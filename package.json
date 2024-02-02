@@ -1,11 +1,24 @@
 {
-  "name": "tijs",
+  "name": "@site0/tijs",
   "version": "1.0.0",
   "description": "Web UI Libraray base on Vue",
-  "repository": "https://github.com/site-zero/tijs.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/site-zero/tijs.git"
+  },
   "author": "Peter Zhang <zozohtnt@gmail.com>",
   "license": "BSD-3-Clause",
   "private": false,
+  "keywords": [
+    "ti",
+    "tijs",
+    "ti-js",
+    "vue",
+    "vue3",
+    "js",
+    "ts",
+    "ui"
+  ],
   "type": "module",
   "main": "./dist/tijs.umd.cjs",
   "module": "./dist/tijs.js",
