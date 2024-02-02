@@ -1,0 +1,59 @@
+@import "./assets/style/app.scss";
+
+:root {
+  color-scheme: light dark;
+  color: var(--ti-color-body-f);
+  background-color: var(--ti-color-body);
+
+  //font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  @include font-nice;
+  font-size: 16px;
+  line-height: 1.5em;
+  font-weight: normal;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+html,
+body,
+#app {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-size: SZ(16);
+}
+
+#app > main.demo-top {
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  display: grid;
+  grid-template-columns: minmax(SZ(100), 15%) 1fr;
+  grid-auto-rows: auto;
+  grid-auto-flow: row;
+  justify-items: stretch;
+  align-items: stretch;
+  grid-gap: 0.02rem;
+
+  > .chute {
+    border-right: 1px solid var(--ti-color-border-shallow);
+    color: var(--ti-color-card-f);
+    background-color: var(--ti-color-card);
+  }
+
+  > .arena {
+    color: var(--ti-color-card-f);
+    background-color: var(--ti-color-card);
+  }
+}

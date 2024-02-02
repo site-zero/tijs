@@ -1,0 +1,8 @@
+div.ti-label {
+  @include colorized;
+
+  &.nil-value {
+    opacity: 0.62;
+    font-style: italic;
+  }
+}

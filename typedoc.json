@@ -1,0 +1,15 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPoints": [
+    "./src/core/*.ts",
+    "./src/core/alg/*.ts",
+    "./src/core/net/*.ts",
+    "./src/core/text/*.ts",
+    "./src/core/type/*.ts",
+    "./src/core/util/*.ts",
+    "./src/core/web/*.ts"
+  ],
+  "out": "docs",
+  "plugin": ["suika-docs-theme"],
+  "theme": "suika-theme"
+}

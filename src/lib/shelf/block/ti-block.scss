@@ -1,0 +1,11 @@
+.ti-block {
+  display: grid;
+
+  > header {
+    @include flex-align-nowrap;
+    font-size: var(--ti-fontsz-block-head);
+    padding: 0.5em;
+    background-color: var(--ti-color-bar);
+    color: var(--ti-color-bar-f);
+  }
+}

@@ -1,0 +1,24 @@
+div.ti-input-box {
+  overflow: hidden;
+  height: var(--ti-measure-box-height);
+  > .part-value {
+    @include flex-align-nowrap($ai: stretch);
+    padding: 0;
+    input {
+      flex: 1 1 auto;
+      width: 10px;
+      font-size: inherit;
+      font-family: inherit;
+      outline: none;
+      border: 0;
+      padding: var(--ti-measure-box-pad);
+      background-color: transparent;
+    }
+  }
+
+  &.is-focused {
+    border-color: var(--ti-color-primary);
+    background-color: var(--ti-color-hightlight);
+    color: var(--ti-color-hightlight-f);
+  }
+}

@@ -1,0 +1,7 @@
+.ti-cell {
+  display: grid;
+  > .ti-cell-con {
+    display: grid;
+    position: relative;
+  }
+}

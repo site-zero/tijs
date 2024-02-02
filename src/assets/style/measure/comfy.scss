@@ -1,0 +1,25 @@
+@mixin use_measure_comfy {
+  --ti-measure-r-b: 12px;
+  --ti-measure-r-m: 8px;
+  --ti-measure-r-s: 4px;
+
+  --ti-measure-box-pad: 6px;
+  --ti-measure-box-height: 32px;
+  --ti-measure-box-icon: 24px;
+
+  --ti-measure-scrollbar: 6px;
+
+  --ti-measure-form-gap: 10px;
+  --ti-measure-form-legend-pad: 10px;
+  --ti-measure-form-legend-mgn: 1.5em;
+
+  --ti-measure-menu-iconsz: 16px;
+  --ti-measure-menu-fontsz: 14px;
+  --ti-measure-menu-lineheight: 2em;
+
+  --ti-fontsz-box: 12px;
+  --ti-fontsz-label: 1em;
+  --ti-fontsz-field: 0.9em;
+  --ti-fontsz-table-head: 0.8em;
+  --ti-fontsz-block-head: 0.8em;
+}

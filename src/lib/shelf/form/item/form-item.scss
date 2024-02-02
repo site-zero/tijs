@@ -1,0 +1,81 @@
+.ti-form-item {
+  /*------------------------------------------
+
+                  Group
+
+  ------------------------------------------*/
+  &[type="group"] {
+    > main {
+      display: grid;
+      padding: var(--ti-measure-form-gap);
+      grid-gap: var(--ti-measure-form-gap);
+    }
+    &.as-legend {
+      position: relative;
+      padding: var(--ti-measure-form-legend-pad);
+      margin: var(--ti-measure-form-legend-mgn) 0;
+      border: 1px solid var(--ti-color-border-dark);
+      border-radius: var(--ti-measure-r-m);
+      &:first-child {
+        margin-top: calc(var(--ti-measure-form-legend-mgn) / 2);
+      }
+      &:last-child {
+        margin-bottom: calc(var(--ti-measure-form-legend-mgn) / 2);
+      }
+      > header {
+        position: absolute;
+        top: -1.2em;
+        left: 0.5em;
+        background-color: var(--ti-color-card);
+        color: var(--ti-color-card-f);
+        padding: 0.2em 0.5em;
+        font-size: 0.8em;
+        font-weight: bold;
+        white-space: nowrap;
+      }
+    }
+    // 嵌套组，不要有那么大外边距
+    > main > .ti-form-item[type="group"] {
+      margin: calc(var(--ti-measure-form-legend-mgn) / 3) 0;
+      border-radius: var(--ti-measure-r-s);
+    }
+  }
+  /*------------------------------------------
+
+                  Label
+
+  ------------------------------------------*/
+  &[type="label"] {
+    > main {
+      display: grid;
+      padding: var(--ti-measure-form-gap);
+      grid-gap: var(--ti-measure-form-gap);
+    }
+  }
+  /*------------------------------------------
+
+                  Field
+
+  ------------------------------------------*/
+  &[type="field"] {
+    @include flex-align-nowrap;
+    > .ti-field-name {
+      @include flex-align-nowrap($jc: flex-end, $ai: center);
+      box-sizing: content-box;
+      position: relative;
+      flex: 0 0 auto;
+      padding: 0 var(--ti-measure-box-pad);
+      > .field-name-con {
+        text-align: right;
+        line-height: 1em;
+        > span {
+          font-size: var(--ti-fontsz-field);
+        }
+      }
+    }
+    > .ti-field-value {
+      flex: 1 1 auto;
+      width: 10px;
+    }
+  }
+}

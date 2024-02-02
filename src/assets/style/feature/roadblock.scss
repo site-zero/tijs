@@ -1,0 +1,146 @@
+.roadblock {
+  padding: SZ(20);
+  overflow: hidden;
+  /*---------------------------------------
+
+                     部件
+
+  /---------------------------------------*/
+  > .part-icon {
+    user-select: none;
+  }
+  > .part-text {
+    user-select: none;
+    line-height: 1.5em;
+  }
+  > .part-links {
+    @include flex($jc: center, $ai: flex-start);
+    flex: 1 1 auto;
+    ul {
+      padding: 0.5em;
+      li > a {
+        @include flex-align-nowrap;
+        line-height: 1.8em;
+        > .link-icon {
+          margin-right: SZ(8);
+        }
+      }
+    }
+  }
+  /*---------------------------------------
+
+                     颜色
+
+  /---------------------------------------*/
+  @include colorized;
+
+  // 透明度
+  &.faint {
+    opacity: 0.372;
+  }
+  &.shadowy {
+    opacity: 0.618;
+  }
+  /*---------------------------------------
+
+                     特征
+
+  /---------------------------------------*/
+  &.hover-icon > .part-icon > .ti-icon {
+    cursor: pointer;
+  }
+  &.hover-text > .part-text > span {
+    cursor: pointer;
+  }
+  /*---------------------------------------
+
+                     模式
+
+  /---------------------------------------*/
+  &.mode-cover {
+    @include pos-abs-full;
+    z-index: $z-mask;
+  }
+  &.mode-fit {
+    width: 100%;
+    height: 100%;
+  }
+
+  /*---------------------------------------
+
+                     布局
+
+      A 模式                  B 模式
+   +----------+
+   |          |            +---+
+   |   Icon   |            |ICO| [  Text  ]
+   |          |            +---+
+   +----------+
+   [   Text   ]
+  /---------------------------------------*/
+  &.layout-A {
+    @include flex-align-v-nowrap;
+    > .part-icon {
+      @include flex($jc: center, $ai: flex-end);
+      margin-bottom: 0.5em;
+      height: 37.2%;
+    }
+    > .part-text {
+      @include flex($jc: center, $ai: flex-start);
+      flex: 1 1 auto;
+      text-align: center;
+    }
+    &.has-links {
+      > .part-text {
+        flex: 0 0 auto;
+      }
+    }
+  }
+  ///---------------------------------------
+  &.layout-B {
+    @include flex-align($ai: center, $ac: center);
+    > .part-icon {
+      margin: 0 0.8em;
+    }
+    > .part-text {
+      flex: 1 1 auto;
+    }
+    &.has-links {
+      > .part-links {
+        width: 100%;
+        justify-content: flex-start;
+        padding-left: 3.2em;
+      }
+    }
+  }
+  /*---------------------------------------
+
+                     尺度
+
+  /---------------------------------------*/
+  &.small {
+    font-size: 0.8em;
+  }
+
+  &.normal {
+    font-size: 1em;
+  }
+
+  &.big {
+    > .part-icon {
+      font-size: 2em;
+    }
+    > .part-text {
+      font-size: 1.5em;
+    }
+  }
+
+  &.large {
+    > .part-icon {
+      font-size: 4em;
+    }
+    > .part-text {
+      font-size: 2em;
+    }
+  }
+}
