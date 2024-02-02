@@ -7,6 +7,15 @@ function __MSG(key: string): string {
   return I18N[k2];
 }
 
+export function createEmptyI18nSet(): I18nSet {
+  return {
+    en_us: {},
+    en_uk: {},
+    zh_cn: {},
+    zh_hk: {}
+  };
+}
+
 export function all() {
   return I18N;
 }
