@@ -2,7 +2,7 @@
   "name": "tijs",
   "version": "1.0.0",
   "description": "Web UI Libraray base on Vue",
-  "repository": "https://github.com/site-zero/ti-js.git",
+  "repository": "https://github.com/site-zero/tijs.git",
   "author": "Peter Zhang <zozohtnt@gmail.com>",
   "license": "BSD-3-Clause",
   "private": false,
