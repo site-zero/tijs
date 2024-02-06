@@ -9,8 +9,9 @@ export class DynElEle implements TmplEle {
 
   constructor(input: string) {
     this._el_func = (__el_context__: any) => {
-      let el = `(__el_context__.${input})`;
-      return eval(el);
+      return _.get(__el_context__, input);
+      // let el = `(__el_context__.${input})`;
+      // return eval(el);
     };
   }
 

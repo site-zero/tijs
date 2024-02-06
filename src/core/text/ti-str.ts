@@ -273,11 +273,11 @@ export function joinArgs(
   // String to split
   if (_.isString(s)) {
     // Maybe a json object
-    if (/^\{.*\}$/.test(s)) {
-      try {
-        return [eval(`(${s})`)];
-      } catch (E) {}
-    }
+    // if (/^\{.*\}$/.test(s)) {
+    //   try {
+    //     return [eval(`(${s})`)];
+    //   } catch (E) {}
+    // }
 
     // Take it as comma-sep list
     let list = s.split(",");
