@@ -1,9 +1,9 @@
 import _ from "lodash";
-import { S, MessageMap, StrConvertor } from "../../../ti";
+import { Str, MessageMap, StrConvertor } from "../../../ti";
 
 export function str_mapping(input: string): StrConvertor {
   let mapping = {} as MessageMap;
-  let ss = S.splitQuote(input, {
+  let ss = Str.splitQuote(input, {
     ignoreBlank: false,
     keepQuote: false,
     seps: ","

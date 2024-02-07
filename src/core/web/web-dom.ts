@@ -20,7 +20,7 @@ import {
   Point2D,
   Predicate,
   Rects,
-  S,
+  Str,
   Size2D,
   Util,
   Vars
@@ -860,7 +860,7 @@ export function watchAutoRootFontSize(
 //----------------------------------------------------
 export function formatStyle(css = {} as Vars, caseMode: StrCaseMode): Vars {
   let reCss = {} as Vars;
-  let keyFn = S.getCaseFunc(caseMode);
+  let keyFn = Str.getCaseFunc(caseMode);
   let keys = _.keys(css);
   for (let key of keys) {
     let val = css[key];

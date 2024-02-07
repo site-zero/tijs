@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { FuncA2, MessageMap, S, Size2D, StrCaseMode, Util, Vars } from "../ti";
+import { FuncA2, MessageMap, Str, Size2D, StrCaseMode, Util, Vars } from "../ti";
 import * as Dom from "./web-dom";
 import { AttrFilter } from "./web-dom";
 
@@ -160,7 +160,7 @@ export function toBackgroundUrl(src?: string, base = "") {
 export function toBackgroundUrlBy(src: Vars | string, tmpl?: string) {
   if (!src) return;
   if (tmpl && !_.isString(src)) {
-    src = S.renderTmpl(tmpl, src);
+    src = Str.renderTmpl(tmpl, src);
   }
   return `url("${src}")`;
 }
@@ -230,7 +230,7 @@ export function mergeStyles(
   let caseMode = options.caseMode || "kebab";
   let filter = options.filter;
   let re = {} as Vars;
-  let fn = S.getCaseFunc(caseMode);
+  let fn = Str.getCaseFunc(caseMode);
   for (let style of styleList) {
     _.forEach(style, (v, k) => {
       let name = fn(k);
@@ -263,14 +263,14 @@ export function parseCssRule(
   }
 
   rule = _.trim(rule);
-  if (S.isBlank(rule)) {
+  if (Str.isBlank(rule)) {
     return {};
   }
   let filter = Dom.attrFilter(flt);
 
   let ss = rule.split(";");
   for (let s of ss) {
-    if (S.isBlank(s)) continue;
+    if (Str.isBlank(s)) continue;
     let pos = s.indexOf(":");
     if (pos <= 0) {
       continue;
@@ -316,7 +316,7 @@ export function parseAndTidyCssRule(
     rule = parseCssRule(rule, filter);
   }
   if (need_parse_background) {
-    let toNameCase = S.getCaseFunc(nameCase);
+    let toNameCase = Str.getCaseFunc(nameCase);
     if (rule.background) {
       let bg = parseBackground(rule.background as string, { nameCase });
       delete rule.background;
@@ -373,7 +373,7 @@ export function parseBackground(
     nameCase: StrCaseMode;
   }
 ): MessageMap {
-  let toNameCase = S.getCaseFunc(nameCase);
+  let toNameCase = Str.getCaseFunc(nameCase);
   // 首先整理字符串，去掉多余的空格，确保 backgroundPosition|backgroundSize 之间是没有空格的
   let s = (str || "")
     .replace(/[ ]{2,}/g, " ")
@@ -446,7 +446,7 @@ export function renderCssRule(css = {}) {
   }
   let list = [] as string[];
   _.forEach(css, (val, key) => {
-    if (_.isNull(val) || _.isUndefined(val) || S.isBlank(val)) return;
+    if (_.isNull(val) || _.isUndefined(val) || Str.isBlank(val)) return;
     let pnm = _.kebabCase(key);
     if (/^(opacity|z-index|order)$/.test(pnm)) {
       list.push(`${pnm}:${val}`);

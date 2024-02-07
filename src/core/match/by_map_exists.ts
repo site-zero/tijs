@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { I18n, TiMatch, ExplainI18n, S } from "../ti";
+import { I18n, TiMatch, ExplainI18n, Str } from "../ti";
 import { explainKeyDisplay } from "./key_display";
 
 export const gen_by_map_exitst = function (
@@ -18,7 +18,7 @@ export const gen_by_map_exitst = function (
       let tkey = not ? i18n.noexists : i18n.exists;
       let tmpl = I18n.text(tkey);
       let t = explainKeyDisplay(key_of_obj, i18n.keyDisplayBy);
-      return S.renderTmpl(tmpl, { val: t });
+      return Str.renderTmpl(tmpl, { val: t });
     }
   };
 };

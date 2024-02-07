@@ -1,22 +1,22 @@
-import _ from "lodash";
-import { App } from "vue";
+import _ from 'lodash';
+import { App } from 'vue';
 import {
   I18n,
   I18nLang,
   I18nSet,
   MessageMap,
-  S,
+  Str,
   getEnv,
-  setEnv
-} from "../core/ti";
-import en_us from "../i18n/en-us";
-import zh_cn from "../i18n/zh-cn";
-import { ComInfoFilter, TiCom, TiComSet } from "./_top";
-import _com_set_action from "./action/all-actions";
-import _com_set_input from "./input/all-input";
-import _com_set_shelf from "./shelf/all-shelf";
-import _com_set_tile from "./tile/all-tiles";
-import _com_set_view from "./view/all-views";
+  setEnv,
+} from '../core/ti';
+import en_us from '../i18n/en-us';
+import zh_cn from '../i18n/zh-cn';
+import { ComInfoFilter, TiCom, TiComSet } from './_top';
+import _com_set_action from './action/all-actions';
+import _com_set_input from './input/all-input';
+import _com_set_shelf from './shelf/all-shelf';
+import _com_set_tile from './tile/all-tiles';
+import _com_set_view from './view/all-views';
 
 /**
  * 定义一个组件的集合
@@ -59,7 +59,7 @@ export const updateInstalledComponentsLangs: {
     let messages = com.i18n[langKey];
 
     // 看看是否字符串是以 com 名称作为前缀
-    let prefix = _.kebabCase(com.name) + "-";
+    let prefix = _.kebabCase(com.name) + '-';
     let _msgs = {} as MessageMap;
     _.forEach(messages, (v, k) => {
       if (!k.startsWith(prefix)) {
@@ -81,7 +81,7 @@ export function installTiCoreI18n(lang: string) {
     zh_cn: cn,
     en_us: en,
     zh_hk: cn,
-    en_uk: en
+    en_uk: en,
   } as I18nSet;
 
   let langKey = I18n.toLangKey(lang);
@@ -96,9 +96,9 @@ export function tiPutComponents(coms: TiComSet) {
 
 export function tiGetComponent(
   key: string,
-  dft: string = "TiUnknown"
+  dft: string = 'TiUnknown'
 ): TiCom | undefined {
-  let comType = S.toComType(key);
+  let comType = Str.toComType(key);
   let com = ALL_TI_COMS.get(comType);
   if (!com && dft) {
     com = ALL_TI_COMS.get(dft);
@@ -125,7 +125,7 @@ export function tiFindComponents(filter?: ComInfoFilter): TiCom[] {
 }
 
 function _dft_com_prop_key(comType: string, propName: string) {
-  return ["ComDefaultProps", comType, propName].join("-");
+  return ['ComDefaultProps', comType, propName].join('-');
 }
 
 /**
@@ -163,11 +163,12 @@ export function tiSetDefaultComPropValue(
   return setEnv(k, value);
 }
 
-export * from "./_features";
-export * from "./_top";
-export * from "./_vue";
-export * from "./action/all-actions";
-export * from "./input/all-input";
-export * from "./shelf/all-shelf";
-export * from "./tile/all-tiles";
-export * from "./view/all-views";
+export * from './_features';
+export * from './_top';
+export * from './_vue';
+export * from './action/all-actions';
+export * from './input/all-input';
+export * from './shelf/all-shelf';
+export * from './tile/all-tiles';
+export * from './view/all-views';
+

@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { I18n, TiMatch, ExplainI18n, S } from "../ti";
+import { I18n, TiMatch, ExplainI18n, Str } from "../ti";
 import { MakeTiMatch, parse } from "./ti-match";
 
 export type MapFindInArrayPayload = {
@@ -25,7 +25,7 @@ export const gen_by_map_find_in_array: MakeTiMatch<MapFindInArrayPayload> =
       explainText: (i18n: ExplainI18n): string => {
         let cTxt = matchFn.explainText(i18n);
         let tmpl = I18n.text(i18n.findInArray);
-        return S.renderTmpl(tmpl, { val: cTxt });
+        return Str.renderTmpl(tmpl, { val: cTxt });
       }
     };
   };

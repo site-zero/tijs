@@ -1,12 +1,12 @@
-import _ from "lodash";
+import _ from 'lodash';
 
 const CHARS =
-  "0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz".split("");
+  '0123456789ABCDEFGHIJKLMNOPQRSTUVWXTZabcdefghiklmnopqrstuvwxyz'.split('');
 /***
  * Generator `N` length random string
  */
 export function getRandomStr(n = 4, dict = CHARS) {
-  let s = "";
+  let s = '';
   for (let i = 0; i < n; i++) {
     let index = _.random(0, CHARS.length - 1);
     s += dict[index];

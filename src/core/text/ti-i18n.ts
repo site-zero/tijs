@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { I18nLang, I18nSet, MessageMap, S, Vars } from "../ti";
+import { I18nLang, I18nSet, MessageMap, Str, Vars } from "../ti";
 
 const I18N = {} as MessageMap;
 function __MSG(key: string): string {
@@ -55,7 +55,7 @@ export function textOrKey(str: string, dft?: string) {
 export function getf(key: string, vars = {} as Vars): string {
   let msg = __MSG(key);
   if (msg) {
-    return S.renderTmpl(msg, vars);
+    return Str.renderTmpl(msg, vars);
   }
   return key;
 }
@@ -65,7 +65,7 @@ export function textf(str: string, vars = {} as Vars): string {
   if (m) {
     return getf(m[1], vars);
   }
-  return S.renderTmpl(str, vars);
+  return Str.renderTmpl(str, vars);
 }
 
 // explain(str) {

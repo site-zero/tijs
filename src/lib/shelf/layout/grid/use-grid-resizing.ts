@@ -7,7 +7,7 @@ import {
   Dom,
   NameStrValue,
   Num,
-  S
+  Str
 } from "../../../../core";
 import { LayoutBar } from "../layout-support";
 import { LayoutGridKeepFeature, keepSizesState } from "./use-grid-keep";
@@ -84,7 +84,7 @@ function getGridMeasure(bar: LayoutBar, $grid: HTMLElement): ResizeMeasure {
     bar.mode == "row" ? "padding-bottom" : "padding-right"
   );
   return {
-    template: _.map(S.splitIgnoreBlank(tmp, /\s+/), (v) =>
+    template: _.map(Str.splitIgnoreBlank(tmp, /\s+/), (v) =>
       toPixel(v)
     ) as number[],
     gap: toPixel(gap),
@@ -187,7 +187,7 @@ function toPercent(ns: number[], gap: number) {
   let tota = _.sum(ns) + Math.max(0, ns.length - 1) * gap;
   let re = [];
   for (let i = 0; i < ns.length; i++) {
-    let per = S.toPercent(ns[i] / tota);
+    let per = Str.toPercent(ns[i] / tota);
     re.push(per);
   }
   re[re.length - 1] = "1fr";

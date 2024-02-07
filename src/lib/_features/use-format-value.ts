@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { Convertor, FuncA1, FuncA3, Render, S, Tmpl, Vars } from "../../core";
+import { Convertor, FuncA1, FuncA3, Render, Str, Tmpl, Vars } from "../../core";
 
 export type FormatValueProps = {
   /**
@@ -50,7 +50,7 @@ export function useFormatValue(
   props: FormatValueProps,
   options = {
     nilFormat: (_vars) => (input) => {
-      return S.anyToStr(input);
+      return Str.anyToStr(input);
     },
     strFormat:
       (format, vars = {}, valueKeyOfVars = "val") =>

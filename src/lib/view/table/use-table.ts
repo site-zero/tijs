@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { Ref } from "vue";
 import { CommonProps, getFieldUniqKey } from "../../";
-import { Callback, Callback1, EventUtils, I18n, S, Vars } from "../../../core";
+import { Callback, Callback1, EventUtils, I18n, Str, Vars } from "../../../core";
 import { TableBehaviorsProps, TableCell, TableRowEvent } from "./table-types";
 import {
   CheckStatus,
@@ -237,7 +237,7 @@ export function useTable(props: TableProps) {
   // 启用特性
   let selectable = useSelectable<TableRowID>({
     getId: props.getId!,
-    convertToId: S.anyToStrOrNum,
+    convertToId: Str.anyToStrOrNum,
     data: props.data,
     multi: props.multi
   });

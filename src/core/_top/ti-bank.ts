@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { I18n, S } from "../ti";
+import { I18n, Str } from "../ti";
 
 ///////////////////////////////////////
 const CURRENCIES = {
@@ -344,7 +344,7 @@ export function toChineseText(cent = 0.0, capitalized = false): string {
   let fen = Math.round((cent - yuan * 100) * 100);
 
   // Gen Text
-  let re = [S.intToChineseNumber(yuan, capitalized)];
+  let re = [Str.intToChineseNumber(yuan, capitalized)];
   if (fen > 0) {
     let UN = "角分厘毫";
     let fens = _.padStart(fen + "", 4, "0");
@@ -352,7 +352,7 @@ export function toChineseText(cent = 0.0, capitalized = false): string {
     for (let i = 0; i < fens.length; i++) {
       let f = Number(fens[i]) * 1;
       if (f > 0) {
-        let t = S.intToChineseNumber(f, capitalized);
+        let t = Str.intToChineseNumber(f, capitalized);
         re.push(t);
         re.push(UN[i]);
       } else if (re[re.length - 1] != "零") {

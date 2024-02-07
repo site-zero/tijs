@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { AbstractTmplSegment } from "./abstract_segment";
-import { Vars, S } from "../../ti";
+import { Vars, Str } from "../../ti";
 
 export class LoopTmplSegment extends AbstractTmplSegment {
   /**
@@ -79,7 +79,7 @@ export class LoopTmplSegment extends AbstractTmplSegment {
    * @return 自身
    */
   valueOf(input: string): LoopTmplSegment {
-    let ss = S.splitIgnoreBlank(input, ":");
+    let ss = Str.splitIgnoreBlank(input, ":");
     // 只有 looper alist
     if (ss.length == 1) {
       this._looperName = ss[0];
@@ -87,7 +87,7 @@ export class LoopTmplSegment extends AbstractTmplSegment {
     // it,index : alist
     else if (ss.length > 1) {
       this._looperName = ss[1];
-      let vv = S.splitIgnoreBlank(ss[0]);
+      let vv = Str.splitIgnoreBlank(ss[0]);
       this._varName = vv[0];
       // it,index=1 : alist
       if (vv.length > 1) {

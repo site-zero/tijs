@@ -6,7 +6,7 @@ import {
   FuncA2,
   FuncA3,
   NameValue,
-  S,
+  Str,
   Vars
 } from "../../core";
 
@@ -93,7 +93,7 @@ export function getFieldConvertor(type: FieldValueType): FieldConvertor {
 }
 
 function toStr(input: any) {
-  return S.anyToStr(input);
+  return Str.anyToStr(input);
 }
 
 function toObject(input: any): Vars {
@@ -118,7 +118,7 @@ function toObject(input: any): Vars {
     }
 
     // Parse String
-    return S.toObject(input);
+    return Str.toObject(input);
   }
 
   // Translate Object
@@ -130,7 +130,7 @@ function toObject(input: any): Vars {
 }
 
 function toArray(input: any) {
-  return S.toArray(input);
+  return Str.toArray(input);
 }
 
 function toNumber(input: any) {
@@ -140,7 +140,7 @@ function toNumber(input: any) {
   if (_.isDate(input)) {
     return input.getTime();
   }
-  if (S.isBlank(input)) {
+  if (Str.isBlank(input)) {
     return NaN;
   }
   let n = 1 * input;

@@ -1,5 +1,5 @@
-import { DictImpl } from "./dict-impl";
-import { DictFactory, IDict, DictOptions } from "./dict-types";
+import { DictImpl } from './dict-impl';
+import { DictFactory, DictOptions, IDict } from './dict-types';
 
 export class DictFactoryImpl<T, V> implements DictFactory<T, V> {
   private _DICTS = new Map<string, IDict<T, V>>();

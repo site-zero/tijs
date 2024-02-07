@@ -1,4 +1,4 @@
-import { I18n, TiMatch, ExplainI18n, S } from "../ti";
+import { I18n, TiMatch, ExplainI18n, Str } from "../ti";
 import { MakeTiMatch } from "./ti-match";
 
 export const gen_by_wildcard: MakeTiMatch<string> = function (
@@ -12,7 +12,7 @@ export const gen_by_wildcard: MakeTiMatch<string> = function (
     },
     explainText: (i18n: ExplainI18n): string => {
       let tmpl = I18n.text(i18n.matchOf);
-      return S.renderTmpl(tmpl, { val: wildcard });
+      return Str.renderTmpl(tmpl, { val: wildcard });
     }
   };
 };

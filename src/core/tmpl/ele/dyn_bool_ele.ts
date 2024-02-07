@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { Vars, S } from "../../ti";
+import { Vars, Str } from "../../ti";
 import { DynElInfo } from "../ti-tmpl";
 import { DynEle } from "./abstract_dyn_ele";
 import { anyToBool } from "../../util/util-lang";
@@ -11,7 +11,7 @@ export class DynBoolEle extends DynEle {
   constructor(input: DynElInfo) {
     super(input);
     let fmt = input.fmt;
-    if (S.isBlank(fmt)) {
+    if (Str.isBlank(fmt)) {
       this._texts = ["false", "true"];
     }
     // 定制了

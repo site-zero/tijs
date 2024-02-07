@@ -1,5 +1,5 @@
-import _ from "lodash";
-import { I18n, S, getEnv } from "../ti";
+import _ from 'lodash';
+import { I18n, Str, getEnv } from '../ti';
 
 ///////////////////////////////////////////
 // const P_DATE = new RegExp(
@@ -11,12 +11,12 @@ import { I18n, S, getEnv } from "../ti";
 //     "(Z(\\d*))?$"
 // );
 const P_DATE = new RegExp(
-  "^((\\d{2,4})([^0-9])?(\\d{1,2})?([^0-9])?(\\d{1,2})?)?([^0-9])?" +
-    "(([ T])?" +
-    "(\\d{1,2})(:)(\\d{1,2})((:)(\\d{1,2}))?" +
-    "((.)(\\d{1,3}))?)?" +
-    "(([+-])(\\d{1,2})(:\\d{1,2})?)?" +
-    "(Z(\\d*))?$"
+  '^((\\d{2,4})([^0-9])?(\\d{1,2})?([^0-9])?(\\d{1,2})?)?([^0-9])?' +
+    '(([ T])?' +
+    '(\\d{1,2})(:)(\\d{1,2})((:)(\\d{1,2}))?' +
+    '((.)(\\d{1,3}))?)?' +
+    '(([+-])(\\d{1,2})(:\\d{1,2})?)?' +
+    '(Z(\\d*))?$'
 );
 
 /**
@@ -40,10 +40,10 @@ const P_DATE = new RegExp(
 export function parse(d: any): Date | null {
   //console.log("parseDate:", d)
   // Default return today
-  if (_.isUndefined(d) || "now" === d) {
+  if (_.isUndefined(d) || 'now' === d) {
     return new Date();
   }
-  if ("today" === d) {
+  if ('today' === d) {
     let d = new Date();
     setTime(d);
     return d;
@@ -81,7 +81,7 @@ export function parse(d: any): Date | null {
       let today = new Date();
       let year = m[2];
       if (year.length == 2) {
-        year = "20" + year;
+        year = '20' + year;
       }
       let yy: number = parseInt(year);
       let MM: number = _int(m, 4, m[2] ? 1 : today.getMonth() + 1);
@@ -91,26 +91,26 @@ export function parse(d: any): Date | null {
       let ss: number = _int(m, 15, 0);
       let ms: number = _int(m, 18, 0);
       let list = [
-        _.padStart(yy as unknown as string, 4, "0"),
-        "-",
-        _.padStart(MM as unknown as string, 2, "0"),
-        "-",
-        _.padStart(dd as unknown as string, 2, "0"),
-        "T",
-        _.padStart(HH as unknown as string, 2, "0"),
-        ":",
-        _.padStart(mm as unknown as string, 2, "0"),
-        ":",
-        _.padStart(ss as unknown as string, 2, "0"),
-        ".",
-        _.padStart(ms as unknown as string, 3, "0")
+        _.padStart(yy as unknown as string, 4, '0'),
+        '-',
+        _.padStart(MM as unknown as string, 2, '0'),
+        '-',
+        _.padStart(dd as unknown as string, 2, '0'),
+        'T',
+        _.padStart(HH as unknown as string, 2, '0'),
+        ':',
+        _.padStart(mm as unknown as string, 2, '0'),
+        ':',
+        _.padStart(ss as unknown as string, 2, '0'),
+        '.',
+        _.padStart(ms as unknown as string, 3, '0'),
       ];
       if (m[18]) list.push(m[18]);
-      let dateStr = list.join("");
+      let dateStr = list.join('');
       let date = new Date(dateStr);
 
       // Compare TimeZone with remote
-      let tzDiff = getEnv("TIMEZONE_DIFF");
+      let tzDiff = getEnv('TIMEZONE_DIFF');
       if (_.isNumber(tzDiff) && tzDiff !== 0) {
         date = new Date(date.getTime() - tzDiff);
       }
@@ -119,7 +119,7 @@ export function parse(d: any): Date | null {
     }
   }
   // Invalid date
-  throw "i18n:invalid-date";
+  throw 'i18n:invalid-date';
 }
 /**
  *
@@ -173,20 +173,20 @@ export function genFormatContext(date: any) {
     s,
     S,
     yyy: yyyy,
-    yy: ("" + yyyy).substring(2, 4),
-    MM: _.padStart(M, 2, "0"),
-    dd: _.padStart(d, 2, "0"),
-    HH: _.padStart(H, 2, "0"),
-    mm: _.padStart(m, 2, "0"),
-    ss: _.padStart(s, 2, "0"),
-    SS: _.padStart(S, 3, "0"),
-    SSS: _.padStart(S, 3, "0"),
+    yy: ('' + yyyy).substring(2, 4),
+    MM: _.padStart(M, 2, '0'),
+    dd: _.padStart(d, 2, '0'),
+    HH: _.padStart(H, 2, '0'),
+    mm: _.padStart(m, 2, '0'),
+    ss: _.padStart(s, 2, '0'),
+    SS: _.padStart(S, 3, '0'),
+    SSS: _.padStart(S, 3, '0'),
     E,
     EE: E,
     EEE: E,
     EEEE,
     MMM,
-    MMMM
+    MMMM,
   };
 }
 
@@ -201,7 +201,7 @@ export function genFormatContext(date: any) {
  */
 export function format(
   date: any,
-  { fmt = "yyyy-MM-dd HH:mm:ss", trimZero = false } = {} as {
+  { fmt = 'yyyy-MM-dd HH:mm:ss', trimZero = false } = {} as {
     fmt?: string;
     trimZero?: boolean;
   }
@@ -225,7 +225,7 @@ export function format(
   }
 
   // Compare TimeZone with remote
-  let tzDiff = getEnv("TIMEZONE_DIFF");
+  let tzDiff = getEnv('TIMEZONE_DIFF');
   if (_.isNumber(tzDiff) && tzDiff !== 0) {
     date = new Date(date.getTime() + tzDiff);
   }
@@ -249,9 +249,9 @@ export function format(
   if (last < fmt.length) {
     list.push(fmt.substring(last));
   }
-  let re = list.join("");
+  let re = list.join('');
   // if end by 00:00:00 then auto trim it
-  if (trimZero && re.endsWith(" 00:00:00")) {
+  if (trimZero && re.endsWith(' 00:00:00')) {
     return re.substring(0, re.length - 9);
   }
   return re;
@@ -270,16 +270,16 @@ export function timeText(
   { justNow = 10, i18n } = {} as {
     justNow: number;
     i18n?: {
-      "any-time": string;
-      "in-year": string;
-      "past-in-min": string;
-      "past-in-hour": string;
-      "past-in-day": string;
-      "past-in-week": string;
-      "future-in-min": string;
-      "future-in-hour": string;
-      "future-in-day": string;
-      "future-in-week": string;
+      'any-time': string;
+      'in-year': string;
+      'past-in-min': string;
+      'past-in-hour': string;
+      'past-in-day': string;
+      'past-in-week': string;
+      'future-in-min': string;
+      'future-in-hour': string;
+      'future-in-day': string;
+      'future-in-week': string;
     };
   }
 ) {
@@ -290,16 +290,16 @@ export function timeText(
   //.....................................
   // 准备 i18n 默认值
   i18n = _.assign(i18n ?? {}, {
-    "any-time": I18n.get("dt-any-time", "yyyy-MM-dd"),
-    "in-year": I18n.get("dt-in-year", "MM-dd"),
-    "past-in-min": I18n.get("dt-past-in-min", "Just now"),
-    "past-in-hour": I18n.get("dt-past-in-hour", "In ${min}mins"),
-    "past-in-day": I18n.get("dt-past-in-day", "In ${hour}hours"),
-    "past-in-week": I18n.get("dt-past-in-week", "In ${day}days"),
-    "future-in-min": I18n.get("dt-future-in-min", "Soon"),
-    "future-in-hour": I18n.get("dt-future-in-hour", "After ${min}mins"),
-    "future-in-day": I18n.get("dt-future-in-day", "After ${hour}hours"),
-    "future-in-week": I18n.get("dt-future-in-week", "After ${day}days")
+    'any-time': I18n.get('dt-any-time', 'yyyy-MM-dd'),
+    'in-year': I18n.get('dt-in-year', 'MM-dd'),
+    'past-in-min': I18n.get('dt-past-in-min', 'Just now'),
+    'past-in-hour': I18n.get('dt-past-in-hour', 'In ${min}mins'),
+    'past-in-day': I18n.get('dt-past-in-day', 'In ${hour}hours'),
+    'past-in-week': I18n.get('dt-past-in-week', 'In ${day}days'),
+    'future-in-min': I18n.get('dt-future-in-min', 'Soon'),
+    'future-in-hour': I18n.get('dt-future-in-hour', 'After ${min}mins'),
+    'future-in-day': I18n.get('dt-future-in-day', 'After ${hour}hours'),
+    'future-in-week': I18n.get('dt-future-in-week', 'After ${day}days'),
   });
   //.....................................
   let ams = d.getTime();
@@ -312,32 +312,32 @@ export function timeText(
   // Just now
   let du_min = Math.round(du_ms / 60000);
   if (du_min < justNow) {
-    return at_past ? i18n["past-in-min"] : i18n["future-in-min"];
+    return at_past ? i18n['past-in-min'] : i18n['future-in-min'];
   }
   // in-hour
   if (du_min < 60) {
-    let tmpl = at_past ? i18n["past-in-hour"] : i18n["future-in-hour"];
-    return S.renderTmpl(tmpl, { min: du_min });
+    let tmpl = at_past ? i18n['past-in-hour'] : i18n['future-in-hour'];
+    return Str.renderTmpl(tmpl, { min: du_min });
   }
   //.....................................
   // in-day
   let du_hr = Math.round(du_ms / 3600000);
   if (du_hr < 24) {
-    let tmpl = at_past ? i18n["past-in-day"] : i18n["future-in-day"];
-    return S.renderTmpl(tmpl, {
+    let tmpl = at_past ? i18n['past-in-day'] : i18n['future-in-day'];
+    return Str.renderTmpl(tmpl, {
       min: du_min,
-      hour: du_hr
+      hour: du_hr,
     });
   }
   //.....................................
   // in-week
   let du_day = Math.round(du_hr / 24);
   if (du_day < 7) {
-    let tmpl = at_past ? i18n["past-in-week"] : i18n["future-in-week"];
-    return S.renderTmpl(tmpl, {
+    let tmpl = at_past ? i18n['past-in-week'] : i18n['future-in-week'];
+    return Str.renderTmpl(tmpl, {
       min: du_min,
       hour: du_hr,
-      day: du_day
+      day: du_day,
     });
   }
   //.....................................
@@ -345,11 +345,11 @@ export function timeText(
   let year = d.getFullYear();
   let toYear = new Date().getFullYear();
   if (year == toYear) {
-    return format(d, { fmt: i18n["in-year"], trimZero: true });
+    return format(d, { fmt: i18n['in-year'], trimZero: true });
   }
   //.....................................
   // any-time
-  return format(d, { fmt: i18n["any-time"], trimZero: true });
+  return format(d, { fmt: i18n['any-time'], trimZero: true });
   //.....................................
 }
 
@@ -486,46 +486,46 @@ export function createDate(d: Date, offset = 0) {
   return d2;
 }
 
-const I_DAYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
+const I_DAYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 const I_WEEK = [
-  "sunday",
-  "monday",
-  "tuesday",
-  "wednesday",
-  "thursday",
-  "friday",
-  "saturday"
+  'sunday',
+  'monday',
+  'tuesday',
+  'wednesday',
+  'thursday',
+  'friday',
+  'saturday',
 ];
 const WEEK_DAYS = {
-  "sun": 0,
-  "mon": 1,
-  "tue": 2,
-  "wed": 3,
-  "thu": 4,
-  "fri": 5,
-  "sat": 6,
-  "sunday": 0,
-  "monday": 1,
-  "tuesday": 2,
-  "wednesday": 3,
-  "thursday": 4,
-  "friday": 5,
-  "saturday": 6
+  sun: 0,
+  mon: 1,
+  tue: 2,
+  wed: 3,
+  thu: 4,
+  fri: 5,
+  sat: 6,
+  sunday: 0,
+  monday: 1,
+  tuesday: 2,
+  wednesday: 3,
+  thursday: 4,
+  friday: 5,
+  saturday: 6,
 } as {
   [k: string]: number;
 };
 const MONTH_ABBR = [
-  "Jan",
-  "Feb",
-  "Mar",
-  "Apr",
-  "May",
-  "Jun",
-  "Jul",
-  "Aug",
-  "Sep",
-  "Oct",
-  "Nov",
-  "Dec"
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
 ];
 ///////////////////////////////////////////

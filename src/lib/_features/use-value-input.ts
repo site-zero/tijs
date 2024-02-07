@@ -4,7 +4,7 @@ import {
   DictSetup,
   Dicts,
   FuncA1,
-  S,
+  Str,
   StrCaseMode,
   TiDict,
   Vars,
@@ -139,7 +139,7 @@ function __build_process_pips(
     processors.push(async (v) => _.trim(v));
   }
   if (props.valueCase) {
-    let toCase = S.getCaseFunc(props.valueCase);
+    let toCase = Str.getCaseFunc(props.valueCase);
     processors.push(async (v) => toCase(v));
   }
   //........................................
@@ -192,7 +192,7 @@ export function useValueInput(props: ValueInputProps): ValueInputFeature {
         } catch (err) {
           is_error = true;
           if (!(err instanceof Error)) {
-            err = new Error(S.anyToStr(err));
+            err = new Error(Str.anyToStr(err));
           }
           console.error(err);
           reject(err);

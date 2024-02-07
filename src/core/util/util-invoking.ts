@@ -62,7 +62,7 @@ export function genInvokingBy(
   }
 
   let invokeArgs = _.map(callArgs, (v) => {
-    if (_.isString(v) || _.isArray(v)) return S.toJsValue(v, { context });
+    if (_.isString(v) || _.isArray(v)) return Str.toJsValue(v, { context });
     return v;
   });
 

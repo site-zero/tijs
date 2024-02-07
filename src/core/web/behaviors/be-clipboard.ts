@@ -1,10 +1,10 @@
-import { Dom, S } from "../../";
+import { Dom, Str } from "../../";
 import _ from "lodash";
 
 export function write(input: any): void {
   let str: string;
   if (!_.isString(input)) {
-    str = S.anyToStr(input);
+    str = Str.anyToStr(input);
   } else {
     str = input;
   }

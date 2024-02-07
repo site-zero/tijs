@@ -1,5 +1,5 @@
-import _ from "lodash";
-import { Match, TiMatch, getEnv } from "../ti";
+import _ from 'lodash';
+import { Match, TiMatch, getEnv } from '../ti';
 
 export type BusMsg<T> = {
   /**
@@ -49,7 +49,7 @@ class BusListener<T> {
 }
 
 function name_is_conditional(name: string) {
-  return name.startsWith("^") || /[?*+{}]/.test(name);
+  return name.startsWith('^') || /[?*+{}]/.test(name);
 }
 
 let BUS_NB = 0;
@@ -92,10 +92,10 @@ export class TiBus<T> {
 
   private _src_bus?: TiBus<T>;
 
-  constructor(name = "BUS") {
+  constructor(name = 'BUS') {
     this._uniqKey = `${name}-${BUS_NB++}`;
 
-    let ALL_BUS = getEnv("ALL_BUS") as Map<string, TiBus<any>>;
+    let ALL_BUS = getEnv('ALL_BUS') as Map<string, TiBus<any>>;
     ALL_BUS.set(this._uniqKey, this);
   }
 
@@ -178,7 +178,7 @@ export class TiBus<T> {
       srcBus: this._uniqKey,
       busPath: [],
       name,
-      data: payload
+      data: payload,
     });
   }
 
@@ -228,7 +228,7 @@ export class TiBus<T> {
    */
   on(name: string, handler: BusListenerHanlder<T>) {
     // 任意监听
-    if ("*" === name) {
+    if ('*' === name) {
       this.onAny(handler);
     }
     // 条件监听
@@ -242,7 +242,7 @@ export class TiBus<T> {
   }
 
   onAny(handler: BusListenerHanlder<T>) {
-    this._lis_any.push(new BusListener("*", handler));
+    this._lis_any.push(new BusListener('*', handler));
   }
 
   onMatch(name: string, handler: BusListenerHanlder<T>) {
@@ -265,7 +265,7 @@ export class TiBus<T> {
       this.offAll(handler);
     }
     // 任意监听
-    else if ("*" === name) {
+    else if ('*' === name) {
       this.offAny(handler);
     }
     // 条件监听
@@ -320,7 +320,7 @@ export class TiBus<T> {
 
   depose() {
     this.tryDisconnect();
-    let ALL_BUS = getEnv("ALL_BUS") as Map<string, TiBus<any>>;
+    let ALL_BUS = getEnv('ALL_BUS') as Map<string, TiBus<any>>;
     ALL_BUS.delete(this._uniqKey);
   }
 }

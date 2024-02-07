@@ -1,22 +1,22 @@
-import _ from "lodash";
-import { Str, Vars } from "../ti";
-import { DictFactoryImpl } from "./dict-factory";
+import _ from 'lodash';
+import { Str, Vars } from '../ti';
+import { DictFactoryImpl } from './dict-factory';
 import {
   _gen_data_loader,
   _gen_data_query,
   _gen_dict_opt_getter,
-  _gen_item_loader
-} from "./dict-options";
+  _gen_item_loader,
+} from './dict-options';
 import {
   DFMaker,
   DictName,
+  DictOptions,
   DictSetup,
   TiDict,
-  DictOptions
-} from "./dict-types";
-import { DynDictFactoryImpl } from "./dyn-dict-factory";
+} from './dict-types';
+import { DynDictFactoryImpl } from './dyn-dict-factory';
 
-export * from "./dict-types";
+export * from './dict-types';
 
 /**
  * 根据一个简单的数据类型，生成标准字典配置对象
@@ -42,10 +42,10 @@ export function makeDictOptions(
 
   // 处理静态方法
 
-  re.getValue = _gen_dict_opt_getter(setup.value || "value");
-  re.getText = _gen_dict_opt_getter(setup.text || "text");
-  re.getIcon = _gen_dict_opt_getter(setup.icon || "icon");
-  re.getTip = _gen_dict_opt_getter(setup.tip || "tip");
+  re.getValue = _gen_dict_opt_getter(setup.value || 'value');
+  re.getText = _gen_dict_opt_getter(setup.text || 'text');
+  re.getIcon = _gen_dict_opt_getter(setup.icon || 'icon');
+  re.getTip = _gen_dict_opt_getter(setup.tip || 'tip');
 
   return re;
 }

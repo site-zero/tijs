@@ -16,7 +16,7 @@ import {
 } from "..";
 import _ from "lodash";
 import { TiEventTrigger } from "../";
-import { Be, Callback, Callback1, FuncA0, S } from "../../core";
+import { Be, Callback, Callback1, FuncA0, Str } from "../../core";
 /*-------------------------------------------------------
 
                      Events
@@ -158,7 +158,7 @@ export function useValueBox<T extends any>(
     let val = state.boxVal;
     // 如果聚焦，则仅仅显示原始值，否则，看看是否需要格式化
     if (state.boxFocused) {
-      state.boxText = S.anyToStr(val);
+      state.boxText = Str.anyToStr(val);
     }
     // 看看是否需要格式化
     else {

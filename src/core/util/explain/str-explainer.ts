@@ -2,7 +2,7 @@ import _ from "lodash";
 import {
   ExplainOptions,
   Explainer,
-  S,
+  Str,
   Util,
   Vars,
   invoke_partial
@@ -15,13 +15,13 @@ type MakeReType = {
 
 // 静态值：任何
 function __static_val(val: any): ReType {
-  let v = S.toJsValue(val);
+  let v = Str.toJsValue(val);
   return () => v;
 }
 
 // 静态值：布尔
 function __static_bool(val: any, not: boolean = false): ReType {
-  let v = S.toJsValue(val);
+  let v = Str.toJsValue(val);
   let b = v ? true : false;
   if (not) {
     b = !b;
@@ -40,7 +40,7 @@ const __get_val: Get_Val = (path, { getDft, autoJsValue }) => {
       return getDft(context, options);
     }
     if (autoJsValue) {
-      v = S.toJsValue(v);
+      v = Str.toJsValue(v);
     }
     return v;
   };
@@ -97,7 +97,7 @@ function __get_call(path: string, partial: invoke_partial) {
 // 模板
 function __get_tmpl(str: string) {
   return (context: Vars, _options: ExplainOptions) => {
-    return S.renderTmpl(str, context);
+    return Str.renderTmpl(str, context);
   };
 }
 

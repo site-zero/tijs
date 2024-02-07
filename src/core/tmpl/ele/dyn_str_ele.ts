@@ -1,5 +1,5 @@
 import { StrCaseMode } from "../../";
-import { S, StrConvertor, Vars } from "../../ti";
+import { Str, StrConvertor, Vars } from "../../ti";
 import { DynElInfo } from "../ti-tmpl";
 import { DynEle } from "./abstract_dyn_ele";
 import { str_format } from "./str/str_format";
@@ -15,7 +15,7 @@ export class DynStrEle extends DynEle {
     this._convertors = [];
 
     // 预先分析处理器
-    let ss = S.splitIgnoreBlank(input.fmt, ";");
+    let ss = Str.splitIgnoreBlank(input.fmt, ";");
     for (let s of ss) {
       // 截取空白
       if ("@trim" == s) {
@@ -36,7 +36,7 @@ export class DynStrEle extends DynEle {
       // 大小写转换
       else if (/^(upper|lower|camel|kebab|snake)$/i.test(s)) {
         let caseName = s.toLowerCase();
-        let func = S.getCaseFunc(caseName as StrCaseMode);
+        let func = Str.getCaseFunc(caseName as StrCaseMode);
         this._convertors.push(func);
       }
       // 默认是字符串格式化:
@@ -58,7 +58,7 @@ export class DynStrEle extends DynEle {
       return;
     }
 
-    let str = S.anyToStr(val);
+    let str = Str.anyToStr(val);
     for (let _c of this._convertors) {
       str = _c(str);
     }
