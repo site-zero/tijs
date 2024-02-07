@@ -1,6 +1,6 @@
 import JSON5 from 'json5';
 import _ from 'lodash';
-import { Callback1, Store, Vars } from '../../core';
+import { Callback1, TiStore, Vars } from '../../core';
 /*-------------------------------------------------------
 
                     Events & Types
@@ -60,7 +60,7 @@ export type KeepFeature = {
 };
 export function useKeep(info: KeepInfo): KeepFeature {
   let props = parseInfo(info);
-  let keep = Store[props.keepMode ?? 'session'];
+  let keep = TiStore[props.keepMode ?? 'session'];
   let keepAt = props.keepAt;
   const load = function (dft?: string) {
     if (!keepAt) {

@@ -15,7 +15,7 @@ import {
   Callback,
   DateTime,
   I18n,
-  Store,
+  TiStore,
   Tmpl,
   Util,
   Vars,
@@ -49,7 +49,7 @@ export function listenInnerBus(
   updateViewMeasure: Callback,
   _bus_event: Ref<SubComEvent | undefined>,
   inner_bus: TiAppBus,
-  outer_bus?: TiAppBus,
+  outer_bus?: TiAppBus
 ) {
   const playground_any_event_handler = (msg: BusMsg<TiAppEvent>) => {
     let { name, data } = msg;
@@ -165,7 +165,7 @@ export function loadLocalSetting(com: TiCom, exName?: string) {
   let key = getExampleStoreKey(com, exName);
   let comConf = com.checkProps(exName);
   if (key) {
-    return Store.local.getObject(key, comConf);
+    return TiStore.local.getObject(key, comConf);
   }
   return _.cloneDeep(comConf);
 }
@@ -192,21 +192,21 @@ export function parseExampleComConf(ex: ExampleState) {
 export function saveLocalSetting(com: TiCom, ex: ExampleState) {
   let key = getExampleStoreKey(com, ex.name);
   if (key) {
-    Store.local.setObject(key, ex.comConf);
+    TiStore.local.setObject(key, ex.comConf);
   }
 }
 
 export function removeLocalSetting(com: TiCom, ex: ExampleState) {
   let key = getExampleStoreKey(com, ex.name);
   if (key) {
-    Store.local.remove(key);
+    TiStore.local.remove(key);
   }
 }
 
 export function watchProps(
   props: PlaygroundProps,
   PlayCom: ComputedRef<TiCom>,
-  ex: ExampleState,
+  ex: ExampleState
 ) {
   watch(
     () => props.example,
@@ -216,13 +216,13 @@ export function watchProps(
     },
     {
       immediate: true,
-    },
+    }
   );
   watch(
     () => ex.text,
     function () {
       parseExampleComConf(ex);
-    },
+    }
   );
   watch(
     () => PlayCom.value,
@@ -230,6 +230,6 @@ export function watchProps(
       ex.comConf = loadLocalSetting(com, props.example);
       ex.name = props.example;
       formatExampleText(ex);
-    },
+    }
   );
 }

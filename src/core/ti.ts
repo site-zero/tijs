@@ -49,7 +49,7 @@ export * as Dicts from './dict/ti-dict';
 export * as G2D from './g2d/ti-g2d';
 export * as Match from './match/ti-match';
 export * as Num from './num/ti-num';
-export * as Store from './storage/ti-storage';
+export * as TiStore from './storage/ti-storage';
 export * as I18n from './text/ti-i18n';
 export * as Str from './text/ti-str';
 export * as Tmpl from './tmpl/ti-tmpl';
