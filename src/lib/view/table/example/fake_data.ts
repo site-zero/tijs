@@ -1,5 +1,5 @@
-import { DateTime, Vars } from "../../../../core";
-import { Chance } from "chance";
+import { DateTime, Vars } from '../../../../core';
+import { Chance } from 'chance';
 
 // 创建一个 Chance 实例
 const chance = new Chance();
@@ -17,6 +17,6 @@ export function generateUser(): Vars {
     country: chance.country({ full: true }),
     address: chance.address(),
     street: chance.street(),
-    local_ip: chance.ip()
+    local_ip: chance.ip(),
   };
 }

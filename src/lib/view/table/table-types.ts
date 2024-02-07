@@ -1,6 +1,6 @@
-import { Vars } from "../../../core";
-import { CellProps } from "../../shelf/cell/use-cell.ts";
-import { TableRowData } from "./use-table";
+import { Vars } from '../../../core';
+import { CellProps } from '../../shelf/cell/use-cell.ts';
+import { TableRowData } from './use-table';
 
 /**
  * - `click` : 点击行头
@@ -9,11 +9,11 @@ import { TableRowData } from "./use-table";
  * - `cell`  : 点击行单元格
  */
 export type TableRowEventName =
-  | "select"
-  | "check"
-  | "open"
-  | "cell"
-  | "cell-open";
+  | 'select'
+  | 'check'
+  | 'open'
+  | 'cell'
+  | 'cell-open';
 
 export type TableRowEvent = {
   colIndex?: number;
@@ -26,7 +26,7 @@ export type TableRowEvent = {
  */
 export type TableCell = Omit<
   CellProps,
-  "activated" | "rowIndex" | "colIndex" | "data" | "vars"
+  'activated' | 'rowIndex' | 'colIndex' | 'data' | 'vars'
 >;
 
 /**

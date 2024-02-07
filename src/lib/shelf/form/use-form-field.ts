@@ -1,4 +1,4 @@
-import _ from "lodash";
+import _ from 'lodash';
 import {
   CommonProps,
   Field,
@@ -8,8 +8,8 @@ import {
   FieldValueType,
   VisibilityProps,
   getFieldUniqKey,
-  useVisibility
-} from "../../";
+  useVisibility,
+} from '../../';
 import {
   CssGridItem,
   CssUtils,
@@ -18,15 +18,15 @@ import {
   Match,
   Util,
   Vars,
-  invoke_partial
-} from "../../../core";
-import { FieldProps } from "../field/use-field";
+  invoke_partial,
+} from '../../../core';
+import { FieldProps } from '../field/use-field';
 import {
   AutoGridHint,
   FormGridLayout,
   buildFieldItemStyle,
-  normalizeGridLayout
-} from "./use-form-layout";
+  normalizeGridLayout,
+} from './use-form-layout';
 
 /*-----------------------------------------------------
 
@@ -126,7 +126,7 @@ export type FormFieldAboutProps = {
                 
 -----------------------------------------------------*/
 export type FormField = CommonProps &
-  Partial<Omit<Field, "transformer" | "serializer">> &
+  Partial<Omit<Field, 'transformer' | 'serializer'>> &
   FieldComProps &
   VisibilityProps &
   CssGridItem & {
@@ -171,7 +171,7 @@ export type FormField = CommonProps &
                 
 -----------------------------------------------------*/
 
-export type FormItemRace = "group" | "label" | "field";
+export type FormItemRace = 'group' | 'label' | 'field';
 
 export type FormItem = {
   uniqKey: string;
@@ -201,7 +201,7 @@ export function buildFormFieldList(
   fields: FormField[],
   context: Vars,
   indexes: number[] = [],
-  maxFieldNameWidth?: number
+  maxFieldNameWidth?: number,
 ): FormItem[] {
   let list = [] as FormItem[];
   for (let i = 0; i < fields.length; i++) {
@@ -211,7 +211,7 @@ export function buildFormFieldList(
       props,
       field,
       context,
-      maxFieldNameWidth
+      maxFieldNameWidth,
     );
     if (fld) {
       list.push(fld);
@@ -232,20 +232,20 @@ function buildFormField(
   props: FormFieldAboutProps,
   field: FormField,
   vars: Vars,
-  maxFieldNameWidth?: number
+  maxFieldNameWidth?: number,
 ): FormItem | undefined {
   maxFieldNameWidth =
     field.maxFieldNameWidth ?? maxFieldNameWidth ?? props.maxFieldNameWidth;
   let uniqKey =
     field.uniqKey ||
-    (field.name ? getFieldUniqKey(field.name) : `_F${indexes.join("_")}`);
+    (field.name ? getFieldUniqKey(field.name) : `_F${indexes.join('_')}`);
 
   let title = field.title ? I18n.text(field.title) : undefined;
   let fItem = {
     uniqKey,
     title,
     className: field.className,
-    maxFieldNameWidth
+    maxFieldNameWidth,
   } as FormItem;
 
   // 准备字段的样式(包括 Grid 布局的自定义属性)
@@ -253,11 +253,11 @@ function buildFormField(
 
   // 字段组
   if (field.fields) {
-    fItem.race = "group";
+    fItem.race = 'group';
 
     // 记入默认组样式
     fItem.className = CssUtils.mergeClassName(
-      field.className ?? props.defaultGroupClassName ?? "as-legend"
+      field.className ?? props.defaultGroupClassName ?? 'as-legend',
     );
 
     // 字段组布局
@@ -271,7 +271,7 @@ function buildFormField(
     // 默认布局
     else {
       fItem.layout = {
-        autoGrid: [[5, 1500], [4, 1200], [3, 900], [2, 500], 1]
+        autoGrid: [[5, 1500], [4, 1200], [3, 900], [2, 500], 1],
       };
     }
     fItem.fields = buildFormFieldList(
@@ -279,7 +279,7 @@ function buildFormField(
       field.fields,
       vars,
       indexes,
-      maxFieldNameWidth
+      maxFieldNameWidth,
     );
     // 空组就无视
     if (_.isEmpty(fItem.fields)) {
@@ -288,16 +288,16 @@ function buildFormField(
   }
   // 标签字段
   else if (!field.name) {
-    fItem.race = "label";
+    fItem.race = 'label';
     fItem.className = CssUtils.mergeClassName(
-      field.className ?? props.defaultLabelClassName
+      field.className ?? props.defaultLabelClassName,
     );
   }
   // 普通字段
   else {
-    fItem.race = "field";
+    fItem.race = 'field';
     fItem.className = CssUtils.mergeClassName(
-      field.className ?? props.defaultFieldClassName
+      field.className ?? props.defaultFieldClassName,
     );
     // 测试显示隐藏性
     let { isHidden, isDisabled } = useVisibility(field);
@@ -316,7 +316,7 @@ function buildFormField(
       readonlyComConf: field.readonlyComConf,
 
       status: _.get(props.fieldStatus, uniqKey),
-      checkEquals: field.checkEquals
+      checkEquals: field.checkEquals,
     } as FieldProps;
     fItem.props.disabled = isDisabled(vars);
 
@@ -336,7 +336,7 @@ function buildFormField(
         vars,
         field.transformer,
         field.transArgs,
-        field.transPartial
+        field.transPartial,
       );
     }
 
@@ -346,7 +346,7 @@ function buildFormField(
         vars,
         field.serializer,
         field.serialArgs,
-        field.serialPartial
+        field.serialPartial,
       );
     }
   }
@@ -358,12 +358,12 @@ function prepareFieldConverter(
   context: Vars,
   converter: string | Function,
   args?: any[],
-  partial?: invoke_partial
+  partial?: invoke_partial,
 ): FuncA2<any, Vars, any> {
   let conv = Util.genInvoking(converter, {
     context,
     args,
-    partial: partial || "right"
+    partial: partial || 'right',
   });
   return (val: any, data: Vars) => {
     return conv(val, data);

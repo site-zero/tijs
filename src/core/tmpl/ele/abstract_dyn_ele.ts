@@ -1,7 +1,7 @@
-import _ from "lodash";
-import { AnyGetter, Vars } from "../../ti";
-import { genObjGetter } from "../../util/util-getter";
-import { DynElInfo, TmplEle } from "../ti-tmpl";
+import _ from 'lodash';
+import { AnyGetter, Vars } from '../../ti';
+import { genObjGetter } from '../../util/util-getter';
+import { DynElInfo, TmplEle } from '../ti-tmpl';
 
 export abstract class DynEle implements TmplEle {
   protected _key: string;

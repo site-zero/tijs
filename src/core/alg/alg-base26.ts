@@ -1,6 +1,6 @@
-import _ from "lodash";
+import _ from 'lodash';
 
-const BASE26 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const BASE26 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
 /***
  * Translate decimal (0-9) to 27 base system (A-Z)
@@ -40,16 +40,16 @@ export function toBase26(n: number) {
     n = high - 1;
   }
   re.push(BASE26[n]);
-  return re.reverse().join("");
+  return re.reverse().join('');
 }
 /***
  * Translate 27 base system (A-Z) to decimal (0-9)
  */
-export function fromBase26(base26:string) {
+export function fromBase26(base26: string) {
   // Reverse the code from low to high
   //  "ADC" => "C","D","A"
   //console.log("fromBase26:", base26)
-  let cs = _.trim(base26).toUpperCase().split("").reverse().join("");
+  let cs = _.trim(base26).toUpperCase().split('').reverse().join('');
   let n = 0;
   let len = cs.length;
   let r = 1;

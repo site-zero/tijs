@@ -1,6 +1,6 @@
-import JSON5 from "json5";
-import _ from "lodash";
-import { FuncA2, Match, Util, Vars } from "../ti";
+import JSON5 from 'json5';
+import _ from 'lodash';
+import { FuncA2, Match, Util, Vars } from '../ti';
 
 export type SelectValueOptions<T, CTX> = {
   explain?: boolean;
@@ -40,7 +40,7 @@ export type SelectValueArm<T, M> = T | Array<SelectValueArmItem<T, M>>;
 export function selectValue<C, T, M>(
   context: C,
   arms: string | SelectValueArm<T, M> = [],
-  options: SelectValueOptions<T, C> = {}
+  options: SelectValueOptions<T, C> = {},
 ): T {
   // Auto Parse
   if (_.isString(arms)) {
@@ -62,7 +62,7 @@ export function selectValue<C, T, M>(
 
   // Guard
   if (_.isString(arms)) {
-    throw new Error("Arms is string but it should be impossible! : " + arms);
+    throw new Error('Arms is string but it should be impossible! : ' + arms);
   }
 
   // Walk Arm
@@ -79,7 +79,7 @@ export function selectValue<C, T, M>(
         return v;
       }
     }
-    throw Error("Arms without default : " + JSON5.stringify(arms));
+    throw Error('Arms without default : ' + JSON5.stringify(arms));
   }
   // Simple value
   else {

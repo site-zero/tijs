@@ -1,6 +1,6 @@
-import JSON5 from "json5";
-import _ from "lodash";
-import { ComputedRef, Ref, watch } from "vue";
+import JSON5 from 'json5';
+import _ from 'lodash';
+import { ComputedRef, Ref, watch } from 'vue';
 import {
   AppEvents,
   ComPropExample,
@@ -8,8 +8,8 @@ import {
   TiAppBus,
   TiAppEvent,
   TiCom,
-  TiEvent
-} from "../../";
+  TiEvent,
+} from '../../';
 import {
   BusMsg,
   Callback,
@@ -18,8 +18,8 @@ import {
   Store,
   Tmpl,
   Util,
-  Vars
-} from "../../../core";
+  Vars,
+} from '../../../core';
 /*-------------------------------------------------------
 
                    Event & bus
@@ -33,14 +33,14 @@ export type SubComEvent = {
 export function buildBusEventMessage(evt?: TiEvent<SubComEvent>): string {
   if (evt) {
     let { created, name, payload } = evt;
-    let ss = [DateTime.format(created, { fmt: "HH:mm:ss.SSS" }), name];
+    let ss = [DateTime.format(created, { fmt: 'HH:mm:ss.SSS' }), name];
     ss.push(`<${typeof payload}>`);
     if (payload) {
       ss.push(JSON.stringify(payload));
     }
-    return ss.join(":");
+    return ss.join(':');
   }
-  return "";
+  return '';
 }
 
 export function listenInnerBus(
@@ -49,7 +49,7 @@ export function listenInnerBus(
   updateViewMeasure: Callback,
   _bus_event: Ref<SubComEvent | undefined>,
   inner_bus: TiAppBus,
-  outer_bus?: TiAppBus
+  outer_bus?: TiAppBus,
 ) {
   const playground_any_event_handler = (msg: BusMsg<TiAppEvent>) => {
     let { name, data } = msg;
@@ -60,10 +60,10 @@ export function listenInnerBus(
       return;
     }
 
-    console.log("playground.inner_bus", msg);
+    console.log('playground.inner_bus', msg);
     _bus_event.value = {
       listenName: name,
-      event: data
+      event: data,
     };
     let eventName = `playground:${name}`;
     outer_bus?.emit(eventName, data.payload);
@@ -71,7 +71,7 @@ export function listenInnerBus(
     //   play.assignExampleConf({ value: v.payload });
     // }
     // 准备更新 comConf
-    let model = PlayCom.value.exampleModel ?? { change: "value" };
+    let model = PlayCom.value.exampleModel ?? { change: 'value' };
     let target = model[name];
     // {"change": "value"}
     if (target) {
@@ -90,7 +90,7 @@ export function listenInnerBus(
       saveLocalSetting(PlayCom.value, ex);
     }
   };
-  inner_bus.on("*", playground_any_event_handler);
+  inner_bus.on('*', playground_any_event_handler);
 }
 /*-------------------------------------------------------
 
@@ -125,11 +125,11 @@ export type ComPropExampleDisplay = ComPropExample & {
 
 -------------------------------------------------------*/
 function getExampleStoreKey(com: TiCom, exampleName?: string) {
-  let keys = ["Ti-Demo-Config", com.name];
+  let keys = ['Ti-Demo-Config', com.name];
   if (exampleName) {
     keys.push(exampleName);
   }
-  return keys.join("-");
+  return keys.join('-');
 }
 
 export function getExampleList(example: ExampleState, com: TiCom) {
@@ -141,10 +141,10 @@ export function getExampleList(example: ExampleState, com: TiCom) {
       href.push(it.name);
     }
     let it2 = _.cloneDeep(it) as ComPropExampleDisplay;
-    it2.href = `/${href.join("/")}`;
+    it2.href = `/${href.join('/')}`;
     it2.highlight = it.name == currentName;
     it2.className = {
-      "is-highlight": it2.highlight
+      'is-highlight': it2.highlight,
     };
     it2.text = I18n.textOrKey(it.text || it.name);
     list.push(it2);
@@ -153,7 +153,7 @@ export function getExampleList(example: ExampleState, com: TiCom) {
 }
 
 export function getExample(com: TiCom, exName?: string) {
-  let name = exName || com.defaultProps || "";
+  let name = exName || com.defaultProps || '';
   for (let it of com.exampleProps) {
     if (it.name === name) {
       return it;
@@ -183,7 +183,7 @@ export function formatExampleText(ex: ExampleState) {
 export function parseExampleComConf(ex: ExampleState) {
   try {
     ex.comConf = JSON5.parse(ex.text);
-    ex.syntaxErr = "";
+    ex.syntaxErr = '';
   } catch (err) {
     ex.syntaxErr = err as string;
   }
@@ -206,7 +206,7 @@ export function removeLocalSetting(com: TiCom, ex: ExampleState) {
 export function watchProps(
   props: PlaygroundProps,
   PlayCom: ComputedRef<TiCom>,
-  ex: ExampleState
+  ex: ExampleState,
 ) {
   watch(
     () => props.example,
@@ -215,14 +215,14 @@ export function watchProps(
       selectExample(com, ex, exampleName);
     },
     {
-      immediate: true
-    }
+      immediate: true,
+    },
   );
   watch(
     () => ex.text,
     function () {
       parseExampleComConf(ex);
-    }
+    },
   );
   watch(
     () => PlayCom.value,
@@ -230,6 +230,6 @@ export function watchProps(
       ex.comConf = loadLocalSetting(com, props.example);
       ex.name = props.example;
       formatExampleText(ex);
-    }
+    },
   );
 }

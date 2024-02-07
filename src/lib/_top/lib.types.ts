@@ -1,5 +1,5 @@
-import _ from "lodash";
-import { DefineComponent, InjectionKey, Plugin } from "vue";
+import _ from 'lodash';
+import { DefineComponent, InjectionKey, Plugin } from 'vue';
 import {
   Callback2,
   I18n,
@@ -7,8 +7,8 @@ import {
   IsType,
   TiBus,
   TiIconObj,
-  Vars
-} from "../../core";
+  Vars,
+} from '../../core';
 
 /*
  */
@@ -16,31 +16,31 @@ export enum TiComRace {
   /**
    *  输入: 生产比较简单单一的数据类型
    */
-  INPUT = "INPUT",
+  INPUT = 'INPUT',
   /**
    *  编辑: 生产比较复杂的数据
    */
-  EIDT = "EIDT",
+  EIDT = 'EIDT',
   /**
    * 搁架:组合更多子控件，用作界面布局
    */
-  SHELF = "SHELF",
+  SHELF = 'SHELF',
   /**
    *  动作: 按钮、导航条、等执行用户命令
    */
-  ACTION = "ACTION",
+  ACTION = 'ACTION',
   /**
    *  小片: 小面积信息展示控件
    */
-  TILE = "TILE",
+  TILE = 'TILE',
   /**
    *  播放器：展示多媒体内容
    */
-  PLAY = "PLAY",
+  PLAY = 'PLAY',
   /**
    *  视图: 通常来处理比较复杂的数据，在页面上占用的面积也比较大
    */
-  VIEW = "VIEW"
+  VIEW = 'VIEW',
 }
 
 export interface ComPropExample {
@@ -112,7 +112,7 @@ export class TiCom implements TiComInfo {
   };
 
   constructor(info: TiComInfo) {
-    this.icon = info.icon || "fas-question";
+    this.icon = info.icon || 'fas-question';
     this.race = info.race;
     this.name = info.name;
     this.text = info.text;
@@ -204,7 +204,7 @@ export type EventInfo<T> = {
 
 export function isEventInfo<T>(
   input: any,
-  isT?: IsType<T>
+  isT?: IsType<T>,
 ): input is EventInfo<T> {
   if (_.isNil(input)) {
     return false;
@@ -214,10 +214,10 @@ export function isEventInfo<T>(
     return false;
   }
   keys.sort();
-  if ("name" != keys[0]) {
+  if ('name' != keys[0]) {
     return false;
   }
-  if (keys.length > 1 && "payload" != keys[1]) {
+  if (keys.length > 1 && 'payload' != keys[1]) {
     return false;
   }
   if (isT && keys.length > 1 && !isT(input.payload)) {
@@ -237,13 +237,13 @@ export type TiEvent<T> = EventInfo<T> & {
    */
   sourceCom: Pick<
     TiComInfo,
-    "name" | "race" | "text" | "i18n" | "exampleModel"
+    'name' | 'race' | 'text' | 'i18n' | 'exampleModel'
   >;
 };
 
 export enum AppEvents {
-  APP_RESIZE = "app-resize",
-  APP_SCROLL = "app-scroll"
+  APP_RESIZE = 'app-resize',
+  APP_SCROLL = 'app-scroll',
 }
 
 export type APP_EVENT = keyof typeof AppEvents;
@@ -261,4 +261,4 @@ export type TiAppEvent = TiEvent<any>;
 export type TiAppBus = TiBus<TiAppEvent>;
 export type TiAppEventTrigger<K extends string> = TiEventTrigger<K, any>;
 
-export const BUS_KEY: InjectionKey<TiAppBus> = Symbol("EVENT_BUS");
+export const BUS_KEY: InjectionKey<TiAppBus> = Symbol('EVENT_BUS');

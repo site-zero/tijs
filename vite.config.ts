@@ -1,5 +1,5 @@
-import vue from "@vitejs/plugin-vue";
-import { defineConfig } from "vite";
+import vue from '@vitejs/plugin-vue';
+import { defineConfig } from 'vite';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -16,29 +16,29 @@ export default defineConfig({
   build: {
     // 单位是 KB
     chunkSizeWarningLimit: 800,
-    outDir: "dist",
-    assetsDir: "./assert",
+    outDir: 'dist',
+    assetsDir: './assert',
     lib: {
-      entry: "index.d.ts",
-      name: "Ti",
-      fileName: (format) => `tijs.${format}.js`
+      entry: 'index.d.ts',
+      name: 'Ti',
+      fileName: (format) => `tijs.${format}.js`,
     },
     sourcemap: true,
     rollupOptions: {
-      external: ["vue"],
+      external: ['vue'],
       output: {
         // 提供全局变量到外部依赖
         globals: {
-          vue: "Vue"
+          vue: 'Vue',
         },
         // 配置样式输出
         assetFileNames: (assetInfo) => {
-          if (assetInfo.name.endsWith(".scss")) {
-            return "style.scss";
+          if (assetInfo.name.endsWith('.scss')) {
+            return 'style.scss';
           }
           return assetInfo.name;
-        }
-      }
-    }
-  }
+        },
+      },
+    },
+  },
 });

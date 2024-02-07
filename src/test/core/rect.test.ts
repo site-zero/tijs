@@ -1,31 +1,31 @@
-import { Rect, RectInfo, Rects } from "../../core";
-import { keys } from "lodash";
-import { Raw } from "node_modules/typedoc/dist/lib/utils";
-import { expect, test } from "vitest";
+import { Rect, RectInfo, Rects } from '../../core';
+import { keys } from 'lodash';
+import { Raw } from 'node_modules/typedoc/dist/lib/utils';
+import { expect, test } from 'vitest';
 
-test("explainToArray", function () {
+test('explainToArray', function () {
   // new Rects.Rect().;
 
-  let arr = ["height", "left", "top", "width"];
-  expect(Rects.explainToArray("tlwh")).toStrictEqual(arr);
+  let arr = ['height', 'left', 'top', 'width'];
+  expect(Rects.explainToArray('tlwh')).toStrictEqual(arr);
 
-  arr = ["top", "left", "width", "height"];
-  expect(Rects.explainToArray("tlwh", false)).toStrictEqual(arr);
+  arr = ['top', 'left', 'width', 'height'];
+  expect(Rects.explainToArray('tlwh', false)).toStrictEqual(arr);
 
-  arr = ["bottom", "height", "right", "width"];
-  expect(Rects.explainToArray("brwh")).toStrictEqual(arr);
+  arr = ['bottom', 'height', 'right', 'width'];
+  expect(Rects.explainToArray('brwh')).toStrictEqual(arr);
 
-  arr = ["bottom", "right", "width", "height"];
-  expect(Rects.explainToArray("brwh", false)).toStrictEqual(arr);
+  arr = ['bottom', 'right', 'width', 'height'];
+  expect(Rects.explainToArray('brwh', false)).toStrictEqual(arr);
 
-  arr = ["left", "top"];
-  expect(Rects.explainToArray("tlmn")).toStrictEqual(arr);
+  arr = ['left', 'top'];
+  expect(Rects.explainToArray('tlmn')).toStrictEqual(arr);
 
   arr = [];
-  expect(Rects.explainToArray("adef")).toStrictEqual(arr);
+  expect(Rects.explainToArray('adef')).toStrictEqual(arr);
 });
 
-test("pickKeys", function () {
+test('pickKeys', function () {
   // let rect = new Rects.Rect();
   // console.log("rect is:", rect);
 
@@ -43,22 +43,22 @@ test("pickKeys", function () {
   // let reObj = Rects.pickKeys(ri, "whxy");
   // console.log(reObj);
 
-  expect(Rects.pickKeys(ri, "whxy")).toStrictEqual({
+  expect(Rects.pickKeys(ri, 'whxy')).toStrictEqual({
     width: 120,
     x: NaN,
     y: NaN,
-    height: 120
+    height: 120,
   });
 
-  expect(Rects.pickKeys(ri, "twxb")).toStrictEqual({
+  expect(Rects.pickKeys(ri, 'twxb')).toStrictEqual({
     width: 120,
     x: NaN,
     bottom: NaN,
-    top: 0
+    top: 0,
   });
 });
 
-test("rectNew", function () {
+test('rectNew', function () {
   expect(1).eq(1);
   let rect = new Rects.Rect();
   expect(
@@ -69,7 +69,7 @@ test("rectNew", function () {
       rect.top == 0 &&
       rect.bottom == 0 &&
       rect.x == 0 &&
-      rect.y == 0
+      rect.y == 0,
   ).eq(true);
 
   // mode: "height/left/top/width"
@@ -83,7 +83,7 @@ test("rectNew", function () {
       rect.top == 20 &&
       rect.bottom == 140 &&
       rect.x == 70 &&
-      rect.y == 80
+      rect.y == 80,
   ).eq(true);
 
   // mode: "height/right/top/width"
@@ -98,7 +98,7 @@ test("rectNew", function () {
       rect.top == 30 &&
       rect.bottom == 150 &&
       rect.x == 150 &&
-      rect.y == 90
+      rect.y == 90,
   ).eq(true);
 
   // mode: "bottom/height/left/width"
@@ -112,7 +112,7 @@ test("rectNew", function () {
       rect.top == 170 &&
       rect.bottom == 230 &&
       rect.x == 235 &&
-      rect.y == 200
+      rect.y == 200,
   ).eq(true);
 
   // mode: "bottom/height/right/width"
@@ -126,7 +126,7 @@ test("rectNew", function () {
       rect.top == 10 &&
       rect.bottom == 100 &&
       rect.x == 40 &&
-      rect.y == 55
+      rect.y == 55,
   ).eq(true);
 
   // mode: "bottom/left/right/top"
@@ -140,7 +140,7 @@ test("rectNew", function () {
       rect.top == 90 &&
       rect.bottom == 130 &&
       rect.x == 65 &&
-      rect.y == 110
+      rect.y == 110,
   ).eq(true);
 
   // mode: "height/width/x/y"
@@ -154,7 +154,7 @@ test("rectNew", function () {
       rect.top == 5 &&
       rect.bottom == 35 &&
       rect.x == 40 &&
-      rect.y == 20
+      rect.y == 20,
   ).eq(true);
 
   // mode: "height/left/width/y"
@@ -168,7 +168,7 @@ test("rectNew", function () {
       rect.top == 0 &&
       rect.bottom == 40 &&
       rect.x == 65 &&
-      rect.y == 20
+      rect.y == 20,
   ).eq(true);
 
   // mode: "height/right/width/y"
@@ -182,7 +182,7 @@ test("rectNew", function () {
       rect.top == 50 &&
       rect.bottom == 190 &&
       rect.x == 35 &&
-      rect.y == 120
+      rect.y == 120,
   ).eq(true);
 
   // mode: "height/top/width/x"
@@ -196,7 +196,7 @@ test("rectNew", function () {
       rect.top == 50 &&
       rect.bottom == 120 &&
       rect.x == 88 &&
-      rect.y == 85
+      rect.y == 85,
   ).eq(true);
 
   // mode: "bottom/height/width/x"
@@ -210,11 +210,11 @@ test("rectNew", function () {
       rect.top == 80 &&
       rect.bottom == 150 &&
       rect.x == 68 &&
-      rect.y == 115
+      rect.y == 115,
   ).eq(true);
 });
 
-test("raw", function () {
+test('raw', function () {
   let rect = new Rects.Rect({ left: 190, bottom: 230, width: 90, height: 60 });
   expect(
     rect.width == 90 &&
@@ -224,32 +224,32 @@ test("raw", function () {
       rect.top == 170 &&
       rect.bottom == 230 &&
       rect.x == 235 &&
-      rect.y == 200
+      rect.y == 200,
   ).eq(true);
 
   expect(rect.raw()).toStrictEqual({
     top: 170,
     left: 190,
     width: 90,
-    height: 60
+    height: 60,
   });
 
-  expect(rect.raw("whlr")).toStrictEqual({
+  expect(rect.raw('whlr')).toStrictEqual({
     width: 90,
     height: 60,
     left: 190,
-    right: 280
+    right: 280,
   });
 
-  expect(rect.raw("TLXY")).toStrictEqual({
+  expect(rect.raw('TLXY')).toStrictEqual({
     top: 170,
     left: 190,
     x: 235,
-    y: 200
+    y: 200,
   });
 });
 
-test("toCss", function () {
+test('toCss', function () {
   let rect = new Rects.Rect({ left: 190, bottom: 230, width: 90, height: 60 });
   expect(
     rect.width == 90 &&
@@ -259,44 +259,44 @@ test("toCss", function () {
       rect.top == 170 &&
       rect.bottom == 230 &&
       rect.x == 235 &&
-      rect.y == 200
+      rect.y == 200,
   ).eq(true);
-  expect(rect.toCss("tlwh", { width: 1000, height: 600 })).toStrictEqual({
+  expect(rect.toCss('tlwh', { width: 1000, height: 600 })).toStrictEqual({
     top: 170,
     left: 190,
     width: 90,
-    height: 60
+    height: 60,
   });
 
-  expect(rect.toCss("rb", { width: 1000, height: 600 })).toStrictEqual({
+  expect(rect.toCss('rb', { width: 1000, height: 600 })).toStrictEqual({
     right: 720,
-    bottom: 370
+    bottom: 370,
   });
 });
 
-test("relative", function () {
+test('relative', function () {
   let rect2 = new Rects.Rect({ top: 100, left: 100, width: 150, height: 150 });
 
   let rect1 = new Rects.Rect({ top: 150, left: 150, width: 50, height: 50 });
   rect1.relative(rect2);
-  expect(rect1.raw("tlwh")).toStrictEqual({
+  expect(rect1.raw('tlwh')).toStrictEqual({
     top: 50,
     left: 50,
     width: 50,
-    height: 50
+    height: 50,
   });
 
   rect1 = new Rects.Rect({ top: 200, left: 200, width: 100, height: 100 });
   rect1.relative(rect2, { x: 10, y: 20 });
-  expect(rect1.raw("tlwh")).toStrictEqual({
+  expect(rect1.raw('tlwh')).toStrictEqual({
     top: 120,
     left: 110,
     width: 100,
-    height: 100
+    height: 100,
   });
 });
 
-test("zoom", function () {
+test('zoom', function () {
   let rect = new Rects.Rect({ top: 100, left: 100, width: 50, height: 60 });
   // x, y 不变，宽度变成原来的 2 倍，高度成为原来的 3 倍
   rect.zoom({ x: 2, y: 3 });
@@ -311,14 +311,14 @@ test("zoom", function () {
 });
 
 // 等 contains 测试完毕，再来补充这个 case
-test("zoomTo", function () {
+test('zoomTo', function () {
   let rect = new Rects.Rect({ top: 100, left: 100, width: 50, height: 60 });
   rect.zoomTo({ width: 80, height: 80 });
   // console.log("=================");
   // console.log(rect);
 });
 
-test("centreTo", function () {
+test('centreTo', function () {
   let rect = new Rects.Rect({ top: 100, left: 80, width: 150, height: 160 });
   rect.centreTo({ width: 180, height: 180, top: 0, left: 0 });
   let rect2 = new Rects.Rect({ x: 90, y: 90, width: 150, height: 160 });
@@ -332,7 +332,7 @@ test("centreTo", function () {
   rect = new Rects.Rect({ top: 100, left: 80, width: 110, height: 90 });
   rect.centreTo(
     { width: 100, height: 120, top: 20, left: 20 },
-    { xAxis: true, yAxis: false }
+    { xAxis: true, yAxis: false },
   );
   rect2 = new Rects.Rect({ x: 70, y: 145, width: 110, height: 90 });
   expect(rect).toStrictEqual(rect2);
@@ -340,38 +340,38 @@ test("centreTo", function () {
   rect = new Rects.Rect({ top: 100, left: 80, width: 110, height: 90 });
   rect.centreTo(
     { width: 100, height: 120, top: 20, left: 20 },
-    { xAxis: false, yAxis: true }
+    { xAxis: false, yAxis: true },
   );
   rect2 = new Rects.Rect({ x: 135, y: 80, width: 110, height: 90 });
   expect(rect).toStrictEqual(rect2);
 });
 
-test("translate", function () {
+test('translate', function () {
   let rect = new Rects.Rect({ top: 20, left: 10, width: 110, height: 120 });
   rect.translate({ x: 10, y: 20 });
   let rect2 = new Rects.Rect({ top: 40, left: 20, width: 110, height: 120 });
   expect(rect).toStrictEqual(rect2);
 });
 
-test("moveTo", function () {
+test('moveTo', function () {
   let rect = new Rects.Rect({ top: 0, left: 0, width: 100, height: 120 });
-  rect.moveTo({ x: 10, y: 15 }, { x: 10, y: 10 }, "tl");
+  rect.moveTo({ x: 10, y: 15 }, { x: 10, y: 10 }, 'tl');
   let rect2 = new Rects.Rect({ top: 5, left: 0, width: 100, height: 120 });
   expect(rect).toStrictEqual(rect2);
 
   rect = new Rects.Rect({ top: 50, left: 60, width: 100, height: 120 });
-  rect.moveTo({ x: 10, y: 15 }, { x: 10, y: 10 }, "rt");
+  rect.moveTo({ x: 10, y: 15 }, { x: 10, y: 10 }, 'rt');
   rect2 = new Rects.Rect({ top: 5, right: 20, width: 100, height: 120 });
   expect(rect).toStrictEqual(rect2);
 });
 
 // 占位
-test("dockTo", function () {});
-test("dockIn", function () {});
-test("wrap", function () {});
-test("wrapCut", function () {});
+test('dockTo', function () {});
+test('dockIn', function () {});
+test('wrap', function () {});
+test('wrapCut', function () {});
 
-test("union", function () {
+test('union', function () {
   let rect1 = new Rects.Rect({ top: 0, left: 15, right: 100, bottom: 100 });
   let rect2 = new Rects.Rect({ top: 10, left: 10, right: 130, bottom: 120 });
   let rect3 = new Rects.Rect({ top: 15, left: 5, right: 105, bottom: 130 });
@@ -381,7 +381,7 @@ test("union", function () {
   expect(rect1).toStrictEqual(rect5);
 });
 
-test("overlap", function () {
+test('overlap', function () {
   let rect1 = new Rects.Rect({ top: 0, left: 15, right: 100, bottom: 100 });
   let rect2 = new Rects.Rect({ top: 10, left: 10, right: 130, bottom: 120 });
   let rect3 = new Rects.Rect({ top: 15, left: 5, right: 105, bottom: 130 });
@@ -391,7 +391,7 @@ test("overlap", function () {
   expect(rect1).toStrictEqual(rect5);
 });
 
-test("contains", function () {
+test('contains', function () {
   let rect1 = new Rects.Rect({ top: 10, left: 10, right: 130, bottom: 120 });
   let rect2 = new Rects.Rect({ top: 10, left: 10, right: 130, bottom: 120 });
   expect(rect1.contains(rect2)).eq(true);
@@ -404,7 +404,7 @@ test("contains", function () {
   expect(rect1.contains(rect2)).eq(false);
 });
 
-test("containsX", function () {
+test('containsX', function () {
   let rect1 = new Rects.Rect({ top: 10, left: 10, right: 130, bottom: 120 });
   let rect2 = new Rects.Rect({ top: 10, left: 10, right: 130, bottom: 120 });
   expect(rect1.containsX(rect2)).eq(true);
@@ -417,7 +417,7 @@ test("containsX", function () {
   expect(rect1.containsX(rect2)).eq(false);
 });
 
-test("containsY", function () {
+test('containsY', function () {
   let rect1 = new Rects.Rect({ top: 10, left: 10, right: 130, bottom: 120 });
   let rect2 = new Rects.Rect({ top: 10, left: 10, right: 130, bottom: 120 });
   expect(rect1.containsY(rect2)).eq(true);
@@ -430,7 +430,7 @@ test("containsY", function () {
   expect(rect1.containsY(rect2)).eq(false);
 });
 
-test("hasPoint", function () {
+test('hasPoint', function () {
   let rect = new Rects.Rect({ top: 10, left: 10, right: 130, bottom: 120 });
   expect(rect.hasPoint({ x: 15, y: 16 })).eq(true);
   expect(rect.hasPoint({ x: 15, y: 16 }, 3)).eq(true);
@@ -438,7 +438,7 @@ test("hasPoint", function () {
   expect(rect.hasPoint({ x: 15, y: 9 }, 3)).eq(false);
 });
 
-test("hasPointX", function () {
+test('hasPointX', function () {
   let rect = new Rects.Rect({ top: 10, left: 10, right: 130, bottom: 120 });
   expect(rect.hasPointX(15)).eq(true);
   expect(rect.hasPointX(15, 2)).eq(true);
@@ -446,7 +446,7 @@ test("hasPointX", function () {
   expect(rect.hasPointX(135, 2)).eq(false);
 });
 
-test("hasPointY", function () {
+test('hasPointY', function () {
   let rect = new Rects.Rect({ top: 10, left: 10, right: 130, bottom: 120 });
   expect(rect.hasPointY(15)).eq(true);
   expect(rect.hasPointY(15, 2)).eq(true);
@@ -454,7 +454,7 @@ test("hasPointY", function () {
   expect(rect.hasPointY(125, 2)).eq(false);
 });
 
-test("isOverlap", function () {
+test('isOverlap', function () {
   let rect1 = new Rects.Rect({ top: 10, left: 10, right: 50, bottom: 50 });
   let rect2 = new Rects.Rect({ top: 8, left: 8, right: 50, bottom: 50 });
   expect(rect1.isOverlap(rect2)).eq(true);
@@ -462,7 +462,7 @@ test("isOverlap", function () {
   expect(rect1.isOverlap(rect3)).eq(false);
 });
 
-test("area", function () {
+test('area', function () {
   let rect = new Rects.Rect({ top: 10, left: 10, right: 50, bottom: 50 });
   expect(rect.area()).eq(1600);
 

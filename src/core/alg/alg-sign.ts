@@ -1,5 +1,5 @@
-import _ from "lodash";
-import * as CryptoJS from "crypto-js";
+import _ from 'lodash';
+import * as CryptoJS from 'crypto-js';
 
 export function sha1(str: any) {
   let s: string;

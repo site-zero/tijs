@@ -1,5 +1,5 @@
-import _ from "lodash";
-import { TextStrValue } from "../ti";
+import _ from 'lodash';
+import { TextStrValue } from '../ti';
 
 /***
  * 将一组值推到一个对象的某个指定键下,
@@ -67,7 +67,7 @@ type GroupingReturn = {
 export function grouping(
   list: any[] = [],
   groupKey: string,
-  options: GroupingOptions | undefined
+  options: GroupingOptions | undefined,
 ):
   | {
       [k: string]: GroupingReturn;
@@ -76,8 +76,8 @@ export function grouping(
   //...............................................
   let {
     titles = [],
-    otherTitle = { value: "Others", text: "Others" },
-    asList = false
+    otherTitle = { value: 'Others', text: 'Others' },
+    asList = false,
   } = options || {};
   //...............................................
   let reMap = {} as {
@@ -109,7 +109,7 @@ export function grouping(
       if (!grp) {
         grp = {
           ...tit,
-          list: []
+          list: [],
         };
         reMap[gk] = grp;
       }
@@ -120,7 +120,7 @@ export function grouping(
   if (!_.isEmpty(others)) {
     reMap[otherTitle.value] = {
       ...otherTitle,
-      list: others
+      list: others,
     };
   }
   //...............................................

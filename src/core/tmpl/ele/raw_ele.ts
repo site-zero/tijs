@@ -1,4 +1,4 @@
-import { TmplEle } from "../ti-tmpl";
+import { TmplEle } from '../ti-tmpl';
 
 export class RawEle implements TmplEle {
   private _str: string;

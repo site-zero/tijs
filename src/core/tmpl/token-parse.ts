@@ -1,12 +1,15 @@
-import _ from "lodash";
-import { WnStackPushResult } from "../alg/char-stack";
-import { WnTmplToken } from "./tmpl-token";
-import { WnTmplTokenExpert } from "./token-expert";
+import _ from 'lodash';
+import { WnStackPushResult } from '../alg/char-stack';
+import { WnTmplToken } from './tmpl-token';
+import { WnTmplTokenExpert } from './token-expert';
 
-export function parseTokens(cs: string, expert?: WnTmplTokenExpert): WnTmplToken[] {
+export function parseTokens(
+  cs: string,
+  expert?: WnTmplTokenExpert,
+): WnTmplToken[] {
   // 默认符号解析专家类
   if (!expert) {
-    expert = new WnTmplTokenExpert("$$", "${", "{", "}");
+    expert = new WnTmplTokenExpert('$$', '${', '{', '}');
   }
 
   // 准备符号结果列表
@@ -35,7 +38,7 @@ export function parseTokens(cs: string, expert?: WnTmplTokenExpert): WnTmplToken
     else if (expert.isStarts()) {
       // 收集之前的符号
       if (sb.length > 0) {
-        list.push(new WnTmplToken(sb.join("")).asText());
+        list.push(new WnTmplToken(sb.join('')).asText());
         sb = [] as string[];
       }
       while (i < n) {
@@ -63,7 +66,7 @@ export function parseTokens(cs: string, expert?: WnTmplTokenExpert): WnTmplToken
 
   // 收集之前的符号
   if (sb.length > 0) {
-    list.push(new WnTmplToken(sb.join("")).asText());
+    list.push(new WnTmplToken(sb.join('')).asText());
   }
   return list;
 }

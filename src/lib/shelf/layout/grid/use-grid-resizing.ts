@@ -1,5 +1,5 @@
-import _ from "lodash";
-import { Dragging, useDraggable } from "../../../";
+import _ from 'lodash';
+import { Dragging, useDraggable } from '../../../';
 import {
   Callback,
   Callback1,
@@ -7,10 +7,10 @@ import {
   Dom,
   NameStrValue,
   Num,
-  Str
-} from "../../../../core";
-import { LayoutBar } from "../layout-support";
-import { LayoutGridKeepFeature, keepSizesState } from "./use-grid-keep";
+  Str,
+} from '../../../../core';
+import { LayoutBar } from '../layout-support';
+import { LayoutGridKeepFeature, keepSizesState } from './use-grid-keep';
 
 export type GridResizingState = {
   /**
@@ -63,7 +63,7 @@ function getLayouBar($bar: HTMLElement): LayoutBar {
   });
   let bar = {} as LayoutBar;
   _.forEach(vars, (v, k) => {
-    if ("adjustIndex" == k) {
+    if ('adjustIndex' == k) {
       v = parseInt(v);
     }
     _.set(bar, k, v);
@@ -77,15 +77,15 @@ function getGridMeasure(bar: LayoutBar, $grid: HTMLElement): ResizeMeasure {
   let gap = Dom.getComputedStyle($grid, `${bar.mode}-gap`);
   let pad0 = Dom.getComputedStyle(
     $grid,
-    bar.mode == "row" ? "padding-top" : "padding-left"
+    bar.mode == 'row' ? 'padding-top' : 'padding-left',
   );
   let pad1 = Dom.getComputedStyle(
     $grid,
-    bar.mode == "row" ? "padding-bottom" : "padding-right"
+    bar.mode == 'row' ? 'padding-bottom' : 'padding-right',
   );
   return {
     template: _.map(Str.splitIgnoreBlank(tmp, /\s+/), (v) =>
-      toPixel(v)
+      toPixel(v),
     ) as number[],
     gap: toPixel(gap),
     pad0: toPixel(pad0),
@@ -94,7 +94,7 @@ function getGridMeasure(bar: LayoutBar, $grid: HTMLElement): ResizeMeasure {
     myIndex: -1,
     taIndex: -1,
     indexes: [-1, -1],
-    scope: [0, 0]
+    scope: [0, 0],
   };
 }
 
@@ -150,7 +150,7 @@ const Moving = {
   bar_column_prev(
     resizing: GridResizingState,
     mea: ResizeMeasure,
-    ing: Dragging
+    ing: Dragging,
   ) {
     let { scope, minSize, gap, myIndex, taIndex } = mea;
     return () => {
@@ -167,7 +167,7 @@ const Moving = {
   bar_column_next(
     resizing: GridResizingState,
     mea: ResizeMeasure,
-    ing: Dragging
+    ing: Dragging,
   ) {
     let { scope, minSize, gap, myIndex, taIndex } = mea;
     return () => {
@@ -180,7 +180,7 @@ const Moving = {
       resizing.columns[taIndex] = `${ta}px`;
       //console.log(`bar_row_next: my=${my} + ta=${ta}  == ${my + ta}`);
     };
-  }
+  },
 };
 
 function toPercent(ns: number[], gap: number) {
@@ -190,7 +190,7 @@ function toPercent(ns: number[], gap: number) {
     let per = Str.toPercent(ns[i] / tota);
     re.push(per);
   }
-  re[re.length - 1] = "1fr";
+  re[re.length - 1] = '1fr';
   return re;
 }
 
@@ -206,24 +206,24 @@ const MoveEnd = {
       let ns = _.map(resizing.rows, (s) => CssUtils.toPixel(s));
       resizing.rows = toPercent(ns, mea.gap);
     };
-  }
+  },
 };
 
 export function useGridResizing(
   $main: HTMLElement,
   resizing: GridResizingState,
   onDestroy: Callback1<Callback>,
-  Keep: LayoutGridKeepFeature
+  Keep: LayoutGridKeepFeature,
 ) {
   useDraggable({
     onDestroy,
     getWatchTarget: () => $main,
     getDragTarget: (target: HTMLElement): HTMLElement | undefined => {
-      return Dom.closest(target, ".adjust-bar", { includeSelf: true });
+      return Dom.closest(target, '.adjust-bar', { includeSelf: true });
     },
     onReady: (ing: Dragging) => {
       //ing.watchZone = Rects.createBy(ing.body!);
-      ing.watchMode = "stop";
+      ing.watchMode = 'stop';
       //console.log("onReady", ing.activated, ing.client);
     },
     onStart: (ing: Dragging) => {
@@ -245,32 +245,32 @@ export function useGridResizing(
       // 我需要知道调整哪两个列
       mea.taIndex = {
         prev: () => bar.adjustIndex - 1,
-        next: () => bar.adjustIndex + 1
+        next: () => bar.adjustIndex + 1,
       }[bar.position]();
 
       setMeasureScope(mea);
 
       // 记录
       ing.setVar(
-        "moving",
-        Moving[`bar_${bar.mode}_${bar.position}`](resizing, mea, ing)
+        'moving',
+        Moving[`bar_${bar.mode}_${bar.position}`](resizing, mea, ing),
       );
-      ing.setVar("move_end", MoveEnd[bar.mode](resizing, mea));
+      ing.setVar('move_end', MoveEnd[bar.mode](resizing, mea));
       // console.log("onStart", bar, mea);
     },
     onMoving: (ing: Dragging) => {
-      let moving = ing.getVar("moving");
+      let moving = ing.getVar('moving');
       if (_.isFunction(moving)) {
         moving();
       }
     },
     onEnd: (ing: Dragging) => {
       //console.log("onEnd", ing);
-      let fn = ing.getVar("move_end");
+      let fn = ing.getVar('move_end');
       if (_.isFunction(fn)) {
         fn();
       }
       keepSizesState(resizing, Keep);
-    }
+    },
   });
 }

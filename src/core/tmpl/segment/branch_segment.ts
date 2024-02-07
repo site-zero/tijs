@@ -1,13 +1,13 @@
-import _ from "lodash";
-import { TmplEle } from "../ti-tmpl";
-import { Vars, TiMatch } from "../../ti";
-import { AbstractTmplSegment } from "./abstract_segment";
-import { BlockTmplSegment } from "./block_segment";
-import { ConditionTmplSegment } from "./condition_segment";
+import _ from 'lodash';
+import { TmplEle } from '../ti-tmpl';
+import { Vars, TiMatch } from '../../ti';
+import { AbstractTmplSegment } from './abstract_segment';
+import { BlockTmplSegment } from './block_segment';
+import { ConditionTmplSegment } from './condition_segment';
 
 export class BranchTmplSegment extends AbstractTmplSegment {
   constructor() {
-    super("BRANCH");
+    super('BRANCH');
   }
 
   renderTo(context: Vars, showKey: boolean, sb: string[]): void {

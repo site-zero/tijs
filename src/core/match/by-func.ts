@@ -1,8 +1,8 @@
-import { MakeTiMatch } from "./ti-match";
-import { TiMatch, ExplainI18n } from "../ti";
+import { MakeTiMatch } from './ti-match';
+import { TiMatch, ExplainI18n } from '../ti';
 
 export const gen_by_func: MakeTiMatch<Function> = function (
-  src: Function
+  src: Function,
 ): TiMatch {
   return {
     test: (input: any): boolean => {
@@ -11,6 +11,6 @@ export const gen_by_func: MakeTiMatch<Function> = function (
     },
     explainText: (i18n: ExplainI18n): string => {
       return i18n.func;
-    }
+    },
   };
 };

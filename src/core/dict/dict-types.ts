@@ -1,4 +1,4 @@
-import _ from "lodash";
+import _ from 'lodash';
 import {
   AsyncFuncA0,
   AsyncFuncA1,
@@ -7,8 +7,8 @@ import {
   FuncA2,
   AnyGetter,
   Vars,
-  ValGetter
-} from "../ti";
+  ValGetter,
+} from '../ti';
 
 export type DictSetup = {
   value?: string | AnyGetter;

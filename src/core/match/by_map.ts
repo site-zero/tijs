@@ -1,9 +1,9 @@
-import _ from "lodash";
-import { I18n, TiMatch, ExplainI18n, TiMap } from "../ti";
-import { MakeTiMatch, parse } from "./ti-match";
-import { gen_by_map_exitst } from "./by_map_exists";
-import { gen_by_not } from "./by_not";
-import { explainKeyDisplay } from "./key_display";
+import _ from 'lodash';
+import { I18n, TiMatch, ExplainI18n, TiMap } from '../ti';
+import { MakeTiMatch, parse } from './ti-match';
+import { gen_by_map_exitst } from './by_map_exists';
+import { gen_by_not } from './by_not';
+import { explainKeyDisplay } from './key_display';
 
 export const gen_by_map: MakeTiMatch<TiMap> = function (map: TiMap): TiMatch {
   // Pre-build
@@ -14,7 +14,7 @@ export const gen_by_map: MakeTiMatch<TiMap> = function (map: TiMap): TiMatch {
 
   // 准备处理函数
   const iteratee = (val: any, key: string) => {
-    let not = key.startsWith("!");
+    let not = key.startsWith('!');
     let m: TiMatch | undefined;
     if (not) {
       key = key.substring(1).trim();
@@ -92,6 +92,6 @@ export const gen_by_map: MakeTiMatch<TiMap> = function (map: TiMap): TiMatch {
       }
       let and = I18n.text(i18n.and);
       return ss.join(and);
-    }
+    },
   };
 };

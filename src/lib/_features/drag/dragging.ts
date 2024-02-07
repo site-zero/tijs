@@ -1,9 +1,9 @@
-import { Callback, Callback1, G2D, Point2D, Rect, Rects } from "../../../core";
-import _ from "lodash";
+import { Callback, Callback1, G2D, Point2D, Rect, Rects } from '../../../core';
+import _ from 'lodash';
 
-export type MoveDirectionX = "left" | "right";
-export type MoveDirectionY = "up" | "down";
-export type DragWatchMode = "stop" | "pause" | "play";
+export type MoveDirectionX = 'left' | 'right';
+export type MoveDirectionY = 'up' | 'down';
+export type DragWatchMode = 'stop' | 'pause' | 'play';
 
 /**
  * 拖动时（核心计算类）
@@ -49,7 +49,7 @@ export class Dragging {
   private _elements: Map<string, HTMLElement> = new Map();
   private _points: Map<string, Point2D> = new Map();
   private _measures: Map<string, number> = new Map();
-  private _vars: Map<string,any> = new Map();
+  private _vars: Map<string, any> = new Map();
   /*
   --------------------------------------------------------
                           Status
@@ -81,7 +81,7 @@ export class Dragging {
    * - `"pause"` : 将暂停拖拽回调，如果指针又回到监控区则继续
    * - `"play"` : 继续调用回调
    */
-  watchMode: DragWatchMode = "pause";
+  watchMode: DragWatchMode = 'pause';
   /*
   --------------------------------------------------------
                           Timestamp
@@ -156,8 +156,8 @@ export class Dragging {
 
   // 移动的距离与方向
   moveDistance: number = 0;
-  directionX: MoveDirectionX = "left";
-  directionY: MoveDirectionY = "down";
+  directionX: MoveDirectionX = 'left';
+  directionY: MoveDirectionY = 'down';
   speed: number = 0;
 
   /**
@@ -215,43 +215,43 @@ export class Dragging {
     // 总偏移  (viewport coord)
     this.offset = {
       x: _X - this.start.x,
-      y: _Y - this.start.y
+      y: _Y - this.start.y,
     };
 
     // 总比例
     this.scale = {
       x: _X / this.viewport.width,
-      y: _Y / this.viewport.height
+      y: _Y / this.viewport.height,
     };
 
     // 步偏移  (viewport coord)
     this.move = {
       x: _X - this.inview.x,
-      y: _Y - this.inview.y
+      y: _Y - this.inview.y,
     };
 
     // 根据步偏移，求出距离方向等步进信息
     this.moveDistance = Math.sqrt(
-      Math.pow(this.move.x, 2) + Math.pow(this.move.y, 2)
+      Math.pow(this.move.x, 2) + Math.pow(this.move.y, 2),
     );
-    this.directionX = this.move.x < 0 ? "left" : "right";
-    this.directionY = this.move.y < 0 ? "up" : "down";
+    this.directionX = this.move.x < 0 ? 'left' : 'right';
+    this.directionY = this.move.y < 0 ? 'up' : 'down';
     this.speed = (this.moveDistance * this._speedUnit) / this.duInMs;
 
     // 最后更新指针在视口中的位置
     this.inview = {
       x: _X,
-      y: _Y
+      y: _Y,
     };
 
     // 超过了监视区，不响应了
     this.outOfWatch = !this._watchZone.hasPoint(_client);
     if (this.outOfWatch) {
-      if ("pause" == this.watchMode) {
+      if ('pause' == this.watchMode) {
         return false;
       }
       // 主动停止推拽
-      else if ("stop" == this.watchMode) {
+      else if ('stop' == this.watchMode) {
         this.stopDragging();
         return true;
       }
@@ -356,7 +356,7 @@ export class Dragging {
     this._on_activated = _fn;
   }
 
-   /*
+  /*
   --------------------------------------------------------
                    Customized Vars
   --------------------------------------------------------
@@ -432,20 +432,20 @@ export class Dragging {
    * 拖拽目标，通常监控`POINTER_DOWN`的元素
    */
   get target() {
-    return this._elements.get("target");
+    return this._elements.get('target');
   }
   set target(target: HTMLElement | undefined) {
-    this.setElement("target", target);
+    this.setElement('target', target);
   }
 
   /**
    * 监控元素，是 `getWatchTarget` 返回的元素。通常就是 viewport
    */
   get currentTarget() {
-    return this._elements.get("currentTarget");
+    return this._elements.get('currentTarget');
   }
   set currentTarget(currentTarget: HTMLElement | undefined) {
-    this.setElement("currentTarget", currentTarget);
+    this.setElement('currentTarget', currentTarget);
   }
 
   /**
@@ -453,10 +453,10 @@ export class Dragging {
    * 上下文的 `inview` 属性就是帮你换算好的坐标
    */
   get viwportElement() {
-    return this._elements.get("viewport");
+    return this._elements.get('viewport');
   }
   set viwportElement(viewport: HTMLElement | undefined) {
-    this.setElement("viewport", viewport);
+    this.setElement('viewport', viewport);
   }
 
   /**
@@ -464,10 +464,10 @@ export class Dragging {
    * 我们会在这个元素上监控 `POINTER_MOVE | POINTER_UP`
    */
   get body() {
-    return this._elements.get("body");
+    return this._elements.get('body');
   }
   set body(body: HTMLElement | undefined) {
-    this.setElement("body", body);
+    this.setElement('body', body);
   }
 
   /*

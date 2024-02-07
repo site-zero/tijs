@@ -1,6 +1,6 @@
-import _ from "lodash";
-import { Vars } from "../ti";
-import { DFMaker, DynDictFactory, IDict } from "./dict-types";
+import _ from 'lodash';
+import { Vars } from '../ti';
+import { DFMaker, DynDictFactory, IDict } from './dict-types';
 
 /**
  * 获取一个动态字典实例的键,这个键格式，类似：
@@ -25,7 +25,7 @@ import { DFMaker, DynDictFactory, IDict } from "./dict-types";
 function _DK(name: string, key: any) {
   let ks;
   if (_.isArray(key)) {
-    ks = key.join(".");
+    ks = key.join('.');
   } else {
     ks = key;
   }

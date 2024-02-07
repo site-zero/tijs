@@ -96,7 +96,7 @@ export function tiPutComponents(coms: TiComSet) {
 
 export function tiGetComponent(
   key: string,
-  dft: string = 'TiUnknown'
+  dft: string = 'TiUnknown',
 ): TiCom | undefined {
   let comType = Str.toComType(key);
   let com = ALL_TI_COMS.get(comType);
@@ -139,7 +139,7 @@ function _dft_com_prop_key(comType: string, propName: string) {
 export function tiGetDefaultComPropValue<T>(
   comType: string,
   propName: string,
-  dft?: T
+  dft?: T,
 ): T {
   let k = _dft_com_prop_key(comType, propName);
   return getEnv(k, dft);
@@ -157,7 +157,7 @@ export function tiGetDefaultComPropValue<T>(
 export function tiSetDefaultComPropValue(
   comType: string,
   propName: string,
-  value: any
+  value: any,
 ): void {
   let k = _dft_com_prop_key(comType, propName);
   return setEnv(k, value);
@@ -171,4 +171,3 @@ export * from './input/all-input';
 export * from './shelf/all-shelf';
 export * from './tile/all-tiles';
 export * from './view/all-views';
-

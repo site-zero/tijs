@@ -1,6 +1,6 @@
-import _ from "lodash";
-import { splitIgnoreBlank, splitQuote } from "../text/ti-str";
-import { AnyTester, AnyGetter } from "../ti";
+import _ from 'lodash';
+import { splitIgnoreBlank, splitQuote } from '../text/ti-str';
+import { AnyTester, AnyGetter } from '../ti';
 
 export type GetOptions = {
   test?: AnyTester;
@@ -22,9 +22,9 @@ export type GetOptions = {
  */
 export function genObjPathGetter(input: string): AnyGetter {
   let keyPath = splitQuote(input, {
-    seps: ".",
+    seps: '.',
     keepQuote: false,
-    ignoreBlank: true
+    ignoreBlank: true,
   });
   let getters = [] as AnyGetter[];
   for (let key of keyPath) {
@@ -72,11 +72,11 @@ export function genObjPathGetter(input: string): AnyGetter {
  */
 export function genObjGetter(
   input: string,
-  options = {} as GetOptions
+  options = {} as GetOptions,
 ): AnyGetter {
   let { test = (v) => !_.isNil(v), enableKeyPath = true, dft } = options;
 
-  let keyFallback = splitIgnoreBlank(input, "|");
+  let keyFallback = splitIgnoreBlank(input, '|');
   let keyGetters = [] as AnyGetter[];
   for (let key of keyFallback) {
     let getter: AnyGetter;

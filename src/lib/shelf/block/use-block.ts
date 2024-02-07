@@ -5,8 +5,8 @@ import {
   TiAppBus,
   TiAppEvent,
   TiRawCom,
-  useFieldCom
-} from "../../";
+  useFieldCom,
+} from '../../';
 import {
   BusMsg,
   Callback,
@@ -15,10 +15,10 @@ import {
   CssGridLayout,
   CssUtils,
   I18n,
-  Vars
-} from "../../../core";
+  Vars,
+} from '../../../core';
 
-export const COM_TYPE = "TiBlock";
+export const COM_TYPE = 'TiBlock';
 /*-------------------------------------------------------
 
                      Events
@@ -30,7 +30,7 @@ export const COM_TYPE = "TiBlock";
                      Props
 
 -------------------------------------------------------*/
-export type BlockComProps = Pick<FieldComProps, "comType" | "comConf">;
+export type BlockComProps = Pick<FieldComProps, 'comType' | 'comConf'>;
 export type BlockInfoProps = CommonProps &
   CssGridItem & {
     // 声明标题栏，如果有 icon || title 就显示标题栏
@@ -83,11 +83,11 @@ export function useBusAdaptor(
   onUnmouned: Callback1<Callback>,
   parentBus: TiAppBus,
   blockBus: TiAppBus,
-  blockName?: string
+  blockName?: string,
 ) {
   blockBus.onAny((msg: BusMsg<TiAppEvent>) => {
     if (blockName) {
-      msg.name = [blockName, msg.name].join("::");
+      msg.name = [blockName, msg.name].join('::');
     }
     parentBus.send(msg);
   });
@@ -113,18 +113,18 @@ export function useBlock(props: BlockProps, _options: BlockOptions) {
   //
   // 计算布局
   let gridStyle = {
-    gridTemplateRows: "1fr"
+    gridTemplateRows: '1fr',
   } as CssGridLayout;
   if (showHeadBar) {
-    gridStyle.gridTemplateRows = "auto 1fr";
+    gridStyle.gridTemplateRows = 'auto 1fr';
   } else {
-    gridStyle.gridTemplateRows = "1fr";
+    gridStyle.gridTemplateRows = '1fr';
   }
 
   const TopClass = CssUtils.mergeClassName(props.className);
   const TopStyle = CssUtils.mergeStyles(
     gridStyle,
-    CssUtils.pickGridItemStyle(props)
+    CssUtils.pickGridItemStyle(props),
   );
   const HeadStyle = CssUtils.mergeStyles({}, props.headStyle);
   const MainStyle = CssUtils.mergeStyles({}, props.mainStyle);
@@ -143,6 +143,6 @@ export function useBlock(props: BlockProps, _options: BlockOptions) {
     BlockIcon,
     BlockTitle,
     BlockComType,
-    BlockComConf
+    BlockComConf,
   };
 }

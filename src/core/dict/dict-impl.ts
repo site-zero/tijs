@@ -1,13 +1,13 @@
-import _ from "lodash";
-import { AbstractDict } from "./dict-abstract";
+import _ from 'lodash';
+import { AbstractDict } from './dict-abstract';
 import {
   dft_children,
   dft_get_item,
   dft_get_str,
   dft_get_value,
   dft_is_matched,
-  dft_query
-} from "./dict-impl-dft";
+  dft_query,
+} from './dict-impl-dft';
 import {
   GetItemText,
   GetItemValue,
@@ -16,8 +16,8 @@ import {
   QueryDictItems,
   IsMatched,
   LoadData,
-  DictOptions
-} from "./dict-types";
+  DictOptions,
+} from './dict-types';
 
 export class DictImpl<T, V> extends AbstractDict<T, V> implements IDict<T, V> {
   /* Async Function */
@@ -45,9 +45,9 @@ export class DictImpl<T, V> extends AbstractDict<T, V> implements IDict<T, V> {
     this._children = info.children ?? dft_children();
 
     this._get_value = info.getValue ?? dft_get_value();
-    this._get_text = info.getText ?? dft_get_str("text");
-    this._get_tip = info.getTip ?? dft_get_str("tip");
-    this._get_icon = info.getIcon ?? dft_get_str("icon");
+    this._get_text = info.getText ?? dft_get_str('text');
+    this._get_tip = info.getTip ?? dft_get_str('tip');
+    this._get_icon = info.getIcon ?? dft_get_str('icon');
     this._is_matched = info.isMatched ?? dft_is_matched(this);
   }
 
@@ -98,11 +98,11 @@ export class DictImpl<T, V> extends AbstractDict<T, V> implements IDict<T, V> {
       }
     }
     if (!it) {
-      throw "Item NoExists: " + val;
+      throw 'Item NoExists: ' + val;
     }
     return new Promise<T>((resolve, reject) => {
       if (!it) {
-        reject("Item NoExists: " + val);
+        reject('Item NoExists: ' + val);
       } else {
         resolve(it);
       }

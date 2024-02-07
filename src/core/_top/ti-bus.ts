@@ -110,7 +110,7 @@ export class TiBus<T> {
   createSubBus(
     name: string,
     eventNames?: string[],
-    adaptor?: BusListenerHanlder<T>
+    adaptor?: BusListenerHanlder<T>,
   ): TiBus<T> {
     let subBus = new TiBus<T>(name);
     subBus.connectTo(this, eventNames, adaptor);
@@ -127,7 +127,7 @@ export class TiBus<T> {
   connectTo(
     srcBus: TiBus<T>,
     eventNames?: string[],
-    adaptor?: BusListenerHanlder<T>
+    adaptor?: BusListenerHanlder<T>,
   ) {
     // 一定要断开连接
     this.tryDisconnect();
@@ -292,7 +292,7 @@ export class TiBus<T> {
     else {
       _.remove(
         this._lis_match,
-        (li) => name == li._name && li.isMyHandler(handler)
+        (li) => name == li._name && li.isMyHandler(handler),
       );
     }
   }

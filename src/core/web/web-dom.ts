@@ -10,9 +10,9 @@ import {
   FontSizeOptions,
   Rect,
   SeekUtilOptions,
-  StrCaseMode
-} from "../";
-import _ from "lodash";
+  StrCaseMode,
+} from '../';
+import _ from 'lodash';
 import {
   CssUtils,
   Match,
@@ -23,8 +23,8 @@ import {
   Str,
   Size2D,
   Util,
-  Vars
-} from "../ti";
+  Vars,
+} from '../ti';
 
 /*-------------------------------------------
 
@@ -33,17 +33,17 @@ import {
   -------------------------------------------*/
 export function createElement(
   options: EleOptions,
-  $doc = document
+  $doc = document,
 ): HTMLElement {
   let {
-    tagName = "div",
+    tagName = 'div',
     attrs,
     props,
     data,
     className,
     style = {},
     $p,
-    $refer
+    $refer,
   } = options;
   const $el = $doc.createElement(tagName);
   if (className) {
@@ -96,7 +96,7 @@ export function prependTo($el: Element, $p: Element) {
 }
 //----------------------------------------------------
 export function wrap($el: Element, $newEl: Element) {
-  $el.insertAdjacentElement("afterend", $newEl);
+  $el.insertAdjacentElement('afterend', $newEl);
   $newEl.appendChild($el);
 }
 //----------------------------------------------------
@@ -117,7 +117,7 @@ export function unwrap($el: Element) {
 }
 //----------------------------------------------------
 export function replace($el: Element, $newEl: Element, keepInnerHTML = false) {
-  $el.insertAdjacentElement("afterend", $newEl);
+  $el.insertAdjacentElement('afterend', $newEl);
   if (keepInnerHTML) {
     $newEl.innerHTML = $el.innerHTML;
   }
@@ -137,7 +137,7 @@ export type AttrFilter =
 export function attrFilter(filter: AttrFilter): AttrPredicate {
   // Selector
   if (_.isString(filter)) {
-    if (filter.startsWith("^") && filter.endsWith("$")) {
+    if (filter.startsWith('^') && filter.endsWith('$')) {
       let reg = new RegExp(filter);
       return (key: string) => reg.test(key);
     }
@@ -175,7 +175,7 @@ export function attrFilter(filter: AttrFilter): AttrPredicate {
     };
   }
 
-  throw new Error("Unsupport attrFilter: " + filter);
+  throw new Error('Unsupport attrFilter: ' + filter);
 }
 //----------------------------------------------------
 export function attr($el: Element, name: string, dft?: any): any {
@@ -211,9 +211,9 @@ export function attrs($el: Element, flt: AttrFilter = true) {
       continue;
     }
     // Auto convert "true/false"
-    if ("true" == val) {
+    if ('true' == val) {
       val = true;
-    } else if ("false" == val) {
+    } else if ('false' == val) {
       val = false;
     }
     // Set the value
@@ -227,7 +227,7 @@ export function getClassList(
   { filter = () => true, dftList = [] } = {} as {
     filter: Predicate<string>;
     dftList: any[];
-  }
+  },
 ) {
   if (!className) {
     return dftList;
@@ -243,7 +243,7 @@ export function getClassList(
   } else {
     str = className.className;
   }
-  let list = _.without(str.split(/\s+/), "");
+  let list = _.without(str.split(/\s+/), '');
   let re = [];
   for (let li of list) {
     if (filter(li)) {
@@ -293,17 +293,17 @@ export function getComputedStyle($el: Element, name: string | string[]) {
 //----------------------------------------------------
 export function getOwnStyle($el: Element, filter = true) {
   if (_.isElement($el)) {
-    return CssUtils.parseCssRule($el.getAttribute("style"), filter);
+    return CssUtils.parseCssRule($el.getAttribute('style'), filter);
   }
 }
 //----------------------------------------------------
-export function parseCssRule(rule = "", filter = true) {
-  console.warn("!Deprecate call: parseCssRule -> Css.parseCssRule");
+export function parseCssRule(rule = '', filter = true) {
+  console.warn('!Deprecate call: parseCssRule -> Css.parseCssRule');
   return CssUtils.parseCssRule(rule, filter);
 }
 //----------------------------------------------------
 export function renderCssRule(css = {}) {
-  console.warn("!Deprecate call: renderCssRule -> Css.renderCssRule");
+  console.warn('!Deprecate call: renderCssRule -> Css.renderCssRule');
   return CssUtils.renderCssRule(css);
 }
 //----------------------------------------------------
@@ -336,7 +336,7 @@ export function getData($el: Element, flt = true) {
   let re = {} as Vars;
   for (let i = 0; i < $el.attributes.length; i++) {
     let { name, value } = $el.attributes[i];
-    if (name.startsWith("data-")) {
+    if (name.startsWith('data-')) {
       name = _.camelCase(name.substring(5));
       let key = filter(name, value);
       if (key) {
@@ -369,7 +369,7 @@ export function setData($el: Element, data = {}) {
 export function copyAttributes(
   $el: Element,
   $ta: Element,
-  attrFilter: AttrPredicate = () => true
+  attrFilter: AttrPredicate = () => true,
 ) {
   let attrs = $el.attributes;
   for (let i = 0; i < attrs.length; i++) {
@@ -384,7 +384,7 @@ export function copyAttributes(
 export function renameElement(
   $el: Element,
   newTagName: string,
-  attrFilter: AttrPredicate = () => true
+  attrFilter: AttrPredicate = () => true,
 ) {
   if (!_.isString(newTagName)) return $el;
   newTagName = newTagName.toUpperCase();
@@ -418,14 +418,14 @@ export function getMyHeadingLevel($el: HTMLElement) {
       if (el.parentElement) {
         return el.parentElement;
       }
-    }
+    },
   );
   return getHeadingLevel($hp);
 }
 //----------------------------------------------------
 export function remove(
   selectorOrElement: DomSelector,
-  context?: DomQueryContext
+  context?: DomQueryContext,
 ) {
   if (_.isString(selectorOrElement)) {
     let $els = findAll(selectorOrElement, context);
@@ -444,7 +444,7 @@ export function remove(
 }
 //----------------------------------------------------
 // self by :scope
-export function findAll(selector = "*", qc?: DomQueryContext): Element[] {
+export function findAll(selector = '*', qc?: DomQueryContext): Element[] {
   let $doc: Document | Element;
   if (!qc) {
     $doc = document;
@@ -460,7 +460,7 @@ export function findAll(selector = "*", qc?: DomQueryContext): Element[] {
 //----------------------------------------------------
 export function find(
   selector: DomSelector | undefined | null,
-  qc?: DomQueryContext
+  qc?: DomQueryContext,
 ): HTMLElement | undefined {
   let $doc = qc || document;
   if (_.isUndefined(selector)) {
@@ -489,14 +489,14 @@ export function find(
 }
 //----------------------------------------------------
 export function elementFilter<T extends Element>(
-  test?: EleFilter<T>
+  test?: EleFilter<T>,
 ): ElePredicate<T> {
   if (!test) {
     return () => false;
   }
   // Selector
   if (_.isString(test)) {
-    if (test.startsWith("^") && test.endsWith("$")) {
+    if (test.startsWith('^') && test.endsWith('$')) {
       let reg = new RegExp(test);
       return (el) => reg.test(el.tagName);
     }
@@ -533,7 +533,7 @@ export function elementFilter<T extends Element>(
     return test;
   }
 
-  throw "Unsupport elementFilter: " + test;
+  throw 'Unsupport elementFilter: ' + test;
 }
 //----------------------------------------------------
 export function seekUntil<T extends Element>(
@@ -544,8 +544,8 @@ export function seekUntil<T extends Element>(
     iteratee = (el: T) => el,
     includeSelf = false,
     includeStop = true,
-    reverse = false
-  } = {} as SeekUtilOptions<T>
+    reverse = false,
+  } = {} as SeekUtilOptions<T>,
 ) {
   if (!flt || !_.isFunction(by)) {
     return [$el];
@@ -591,7 +591,7 @@ export function seekUntil<T extends Element>(
 export function seek<T extends Element>(
   $el: T,
   flt: EleFilter<T>,
-  by: EleIteratee<T>
+  by: EleIteratee<T>,
 ): T | undefined {
   if (!_.isFunction(by)) {
     return $el;
@@ -617,7 +617,7 @@ export function seek<T extends Element>(
 export function seekByTagName<T extends Element>(
   $el: T,
   tagName: string,
-  by: EleIteratee<T>
+  by: EleIteratee<T>,
 ) {
   if (!tagName || !_.isFunction(by)) {
     return;
@@ -629,7 +629,7 @@ export function seekByTagName<T extends Element>(
     (el) => {
       return am.test(el.tagName);
     },
-    by
+    by,
   );
 }
 //
@@ -644,11 +644,11 @@ export function prevByTagName<T extends Element>($el: T, tagName: string) {
 export function prevUtil<T extends Element>(
   $el: T,
   test?: EleFilter<T>,
-  setup = {} as SeekUtilOptions<T>
+  setup = {} as SeekUtilOptions<T>,
 ) {
   return seekUntil($el, test, {
     ...setup,
-    by: (el: T) => el.previousElementSibling as T
+    by: (el: T) => el.previousElementSibling as T,
   });
 }
 //
@@ -663,11 +663,11 @@ export function nextByTagName($el: Element, tagName: string) {
 export function nextUtil<T extends Element>(
   $el: T,
   test?: EleFilter<T>,
-  setup = {} as SeekUtilOptions<T>
+  setup = {} as SeekUtilOptions<T>,
 ) {
   return seekUntil($el, test, {
     ...setup,
-    by: (el) => el.nextElementSibling as T
+    by: (el) => el.nextElementSibling as T,
   });
 }
 //
@@ -676,7 +676,7 @@ export function nextUtil<T extends Element>(
 export function closest<T extends Element>(
   $el: T,
   filter: EleFilter<T>,
-  { includeSelf = false } = {}
+  { includeSelf = false } = {},
 ): T | undefined {
   if (!_.isElement($el)) {
     return;
@@ -699,7 +699,7 @@ export function closest<T extends Element>(
 export function closestByTagName<T extends Element>(
   $el: T,
   tagName: string,
-  { includeSelf = false } = {}
+  { includeSelf = false } = {},
 ) {
   if (!_.isElement($el)) {
     return;
@@ -722,7 +722,7 @@ export function closestByTagName<T extends Element>(
 export function parentsUntil<T extends Element>(
   $el: T,
   selector: DomSelector,
-  setup = {} as SeekUtilOptions<T>
+  setup = {} as SeekUtilOptions<T>,
 ) {
   if (!_.isElement($el)) {
     return;
@@ -733,7 +733,7 @@ export function parentsUntil<T extends Element>(
       if (el.parentElement) {
         return el.parentElement as unknown as T;
       }
-    }
+    },
   });
 }
 //
@@ -742,7 +742,7 @@ export function parentsUntil<T extends Element>(
 export function eventCurrentTarget(
   evt: Event,
   selector?: DomSelector,
-  scope?: Element
+  scope?: Element,
 ) {
   let $el: Element | null = evt.target as Element;
   if (!selector) {
@@ -773,7 +773,7 @@ export function ownerWindow($el: Element | Document | Window) {
 }
 //----------------------------------------------------
 export function isTouchDevice() {
-  let UA = window.navigator.userAgent || "";
+  let UA = window.navigator.userAgent || '';
   if (/^.+(\((ipad|iphone);|linux;\s*android).+$/i.test(UA)) {
     return true;
   }
@@ -792,8 +792,8 @@ export function autoRootFontSize(
     designWidth = 1000,
     max = 100,
     min = 80,
-    callback
-  } = {} as FontSizeOptions
+    callback,
+  } = {} as FontSizeOptions,
 ) {
   const $doc = $win.document;
   const $root = $doc.documentElement;
@@ -804,10 +804,10 @@ export function autoRootFontSize(
   if (_.isFunction(callback)) {
     let mode =
       win_rect.width > tabletMaxWidth
-        ? "desktop"
+        ? 'desktop'
         : win_rect.width > phoneMaxWidth
-        ? "tablet"
-        : "phone";
+          ? 'tablet'
+          : 'phone';
 
     callback({
       $win,
@@ -816,21 +816,21 @@ export function autoRootFontSize(
       mode,
       fontSize,
       width: win_rect.width,
-      height: win_rect.height
+      height: win_rect.height,
     });
   }
 }
 //----------------------------------------------------
 export function watchDocument(
   event: any,
-  handler: { (this: any, ev: any): any }
+  handler: { (this: any, ev: any): any },
 ) {
   document.addEventListener(event, handler);
 }
 //----------------------------------------------------
 export function unwatchDocument(
   event: any,
-  handler: { (this: any, ev: any): any }
+  handler: { (this: any, ev: any): any },
 ) {
   document.removeEventListener(event, handler);
 }
@@ -838,7 +838,7 @@ export function unwatchDocument(
 export function watchAutoRootFontSize(
   setup = {} as FontSizeOptions | FontSizeCallback,
   callback: FontSizeCallback | Window,
-  $win: Window = window
+  $win: Window = window,
 ) {
   let opt: FontSizeOptions | undefined;
   if (_.isFunction(setup)) {
@@ -849,7 +849,7 @@ export function watchAutoRootFontSize(
   }
   let options: FontSizeOptions = _.assign({}, opt, { $win, callback });
   // Watch the window resizing
-  $win.addEventListener("resize", () => {
+  $win.addEventListener('resize', () => {
     autoRootFontSize(options);
   });
   // auto resize firstly
@@ -882,10 +882,10 @@ export function setStyleValue(
   $el: HTMLElement,
   name: string,
   val: any,
-  oldVal: any
+  oldVal: any,
 ) {
   if (!_.isUndefined(oldVal) && oldVal == val) return;
-  if (!val || "none" == val) {
+  if (!val || 'none' == val) {
     $el.style.removeProperty(name);
   } else if (_.isNumber(val) || /^\d+(\.\d+)?$/.test(val)) {
     $el.style.setProperty(name, `${val}px`);
@@ -898,25 +898,25 @@ export function setStyle($el: HTMLElement, css = {}) {
   // Guard
   if (!$el) return;
   if (_.isEmpty(css)) {
-    _.set($el, "style", "");
+    _.set($el, 'style', '');
     return;
   }
   let cssStyle = CssUtils.renderCssRule(css);
-  _.set($el, "style", cssStyle);
+  _.set($el, 'style', cssStyle);
 }
 //----------------------------------------------------
 export function updateStyle($el: HTMLElement, css = {}) {
   // Guard
   if (!$el) return;
   if (_.isEmpty(css)) {
-    _.set($el, "style", "");
+    _.set($el, 'style', '');
     return;
   }
   _.forOwn(css, (val, key) => {
     if (_.isNull(val) || _.isUndefined(val)) return;
     let pnm = _.kebabCase(key);
     // Empty string to remove one propperty
-    if ("" === val) {
+    if ('' === val) {
       $el.style.removeProperty(pnm);
     }
     // Set the property
@@ -924,7 +924,7 @@ export function updateStyle($el: HTMLElement, css = {}) {
       // integer as the px
       let v2 =
         !/^(opacity|z-index)$/.test(pnm) && val !== 0 && _.isNumber(val)
-          ? val + "px"
+          ? val + 'px'
           : val;
       $el.style.setProperty(pnm, v2);
     }
@@ -934,7 +934,7 @@ export function updateStyle($el: HTMLElement, css = {}) {
 export function setAttrs(
   $el: HTMLElement,
   attrs = {} as Vars,
-  prefix?: string
+  prefix?: string,
 ) {
   // Guard
   if (!$el || !_.isElement($el)) {
@@ -946,12 +946,12 @@ export function setAttrs(
     let k3 = _.kebabCase(k2);
 
     // Style
-    if ("style" == k3) {
+    if ('style' == k3) {
       if (_.isNil(val)) {
-        $el.removeAttribute("style");
+        $el.removeAttribute('style');
       } else {
         let cssStyle = CssUtils.renderCssRule(val);
-        _.set($el, "style", cssStyle);
+        _.set($el, 'style', cssStyle);
       }
     }
     // Other attribute
@@ -976,7 +976,7 @@ export function setAttrs(
 //----------------------------------------------------
 export function setClass($el: Element, ...classNames: any[]) {
   let klass = _.flattenDeep(classNames);
-  let className = klass.join(" ");
+  let className = klass.join(' ');
   $el.className = className;
 }
 //----------------------------------------------------
@@ -1002,7 +1002,7 @@ export function is($el: Element, selector: DomSelector) {
   if ($el.matches) {
     return $el.matches(selector);
   }
-  throw "Slot Element matched";
+  throw 'Slot Element matched';
   // console.warn("slow is!")
   // let doc = $el.ownerDocument
   // let win = doc.defaultView
@@ -1072,43 +1072,43 @@ export function hasOneClass($el: Element, ...classNames: any[]) {
 export function applyRect(
   $el: HTMLElement,
   rect: Rect,
-  keys = "tlwh",
-  viewport?: Size2D
+  keys = 'tlwh',
+  viewport?: Size2D,
 ) {
   let $win = $el.ownerDocument.defaultView;
   if (!$win) {
-    throw new Error("impossible!");
+    throw new Error('impossible!');
   }
   _.defaults(viewport, {
     width: $win.innerWidth,
-    height: $win.innerHeight
+    height: $win.innerHeight,
   });
   let css = rect.toCss(keys, viewport);
   updateStyle($el, css);
 }
 //----------------------------------------------------
-export type DockPosX = "left" | "center" | "right";
-export type DockPosY = "top" | "center" | "bottom";
+export type DockPosX = 'left' | 'center' | 'right';
+export type DockPosY = 'top' | 'center' | 'bottom';
 export interface DomDockOptions extends DockOptions {
   posListX?: DockPosX[]; // ["left"| "center"| "right"]
   posListY?: DockPosY[]; // ["top"| "center"| "bottom"]
-  coord?: "win" | "target";
-  position?: "fixed" | "absolute";
+  coord?: 'win' | 'target';
+  position?: 'fixed' | 'absolute';
 }
 
 export function dockTo(
   $src: HTMLElement,
   $ta: HTMLElement,
   {
-    mode = "H",
+    mode = 'H',
     axis = {},
     posListX, // ["left", "center", "right"]
     posListY, // ["top", "center", "bottom"]
     space,
-    coord = "win", // win | target
+    coord = 'win', // win | target
     viewportBorder = 4,
-    position
-  } = {} as DomDockOptions
+    position,
+  } = {} as DomDockOptions,
 ) {
   // Guard
   if (!_.isElement($src) || !_.isElement($ta)) {
@@ -1123,14 +1123,14 @@ export function dockTo(
   //console.log(mode, axis, space, position)
 
   if (!$src.ownerDocument.defaultView) {
-    throw new Error("why element window is null");
+    throw new Error('why element window is null');
   }
 
   // Get the rect
   let rect = {
     src: Rects.createBy($src),
     ta: Rects.createBy($ta),
-    win: Rects.createBy($src.ownerDocument.defaultView)
+    win: Rects.createBy($src.ownerDocument.defaultView),
   };
   // console.log("dockSrc",rect.src.width, rect.src+"")
   // console.log("dockTag",rect.ta.width, rect.ta+"")
@@ -1147,22 +1147,22 @@ export function dockTo(
   }
 
   // Auto axis
-  _.defaults(axis, { x: "auto", y: "auto" });
-  if ("auto" == axis.x) {
+  _.defaults(axis, { x: 'auto', y: 'auto' });
+  if ('auto' == axis.x) {
     let list =
       posListX ||
       ({
-        "H": ["left", "right"],
-        "V": ["right", "left"]
+        H: ['left', 'right'],
+        V: ['right', 'left'],
       }[mode] as DockPosX[]);
     axis.x = getAxis(rect.ta.x, rect.win.width / list.length, list);
   }
-  if ("auto" == axis.y) {
+  if ('auto' == axis.y) {
     let list =
       posListY ||
       ({
-        "H": ["bottom", "top"],
-        "V": ["top", "center", "bottom"]
+        H: ['bottom', 'top'],
+        V: ['top', 'center', 'bottom'],
       }[mode] as DockPosY[]);
     axis.y = getAxis(rect.ta.y, rect.win.height / list.length, list);
   }
@@ -1170,13 +1170,13 @@ export function dockTo(
   // Count the max viewport to wrapCut
   // Cut the droplist panel by target positon
   let viewport: Rect = rect.win.clone();
-  if ("H" == mode && "win" == coord) {
-    if (axis.y == "bottom") {
+  if ('H' == mode && 'win' == coord) {
+    if (axis.y == 'bottom') {
       viewport.top = rect.ta.bottom;
-    } else if (axis.y == "top") {
+    } else if (axis.y == 'top') {
       viewport.bottom = rect.ta.top;
     }
-    viewport.updateBy("tlbr");
+    viewport.updateBy('tlbr');
   }
 
   // Dock & Apply
@@ -1186,22 +1186,22 @@ export function dockTo(
     space,
     viewport,
     viewportBorder,
-    wrapCut: true
+    wrapCut: true,
   });
   //console.log({ dockMode })
 
   // Translate coord
-  if ("target" == coord) {
+  if ('target' == coord) {
     rect.src.translate({
       x: rect.ta.left * -1,
-      y: rect.ta.top * -1
+      y: rect.ta.top * -1,
     });
   }
   // If absolute, it should considering the window scrollTop
   else {
     let realStyle = window.getComputedStyle($src);
     //console.log(realStyle.position, window.pageYOffset)
-    if ("absolute" == realStyle.position && window.pageYOffset > 0) {
+    if ('absolute' == realStyle.position && window.pageYOffset > 0) {
       rect.src.top += window.scrollY;
       rect.src.update();
     }
@@ -1217,7 +1217,7 @@ export function dockTo(
     dockMode,
     srcRect: rect.src,
     targetRect: rect.ta,
-    viewport
+    viewport,
   };
 }
 //----------------------------------------------------
@@ -1225,7 +1225,7 @@ export function getRemBase($doc = document) {
   if (_.isElement($doc) && $doc.ownerDocument) {
     $doc = $doc.ownerDocument;
   }
-  let fontSize = $doc.documentElement.style.fontSize || "100px";
+  let fontSize = $doc.documentElement.style.fontSize || '100px';
   return CssUtils.toAbsPixel(fontSize);
 }
 //----------------------------------------------------
@@ -1248,7 +1248,7 @@ export function pendingMoreWhenScrolling(
   { $view, $more } = {} as {
     $view: Element;
     $more: Element;
-  }
+  },
 ) {
   if (!_.isElement($view) || !_.isElement($more)) {
     return;
@@ -1271,7 +1271,7 @@ export function getFromClipBoard(
   clipboardData: any,
   filter: {
     (it: any, i: number): any;
-  }
+  },
 ) {
   let items = clipboardData && clipboardData.items;
   if (_.isEmpty(items)) {
@@ -1300,27 +1300,27 @@ export async function loadImageRawData(
     asBase64: boolean;
     dataUrlPrefix?: string;
   },
-  $doc = document
+  $doc = document,
 ) {
   const __make_data = function (img: HTMLImageElement) {
-    let canvas = createElement({ tagName: "canvas" }) as HTMLCanvasElement;
+    let canvas = createElement({ tagName: 'canvas' }) as HTMLCanvasElement;
     canvas.width = img.width;
     canvas.height = img.height;
-    let ctx = canvas.getContext("2d");
+    let ctx = canvas.getContext('2d');
     if (!ctx) {
-      throw new Error("Fail to create Canvas2D from load Image!!!");
+      throw new Error('Fail to create Canvas2D from load Image!!!');
     }
     ctx.drawImage(img, 0, 0, img.width, img.height);
     try {
       if (asBase64) {
         if (!dataUrlPrefix) {
           let suffixName = Util.getSuffixName(url, true);
-          dataUrlPrefix = `image/${{ jpg: "jpeg" }[suffixName] || suffixName}`;
+          dataUrlPrefix = `image/${{ jpg: 'jpeg' }[suffixName] || suffixName}`;
         }
         return {
           width: img.width,
           height: img.height,
-          data: canvas.toDataURL(dataUrlPrefix)
+          data: canvas.toDataURL(dataUrlPrefix),
         };
       }
       return ctx.getImageData(0, 0, img.width, img.height);
@@ -1332,11 +1332,11 @@ export async function loadImageRawData(
   let $img = find(`img[src="${url}"]`, $doc);
   if (!$img) {
     let $new_img = createElement({
-      tagName: "img",
-      $p: $doc.body
+      tagName: 'img',
+      $p: $doc.body,
     }) as HTMLImageElement;
     return new Promise((resolve) => {
-      $new_img.addEventListener("load", function (evt) {
+      $new_img.addEventListener('load', function (evt) {
         let imgData = __make_data(evt.target as HTMLImageElement);
         resolve(imgData);
       });
@@ -1355,34 +1355,34 @@ export function scrollBarSize() {
   if (!SCROLL_BAR_SIZE) {
     let body = document.body;
     let $out = createElement({
-      tagName: "div",
+      tagName: 'div',
       style: {
-        position: "fixed",
-        top: "-1000px",
+        position: 'fixed',
+        top: '-1000px',
         left: 0,
-        width: "200px",
-        height: "200px",
-        overflowY: "scroll",
-        overflowX: "scroll"
+        width: '200px',
+        height: '200px',
+        overflowY: 'scroll',
+        overflowX: 'scroll',
       },
-      $p: body
+      $p: body,
     });
     let $in = createElement({
-      tagName: "div",
+      tagName: 'div',
       style: {
-        width: "100%",
-        height: "100%",
-        overflowY: "scroll",
-        overflowX: "scroll"
+        width: '100%',
+        height: '100%',
+        overflowY: 'scroll',
+        overflowX: 'scroll',
       },
-      $refer: $out
+      $refer: $out,
     });
 
     let outRect = $out.getBoundingClientRect();
     let inRect = $in.getBoundingClientRect();
     SCROLL_BAR_SIZE = {
       x: outRect.width - inRect.width,
-      y: outRect.height - inRect.height
+      y: outRect.height - inRect.height,
     };
 
     remove($out);
@@ -1395,12 +1395,12 @@ export function scrollIntoView(
   $view: HTMLElement,
   $row: HTMLElement,
   {
-    to = "auto", // top | bottom | center | auto
-    axis = "xy" // x | y | xy
+    to = 'auto', // top | bottom | center | auto
+    axis = 'xy', // x | y | xy
   } = {} as {
-    to: "top" | "bottom" | "center" | "auto";
-    axis: "x" | "y" | "xy";
-  }
+    to: 'top' | 'bottom' | 'center' | 'auto';
+    axis: 'x' | 'y' | 'xy';
+  },
 ) {
   if (!_.isElement($view) || !_.isElement($row)) {
     return;
@@ -1412,18 +1412,18 @@ export function scrollIntoView(
   let testFn = {
     xy: () => r_view.contains(r_row),
     x: () => r_view.containsX(r_row),
-    y: () => r_view.containsY(r_row)
+    y: () => r_view.containsY(r_row),
   }[axis];
 
-  let toMode: "top" | "bottom" | "center";
-  if ("auto" == to) {
+  let toMode: 'top' | 'bottom' | 'center';
+  if ('auto' == to) {
     // at bottom
     if (r_row.bottom > r_view.bottom) {
-      toMode = "bottom";
+      toMode = 'bottom';
     }
     // at top
     else {
-      toMode = "top";
+      toMode = 'top';
     }
   } else {
     toMode = to;
@@ -1442,7 +1442,7 @@ export function scrollIntoView(
       },
       bottom: (): number => {
         return r_row.bottom - r_view.bottom + r_view.height / 2;
-      }
+      },
     }[toMode];
 
     let off = offset();

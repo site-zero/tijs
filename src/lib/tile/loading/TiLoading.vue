@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { TiRoadblock } from "../../";
-import { RoadblockProps } from "../roadblock/use-roadblock";
+  import { TiRoadblock } from '../../';
+  import { RoadblockProps } from '../roadblock/use-roadblock';
 
-let props = withDefaults(defineProps<RoadblockProps>(), {
-  className: "",
-  icon: "fas-spinner fa-spin",
-  text: "i18n:loading",
-  autoI18n: true
-});
+  let props = withDefaults(defineProps<RoadblockProps>(), {
+    className: '',
+    icon: 'fas-spinner fa-spin',
+    text: 'i18n:loading',
+    autoI18n: true,
+  });
 </script>
 
 <template>

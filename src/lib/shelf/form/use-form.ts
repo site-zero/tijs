@@ -1,18 +1,18 @@
-import { I18n, Size2D } from "../../../core";
-import { FieldPair, TiEvent, TiEventTrigger } from "../../";
-import _ from "lodash";
-import { joinPairs } from "./form-util";
-import { buildFormFieldList } from "./use-form-field";
-import { FormProps } from "./use-form-props";
-import { FormState, updateFormState } from "./use-form-state";
+import { I18n, Size2D } from '../../../core';
+import { FieldPair, TiEvent, TiEventTrigger } from '../../';
+import _ from 'lodash';
+import { joinPairs } from './form-util';
+import { buildFormFieldList } from './use-form-field';
+import { FormProps } from './use-form-props';
+import { FormState, updateFormState } from './use-form-state';
 
-export const COM_TYPE = "TiForm";
+export const COM_TYPE = 'TiForm';
 /*-------------------------------------------------------
 
                      Events
 
 -------------------------------------------------------*/
-export type FormEvents = "change" | "field-change";
+export type FormEvents = 'change' | 'field-change';
 /*-------------------------------------------------------
 
                      Options
@@ -35,7 +35,7 @@ export type FormOptions = {
 export function useForm(
   state: FormState,
   props: FormProps,
-  options: FormOptions
+  options: FormOptions,
 ) {
   let { notify } = options;
   //
@@ -52,7 +52,7 @@ export function useForm(
     }
 
     // 通知改动
-    notify("field-change", evt.payload);
+    notify('field-change', evt.payload);
   };
 
   return {
@@ -70,6 +70,6 @@ export function useForm(
     buildFormStyle(_view: Size2D) {},
 
     // 响应事件
-    OnFieldChange
+    OnFieldChange,
   };
 }

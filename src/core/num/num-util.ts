@@ -1,5 +1,5 @@
-import _ from "lodash";
-import { Limitation } from "../ti";
+import _ from 'lodash';
+import { Limitation } from '../ti';
 
 /**
  * Translate
@@ -49,7 +49,7 @@ export function fillSteps(
   { len, step = 1 } = {} as {
     len?: number;
     step?: number;
-  }
+  },
 ): any[] {
   len = len ?? source.length;
   for (let i = 0; i < len; i++) {

@@ -3,7 +3,7 @@ import { ExplainI18n, I18n, Str, TiMatch } from '../ti';
 import { MakeTiMatch } from './ti-match';
 
 export const gen_by_map_nil: MakeTiMatch<string> = function (
-  key_of_obj: string
+  key_of_obj: string,
 ): TiMatch {
   return {
     test: (input: any): boolean => {

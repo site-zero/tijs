@@ -1,6 +1,6 @@
-import _ from "lodash";
-import { ExplainI18n, I18n, TiMatch } from "../ti";
-import { MakeTiMatch } from "./ti-match";
+import _ from 'lodash';
+import { ExplainI18n, I18n, TiMatch } from '../ti';
+import { MakeTiMatch } from './ti-match';
 
 export const gen_by_undefined: MakeTiMatch<string> = function (): TiMatch {
   return {
@@ -9,6 +9,6 @@ export const gen_by_undefined: MakeTiMatch<string> = function (): TiMatch {
     },
     explainText: (i18n: ExplainI18n): string => {
       return I18n.text(i18n.undefined);
-    }
+    },
   };
 };

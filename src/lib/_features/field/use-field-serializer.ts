@@ -1,6 +1,6 @@
-import { FuncA2, Vars } from "../../../core";
-import { Field, getFieldConvertor } from "../../";
-import _ from "lodash";
+import { FuncA2, Vars } from '../../../core';
+import { Field, getFieldConvertor } from '../../';
+import _ from 'lodash';
 
 /*-------------------------------------------------------
 
@@ -9,7 +9,7 @@ import _ from "lodash";
 -------------------------------------------------------*/
 export type FieldSerializerProps = Pick<
   Field,
-  "name" | "type" | "defaultAs" | "emptyAs" | "serializer"
+  'name' | 'type' | 'defaultAs' | 'emptyAs' | 'serializer'
 >;
 /*-------------------------------------------------------
 
@@ -25,16 +25,16 @@ export type FieldSerializerFeature = {
 
 -------------------------------------------------------*/
 export function useFieldSerializer(
-  props: FieldSerializerProps
+  props: FieldSerializerProps,
 ): FieldSerializerFeature {
   return {
     prepareFieldValue(val: any, data: Vars) {
       let { name, type, defaultAs, emptyAs, serializer } = props;
 
-      if ("~~undefined~~" == defaultAs) {
+      if ('~~undefined~~' == defaultAs) {
         defaultAs = undefined;
       }
-      if ("~~undefined~~" == emptyAs) {
+      if ('~~undefined~~' == emptyAs) {
         emptyAs = undefined;
       }
 
@@ -49,7 +49,7 @@ export function useFieldSerializer(
 
       // 内置类型转换器
       if (!_.isNil(val)) {
-        let cov = getFieldConvertor(type || "String");
+        let cov = getFieldConvertor(type || 'String');
         val = cov.serialize(val);
       }
 
@@ -59,6 +59,6 @@ export function useFieldSerializer(
       }
 
       return val;
-    }
+    },
   };
 }

@@ -1,6 +1,5 @@
-import _ from "lodash";
-import { TimeInfo } from "./_types";
-
+import _ from 'lodash';
+import { TimeInfo } from './_types';
 
 type TimeInput = number | string | Date | TimeInfo;
 
@@ -53,7 +52,7 @@ export class TiTime implements TimeInfo {
     this.milliseconds = _.clamp(milliseconds ?? this.milliseconds, 0, 999);
   }
   //--------------------------------
-  update(input: TimeInput, unit = "ms") {
+  update(input: TimeInput, unit = 'ms') {
     this.__cached = {};
     // Date
     if (_.isDate(input)) {
@@ -72,10 +71,10 @@ export class TiTime implements TimeInfo {
     // Number as Seconds
     else if (_.isNumber(input)) {
       const FNS0 = {
-        "ms": (v) => Math.round(v),
-        "s": (v) => Math.round(v * 1000),
-        "min": (v) => Math.round(v * 1000 * 60),
-        "hr": (v) => Math.round(v * 1000 * 60 * 60)
+        ms: (v) => Math.round(v),
+        s: (v) => Math.round(v * 1000),
+        min: (v) => Math.round(v * 1000 * 60),
+        hr: (v) => Math.round(v * 1000 * 60 * 60),
       } as {
         [k: string]: { (v: number): number };
       };
@@ -104,7 +103,7 @@ export class TiTime implements TimeInfo {
       // Time string
       m =
         /^([0-9]{1,2}):?([0-9]{1,2})(:?([0-9]{1,2})([.,]([0-9]{1,3}))?)?$/.exec(
-          input
+          input,
         );
       if (m) {
         // Min: 23:59
@@ -158,42 +157,42 @@ export class TiTime implements TimeInfo {
     return this.__cached.valueInMilliseconds;
   }
   //--------------------------------
-  toString(fmt = "auto") {
+  toString(fmt = 'auto') {
     // Auto
-    if ("auto" == fmt) {
+    if ('auto' == fmt) {
       fmt =
         this.milliseconds > 0
-          ? "HH:mm:ss.SSS"
+          ? 'HH:mm:ss.SSS'
           : this.seconds > 0
-          ? "HH:mm:ss"
-          : "HH:mm";
+            ? 'HH:mm:ss'
+            : 'HH:mm';
     }
     // To Min
-    else if ("min" == fmt) {
-      fmt = this.hours <= 0 ? "mm:ss" : "HH:mm:ss";
+    else if ('min' == fmt) {
+      fmt = this.hours <= 0 ? 'mm:ss' : 'HH:mm:ss';
     }
     const _S = (n: number) => n.toString();
     const FNS1 = {
-      "a": () => (this.value > 43200 ? "PM" : "AM"), // am|pm
-      "H": () => this.hours, // Hour in day (0-23)
-      "k": () => this.hours + 1, // Hour in day (1-24)
-      "K": () => this.hours % 12, // Hour in am/pm (0-11)
-      "h": () => (this.hours % 12) + 1, // Hour in am/pm (1-12)
-      "m": () => this.minutes, // Minute in hour
-      "s": () => this.seconds, // Second in minute
-      "S": () => this.milliseconds, // Millisecond Number
-      "HH": () => _.padStart(_S(this.hours), 2, "0"),
-      "kk": () => _.padStart(_S(this.hours + 1), 2, "0"),
-      "KK": () => _.padStart(_S(this.hours % 12), 2, "0"),
-      "hh": () => _.padStart(_S((this.hours % 12) + 1), 2, "0"),
-      "mm": () => _.padStart(_S(this.minutes), 2, "0"),
-      "ss": () => _.padStart(_S(this.seconds), 2, "0"),
-      "SSS": () => _.padStart(_S(this.milliseconds), 3, "0")
+      a: () => (this.value > 43200 ? 'PM' : 'AM'), // am|pm
+      H: () => this.hours, // Hour in day (0-23)
+      k: () => this.hours + 1, // Hour in day (1-24)
+      K: () => this.hours % 12, // Hour in am/pm (0-11)
+      h: () => (this.hours % 12) + 1, // Hour in am/pm (1-12)
+      m: () => this.minutes, // Minute in hour
+      s: () => this.seconds, // Second in minute
+      S: () => this.milliseconds, // Millisecond Number
+      HH: () => _.padStart(_S(this.hours), 2, '0'),
+      kk: () => _.padStart(_S(this.hours + 1), 2, '0'),
+      KK: () => _.padStart(_S(this.hours % 12), 2, '0'),
+      hh: () => _.padStart(_S((this.hours % 12) + 1), 2, '0'),
+      mm: () => _.padStart(_S(this.minutes), 2, '0'),
+      ss: () => _.padStart(_S(this.seconds), 2, '0'),
+      SSS: () => _.padStart(_S(this.milliseconds), 3, '0'),
     } as {
       [k: string]: { (): number | string };
     };
     // Formatting
-    let sb = "";
+    let sb = '';
     let ptn = /a|HH?|KK?|hh?|kk?|mm?|ss?|S(SS)?/g;
     let pos = 0;
     let m;

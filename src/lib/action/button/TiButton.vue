@@ -1,14 +1,14 @@
 <script setup lang="ts">
-const emit = defineEmits(["submitCallback"]);
+  const emit = defineEmits(['submitCallback']);
 
-defineProps({
-  text: { type: String, default: "提交" }
-});
+  defineProps({
+    text: { type: String, default: '提交' },
+  });
 
-const clickBack = () => {
-  alert("点击提交dd");
-  emit("submitCallback");
-};
+  const clickBack = () => {
+    alert('点击提交dd');
+    emit('submitCallback');
+  };
 </script>
 
 <template>
@@ -18,19 +18,19 @@ const clickBack = () => {
 </template>
 
 <style lang="scss" scoped>
-.main-container {
-  .button-container {
-    padding: 8px 15px;
+  .main-container {
+    .button-container {
+      padding: 8px 15px;
 
-    background-color: #36c96d;
-    border-width: 0px;
-    border-radius: 2px;
-    box-shadow: none;
+      background-color: #36c96d;
+      border-width: 0px;
+      border-radius: 2px;
+      box-shadow: none;
 
-    font-size: 14px;
-    color: #fff;
+      font-size: 14px;
+      color: #fff;
 
-    cursor: pointer;
+      cursor: pointer;
+    }
   }
-}
 </style>

@@ -1,13 +1,13 @@
-import { TiEventTrigger } from "../../../";
-import { LayoutProps, LayoutState, TabsProps } from "../layout-support.ts";
+import { TiEventTrigger } from '../../../';
+import { LayoutProps, LayoutState, TabsProps } from '../layout-support.ts';
 
-export const COM_TYPE = "TiLayoutTabs";
+export const COM_TYPE = 'TiLayoutTabs';
 /*-------------------------------------------------------
 
                      Events
 
 -------------------------------------------------------*/
-export type LayoutTabsEvents = "shown";
+export type LayoutTabsEvents = 'shown';
 /*-------------------------------------------------------
 
                      State
@@ -42,10 +42,10 @@ export type LayoutTabsOptions = {
 export function useLayoutTabs(
   _state: LayoutState,
   _props: LayoutTabsProps,
-  _options: LayoutTabsOptions
+  _options: LayoutTabsOptions,
 ) {
   return {
     TopClass: null,
-    Items: []
+    Items: [],
   };
 }

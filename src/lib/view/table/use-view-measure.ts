@@ -1,7 +1,7 @@
-import { Callback, Callback1, FuncA0, Rects, Size2D } from "../../../core";
-import { AppEvents, TiAppBus } from "../../";
-import _ from "lodash";
-import { nextTick } from "vue";
+import { Callback, Callback1, FuncA0, Rects, Size2D } from '../../../core';
+import { AppEvents, TiAppBus } from '../../';
+import _ from 'lodash';
+import { nextTick } from 'vue';
 
 export type ViewMeasureProps = {
   getMainElement: FuncA0<HTMLElement | undefined>;
@@ -27,7 +27,7 @@ export function useViewMeasure(props: ViewMeasureProps) {
     onMounted,
     onUnmounted,
     GBus,
-    debounce = 500
+    debounce = 500,
   } = props;
   let updateViewport = function () {
     let $main = getMainElement();
@@ -62,7 +62,7 @@ export function useViewMeasure(props: ViewMeasureProps) {
 
       let $main = getMainElement();
       if ($main) {
-        $main.addEventListener("scroll", debounceUpdateScrollTop);
+        $main.addEventListener('scroll', debounceUpdateScrollTop);
       }
 
       if (GBus) {
@@ -75,7 +75,7 @@ export function useViewMeasure(props: ViewMeasureProps) {
     onUnmounted(() => {
       let $main = getMainElement();
       if ($main) {
-        $main.removeEventListener("scroll", debounceUpdateScrollTop);
+        $main.removeEventListener('scroll', debounceUpdateScrollTop);
       }
       if (GBus) {
         GBus.off(debounceUpdateMeasure, AppEvents.APP_RESIZE);
@@ -87,6 +87,6 @@ export function useViewMeasure(props: ViewMeasureProps) {
     updateViewport,
     updateScrollTop,
     updateMeasure,
-    debounceUpdateMeasure
+    debounceUpdateMeasure,
   };
 }

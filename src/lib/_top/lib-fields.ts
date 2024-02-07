@@ -1,5 +1,5 @@
-import JSON5 from "json5";
-import _ from "lodash";
+import JSON5 from 'json5';
+import _ from 'lodash';
 import {
   Convertor,
   DateTime,
@@ -7,8 +7,8 @@ import {
   FuncA3,
   NameValue,
   Str,
-  Vars
-} from "../../core";
+  Vars,
+} from '../../core';
 
 export type Field = {
   /**
@@ -69,7 +69,7 @@ const FIELD_CONVERTERS: FieldConvertorSet = {
   Float: { transform: toFloat, serialize: toFloat },
   Boolean: { transform: toBoolean, serialize: toBoolean },
   Timestamp: { transform: toDate, serialize: toAMS },
-  AMS: { transform: toDate, serialize: toAMS }
+  AMS: { transform: toDate, serialize: toAMS },
 };
 
 export function isFieldType(type: string): type is FieldValueType {
@@ -85,7 +85,7 @@ export function getFieldUniqKey(name: FieldName): string {
   if (_.isString(name)) {
     return name;
   }
-  return name.join("-");
+  return name.join('-');
 }
 
 export function getFieldConvertor(type: FieldValueType): FieldConvertor {
@@ -156,7 +156,7 @@ const INT_CONVERTERS = {
   round: (v: any) => Math.round(v),
   ceil: (v: any) => Math.ceil(v),
   floor: (v: any) => Math.floor(v),
-  int: (v: any) => parseInt(v)
+  int: (v: any) => parseInt(v),
 } as {
   [k: string]: Convertor<any, number>;
 };
@@ -165,12 +165,12 @@ type IntConverterName = keyof typeof INT_CONVERTERS;
 
 function toInteger(
   input: any,
-  { mode = "int", dft = -1, range = [], border = [true, true] } = {} as {
+  { mode = 'int', dft = -1, range = [], border = [true, true] } = {} as {
     mode: IntConverterName;
     dft: number;
     range?: [number, number];
     border?: [boolean, boolean];
-  }
+  },
 ) {
   let n = INT_CONVERTERS[mode](input);
   // Apply the default
@@ -209,7 +209,7 @@ function toFloat(
   { precision = 2, dft = NaN } = {} as {
     precision: number;
     dft: number;
-  }
+  },
 ) {
   //console.log("toFloat", val, precision, dft)
   if (_.isNil(input)) {

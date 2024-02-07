@@ -1,5 +1,5 @@
-import { CommonProps, IconInput } from "../../";
-import { TiColor, TiDict, Vars } from "../../../core";
+import { CommonProps, IconInput } from '../../';
+import { TiColor, TiDict, Vars } from '../../../core';
 
 export interface IconProps extends CommonProps {
   //
@@ -25,7 +25,7 @@ export interface IconProps extends CommonProps {
   fontSize?: number | string;
   color?: string | TiColor;
   // image only
-  objectFit?: "contain" | "cover" | "fill" | "scale-down";
+  objectFit?: 'contain' | 'cover' | 'fill' | 'scale-down';
   // Free Style
   imgStyle?: Vars;
   fontStyle?: Vars;

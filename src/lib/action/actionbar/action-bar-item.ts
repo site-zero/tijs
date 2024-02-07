@@ -1,22 +1,22 @@
-import { Callback, I18n, Match, TiMatch, Util, isInvoke } from "../../../core";
-import { isEventInfo } from "../../";
-import _ from "lodash";
+import { Callback, I18n, Match, TiMatch, Util, isInvoke } from '../../../core';
+import { isEventInfo } from '../../';
+import _ from 'lodash';
 import {
   ActionBarItem,
   AltBarItemisplay,
   BarItemAction,
   BarState,
   BuiltedBarItem,
-  ItemAncestors
-} from "./action-bar-type";
-import { ActionBarOptions } from "./use-action-bar";
+  ItemAncestors,
+} from './action-bar-type';
+import { ActionBarOptions } from './use-action-bar';
 
 function __gen_group_children(
   index: number,
   items: ActionBarItem[] | undefined,
   state: BarState,
   options: ActionBarOptions,
-  depth: number[]
+  depth: number[],
 ) {
   if (items) {
     let subItems: BuiltedBarItem[] = [];
@@ -32,38 +32,38 @@ function __gen_group_children(
 }
 
 export type BarItemType =
-  | "action"
-  | "group"
-  | "inline-group"
-  | "status"
-  | "sep";
+  | 'action'
+  | 'group'
+  | 'inline-group'
+  | 'status'
+  | 'sep';
 
 const TIDY_BAR_ITEMS = {
-  "action": () => {},
-  "group": (aItem, bItem, state, options, depth) => {
-    bItem.className["opened"] =
+  'action': () => {},
+  'group': (aItem, bItem, state, options, depth) => {
+    bItem.className['opened'] =
       bItem.opened && /^(open|ready)$/.test(bItem.opened);
-    bItem.className["ready"] = bItem.opened == "ready";
-    bItem.className["closed"] = !bItem.opened;
+    bItem.className['ready'] = bItem.opened == 'ready';
+    bItem.className['closed'] = !bItem.opened;
     bItem.items = __gen_group_children(
       bItem.index,
       aItem.items,
       state,
       options,
-      depth
+      depth,
     );
   },
-  "inline-group": (aItem, bItem, state, options, depth) => {
+  'inline-group': (aItem, bItem, state, options, depth) => {
     bItem.items = __gen_group_children(
       bItem.index,
       aItem.items,
       state,
       options,
-      depth
+      depth,
     );
   },
-  "status": () => {},
-  "sep": () => {}
+  'status': () => {},
+  'sep': () => {},
 } as Record<
   BarItemType,
   (
@@ -71,7 +71,7 @@ const TIDY_BAR_ITEMS = {
     bItem: BuiltedBarItem,
     state: BarState,
     options: ActionBarOptions,
-    depth: number[]
+    depth: number[],
   ) => void
 >;
 
@@ -80,7 +80,7 @@ function tidyItem(
   bItem: BuiltedBarItem,
   state: BarState,
   options: ActionBarOptions,
-  depth: number[]
+  depth: number[],
 ) {
   TIDY_BAR_ITEMS[bItem.type](aItem, bItem, state, options, depth);
 }
@@ -89,7 +89,7 @@ function tidyItem(
 function parseItemAction(
   action: BarItemAction | undefined,
   state: BarState,
-  options: ActionBarOptions
+  options: ActionBarOptions,
 ): Callback | undefined {
   // Guard
   if (!action) {
@@ -106,7 +106,7 @@ function parseItemAction(
     let ei = action;
     return () => {
       let payload = Util.explainObj(state.vars, ei.payload, {
-        evalFunc: false
+        evalFunc: false,
       });
       options.notify(ei.name, payload);
     };
@@ -117,8 +117,8 @@ function parseItemAction(
     return Util.genInvokingBy(action, {
       context: state.vars,
       dft: () => {
-        throw new Error("fail to parse: " + action);
-      }
+        throw new Error('fail to parse: ' + action);
+      },
     }) as Callback;
   }
 
@@ -131,16 +131,16 @@ function createItem(
   options: ActionBarOptions,
   it: ActionBarItem,
   index: number,
-  depth: number[] = []
+  depth: number[] = [],
 ): BuiltedBarItem {
   let type: BarItemType;
   if (!it.type) {
     if (it.items) {
-      type = "group";
+      type = 'group';
     } else if (_.isEmpty(it)) {
-      type = "sep";
+      type = 'sep';
     } else {
-      type = "action";
+      type = 'action';
     }
   } else {
     type = it.type;
@@ -148,7 +148,7 @@ function createItem(
 
   // 基本信息
   let uniqKey =
-    it.name || `${_.camelCase(type)}-${_.concat(depth, index).join("-")}`;
+    it.name || `${_.camelCase(type)}-${_.concat(depth, index).join('-')}`;
   let re: BuiltedBarItem = {
     uniqKey,
     type,
@@ -159,7 +159,7 @@ function createItem(
     tip: I18n.textOr(it.tip),
     opened: state.opened.get(uniqKey),
     depth: depth.length,
-    className: {}
+    className: {},
   };
 
   // 判断显示
@@ -167,7 +167,7 @@ function createItem(
     let alts = _.concat(it.altDisplay);
     let parsedAlt = [] as AltBarItemisplay<TiMatch>[];
     for (let alt of alts) {
-      let a2: AltBarItemisplay<TiMatch> = _.pick(alt, "icon", "title");
+      let a2: AltBarItemisplay<TiMatch> = _.pick(alt, 'icon', 'title');
       if (alt.test) {
         a2.test = Match.parse(alt.test);
       }
@@ -189,7 +189,7 @@ function createItem(
 export function buildBarViewItems(
   state: BarState,
   items: ActionBarItem[],
-  options: ActionBarOptions
+  options: ActionBarOptions,
 ): BuiltedBarItem[] {
   let re = [] as BuiltedBarItem[];
   for (let i = 0; i < items.length; i++) {
@@ -197,8 +197,8 @@ export function buildBarViewItems(
     let bItem = createItem(state, options, aItem, i);
     tidyItem(aItem, bItem, state, options, []);
     // 连续的 Sep 没有必要
-    if ("sep" == bItem.type) {
-      if (re.length == 0 || "sep" == re[re.length - 1].type) {
+    if ('sep' == bItem.type) {
+      if (re.length == 0 || 'sep' == re[re.length - 1].type) {
         continue;
       }
     }

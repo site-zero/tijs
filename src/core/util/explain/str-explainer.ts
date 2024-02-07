@@ -1,12 +1,12 @@
-import _ from "lodash";
+import _ from 'lodash';
 import {
   ExplainOptions,
   Explainer,
   Str,
   Util,
   Vars,
-  invoke_partial
-} from "../../ti";
+  invoke_partial,
+} from '../../ti';
 
 type ReType = { (context: Vars, options: ExplainOptions): any };
 type MakeReType = {
@@ -71,7 +71,7 @@ function __get_func(path: string, partial: invoke_partial) {
       func = Util.genInvoking(path, {
         context,
         partial,
-        dft: () => path
+        dft: () => path,
       });
     }
     return func;
@@ -87,7 +87,7 @@ function __get_call(path: string, partial: invoke_partial) {
         context,
         partial,
         funcSet: options.funcSet,
-        dft: () => path
+        dft: () => path,
       });
     }
     return func();
@@ -109,27 +109,27 @@ const _makers: MakerMap = {
   //
   // 函数
   //
-  "==>": (val) => __get_func(val, "left"),
-  "==>?": (val) => __get_func(val, "left?"),
-  "==>>": (val) => __get_func(val, "right"),
-  "==>>?": (val) => __get_func(val, "right?"),
+  '==>': (val) => __get_func(val, 'left'),
+  '==>?': (val) => __get_func(val, 'left?'),
+  '==>>': (val) => __get_func(val, 'right'),
+  '==>>?': (val) => __get_func(val, 'right?'),
   //
   // 赋值
   //
-  "==": (val, getDft) => __get_bool(val, { getDft }),
-  "!=": (val, getDft) => __get_bool(val, { getDft, not: true }),
-  "=": (val, getDft) => __get_val(val, { getDft, autoJsValue: true }),
+  '==': (val, getDft) => __get_bool(val, { getDft }),
+  '!=': (val, getDft) => __get_bool(val, { getDft, not: true }),
+  '=': (val, getDft) => __get_val(val, { getDft, autoJsValue: true }),
   //
   // 直接调用
   //
-  "=>": (val) => __get_call(val, "left"),
-  "=>?": (val) => __get_call(val, "left?"),
-  "=>>": (val) => __get_call(val, "right"),
-  "=>>?": (val) => __get_call(val, "right?"),
+  '=>': (val) => __get_call(val, 'left'),
+  '=>?': (val) => __get_call(val, 'left?'),
+  '=>>': (val) => __get_call(val, 'right'),
+  '=>>?': (val) => __get_call(val, 'right?'),
   //
   // 渲染模板
   //
-  "->": (val) => __get_tmpl(val)
+  '->': (val) => __get_tmpl(val),
 };
 
 export class StringExplainer implements Explainer {
@@ -176,11 +176,11 @@ export class StringExplainer implements Explainer {
           the_dft = __get_val(s, { getDft: the_dft, autoJsValue: true });
         }
         // starts with "!=" or "==" auto covert to Boolean
-        else if ("==" == m_type) {
+        else if ('==' == m_type) {
           the_dft = __static_bool(m_dft);
         }
         // starts with "!=" or "==" auto covert to Boolean
-        else if ("!=" == m_type) {
+        else if ('!=' == m_type) {
           the_dft = __static_bool(m_dft, true);
         }
         // Others, just trim the value

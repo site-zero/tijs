@@ -1,6 +1,6 @@
-import _ from "lodash";
-import { AbstractDict } from "./dict-abstract";
-import { IDict } from "./dict-types";
+import _ from 'lodash';
+import { AbstractDict } from './dict-abstract';
+import { IDict } from './dict-types';
 
 export class DictFactoryWrapper<T, V>
   extends AbstractDict<T, V>
@@ -26,7 +26,7 @@ export class DictFactoryWrapper<T, V>
       return new Promise<T[]>((resolve) => {
         let data = _.cloneDeep(this._cache_data);
         if (!data) {
-          throw new Error("impossiable");
+          throw new Error('impossiable');
         }
         resolve(data);
       });
@@ -36,7 +36,7 @@ export class DictFactoryWrapper<T, V>
       return new Promise<T[]>((resolve) => {
         let data = _.cloneDeep(this._cache_data);
         if (!data) {
-          throw new Error("impossiable");
+          throw new Error('impossiable');
         }
         resolve(data);
       });

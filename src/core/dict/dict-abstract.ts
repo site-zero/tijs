@@ -1,5 +1,5 @@
-import _ from "lodash";
-import { DictItem, IDict } from "./dict-types";
+import _ from 'lodash';
+import { DictItem, IDict } from './dict-types';
 
 export abstract class AbstractDict<T, V> implements IDict<T, V> {
   abstract clearCache(): void;

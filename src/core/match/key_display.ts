@@ -1,9 +1,9 @@
-import _ from "lodash";
-import { KeyDisplay } from "../ti";
+import _ from 'lodash';
+import { KeyDisplay } from '../ti';
 
 export function explainKeyDisplay(
   key: string,
-  keyDisplayBy?: KeyDisplay
+  keyDisplayBy?: KeyDisplay,
 ): string {
   // Translate the key
   if (_.isFunction(keyDisplayBy)) {
@@ -11,7 +11,7 @@ export function explainKeyDisplay(
   }
   // Tranlsate as key path
   if (_.isArray(keyDisplayBy)) {
-    let keyPath = key.split(".");
+    let keyPath = key.split('.');
     let kdiss = [];
     for (let i = 0; i < keyPath.length; i++) {
       let kph = keyPath[i];
@@ -22,7 +22,7 @@ export function explainKeyDisplay(
         kdiss.push(kph);
       }
     }
-    return kdiss.join(".");
+    return kdiss.join('.');
   }
   // Simple translate
   if (keyDisplayBy) {

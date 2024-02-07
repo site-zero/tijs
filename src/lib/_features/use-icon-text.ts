@@ -1,7 +1,7 @@
-import { Callback, Callback1, CssUtils, I18n, Vars } from "../../core";
-import { IconInput, TiEventTrigger } from "../";
-import _ from "lodash";
-import { CommonProps, TextShowProps, useClassStyle } from ".";
+import { Callback, Callback1, CssUtils, I18n, Vars } from '../../core';
+import { IconInput, TiEventTrigger } from '../';
+import _ from 'lodash';
+import { CommonProps, TextShowProps, useClassStyle } from '.';
 export type IconTextState = {
   iconHovered?: boolean;
   textHovered?: boolean;
@@ -11,14 +11,14 @@ export type IconTextState = {
                      Events
 
 -------------------------------------------------------*/
-export type IconTextEvents = "click-icon" | "click-text";
+export type IconTextEvents = 'click-icon' | 'click-text';
 /*-------------------------------------------------------
 
                      Props
 
 -------------------------------------------------------*/
-export type IconTextProps = Pick<CommonProps, "className"> &
-  Pick<TextShowProps, "autoI18n"> & {
+export type IconTextProps = Pick<CommonProps, 'className'> &
+  Pick<TextShowProps, 'autoI18n'> & {
     style?: Vars;
     icon?: IconInput;
     text?: string;
@@ -79,7 +79,7 @@ export type IconTextOptions<K extends string, T> = {
 export function useIconText<K extends string, T>(
   state: IconTextState,
   props: IconTextProps,
-  options: IconTextOptions<K, T> = {}
+  options: IconTextOptions<K, T> = {},
 ): IconTextFeature {
   let { notify, notifyIcon, notifyText } = options;
 
@@ -105,28 +105,28 @@ export function useIconText<K extends string, T>(
 
   // 准备动态类型计算函数
   let evalClassAndStyle = (
-    info?: Pick<IconTextFeature, "canHoverIcon" | "canHoverText">
+    info?: Pick<IconTextFeature, 'canHoverIcon' | 'canHoverText'>,
   ) => {
     //console.log("canHoverIcon", info.canHoverIcon);
     return {
-      "hover-icon": info?.canHoverIcon,
-      "hover-text": info?.canHoverText
+      'hover-icon': info?.canHoverIcon,
+      'hover-text': info?.canHoverText,
     };
   };
 
   let _class_style = useClassStyle(props, evalClassAndStyle, {
     canHoverIcon,
-    canHoverText
+    canHoverText,
   });
 
   let icon_class_style = useClassStyle({
     className: props.iconClass,
-    style: props.iconStyle
+    style: props.iconStyle,
   });
 
   let text_class_style = useClassStyle({
     className: props.textClass,
-    style: props.textStyle
+    style: props.textStyle,
   });
   //
   // 返回特性
@@ -146,13 +146,13 @@ export function useIconText<K extends string, T>(
     textStyle: text_class_style.style,
     getClassName(className?: string, ...others: any[]) {
       return CssUtils.mergeClassName(className, ...others, {
-        "hover-icon": canHoverIcon,
-        "hover-text": canHoverText
+        'hover-icon': canHoverIcon,
+        'hover-text': canHoverText,
       });
     },
 
     OnClickIcon: function () {
-      console.log("OnClickIcon");
+      console.log('OnClickIcon');
       if (showIcon && canHoverIcon && notify && notifyIcon) {
         notify(notifyIcon[0], notifyIcon[1]);
       }
@@ -167,6 +167,6 @@ export function useIconText<K extends string, T>(
     },
     setTextHover: function (hovred: boolean) {
       state.textHovered = hovred;
-    }
+    },
   };
 }

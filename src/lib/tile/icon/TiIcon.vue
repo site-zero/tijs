@@ -1,42 +1,48 @@
 <script setup lang="ts">
-import { CssUtils, Icons } from "../../../core";
-import { computed } from "vue";
-import { IconProps } from "./icon-props";
-import { getIconStyle } from "./use-icon";
-defineOptions({
-  name: "TiIcon",
-  inheritAttrs: true
-})
-/*-------------------------------------------------------
+  import { CssUtils, Icons } from '../../../core';
+  import { computed } from 'vue';
+  import { IconProps } from './icon-props';
+  import { getIconStyle } from './use-icon';
+  defineOptions({
+    name: 'TiIcon',
+    inheritAttrs: true,
+  });
+  /*-------------------------------------------------------
 
                       Props
 
 -------------------------------------------------------*/
-const props = defineProps<IconProps>();
-/*-------------------------------------------------------
+  const props = defineProps<IconProps>();
+  /*-------------------------------------------------------
 
                       Computed
 
 -------------------------------------------------------*/
-const Icon = computed(() => {
-  return Icons.toIconObj(props.value ?? props.defaultValue);
-});
-const TopClass = computed(() => CssUtils.mergeClassName(props.className, () => {
-  return `is-type-${Icon.value.type}`
-}));
-const TopStyle = computed(() => CssUtils.toStyle({
-  width: props.width,
-  height: props.height,
-  opacity: props.opacity
-})
-);
-const IconStyle = computed(() => getIconStyle(props, Icon));
+  const Icon = computed(() => {
+    return Icons.toIconObj(props.value ?? props.defaultValue);
+  });
+  const TopClass = computed(() =>
+    CssUtils.mergeClassName(props.className, () => {
+      return `is-type-${Icon.value.type}`;
+    }),
+  );
+  const TopStyle = computed(() =>
+    CssUtils.toStyle({
+      width: props.width,
+      height: props.height,
+      opacity: props.opacity,
+    }),
+  );
+  const IconStyle = computed(() => getIconStyle(props, Icon));
 </script>
 
 <template>
   <div class="ti-icon" :class="TopClass" :style="TopStyle">
     <!-- Font Icon-->
-    <div class="part-main as-font" :style="IconStyle" v-if="'font' == Icon.type">
+    <div
+      class="part-main as-font"
+      :style="IconStyle"
+      v-if="'font' == Icon.type">
       <i :class="Icon.className"></i>
     </div>
     <!-- Image Icon-->
@@ -44,10 +50,10 @@ const IconStyle = computed(() => getIconStyle(props, Icon));
   </div>
 </template>
 <style lang="scss">
-@use "../../../assets/style/_all.scss" as *;
+  @use '../../../assets/style/_all.scss' as *;
 
-@import "../../../assets/zmdi/css/material-design-iconic-font.css";
-@import "../../../assets/fontawesome/6.4.2-web/css/all.css";
+  @import '../../../assets/zmdi/css/material-design-iconic-font.css';
+  @import '../../../assets/fontawesome/6.4.2-web/css/all.css';
 
-@import "./ti-icon.scss";
+  @import './ti-icon.scss';
 </style>

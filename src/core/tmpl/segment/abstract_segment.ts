@@ -1,6 +1,6 @@
-import _ from "lodash";
-import { TmplEle, TmplSegment } from "../ti-tmpl";
-import { Vars } from "../../ti";
+import _ from 'lodash';
+import { TmplEle, TmplSegment } from '../ti-tmpl';
+import { Vars } from '../../ti';
 
 export class AbstractTmplSegment implements TmplSegment {
   protected _type_name: string;
@@ -34,7 +34,7 @@ export class AbstractTmplSegment implements TmplSegment {
   }
 
   addElement(_ele: TmplEle): void {
-    throw "Not Implement()";
+    throw 'Not Implement()';
   }
 
   addChild(child?: TmplSegment): void {
@@ -45,12 +45,12 @@ export class AbstractTmplSegment implements TmplSegment {
 
   joinDebugTree(sb: string[], indent: number): void {
     if (indent > 0) {
-      sb.push(_.repeat("|   ", indent));
+      sb.push(_.repeat('|   ', indent));
     }
-    sb.push("<", this._type_name, ">");
+    sb.push('<', this._type_name, '>');
     if (!_.isEmpty(this.children)) {
       for (let child of this.children) {
-        sb.push("\n");
+        sb.push('\n');
         child.joinDebugTree(sb, indent + 1);
       }
     }
@@ -67,15 +67,15 @@ export class AbstractTmplSegment implements TmplSegment {
   }
 
   isBlock(): boolean {
-    return "BLOCK" == this._type_name;
+    return 'BLOCK' == this._type_name;
   }
   isBranch(): boolean {
-    return "BRANCH" == this._type_name;
+    return 'BRANCH' == this._type_name;
   }
   isCondition(): boolean {
-    return "CONDITION" == this._type_name;
+    return 'CONDITION' == this._type_name;
   }
   isLoop(): boolean {
-    return "LOOP" == this._type_name;
+    return 'LOOP' == this._type_name;
   }
 }

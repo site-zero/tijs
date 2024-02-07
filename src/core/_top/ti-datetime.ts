@@ -16,7 +16,7 @@ const P_DATE = new RegExp(
     '(\\d{1,2})(:)(\\d{1,2})((:)(\\d{1,2}))?' +
     '((.)(\\d{1,3}))?)?' +
     '(([+-])(\\d{1,2})(:\\d{1,2})?)?' +
-    '(Z(\\d*))?$'
+    '(Z(\\d*))?$',
 );
 
 /**
@@ -204,7 +204,7 @@ export function format(
   { fmt = 'yyyy-MM-dd HH:mm:ss', trimZero = false } = {} as {
     fmt?: string;
     trimZero?: boolean;
-  }
+  },
 ): string | string[] | null {
   // Date Range or a group of date
   if (_.isArray(date)) {
@@ -281,7 +281,7 @@ export function timeText(
       'future-in-day': string;
       'future-in-week': string;
     };
-  }
+  },
 ) {
   d = parse(d);
   if (!_.isDate(d)) {
@@ -400,7 +400,7 @@ export function setTime(
   hours = 0,
   minutes = 0,
   seconds = 0,
-  milliseconds = 0
+  milliseconds = 0,
 ) {
   if (_.inRange(hours, 0, 24)) {
     d.setHours(hours);

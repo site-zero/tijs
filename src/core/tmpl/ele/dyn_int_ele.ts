@@ -1,7 +1,7 @@
-import _ from "lodash";
-import { Vars } from "../../ti";
-import { DynElInfo, TmplEle } from "../ti-tmpl";
-import { sprintf } from "sprintf-js";
+import _ from 'lodash';
+import { Vars } from '../../ti';
+import { DynElInfo, TmplEle } from '../ti-tmpl';
+import { sprintf } from 'sprintf-js';
 
 export class DynIntEle implements TmplEle {
   private _dft_val: number;

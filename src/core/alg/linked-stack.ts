@@ -1,6 +1,6 @@
-import _ from "lodash";
-import { Predicate, WnStack } from "../_top/_types";
-import { sprintf } from "sprintf-js";
+import _ from 'lodash';
+import { Predicate, WnStack } from '../_top/_types';
+import { sprintf } from 'sprintf-js';
 
 export class LinkedStack<T> implements WnStack<T> {
   private stack = [] as T[];
@@ -71,8 +71,8 @@ export class LinkedStack<T> implements WnStack<T> {
     let i = this.stack.length - 1;
     for (let obj of this.stack) {
       let name = typeof obj;
-      sb.push(sprintf("%02d) [ %20s ]", i--, name));
+      sb.push(sprintf('%02d) [ %20s ]', i--, name));
     }
-    return sb.join("\n");
+    return sb.join('\n');
   }
 }

@@ -120,21 +120,21 @@ export function buildEscapeReverTable(cs: string): EscapeTable {
 
 // 解码过程表: 转义字符串 -> 真正字符
 const STR_ESC_TS = [
-  "n",
-  "\n",
-  "r",
-  "\r",
-  "t",
-  "\t",
-  "b",
-  "\b",
+  'n',
+  '\n',
+  'r',
+  '\r',
+  't',
+  '\t',
+  'b',
+  '\b',
   "'",
   "'",
   '"',
   '"',
-  "\\",
-  "\\"
-].join("");
+  '\\',
+  '\\',
+].join('');
 export const STR_UNESC_TAB = buildEscapeTable(STR_ESC_TS);
 
 // 编码过程表: 真正字符 -> 转义字符串

@@ -1,12 +1,12 @@
-import _ from "lodash";
+import _ from 'lodash';
 import {
   Vars,
   ExplainOptions,
   Explainer,
   InvokeOptions,
   Invoke,
-  Util
-} from "../../ti";
+  Util,
+} from '../../ti';
 
 export class InvokeExplainer implements Explainer {
   // 解析后的处理函数
@@ -24,10 +24,10 @@ export class InvokeExplainer implements Explainer {
     let opt: InvokeOptions = {
       context,
       funcSet: options.funcSet,
-      partial: "left",
+      partial: 'left',
       dft: () => {
         throw `Fail to Invoke : ${JSON.stringify(this._invoke)}`;
-      }
+      },
     };
     let func = Util.genInvokingBy(this._invoke, opt);
     if (this._evalFunc) {

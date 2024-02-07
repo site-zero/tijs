@@ -1,5 +1,5 @@
-import _ from "lodash";
-import { Convertor, FuncA1, FuncA3, Render, Str, Tmpl, Vars } from "../../core";
+import _ from 'lodash';
+import { Convertor, FuncA1, FuncA3, Render, Str, Tmpl, Vars } from '../../core';
 
 export type FormatValueProps = {
   /**
@@ -53,14 +53,14 @@ export function useFormatValue(
       return Str.anyToStr(input);
     },
     strFormat:
-      (format, vars = {}, valueKeyOfVars = "val") =>
+      (format, vars = {}, valueKeyOfVars = 'val') =>
       (input: any) => {
         let tmpl = Tmpl.parse(format as string);
         let c = _.cloneDeep(vars) ?? {};
         c[valueKeyOfVars] = input;
         return tmpl.render(c);
-      }
-  } as FormatValueOptions
+      },
+  } as FormatValueOptions,
 ): FormatValueFeature {
   let __create_formatter = (): Convertor<any, string> => {
     let { format, valueKeyOfVars, vars } = props;
@@ -71,13 +71,13 @@ export function useFormatValue(
 
     // 采用字符串模板来格式化
     if (_.isString(format)) {
-      return options.strFormat(format, vars || {}, valueKeyOfVars || "val");
+      return options.strFormat(format, vars || {}, valueKeyOfVars || 'val');
     }
     // 直接就是函数
     let customized_formater: Render<any, string> = format;
     return (input) => {
       let c = _.cloneDeep(vars) ?? {};
-      let k = valueKeyOfVars ?? "val";
+      let k = valueKeyOfVars ?? 'val';
       c[k] = input;
       return customized_formater(input, c);
     };

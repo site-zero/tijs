@@ -1,21 +1,21 @@
-import { InjectionKey } from "vue";
-import { EventInfo, IconInput } from "../../";
+import { InjectionKey } from 'vue';
+import { EventInfo, IconInput } from '../../';
 import {
   Callback,
   Invoke,
   Optional,
   TiBus,
   TiMatch,
-  Vars
-} from "../../../core";
-import { BarItemType } from "./action-bar-item";
+  Vars,
+} from '../../../core';
+import { BarItemType } from './action-bar-item';
 
-export const COM_TYPE = "TiActionBar";
+export const COM_TYPE = 'TiActionBar';
 
 export const BAR_BUS_KEY: InjectionKey<TiBus<BuiltedBarItem>> =
-  Symbol("BUS_KEY");
+  Symbol('BUS_KEY');
 
-export type BarItemOpenStatus = "open" | "ready";
+export type BarItemOpenStatus = 'open' | 'ready';
 
 /**
  * 为每个动作项建立一个层级关系映射:
@@ -68,7 +68,7 @@ export type AltBarItemisplay<T> = BarItemDisplay & {
 
 export type BarItemAction = Callback | EventInfo<any> | Invoke | string;
 
-export type ActionBarItem = Optional<BarItem, "type"> & {
+export type ActionBarItem = Optional<BarItem, 'type'> & {
   altDisplay?: AltBarItemisplay<any> | AltBarItemisplay<any>[];
   items?: ActionBarItem[];
   action?: BarItemAction;
@@ -106,4 +106,4 @@ export type BarSupport = {
   clearBarOpenStateExcept: (...uniqKeys: string[]) => void;
 };
 
-export const BAR_SUPPORT: InjectionKey<BarSupport> = Symbol("BAR_SUPPORT");
+export const BAR_SUPPORT: InjectionKey<BarSupport> = Symbol('BAR_SUPPORT');

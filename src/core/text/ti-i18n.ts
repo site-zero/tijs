@@ -1,9 +1,9 @@
-import _ from "lodash";
-import { I18nLang, I18nSet, MessageMap, Str, Vars } from "../ti";
+import _ from 'lodash';
+import { I18nLang, I18nSet, MessageMap, Str, Vars } from '../ti';
 
 const I18N = {} as MessageMap;
 function __MSG(key: string): string {
-  let k2 = key.replace(/\./g, "-");
+  let k2 = key.replace(/\./g, '-');
   return I18N[k2];
 }
 
@@ -12,7 +12,7 @@ export function createEmptyI18nSet(): I18nSet {
     en_us: {},
     en_uk: {},
     zh_cn: {},
-    zh_hk: {}
+    zh_hk: {},
   };
 }
 
@@ -81,11 +81,11 @@ export function textf(str: string, vars = {} as Vars): string {
 // },
 export function translate(str: string) {
   let s = _.trim(str);
-  let pos = s.indexOf(":");
+  let pos = s.indexOf(':');
   if (pos > 0) {
     let code = _.trim(s.substring(0, pos));
     let data = _.trim(s.substring(pos + 1));
-    return get(code) + " : " + data;
+    return get(code) + ' : ' + data;
   }
   return get(s);
 }
@@ -94,7 +94,7 @@ const _i18n_set = {
   en_us: {},
   en_uk: {},
   zh_cn: {},
-  zh_hk: {}
+  zh_hk: {},
 } as I18nSet;
 
 export function toLangKey(lang: string): I18nLang {

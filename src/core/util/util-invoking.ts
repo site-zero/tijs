@@ -1,5 +1,5 @@
-import _ from "lodash";
-import { Invoke, InvokeOptions, Str } from "../ti";
+import _ from 'lodash';
+import { Invoke, InvokeOptions, Str } from '../ti';
 
 /**
  * 根据一个调用语句，返回一个包裹的函数调用
@@ -11,7 +11,7 @@ import { Invoke, InvokeOptions, Str } from "../ti";
  */
 export function genInvoking(
   str: string | Function,
-  options: InvokeOptions
+  options: InvokeOptions,
 ): Function {
   // 传入函数就直接返回了
   if (_.isFunction(str)) {
@@ -24,7 +24,7 @@ export function genInvoking(
 
 export function genInvokingBy(
   invoke: Invoke,
-  options: InvokeOptions
+  options: InvokeOptions,
 ): Function {
   // 分析选项
   let {
@@ -32,8 +32,8 @@ export function genInvokingBy(
     context = {},
     args = [],
     funcSet = globalThis,
-    partial = "left",
-    dft
+    partial = 'left',
+    dft,
   } = options;
 
   // 确保有默认值
@@ -75,7 +75,7 @@ export function genInvokingBy(
 
   let re = {
     // [ ? --> ... ]
-    "right": function (...input: any[]) {
+    'right': function (...input: any[]) {
       // 这里不能像 right? 一样忽略 undefined,
       // 因为 Ti.Types.toBoolStr， 一般用作表格的布尔字段显示
       // 而有的字段，布尔值是 undefined 的
@@ -84,23 +84,23 @@ export function genInvokingBy(
       return func.apply(that, as);
     },
     // [ ? --> ... ] 同时去掉参数里的 undefined
-    "right?": function (...input: any[]) {
+    'right?': function (...input: any[]) {
       let ins = _.without(input, undefined);
       let as = _.concat([], ins, invokeArgs);
       return func.apply(that, as);
     },
     // [ ... <-- ?]
-    "left": function (...input: any[]) {
+    'left': function (...input: any[]) {
       let ins = input;
       let as = _.concat([], invokeArgs, ins);
       return func.apply(that, as);
     },
     // [ ... <-- ?]
-    "left?": function (...input: any[]) {
+    'left?': function (...input: any[]) {
       let ins = _.without(input, undefined);
       let as = _.concat([], invokeArgs, ins);
       return func.apply(that, as);
-    }
+    },
   }[partial];
 
   if (_.isFunction(re)) {
@@ -120,14 +120,14 @@ export function parseInvoking(str: string | Invoke): Invoke {
   }
 
   let ivk = {
-    name: "",
-    args: []
+    name: '',
+    args: [],
   } as Invoke;
   let m = /^([^()]+)(\((.+)\))?$/.exec(str);
   if (m) {
     ivk.name = _.trim(m[1]);
     let s_args = _.trim(m[3]);
-    ivk.args = Str.joinArgs(s_args, [], (v:any) => v);
+    ivk.args = Str.joinArgs(s_args, [], (v: any) => v);
   }
 
   return ivk;

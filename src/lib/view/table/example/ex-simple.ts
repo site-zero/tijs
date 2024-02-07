@@ -1,40 +1,40 @@
-import { TableCell } from "../table-types";
-import { mockData } from "./mock-table-row";
+import { TableCell } from '../table-types';
+import { mockData } from './mock-table-row';
 
 export default {
-  name: "simple",
-  text: "i18n:simple",
+  name: 'simple',
+  text: 'i18n:simple',
   comConf: {
-    className: "fit-parent",
+    className: 'fit-parent',
     keepColumns: {
-      keepAt: "Ti-Demo-table-simple-columns"
+      keepAt: 'Ti-Demo-table-simple-columns',
     },
     columns: [
       {
-        name: "id"
+        name: 'id',
       },
       {
-        name: "name"
+        name: 'name',
       },
       {
-        name: "age"
+        name: 'age',
       },
       {
-        name: "birthday"
+        name: 'birthday',
       },
       {
-        name: "city"
+        name: 'city',
       },
       {
-        name: "address"
+        name: 'address',
       },
       {
-        name: "street"
+        name: 'street',
       },
       {
-        name: "local_ip"
-      }
+        name: 'local_ip',
+      },
     ] as TableCell[],
-    data: mockData(10)
-  }
+    data: mockData(10),
+  },
 };

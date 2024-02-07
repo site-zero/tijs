@@ -1,4 +1,4 @@
-import { FuncA1, Match, Vars } from "../../core";
+import { FuncA1, Match, Vars } from '../../core';
 
 /*-------------------------------------------------------
 
@@ -58,6 +58,6 @@ function buildMatcher(whenYes: any, whenNo: any, dft: boolean) {
 export function useVisibility(props: VisibilityProps): VisibilityFeature {
   return {
     isDisabled: buildMatcher(props.disabled, props.enabled, false),
-    isHidden: buildMatcher(props.hidden, props.visible, false)
+    isHidden: buildMatcher(props.hidden, props.visible, false),
   };
 }

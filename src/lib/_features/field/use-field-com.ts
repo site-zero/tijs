@@ -1,6 +1,6 @@
-import { FuncA0, FuncA2, Util, Vars } from "../../../core";
-import { TiRawCom, tiCheckComponent } from "../../";
-import _ from "lodash";
+import { FuncA0, FuncA2, Util, Vars } from '../../../core';
+import { TiRawCom, tiCheckComponent } from '../../';
+import _ from 'lodash';
 
 export type ComRef = {
   /**
@@ -75,13 +75,13 @@ export function useFieldCom(props: FieldComProps): FieldComFeature {
     //             Normal Com
     //
     getComType() {
-      return tiCheckComponent(props.comType || "TiLabel").com;
+      return tiCheckComponent(props.comType || 'TiLabel').com;
     },
     getComConf(context, val?) {
       let comConf = Util.explainObj(context, props.comConf) ?? {};
       // 自动为控件添加值属性
       if (!_.isNull(props.autoValue) && _.isUndefined(comConf.value)) {
-        let valueKey = props.autoValue ?? "value";
+        let valueKey = props.autoValue ?? 'value';
         comConf[valueKey] = val;
       }
       return comConf;
@@ -90,7 +90,7 @@ export function useFieldCom(props: FieldComProps): FieldComFeature {
     //             Readonly Com
     //
     getReadonlyComType() {
-      return tiCheckComponent(props.readonlyComType || "TiLabel").com;
+      return tiCheckComponent(props.readonlyComType || 'TiLabel').com;
     },
     getReadonlyComConf(context, val) {
       let comConf = Util.explainObj(context, props.readonlyComConf) || {};
@@ -98,7 +98,7 @@ export function useFieldCom(props: FieldComProps): FieldComFeature {
 
       // 自动为控件添加值属性
       if (!_.isNull(props.autoValue) && _.isUndefined(comConf.value)) {
-        let valueKey = props.autoValue ?? "value";
+        let valueKey = props.autoValue ?? 'value';
         comConf[valueKey] = val;
       }
 
@@ -112,7 +112,7 @@ export function useFieldCom(props: FieldComProps): FieldComFeature {
     //             Activated Com
     //
     getActivatedComType() {
-      return tiCheckComponent(props.activatedComType || "TiInput").com;
+      return tiCheckComponent(props.activatedComType || 'TiInput').com;
     },
     getActivatedComConf(context, val) {
       let comConf = props.activatedComConf ?? props.comConf ?? {};
@@ -120,10 +120,10 @@ export function useFieldCom(props: FieldComProps): FieldComFeature {
 
       // 自动为控件添加值属性
       if (!_.isNull(props.autoValue) && _.isUndefined(comConf.value)) {
-        let valueKey = props.autoValue ?? "value";
+        let valueKey = props.autoValue ?? 'value';
         comConf[valueKey] = val;
       }
       return comConf;
-    }
+    },
   };
 }

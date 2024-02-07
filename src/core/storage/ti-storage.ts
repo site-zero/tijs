@@ -29,7 +29,7 @@ export class TiStorage {
   }
   getBoolean(key: string, dft = false) {
     return this.get(key, dft, (s) =>
-      /^(true|yes|on|ok)$/.test(s) ? true : false
+      /^(true|yes|on|ok)$/.test(s) ? true : false,
     );
   }
   getNumber(key: string, dft = -1) {

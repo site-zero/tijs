@@ -1,6 +1,6 @@
-import _ from "lodash";
-import { Vars, ExplainOptions, Explainer } from "../../ti";
-import { buildExplainer } from "../util-explain";
+import _ from 'lodash';
+import { Vars, ExplainOptions, Explainer } from '../../ti';
+import { buildExplainer } from '../util-explain';
 
 export class ArrayExplainer implements Explainer {
   // 解析后的处理函数

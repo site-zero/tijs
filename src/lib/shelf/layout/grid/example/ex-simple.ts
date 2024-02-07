@@ -1,102 +1,102 @@
 export default {
-  name: "simple",
-  text: "i18n:simple",
+  name: 'simple',
+  text: 'i18n:simple',
   comConf: {
-    className: "fit-parent as-card r-b",
+    className: 'fit-parent as-card r-b',
     keepShown: {
-      keepAt: "Ti-Demo-simple-Shown"
+      keepAt: 'Ti-Demo-simple-Shown',
     },
     keepSizes: {
-      keepAt: "Ti-Demo-simple-Sizes"
+      keepAt: 'Ti-Demo-simple-Sizes',
     },
     style: {
-      padding: "10px"
+      padding: '10px',
     },
     itemStyle: {
-      backgroundColor: "#FFEE66"
+      backgroundColor: '#FFEE66',
     },
     layout: {
-      gridTemplateColumns: "1fr 2fr",
-      gridTemplateRows: "1fr 1.8fr",
-      gap: "10px"
+      gridTemplateColumns: '1fr 2fr',
+      gridTemplateRows: '1fr 1.8fr',
+      gap: '10px',
     },
     blocks: [
       {
-        name: "search",
-        type: "grid",
+        name: 'search',
+        type: 'grid',
         layout: {
-          gridTemplateRows: "auto 1fr auto",
-          gap: "0px"
+          gridTemplateRows: 'auto 1fr auto',
+          gap: '0px',
         },
         grid: {
-          gridRow: "span 2"
+          gridRow: 'span 2',
         },
         bar: {
-          mode: "column",
+          mode: 'column',
           adjustIndex: 0,
-          position: "next"
+          position: 'next',
         },
         blocks: [
           {
-            name: "filter"
+            name: 'filter',
           },
           {
-            name: "list"
+            name: 'list',
           },
           {
-            name: "pager"
-          }
-        ]
+            name: 'pager',
+          },
+        ],
       },
       {
-        name: "info"
+        name: 'info',
       },
       {
-        name: "detail",
+        name: 'detail',
         bar: {
-          mode: "row",
+          mode: 'row',
           adjustIndex: 1,
-          position: "prev"
-        }
-      }
+          position: 'prev',
+        },
+      },
     ],
     schema: {
       filter: {
-        comType: "TiLabel",
+        comType: 'TiLabel',
         comConf: {
-          value: "过滤条"
-        }
+          value: '过滤条',
+        },
       },
       list: {
-        comType: "TiRoadblock",
+        comType: 'TiRoadblock',
         comConf: {
-          className: "is-info-r",
-          text: "列表区",
-          icon: "zmdi-format-list-bulleted"
-        }
+          className: 'is-info-r',
+          text: '列表区',
+          icon: 'zmdi-format-list-bulleted',
+        },
       },
       pager: {
-        comType: "TiLabel",
+        comType: 'TiLabel',
         comConf: {
-          value: "翻页条"
-        }
+          value: '翻页条',
+        },
       },
       info: {
-        comType: "TiRoadblock",
+        comType: 'TiRoadblock',
         comConf: {
-          className: "is-text",
-          text: "信息区",
-          icon: "zmdi-info"
-        }
+          className: 'is-text',
+          text: '信息区',
+          icon: 'zmdi-info',
+        },
       },
       detail: {
-        comType: "TiRoadblock",
+        comType: 'TiRoadblock',
         comConf: {
-          className: "is-warn-r",
-          text: "详情区",
-          icon: "zmdi-navigation"
-        }
-      }
-    }
-  }
+          className: 'is-warn-r',
+          text: '详情区',
+          icon: 'zmdi-navigation',
+        },
+      },
+    },
+  },
 };

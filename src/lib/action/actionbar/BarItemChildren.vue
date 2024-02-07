@@ -1,12 +1,12 @@
 <script lang="ts" setup>
-  import { DockMode, Dom, Point2D } from "../../../core/ti.ts";
-  import _ from "lodash";
-  import { inject, onMounted, onUnmounted, ref } from "vue";
-  import ItemAsAction from "./ItemAsAction.vue";
-  import ItemAsFolderGroup from "./ItemAsFolderGroup.vue";
-  import ItemAsInlineGroup from "./ItemAsInlineGroup.vue";
-  import ItemAsStatus from "./ItemAsStatus.vue";
-  import { BAR_SUPPORT, BarItemProp } from "./action-bar-type";
+  import { DockMode, Dom, Point2D } from '../../../core/ti.ts';
+  import _ from 'lodash';
+  import { inject, onMounted, onUnmounted, ref } from 'vue';
+  import ItemAsAction from './ItemAsAction.vue';
+  import ItemAsFolderGroup from './ItemAsFolderGroup.vue';
+  import ItemAsInlineGroup from './ItemAsInlineGroup.vue';
+  import ItemAsStatus from './ItemAsStatus.vue';
+  import { BAR_SUPPORT, BarItemProp } from './action-bar-type';
 
   /*-------------------------------------------------------
 
@@ -14,7 +14,7 @@
 
 -------------------------------------------------------*/
   defineOptions({
-    inheritAttrs: false
+    inheritAttrs: false,
   });
   let { MENU_SPACE, setBarOpenState } = inject(BAR_SUPPORT)!;
   /*-------------------------------------------------------
@@ -34,30 +34,30 @@
   const ob = new MutationObserver((mutList, _ob) => {
     for (let mut of mutList) {
       let $menu = mut.target as HTMLElement;
-      let $item = Dom.closest($menu, ".bar-item");
+      let $item = Dom.closest($menu, '.bar-item');
       if (!$item) {
         return;
       }
-      let $head = Dom.find(":scope > .bar-item-head", $item);
+      let $head = Dom.find(':scope > .bar-item-head', $item);
       if (!$head) {
         return;
       }
       // 如果打开的话，就停靠
-      if (Dom.hasClass($menu, "opened") && !Dom.hasClass($menu, "ready")) {
-        let uniqKey = $item.getAttribute("item-ukey");
+      if (Dom.hasClass($menu, 'opened') && !Dom.hasClass($menu, 'ready')) {
+        let uniqKey = $item.getAttribute('item-ukey');
         if (!uniqKey) {
           return;
         }
-        let mode: DockMode = props.depth > 0 ? "V" : "H";
+        let mode: DockMode = props.depth > 0 ? 'V' : 'H';
         let space: Point2D =
-          "H" == mode ? { x: 0, y: MENU_SPACE } : { x: MENU_SPACE, y: 0 };
+          'H' == mode ? { x: 0, y: MENU_SPACE } : { x: MENU_SPACE, y: 0 };
         Dom.dockTo($menu, $head, {
           mode,
           space,
-          position: "fixed"
+          position: 'fixed',
         });
         _.delay(() => {
-          setBarOpenState(uniqKey!, "ready");
+          setBarOpenState(uniqKey!, 'ready');
         }, 0);
       }
 
@@ -72,7 +72,7 @@
   onMounted(() => {
     if ($con && $con.value) {
       ob.observe($con.value, {
-        attributes: true
+        attributes: true,
       });
     }
   });

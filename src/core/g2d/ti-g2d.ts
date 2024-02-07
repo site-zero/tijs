@@ -1,1 +1,1 @@
-export * from "./g2d-coord";
+export * from './g2d-coord';

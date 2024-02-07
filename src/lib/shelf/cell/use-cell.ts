@@ -1,18 +1,24 @@
-import _ from "lodash";
+import _ from 'lodash';
 import {
-  CommonProps, Field, FieldComProps, FieldPair, TiEventTrigger, TiRawCom, useFieldCom,
+  CommonProps,
+  Field,
+  FieldComProps,
+  FieldPair,
+  TiEventTrigger,
+  TiRawCom,
+  useFieldCom,
   useFieldSerializer,
-  useFieldTransformer
-} from "../../";
-import { Callback1, I18n, Vars } from "../../../core";
+  useFieldTransformer,
+} from '../../';
+import { Callback1, I18n, Vars } from '../../../core';
 
-export const COM_TYPE = "TiCell";
+export const COM_TYPE = 'TiCell';
 /*-------------------------------------------------------
 
                      Events
 
 -------------------------------------------------------*/
-export type CellEvents = "change";
+export type CellEvents = 'change';
 export type CellChanged = FieldPair & {
   rowIndex: number;
   colIndex: number;
@@ -24,7 +30,7 @@ export type CellChanged = FieldPair & {
 -------------------------------------------------------*/
 export type CellProps = CommonProps &
   Field &
-  Omit<FieldComProps, "redonlyComType" | "redonlyComConf"> & {
+  Omit<FieldComProps, 'redonlyComType' | 'redonlyComConf'> & {
     title?: string;
     tip?: string;
     disabled?: boolean;
@@ -83,8 +89,8 @@ export type CellOptions = {
 -------------------------------------------------------*/
 export function useField(
   props: CellProps,
-  options: CellOptions
-): Omit<CellFeature, "getReadonlyComType" | "getReadonlyComConf"> {
+  options: CellOptions,
+): Omit<CellFeature, 'getReadonlyComType' | 'getReadonlyComConf'> {
   let { data, vars } = props;
   let { notify } = options;
   const { getFieldValue } = useFieldTransformer(props);
@@ -123,7 +129,7 @@ export function useField(
       if (props.disabled) {
         return;
       }
-      console.log("OnCellChange", val);
+      console.log('OnCellChange', val);
       // 应用类型转换和默认值
       let v2 = prepareFieldValue(val, data);
 
@@ -136,12 +142,12 @@ export function useField(
       }
 
       // 通知改动
-      notify("change", {
+      notify('change', {
         rowIndex: props.rowIndex ?? 0,
         colIndex: props.colIndex ?? 0,
         name: props.name,
-        value: v2
+        value: v2,
       });
-    }
+    },
   };
 }

@@ -1,14 +1,14 @@
-import _ from "lodash";
-import { Match } from "../ti";
-import { DictImpl } from "./dict-impl";
+import _ from 'lodash';
+import { Match } from '../ti';
+import { DictImpl } from './dict-impl';
 import {
   GetItemText,
   GetItemValue,
   IDict,
   LoadDictItem,
   QueryDictItems,
-  IsMatched
-} from "./dict-types";
+  IsMatched,
+} from './dict-types';
 
 export function dft_get_item<T, V>(): LoadDictItem<T, V> {
   return (dict: IDict<T, V>, val: V) => {
@@ -65,7 +65,7 @@ export function dft_children<T, V>(): QueryDictItems<T, V, V> {
 
 export function dft_get_value<T, V>(): GetItemValue<T, V> {
   return (it: T): V => {
-    let re = _.get(it, "value") as V;
+    let re = _.get(it, 'value') as V;
     return re;
   };
 }
@@ -81,7 +81,7 @@ export function dft_is_matched<T, V>(dict: DictImpl<T, V>): IsMatched<T, V> {
   return (it: T, val: V): boolean => {
     let std = dict.toStdItem(it);
     let text = std.text.toLowerCase();
-    let vals = (std.value + "").toLowerCase();
+    let vals = (std.value + '').toLowerCase();
     let am = Match.parse(val);
     if (
       am.test(std.text) ||

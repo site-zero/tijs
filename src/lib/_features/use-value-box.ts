@@ -12,11 +12,11 @@ import {
   useFormatValue,
   usePlaceholder,
   usePrefixSuffix,
-  useValueInput
-} from "..";
-import _ from "lodash";
-import { TiEventTrigger } from "../";
-import { Be, Callback, Callback1, FuncA0, Str } from "../../core";
+  useValueInput,
+} from '..';
+import _ from 'lodash';
+import { TiEventTrigger } from '../';
+import { Be, Callback, Callback1, FuncA0, Str } from '../../core';
 /*-------------------------------------------------------
 
                      Events
@@ -102,7 +102,7 @@ export type ValueBoxOptions = {
    *
    * @default `both`
    */
-  valueChangeMode?: "both" | "notify" | "inner";
+  valueChangeMode?: 'both' | 'notify' | 'inner';
 
   /**
    * 如果 suffixIconForCopy, 那么复制之后需要自动闪烁一下 box。
@@ -120,9 +120,9 @@ export type ValueBoxOptions = {
 export function useValueBox<T extends any>(
   state: ValueBoxState<T>,
   props: ValueBoxProps<T>,
-  options: ValueBoxOptions
+  options: ValueBoxOptions,
 ): ValueBoxFeature {
-  let { notify, valueChangeMode = "both", getBoxElement } = options;
+  let { notify, valueChangeMode = 'both', getBoxElement } = options;
   let _value_change_notify = /^(both|notify)$/.test(valueChangeMode);
   let _value_change_inner = /^(both|inner)$/.test(valueChangeMode);
   //
@@ -135,11 +135,11 @@ export function useValueBox<T extends any>(
   // 准备前后缀框
   let boxProps = _.cloneDeep(props);
   if (props.prefixIconForClean) {
-    boxProps.prefixIcon = boxProps.prefixIcon || "zmdi-close";
+    boxProps.prefixIcon = boxProps.prefixIcon || 'zmdi-close';
     boxProps.prefixIconClickable = true;
   }
   if (props.suffixIconForCopy) {
-    boxProps.suffixIcon = boxProps.suffixIcon || "zmdi-copy";
+    boxProps.suffixIcon = boxProps.suffixIcon || 'zmdi-copy';
     boxProps.suffixIconClickable = true;
   }
   let _box = usePrefixSuffix(state, boxProps, notify);
@@ -174,18 +174,18 @@ export function useValueBox<T extends any>(
       await doUpdateValue(val);
     }
     if (_value_change_notify) {
-      console.log("_value_change_notify");
+      console.log('_value_change_notify');
       let v = await tidyValue(val);
-      notify("change", v);
+      notify('change', v);
     }
   }
   //
   // 方法： 点击前缀按钮
   //
   async function OnClickPrefixIcon() {
-    console.log("OnClickPrefixIcon");
+    console.log('OnClickPrefixIcon');
     if (props.prefixIconForClean) {
-      await doChangeValue("");
+      await doChangeValue('');
     }
     // 默认行为
     else {
@@ -197,7 +197,7 @@ export function useValueBox<T extends any>(
   // 方法： 点击后缀按钮
   //
   function OnClickSuffixIcon() {
-    console.log("OnClickSuffixIcon");
+    console.log('OnClickSuffixIcon');
     if (props.suffixIconForCopy) {
       Be.Clipboard.write(state.boxVal);
       Be.BlinkIt(getBoxElement());
@@ -228,6 +228,6 @@ export function useValueBox<T extends any>(
     },
     OnHoverSuffixIcon(hovered: boolean) {
       state.suffixIconHovered = hovered;
-    }
+    },
   };
 }

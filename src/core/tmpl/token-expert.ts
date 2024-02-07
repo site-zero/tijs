@@ -1,5 +1,5 @@
-import _ from "lodash";
-import { CharStack } from "../alg/char-stack";
+import _ from 'lodash';
+import { CharStack } from '../alg/char-stack';
 
 type BufEle = string | undefined;
 
@@ -66,7 +66,7 @@ export class WnTmplTokenExpert {
   }
 
   escapeBuf(): string {
-    return this.buf.slice(this.bufLastI).join("");
+    return this.buf.slice(this.bufLastI).join('');
   }
 
   joinBufToString(sb: string[]): void {

@@ -1,81 +1,81 @@
-import { expect, test } from "vitest";
-import { Vars, Util } from "../../core/ti";
-import _ from "lodash";
+import { expect, test } from 'vitest';
+import { Vars, Util } from '../../core/ti';
+import _ from 'lodash';
 
-test("BaseExplain", () => {
+test('BaseExplain', () => {
   let context = {
-    name: "xiaobai",
-    age: 12
+    name: 'xiaobai',
+    age: 12,
   } as Vars;
 
-  expect({ a: "xiaobai", b: 12 }).toStrictEqual(
+  expect({ a: 'xiaobai', b: 12 }).toStrictEqual(
     Util.explainObj(context, {
-      a: "=name",
-      b: "=age"
-    })
+      a: '=name',
+      b: '=age',
+    }),
   );
 });
 
-test("InvokeExplain", () => {
+test('InvokeExplain', () => {
   let context = {
-    name: "xiao bai",
-    age: 12
+    name: 'xiao bai',
+    age: 12,
   } as Vars;
 
-  expect({ a: "XiaoBai" }).toStrictEqual(
+  expect({ a: 'XiaoBai' }).toStrictEqual(
     Util.explainObj(
       context,
       {
-        a: "=>transName(name)"
+        a: '=>transName(name)',
       },
       {
         funcSet: {
           transName: (str: string) => {
             return _.upperFirst(_.camelCase(str));
-          }
-        }
-      }
-    )
+          },
+        },
+      },
+    ),
   );
 });
 
-test("BoolExplain", () => {
+test('BoolExplain', () => {
   let context = {
-    name: "asdfasdf",
-    age: 12
+    name: 'asdfasdf',
+    age: 12,
   } as Vars;
 
-  expect(true).toStrictEqual(Util.explainObj(context, "==name"));
+  expect(true).toStrictEqual(Util.explainObj(context, '==name'));
 });
 
-test("MapExplain", () => {
+test('MapExplain', () => {
   let context = {
-    name: "abc",
+    name: 'abc',
     age: 12,
     pet: {
-      name: "xx"
-    }
+      name: 'xx',
+    },
   } as Vars;
 
   expect(
-    Util.explainObj(context, { a: "=name", b: "=pet.name", c: "=age" })
+    Util.explainObj(context, { a: '=name', b: '=pet.name', c: '=age' }),
   ).toStrictEqual({
-    a: "abc",
-    b: "xx",
-    c: 12
+    a: 'abc',
+    b: 'xx',
+    c: 12,
   });
 });
 
-test("ArrayExplain", () => {
+test('ArrayExplain', () => {
   let context = {
-    name: "abc",
+    name: 'abc',
     age: 12,
     pet: {
-      name: "xx"
-    }
+      name: 'xx',
+    },
   } as Vars;
 
   expect(
-    Util.explainObj(context, ["=name", { b: "=pet.name" }, "=age"])
-  ).toStrictEqual(["abc", { b: "xx" }, 12]);
+    Util.explainObj(context, ['=name', { b: '=pet.name' }, '=age']),
+  ).toStrictEqual(['abc', { b: 'xx' }, 12]);
 });

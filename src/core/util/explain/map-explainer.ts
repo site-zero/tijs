@@ -1,6 +1,6 @@
-import _ from "lodash";
-import { ExplainOptions, Explainer, Vars } from "../../ti";
-import { buildExplainer } from "../util-explain";
+import _ from 'lodash';
+import { ExplainOptions, Explainer, Vars } from '../../ti';
+import { buildExplainer } from '../util-explain';
 
 type Field = {
   // "..." 开头的键，表示解构，一个对象可以有 "...","...1", "...2" 多个解构键
@@ -20,7 +20,7 @@ export class MapExplainer implements Explainer {
       let fld = {
         decon: /^\.{3,}/.test(name),
         name,
-        value: buildExplainer(v)
+        value: buildExplainer(v),
       };
       this.fields.push(fld);
     });

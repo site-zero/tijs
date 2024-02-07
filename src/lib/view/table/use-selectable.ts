@@ -6,16 +6,16 @@ import {
   FuncA1,
   FuncA2,
   Util,
-  Vars
-} from "../../../core";
-import { objToMap } from "../../../core/util";
-import _ from "lodash";
+  Vars,
+} from '../../../core';
+import { objToMap } from '../../../core/util';
+import _ from 'lodash';
 /*-----------------------------------------------------
 
                       Types
                 
 -----------------------------------------------------*/
-export type CheckStatus = "all" | "none" | "part";
+export type CheckStatus = 'all' | 'none' | 'part';
 
 /*-----------------------------------------------------
 
@@ -86,7 +86,7 @@ export type SelectableFeature<ID extends string | number> = {
                 
 -----------------------------------------------------*/
 export function useSelectable<ID extends string | number>(
-  props: SelectableProps<ID>
+  props: SelectableProps<ID>,
 ): SelectableFeature<ID> {
   let { getId, convertToId } = props;
 
@@ -171,7 +171,7 @@ export function useSelectable<ID extends string | number>(
     return {
       currentId: props.currentId,
       checkedIds,
-      ids
+      ids,
     };
   }
 
@@ -187,13 +187,13 @@ export function useSelectable<ID extends string | number>(
       let checkedIds = state.checkedIds;
       for (let id of state.ids) {
         if (!checkedIds.get(id)) {
-          return "part";
+          return 'part';
         }
       }
       // 通过了，那就是全选
-      return "all";
+      return 'all';
     }
-    return "none";
+    return 'none';
   }
 
   /*-----------------------------------------------------
@@ -220,7 +220,7 @@ export function useSelectable<ID extends string | number>(
   function selectRange(
     state: SelectableState<ID>,
     ids: ID[],
-    range: [ID, ID?]
+    range: [ID, ID?],
   ) {
     // 没有内容
     if (_.isEmpty(ids)) {
@@ -298,6 +298,6 @@ export function useSelectable<ID extends string | number>(
 
     selectId,
     toggleId,
-    selectRange
+    selectRange,
   };
 }

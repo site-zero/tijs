@@ -1,4 +1,4 @@
-import _ from "lodash";
+import _ from 'lodash';
 import {
   CommonProps,
   Field,
@@ -9,17 +9,17 @@ import {
   TiRawCom,
   useFieldCom,
   useFieldSerializer,
-  useFieldTransformer
-} from "../../";
-import { Callback1, CssUtils, I18n, Vars } from "../../../core";
+  useFieldTransformer,
+} from '../../';
+import { Callback1, CssUtils, I18n, Vars } from '../../../core';
 
-export const COM_TYPE = "TiField";
+export const COM_TYPE = 'TiField';
 /*-------------------------------------------------------
 
                      Events
 
 -------------------------------------------------------*/
-export type FieldEvents = "change";
+export type FieldEvents = 'change';
 /*-------------------------------------------------------
 
                      Props
@@ -27,7 +27,7 @@ export type FieldEvents = "change";
 -------------------------------------------------------*/
 export type FieldProps = CommonProps &
   Field &
-  Omit<FieldComProps, "activatedComType" | "activatedComConf"> & {
+  Omit<FieldComProps, 'activatedComType' | 'activatedComConf'> & {
     title?: string;
     tip?: string;
     readonly?: boolean;
@@ -96,8 +96,8 @@ export type FieldOptions = {
 -------------------------------------------------------*/
 export function useField(
   props: FieldProps,
-  options: FieldOptions
-): Omit<FieldFeature, "getActivatedComType" | "getActivatedComConf"> {
+  options: FieldOptions,
+): Omit<FieldFeature, 'getActivatedComType' | 'getActivatedComConf'> {
   let { data, vars } = props;
   let { notify } = options;
   const { getFieldValue } = useFieldTransformer(props);
@@ -112,7 +112,7 @@ export function useField(
   let FieldNameStyle;
   if ((props.nameWidth ?? 0) > 0) {
     FieldNameStyle = CssUtils.toStyle({
-      width: props.nameWidth
+      width: props.nameWidth,
     });
   }
 
@@ -147,7 +147,7 @@ export function useField(
       if (props.disabled) {
         return;
       }
-      console.log("OnFieldChange", val);
+      console.log('OnFieldChange', val);
       // 应用类型转换和默认值
       let v2 = prepareFieldValue(val, data);
 
@@ -160,11 +160,11 @@ export function useField(
       }
 
       // 通知改动
-      notify("change", {
+      notify('change', {
         name: props.name,
-        value: v2
+        value: v2,
       });
     },
-    FieldNameStyle
+    FieldNameStyle,
   };
 }

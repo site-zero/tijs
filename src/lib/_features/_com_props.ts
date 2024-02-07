@@ -15,13 +15,13 @@ export type CommonProps = {
    * - `both`: 除了采用原生方式 emit 事件，如果上层注入了 `bus` 也会通知到
    * - `auto`: 【默认】自动判断，如果上层注入了 `bus` 则相当于 `bus模式`，否则相当于 `native模式`
    */
-  emitMode?: "auto" | "both" | "native" | "bus";
+  emitMode?: 'auto' | 'both' | 'native' | 'bus';
 
   /**
    * 对于自己有子孙的控件，这个属性可以用来批量给自己的子孙设置 `emitMode`
    * 当然这需要控件的实现者，自行使用这个属性
    */
-  childEmitMode?: "auto" | "both" | "native" | "bus";
+  childEmitMode?: 'auto' | 'both' | 'native' | 'bus';
 };
 
 /**

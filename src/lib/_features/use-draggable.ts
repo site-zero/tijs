@@ -6,10 +6,10 @@ import {
   FuncA0,
   Point2D,
   Rect,
-  Rects
-} from "../../core";
-import { Dragging } from "./drag/dragging";
-export { Dragging } from "./drag/dragging";
+  Rects,
+} from '../../core';
+import { Dragging } from './drag/dragging';
+export { Dragging } from './drag/dragging';
 /*-----------------------------------------------------
 
                       Types
@@ -79,7 +79,7 @@ type WATCH_EVENT = {
   POINTER_UP: string;
   POINTER_MOVE: string;
   // 如果有这个设置，需要在激活后阻止
-  POINTER_CLICK?: "click";
+  POINTER_CLICK?: 'click';
   getPointerEvent: Convertor<Event, MouseEvent | Touch>;
   getPoint2D: Convertor<MouseEvent | Touch, Point2D>;
 };
@@ -102,7 +102,7 @@ function getWatchEvent(): WATCH_EVENT {
   let getPoint2D: Convertor<MouseEvent | Touch, Point2D> = (evt) => {
     return {
       x: evt.clientX,
-      y: evt.clientY
+      y: evt.clientY,
     };
   };
   // if (Dom.isTouchDevice()) {
@@ -113,12 +113,12 @@ function getWatchEvent(): WATCH_EVENT {
   //   };
   // }
   return {
-    POINTER_DOWN: "pointerdown",
-    POINTER_MOVE: "pointermove",
-    POINTER_UP: "pointerup",
-    POINTER_CLICK: Dom.isTouchDevice() ? undefined : "click",
+    POINTER_DOWN: 'pointerdown',
+    POINTER_MOVE: 'pointermove',
+    POINTER_UP: 'pointerup',
+    POINTER_CLICK: Dom.isTouchDevice() ? undefined : 'click',
     getPointerEvent,
-    getPoint2D
+    getPoint2D,
   };
 }
 
@@ -146,7 +146,7 @@ function deposeDragging(ing: Dragging, onEnd?: Callback1<Dragging>) {
 function whenMoving(
   ing: Dragging,
   p2d: Point2D,
-  options: Pick<DraggalbeOptions, "onMoving" | "onEnd">
+  options: Pick<DraggalbeOptions, 'onMoving' | 'onEnd'>,
 ) {
   if (ing.update(p2d)) {
     // 处理推拽
@@ -266,7 +266,7 @@ export function useDraggable(options: DraggalbeOptions) {
   $watchTarget.addEventListener(POINTER_DOWN, OnPointerDown);
 
   onDestroy(function () {
-    console.log("销毁 dragging down");
+    console.log('销毁 dragging down');
     $watchTarget.removeEventListener(POINTER_DOWN, OnPointerDown);
   });
 }

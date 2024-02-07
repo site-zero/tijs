@@ -1,5 +1,5 @@
-import _ from "lodash";
-import { I18n } from "../ti";
+import _ from 'lodash';
+import { I18n } from '../ti';
 
 export interface NumRangeBorder {
   open: boolean;
@@ -54,8 +54,8 @@ export class NumRange {
           return (v as any) * 1;
         }
       });
-      borderOpen[0] = "(" == _.trim(m[1]);
-      borderOpen[1] = ")" == _.trim(m[3]);
+      borderOpen[0] = '(' == _.trim(m[1]);
+      borderOpen[1] = ')' == _.trim(m[3]);
     }
     // Array
     else if (_.isArray(input)) {
@@ -76,7 +76,7 @@ export class NumRange {
     if (!_.isUndefined(v0)) {
       this.left = {
         open: borderOpen[0],
-        value: v0
+        value: v0,
       };
     } else {
       this.left = undefined;
@@ -85,7 +85,7 @@ export class NumRange {
     if (!_.isUndefined(v1)) {
       this.right = {
         open: borderOpen[1],
-        value: v1
+        value: v1,
       };
     } else {
       this.right = undefined;
@@ -138,14 +138,14 @@ export class NumRange {
   //--------------------------------
   toString({
     format = (v: number): string => v.toString(),
-    separator = ",",
-    leftOpen = "(",
-    leftClose = "[",
-    rightOpen = ")",
-    rightClose = "]"
+    separator = ',',
+    leftOpen = '(',
+    leftClose = '[',
+    rightOpen = ')',
+    rightClose = ']',
   } = {}) {
     if (this.invalid) {
-      return "<!!!Invalid MsRange!!!>";
+      return '<!!!Invalid MsRange!!!>';
     }
     let leftText = this.left
       ? this.left.open
@@ -189,7 +189,7 @@ export class NumRange {
       }
     }
     ss.push(rightText);
-    return ss.join("");
+    return ss.join('');
   }
   //--------------------------------
 }

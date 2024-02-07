@@ -1,7 +1,7 @@
-import _ from "lodash";
-import { IconInput } from "../../lib";
-import { Rect } from "./ti-rect";
-export { Rect } from "./ti-rect";
+import _ from 'lodash';
+import { IconInput } from '../../lib';
+import { Rect } from './ti-rect';
+export { Rect } from './ti-rect';
 
 /*---------------------------------------------------`
 
@@ -24,7 +24,7 @@ export type NameValue<N, V> = {
 export type NameStrValue = NameValue<string, string>;
 
 export type TiIconObj = {
-  type: "font" | "image";
+  type: 'font' | 'image';
   src?: string; // for image icon
   className?: any; // for font icon
   style?: Vars; // font/image container style
@@ -64,13 +64,13 @@ export type BlockEvent = {
 };
 
 /** 贴着 水平边 或 垂直边 */
-export type DockMode = "H" | "V";
+export type DockMode = 'H' | 'V';
 
 export interface DockOptions {
   mode?: DockMode;
   axis?: {
-    x?: "left" | "right" | "center" | "auto";
-    y?: "top" | "bottom" | "center" | "auto";
+    x?: 'left' | 'right' | 'center' | 'auto';
+    y?: 'top' | 'bottom' | 'center' | 'auto';
   };
   space?: number | Point2D;
   viewport?: Rect;
@@ -90,7 +90,7 @@ export interface RectInfo {
 }
 
 export type Link = {
-  target?: "_blank";
+  target?: '_blank';
   icon?: IconInput;
   text: string;
   href?: string;
@@ -170,21 +170,21 @@ export type ExplainI18n = {
 
                      Css 相关
 -------------------------------------------------------*/
-export type CssItemAlignment = "start" | "end" | "center" | "stretch";
+export type CssItemAlignment = 'start' | 'end' | 'center' | 'stretch';
 export type CssContentAlignment =
-  | "start"
-  | "end"
-  | "center"
-  | "stretch"
-  | "space-around"
-  | "space-between"
-  | "space-evenly";
+  | 'start'
+  | 'end'
+  | 'center'
+  | 'stretch'
+  | 'space-around'
+  | 'space-between'
+  | 'space-evenly';
 export type CssGridAutoFlow =
-  | "row"
-  | "column"
-  | "dense"
-  | "row dense"
-  | "column dense";
+  | 'row'
+  | 'column'
+  | 'dense'
+  | 'row dense'
+  | 'column dense';
 export type CssGridLayout = Partial<{
   // Track
   gridTemplateColumns: string;
@@ -306,7 +306,7 @@ export interface InvokeOptions {
   dft?: Function;
 }
 
-export type invoke_partial = "left" | "right" | "left?" | "right?";
+export type invoke_partial = 'left' | 'right' | 'left?' | 'right?';
 
 export type Invoke = {
   /**
@@ -329,13 +329,13 @@ export function isInvoke(input: any): input is Invoke {
     return false;
   }
   keys.sort();
-  if ("args" != keys[0]) {
+  if ('args' != keys[0]) {
     return false;
   }
-  if ("name" != keys[1]) {
+  if ('name' != keys[1]) {
     return false;
   }
-  if (keys.length > 1 && "partial" != keys[2]) {
+  if (keys.length > 1 && 'partial' != keys[2]) {
     return false;
   }
   return true;

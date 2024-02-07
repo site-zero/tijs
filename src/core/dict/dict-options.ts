@@ -1,6 +1,6 @@
-import _ from "lodash";
-import { Match, AnyGetter, Util } from "../ti";
-import { IDict, LoadData, LoadDictItem, QueryDictItems } from "./dict-types";
+import _ from 'lodash';
+import { Match, AnyGetter, Util } from '../ti';
+import { IDict, LoadData, LoadDictItem, QueryDictItems } from './dict-types';
 
 export function _gen_item_loader(input: any): LoadDictItem<any, any> {
   // 如果是个函数
@@ -68,7 +68,7 @@ export function _gen_data_loader(input: any): LoadData<any> {
       });
   }
   // 其他的不支持
-  throw new Error("Fail to _gen_data_loader by " + input);
+  throw new Error('Fail to _gen_data_loader by ' + input);
 }
 
 export function _gen_dict_opt_getter(input: string | AnyGetter): AnyGetter {
@@ -78,6 +78,6 @@ export function _gen_dict_opt_getter(input: string | AnyGetter): AnyGetter {
   return Util.genObjGetter(input, {
     test: (v: any) => !_.isNil(v),
     enableKeyPath: true,
-    dft: undefined
+    dft: undefined,
   });
 }

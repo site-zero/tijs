@@ -1,6 +1,6 @@
-import _ from "lodash";
-import { I18n, DateTime } from "../ti";
-import { NumRange } from "./num-range";
+import _ from 'lodash';
+import { I18n, DateTime } from '../ti';
+import { NumRange } from './num-range';
 
 export class MsRange extends NumRange {
   //--------------------------------
@@ -14,12 +14,12 @@ export class MsRange extends NumRange {
   }
   //--------------------------------
   toDateString(
-    fmt = "yyyy-MM-dd",
-    separator = ",",
-    leftOpen = "(",
-    leftClose = "[",
-    rightOpen = ")",
-    rightClose = "]"
+    fmt = 'yyyy-MM-dd',
+    separator = ',',
+    leftOpen = '(',
+    leftClose = '[',
+    rightOpen = ')',
+    rightClose = ']',
   ) {
     let dfmt = I18n.text(fmt);
     return this.toString({
@@ -30,17 +30,17 @@ export class MsRange extends NumRange {
       leftOpen,
       leftClose,
       rightOpen,
-      rightClose
+      rightClose,
     });
   }
   //--------------------------------
   toDateTimeString(
-    fmt = "yyyy-MM-dd HH:mm:ss",
-    separator = ",",
-    leftOpen = "(",
-    leftClose = "[",
-    rightOpen = ")",
-    rightClose = "]"
+    fmt = 'yyyy-MM-dd HH:mm:ss',
+    separator = ',',
+    leftOpen = '(',
+    leftClose = '[',
+    rightOpen = ')',
+    rightClose = ']',
   ) {
     let dfmt = I18n.text(fmt);
     return this.toString({
@@ -51,7 +51,7 @@ export class MsRange extends NumRange {
       leftOpen,
       leftClose,
       rightOpen,
-      rightClose
+      rightClose,
     });
   }
   //--------------------------------

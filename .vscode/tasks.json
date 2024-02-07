@@ -1,0 +1,10 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "format_all",
+      "type": "shell",
+      "command": "npx prettier --write '**/*.{ts,vue}'"
+    }
+  ]
+}

@@ -1,10 +1,10 @@
-import _ from "lodash";
-import { I18n, NumRange, Str } from "../ti";
-import { MakeTiMatch } from "./ti-match";
-import { TiMatch, ExplainI18n } from "../ti";
+import _ from 'lodash';
+import { I18n, NumRange, Str } from '../ti';
+import { MakeTiMatch } from './ti-match';
+import { TiMatch, ExplainI18n } from '../ti';
 
 export const gen_by_num_range: MakeTiMatch<string> = function (
-  src: string
+  src: string,
 ): TiMatch {
   let rg = new NumRange(src);
 
@@ -45,6 +45,6 @@ export const gen_by_num_range: MakeTiMatch<string> = function (
         return ss.join(sep);
       }
       return ss[0];
-    }
+    },
   };
 };

@@ -1,6 +1,5 @@
-import _ from "lodash";
-import { Explainer } from "../../ti";
-
+import _ from 'lodash';
+import { Explainer } from '../../ti';
 
 export class RawExplainer implements Explainer {
   // 解析后的处理函数

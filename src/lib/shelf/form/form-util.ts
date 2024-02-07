@@ -1,7 +1,7 @@
-import { Vars } from "../../../core";
-import { FieldPair } from "../../";
-import _ from "lodash";
-import JSON5 from "json5";
+import { Vars } from '../../../core';
+import { FieldPair } from '../../';
+import _ from 'lodash';
+import JSON5 from 'json5';
 
 export function joinPairs(data: Vars, ...pairs: FieldPair[]): Vars {
   for (let pair of pairs) {
@@ -15,7 +15,7 @@ export function joinPairs(data: Vars, ...pairs: FieldPair[]): Vars {
         throw Error(
           `Fail to Join Pair, 
           value should be Object 
-          when name is Array '${JSON5.stringify(pair)}'`
+          when name is Array '${JSON5.stringify(pair)}'`,
         );
       }
       for (let k in key) {

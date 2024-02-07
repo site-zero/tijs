@@ -1,15 +1,15 @@
-import _ from "lodash";
-import { DockOptions, Num, Point2D, RectInfo, Size2D, Util, Vars } from "../";
+import _ from 'lodash';
+import { DockOptions, Num, Point2D, RectInfo, Size2D, Util, Vars } from '../';
 
 const RECTINFO_NAMES = {
-  w: "width",
-  h: "height",
-  l: "left",
-  r: "right",
-  t: "top",
-  b: "bottom",
-  x: "x",
-  y: "y"
+  w: 'width',
+  h: 'height',
+  l: 'left',
+  r: 'right',
+  t: 'top',
+  b: 'bottom',
+  x: 'x',
+  y: 'y',
 } as { [k: string]: string };
 
 //--------------------------------------
@@ -22,7 +22,7 @@ const RECTINFO_NAMES = {
  */
 export function explainToArray(mode: string, sorted: boolean = true): string[] {
   let re: string[] = [];
-  let ks = mode.toLocaleLowerCase().split("");
+  let ks = mode.toLocaleLowerCase().split('');
   if (sorted) ks = ks.sort();
   for (let m of ks) {
     let name = RECTINFO_NAMES[m];
@@ -43,7 +43,7 @@ export function explainToArray(mode: string, sorted: boolean = true): string[] {
 export function pickKeys(
   rect: RectInfo,
   keys: string,
-  dft: number = NaN
+  dft: number = NaN,
 ): { [k: string]: number } {
   let re = {} as { [k: string]: number };
   let ks = explainToArray(keys, false);
@@ -68,7 +68,7 @@ export class Rect implements RectInfo {
 
   constructor(
     rect = { top: 0, left: 0, height: 0, width: 0 } as RectInfo,
-    mode?: string
+    mode?: string,
   ) {
     let key: keyof RectInfo;
 
@@ -82,7 +82,7 @@ export class Rect implements RectInfo {
           nms.push(key.substring(0, 1));
         }
       }
-      mode = nms.join("");
+      mode = nms.join('');
     } else {
       for (key in rect) {
         let val = rect[key];
@@ -93,7 +93,7 @@ export class Rect implements RectInfo {
     }
 
     //  如果 mode 是 "bhlrtwxy"， 说明所有属性都齐备
-    if ("bhlrtwxy" == mode) return this;
+    if ('bhlrtwxy' == mode) return this;
 
     // 按照 mode 更新其他属性
     return this.updateBy(mode);
@@ -106,7 +106,7 @@ export class Rect implements RectInfo {
   toSize2D(): Size2D {
     return {
       width: this.width,
-      height: this.height
+      height: this.height,
     };
   }
 
@@ -115,43 +115,43 @@ export class Rect implements RectInfo {
    * @param mode 更新模式
    * @returns 更新后的矩形本身
    */
-  updateBy(mode: string = "tlwh"): Rect {
+  updateBy(mode: string = 'tlwh'): Rect {
     // TODO 占位实现
     let ary = explainToArray(mode);
-    let alg = ary.join("/");
+    let alg = ary.join('/');
     (
       ({
-        "height/left/top/width": () => {
+        'height/left/top/width': () => {
           this.right = this.left + this.width;
           this.bottom = this.top + this.height;
           this.x = this.left + this.width / 2;
           this.y = this.top + this.height / 2;
         },
-        "height/right/top/width": () => {
+        'height/right/top/width': () => {
           this.left = this.right - this.width;
           this.bottom = this.top + this.height;
           this.x = this.left + this.width / 2;
           this.y = this.top + this.height / 2;
         },
-        "bottom/height/left/width": () => {
+        'bottom/height/left/width': () => {
           this.top = this.bottom - this.height;
           this.right = this.left + this.width;
           this.x = this.left + this.width / 2;
           this.y = this.top + this.height / 2;
         },
-        "bottom/height/right/width": () => {
+        'bottom/height/right/width': () => {
           this.top = this.bottom - this.height;
           this.left = this.right - this.width;
           this.x = this.left + this.width / 2;
           this.y = this.top + this.height / 2;
         },
-        "bottom/left/right/top": () => {
+        'bottom/left/right/top': () => {
           this.width = this.right - this.left;
           this.height = this.bottom - this.top;
           this.x = this.left + this.width / 2;
           this.y = this.top + this.height / 2;
         },
-        "height/width/x/y": () => {
+        'height/width/x/y': () => {
           let W2 = this.width / 2;
           let H2 = this.height / 2;
           this.top = this.y - H2;
@@ -159,7 +159,7 @@ export class Rect implements RectInfo {
           this.left = this.x - W2;
           this.right = this.x + W2;
         },
-        "height/left/width/y": () => {
+        'height/left/width/y': () => {
           let W2 = this.width / 2;
           let H2 = this.height / 2;
           this.top = this.y - H2;
@@ -167,7 +167,7 @@ export class Rect implements RectInfo {
           this.x = this.left + W2;
           this.right = this.left + this.width;
         },
-        "height/right/width/y": () => {
+        'height/right/width/y': () => {
           let W2 = this.width / 2;
           let H2 = this.height / 2;
           this.top = this.y - H2;
@@ -175,7 +175,7 @@ export class Rect implements RectInfo {
           this.x = this.right - W2;
           this.left = this.right - this.width;
         },
-        "height/top/width/x": () => {
+        'height/top/width/x': () => {
           let W2 = this.width / 2;
           let H2 = this.height / 2;
           this.y = this.top + H2;
@@ -183,14 +183,14 @@ export class Rect implements RectInfo {
           this.left = this.x - W2;
           this.right = this.x + W2;
         },
-        "bottom/height/width/x": () => {
+        'bottom/height/width/x': () => {
           let W2 = this.width / 2;
           let H2 = this.height / 2;
           this.y = this.bottom - H2;
           this.top = this.bottom - this.height;
           this.left = this.x - W2;
           this.right = this.x + W2;
-        }
+        },
       }) as {
         [k: string]: () => undefined;
       }
@@ -205,7 +205,7 @@ export class Rect implements RectInfo {
    * @param dft 属性默认值
    * @returns 含有指定属性的原生对象
    */
-  raw(keys = "tlwh", dft?: number): { [k: string]: number } {
+  raw(keys = 'tlwh', dft?: number): { [k: string]: number } {
     return _.isNil(dft) ? pickKeys(this, keys) : pickKeys(this, keys, dft);
   }
   /**
@@ -237,11 +237,11 @@ export class Rect implements RectInfo {
    * @param viewport
    */
   toCss(
-    keys: string = "tlwh",
+    keys: string = 'tlwh',
     viewport: Size2D = {
       width: window.innerWidth,
-      height: window.innerHeight
-    }
+      height: window.innerHeight,
+    },
   ): Vars {
     // 计算
     var css = {
@@ -250,7 +250,7 @@ export class Rect implements RectInfo {
       width: this.width,
       height: this.height,
       right: viewport.width - this.right,
-      bottom: viewport.height - this.bottom
+      bottom: viewport.height - this.bottom,
     };
     return pickKeys(css, keys);
   }
@@ -274,7 +274,7 @@ export class Rect implements RectInfo {
     // 计算相对位置
     this.top = this.top - (rect.top - scroll.y);
     this.left = this.left - (rect.left - scroll.x);
-    return this.updateBy("tlwh");
+    return this.updateBy('tlwh');
   }
 
   /**
@@ -285,7 +285,7 @@ export class Rect implements RectInfo {
   coordOnMe(p2d: Point2D): Point2D {
     return {
       x: p2d.x - this.left,
-      y: p2d.y - this.top
+      y: p2d.y - this.top,
     };
   }
 
@@ -301,7 +301,7 @@ export class Rect implements RectInfo {
   zoom({
     x = 1,
     y = x,
-    centre = { x: this.x, y: this.y }
+    centre = { x: this.x, y: this.y },
   }: Partial<Point2D> & {
     centre?: Point2D;
   }) {
@@ -309,7 +309,7 @@ export class Rect implements RectInfo {
     this.left = (this.left - centre.x) * x + centre.x;
     this.width = this.width * x;
     this.height = this.height * y;
-    return this.updateBy("tlwh");
+    return this.updateBy('tlwh');
   }
 
   /**
@@ -326,8 +326,8 @@ export class Rect implements RectInfo {
   zoomTo({
     width,
     height,
-    mode = "contain",
-    round = false
+    mode = 'contain',
+    round = false,
   }: {
     width: number;
     height: number;
@@ -335,7 +335,7 @@ export class Rect implements RectInfo {
     round?: boolean;
   }) {
     // 无需缩放的情况
-    if ("contain" == mode) {
+    if ('contain' == mode) {
       let viewport = new Rect({ top: 0, left: 0, width, height });
       if (viewport.contains(this)) {
         return this;
@@ -355,7 +355,7 @@ export class Rect implements RectInfo {
     // Too wide
     if (oR > nR) {
       // Cover
-      if ("cover" == mode) {
+      if ('cover' == mode) {
         nH = h;
         nW = h * oR;
       }
@@ -368,7 +368,7 @@ export class Rect implements RectInfo {
     // Too hight
     else if (oR < nR) {
       // Cover
-      if ("cover" == mode) {
+      if ('cover' == mode) {
         nW = w;
         nH = w / oR;
       }
@@ -387,7 +387,7 @@ export class Rect implements RectInfo {
     this.width = round ? Math.round(nW) : nW;
     this.height = round ? Math.round(nH) : nH;
 
-    return this.updateBy("tlwh");
+    return this.updateBy('tlwh');
   }
 
   /**
@@ -399,14 +399,14 @@ export class Rect implements RectInfo {
       width,
       height,
       top = 0,
-      left = 0
+      left = 0,
     }: {
       width: number;
       height: number;
       top?: number;
       left?: number;
     },
-    { xAxis = true, yAxis = true } = {}
+    { xAxis = true, yAxis = true } = {},
   ) {
     // Translate xAxis
     if (xAxis) {
@@ -423,7 +423,7 @@ export class Rect implements RectInfo {
       }
     }
 
-    return this.updateBy("tlwh");
+    return this.updateBy('tlwh');
   }
 
   /**
@@ -437,7 +437,7 @@ export class Rect implements RectInfo {
   translate(p: Point2D = { x: 0, y: 0 }): Rect {
     this.x += p.x;
     this.y += p.y;
-    return this.updateBy("xywh");
+    return this.updateBy('xywh');
   }
 
   /**
@@ -456,34 +456,34 @@ export class Rect implements RectInfo {
   moveTo(
     pos: Point2D = { x: 0, y: 0 },
     offset: Point2D = { x: 0, y: 0 },
-    mode = "tl"
+    mode = 'tl',
   ) {
     // _.defaults(pos, { x: 0, y: 0 });
     // _.defaults(offset, { x: 0, y: 0 });
     let ary = explainToArray(mode);
-    let alg = ary.join("/");
+    let alg = ary.join('/');
     (
       ({
-        "left/top": () => {
+        'left/top': () => {
           this.left = pos.x - offset.x;
           this.top = pos.y - offset.y;
-          this.updateBy("tlwh");
+          this.updateBy('tlwh');
         },
-        "right/top": () => {
+        'right/top': () => {
           this.right = pos.x + offset.x;
           this.top = pos.y - offset.y;
-          this.updateBy("trwh");
+          this.updateBy('trwh');
         },
-        "bottom/left": () => {
+        'bottom/left': () => {
           this.left = pos.x - offset.x;
           this.bottom = pos.y + offset.y;
-          this.updateBy("blwh");
+          this.updateBy('blwh');
         },
-        "bottom/right": () => {
+        'bottom/right': () => {
           this.right = pos.x + offset.x;
           this.bottom = pos.y + offset.y;
-          this.updateBy("brwh");
-        }
+          this.updateBy('brwh');
+        },
       }) as {
         [k: string]: () => undefined;
       }
@@ -526,13 +526,13 @@ export class Rect implements RectInfo {
   dockTo(
     rect: Rect,
     {
-      mode = "H",
-      axis = { x: "center", y: "bottom" },
+      mode = 'H',
+      axis = { x: 'center', y: 'bottom' },
       space = { x: 0, y: 0 },
       viewport,
       viewportBorder = 4,
-      wrapCut = false
-    } = {} as DockOptions
+      wrapCut = false,
+    } = {} as DockOptions,
   ): string {
     let _space: Point2D;
     if (_.isNumber(space)) {
@@ -544,76 +544,76 @@ export class Rect implements RectInfo {
     }
     // _.defaults(axis, { x: "center", y: "bottom" });
     // _.defaults(_space, { x: 0, y: 0 });
-    let alg = mode + ":" + axis.x + "/" + axis.y;
+    let alg = mode + ':' + axis.x + '/' + axis.y;
     (
       ({
-        "V:left/top": () => {
+        'V:left/top': () => {
           this.right = rect.left - _space.x;
           this.top = rect.top + _space.y;
-          this.updateBy("rtwh");
+          this.updateBy('rtwh');
         },
-        "V:left/center": () => {
+        'V:left/center': () => {
           this.right = rect.left - _space.x;
           this.y = rect.y + _space.y;
-          this.updateBy("rywh");
+          this.updateBy('rywh');
         },
-        "V:left/bottom": () => {
+        'V:left/bottom': () => {
           this.right = rect.left - _space.x;
           this.bottom = rect.bottom - _space.y;
-          this.updateBy("rbwh");
+          this.updateBy('rbwh');
         },
-        "V:right/top": () => {
+        'V:right/top': () => {
           this.left = rect.right + _space.x;
           this.top = rect.top + _space.y;
-          this.updateBy("ltwh");
+          this.updateBy('ltwh');
         },
-        "V:right/center": () => {
+        'V:right/center': () => {
           this.left = rect.right + _space.x;
           this.y = rect.y + _space.y;
-          this.updateBy("lywh");
+          this.updateBy('lywh');
         },
-        "V:right/bottom": () => {
+        'V:right/bottom': () => {
           this.left = rect.right + _space.x;
           this.bottom = rect.bottom - _space.y;
-          this.updateBy("lbwh");
+          this.updateBy('lbwh');
         },
-        "H:left/top": () => {
+        'H:left/top': () => {
           this.left = rect.left + _space.x;
           this.bottom = rect.top - _space.y;
-          this.updateBy("lbwh");
+          this.updateBy('lbwh');
         },
-        "H:left/bottom": () => {
+        'H:left/bottom': () => {
           this.left = rect.left + _space.x;
           this.top = rect.bottom + _space.y;
-          this.updateBy("ltwh");
+          this.updateBy('ltwh');
         },
-        "H:center/top": () => {
+        'H:center/top': () => {
           this.x = rect.x + _space.x;
           this.bottom = rect.top - _space.y;
-          this.updateBy("xbwh");
+          this.updateBy('xbwh');
         },
-        "H:center/bottom": () => {
+        'H:center/bottom': () => {
           this.x = rect.x + _space.x;
           this.top = rect.bottom + _space.y;
-          this.updateBy("xtwh");
+          this.updateBy('xtwh');
         },
-        "H:right/top": () => {
+        'H:right/top': () => {
           this.right = rect.right - _space.x;
           this.bottom = rect.top - _space.y;
-          this.updateBy("rbwh");
+          this.updateBy('rbwh');
         },
-        "H:right/bottom": () => {
+        'H:right/bottom': () => {
           this.right = rect.right - _space.x;
           this.top = rect.bottom + _space.y;
-          this.updateBy("rtwh");
-        }
+          this.updateBy('rtwh');
+        },
       }) as {
         [k: string]: Function;
       }
     )[alg]();
 
     // Wrap cut
-    let dockMode = "tl";
+    let dockMode = 'tl';
     if (wrapCut && viewport) {
       let viewport2 = viewport.clone(viewportBorder);
       // Wrap at first
@@ -621,7 +621,7 @@ export class Rect implements RectInfo {
       // If still can not contains, overlay it
       if (!viewport2.contains(this)) {
         this.overlap(viewport2);
-        dockMode = "tlwh";
+        dockMode = 'tlwh';
       }
     }
     // return
@@ -642,52 +642,52 @@ export class Rect implements RectInfo {
   dockIn(
     rect: Rect,
     axis: {
-      x?: "left" | "right" | "center" | "auto";
-      y?: "top" | "bottom" | "center" | "auto";
+      x?: 'left' | 'right' | 'center' | 'auto';
+      y?: 'top' | 'bottom' | 'center' | 'auto';
     },
-    space = { x: 0, y: 0 } as Point2D
+    space = { x: 0, y: 0 } as Point2D,
   ): Rect {
-    _.defaults(axis, { x: "center", y: "center" });
+    _.defaults(axis, { x: 'center', y: 'center' });
     _.defaults(space, { x: 0, y: 0 });
 
-    let alg = axis.x + "/" + axis.y;
+    let alg = axis.x + '/' + axis.y;
     (
       ({
-        "left/top": () => {
+        'left/top': () => {
           this.left = rect.left + space.x;
           this.top = rect.top + space.y;
-          this.updateBy("ltwh");
+          this.updateBy('ltwh');
         },
-        "left/center": () => {
+        'left/center': () => {
           this.left = rect.left + space.x;
           this.y = rect.y + space.y;
-          this.updateBy("lywh");
+          this.updateBy('lywh');
         },
-        "left/bottom": () => {
+        'left/bottom': () => {
           this.left = rect.left + space.x;
           this.bottom = rect.bottom - space.y;
-          this.updateBy("lbwh");
+          this.updateBy('lbwh');
         },
-        "right/top": () => {
+        'right/top': () => {
           this.right = rect.right - space.x;
           this.top = rect.top + space.y;
-          this.updateBy("rtwh");
+          this.updateBy('rtwh');
         },
-        "right/center": () => {
+        'right/center': () => {
           this.right = rect.right - space.x;
           this.y = rect.y + space.y;
-          this.updateBy("rywh");
+          this.updateBy('rywh');
         },
-        "right/bottom": () => {
+        'right/bottom': () => {
           this.right = rect.right - space.x;
           this.bottom = rect.bottom - space.y;
-          this.updateBy("brwh");
+          this.updateBy('brwh');
         },
-        "center/center": () => {
+        'center/center': () => {
           this.x = rect.x + space.x;
           this.x = rect.y + space.y;
-          this.updateBy("xywh");
-        }
+          this.updateBy('xywh');
+        },
       }) as { [k: string]: () => undefined }
     )[alg]();
 
@@ -706,20 +706,20 @@ export class Rect implements RectInfo {
    *
    */
   wrap(rect: Rect): Rect {
-    let ms = ["w", "h"];
+    let ms = ['w', 'h'];
     //....................................
     // Try X
     if (!this.containsX(rect)) {
       // [viewport]{given} or [viewport {gi]ven}
       if (rect.left > this.left && rect.right > this.right) {
         rect.right = this.right;
-        ms.push("r");
+        ms.push('r');
       }
       // {given}[viewport] or { gi[ven }viewport ]
       // {giv-[viewport]-en}
       else {
         rect.left = this.left;
-        ms.push("l");
+        ms.push('l');
       }
     }
     //....................................
@@ -728,28 +728,28 @@ export class Rect implements RectInfo {
       // top:=> [viewport]{given} or [viewport {gi]ven}
       if (rect.top > this.top && rect.bottom > this.bottom) {
         rect.bottom = this.bottom;
-        ms.push("b");
+        ms.push('b');
       }
       // top:=> {given}[viewport] or { gi[ven }viewport ]
       // top:=> {giv-[viewport]-en}
       else {
         rect.top = this.top;
-        ms.push("t");
+        ms.push('t');
       }
     }
     // Has already X
     else if (ms.length == 3) {
-      ms.push("t");
+      ms.push('t');
     }
     //....................................
     // Lack X
     if (3 == ms.length) {
-      ms.push("l");
+      ms.push('l');
     }
     //....................................
     // Update it
     if (4 == ms.length) {
-      return rect.updateBy(ms.join(""));
+      return rect.updateBy(ms.join(''));
     }
     //....................................
     // Done
@@ -786,7 +786,7 @@ export class Rect implements RectInfo {
       this.right = Math.max(this.right, rect.right);
       this.bottom = Math.max(this.bottom, rect.bottom);
     }
-    return this.updateBy("tlbr");
+    return this.updateBy('tlbr');
   }
 
   overlap(...rects: Rect[]): Rect {
@@ -796,7 +796,7 @@ export class Rect implements RectInfo {
       this.right = Math.min(this.right, rect.right);
       this.bottom = Math.min(this.bottom, rect.bottom);
     }
-    return this.updateBy("tlbr");
+    return this.updateBy('tlbr');
   }
 
   contains(rect: Rect, border = 0): boolean {
@@ -847,9 +847,9 @@ export class Rect implements RectInfo {
         left: this.left + border,
         right: this.right - border,
         top: this.top + border,
-        bottom: this.bottom - border
+        bottom: this.bottom - border,
       },
-      "tlbr"
+      'tlbr',
     );
   }
 }
@@ -867,7 +867,7 @@ export function createBy($el: Element | Document | Window | Rect): Rect {
   }
   if ($el instanceof Element) {
     let domRect = $el.getBoundingClientRect();
-    return new Rect(domRect, "tlwh");
+    return new Rect(domRect, 'tlwh');
   }
   let wd;
   if ($el instanceof Document) {
@@ -877,7 +877,7 @@ export function createBy($el: Element | Document | Window | Rect): Rect {
   }
 
   if (!wd) {
-    throw new Error("Cannot create rect with null window!");
+    throw new Error('Cannot create rect with null window!');
   }
 
   let w = wd.document.documentElement.clientWidth;

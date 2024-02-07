@@ -1,8 +1,8 @@
-import { expect, test } from "vitest";
-import { Num } from "../../core/ti";
-import _ from "lodash";
+import { expect, test } from 'vitest';
+import { Num } from '../../core/ti';
+import _ from 'lodash';
 
-test("scrollIndex", () => {
+test('scrollIndex', () => {
   expect(Num.scrollIndex(3, 5)).eq(3);
   expect(Num.scrollIndex(0, 5)).eq(0);
   expect(Num.scrollIndex(4, 5)).eq(4);

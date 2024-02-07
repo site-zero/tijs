@@ -1,5 +1,5 @@
-import { Dom, Str } from "../../";
-import _ from "lodash";
+import { Dom, Str } from '../../';
+import _ from 'lodash';
 
 export function write(input: any): void {
   let str: string;
@@ -16,31 +16,31 @@ export function write(input: any): void {
   // Hack copy
   else {
     let $t: HTMLTextAreaElement = Dom.createElement({
-      tagName: "textarea",
+      tagName: 'textarea',
       style: {
-        position: "fixed",
-        top: "-100000px",
-        left: "0px",
-        width: "300px",
-        height: "300px",
+        position: 'fixed',
+        top: '-100000px',
+        left: '0px',
+        width: '300px',
+        height: '300px',
         opacity: -0,
-        zIndex: 10000
+        zIndex: 10000,
       },
       props: {
-        value: str
+        value: str,
       },
-      $p: document.body
+      $p: document.body,
     }) as HTMLTextAreaElement;
     $t.focus();
     $t.select();
 
     try {
-      if (!document.execCommand("copy")) {
+      if (!document.execCommand('copy')) {
         console.warn('fail to execCommand("copy") for text: ', str);
       }
       //console.log(re)
     } catch (err) {
-      console.warn("fail to copy text: ", err);
+      console.warn('fail to copy text: ', err);
     }
 
     Dom.remove($t);

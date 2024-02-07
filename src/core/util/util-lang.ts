@@ -1,5 +1,5 @@
-import _ from "lodash";
-import { genObjGetter } from "./util-getter";
+import _ from 'lodash';
+import { genObjGetter } from './util-getter';
 
 /**
  * 有时候，函数的返回值被要求是 `Promise`，
@@ -18,7 +18,7 @@ export function wrapPromise<E>(reValue: E): Promise<E> {
 }
 
 export function wrapPromiseFunc<F extends Function, W extends Function>(
-  funcs?: F | F[]
+  funcs?: F | F[],
 ): W[] {
   let list: W[] = [];
   if (!funcs) {
@@ -50,7 +50,7 @@ export function getOrPick(obj: any, key: string | string[], dft: any): any {
   let getter = genObjGetter(key, {
     test: (val: any) => !_.isUndefined(val),
     enableKeyPath: true,
-    dft
+    dft,
   });
   return getter(obj);
 }
@@ -192,7 +192,7 @@ export function notEquals(o1: any, ...o2: any[]) {
 }
 
 export function isBlank(o: any) {
-  return _.isUndefined(o) || _.isNull(o) || "" === o || /^[ \t]*$/.test(o);
+  return _.isUndefined(o) || _.isNull(o) || '' === o || /^[ \t]*$/.test(o);
 }
 export function notBlank(o: any) {
   return !isBlank(o);
@@ -249,7 +249,7 @@ export function mapTruthyKeys<T>(map?: Map<T, any>): T[] {
  * @returns  `Map<K,V>`
  */
 export function objToMap<K extends string | number, V>(
-  obj?: Record<K, V> | Map<K, V>
+  obj?: Record<K, V> | Map<K, V>,
 ): Map<K, V> {
   if (obj instanceof Map) {
     return obj;
@@ -270,7 +270,7 @@ export function objToMap<K extends string | number, V>(
  */
 export function assignMap<K extends string | number, V>(
   a: Map<K, V>,
-  b: Map<K, V>
+  b: Map<K, V>,
 ) {
   for (let en of b.entries()) {
     let [k, v] = en;

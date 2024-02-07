@@ -1,17 +1,17 @@
-import { createBus, setEnv } from "../../core";
-import { AppEvents, TiAppBus, TiAppEvent } from "../";
-import { makeAnonymouseEvent } from "./use-bus-emit";
+import { createBus, setEnv } from '../../core';
+import { AppEvents, TiAppBus, TiAppEvent } from '../';
+import { makeAnonymouseEvent } from './use-bus-emit';
 
 type BusDeposeCallback = (hook: () => any) => false | Function | undefined;
 
 export function createAppBus(deposer: BusDeposeCallback) {
   let bus = createBus<TiAppEvent>();
-  setEnv("BUS", bus);
-  bus.on("*", (msg) => {
-    console.log("总线收到消息", msg);
+  setEnv('BUS', bus);
+  bus.on('*', (msg) => {
+    console.log('总线收到消息', msg);
   });
-  bus.on("playground:click-suffix-text", (v) => {
-    console.log("哈哈哈", v);
+  bus.on('playground:click-suffix-text', (v) => {
+    console.log('哈哈哈', v);
   });
   deposer(() => {
     bus.depose();
@@ -22,11 +22,11 @@ export function createAppBus(deposer: BusDeposeCallback) {
 export function createAppSubBus(
   bus: TiAppBus,
   name: string,
-  deposer: BusDeposeCallback
+  deposer: BusDeposeCallback,
 ) {
   let sub = bus.createSubBus(name, [
     AppEvents.APP_RESIZE,
-    AppEvents.APP_SCROLL
+    AppEvents.APP_SCROLL,
   ]);
   deposer(() => {
     sub.depose();
@@ -35,7 +35,7 @@ export function createAppSubBus(
 }
 
 export function watchAppResize(bus: TiAppBus, win = window) {
-  win.addEventListener("resize", () => {
+  win.addEventListener('resize', () => {
     let evt = makeAnonymouseEvent(AppEvents.APP_RESIZE);
     bus.emit(evt.name, evt);
   });

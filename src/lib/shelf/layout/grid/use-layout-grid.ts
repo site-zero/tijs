@@ -1,29 +1,29 @@
-import _ from "lodash";
-import { TiEventTrigger } from "../../../";
+import _ from 'lodash';
+import { TiEventTrigger } from '../../../';
 import {
   Callback,
   Callback1,
   CssGridLayout,
   CssUtils,
-  Vars
-} from "../../../../core";
+  Vars,
+} from '../../../../core';
 import {
   LayoutBar,
   LayoutItem,
   LayoutProps,
   LayoutState,
-  getLayoutItem
-} from "../layout-support.ts";
-import { LayoutGridKeepFeature, LayoutGridKeepProps } from "./use-grid-keep";
-import { GridResizingState, useGridResizing } from "./use-grid-resizing";
+  getLayoutItem,
+} from '../layout-support.ts';
+import { LayoutGridKeepFeature, LayoutGridKeepProps } from './use-grid-keep';
+import { GridResizingState, useGridResizing } from './use-grid-resizing';
 
-export const COM_TYPE = "TiLayoutGrid";
+export const COM_TYPE = 'TiLayoutGrid';
 /*-------------------------------------------------------
 
                     Events & Types
 
 -------------------------------------------------------*/
-export type LayoutGridEvents = "shown";
+export type LayoutGridEvents = 'shown';
 export type LayoutGridItem = LayoutItem & {
   adjustBars: LayoutBar[];
 };
@@ -57,7 +57,7 @@ export type LayoutGridOptions = {
 -------------------------------------------------------*/
 function getLayoutGridItem(
   state: LayoutState,
-  props: LayoutGridProps
+  props: LayoutGridProps,
 ): LayoutGridItem[] {
   let items = getLayoutItem(state, props) as LayoutGridItem[];
   for (let item of items) {
@@ -86,13 +86,13 @@ export type LayoutGridFeature = {
     $main: HTMLElement,
     resizing: GridResizingState,
     onDestroy: Callback1<Callback>,
-    Keep: LayoutGridKeepFeature
+    Keep: LayoutGridKeepFeature,
   ): void;
 };
 export function useLayoutGrid(
   state: LayoutGridState,
   props: LayoutGridProps,
-  _options: LayoutGridOptions
+  _options: LayoutGridOptions,
 ): LayoutGridFeature {
   let Items = getLayoutGridItem(state, props);
 
@@ -108,10 +108,10 @@ export function useLayoutGrid(
   // 计算顶部的样式
   let TopStyle = CssUtils.mergeStyles(props.layout || {});
   if (!_.isEmpty(state.rows)) {
-    TopStyle.gridTemplateRows = state.rows.join(" ");
+    TopStyle.gridTemplateRows = state.rows.join(' ');
   }
   if (!_.isEmpty(state.columns)) {
-    TopStyle.gridTemplateColumns = state.columns.join(" ");
+    TopStyle.gridTemplateColumns = state.columns.join(' ');
   }
 
   // 返回
@@ -123,11 +123,11 @@ export function useLayoutGrid(
       $main: HTMLElement,
       resizing: GridResizingState,
       onDestroy: Callback1<Callback>,
-      Keep: LayoutGridKeepFeature
+      Keep: LayoutGridKeepFeature,
     ) {
       if (isAdjustable) {
         useGridResizing($main, resizing, onDestroy, Keep);
       }
-    }
+    },
   };
 }

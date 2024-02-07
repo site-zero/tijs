@@ -1,6 +1,6 @@
-import { CommonProps } from "../../";
-import { Vars } from "../../../core";
-import { FormField, FormFieldAboutProps } from "./use-form-field";
+import { CommonProps } from '../../';
+import { Vars } from '../../../core';
+import { FormField, FormFieldAboutProps } from './use-form-field';
 
 export type FormProps = CommonProps &
   FormFieldAboutProps & {
@@ -50,7 +50,7 @@ export type FormProps = CommonProps &
      *
      * * @default "auto"
      */
-    dataMode?: "all" | "diff" | "auto";
+    dataMode?: 'all' | 'diff' | 'auto';
 
     /**
      * 当表单字段任何一个字段发生改变，实际上发生两件事：
@@ -76,7 +76,7 @@ export type FormProps = CommonProps &
      *
      * @default "auto"
      */
-    notifyMode?: "immediate" | "data" | "field" | "confirm" | "none" | "auto";
+    notifyMode?: 'immediate' | 'data' | 'field' | 'confirm' | 'none' | 'auto';
 
     autoShowBlank?: boolean;
     //-----------------------------------
@@ -98,7 +98,7 @@ export type FormProps = CommonProps &
      *  - `group` 字段分组显示
      *  - `group` 字段分标签页显示
      */
-    mode?: "group" | "tab";
+    mode?: 'group' | 'tab';
   };
 
 export type FormGridHint = [number, number] | number;

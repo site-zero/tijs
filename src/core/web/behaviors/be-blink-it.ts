@@ -1,5 +1,5 @@
-import { Callback1, Dom, DomSelector, Rects } from "../../";
-import _ from "lodash";
+import { Callback1, Dom, DomSelector, Rects } from '../../';
+import _ from 'lodash';
 
 export type BlinkOptions = {
   /**
@@ -31,18 +31,18 @@ export function BlinkIt(it: DomSelector, options = {} as BlinkOptions): void {
   let rect = Rects.createBy(el);
   let css = rect.toCss();
   _.assign(css, {
-    "transition": `opacity ${speed}ms`,
-    "border-color": "#FF0",
-    "background": "#FFA",
-    "opacity": 0.8,
-    "position": "fixed",
-    "z-index": 9999999
+    'transition': `opacity ${speed}ms`,
+    'border-color': '#FF0',
+    'background': '#FFA',
+    'opacity': 0.8,
+    'position': 'fixed',
+    'z-index': 9999999,
   });
 
   let blinkEl = Dom.createElement({
-    tagName: "div",
-    className: "ti-blink-light",
-    style: css
+    tagName: 'div',
+    className: 'ti-blink-light',
+    style: css,
   });
 
   if (_.isFunction(update)) {

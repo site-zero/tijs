@@ -1,11 +1,11 @@
-import { StrCaseMode } from "../../";
-import { Str, StrConvertor, Vars } from "../../ti";
-import { DynElInfo } from "../ti-tmpl";
-import { DynEle } from "./abstract_dyn_ele";
-import { str_format } from "./str/str_format";
-import { str_mapping } from "./str/str_mapping";
-import { str_replace } from "./str/str_replace";
-import { str_trim } from "./str/str_trim";
+import { StrCaseMode } from '../../';
+import { Str, StrConvertor, Vars } from '../../ti';
+import { DynElInfo } from '../ti-tmpl';
+import { DynEle } from './abstract_dyn_ele';
+import { str_format } from './str/str_format';
+import { str_mapping } from './str/str_mapping';
+import { str_replace } from './str/str_replace';
+import { str_trim } from './str/str_trim';
 
 export class DynStrEle extends DynEle {
   private _convertors: StrConvertor[];
@@ -15,21 +15,21 @@ export class DynStrEle extends DynEle {
     this._convertors = [];
 
     // 预先分析处理器
-    let ss = Str.splitIgnoreBlank(input.fmt, ";");
+    let ss = Str.splitIgnoreBlank(input.fmt, ';');
     for (let s of ss) {
       // 截取空白
-      if ("@trim" == s) {
+      if ('@trim' == s) {
         this._convertors.push(str_trim);
       }
       // 字符串替换:
       // ${path<string:@trim;@replace'/','-';@replace'~'>}
-      else if (s.startsWith("@replace")) {
+      else if (s.startsWith('@replace')) {
         let is = s.substring(8);
         this._convertors.push(str_replace(is));
       }
       // 字符串映射
       // ${fruit(string::A=Apple,B=Banana,C=Cherry)}
-      else if (s.startsWith(":")) {
+      else if (s.startsWith(':')) {
         let is = s.substring(1);
         this._convertors.push(str_mapping(is));
       }

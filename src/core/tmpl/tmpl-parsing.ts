@@ -1,11 +1,11 @@
-import _ from "lodash";
-import { LinkedStack } from "../alg/linked-stack";
-import { BlockTmplSegment } from "./segment/block_segment";
-import { BranchTmplSegment } from "./segment/branch_segment";
-import { TmplSegment, WnTmplX } from "./ti-tmpl";
-import { WnTmplToken } from "./tmpl-token";
-import { WnTmplTokenExpert } from "./token-expert";
-import { parseTokens } from "./token-parse";
+import _ from 'lodash';
+import { LinkedStack } from '../alg/linked-stack';
+import { BlockTmplSegment } from './segment/block_segment';
+import { BranchTmplSegment } from './segment/branch_segment';
+import { TmplSegment, WnTmplX } from './ti-tmpl';
+import { WnTmplToken } from './tmpl-token';
+import { WnTmplTokenExpert } from './token-expert';
+import { parseTokens } from './token-parse';
 
 /**
  * <pre>
@@ -30,7 +30,7 @@ export class WnTmplParsing {
   private _tmpl: WnTmplX;
 
   constructor() {
-    this._expert = new WnTmplTokenExpert("$$", "${", "{", "}");
+    this._expert = new WnTmplTokenExpert('$$', '${', '{', '}');
     this._tmpl = new WnTmplX();
     this._stack = new LinkedStack<TmplSegment>();
   }
@@ -178,7 +178,7 @@ export class WnTmplParsing {
 
   private margeDown(
     sgs: TmplSegment[],
-    lastI?: number
+    lastI?: number,
   ): TmplSegment | undefined {
     if (_.isUndefined(lastI)) {
       lastI = sgs.length - 1;

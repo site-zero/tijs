@@ -1,10 +1,10 @@
-import { Size2D } from "../../core";
-import { SelectValueArm, selectValue } from "../../core/util";
-import _ from "lodash";
-import { expect, test } from "vitest";
+import { Size2D } from '../../core';
+import { SelectValueArm, selectValue } from '../../core/util';
+import _ from 'lodash';
+import { expect, test } from 'vitest';
 
-test("Simple", () => {
-  let arms = [[3, "[1000,]"], [2, "[500,]"], 1] as SelectValueArm<
+test('Simple', () => {
+  let arms = [[3, '[1000,]'], [2, '[500,]'], 1] as SelectValueArm<
     number,
     string
   >;
@@ -19,7 +19,7 @@ test("Simple", () => {
   expect(1).eq(selectValue(0, arms));
 });
 
-test("Cus-By", () => {
+test('Cus-By', () => {
   let arms = [[3, 1000], [2, 500], 1] as SelectValueArm<
     number,
     number | undefined
@@ -27,7 +27,7 @@ test("Cus-By", () => {
   let opts = {
     by: (
       arm: [number, any],
-      { width } = {} as Partial<Size2D>
+      { width } = {} as Partial<Size2D>,
     ): number | undefined => {
       let [v, m] = arm;
       // 没有宽度，那么必须要默认的 Arm
@@ -40,7 +40,7 @@ test("Cus-By", () => {
       else if (!m || width >= m) {
         return v;
       }
-    }
+    },
   };
 
   expect(3).eq(selectValue({ width: 2000 }, arms, opts));

@@ -1,1 +1,1 @@
-export * from "./vue-ti-plugin";
+export * from './vue-ti-plugin';

@@ -1,7 +1,7 @@
-import { CommonProps } from "../../../";
-import { Callback2 } from "../../../../core";
-import { TableBehaviorsProps } from "../table-types";
-import { TableRowData } from "../use-table";
+import { CommonProps } from '../../../';
+import { Callback2 } from '../../../../core';
+import { TableBehaviorsProps } from '../table-types';
+import { TableRowData } from '../use-table';
 /*-------------------------------------------------------
 
                         Props

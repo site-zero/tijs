@@ -1,6 +1,6 @@
-import _ from "lodash";
-import { EscapeTable, STR_UNESC_TAB } from "./escape-table";
-import { sprintf } from "sprintf-js";
+import _ from 'lodash';
+import { EscapeTable, STR_UNESC_TAB } from './escape-table';
+import { sprintf } from 'sprintf-js';
 
 /**
  * 这是一个简单的堆栈，主要用来做字符串解析。
@@ -87,8 +87,8 @@ export class CharStack {
   constructor(
     cPush: string,
     cPop?: string,
-    cEscaper: string = "\\",
-    escTable: EscapeTable = STR_UNESC_TAB
+    cEscaper: string = '\\',
+    escTable: EscapeTable = STR_UNESC_TAB,
   ) {
     this.cPush = cPush;
     this.cPop = cPop;
@@ -98,9 +98,9 @@ export class CharStack {
   }
 
   toString(): string {
-    let sb = ["<", this.status, "> :: "];
-    sb.push("'", this.cPush, this.cPop ?? "-no-pop-");
-    sb.push(this.cEscaper || "-No-Esc-", "'");
+    let sb = ['<', this.status, '> :: '];
+    sb.push("'", this.cPush, this.cPop ?? '-no-pop-');
+    sb.push(this.cEscaper || '-No-Esc-', "'");
     if (Status.S0 != this.status) {
       // 栈顶
       sb.push(sprintf('\n[ %s ] >> ("%s")', this.topC, this.topBuf));
@@ -115,7 +115,7 @@ export class CharStack {
           if (IS >= 0) {
             sb.push(sprintf('\n[ %s ] >> ("%s")', c, sbs[IS]));
           } else {
-            sb.push(sprintf("\n[ %s ]", c));
+            sb.push(sprintf('\n[ %s ]', c));
           }
         }
       }
@@ -149,13 +149,13 @@ export class CharStack {
     // 激活态
     if (Status.S1 == this.status) {
       if (!this.topC || !this.topBuf || !this.stackC || !this.stackBuf) {
-        throw "impossiable in Status.S1";
+        throw 'impossiable in Status.S1';
       }
       // 逃逸字符
       if (this.cEscaper == this.topC) {
         let c2 = this.escTable.get(c);
         if (!c2) {
-          throw new Error("e.char.stack.InvalidEscapeChar");
+          throw new Error('e.char.stack.InvalidEscapeChar');
         }
         this.topBuf.push(c2);
         this.topC = this.stackC.pop();
@@ -176,7 +176,7 @@ export class CharStack {
         }
         // 弹出一层
         let sb = this.stackBuf.pop() as string[];
-        sb.push(this.topC, this.topBuf.join(""), c);
+        sb.push(this.topC, this.topBuf.join(''), c);
         this.topBuf = sb;
         this.topC = this.stackC.pop();
         return WnStackPushResult.ACCEPT;
@@ -197,7 +197,7 @@ export class CharStack {
     if (Status.S9 == this.status) {
       return WnStackPushResult.DONE;
     }
-    throw new Error("impossible");
+    throw new Error('impossible');
   }
 
   getContentAndReset(): string | undefined {
@@ -205,7 +205,7 @@ export class CharStack {
     if (!this.topBuf) {
       return undefined;
     }
-    let s = this.topBuf.join("");
+    let s = this.topBuf.join('');
     this.reset();
     return s;
   }
@@ -245,11 +245,11 @@ export class CharStack {
 
 enum Status {
   // 休眠态： 未曾压栈，对于输入默认是 REJECT
-  S0 = "S0",
+  S0 = 'S0',
   // 激活态： 已经压栈，对于输入默认是 ACCEPT
-  S1 = "S1",
+  S1 = 'S1',
   // 完成态： 已经清栈，对于输入默认是 DONE
-  S9 = "S9"
+  S9 = 'S9',
 }
 
 export enum WnStackPushResult {
@@ -266,5 +266,5 @@ export enum WnStackPushResult {
   /**
    * 我已经解析完成，不能接受更多内容了，清获取分析结果
    */
-  DONE
+  DONE,
 }

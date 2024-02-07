@@ -1,6 +1,6 @@
-import _ from "lodash";
-import { ComRef, CommonProps, IconInput } from "../../";
-import { CssGridItem, CssGridLayout, CssUtils, Vars } from "../../../core";
+import _ from 'lodash';
+import { ComRef, CommonProps, IconInput } from '../../';
+import { CssGridItem, CssGridLayout, CssUtils, Vars } from '../../../core';
 
 export type LayoutSchema = Record<string, ComRef>;
 
@@ -9,7 +9,7 @@ export type LayoutState = {
 };
 
 export type LayoutProps = CommonProps &
-  Pick<LayoutItem, "name" | "blocks"> & {
+  Pick<LayoutItem, 'name' | 'blocks'> & {
     schema?: LayoutSchema;
 
     /**
@@ -22,11 +22,11 @@ export type TabsProps = {
   /**
    * @default `top`
    */
-  tabAt?: "top" | "bottom";
+  tabAt?: 'top' | 'bottom';
   /**
    * @default `center`
    */
-  tabAlign?: "left" | "right" | "center";
+  tabAlign?: 'left' | 'right' | 'center';
   /**
    * @default `0`
    */
@@ -40,7 +40,7 @@ export type LayoutBar = {
    * - `column` 调整列宽，因此是一个竖条
    * - `row` 调整行高，因此是一个横条
    */
-  mode: "column" | "row";
+  mode: 'column' | 'row';
 
   /**
    * 拖动将调整哪个行/列（0 Base下标）。
@@ -75,10 +75,10 @@ export type LayoutBar = {
    *
    * 拖动将涉及上传的行/列的格子轨道改动
    */
-  position: "prev" | "next";
+  position: 'prev' | 'next';
 };
 
-export type LayoutItemType = "block" | "grid" | "tabs";
+export type LayoutItemType = 'block' | 'grid' | 'tabs';
 export type LayoutBlock = TabsProps & {
   /**
    * 块的布局内唯一键，如果不指定，则会依次尝试：
@@ -168,22 +168,22 @@ function autoSetLayoutItemType(it: LayoutItem) {
   if (!it.type) {
     // Grid
     if (it.layout) {
-      it.type = "grid";
+      it.type = 'grid';
     }
     // Tabs
     else if (it.blocks) {
-      it.type = "tabs";
+      it.type = 'tabs';
     }
     // 默认就是 Block， 放个路障
     else {
-      it.type = "block";
+      it.type = 'block';
     }
   }
 }
 
 function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
   // 布局块
-  if ("block" == it.type && !it.comType) {
+  if ('block' == it.type && !it.comType) {
     let refName = it.body || it.name;
     if (refName) {
       let ref = schema[refName];
@@ -192,27 +192,27 @@ function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
     // 设置默认
     if (!it.itemConfig?.comType) {
       _.assign(it.itemConfig, {
-        comType: "TiRoadblock",
+        comType: 'TiRoadblock',
         comConf: {
-          icon: "fas-person-digging",
-          text: it.name || "Layout Block"
-        }
+          icon: 'fas-person-digging',
+          text: it.name || 'Layout Block',
+        },
       });
     }
   }
   // 格子布局
-  else if ("grid" == it.type) {
-    it.itemConfig = _.pick(it, "name", "blocks", "layout");
+  else if ('grid' == it.type) {
+    it.itemConfig = _.pick(it, 'name', 'blocks', 'layout');
   }
   // 标签布局
-  else if ("tabs" == it.type) {
+  else if ('tabs' == it.type) {
     it.itemConfig = _.pick(
       it,
-      "name",
-      "blocks",
-      "tabAt",
-      "tabAlign",
-      "defaultTab"
+      'name',
+      'blocks',
+      'tabAt',
+      'tabAlign',
+      'defaultTab',
     );
   }
 }

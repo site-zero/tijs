@@ -1,6 +1,6 @@
-import _ from "lodash";
-import { I18n, TiMatch, ExplainI18n } from "../ti";
-import { MakeTiMatch, parse } from "./ti-match";
+import _ from 'lodash';
+import { I18n, TiMatch, ExplainI18n } from '../ti';
+import { MakeTiMatch, parse } from './ti-match';
 
 export const gen_by_array: MakeTiMatch<any[]> = function (src: any[]): TiMatch {
   let ms = [] as TiMatch[];
@@ -19,7 +19,7 @@ export const gen_by_array: MakeTiMatch<any[]> = function (src: any[]): TiMatch {
     },
     explainText: (i18n: ExplainI18n): string => {
       if (_.isEmpty(ms)) {
-        return "";
+        return '';
       }
       if (ms.length == 1) {
         return ms[0].explainText(i18n);
@@ -29,7 +29,7 @@ export const gen_by_array: MakeTiMatch<any[]> = function (src: any[]): TiMatch {
         ss.push(m.explainText(i18n));
       }
       let or = I18n.text(i18n.or);
-      return ss.join("; " + or);
-    }
+      return ss.join('; ' + or);
+    },
   };
 };

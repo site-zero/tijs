@@ -1,9 +1,9 @@
-import _ from "lodash";
-import { I18n, TiMatch, ExplainI18n, Str } from "../ti";
-import { MakeTiMatch } from "./ti-match";
+import _ from 'lodash';
+import { I18n, TiMatch, ExplainI18n, Str } from '../ti';
+import { MakeTiMatch } from './ti-match';
 
 export const gen_by_map_undefined: MakeTiMatch<string> = function (
-  key_of_obj: string
+  key_of_obj: string,
 ): TiMatch {
   return {
     test: (input: any): boolean => {
@@ -13,6 +13,6 @@ export const gen_by_map_undefined: MakeTiMatch<string> = function (
     explainText: (i18n: ExplainI18n): string => {
       let tmpl = I18n.text(i18n.undefinedOf);
       return Str.renderTmpl(tmpl, { val: key_of_obj });
-    }
+    },
   };
 };

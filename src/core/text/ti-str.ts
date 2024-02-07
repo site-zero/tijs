@@ -1,7 +1,7 @@
-import _ from "lodash";
-import JSON5 from "json5";
-import { Vars, StrConvertor, Tmpl, StrCaseFunc, StrCaseMode } from "../ti";
-import * as DateTime from "../_top/ti-datetime";
+import _ from 'lodash';
+import JSON5 from 'json5';
+import { Vars, StrConvertor, Tmpl, StrCaseFunc, StrCaseMode } from '../ti';
+import * as DateTime from '../_top/ti-datetime';
 
 /*---------------------------------------------------
 
@@ -57,7 +57,7 @@ export function sBlank(str: string, dft: string): string {
  */
 export function splitIgnoreBlank(
   input: string,
-  sep: string | RegExp = ","
+  sep: string | RegExp = ',',
 ): string[] {
   if (!input) {
     return [];
@@ -77,8 +77,8 @@ export type SplitOptions = {
 export function splitQuote(str: string, options: SplitOptions = {}): string[] {
   // 分析参数
   let qucs = options.quote || `"'`;
-  let spcs = options.seps || ",;、，； \t\r\n";
-  let escapeChar = options.escapeChar || "\\";
+  let spcs = options.seps || ',;、，； \t\r\n';
+  let escapeChar = options.escapeChar || '\\';
   let ignoreBlank = options.ignoreBlank ?? false;
   let keepQuote = options.keepQuote ?? true;
 
@@ -86,7 +86,7 @@ export function splitQuote(str: string, options: SplitOptions = {}): string[] {
   let list = [] as string[];
 
   // 解析的中间状态变量
-  let cs = str.split("");
+  let cs = str.split('');
   let sb = [] as string[];
   let quoteBy: string | undefined;
 
@@ -96,7 +96,7 @@ export function splitQuote(str: string, options: SplitOptions = {}): string[] {
     // 引用外，且遇到分隔符号就拆分
     if (!quoteBy && spcs.indexOf(c) >= 0) {
       if (!ignoreBlank || !_.isEmpty(sb)) {
-        let s2 = sb.join("");
+        let s2 = sb.join('');
         if (ignoreBlank) {
           s2 = _.trim(s2);
           if (s2) {
@@ -148,7 +148,7 @@ export function splitQuote(str: string, options: SplitOptions = {}): string[] {
 
   // 添加最后一个
   if (!ignoreBlank || !_.isEmpty(sb)) {
-    list.push(sb.join(""));
+    list.push(sb.join(''));
   }
 
   // 搞定
@@ -167,7 +167,7 @@ type toJsValueOptions = {
   trimed?: boolean;
   context?: Vars;
 };
-export function toJsValue(v: any = "", options = {} as toJsValueOptions): any {
+export function toJsValue(v: any = '', options = {} as toJsValueOptions): any {
   //...............................................
   // Array
   if (_.isArray(v)) {
@@ -194,7 +194,7 @@ export function toJsValue(v: any = "", options = {} as toJsValueOptions): any {
     autoDate = true,
     autoNil = false,
     trimed = true,
-    context = {}
+    context = {},
   } = options || {};
   //...............................................
   // Number
@@ -207,19 +207,19 @@ export function toJsValue(v: any = "", options = {} as toJsValueOptions): any {
   // Must by string
   let str = trimed ? _.trim(v) : v;
   let dftAsNil = false;
-  if (str.endsWith("?")) {
+  if (str.endsWith('?')) {
     dftAsNil = true;
     str = str.substring(0, str.length - 1).trim();
   }
   //...............................................
   // autoNil
   if (autoNil) {
-    if ("undefined" == str) return undefined;
-    if ("null" == str) return null;
+    if ('undefined' == str) return undefined;
+    if ('null' == str) return null;
   }
   //...............................................
   // The whole context
-  if (".." == str) {
+  if ('..' == str) {
     return context;
   }
   //...............................................
@@ -268,7 +268,7 @@ export function toJsValue(v: any = "", options = {} as toJsValueOptions): any {
 export function joinArgs(
   s: string | any[],
   args: any[] = [],
-  iteratee = toJsValue
+  iteratee = toJsValue,
 ) {
   // String to split
   if (_.isString(s)) {
@@ -280,7 +280,7 @@ export function joinArgs(
     // }
 
     // Take it as comma-sep list
-    let list = s.split(",");
+    let list = s.split(',');
     for (let li of list) {
       let vs = _.trim(li);
       if (!vs) continue;
@@ -305,7 +305,7 @@ export function joinArgs(
 
 export function anyToStr(input: any): string {
   if (_.isNil(input)) {
-    return "";
+    return '';
   }
 
   if (_.isString(input)) {
@@ -314,18 +314,18 @@ export function anyToStr(input: any): string {
 
   if (_.isArray(input)) {
     let ss = _.map(input, (it) => anyToStr(it));
-    return ss.join(",");
+    return ss.join(',');
   }
 
   if (_.isError(input)) {
-    return [input.name, input.message].join(": ");
+    return [input.name, input.message].join(': ');
   }
 
   if (_.isObject(input)) {
     return JSON.stringify(input);
   }
 
-  return input + "";
+  return input + '';
 }
 
 export function anyToStrOrNum(val: any): string | number {
@@ -341,7 +341,7 @@ export function anyToStrOrNum(val: any): string | number {
 ---------------------------------------------------*/
 export function intToChineseNumber(
   input: string | number,
-  capitalized = false
+  capitalized = false,
 ) {
   // 预处理，兼容字符串
   let n: number;
@@ -353,14 +353,14 @@ export function intToChineseNumber(
   // 中文大写
   if (capitalized) {
     return _to_chinese_number(n, {
-      CN_NC0: "零壹贰叁肆伍陆柒捌玖",
-      CN_NU0: "个拾佰仟万亿"
+      CN_NC0: '零壹贰叁肆伍陆柒捌玖',
+      CN_NU0: '个拾佰仟万亿',
     });
   }
   // 中文数字
   return _to_chinese_number(n, {
-    CN_NC0: "零一二三四五六七八九",
-    CN_NU0: "个十百千万亿"
+    CN_NC0: '零一二三四五六七八九',
+    CN_NU0: '个十百千万亿',
   });
 }
 type CN_DICT = { CN_NC0: string; CN_NU0: string };
@@ -374,7 +374,7 @@ function _to_chinese_number(input: number, { CN_NC0, CN_NU0 }: CN_DICT) {
 
   // 考虑负数
   if (input < 0) {
-    re.push("负");
+    re.push('负');
     input *= -1;
   }
 
@@ -382,7 +382,7 @@ function _to_chinese_number(input: number, { CN_NC0, CN_NU0 }: CN_DICT) {
   if (input < 10) {
     let c = CN_NC0[input];
     re.push(c);
-    return re.join("");
+    return re.join('');
   }
 
   // 准备拆分各个位，数组 0 表示个位
@@ -497,10 +497,10 @@ function _to_chinese_number(input: number, { CN_NC0, CN_NU0 }: CN_DICT) {
   // 输出前，检查，最后一个字符是 '零' 删掉它
   lastI = re.length - 1;
   if (re[lastI] == CN_NC0[0]) {
-    return re.slice(0, lastI).join("");
+    return re.slice(0, lastI).join('');
   }
 
-  return re.join("");
+  return re.join('');
 }
 
 /*---------------------------------------------------
@@ -515,7 +515,7 @@ const STR_CASE_FUNC = {
   camel: (s: string) => _.camelCase(s),
   snake: (s: string) => _.snakeCase(s),
   kebab: (s: string) => _.kebabCase(s),
-  start: (s: string) => _.startCase(s)
+  start: (s: string) => _.startCase(s),
 } as StrCaseFunc;
 
 export function toStdComType(comType: string) {
@@ -581,7 +581,7 @@ export function toComType(comType: string): string {
 export function safeDeep(data: any, regex = /['"]/g): any {
   // String to replace
   if (_.isString(data)) {
-    return data.replace(regex, "");
+    return data.replace(regex, '');
   }
   // Array
   else if (_.isArray(data)) {
@@ -602,7 +602,7 @@ export function safeDeep(data: any, regex = /['"]/g): any {
  *
  * @returns 拼接后的字符串
  */
-export function joinWithoutNil(sep: string = "", ...args: any): string {
+export function joinWithoutNil(sep: string = '', ...args: any): string {
   let list2 = _.flattenDeep(args);
   let list3 = _.filter(list2, (li) => !_.isNil(li));
   return list3.join(sep);
@@ -622,8 +622,8 @@ interface JoinIteratee<T> {
  */
 export function join(
   list: any[] = [],
-  sep: string = "",
-  iteratee: JoinIteratee<any> | null
+  sep: string = '',
+  iteratee: JoinIteratee<any> | null,
 ): string {
   let list1 = _.flattenDeep(list);
   let list2;
@@ -645,8 +645,8 @@ export function join(
  */
 export function joinAs(
   list: any[] = [],
-  sep: string = "",
-  key: string | null = null
+  sep: string = '',
+  key: string | null = null,
 ): string {
   let iter: JoinIteratee<any> | null = null;
   if (!_.isEmpty(key)) {
@@ -669,7 +669,7 @@ export function toArray(
   { sep = /[:,;\t\n\/]+/g, ignoreNil = true } = {} as {
     sep?: RegExp | string;
     ignoreNil?: boolean;
-  }
+  },
 ): any[] {
   // Nil
   if (_.isNil(s)) {
@@ -684,7 +684,7 @@ export function toArray(
   if (_.isString(s) && sep) {
     let ss = _.map(s.split(sep), (v) => _.trim(v));
     if (ignoreNil) {
-      return _.without(ss, "");
+      return _.without(ss, '');
     }
     return ss;
   }
@@ -698,7 +698,7 @@ export function toArray(
  * @param sep : 分隔符，默认是 `,`
  * @returns 过滤空白字符串之后的数组
  */
-export function toArrayBy(s: any, sep: string = ",") {
+export function toArrayBy(s: any, sep: string = ',') {
   return toArray(s, { sep, ignoreNil: true });
 }
 
@@ -717,12 +717,12 @@ export function toObject(
   {
     sep = /[:,;\t\n\/]+/g,
     ignoreNil = true,
-    keys = ["value", "text?value", "icon"]
+    keys = ['value', 'text?value', 'icon'],
   } = {} as {
     sep?: RegExp | string;
     ignoreNil?: boolean;
     keys?: string[] | string;
-  }
+  },
 ) {
   // Split value to array
   let vs = toArray(s, { sep, ignoreNil });
@@ -730,7 +730,7 @@ export function toObject(
   // Make sure keys as array
   if (_.isString(keys)) {
     keys = toArray(keys, {
-      sep: /[:,;\s]+/g
+      sep: /[:,;\s]+/g,
     });
   }
 
@@ -738,12 +738,12 @@ export function toObject(
   let a_ks: string[] = []; // assign key list
   let m_ks: any[] = []; // those keys must has value
   _.forEach(keys, (k) => {
-    let ss = toArray(k, { sep: "?" });
+    let ss = toArray(k, { sep: '?' });
     if (ss.length > 1) {
       a_ks.push(ss[0]);
       m_ks.push({
         name: ss[0],
-        backup: ss[1]
+        backup: ss[1],
       });
     } else {
       a_ks.push(k);
@@ -781,13 +781,13 @@ export function toObjList(
     sepLine = /[,;\n]+/g,
     sepPair = /[:|\/\t]+/g,
     ignoreNil = true,
-    keys = ["value", "text?value", "icon"]
+    keys = ['value', 'text?value', 'icon'],
   } = {} as {
     sepLine?: RegExp | string;
     sepPair?: RegExp | string;
     ignoreNil?: boolean;
     keys?: string[] | string;
-  }
+  },
 ): any[] {
   // console.log(s, sepLine, sepPair, ignoreNil, keys);
   let list = toArray(s, { sep: sepLine, ignoreNil });
@@ -795,8 +795,8 @@ export function toObjList(
     toObject(v, {
       sep: sepPair,
       ignoreNil,
-      keys
-    })
+      keys,
+    }),
   );
 }
 
@@ -836,13 +836,13 @@ export function sizeText(
     fixed = 2,
     M = 1024,
     bytes = false,
-    units = ["Bytes", "KB", "MB", "GB", "PB", "TB"]
+    units = ['Bytes', 'KB', 'MB', 'GB', 'PB', 'TB'],
   } = {} as {
     fixed?: number;
     M?: number;
     bytes: boolean;
     units: string[];
-  }
+  },
 ) {
   let nb = byte;
   let i = 0;
@@ -880,20 +880,20 @@ export function toPercent(
   { fixed = 2, auto = true } = {} as {
     fixed?: number;
     auto: boolean;
-  }
+  },
 ): string {
-  if (!_.isNumber(n)) return "NaN";
+  if (!_.isNumber(n)) return 'NaN';
   let nb = n * 100;
   // Round
-  let str = fixed >= 0 ? nb.toFixed(fixed) : nb + "";
+  let str = fixed >= 0 ? nb.toFixed(fixed) : nb + '';
   if (auto) {
-    let lastDot = str.lastIndexOf(".");
-    let lastZero = str.lastIndexOf("0");
+    let lastDot = str.lastIndexOf('.');
+    let lastZero = str.lastIndexOf('0');
     if (lastDot >= 0 && lastZero > lastDot) {
       let last = str.length - 1;
       let pos = last;
       for (; pos >= lastDot; pos--) {
-        if (str[pos] != "0") break;
+        if (str[pos] != '0') break;
       }
       if (pos == lastZero || pos == lastDot) {
         //pos --
@@ -903,5 +903,5 @@ export function toPercent(
       if (pos < str.length) str = str.substring(0, pos);
     }
   }
-  return str + "%";
+  return str + '%';
 }

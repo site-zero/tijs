@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-  import { inject } from "vue";
-  import BarItemChildren from "./BarItemChildren.vue";
-  import BarItemTmpl from "./BarItemTmpl.vue";
-  import { BAR_SUPPORT, BarItemProp } from "./action-bar-type";
+  import { inject } from 'vue';
+  import BarItemChildren from './BarItemChildren.vue';
+  import BarItemTmpl from './BarItemTmpl.vue';
+  import { BAR_SUPPORT, BarItemProp } from './action-bar-type';
   defineOptions({
-    inheritAttrs: false
+    inheritAttrs: false,
   });
   const { setBarOpenState, MENU_SPACE } = inject(BAR_SUPPORT)!;
   //
@@ -16,7 +16,7 @@
   //
   function OnClickHead() {
     if (!props.opened) {
-      setBarOpenState(props.uniqKey, "open");
+      setBarOpenState(props.uniqKey, 'open');
     }
   }
 </script>

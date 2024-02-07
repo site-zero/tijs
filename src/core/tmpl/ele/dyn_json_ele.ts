@@ -1,7 +1,7 @@
-import _ from "lodash";
-import JSON5 from "json5";
-import { Vars } from "../../ti";
-import { DynElInfo, TmplEle } from "../ti-tmpl";
+import _ from 'lodash';
+import JSON5 from 'json5';
+import { Vars } from '../../ti';
+import { DynElInfo, TmplEle } from '../ti-tmpl';
 
 export class DynJsonEle implements TmplEle {
   // [false, true]
@@ -15,23 +15,23 @@ export class DynJsonEle implements TmplEle {
   constructor(input: DynElInfo) {
     this._key = input.key;
     this._dft = input.dft;
-    let fmt = input.fmt || "";
-    this._ignoreNil = fmt.indexOf("n") >= 0;
-    this._compacted = fmt.indexOf("c") >= 0;
-    this._quoteName = fmt.indexOf("q") >= 0;
+    let fmt = input.fmt || '';
+    this._ignoreNil = fmt.indexOf('n') >= 0;
+    this._compacted = fmt.indexOf('c') >= 0;
+    this._quoteName = fmt.indexOf('q') >= 0;
   }
 
   join(sb: string[], context: Vars) {
     let v = _.get(context, this._key) ?? this._dft;
     if (_.isNil(v)) {
-      sb.push("null");
+      sb.push('null');
       return;
     }
     v =
       (
         {
-          "-obj-": {},
-          "-array-": []
+          '-obj-': {},
+          '-array-': [],
         } as Vars
       )[v] || v;
 
@@ -50,7 +50,7 @@ export class DynJsonEle implements TmplEle {
         }
       : undefined;
 
-    let space = this._compacted ? undefined : "  ";
+    let space = this._compacted ? undefined : '  ';
 
     let json: string;
     if (this._quoteName) {
@@ -58,7 +58,7 @@ export class DynJsonEle implements TmplEle {
     } else {
       json = JSON5.stringify(v, {
         replacer: key_flt,
-        space
+        space,
       });
     }
 

@@ -1,13 +1,13 @@
-import JSON5 from "json5";
-import _ from "lodash";
-import { Callback1, Store, Vars } from "../../core";
+import JSON5 from 'json5';
+import _ from 'lodash';
+import { Callback1, Store, Vars } from '../../core';
 /*-------------------------------------------------------
 
                     Events & Types
 
 -------------------------------------------------------*/
 export type KeepInfo = KeepProps | string;
-export type KeepMode = "session" | "local";
+export type KeepMode = 'session' | 'local';
 
 /*-------------------------------------------------------
 
@@ -36,7 +36,7 @@ function parseInfo(info: KeepInfo): KeepProps {
   if (_.isString(info)) {
     let m = /^((session|local):\s*)?(.+)/.exec(info);
     let keepAt = info;
-    let keepMode: KeepMode = "session";
+    let keepMode: KeepMode = 'session';
     if (m) {
       keepAt = _.trim(m[3]);
       keepMode = m[1] as KeepMode;
@@ -60,7 +60,7 @@ export type KeepFeature = {
 };
 export function useKeep(info: KeepInfo): KeepFeature {
   let props = parseInfo(info);
-  let keep = Store[props.keepMode ?? "session"];
+  let keep = Store[props.keepMode ?? 'session'];
   let keepAt = props.keepAt;
   const load = function (dft?: string) {
     if (!keepAt) {
@@ -97,6 +97,6 @@ export function useKeep(info: KeepInfo): KeepFeature {
         return dft ?? null;
       }
       return JSON5.parse(json) as any[];
-    }
+    },
   };
 }

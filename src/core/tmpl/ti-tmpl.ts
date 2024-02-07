@@ -1,8 +1,8 @@
-import _ from "lodash";
-import { Vars } from "../ti";
-import { AbstractTmplSegment } from "./segment/abstract_segment";
-import { WnTmplTokenExpert } from "./token-expert";
-import { WnTmplParsing } from "./tmpl-parsing";
+import _ from 'lodash';
+import { Vars } from '../ti';
+import { AbstractTmplSegment } from './segment/abstract_segment';
+import { WnTmplTokenExpert } from './token-expert';
+import { WnTmplParsing } from './tmpl-parsing';
 
 /*-----------------------------------
 
@@ -48,7 +48,7 @@ export interface TmplSegment {
 
 export class WnTmplX extends AbstractTmplSegment {
   constructor() {
-    super("TMPL");
+    super('TMPL');
   }
   render(context?: Vars, showKey = false): string {
     if (!context) {
@@ -56,7 +56,7 @@ export class WnTmplX extends AbstractTmplSegment {
     }
     let sb = [] as string[];
     this.renderTo(context, showKey, sb);
-    return sb.join("");
+    return sb.join('');
   }
 }
 

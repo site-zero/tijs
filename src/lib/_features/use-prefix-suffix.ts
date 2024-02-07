@@ -1,21 +1,21 @@
-import { Callback1, Vars } from "../../core";
-import { IconInput, TiEventTrigger } from "../";
+import { Callback1, Vars } from '../../core';
+import { IconInput, TiEventTrigger } from '../';
 import {
   BusEmitProps,
   ClassStyleFeature,
   IconTextFeature,
-  useIconText
-} from ".";
+  useIconText,
+} from '.';
 /*-------------------------------------------------------
 
                      Events
 
 -------------------------------------------------------*/
 export type PrefixSuffixEvents =
-  | "click-prefix-icon"
-  | "click-prefix-text"
-  | "click-suffix-icon"
-  | "click-suffix-text";
+  | 'click-prefix-icon'
+  | 'click-prefix-text'
+  | 'click-suffix-icon'
+  | 'click-suffix-text';
 /*-------------------------------------------------------
 
                      State
@@ -91,14 +91,14 @@ export type PrefixSuffixFeature = {
 export function usePrefixSuffix(
   state: PrefixSuffixState,
   props: PrefixSuffixFeatureProps,
-  notify: TiEventTrigger<PrefixSuffixEvents, undefined>
+  notify: TiEventTrigger<PrefixSuffixEvents, undefined>,
 ): PrefixSuffixFeature {
   return {
     //.......................................
     Prefix: useIconText(
       {
         iconHovered: state.prefixIconHovered,
-        textHovered: state.prefixTextHovered
+        textHovered: state.prefixTextHovered,
       },
       {
         className: props.prefixClass,
@@ -112,19 +112,19 @@ export function usePrefixSuffix(
         hoverIcon: props.prefixHoverIcon,
         hoverText: props.prefixHoverText,
         iconClickable: props.prefixIconClickable,
-        textClickable: props.prefixTextClickable
+        textClickable: props.prefixTextClickable,
       },
       {
         notify,
-        notifyIcon: ["click-prefix-icon", undefined],
-        notifyText: ["click-prefix-text", undefined]
-      }
+        notifyIcon: ['click-prefix-icon', undefined],
+        notifyText: ['click-prefix-text', undefined],
+      },
     ),
     //.......................................
     Suffix: useIconText(
       {
         iconHovered: state.suffixIconHovered,
-        textHovered: state.suffixTextHovered
+        textHovered: state.suffixTextHovered,
       },
       {
         className: props.suffixClass,
@@ -138,13 +138,13 @@ export function usePrefixSuffix(
         hoverIcon: props.suffixHoverIcon,
         hoverText: props.suffixHoverText,
         iconClickable: props.suffixIconClickable,
-        textClickable: props.suffixTextClickable
+        textClickable: props.suffixTextClickable,
       },
       {
         notify,
-        notifyIcon: ["click-suffix-icon", undefined],
-        notifyText: ["click-suffix-text", undefined]
-      }
+        notifyIcon: ['click-suffix-icon', undefined],
+        notifyText: ['click-suffix-text', undefined],
+      },
     ),
     //.......................................
     setPrefixIconHover: function (hovred: boolean) {
@@ -159,7 +159,7 @@ export function usePrefixSuffix(
     },
     setSuffixTextHover: function (hovred: boolean) {
       state.suffixTextHovered = hovred;
-    }
+    },
     //.......................................
   };
 }

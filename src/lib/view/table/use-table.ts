@@ -1,17 +1,24 @@
-import _ from "lodash";
-import { Ref } from "vue";
-import { CommonProps, getFieldUniqKey } from "../../";
-import { Callback, Callback1, EventUtils, I18n, Str, Vars } from "../../../core";
-import { TableBehaviorsProps, TableCell, TableRowEvent } from "./table-types";
+import _ from 'lodash';
+import { Ref } from 'vue';
+import { CommonProps, getFieldUniqKey } from '../../';
+import {
+  Callback,
+  Callback1,
+  EventUtils,
+  I18n,
+  Str,
+  Vars,
+} from '../../../core';
+import { TableBehaviorsProps, TableCell, TableRowEvent } from './table-types';
 import {
   CheckStatus,
   SelectableFeature,
   SelectableProps,
   SelectableState,
-  useSelectable
-} from "./use-selectable";
-import { TableKeepFeature, TableKeepProps } from "./use-table-keep";
-import { useTableResizing } from "./use-table-resizing";
+  useSelectable,
+} from './use-selectable';
+import { TableKeepFeature, TableKeepProps } from './use-table-keep';
+import { useTableResizing } from './use-table-resizing';
 /*-------------------------------------------------------
 
                         Types
@@ -156,10 +163,10 @@ function _get_table_columns(props: TableProps) {
     }
 
     // 表格默认控件
-    colItem.comType = col.comType ?? props.defaultCellComType ?? "TiLabel";
+    colItem.comType = col.comType ?? props.defaultCellComType ?? 'TiLabel';
     colItem.comConf = col.comConf ??
       props.defaultCellComConf ?? {
-        className: "is-nowrap"
+        className: 'is-nowrap',
       };
 
     // 记入列表
@@ -179,7 +186,7 @@ function _get_table_columns(props: TableProps) {
 function _get_table_data(
   selectable: SelectableFeature<TableRowID>,
   state: SelectableState<TableRowID>,
-  data: Vars[]
+  data: Vars[],
 ): TableRowData[] {
   // 启用特性
   let { getDataId, isIDChecked } = selectable;
@@ -196,7 +203,7 @@ function _get_table_data(
       indent: 0,
       activated: id == state.currentId,
       checked: isIDChecked(state, id),
-      rawData
+      rawData,
     });
   }
   return list;
@@ -208,7 +215,7 @@ function _get_table_data(
 function _on_row_select(
   selectable: SelectableFeature<TableRowID>,
   selection: SelectableState<TableRowID>,
-  rowEvent: TableRowEvent
+  rowEvent: TableRowEvent,
 ) {
   let { event, row } = rowEvent;
   let se = EventUtils.getKeyboardStatus(event);
@@ -219,7 +226,7 @@ function _on_row_select(
   }
   // shiftKey
   else if (se.shiftKey) {
-    console.log("shift mode");
+    console.log('shift mode');
     let ids = selection.ids;
     selectable.selectRange(selection, ids, [row.id, selection.currentId]);
   }
@@ -239,7 +246,7 @@ export function useTable(props: TableProps) {
     getId: props.getId!,
     convertToId: Str.anyToStrOrNum,
     data: props.data,
-    multi: props.multi
+    multi: props.multi,
   });
 
   return {
@@ -255,7 +262,7 @@ export function useTable(props: TableProps) {
       columnSizes: Ref<number[]>,
       showRowMarker: boolean,
       onDestroy: Callback1<Callback>,
-      Keep: TableKeepFeature
+      Keep: TableKeepFeature,
     ) => {
       if (props.columnResizable) {
         useTableResizing(
@@ -271,7 +278,7 @@ export function useTable(props: TableProps) {
             let n = props.columnResizeInTime ?? 50;
             return props.data.length <= n;
           },
-          Keep
+          Keep,
         );
       }
     },
@@ -286,11 +293,11 @@ export function useTable(props: TableProps) {
 
     OnTableHeadCheckerClick(
       selection: SelectableState<TableRowID>,
-      status: CheckStatus
+      status: CheckStatus,
     ) {
       let { ids, checkedIds } = selection;
       checkedIds.clear();
-      if ("all" != status) {
+      if ('all' != status) {
         for (let id of ids) {
           checkedIds.set(id, true);
         }
@@ -299,41 +306,41 @@ export function useTable(props: TableProps) {
 
     OnRowSelect(
       selection: SelectableState<TableRowID>,
-      rowEvent: TableRowEvent
+      rowEvent: TableRowEvent,
     ) {
       _on_row_select(selectable, selection, rowEvent);
     },
 
     OnRowCheck(
       selection: SelectableState<TableRowID>,
-      rowEvent: TableRowEvent
+      rowEvent: TableRowEvent,
     ) {
       selectable.toggleId(selection, rowEvent.row.id);
     },
 
     OnRowOpen(
       _selection: SelectableState<TableRowID>,
-      rowEvent: TableRowEvent
+      rowEvent: TableRowEvent,
     ) {
-      console.log("row Open", rowEvent);
+      console.log('row Open', rowEvent);
     },
 
     OnCellSelect(
       selection: SelectableState<TableRowID>,
-      rowEvent: TableRowEvent
+      rowEvent: TableRowEvent,
     ) {
       let { row } = rowEvent;
       if (!selection.checkedIds.get(row.id)) {
         selectable.selectId(selection, row.id);
       }
-      console.log("cell select", rowEvent);
+      console.log('cell select', rowEvent);
     },
 
     OnCellOpen(
       _selection: SelectableState<TableRowID>,
-      rowEvent: TableRowEvent
+      rowEvent: TableRowEvent,
     ) {
-      console.log("cell open", rowEvent);
-    }
+      console.log('cell open', rowEvent);
+    },
   };
 }

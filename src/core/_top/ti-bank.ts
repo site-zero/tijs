@@ -1,53 +1,53 @@
-import _ from "lodash";
-import { I18n, Str } from "../ti";
+import _ from 'lodash';
+import { I18n, Str } from '../ti';
 
 ///////////////////////////////////////
 const CURRENCIES = {
-  "AUD": {
-    token: "$",
-    icon: "fas-dollar-sign",
-    text: `i18n:currency-AUD`
+  AUD: {
+    token: '$',
+    icon: 'fas-dollar-sign',
+    text: `i18n:currency-AUD`,
   },
-  "CAD": {
-    token: "$",
-    icon: "fas-dollar-sign",
-    text: `i18n:currency-CAD`
+  CAD: {
+    token: '$',
+    icon: 'fas-dollar-sign',
+    text: `i18n:currency-CAD`,
   },
-  "EUR": {
-    token: "€",
-    icon: "fas-euro-sign",
-    text: `i18n:currency-EUR`
+  EUR: {
+    token: '€',
+    icon: 'fas-euro-sign',
+    text: `i18n:currency-EUR`,
   },
-  "GBP": {
-    token: "£",
-    icon: "fas-pound-sign",
-    text: `i18n:currency-GBP`
+  GBP: {
+    token: '£',
+    icon: 'fas-pound-sign',
+    text: `i18n:currency-GBP`,
   },
-  "HKD": {
-    token: "¥",
-    icon: "fas-yen-sign",
-    text: `i18n:currency-HKD`
+  HKD: {
+    token: '¥',
+    icon: 'fas-yen-sign',
+    text: `i18n:currency-HKD`,
   },
-  "JPY": {
-    token: "¥",
-    icon: "fas-yen-sign",
-    text: `i18n:currency-JPY`
+  JPY: {
+    token: '¥',
+    icon: 'fas-yen-sign',
+    text: `i18n:currency-JPY`,
   },
-  "MOP": {
-    token: "¥",
-    icon: "fas-yen-sign",
-    text: `i18n:currency-MOP`
+  MOP: {
+    token: '¥',
+    icon: 'fas-yen-sign',
+    text: `i18n:currency-MOP`,
   },
-  "RMB": {
-    token: "¥",
-    icon: "fas-yen-sign",
-    text: `i18n:currency-RMB`
+  RMB: {
+    token: '¥',
+    icon: 'fas-yen-sign',
+    text: `i18n:currency-RMB`,
   },
-  "USD": {
-    token: "$",
-    icon: "fas-dollar-sign",
-    text: `i18n:currency-USD`
-  }
+  USD: {
+    token: '$',
+    icon: 'fas-dollar-sign',
+    text: `i18n:currency-USD`,
+  },
 } as { [k: string]: { token: string; icon: string; text: string } };
 ///////////////////////////////////////
 
@@ -65,17 +65,17 @@ const CURRENCIES = {
 
 export function exchange(
   val: number | string,
-  { from = "RMB", to = "RMB", bridge = "RMB", exrs = {} } = {} as {
+  { from = 'RMB', to = 'RMB', bridge = 'RMB', exrs = {} } = {} as {
     from?: string;
     to?: string;
     bridge?: string;
     exrs?: { [k: string]: number };
-  }
+  },
 ): number | undefined {
   // 解析出 cent 和 货币单位
   let { cent, currency } = parseCurrency(val, {
     currency: from,
-    unit: _.isNumber(val) ? 1 : 100 // "20RMB" or 2000
+    unit: _.isNumber(val) ? 1 : 100, // "20RMB" or 2000
   });
 
   from = currency || from;
@@ -113,22 +113,22 @@ export function exchange(
   }
 }
 
-export function getCurrencyChar(cur: string = "RMB"): string {
-  return _.get(CURRENCIES[cur], "token");
+export function getCurrencyChar(cur: string = 'RMB'): string {
+  return _.get(CURRENCIES[cur], 'token');
 }
 
 //-----------------------------------
-export function getCurrencyToken(cur: string = "RMB"): string {
-  return _.get(CURRENCIES[cur], "token");
+export function getCurrencyToken(cur: string = 'RMB'): string {
+  return _.get(CURRENCIES[cur], 'token');
 }
 
 //-----------------------------------
-export function getCurrencyText(cur = "RMB") {
-  return _.get(CURRENCIES[cur], "text");
+export function getCurrencyText(cur = 'RMB') {
+  return _.get(CURRENCIES[cur], 'text');
 }
 //   //-----------------------------------
-export function getCurrencyIcon(cur = "RMB") {
-  return _.get(CURRENCIES[cur], "icon");
+export function getCurrencyIcon(cur = 'RMB') {
+  return _.get(CURRENCIES[cur], 'icon');
 }
 //-----------------------------------
 export function getCurrencyList(): any[] {
@@ -139,7 +139,7 @@ export function getCurrencyList(): any[] {
       value: key,
       token: cu.token,
       icon: cu.icon,
-      text: I18n.text(cu.text)
+      text: I18n.text(cu.text),
     });
   });
   return list;
@@ -166,10 +166,10 @@ export type TiCurrency = {
  */
 export function parseCurrency(
   input: String | Number | TiCurrency,
-  { unit = 100, currency = "RMB" } = {} as {
+  { unit = 100, currency = 'RMB' } = {} as {
     unit: number;
     currency?: string;
-  }
+  },
 ) {
   let [cent, yuan] = [NaN, NaN];
 
@@ -197,7 +197,7 @@ export function parseCurrency(
     }
   }
   // 若是对象类型
-  else if (input instanceof Object && _.has(input, "currency")) {
+  else if (input instanceof Object && _.has(input, 'currency')) {
     //   if (input && input.currency) {
     // if (_.isObject(input) && _.has(input, "currency")) {
     input = <TiCurrency>input;
@@ -226,31 +226,31 @@ export function parseCurrency(
 //-----------------------------------
 export function autoYuanTokenText(
   cent: number = 0.0,
-  { currency = "RMB", precision = 2, auto = true } = {} as {
+  { currency = 'RMB', precision = 2, auto = true } = {} as {
     currency?: string;
     precision?: number;
     auto?: boolean;
-  }
+  },
 ): string {
   cent = Math.round(cent);
-  let neg = cent < 0 ? "-" : "";
+  let neg = cent < 0 ? '-' : '';
   cent = Math.abs(cent);
-  let t = getCurrencyToken(currency) || "";
+  let t = getCurrencyToken(currency) || '';
 
   let n = _.round(cent / 100, precision);
 
   // 组装 "金额文字"
   let s = `${n}`;
   if (precision > 0 && !auto) {
-    let pos = s.lastIndexOf(".");
+    let pos = s.lastIndexOf('.');
     if (pos < 0) {
-      s = s + "." + _.repeat("0", precision);
+      s = s + '.' + _.repeat('0', precision);
     }
     // 补零
     else {
       let sub = s.substring(pos + 1);
       if (sub.length < precision) {
-        sub = _.padEnd(sub, precision, "0");
+        sub = _.padEnd(sub, precision, '0');
         s = s.substring(0, pos + 1) + sub;
       }
     }
@@ -272,22 +272,22 @@ export function toYuanText(cent = 0.0, precision = 2): string {
   return autoYuanTokenText(cent, {
     currency: undefined,
     precision,
-    auto: true
+    auto: true,
   });
 }
 //-----------------------------------
 export function toYuanTokenText(
   cent = 0.0,
-  currency = "RMB",
-  precision = 2
+  currency = 'RMB',
+  precision = 2,
 ): string {
   return autoYuanTokenText(cent, { currency, precision, auto: true });
 }
 //-----------------------------------
 export function toYuanTokenText2(
   cent = 0.0,
-  currency = "RMB",
-  precision = 2
+  currency = 'RMB',
+  precision = 2,
 ): string {
   let s = toYuanTokenText(cent, currency, precision);
   return `${s}${currency}`;
@@ -296,10 +296,10 @@ export function toYuanTokenText2(
 //-----------------------------------
 export function toZeroText(
   cent: number = 0.0,
-  { precision = 2, placeholder = "---" } = {} as {
+  { precision = 2, placeholder = '---' } = {} as {
     precision?: number;
     placeholder?: string;
-  }
+  },
 ) {
   if (!cent) {
     return placeholder;
@@ -310,11 +310,11 @@ export function toZeroText(
 //-----------------------------------
 export function toZeroTokenText(
   cent = 0.0,
-  { currency = "RMB", precision = 2, placeholder = "---" } = {} as {
+  { currency = 'RMB', precision = 2, placeholder = '---' } = {} as {
     currency?: string;
     precision?: number;
     placeholder?: string;
-  }
+  },
 ): string {
   if (!cent) {
     return placeholder;
@@ -325,11 +325,11 @@ export function toZeroTokenText(
 //-----------------------------------
 export function toZeroTokenText2(
   cent = 0.0,
-  { currency = "RMB", precision = 2, placeholder = "---" } = {} as {
+  { currency = 'RMB', precision = 2, placeholder = '---' } = {} as {
     currency?: string;
     precision?: number;
     placeholder?: string;
-  }
+  },
 ) {
   if (!cent) {
     return placeholder;
@@ -346,53 +346,53 @@ export function toChineseText(cent = 0.0, capitalized = false): string {
   // Gen Text
   let re = [Str.intToChineseNumber(yuan, capitalized)];
   if (fen > 0) {
-    let UN = "角分厘毫";
-    let fens = _.padStart(fen + "", 4, "0");
-    re.push("元");
+    let UN = '角分厘毫';
+    let fens = _.padStart(fen + '', 4, '0');
+    re.push('元');
     for (let i = 0; i < fens.length; i++) {
       let f = Number(fens[i]) * 1;
       if (f > 0) {
         let t = Str.intToChineseNumber(f, capitalized);
         re.push(t);
         re.push(UN[i]);
-      } else if (re[re.length - 1] != "零") {
-        re.push("零");
+      } else if (re[re.length - 1] != '零') {
+        re.push('零');
       }
     }
-    if (re[re.length - 1] == "零") {
+    if (re[re.length - 1] == '零') {
       re.pop();
     }
   } else {
-    re.push("元整");
+    re.push('元整');
   }
-  return re.join("");
+  return re.join('');
 }
 
 //-----------------------------------
 export function toBankText(
   v: string,
-  { part = 3, sep = ",", to = "left" } = {} as {
+  { part = 3, sep = ',', to = 'left' } = {} as {
     part?: number;
     sep?: string;
     to?: string;
-  }
+  },
 ): string {
   if (_.isNil(v)) {
     return v;
   }
-  let s = v + "";
-  let pos = s.indexOf(".");
+  let s = v + '';
+  let pos = s.indexOf('.');
   if (pos < 0) {
     pos = s.length;
   }
-  let ns = s.split("");
-  if ("left" == to) {
+  let ns = s.split('');
+  if ('left' == to) {
     for (let i = pos; i > 0; i -= part) {
       if (i < pos) {
         ns.splice(i, 0, sep);
       }
     }
-  } else if ("right" == to) {
+  } else if ('right' == to) {
     let off = 0;
     for (let i = 0; i < pos; i += part) {
       if (i > 0) {
@@ -401,16 +401,16 @@ export function toBankText(
       }
     }
   }
-  return ns.join("");
+  return ns.join('');
 }
 
 //-----------------------------------
 export function isValidPayType(payType: string): boolean {
   return (
     {
-      "wx.qrcode": true,
-      "zfb.qrcode": true,
-      "paypal": true
+      'wx.qrcode': true,
+      'zfb.qrcode': true,
+      'paypal': true,
     }[payType] || false
   );
 }
@@ -418,7 +418,7 @@ export function isValidPayType(payType: string): boolean {
 export function getPayTypeText(payType: string, autoI18n = false) {
   let key = null;
   if (_.isString(payType)) {
-    key = `pay-by-${payType.replace(".", "-")}`;
+    key = `pay-by-${payType.replace('.', '-')}`;
   }
   if (key) return autoI18n ? I18n.get(key) : key;
 }
@@ -426,7 +426,7 @@ export function getPayTypeText(payType: string, autoI18n = false) {
 //-----------------------------------
 export function getPayTypeChooseI18nText(
   payType: string,
-  { text = "pay-step-choose-tip2", nil = "pay-step-choose-nil" } = {}
+  { text = 'pay-step-choose-tip2', nil = 'pay-step-choose-nil' } = {},
 ) {
   let ptt = getPayTypeText(payType, true);
   if (ptt) {

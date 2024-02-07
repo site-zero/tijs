@@ -1,6 +1,6 @@
-import { Convertor, Vars } from "../../../core";
-import { Field, getFieldConvertor } from "../../";
-import _ from "lodash";
+import { Convertor, Vars } from '../../../core';
+import { Field, getFieldConvertor } from '../../';
+import _ from 'lodash';
 
 /*-------------------------------------------------------
 
@@ -9,7 +9,7 @@ import _ from "lodash";
 -------------------------------------------------------*/
 export type FieldTransformerProps = Pick<
   Field,
-  "name" | "type" | "transformer"
+  'name' | 'type' | 'transformer'
 >;
 /*-------------------------------------------------------
 
@@ -25,7 +25,7 @@ export type FieldTransformerFeature = {
 
 -------------------------------------------------------*/
 export function useFieldTransformer(
-  props: FieldTransformerProps
+  props: FieldTransformerProps,
 ): FieldTransformerFeature {
   return {
     getFieldValue(data: Vars) {
@@ -40,7 +40,7 @@ export function useFieldTransformer(
       }
       // 内置类型转换器
       if (!_.isNil(val)) {
-        let cov = getFieldConvertor(type || "String");
+        let cov = getFieldConvertor(type || 'String');
         val = cov.transform(val);
       }
 
@@ -50,6 +50,6 @@ export function useFieldTransformer(
       }
 
       return val;
-    }
+    },
   };
 }

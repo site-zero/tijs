@@ -1,4 +1,4 @@
-import _ from "lodash";
+import _ from 'lodash';
 
 type I_RGBA = { r?: number; g?: number; b?: number; a?: number };
 type I_HSL = { h?: number; s?: number; l?: number };
@@ -9,12 +9,12 @@ type RGBA = [number, number, number, number?];
 type HSL = [number, number, number];
 
 const QUICK_COLOR_TABLE = {
-  "red": [255, 0, 0, 1],
-  "green": [0, 255, 0, 1],
-  "blue": [0, 0, 255, 1],
-  "yellow": [255, 255, 0, 1],
-  "black": [0, 0, 0, 1],
-  "white": [255, 255, 255, 1]
+  red: [255, 0, 0, 1],
+  green: [0, 255, 0, 1],
+  blue: [0, 0, 255, 1],
+  yellow: [255, 255, 0, 1],
+  black: [0, 0, 0, 1],
+  white: [255, 255, 255, 1],
 } as {
   [k: string]: RGBA;
 };
@@ -27,7 +27,7 @@ interface ColorInfo {
 }
 
 export function isColorInfo(input: any): input is ColorInfo {
-  if ("object" === typeof input) {
+  if ('object' === typeof input) {
     return (
       _.isNumber(input.red) && _.isNumber(input.green) && _.isNumber(input.blue)
     );
@@ -43,7 +43,7 @@ export function isColor(val: any): val is TiColor {
 
 export function colorToStr(
   color?: string | TiColor,
-  dft?: string
+  dft?: string,
 ): string | undefined {
   if (!color) {
     return dft;
@@ -133,7 +133,7 @@ export class TiColor implements ColorInfo {
       }
       // Explain
       else {
-        let str = input.replace(/[ \t\r\n]+/g, "").toUpperCase();
+        let str = input.replace(/[ \t\r\n]+/g, '').toUpperCase();
         let m: RegExpExecArray | null;
         // HEX: #FFF
         if ((m = /^#?([0-9A-F])([0-9A-F])([0-9A-F]);?$/.exec(str))) {
@@ -166,7 +166,7 @@ export class TiColor implements ColorInfo {
         else if (
           (m =
             /^0[xX]([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2})([0-9A-F]{2});?$/.exec(
-              str
+              str,
             ))
         ) {
           this.alpha = parseInt(m[1], 16) / 255;
@@ -208,11 +208,11 @@ export class TiColor implements ColorInfo {
    */
   get hex() {
     if (!this._hex) {
-      let hex = ["#"];
-      hex.push(_.padStart(this.red.toString(16).toUpperCase(), 2, "0"));
-      hex.push(_.padStart(this.green.toString(16).toUpperCase(), 2, "0"));
-      hex.push(_.padStart(this.blue.toString(16).toUpperCase(), 2, "0"));
-      this._hex = hex.join("");
+      let hex = ['#'];
+      hex.push(_.padStart(this.red.toString(16).toUpperCase(), 2, '0'));
+      hex.push(_.padStart(this.green.toString(16).toUpperCase(), 2, '0'));
+      hex.push(_.padStart(this.blue.toString(16).toUpperCase(), 2, '0'));
+      this._hex = hex.join('');
     }
     return this._hex;
   }
@@ -222,7 +222,7 @@ export class TiColor implements ColorInfo {
   get rgb() {
     if (!this._rgb) {
       let rgb = [this.red, this.green, this.blue];
-      this._rgb = `RGB(${rgb.join(",")})`;
+      this._rgb = `RGB(${rgb.join(',')})`;
     }
     return this._rgb;
   }
@@ -232,7 +232,7 @@ export class TiColor implements ColorInfo {
   get rgba() {
     if (!this._rgba) {
       let rgba = [this.red, this.green, this.blue, this.alpha];
-      return `RGBA(${rgba.join(",")})`;
+      return `RGBA(${rgba.join(',')})`;
     }
     return this._rgba;
   }
@@ -279,7 +279,7 @@ export class TiColor implements ColorInfo {
       _.clamp(Math.round(r), 0, 255),
       _.clamp(Math.round(g), 0, 255),
       _.clamp(Math.round(b), 0, 255),
-      _.clamp(a, 0, 1)
+      _.clamp(a, 0, 1),
     ]);
   }
   updateByHSL(input: I_HSL | HSL = {}) {
@@ -356,7 +356,7 @@ export class TiColor implements ColorInfo {
           h = (r - g) / d + 4;
           break;
         default:
-          throw "toHSL impossiable";
+          throw 'toHSL impossiable';
       }
       h /= 6;
     }

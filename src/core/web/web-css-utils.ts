@@ -1,7 +1,15 @@
-import _ from "lodash";
-import { FuncA2, MessageMap, Str, Size2D, StrCaseMode, Util, Vars } from "../ti";
-import * as Dom from "./web-dom";
-import { AttrFilter } from "./web-dom";
+import _ from 'lodash';
+import {
+  FuncA2,
+  MessageMap,
+  Str,
+  Size2D,
+  StrCaseMode,
+  Util,
+  Vars,
+} from '../ti';
+import * as Dom from './web-dom';
+import { AttrFilter } from './web-dom';
 
 export function pickGridItemStyle(sty: Vars) {
   return mergeStyles(sty, {
@@ -16,7 +24,7 @@ export function pickGridItemStyle(sty: Vars) {
     // - alignSelf: CssItemAlignment;
     filter: (key, val) => {
       return !_.isNil(val) && /^(grid-.+|(justify|align)-self)$/.test(key);
-    }
+    },
   });
 }
 /*-------------------------------------------------------
@@ -35,25 +43,25 @@ export function scaleSize(scale = 1.0, W: number, H: number): Size2D {
   if (H && W) {
     return {
       width: W,
-      height: H
+      height: H,
     };
   }
   if (H) {
     return {
       width: scale * H,
-      height: H
+      height: H,
     };
   }
   return {
     width: W,
-    height: W / scale
+    height: W / scale,
   };
 }
 //-----------------------------------
 export function toPixel(
   input: null | undefined | number | string,
   base = 100,
-  dft = 0
+  dft = 0,
 ) {
   if (_.isNil(input)) {
     return dft;
@@ -71,14 +79,14 @@ export function toPixel(
   let opt = {
     base,
     dft,
-    remBase: Dom.getRemBase()
+    remBase: Dom.getRemBase(),
   };
   return toAbsPixel(input, opt);
 }
 //-----------------------------------
 export function toAbsPixel(
   input: number | string,
-  { base = 100, dft = 0, remBase = 100, emBase = 14 } = {}
+  { base = 100, dft = 0, remBase = 100, emBase = 14 } = {},
 ) {
   if (_.isNumber(input)) {
     return input;
@@ -87,10 +95,10 @@ export function toAbsPixel(
   if (m) {
     let v: number = (m[1] as any) * 1;
     let fn = {
-      "px": (v: number) => v,
-      "rem": (v: number) => v * remBase,
-      "em": (v: number) => v * emBase,
-      "%": (v: number) => (v * base) / 100
+      'px': (v: number) => v,
+      'rem': (v: number) => v * remBase,
+      'em': (v: number) => v * emBase,
+      '%': (v: number) => (v * base) / 100,
     }[m[2]];
     if (fn) {
       return fn(v);
@@ -107,17 +115,17 @@ export type ToSizeOptions = {
 };
 export function toSize(
   sz: any,
-  { autoPercent = false, remBase = 0 } = {} as ToSizeOptions
+  { autoPercent = false, remBase = 0 } = {} as ToSizeOptions,
 ): string {
   if (_.isNumber(sz) || /^[0-9]+$/.test(sz)) {
     if (0 == sz) return sz;
     if (autoPercent && sz >= -1 && sz <= 1) {
-      return sz * 100 + "%";
+      return sz * 100 + '%';
     }
     if (remBase > 0) {
-      return sz / remBase + "rem";
+      return sz / remBase + 'rem';
     }
-    return sz + "px";
+    return sz + 'px';
   }
   return sz;
 }
@@ -149,7 +157,7 @@ export function toStyleRem100(obj: Vars, options?: ToSizeOptions) {
   return toStyle(obj, opt);
 }
 //-----------------------------------
-export function toBackgroundUrl(src?: string, base = "") {
+export function toBackgroundUrl(src?: string, base = '') {
   if (!src) return;
   if (base) {
     src = Util.appendPath(base, src);
@@ -186,7 +194,7 @@ export function mergeClassNameBy(context = {} as Vars, ...args: any[]) {
     }
     // String
     else if (_.isString(kla)) {
-      let ss = _.without(_.split(kla, /\s+/g), "");
+      let ss = _.without(_.split(kla, /\s+/g), '');
       for (let s of ss) {
         klass[s] = true;
       }
@@ -219,7 +227,7 @@ export type MergetStyleOptions = {
 //-----------------------------------
 export function mergeStyles(
   styles: Vars[] | Vars,
-  options: MergetStyleOptions = {}
+  options: MergetStyleOptions = {},
 ): Vars {
   let styleList: Vars[];
   if (!_.isArray(styles)) {
@@ -227,7 +235,7 @@ export function mergeStyles(
   } else {
     styleList = styles;
   }
-  let caseMode = options.caseMode || "kebab";
+  let caseMode = options.caseMode || 'kebab';
   let filter = options.filter;
   let re = {} as Vars;
   let fn = Str.getCaseFunc(caseMode);
@@ -250,12 +258,12 @@ export function joinClassNames(...args: any[]) {
       names.push(key);
     }
   });
-  return names.join(" ");
+  return names.join(' ');
 }
 //----------------------------------------------------
 export function parseCssRule(
   rule: undefined | null | string,
-  flt: AttrFilter = true
+  flt: AttrFilter = true,
 ): Vars {
   let re = {} as Vars;
   if (!rule) {
@@ -268,10 +276,10 @@ export function parseCssRule(
   }
   let filter = Dom.attrFilter(flt);
 
-  let ss = rule.split(";");
+  let ss = rule.split(';');
   for (let s of ss) {
     if (Str.isBlank(s)) continue;
-    let pos = s.indexOf(":");
+    let pos = s.indexOf(':');
     if (pos <= 0) {
       continue;
     }
@@ -308,9 +316,9 @@ export function parseAndTidyCssRule(
   {
     filter,
     parseBackground: need_parse_background = true,
-    nameCase = "kebab",
-    urlRewrite
-  } = {} as ParseAndTidyCssOptions
+    nameCase = 'kebab',
+    urlRewrite,
+  } = {} as ParseAndTidyCssOptions,
 ) {
   if (_.isString(rule)) {
     rule = parseCssRule(rule, filter);
@@ -324,25 +332,25 @@ export function parseAndTidyCssRule(
     }
 
     // Rewruite url
-    let bgImgKey = toNameCase("background-image");
+    let bgImgKey = toNameCase('background-image');
     if (rule[bgImgKey] && _.isFunction(urlRewrite)) {
       rule[bgImgKey] = urlRewrite(rule[bgImgKey]);
     }
 
-    let bgPosKey = toNameCase("background-position");
+    let bgPosKey = toNameCase('background-position');
     if (rule[bgPosKey]) {
       const toPosName = function (
         str: string | undefined,
-        cans = [] as string[]
+        cans = [] as string[],
       ) {
         if (str) {
           if (/^0(%|px|rem|em|pt)?$/.test(str)) {
             return cans[0];
           }
-          if ("50%" == str) {
+          if ('50%' == str) {
             return cans[1];
           }
-          if ("100%" == str) {
+          if ('100%' == str) {
             return cans[2];
           }
         }
@@ -352,15 +360,15 @@ export function parseAndTidyCssRule(
       let posX = _.first(poss);
       let posY = _.last(poss);
       delete rule[bgPosKey];
-      rule[toNameCase("background-position-x")] = toPosName(posX, [
-        "left",
-        "center",
-        "right"
+      rule[toNameCase('background-position-x')] = toPosName(posX, [
+        'left',
+        'center',
+        'right',
       ]);
-      rule[toNameCase("background-position-y")] = toPosName(posY, [
-        "top",
-        "center",
-        "bottom"
+      rule[toNameCase('background-position-y')] = toPosName(posY, [
+        'top',
+        'center',
+        'bottom',
       ]);
     }
   }
@@ -368,40 +376,40 @@ export function parseAndTidyCssRule(
 }
 //----------------------------------------------------
 export function parseBackground(
-  str = "",
-  { nameCase = "kebab" } = {} as {
+  str = '',
+  { nameCase = 'kebab' } = {} as {
     nameCase: StrCaseMode;
-  }
+  },
 ): MessageMap {
   let toNameCase = Str.getCaseFunc(nameCase);
   // 首先整理字符串，去掉多余的空格，确保 backgroundPosition|backgroundSize 之间是没有空格的
-  let s = (str || "")
-    .replace(/[ ]{2,}/g, " ")
-    .replace(/[ ]*([\/,])[ ]*/g, "$1")
-    .replace(/[ ]\)/g, ")")
-    .replace(/\([ ]/g, "(");
+  let s = (str || '')
+    .replace(/[ ]{2,}/g, ' ')
+    .replace(/[ ]*([\/,])[ ]*/g, '$1')
+    .replace(/[ ]\)/g, ')')
+    .replace(/\([ ]/g, '(');
 
   // 正则表达式拼装
   // 1: backgroundColor
-  let R = "(#[0-9a-f]{3,}|rgba?\\([\\d, .]+\\))";
+  let R = '(#[0-9a-f]{3,}|rgba?\\([\\d, .]+\\))';
   // 2: backgroundImage
-  R += "|(url\\([^\\)]+\\))";
+  R += '|(url\\([^\\)]+\\))';
   // 3: 组合 backgroundPosition / backgroundSize 的组合
-  R += "|(";
+  R += '|(';
   // 4: backgroundPositionX
-  R += "(left|right|center|\\d+(%|em|px|cm|ch))";
+  R += '(left|right|center|\\d+(%|em|px|cm|ch))';
   // 6: backgroundPositionX
-  R += " *(top|bottom|center|\\d+(%|em|px|cm|ch)?)";
+  R += ' *(top|bottom|center|\\d+(%|em|px|cm|ch)?)';
   // 8: backgroundSize : 3 子表达式
-  R += "/(auto|cover|contain|\\d+(%|em|px)( \\d+(%|em|px))?|auto( auto)?)";
-  R += ")";
+  R += '/(auto|cover|contain|\\d+(%|em|px)( \\d+(%|em|px))?|auto( auto)?)';
+  R += ')';
   // 13: backgroundRepeat
-  R += "|(repeat|no-repeat)";
+  R += '|(repeat|no-repeat)';
   // 14: backgroundOrigin : 1 子表达式
-  R += "|((padding|border|content)-box)";
+  R += '|((padding|border|content)-box)';
   // 16: backgroundAttachment
-  R += "|(scroll|fixed)";
-  let regex = new RegExp(R, "gi");
+  R += '|(scroll|fixed)';
+  let regex = new RegExp(R, 'gi');
 
   // 准备赋值
   let indexes = {
@@ -412,7 +420,7 @@ export function parseBackground(
     backgroundSize: 8,
     backgroundRepeat: 13,
     backgroundOrigin: 14,
-    backgroundAttachment: 16
+    backgroundAttachment: 16,
   } as {
     [k: string]: number;
   };
@@ -439,7 +447,7 @@ export function parseBackground(
 //----------------------------------------------------
 export function renderCssRule(css = {}) {
   if (_.isEmpty(css)) {
-    return "";
+    return '';
   }
   if (_.isString(css)) {
     return css;
@@ -460,7 +468,7 @@ export function renderCssRule(css = {}) {
       list.push(`${pnm}:${val}`);
     }
   });
-  return list.join(";");
+  return list.join(';');
 }
 //----------------------------------------------------
 /**
@@ -490,9 +498,9 @@ export function renderCssStyleSheet(sheet = [] as CssSheet[]) {
     if (_.isEmpty(selectors) || _.isEmpty(rules)) {
       continue;
     }
-    re.push(selectors.join(",") + "{");
+    re.push(selectors.join(',') + '{');
     re.push(renderCssRule(rules));
-    re.push("}");
+    re.push('}');
   }
-  return re.join("\n");
+  return re.join('\n');
 }

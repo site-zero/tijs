@@ -1,26 +1,26 @@
-import _ from "lodash";
-import JSON5 from "json5";
-import { sprintf } from "sprintf-js";
-import { Match, TiMatch } from "../ti";
-import { ConditionTmplSegment } from "./segment/condition_segment";
-import { LoopTmplSegment } from "./segment/loop_segment";
-import { BlockTmplSegment } from "./segment/block_segment";
-import { TmplEle, TmplSegment } from "./ti-tmpl";
-import { RawEle } from "./ele/raw_ele";
-import { createTmplEle } from "./tmpl-el";
+import _ from 'lodash';
+import JSON5 from 'json5';
+import { sprintf } from 'sprintf-js';
+import { Match, TiMatch } from '../ti';
+import { ConditionTmplSegment } from './segment/condition_segment';
+import { LoopTmplSegment } from './segment/loop_segment';
+import { BlockTmplSegment } from './segment/block_segment';
+import { TmplEle, TmplSegment } from './ti-tmpl';
+import { RawEle } from './ele/raw_ele';
+import { createTmplEle } from './tmpl-el';
 
 enum TokenRace {
-  TEXT = "TEXT",
-  DYNAMIC = "DYNAMIC"
+  TEXT = 'TEXT',
+  DYNAMIC = 'DYNAMIC',
 }
 
 enum TokenType {
-  IF = "IF",
-  ELSE_IF = "ELSE_IF",
-  ELSE = "ELSE",
-  END = "END",
-  LOOP = "LOOP",
-  VAR = "VAR"
+  IF = 'IF',
+  ELSE_IF = 'ELSE_IF',
+  ELSE = 'ELSE',
+  END = 'END',
+  LOOP = 'LOOP',
+  VAR = 'VAR',
 }
 
 function evalTokenType(s: string): TokenType {
@@ -31,7 +31,7 @@ function evalTokenType(s: string): TokenType {
     ELSE: TokenType.ELSE,
     END: TokenType.END,
     LOOP: TokenType.LOOP,
-    VAR: TokenType.VAR
+    VAR: TokenType.VAR,
   }[st];
   if (!re) {
     throw new Error(`e.tmp.token.UnknownType : ${s}`);
@@ -96,7 +96,7 @@ export class WnTmplToken {
   genMatchByContent(): TiMatch {
     let json = this._content;
     let not = false;
-    if (json.startsWith("not")) {
+    if (json.startsWith('not')) {
       not = true;
       json = json.substring(3).trim();
     }

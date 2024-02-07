@@ -1,8 +1,8 @@
-import { I18n } from "../../core";
-import _ from "lodash";
-import { TextShowProps } from ".";
+import { I18n } from '../../core';
+import _ from 'lodash';
+import { TextShowProps } from '.';
 
-export type PlaceholderFeatureProps = Pick<TextShowProps, "autoI18n"> & {
+export type PlaceholderFeatureProps = Pick<TextShowProps, 'autoI18n'> & {
   placeholder?: string;
 };
 
@@ -33,7 +33,7 @@ export type PlaceholderFeature = {
  *
  */
 export function usePlaceholder(
-  props: PlaceholderFeatureProps
+  props: PlaceholderFeatureProps,
 ): PlaceholderFeature {
   return {
     getPlaceholder: (dft?) => {
@@ -43,6 +43,6 @@ export function usePlaceholder(
         placeholder = I18n.text(placeholder);
       }
       return placeholder;
-    }
+    },
   };
 }

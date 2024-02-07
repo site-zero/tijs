@@ -1,12 +1,12 @@
-import { Vars, TiMatch } from "../../ti";
-import { TmplSegment } from "../ti-tmpl";
-import { AbstractTmplSegment } from "./abstract_segment";
+import { Vars, TiMatch } from '../../ti';
+import { TmplSegment } from '../ti-tmpl';
+import { AbstractTmplSegment } from './abstract_segment';
 
 export class ConditionTmplSegment extends AbstractTmplSegment {
   private _match?: TiMatch;
 
   constructor(match?: TiMatch, seg?: TmplSegment) {
-    super("CONDITION");
+    super('CONDITION');
     this._match = match;
     this.addChild(seg);
   }

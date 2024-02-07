@@ -1,5 +1,5 @@
-import _ from "lodash";
-import { BlockEvent } from "../ti";
+import _ from 'lodash';
+import { BlockEvent } from '../ti';
 
 /***
  * Get the name of a Ti linked path, such as:
@@ -13,8 +13,8 @@ import { BlockEvent } from "../ti";
  * @return The major name of entity
  */
 export function getLinkName(path: string) {
-  let p_a = path.lastIndexOf("/");
-  let p_b = path.lastIndexOf(":");
+  let p_a = path.lastIndexOf('/');
+  let p_b = path.lastIndexOf(':');
   let pos = Math.max(p_a, p_b);
   let str = pos >= 0 ? path.substring(pos + 1) : path;
   return getMajorName(str);
@@ -25,14 +25,14 @@ export function getLinkName(path: string) {
  * @param `path{String}` The path
  * @return The file name of entity (like file ordir) of a path
  */
-export function getFileName(path: string, dft = "") {
+export function getFileName(path: string, dft = '') {
   if (!path) return dft;
 
-  while (path.endsWith("/")) {
+  while (path.endsWith('/')) {
     path = path.substring(0, path.length - 1);
   }
 
-  let pos = path.lastIndexOf("/");
+  let pos = path.lastIndexOf('/');
   if (pos >= 0) {
     return path.substring(pos + 1);
   }
@@ -44,10 +44,10 @@ export function getFileName(path: string, dft = "") {
  * @param `path{String}` The path
  * @return The major name of entity (like file ordir) of a path
  */
-export function getMajorName(path: string, dft = "") {
+export function getMajorName(path: string, dft = '') {
   if (!path) return dft;
 
-  while (path.endsWith("/")) {
+  while (path.endsWith('/')) {
     path = path.substring(0, path.length - 1);
   }
 
@@ -56,10 +56,10 @@ export function getMajorName(path: string, dft = "") {
   var r = len;
   for (var i = r - 1; i > 0; i--) {
     if (r == len)
-      if (path[i] == ".") {
+      if (path[i] == '.') {
         r = i;
       }
-    if (path[i] == "/" || path[i] == "\\") {
+    if (path[i] == '/' || path[i] == '\\') {
       l = i + 1;
       break;
     }
@@ -74,10 +74,10 @@ export function getMajorName(path: string, dft = "") {
  * @return 文件后缀名
  */
 export function getSuffixName(path: string, forceLower?: boolean) {
-  if (!path) return "";
-  var p0 = path.lastIndexOf(".");
-  var p1 = path.lastIndexOf("/");
-  if (-1 == p0 || p0 < p1) return "";
+  if (!path) return '';
+  var p0 = path.lastIndexOf('.');
+  var p1 = path.lastIndexOf('/');
+  if (-1 == p0 || p0 < p1) return '';
   var sfnm = path.substring(p0 + 1);
   return forceLower ? sfnm.toLowerCase() : sfnm;
 }
@@ -89,10 +89,10 @@ export function getSuffixName(path: string, forceLower?: boolean) {
  * @return 文件后缀
  */
 export function getSuffix(path: string, forceLower?: boolean) {
-  if (!path) return "";
-  var p0 = path.lastIndexOf(".");
-  var p1 = path.lastIndexOf("/");
-  if (-1 == p0 || p0 < p1) return "";
+  if (!path) return '';
+  var p0 = path.lastIndexOf('.');
+  var p1 = path.lastIndexOf('/');
+  if (-1 == p0 || p0 < p1) return '';
   var sfnm = path.substring(p0);
   return forceLower ? sfnm.toLowerCase() : sfnm;
 }
@@ -103,7 +103,7 @@ export function splitPathToFullAncestorList(ph: string) {
   let re = [];
   let last = 0;
   let pos = 0;
-  while ((pos = ph.indexOf("/", pos)) > 1) {
+  while ((pos = ph.indexOf('/', pos)) > 1) {
     re.push(ph.substring(0, pos));
     pos++;
     last = pos;
@@ -133,22 +133,22 @@ export function appendPath(...args: string[]) {
     }
     // add the middle '/'
     if (re.length > 0 && !/^\//.test(ph)) {
-      re.push("/");
+      re.push('/');
     }
     re.push(ph);
   }
-  return re.join("");
+  return re.join('');
 }
 /***
  * Get the parent path
  */
-export function getParentPath(path = "") {
+export function getParentPath(path = '') {
   if (!path) return path;
-  while (path.endsWith("/")) {
+  while (path.endsWith('/')) {
     path = path.substring(0, path.length - 1);
   }
-  let pos = path.lastIndexOf("/");
-  if (pos < 0) return "";
+  let pos = path.lastIndexOf('/');
+  if (pos < 0) return '';
   return path.substring(0, pos + 1);
 }
 /***
@@ -165,16 +165,16 @@ export function getParentPath(path = "") {
  *
  * @return 相对于基础路径对象的相对路径
  */
-export function getRelativePath(base = "", path = "", equalPath = ".") {
+export function getRelativePath(base = '', path = '', equalPath = '.') {
   // Guard
   if (_.isEqual(base, path)) {
     return equalPath;
   }
   //............................................
-  let baseIsDir = base.endsWith("/");
-  let pathIsDir = path.endsWith("/");
-  let aryBase = _.without(base.split("/"), "");
-  let aryPath = _.without(path.split("/"), "");
+  let baseIsDir = base.endsWith('/');
+  let pathIsDir = path.endsWith('/');
+  let aryBase = _.without(base.split('/'), '');
+  let aryPath = _.without(path.split('/'), '');
   //............................................
   // Compare too paths
   let len = Math.min(aryBase.length, aryPath.length);
@@ -194,7 +194,7 @@ export function getRelativePath(base = "", path = "", equalPath = ".") {
     baseLen--;
   }
   for (let i = pos; i < baseLen; i++) {
-    rph.push("..");
+    rph.push('..');
   }
   // Go into
   for (let i = pos; i < aryPath.length; i++) {
@@ -202,10 +202,10 @@ export function getRelativePath(base = "", path = "", equalPath = ".") {
   }
   //............................................
   if (pathIsDir) {
-    rph.push("");
+    rph.push('');
   }
   //............................................
-  return rph.join("/");
+  return rph.join('/');
 }
 /***
  * 'arena>item:change' -> {block:"arena", event:"item:change"}
@@ -222,6 +222,6 @@ export function explainEventName(name: string) {
 /***
  * 'arena>item:change' -> {block:"arena", event:"item:change"}
  */
-export function parseHref(_href = "") {
-  throw new Error("应该创建一个 Href 解析类");
+export function parseHref(_href = '') {
+  throw new Error('应该创建一个 Href 解析类');
 }

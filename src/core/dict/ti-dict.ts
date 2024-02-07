@@ -26,7 +26,7 @@ export * from './dict-types';
  * @returns 字典标准配置对象
  */
 export function makeDictOptions(
-  setup = {} as DictSetup
+  setup = {} as DictSetup,
 ): DictOptions<any, any> {
   // 准备返回值
   let re = {} as DictOptions<any, any>;
@@ -64,7 +64,7 @@ const STATIC_DICT = new DictFactoryImpl<any, any>();
  */
 export function getOrCreate(
   options: DictOptions<any, any>,
-  name?: string
+  name?: string,
 ): TiDict {
   let dict: TiDict | undefined;
   if (name) {
@@ -85,7 +85,7 @@ export function getOrCreate(
  */
 export function createDict(
   options: DictOptions<any, any>,
-  name?: string
+  name?: string,
 ): TiDict {
   return STATIC_DICT.createDict(options, name);
 }
@@ -185,7 +185,7 @@ const DYN_DICTS = new DynDictFactoryImpl<any, any>();
  */
 export function createDynamicDict(
   creator: DFMaker<any, any>,
-  name: string
+  name: string,
 ): void {
   DYN_DICTS.setCreator(name, creator);
 }
@@ -202,7 +202,7 @@ export function createDynamicDict(
 export function getDynamicDict(
   name: string,
   key: any,
-  vars: Vars
+  vars: Vars,
 ): TiDict | undefined {
   return DYN_DICTS.getDict(name, key, vars);
 }

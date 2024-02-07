@@ -1,7 +1,7 @@
-import JSON5 from "json5";
-import _ from "lodash";
-import { CssGridLayout, CssUtils, Size2D, Util, Vars } from "../../../core";
-import { FormField } from "./use-form-field";
+import JSON5 from 'json5';
+import _ from 'lodash';
+import { CssGridLayout, CssUtils, Size2D, Util, Vars } from '../../../core';
+import { FormField } from './use-form-field';
 
 const DFT_LAYOUT: AutoGridHint = [[5, 1500], [4, 1200], [3, 900], [2, 500], 1];
 /**
@@ -43,11 +43,11 @@ export type AutoGridHint = string | AutoGridHintItem | AutoGridHintItem[];
                 
 -----------------------------------------------------*/
 export function normalizeGridLayout(
-  layout?: AutoGridHint | FormGridLayout
+  layout?: AutoGridHint | FormGridLayout,
 ): FormGridLayout {
   if (_.isNil(layout)) {
     return {
-      autoGrid: DFT_LAYOUT
+      autoGrid: DFT_LAYOUT,
     };
   }
   // 合并情况
@@ -63,7 +63,7 @@ export function normalizeGridLayout(
 
   if (!(layout instanceof Object)) {
     throw new Error(
-      "Invalid layout and it is impossiable: " + JSON5.stringify(layout)
+      'Invalid layout and it is impossiable: ' + JSON5.stringify(layout),
     );
   }
   layout = _.cloneDeep(layout);
@@ -86,7 +86,7 @@ export function normalizeGridLayout(
  */
 
 export function autoCountGrid(view: Size2D, layout: FormGridLayout) {
-  console.log("autoCountGrid", view, layout);
+  console.log('autoCountGrid', view, layout);
   let by = function (arm: [number, any], view: Size2D): number | undefined {
     let width = view.width;
     let [v, m] = arm;
@@ -101,7 +101,7 @@ export function autoCountGrid(view: Size2D, layout: FormGridLayout) {
     }
   };
   let re = Util.selectValue(view, layout.autoGrid, { by });
-  console.log(" > ", re);
+  console.log(' > ', re);
   return re;
 }
 /*-----------------------------------------------------
@@ -111,26 +111,26 @@ export function autoCountGrid(view: Size2D, layout: FormGridLayout) {
 -----------------------------------------------------*/
 export function buildFieldsGroupStyle(
   layout: FormGridLayout,
-  autoTrackCount: number
+  autoTrackCount: number,
 ): Vars {
   // 自动模式
   if (layout.autoGrid) {
     let trackCount = autoTrackCount;
 
     // 纵向排布
-    if (layout.gridAutoFlow && layout.gridAutoFlow.indexOf("column") >= 0) {
-      layout.gridTemplateRows = _.repeat(" 1fr ", trackCount).trim();
-      _.defaults(layout, { gridTemplateColumns: "auto" });
+    if (layout.gridAutoFlow && layout.gridAutoFlow.indexOf('column') >= 0) {
+      layout.gridTemplateRows = _.repeat(' 1fr ', trackCount).trim();
+      _.defaults(layout, { gridTemplateColumns: 'auto' });
     }
     // 横向排布
     else {
-      layout.gridTemplateColumns = _.repeat(" 1fr ", trackCount).trim();
-      _.defaults(layout, { gridTemplateRows: "auto" });
+      layout.gridTemplateColumns = _.repeat(' 1fr ', trackCount).trim();
+      _.defaults(layout, { gridTemplateRows: 'auto' });
     }
   }
 
   // 那么已经变成精确模式了
-  return CssUtils.mergeStyles(layout, { filter: (k) => "auto-grid" != k });
+  return CssUtils.mergeStyles(layout, { filter: (k) => 'auto-grid' != k });
 }
 
 /**

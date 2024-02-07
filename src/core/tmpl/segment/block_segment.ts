@@ -1,13 +1,13 @@
-import _ from "lodash";
-import { TmplEle, TmplSegment } from "../ti-tmpl";
-import { Vars } from "../../ti";
-import { AbstractTmplSegment } from "./abstract_segment";
+import _ from 'lodash';
+import { TmplEle, TmplSegment } from '../ti-tmpl';
+import { Vars } from '../../ti';
+import { AbstractTmplSegment } from './abstract_segment';
 
 export class BlockTmplSegment extends AbstractTmplSegment {
   elements: TmplEle[];
 
   constructor(eles?: TmplEle[]) {
-    super("BLOCK");
+    super('BLOCK');
     this.elements = eles ?? [];
   }
   isEnable(): boolean {
@@ -46,9 +46,9 @@ export class BlockTmplSegment extends AbstractTmplSegment {
 
   joinDebugTree(sb: string[], indent: number): void {
     if (indent > 0) {
-      sb.push(_.repeat("|   ", indent));
+      sb.push(_.repeat('|   ', indent));
     }
-    sb.push("<", this._type_name, ">");
+    sb.push('<', this._type_name, '>');
     for (let ele of this.elements) {
       ele.join(sb, {}, true);
     }

@@ -1,8 +1,8 @@
-import _ from "lodash";
-import { Vars, Str } from "../../ti";
-import { DynElInfo } from "../ti-tmpl";
-import { DynEle } from "./abstract_dyn_ele";
-import { anyToBool } from "../../util/util-lang";
+import _ from 'lodash';
+import { Vars, Str } from '../../ti';
+import { DynElInfo } from '../ti-tmpl';
+import { DynEle } from './abstract_dyn_ele';
+import { anyToBool } from '../../util/util-lang';
 
 export class DynBoolEle extends DynEle {
   // [false, true]
@@ -12,23 +12,23 @@ export class DynBoolEle extends DynEle {
     super(input);
     let fmt = input.fmt;
     if (Str.isBlank(fmt)) {
-      this._texts = ["false", "true"];
+      this._texts = ['false', 'true'];
     }
     // 定制了
     else {
-      let s = fmt || "false/true";
-      let pos = s.indexOf("/");
+      let s = fmt || 'false/true';
+      let pos = s.indexOf('/');
       // "xxx"
       if (pos < 0) {
-        this._texts = ["", s.trim()];
+        this._texts = ['', s.trim()];
       }
       // "/xxx"
       else if (pos == 0) {
-        this._texts = ["", s.substring(pos + 1).trim()];
+        this._texts = ['', s.substring(pos + 1).trim()];
       }
       // "xxx/"
       else if (pos == s.length - 1) {
-        this._texts = [s.substring(0, pos).trim(), ""];
+        this._texts = [s.substring(0, pos).trim(), ''];
       }
       // must by "xxx/xxx"
       else {

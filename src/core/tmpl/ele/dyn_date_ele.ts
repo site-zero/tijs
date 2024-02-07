@@ -1,7 +1,7 @@
-import _ from "lodash";
-import { Vars, DateTime } from "../../ti";
-import { DynElInfo } from "../ti-tmpl";
-import { DynEle } from "./abstract_dyn_ele";
+import _ from 'lodash';
+import { Vars, DateTime } from '../../ti';
+import { DynElInfo } from '../ti-tmpl';
+import { DynEle } from './abstract_dyn_ele';
 
 export class DynDateEle extends DynEle {
   private _fmt: string;
