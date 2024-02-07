@@ -87,6 +87,7 @@ button {
   border-radius: 0.4em;
   outline: none;
   padding: SZ(6) SZ(8);
+  cursor: pointer;
   &:focus,
   &:focus-visible {
     outline: none;

@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { Invoke, InvokeOptions, S } from "../ti";
+import { Invoke, InvokeOptions, Str } from "../ti";
 
 /**
  * 根据一个调用语句，返回一个包裹的函数调用
@@ -127,7 +127,7 @@ export function parseInvoking(str: string | Invoke): Invoke {
   if (m) {
     ivk.name = _.trim(m[1]);
     let s_args = _.trim(m[3]);
-    ivk.args = S.joinArgs(s_args, [], (v:any) => v);
+    ivk.args = Str.joinArgs(s_args, [], (v:any) => v);
   }
 
   return ivk;

@@ -5,7 +5,7 @@ import {
   ValueBoxProps,
   ValueBoxState,
   useValueBox
-} from "../../features";
+} from "../../";
 /*-----------------------------------------------------
 
                 Type Defination

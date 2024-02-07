@@ -1,13 +1,10 @@
-import { Callback1, I18n, Vars } from "../../../core";
-import { Field, FieldPair, TiEventTrigger, TiRawCom } from "../../";
+import _ from "lodash";
 import {
-  CommonProps,
-  FieldComProps,
-  useFieldCom,
+  CommonProps, Field, FieldComProps, FieldPair, TiEventTrigger, TiRawCom, useFieldCom,
   useFieldSerializer,
   useFieldTransformer
-} from "../../features";
-import _ from "lodash";
+} from "../../";
+import { Callback1, I18n, Vars } from "../../../core";
 
 export const COM_TYPE = "TiCell";
 /*-------------------------------------------------------

@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { S, Vars } from "../ti";
+import { Str, Vars } from "../ti";
 import { DictFactoryImpl } from "./dict-factory";
 import {
   _gen_data_loader,
@@ -162,7 +162,7 @@ export function explainDictName(dictName: string): DictName {
   let m = /^([^:()]+)(\(([^)]*)\))?(:(.+))?$/.exec(dictName);
   if (m) {
     re.name = m[1];
-    re.args = S.joinArgs(m[3]);
+    re.args = Str.joinArgs(m[3]);
     re.vkey = m[5];
     if (re.args.length == 1 && /^=/.test(re.args[0])) {
       re.dynamic = true;

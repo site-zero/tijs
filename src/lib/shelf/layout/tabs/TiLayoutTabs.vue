@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import { BUS_KEY, TiAppEvent } from "../../../";
-import { useBusEmit } from "../../../features";
-import { LayoutState } from "../layout-support.ts";
 import { inject, reactive } from "vue";
+import { BUS_KEY, TiAppEvent, useBusEmit } from "../../../";
+import { LayoutState } from "../layout-support.ts";
 import { TiLayoutTabsInfo } from "./ti-layout-tabs-index";
 import { COM_TYPE, LayoutTabsEvents, LayoutTabsProps, useLayoutTabs } from "./use-layout-tabs";
 /*-------------------------------------------------------

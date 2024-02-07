@@ -1,7 +1,6 @@
-import { Vars } from "../../../core";
-import { KeepFeature, KeepInfo, useKeep } from "../../features/use-keep.ts";
 import _ from "lodash";
 import { Ref } from "vue";
+import { KeepFeature, KeepInfo, useKeep } from "../../";
 
 export type TableKeepProps = {
   keepColumns?: KeepInfo;

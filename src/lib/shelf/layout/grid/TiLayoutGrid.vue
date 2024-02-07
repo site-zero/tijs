@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-import { BUS_KEY, TiAppEvent, TiBlock, TiLayoutTabs } from "../../../";
-import { useBusEmit } from "../../../features";
 import {
   Ref,
   computed,
@@ -11,6 +9,7 @@ import {
   ref,
   watch
 } from "vue";
+import { BUS_KEY, TiAppEvent, TiBlock, TiLayoutTabs, useBusEmit } from "../../../";
 import { TiLayoutGridInfo } from "./ti-layout-grid-index";
 import { loadAllState, useKeepLayoutGrid } from "./use-grid-keep";
 import {

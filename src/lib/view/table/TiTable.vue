@@ -1,23 +1,21 @@
 <script lang="ts" setup>
-import { CssUtils, Size2D, Util } from "../../../core";
-import { BUS_KEY, TiIcon } from "../../";
-import { useLargeScrolling } from "../../features/use-large-scrolling.ts";
 import _ from "lodash";
 import {
-  Ref,
-  computed,
-  inject,
-  onMounted,
-  onUnmounted,
-  reactive,
-  ref,
-  watch
+Ref,
+computed,
+inject,
+onMounted,
+onUnmounted,
+reactive,
+ref,
+watch
 } from "vue";
+import { BUS_KEY, TiIcon, useLargeScrolling } from "../../";
+import { CssUtils, Size2D, Util } from "../../../core";
 import TableRow from "./row/TableRow.vue";
 import { ColResizingState, TableProps, useTable } from "./use-table";
-import { useViewMeasure } from "./use-view-measure";
 import { loadColumnSizes, useKeepTable } from "./use-table-keep";
-import { collapseTextChangeRangesAcrossMultipleVersions } from "typescript";
+import { useViewMeasure } from "./use-view-measure";
 //-------------------------------------------------------
 const showDebugScrolling = false;
 const showDebugResizing = false;

@@ -1,5 +1,5 @@
+import { CommonProps } from "../../../";
 import { Callback2 } from "../../../../core";
-import { CommonProps } from "../../../features";
 import { TableBehaviorsProps } from "../table-types";
 import { TableRowData } from "../use-table";
 /*-------------------------------------------------------

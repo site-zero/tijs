@@ -1,7 +1,6 @@
+import { CommonProps } from "../../";
 import { Vars } from "../../../core";
-import { CommonProps } from "../../features";
 import { FormField, FormFieldAboutProps } from "./use-form-field";
-import { AutoGridHint, FormGridLayout } from "./use-form-layout";
 
 export type FormProps = CommonProps &
   FormFieldAboutProps & {

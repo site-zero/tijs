@@ -1,6 +1,12 @@
-import { Callback, Callback1, CssUtils, Vars } from "../../../../core";
-import { CssGridLayout } from "../../../../core/web/web-css-utils.ts";
+import _ from "lodash";
 import { TiEventTrigger } from "../../../";
+import {
+  Callback,
+  Callback1,
+  CssGridLayout,
+  CssUtils,
+  Vars
+} from "../../../../core";
 import {
   LayoutBar,
   LayoutItem,
@@ -8,15 +14,8 @@ import {
   LayoutState,
   getLayoutItem
 } from "../layout-support.ts";
-import _ from "lodash";
-import { GridResizingState, useGridResizing } from "./use-grid-resizing";
-import {
-  KeepFeature,
-  KeepInfo,
-  KeepProps,
-  useKeep
-} from "../../../features/use-keep.ts";
 import { LayoutGridKeepFeature, LayoutGridKeepProps } from "./use-grid-keep";
+import { GridResizingState, useGridResizing } from "./use-grid-resizing";
 
 export const COM_TYPE = "TiLayoutGrid";
 /*-------------------------------------------------------

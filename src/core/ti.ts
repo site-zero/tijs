@@ -11,8 +11,8 @@ const _ENV = {
   appName: null,
   session: {},
   ALL_BUS: new Map<string, TiBus<any>>(),
-  "log": {
-    "ROOT": 0
+  log: {
+    ROOT: 0
   }
 } as Vars;
 
@@ -36,23 +36,23 @@ export * from "./_top/_types";
 export * from "./_top/color";
 export * from "./_top/ms-range";
 export * from "./_top/num-range";
-export * from "./_top/time";
-export * from "./dict/dict-types";
-export * from "./web";
-export * from "./_top/ti-bus";
-export * as G2D from "./g2d/ti-g2d";
-export * as Store from "./storage/ti-storage";
 export * as Bank from "./_top/ti-bank";
+export * from "./_top/ti-bus";
 export * as DateTime from "./_top/ti-datetime";
 export * as Icons from "./_top/ti-icons";
-export * as Rects from "./_top/ti-rect";
 export * as Random from "./_top/ti-random";
+export * as Rects from "./_top/ti-rect";
+export * from "./_top/time";
 export * as Alg from "./alg/ti-alg";
+export * from "./dict/dict-types";
 export * as Dicts from "./dict/ti-dict";
+export * as G2D from "./g2d/ti-g2d";
 export * as Match from "./match/ti-match";
 export * as Num from "./num/ti-num";
+export * as Store from "./storage/ti-storage";
 export * as I18n from "./text/ti-i18n";
-export * as S from "./text/ti-str";
+export * as Str from "./text/ti-str";
 export * as Tmpl from "./tmpl/ti-tmpl";
 export * as Util from "./util";
+export * from "./web";
 export * as Be from "./web/behaviors";

@@ -2,72 +2,6 @@ import _ from "lodash";
 import { FuncA2, MessageMap, S, Size2D, StrCaseMode, Util, Vars } from "../ti";
 import * as Dom from "./web-dom";
 import { AttrFilter } from "./web-dom";
-/*-------------------------------------------------------
-
-                     Type Defination
-
--------------------------------------------------------*/
-export type CssItemAlignment = "start" | "end" | "center" | "stretch";
-export type CssContentAlignment =
-  | "start"
-  | "end"
-  | "center"
-  | "stretch"
-  | "space-around"
-  | "space-between"
-  | "space-evenly";
-export type CssGridAutoFlow =
-  | "row"
-  | "column"
-  | "dense"
-  | "row dense"
-  | "column dense";
-export type CssGridLayout = Partial<{
-  // Track
-  gridTemplateColumns: string;
-  gridTemplateRows: string;
-  /*
-  [
-    "header header header header",
-    "main   main   .      sidebar",
-    "footer footer footer footer",
-  ]
-   */
-  gridTemplateAreas: string[];
-  // Gap
-  gridColumnGap: string;
-  gridRowGap: string;
-  // <grid-row-gap> <grid-column-gap>
-  gap: string;
-  // Alignment
-  justifyItems: CssItemAlignment;
-  alignItems: CssItemAlignment;
-  justifyContent: CssContentAlignment;
-  alignContent: string;
-  // Extends
-  gridAutoColumns: string;
-  gridAutoRows: string;
-  gridAutoFlow: CssGridAutoFlow;
-}>;
-
-export type CssGridItem = Partial<{
-  // <grid-column-start> <grid-column-end>
-  gridColumn: string;
-  // <number> | <name> | span <number> | auto
-  gridColumnStart: string;
-  // <number> | <name> | span <number> | auto
-  gridColumnEnd: string;
-  // <grid-row-start> <grid-row-end>
-  gridRow: string;
-  // <number> | <name> | span <number> | auto
-  gridRowStart: string;
-  // <number> | <name> | span <number> | auto
-  gridRowEnd: string;
-  // <name> | <row-start> / <column-start> / <row-end> / <column-end>
-  gridArea: string;
-  justifySelf: CssItemAlignment;
-  alignSelf: CssItemAlignment;
-}>;
 
 export function pickGridItemStyle(sty: Vars) {
   return mergeStyles(sty, {
@@ -153,9 +87,9 @@ export function toAbsPixel(
   if (m) {
     let v: number = (m[1] as any) * 1;
     let fn = {
-      px: (v: number) => v,
-      rem: (v: number) => v * remBase,
-      em: (v: number) => v * emBase,
+      "px": (v: number) => v,
+      "rem": (v: number) => v * remBase,
+      "em": (v: number) => v * emBase,
       "%": (v: number) => (v * base) / 100
     }[m[2]];
     if (fn) {

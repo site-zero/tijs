@@ -24,9 +24,7 @@ defineProps<{
                     Methods
 
 -------------------------------------------------------*/
-let emit = defineEmits<{
-  (event: "field-change", payload: TiEvent<FieldPair>): void;
-}>();
+let emit = defineEmits<(event: "field-change", payload: TiEvent<FieldPair>) => void>();
 // function OnFieldChange(evt: TiEvent<FieldPair>) {
 //   let payload = evt.payload;
 //   console.log("On Group Field Change", payload);

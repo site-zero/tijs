@@ -1,15 +1,15 @@
-import { Callback1, CssUtils, I18n, Link, Vars } from "../../../core";
-import { IconInput } from "../../";
+import _ from "lodash";
 import {
   CommonProps,
+  IconInput,
   IconTextEvents,
   IconTextFeature,
   IconTextOptions,
   IconTextProps,
   IconTextState,
   useIconText
-} from "../../features";
-import _ from "lodash";
+} from "../../";
+import { CssUtils, I18n, Link } from "../../../core";
 /*-------------------------------------------------------
 
                      Types
@@ -69,10 +69,10 @@ export type RoadblockOptions = IconTextOptions<RoadblockEvents, undefined> & {
 function getIconClass(Roadblock: IconTextFeature, Size: RoadblockSize) {
   let css = CssUtils.mergeClassName({}, Roadblock.iconClass);
   let autoIconClass = {
-    "small": "s16",
-    "normal": "s32",
-    "big": "s64",
-    "large": "s128"
+    small: "s16",
+    normal: "s32",
+    big: "s64",
+    large: "s128"
   }[Size];
   let keys = _.keys(css);
   for (let k of keys) {

@@ -1,4 +1,17 @@
+import _ from "lodash";
 import {
+  CommonProps,
+  Field,
+  FieldComProps,
+  FieldStatus,
+  FieldStatusIcons,
+  FieldValueType,
+  VisibilityProps,
+  getFieldUniqKey,
+  useVisibility
+} from "../../";
+import {
+  CssGridItem,
   CssUtils,
   FuncA2,
   I18n,
@@ -7,21 +20,6 @@ import {
   Vars,
   invoke_partial
 } from "../../../core";
-import { CssGridItem } from "../../../core/web/web-css-utils.ts";
-import {
-  Field,
-  FieldStatus,
-  FieldStatusIcons,
-  FieldValueType,
-  getFieldUniqKey
-} from "../../";
-import {
-  CommonProps,
-  FieldComProps,
-  VisibilityProps,
-  useVisibility
-} from "../../features";
-import _ from "lodash";
 import { FieldProps } from "../field/use-field";
 import {
   AutoGridHint,

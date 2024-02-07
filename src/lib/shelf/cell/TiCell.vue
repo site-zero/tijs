@@ -1,8 +1,7 @@
 <script lang="ts" setup>
-import { createBus } from "../../../core";
-import { BUS_KEY, TiAppEvent, TiEvent } from "../../";
-import { useBusEmit } from "../../features";
 import { computed, onUnmounted, provide } from "vue";
+import { BUS_KEY, TiAppEvent, TiEvent, useBusEmit } from "../../";
+import { createBus } from "../../../core";
 import { TiCellInfo } from "./ti-cell-index";
 import { COM_TYPE, CellChanged, CellEvents, CellProps, useField } from "./use-cell";
 /*-------------------------------------------------------

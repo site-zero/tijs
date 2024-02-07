@@ -1,7 +1,7 @@
 import { Ref } from "vue";
+import { Dragging, useDraggable } from "../../";
+import { Callback, Callback1, Dom, FuncA0, Num } from "../../../core";
 import { ColResizingState } from "./use-table";
-import { Callback1, Callback, FuncA0, Num, Dom } from "../../../core";
-import { Dragging, useDraggable } from "../../features";
 import { TableKeepFeature } from "./use-table-keep";
 
 /**

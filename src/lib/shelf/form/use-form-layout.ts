@@ -1,7 +1,6 @@
-import { CssUtils, Size2D, Util, Vars } from "../../../core";
-import { CssGridLayout } from "../../../core/web/web-css-utils.ts";
 import JSON5 from "json5";
 import _ from "lodash";
+import { CssGridLayout, CssUtils, Size2D, Util, Vars } from "../../../core";
 import { FormField } from "./use-form-field";
 
 const DFT_LAYOUT: AutoGridHint = [[5, 1500], [4, 1200], [3, 900], [2, 500], 1];

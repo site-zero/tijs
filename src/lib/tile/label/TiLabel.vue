@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { CssUtils } from "../../../core";
-import { BUS_KEY, TiEvent, TiIcon, tiGetDefaultComPropValue } from "../../";
-import { useBusEmit } from "../../features";
-import { TiInputInfo } from "../../input/box/ti-input-index.ts";
 import _ from "lodash";
 import { computed, inject, reactive, ref } from "vue";
+import { BUS_KEY, TiEvent, TiIcon, tiGetDefaultComPropValue, useBusEmit } from "../../";
+import { CssUtils } from "../../../core";
+import { TiInputInfo } from "../../input/box/ti-input-index.ts";
 import {
   COM_TYPE,
   LabelEvents,

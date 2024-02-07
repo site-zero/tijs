@@ -1,8 +1,7 @@
-import { Callback, Callback1, EventUtils, I18n, S, Vars } from "../../../core";
-import { getFieldUniqKey } from "../../";
-import { CommonProps } from "../../features";
 import _ from "lodash";
 import { Ref } from "vue";
+import { CommonProps, getFieldUniqKey } from "../../";
+import { Callback, Callback1, EventUtils, I18n, S, Vars } from "../../../core";
 import { TableBehaviorsProps, TableCell, TableRowEvent } from "./table-types";
 import {
   CheckStatus,

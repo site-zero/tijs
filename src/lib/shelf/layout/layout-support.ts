@@ -1,8 +1,6 @@
-import { CssUtils, Vars } from "../../../core";
-import { CssGridItem, CssGridLayout } from "../../../core/web/web-css-utils.ts";
-import { IconInput } from "../../";
-import { ComRef, CommonProps } from "../../features";
 import _ from "lodash";
+import { ComRef, CommonProps, IconInput } from "../../";
+import { CssGridItem, CssGridLayout, CssUtils, Vars } from "../../../core";
 
 export type LayoutSchema = Record<string, ComRef>;
 

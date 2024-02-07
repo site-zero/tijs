@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import { Callback, CssUtils, Util } from "../../../core";
-import { BUS_KEY, TiEvent } from "../../";
-import { useBusEmit } from "../../features";
+import _ from "lodash";
 import { computed, inject, onMounted, provide, reactive, ref } from "vue";
+import { BUS_KEY, TiEvent, useBusEmit } from "../../";
+import { Callback, CssUtils, Util } from "../../../core";
 import BarItemChildren from "./BarItemChildren.vue";
 import {
   BAR_SUPPORT,
@@ -12,7 +12,6 @@ import {
 } from "./action-bar-type";
 import { TiActionBarInfo } from "./ti-action-bar-index";
 import { ActionBarProps, useActionBar } from "./use-action-bar";
-import _ from "lodash";
 /*-------------------------------------------------------
 
                    Com Options

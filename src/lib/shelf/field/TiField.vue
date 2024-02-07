@@ -1,10 +1,9 @@
 <script lang="ts" setup>
-import { BUS_KEY, FieldPair, TiAppEvent, TiEvent } from "../../";
-import { useBusEmit } from "../../features";
 import { computed, onUnmounted, provide } from "vue";
+import { BUS_KEY, FieldPair, TiAppEvent, TiEvent, useBusEmit } from "../../";
+import { createBus } from "../../../core";
 import { TiFieldInfo } from "./ti-field-index";
 import { COM_TYPE, FieldEvents, FieldProps, useField } from "./use-field";
-import { createBus } from "../../../core";
 
 /*-------------------------------------------------------
 

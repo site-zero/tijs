@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-import { CssUtils } from "../../../core";
-import { BUS_KEY, TiAppEvent } from "../../";
-import { useBusEmit } from "../../features";
 import _ from "lodash";
 import { computed, inject, reactive, watch } from "vue";
+import { BUS_KEY, TiAppEvent, useBusEmit } from "../../";
+import { CssUtils } from "../../../core";
 import TiFormModeGroup from "./group/TiFormModeGroup.vue";
 import TiFormModeTab from "./tab/TiFormModeTab.vue";
 import { TiFormInfo } from "./ti-form-index";
@@ -102,22 +101,13 @@ const FormLayout = computed(() => {
     <!--表单标题-->
     <header v-if="FormTitle">{{ FormTitle }}</header>
     <!-- 分组平铺模式 -->
-    <TiFormModeGroup
-      v-if="'group' == props.mode"
-      :fields="FormFields"
-      :data="state.data"
-      :layout="FormLayout"
-      :maxFieldNameWidth="maxFieldNameWidth"
-      @field-change="Form.OnFieldChange"
-    />
+    <TiFormModeGroup v-if="'group' == props.mode" :fields="FormFields"
+      :data="state.data" :layout="FormLayout"
+      :maxFieldNameWidth="maxFieldNameWidth" @field-change="Form.OnFieldChange" />
     <!-- 分组标签模式 -->
-    <TiFormModeTab
-      v-else-if="'tab' == props.mode"
-      :fields="FormFields"
-      :data="state.data"
-      :layout="FormLayout"
-      @field-change="Form.OnFieldChange"
-    />
+    <TiFormModeTab v-else-if="'tab' == props.mode" :fields="FormFields"
+      :data="state.data" :layout="FormLayout"
+      @field-change="Form.OnFieldChange" />
   </div>
 </template>
 <style lang="scss" scoped>

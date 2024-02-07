@@ -1,6 +1,5 @@
-import { TiEventTrigger } from "../../";
+import { CommonProps, TiEventTrigger } from "../../";
 import { Callback } from "../../../core";
-import { CommonProps } from "../../features";
 import { buildBarViewItems, buildItemsAncestors } from "./action-bar-item";
 import { ActionBarItem, BarState } from "./action-bar-type";
 

@@ -1,6 +1,16 @@
 import _ from "lodash";
 import { App } from "vue";
-import { I18n, I18nLang, MessageMap, S, getEnv, setEnv } from "../core/ti";
+import {
+  I18n,
+  I18nLang,
+  I18nSet,
+  MessageMap,
+  S,
+  getEnv,
+  setEnv
+} from "../core/ti";
+import en_us from "../i18n/en-us";
+import zh_cn from "../i18n/zh-cn";
 import { ComInfoFilter, TiCom, TiComSet } from "./_top";
 import _com_set_action from "./action/all-actions";
 import _com_set_input from "./input/all-input";
@@ -62,6 +72,23 @@ export const updateInstalledComponentsLangs: {
     I18n.putAll(_msgs);
   }
 };
+
+export function installTiCoreI18n(lang: string) {
+  let cn = zh_cn as MessageMap;
+  let en = en_us as MessageMap;
+
+  const app_i18ns = {
+    zh_cn: cn,
+    en_us: en,
+    zh_hk: cn,
+    en_uk: en
+  } as I18nSet;
+
+  let langKey = I18n.toLangKey(lang);
+  I18n.putAll(app_i18ns[langKey]);
+
+  updateInstalledComponentsLangs(langKey);
+}
 
 export function tiPutComponents(coms: TiComSet) {
   _put_com_set(coms);
@@ -136,10 +163,11 @@ export function tiSetDefaultComPropValue(
   return setEnv(k, value);
 }
 
+export * from "./_features";
 export * from "./_top";
+export * from "./_vue";
 export * from "./action/all-actions";
 export * from "./input/all-input";
-export * from "./tile/all-tiles";
 export * from "./shelf/all-shelf";
+export * from "./tile/all-tiles";
 export * from "./view/all-views";
-export * from "./features";

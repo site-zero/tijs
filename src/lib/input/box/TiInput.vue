@@ -1,16 +1,15 @@
 <script setup lang="ts">
 import _ from "lodash";
 import { computed, inject, nextTick, reactive, ref } from "vue";
-import { BUS_KEY, TiEvent, TiIcon, tiGetDefaultComPropValue } from "../../";
+import { BUS_KEY, TiEvent, TiIcon, tiGetDefaultComPropValue, useBusEmit } from "../../";
 import { CssUtils } from "../../../core";
-import { useBusEmit } from "../../features";
 import { TiInputInfo } from "./ti-input-index";
 import {
-  COM_TYPE,
-  InputBoxEvents,
-  InputBoxProps,
-  InputBoxState,
-  useInputBox
+COM_TYPE,
+InputBoxEvents,
+InputBoxProps,
+InputBoxState,
+useInputBox
 } from "./use-input-box";
 /*-------------------------------------------------------
 

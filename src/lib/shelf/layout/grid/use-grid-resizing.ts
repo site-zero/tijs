@@ -1,3 +1,5 @@
+import _ from "lodash";
+import { Dragging, useDraggable } from "../../../";
 import {
   Callback,
   Callback1,
@@ -7,9 +9,7 @@ import {
   Num,
   S
 } from "../../../../core";
-import { Dragging, useDraggable } from "../../../features";
 import { LayoutBar } from "../layout-support";
-import _ from "lodash";
 import { LayoutGridKeepFeature, keepSizesState } from "./use-grid-keep";
 
 export type GridResizingState = {

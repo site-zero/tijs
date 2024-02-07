@@ -1,14 +1,5 @@
-import { CssUtils } from "../../../../core";
 import { TiEventTrigger } from "../../../";
-import { CommonProps } from "../../../features";
-import {
-  LayoutItem,
-  LayoutProps,
-  LayoutSchema,
-  LayoutState,
-  TabsProps
-} from "../layout-support.ts";
-import _ from "lodash";
+import { LayoutProps, LayoutState, TabsProps } from "../layout-support.ts";
 
 export const COM_TYPE = "TiLayoutTabs";
 /*-------------------------------------------------------

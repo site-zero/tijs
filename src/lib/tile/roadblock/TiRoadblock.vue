@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import { BUS_KEY, TiEvent, TiIcon } from "../../";
-import { IconTextState, useBusEmit } from "../../features";
-import { TiInputInfo } from "../../input/box/ti-input-index.ts";
 import { computed, inject, reactive } from "vue";
+import { BUS_KEY, IconTextState, TiEvent, TiIcon, useBusEmit } from "../../";
+import { TiInputInfo } from "../../input/box/ti-input-index.ts";
 import { RoadblockEvents, RoadblockProps, useRoadblock } from "./use-roadblock";
 /*-------------------------------------------------------
 
@@ -66,32 +65,20 @@ const Roadblock = computed(() =>
 </script>
 
 <template>
-  <main
-    class="roadblock"
-    :class="Roadblock.TopClass"
-    :style="Roadblock.TopStyle"
-  >
+  <main class="roadblock" :class="Roadblock.TopClass" :style="Roadblock.TopStyle">
     <!--Icon---->
     <section class="part-icon" v-if="Roadblock.showIcon">
-      <TiIcon
-        :class="Roadblock.IconClass"
-        :value="Roadblock.DisplayIcon"
-        :style="Roadblock.IconStyle"
-        @click="Roadblock.OnClickIcon"
+      <TiIcon :class="Roadblock.IconClass" :value="Roadblock.DisplayIcon"
+        :style="Roadblock.IconStyle" @click="Roadblock.OnClickIcon"
         @mouseenter="Roadblock.setIconHover(true)"
-        @mouseleave="Roadblock.setIconHover(false)"
-      />
+        @mouseleave="Roadblock.setIconHover(false)" />
     </section>
     <!--Text---->
     <section class="part-text">
-      <span
-        :class="Roadblock.TextClass"
-        :style="Roadblock.TextStyle"
-        @click="Roadblock.OnClickText"
-        @mouseenter="Roadblock.setTextHover(true)"
-        @mouseleave="Roadblock.setTextHover(false)"
-        >{{ Roadblock.DisplayText }}</span
-      >
+      <span :class="Roadblock.TextClass" :style="Roadblock.TextStyle"
+        @click="Roadblock.OnClickText" @mouseenter="Roadblock.setTextHover(true)"
+        @mouseleave="Roadblock.setTextHover(false)">{{ Roadblock.DisplayText
+        }}</span>
     </section>
     <!--Links-->
     <section v-if="Roadblock.hasLinks" class="part-links">
