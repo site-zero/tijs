@@ -1,54 +1,69 @@
 /*
 App Main Frame layout, there is 3 modes below::after
 
-# T-mode
+# mode = T
 
 ```bash
 +---------------------------+
 |           Sky             |
 +---------+-----------------+
-|        <|                 |
-|         |                 |
-|  Chute  |     Arena       |
-|         |                 |
-|         |                 |
+|        <|                ||
+|         |                ||
+|  Chute  |     Arena      ||
+|         |                ||
+|         |                ||
 +---------+-----------------+
 |           Foot            |
 +---------------------------+
 ```
 
-# C-mode
+# mode = C
 
 ```bash
 +---------------------------+
 |        <|      Sky        |
 |         +-----------------+
-|         |                 |
-|         |                 |
-|  Chute  |     Arena       |
-|         |                 |
-|         |                 |
+|         |                ||
+|         |                ||
+|  Chute  |     Arena      ||
+|         |                ||
+|         |                ||
 |         +-----------------+
 |         |      Foot       |
 +---------+-----------------+
 ```
 
-# Z-mode
+# mode = Z
 
 ```bash
 +---------------------------+
 |           Sky             |
 +---------+-----------------+
-|        <|                 |
-|         |                 |
-|  Chute  |     Arena       |
-|         |                 |
-|         |                 |
+|        <|                ||
+|         |                ||
+|  Chute  |     Arena      ||
+|         |                ||
+|         |                ||
 |         +-----------------+
 |         |      Foot       |
 +---------+-----------------+
 ```
 
+# mode = mobile
+
+```bash
++---+-----------++
+| = |   Sky     ||
++---+-----------+|
+|               ||
+|               ||
+|     Arena     ||
+|               ||
+|               ||
++---------------+|
+|      Foot     ||
++---------------++
+```
 */
 .ti-main-frame {
   width: 100%;
@@ -73,12 +88,11 @@ App Main Frame layout, there is 3 modes below::after
     }
     &.as-arena {
       grid-area: arena;
-      background-color: pink;
       position: relative;
       > .arena-con {
         @include pos-abs-full;
         padding: 1px;
-        background-color: blue;
+        background-color: pink;
         overflow: auto;
       }
     }
@@ -93,32 +107,61 @@ App Main Frame layout, there is 3 modes below::after
   //                Mode-T
   //
   //----------------------------------------
-  &.mode-T {
+  &[mode="T"] {
     grid-template-areas:
-      'sky   sky'
-      'chute arena'
-      'foot  foot';
+      "sky   sky"
+      "chute arena"
+      "foot  foot";
   }
   //----------------------------------------
   //
   //                Mode-c
   //
   //----------------------------------------
-  &.mode-C {
+  &[mode="C"] {
     grid-template-areas:
-      'chute sky'
-      'chute arena'
-      'chute foot';
+      "chute sky"
+      "chute arena"
+      "chute foot";
   }
   //----------------------------------------
   //
   //                Mode-Z
   //
   //----------------------------------------
-  &.mode-Z {
+  &[mode="Z"] {
     grid-template-areas:
-      'sky   sky'
-      'chute arena'
-      'chute foot';
+      "sky   sky"
+      "chute arena"
+      "chute foot";
+  }
+  //----------------------------------------
+  //
+  //                Mode-mobile
+  //
+  //----------------------------------------
+  &[mode="mobile"] {
+    display: block;
+    position: relative;
+    overflow: auto;
+    > .frame-part {
+      &.as-sky {
+        position: sticky;
+        @include pos($t: 0px, $l: 0, $r: 0, $h: $H_SKY);
+        z-index: $z-above;
+      }
+      &.as-arena {
+        position: initial;
+        > .arena-con {
+          position: relative;
+          padding: 1px;
+          overflow: initial;
+        }
+      }
+      &.as-foot {
+        position: sticky;
+        @include pos($b: 0, $l: 0, $r: 0, $h: $H_FOOT);
+      }
+    }
   }
 }
