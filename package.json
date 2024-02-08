@@ -49,6 +49,7 @@
     "@mdit-vue/plugin-toc": "^1.0.0",
     "@types/crypto-js": "^4.1.2",
     "@types/lodash": "^4.14.202",
+    "@types/node": "^20.11.16",
     "chance": "^1.1.11",
     "crypto-js": "^4.2.0",
     "json5": "^2.2.3",
