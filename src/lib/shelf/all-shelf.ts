@@ -6,7 +6,7 @@ import { TiFormInfo } from './form/ti-form-index';
 import { TiLayoutGridInfo } from './layout/grid/ti-layout-grid-index';
 import { TiLayoutTabsInfo } from './layout/tabs/ti-layout-tabs-index';
 import { TiMainFrameInfo } from './main-frame/ti-main-frame-index';
-import TiPlayground from './playground/Playground.vue';
+import TiPlayground from './playground/TiPlayground.vue';
 
 export default {
   TiCell: TiCellInfo,
