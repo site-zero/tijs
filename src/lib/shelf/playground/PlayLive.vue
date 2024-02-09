@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { Vars } from 'src/core';
-import { TiCom } from '../../../lib';
-import { LiveBgMode } from './use-playground';
+  import { TiCom } from '../../';
+  import { Vars } from '../../../core';
+  import { LiveBgMode } from './use-playground';
 
-/**
- * 本控件要接入的属性
- */
-defineProps<{
-  playCom: TiCom,
-  playConf?: Vars,
-  mode: LiveBgMode
-}>();
+  /**
+   * 本控件要接入的属性
+   */
+  defineProps<{
+    playCom: TiCom;
+    playConf?: Vars;
+    mode: LiveBgMode;
+  }>();
 </script>
 
 <template>
@@ -22,23 +22,30 @@ defineProps<{
 </template>
 
 <style lang="scss" scoped>
-@use '../../../assets/style/_all.scss' as *;
+  @use '../../../assets/style/_all.scss' as *;
 
-.play-live {
-  @include pos-abs-full;
+  .play-live {
+    @include pos-abs-full;
 
-  &[mode='none'] {
-    @include bg-chessboard;
+    &[mode='none'] {
+      @include bg-chessboard;
+    }
+
+    &[mode='fill'] {
+      background-color: var(--ti-color-card);
+    }
+
+    &[com-race='INPUT'],
+    &[com-race='TILE'] {
+      > .play-live-con {
+        @include flex-center;
+      }
+    }
   }
 
-  &[mode='fill'] {
-    background-color: var(--ti-color-card);
+  .play-live-con {
+    width: 100%;
+    height: 100%;
+    position: relative;
   }
-}
-
-.play-live-con {
-  width: 100%;
-  height: 100%;
-  position: relative;
-}
 </style>

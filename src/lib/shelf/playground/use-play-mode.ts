@@ -54,7 +54,7 @@ export type PlayLayoutMode = 'H' | 'V' | 'F';
 const PLY_MODE_KEY = 'Ti-Playground-Mode-Play';
 
 export function loadPlayLayoutMode(): PlayLayoutMode {
-  let mode = TiStore.local.getString(PLY_MODE_KEY, 'F');
+  let mode = TiStore.local.getString(PLY_MODE_KEY, 'V');
   switch (mode) {
     case 'H':
     case 'V':
