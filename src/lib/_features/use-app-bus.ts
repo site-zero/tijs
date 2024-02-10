@@ -7,12 +7,12 @@ type BusDeposeCallback = (hook: () => any) => false | Function | undefined;
 export function createAppBus(deposer: BusDeposeCallback) {
   let bus = createBus<TiAppEvent>();
   setEnv('BUS', bus);
-  bus.on('*', (msg) => {
-    console.log('总线收到消息', msg);
-  });
-  bus.on('playground:click-suffix-text', (v) => {
-    console.log('哈哈哈', v);
-  });
+  // bus.on('*', (msg) => {
+  //   console.log('总线收到消息', msg);
+  // });
+  // bus.on('playground:click-suffix-text', (v) => {
+  //   console.log('哈哈哈', v);
+  // });
   deposer(() => {
     bus.depose();
   });

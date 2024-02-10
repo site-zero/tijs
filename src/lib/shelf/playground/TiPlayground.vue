@@ -1,131 +1,135 @@
 <script setup lang="ts">
-  import JSON5 from 'json5';
-  import { Ref, computed, ref, watch } from 'vue';
-  import { TiBlock, tiCheckComponent } from '../../../lib';
-  import TiLayoutGrid from '../layout/grid/TiLayoutGrid.vue';
-  import PlayConf from './PlayConf.vue';
-  import PlayLive from './PlayLive.vue';
-  import PlayTabs from './PlayTabs.vue';
-  import { useGridLayout } from './use-play-layout';
-  import {
-    LiveBgMode,
-    PlayLayoutMode,
-    loadLiveBgMode,
-    loadPlayLayoutMode,
-  } from './use-play-mode';
-  import {
-    ExampleState,
-    PlaygroundProps,
-    loadLocalSetting,
-    selectExample,
-  } from './use-playground';
-  /**
-   * 指明当前的控件对象要展示的示例配置信息
-   */
-  const _example = ref({} as ExampleState);
+import _ from 'lodash';
+import { Ref, computed, ref, watch } from 'vue';
+import { Vars } from '../../../core';
+import { tiCheckComponent } from '../../../lib';
+import TiLayoutGrid from '../layout/grid/TiLayoutGrid.vue';
+import PlayConf from './PlayConf.vue';
+import PlayLive from './PlayLive.vue';
+import PlayTabs from './PlayTabs.vue';
+import { useGridLayout } from './use-play-layout';
+import {
+  LiveBgMode,
+  PlayLayoutMode,
+  loadLiveBgMode,
+  loadPlayLayoutMode,
+  saveLiveBgMode,
+  savePlayLayoutMode,
+} from './use-play-mode';
+import {
+  ExampleState,
+  PlaygroundProps,
+  saveLocalSetting,
+  selectExample
+} from './use-playground';
+/**
+ * 指明当前的控件对象要展示的示例配置信息
+ */
+const _example = ref({} as ExampleState);
 
-  /*
-   * 指明布局显示模式
-   */
-  const _play_layout_mode: Ref<PlayLayoutMode> = ref(loadPlayLayoutMode());
-  /**
-   * 指明控件演示区的布局模式
-   */
-  const _live_bg_mode: Ref<LiveBgMode> = ref(loadLiveBgMode());
+/*
+ * 指明布局显示模式
+ */
+const _play_layout_mode: Ref<PlayLayoutMode> = ref(loadPlayLayoutMode());
+/**
+ * 指明控件演示区的布局模式
+ */
+const _live_bg_mode: Ref<LiveBgMode> = ref(loadLiveBgMode());
 
-  /**
-   * 本控件要接入的属性
-   */
-  const props = withDefaults(defineProps<PlaygroundProps>(), {
-    comType: 'TiUnkown',
-    example: '',
-    exampleAsRouterLink: false,
-  });
+/**
+ * 本控件要接入的属性
+ */
+const props = withDefaults(defineProps<PlaygroundProps>(), {
+  comType: 'TiUnkown',
+  example: '',
+  exampleAsRouterLink: false,
+});
 
-  /**
-   * 指明当前的控件对象
-   */
-  const PlayCom = computed(() => {
-    return tiCheckComponent(props.comType);
-  });
+/**
+ * 指明当前的控件对象
+ */
+const PlayCom = computed(() => {
+  return tiCheckComponent(props.comType);
+});
 
-  const Grid = computed(() => useGridLayout(_play_layout_mode.value));
+const ExampleChanged = computed(() => {
+  let dftComConf = PlayCom.value.checkProps(_example.value.name);
+  return !_.isEqual(_example.value.comConf, dftComConf)
+})
 
-  function OnSelectExample(name: string) {
-    let ex = _example.value;
-    ex.name = name;
-    ex.comConf = loadLocalSetting(PlayCom.value, ex.name);
-    ex.text = JSON5.stringify(ex.comConf, null, 2);
+const Grid = computed(() => useGridLayout(_play_layout_mode.value));
+
+function OnSelectExample(name: string) {
+  selectExample(PlayCom.value, _example.value, name);
+}
+
+function OnConfReset() {
+  let dftComConf = PlayCom.value.checkProps(_example.value.name);
+  _example.value.comConf = dftComConf
+}
+
+function OnConfChange(confData: Vars) {
+  _example.value.comConf = confData
+  saveLocalSetting(PlayCom.value, _example.value)
+}
+
+watch(
+  () => props.example,
+  function (exampleName) {
+    let com = PlayCom.value;
+    selectExample(com, _example.value, exampleName);
+  },
+  {
+    immediate: true,
   }
+);
 
-  watch(
-    () => props.example,
-    function (exampleName) {
-      let com = PlayCom.value;
-      selectExample(com, _example.value, exampleName);
-    },
-    {
-      immediate: true,
-    }
-  );
+watch(() => [_live_bg_mode.value, _play_layout_mode.value], function (payload) {
+  let [live_bg, play_layout] = payload
+  saveLiveBgMode(live_bg as LiveBgMode);
+  savePlayLayoutMode(play_layout as PlayLayoutMode);
+})
 </script>
 
 <template>
   <div class="ti-playground" :mode="_play_layout_mode">
-    <!--
-    <section class="part-tabs">
-      <PlayTabs :com="PlayCom" :current-example="_example.name" :mode="_play_mode"
-        :example-as-router-link="exampleAsRouterLink" @change="OnSelectExample" />
-    </section>
-    <section class="part-arena">
-      <TiBlock>
-        <PlayLive :play-com="PlayCom" :play-conf="_example.comConf"
-          :mode="_live_bg_mode" />
-      </TiBlock>
-    </section>
-    -->
-    <TiLayoutGrid
-      v-bind="Grid"
-      :style="{
-        flex: '1 1 auto',
-        padding: '10px',
-      }">
+    <TiLayoutGrid v-bind="Grid" :style="{
+      flex: '1 1 auto',
+      padding: '10px',
+    }">
       <template v-slot="{ item }">
         <!--
             Tabs
         -->
-        <TiBlock v-if="'tabs' == item.name">
-          <PlayTabs
-            :com="PlayCom"
-            :current-example="_example.name"
-            :play-layout-mode="_play_layout_mode"
-            :live-bg-mode="_live_bg_mode"
+        <template v-if="'tabs' == item.name">
+          <PlayTabs :com="PlayCom" :current-example="_example.name"
+            :play-layout-mode="_play_layout_mode" :live-bg-mode="_live_bg_mode"
             :example-as-router-link="exampleAsRouterLink"
             @change="OnSelectExample"
-            @mode:layout="_play_layout_mode = $event as PlayLayoutMode"
-            @mode:live_bg="_live_bg_mode = $event as LiveBgMode" />
-        </TiBlock>
+            @mode:layout="_play_layout_mode = ($event as PlayLayoutMode)"
+            @mode:live_bg="_live_bg_mode = ($event as LiveBgMode)" />
+        </template>
         <!--
           Live
         -->
-        <TiBlock v-else-if="'live' == item.name">
-          <PlayLive
-            :play-com="PlayCom"
-            :play-conf="_example.comConf"
+        <template v-else-if="'live' == item.name">
+          <PlayLive :play-com="PlayCom" :play-conf="_example.comConf"
             :mode="_live_bg_mode" />
-        </TiBlock>
+        </template>
         <!--
           Conf
         -->
-        <TiBlock v-else>
-          <PlayConf />
-        </TiBlock>
+        <template v-else>
+          <PlayConf :config-data="_example.comConf"
+            :config-changed="ExampleChanged" @change="OnConfChange"
+            @reset="OnConfReset" />
+        </template>
       </template>
     </TiLayoutGrid>
   </div>
 </template>
 
 <style lang="scss" scoped>
-  @use '../../../assets/style/_all.scss' as *;
-  @import './playground.scss';
+@use '../../../assets/style/_all.scss' as *;
+@import './playground.scss';
 </style>

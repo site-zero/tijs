@@ -12,21 +12,14 @@ export type PlaygroundProps = CommonProps & {
 
 export type ExampleState = {
   name?: string; // 示例名称
-  text: string; // 示例的名称文本
   comConf: Vars; // 示例的控件配置
-  syntaxErr: string;
 };
 
 export type LiveBgMode = 'none' | 'fill';
 
-function formatExampleText(ex: ExampleState) {
-  ex.text = JSON5.stringify(ex.comConf, null, 2);
-}
-
 export function selectExample(com: TiCom, ex: ExampleState, name?: string) {
   ex.name = name;
   ex.comConf = loadLocalSetting(com, ex.name);
-  formatExampleText(ex);
 }
 
 export function getExampleList(com: TiCom, currentName?: string) {
@@ -66,4 +59,17 @@ export function loadLocalSetting(com: TiCom, exName?: string) {
     return TiStore.local.getObject(key, comConf);
   }
   return _.cloneDeep(comConf);
+}
+
+export function saveLocalSetting(com: TiCom, state: ExampleState) {
+  let { name, comConf } = state;
+  let key = getExampleStoreKey(com, name);
+  if (key) {
+    let json = formatExampleConfData(comConf || {});
+    TiStore.local.set(key, json);
+  }
+}
+
+export function formatExampleConfData(data: any) {
+  return JSON5.stringify(data, null, 2);
 }

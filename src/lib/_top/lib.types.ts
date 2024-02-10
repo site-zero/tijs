@@ -129,7 +129,7 @@ export class TiCom implements TiComInfo {
       name = this.defaultProps;
     }
     let it = _.find(this.exampleProps, (it) => it.name == name);
-    return it?.comConf;
+    return _.cloneDeep(it?.comConf);
   }
 
   checkProps(name?: string) {

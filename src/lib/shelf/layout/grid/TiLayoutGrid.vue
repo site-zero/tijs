@@ -78,18 +78,17 @@ let Keep = computed(() => useKeepLayoutGrid(props));
 watch(
   () => [props.keepShown, props.keepSizes],
   () => {
-    loadAllState(state, Keep.value);
+    loadAllState(props, state, Keep.value);
   },
 );
 onMounted(() => {
-  Grid.value.bindResizing($main.value, state, onUnmounted, Keep.value);
-  loadAllState(state, Keep.value);
+  Grid.value.bindResizing($main.value, state, onUnmounted, Keep);
+  loadAllState(props, state, Keep.value);
 });
 </script>
 <template>
   <div class="ti-layout-grid" :class="Grid.TopClass" :style="Grid.TopStyle"
     ref="$main">
-
     <div v-for="it in Grid.Items" :key="it.uniqKey" class="grid-item"
       :it-index="it.index" :it-ukey="it.uniqKey" :style="it.style">
       <!-------- 块内容 -------->

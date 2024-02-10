@@ -7,6 +7,8 @@ import { LayoutGridProps, LayoutGridState } from './use-layout-grid';
 export type LayoutGridKeepProps = {
   keepShown?: KeepInfo;
   keepSizes?: KeepInfo;
+  shown?: Vars;
+  sizes?: GridResizingState;
 };
 
 export type LayoutGridKeepFeature = {
@@ -15,7 +17,7 @@ export type LayoutGridKeepFeature = {
 };
 
 export function useKeepLayoutGrid(
-  props: LayoutGridProps,
+  props: LayoutGridProps
 ): LayoutGridKeepFeature {
   return {
     KeepShown: useKeep(
@@ -23,41 +25,48 @@ export function useKeepLayoutGrid(
         {
           keepMode: 'session',
         },
-        props.keepShown,
-      ),
+        props.keepShown
+      )
     ),
     KeepSizes: useKeep(
       _.assign(
         {
           keepMode: 'local',
         },
-        props.keepSizes,
-      ),
+        props.keepSizes
+      )
     ),
   };
 }
 
 export function loadAllState(
+  props: LayoutGridKeepProps,
   state: LayoutGridState,
-  Keep: LayoutGridKeepFeature,
+  Keep: LayoutGridKeepFeature
 ) {
   let shown = Keep.KeepShown.loadObj();
   if (shown) {
     state.shown = shown;
+  } else {
+    state.shown = props.shown || {};
   }
 
   let sizes = Keep.KeepSizes.loadObj();
   if (sizes && sizes.columns) {
     state.columns = sizes.columns;
+  } else {
+    state.columns = props.sizes?.columns || [];
   }
   if (sizes && sizes.rows) {
     state.rows = sizes.rows;
+  } else {
+    state.rows = props.sizes?.rows || [];
   }
 }
 
 export function keepAllState(
   state: LayoutGridState,
-  Keep: LayoutGridKeepFeature,
+  Keep: LayoutGridKeepFeature
 ) {
   //  保存块显示
   if (!_.isEmpty(state.shown)) {
@@ -69,7 +78,7 @@ export function keepAllState(
 
 export function keepSizesState(
   state: GridResizingState,
-  Keep: LayoutGridKeepFeature,
+  Keep: LayoutGridKeepFeature
 ) {
   let sizes = {} as Vars;
   if (!_.isEmpty(state.columns)) {

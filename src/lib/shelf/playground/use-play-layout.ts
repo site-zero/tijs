@@ -86,6 +86,10 @@ export function useGridLayout(mode: PlayLayoutMode): LayoutGridProps {
     itemStyle: {
       backgroundColor: 'var(--ti-color-card)',
     },
+    keepSizes: {
+      keepMode: 'session',
+      keepAt: `Ti-Playground-Layout-${mode}`,
+    },
     layout: getGridLayout(),
     blocks: getGridBlocks(),
   };

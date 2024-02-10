@@ -16,6 +16,7 @@ import {
 } from '../layout-support.ts';
 import { LayoutGridKeepFeature, LayoutGridKeepProps } from './use-grid-keep';
 import { GridResizingState, useGridResizing } from './use-grid-resizing';
+import { ComputedRef } from 'vue';
 
 export const COM_TYPE = 'TiLayoutGrid';
 /*-------------------------------------------------------
@@ -86,7 +87,7 @@ export type LayoutGridFeature = {
     $main: HTMLElement,
     resizing: GridResizingState,
     onDestroy: Callback1<Callback>,
-    Keep: LayoutGridKeepFeature,
+    Keep: ComputedRef<LayoutGridKeepFeature>,
   ): void;
 };
 export function useLayoutGrid(
@@ -123,7 +124,7 @@ export function useLayoutGrid(
       $main: HTMLElement,
       resizing: GridResizingState,
       onDestroy: Callback1<Callback>,
-      Keep: LayoutGridKeepFeature,
+      Keep: ComputedRef<LayoutGridKeepFeature>,
     ) {
       if (isAdjustable) {
         useGridResizing($main, resizing, onDestroy, Keep);

@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {
   Callback,
   Callback1,
@@ -146,7 +147,7 @@ function deposeDragging(ing: Dragging, onEnd?: Callback1<Dragging>) {
 function whenMoving(
   ing: Dragging,
   p2d: Point2D,
-  options: Pick<DraggalbeOptions, 'onMoving' | 'onEnd'>,
+  options: Pick<DraggalbeOptions, 'onMoving' | 'onEnd'>
 ) {
   if (ing.update(p2d)) {
     // 处理推拽
@@ -263,7 +264,10 @@ export function useDraggable(options: DraggalbeOptions) {
   //
   // 开始监听目标的指针按下事件
   //
-  $watchTarget.addEventListener(POINTER_DOWN, OnPointerDown);
+  $watchTarget.removeEventListener(POINTER_DOWN, OnPointerDown);
+  _.delay(() => {
+    $watchTarget.addEventListener(POINTER_DOWN, OnPointerDown);
+  },0);
 
   onDestroy(function () {
     console.log('销毁 dragging down');

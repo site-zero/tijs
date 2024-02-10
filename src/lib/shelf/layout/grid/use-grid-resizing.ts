@@ -11,6 +11,7 @@ import {
 } from '../../../../core';
 import { LayoutBar } from '../layout-support';
 import { LayoutGridKeepFeature, keepSizesState } from './use-grid-keep';
+import { ComputedRef } from 'vue';
 
 export type GridResizingState = {
   /**
@@ -77,15 +78,15 @@ function getGridMeasure(bar: LayoutBar, $grid: HTMLElement): ResizeMeasure {
   let gap = Dom.getComputedStyle($grid, `${bar.mode}-gap`);
   let pad0 = Dom.getComputedStyle(
     $grid,
-    bar.mode == 'row' ? 'padding-top' : 'padding-left',
+    bar.mode == 'row' ? 'padding-top' : 'padding-left'
   );
   let pad1 = Dom.getComputedStyle(
     $grid,
-    bar.mode == 'row' ? 'padding-bottom' : 'padding-right',
+    bar.mode == 'row' ? 'padding-bottom' : 'padding-right'
   );
   return {
     template: _.map(Str.splitIgnoreBlank(tmp, /\s+/), (v) =>
-      toPixel(v),
+      toPixel(v)
     ) as number[],
     gap: toPixel(gap),
     pad0: toPixel(pad0),
@@ -150,7 +151,7 @@ const Moving = {
   bar_column_prev(
     resizing: GridResizingState,
     mea: ResizeMeasure,
-    ing: Dragging,
+    ing: Dragging
   ) {
     let { scope, minSize, gap, myIndex, taIndex } = mea;
     return () => {
@@ -167,7 +168,7 @@ const Moving = {
   bar_column_next(
     resizing: GridResizingState,
     mea: ResizeMeasure,
-    ing: Dragging,
+    ing: Dragging
   ) {
     let { scope, minSize, gap, myIndex, taIndex } = mea;
     return () => {
@@ -213,7 +214,7 @@ export function useGridResizing(
   $main: HTMLElement,
   resizing: GridResizingState,
   onDestroy: Callback1<Callback>,
-  Keep: LayoutGridKeepFeature,
+  Keep: ComputedRef<LayoutGridKeepFeature>
 ) {
   useDraggable({
     onDestroy,
@@ -253,7 +254,7 @@ export function useGridResizing(
       // 记录
       ing.setVar(
         'moving',
-        Moving[`bar_${bar.mode}_${bar.position}`](resizing, mea, ing),
+        Moving[`bar_${bar.mode}_${bar.position}`](resizing, mea, ing)
       );
       ing.setVar('move_end', MoveEnd[bar.mode](resizing, mea));
       // console.log("onStart", bar, mea);
@@ -270,7 +271,7 @@ export function useGridResizing(
       if (_.isFunction(fn)) {
         fn();
       }
-      keepSizesState(resizing, Keep);
+      keepSizesState(resizing, Keep.value);
     },
   });
 }
