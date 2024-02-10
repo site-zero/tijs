@@ -68,7 +68,7 @@ textarea {
   font-size: SZ(14);
   outline: none;
   resize: none;
-  border: 1px solid var(--ti-color-border-shallow);
+  border: 0;
   padding: 1em;
   line-height: 1.6em;
 }

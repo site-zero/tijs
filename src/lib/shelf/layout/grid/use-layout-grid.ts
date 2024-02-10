@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { ComputedRef } from 'vue';
 import { TiEventTrigger } from '../../../';
 import {
   Callback,
@@ -8,6 +9,11 @@ import {
   Vars,
 } from '../../../../core';
 import {
+  LayoutPanelItem,
+  LayoutPanelProps,
+  getLayoutPanelItems,
+} from '../layout-panel.ts';
+import {
   LayoutBar,
   LayoutItem,
   LayoutProps,
@@ -16,7 +22,6 @@ import {
 } from '../layout-support.ts';
 import { LayoutGridKeepFeature, LayoutGridKeepProps } from './use-grid-keep';
 import { GridResizingState, useGridResizing } from './use-grid-resizing';
-import { ComputedRef } from 'vue';
 
 export const COM_TYPE = 'TiLayoutGrid';
 /*-------------------------------------------------------
@@ -40,7 +45,8 @@ export type LayoutGridState = LayoutState & GridResizingState;
 
 -------------------------------------------------------*/
 export type LayoutGridProps = LayoutProps &
-  LayoutGridKeepProps & {
+  LayoutGridKeepProps &
+  LayoutPanelProps & {
     layout?: CssGridLayout;
   };
 /*-------------------------------------------------------
@@ -56,9 +62,9 @@ export type LayoutGridOptions = {
                      Methods
 
 -------------------------------------------------------*/
-function getLayoutGridItem(
+function getLayoutGridItems(
   state: LayoutState,
-  props: LayoutGridProps,
+  props: LayoutProps
 ): LayoutGridItem[] {
   let items = getLayoutItem(state, props) as LayoutGridItem[];
   for (let item of items) {
@@ -83,20 +89,21 @@ export type LayoutGridFeature = {
   TopClass: Vars;
   TopStyle: Vars;
   Items: LayoutGridItem[];
+  Panels: LayoutPanelItem[];
   bindResizing(
     $main: HTMLElement,
     resizing: GridResizingState,
     onDestroy: Callback1<Callback>,
-    Keep: ComputedRef<LayoutGridKeepFeature>,
+    Keep: ComputedRef<LayoutGridKeepFeature>
   ): void;
 };
 export function useLayoutGrid(
   state: LayoutGridState,
   props: LayoutGridProps,
-  _options: LayoutGridOptions,
+  _options: LayoutGridOptions
 ): LayoutGridFeature {
-  let Items = getLayoutGridItem(state, props);
-
+  let Items = getLayoutGridItems(state, props);
+  let Panels = getLayoutPanelItems(state, props);
   // 如果声明了调整条，则界面应该就是可调整的
   let isAdjustable = false;
   for (let it of Items) {
@@ -120,11 +127,12 @@ export function useLayoutGrid(
     TopClass: CssUtils.mergeClassName(props.className),
     TopStyle,
     Items,
+    Panels,
     bindResizing(
       $main: HTMLElement,
       resizing: GridResizingState,
       onDestroy: Callback1<Callback>,
-      Keep: ComputedRef<LayoutGridKeepFeature>,
+      Keep: ComputedRef<LayoutGridKeepFeature>
     ) {
       if (isAdjustable) {
         useGridResizing($main, resizing, onDestroy, Keep);

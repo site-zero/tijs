@@ -232,6 +232,21 @@ export type CssGridItem = Partial<{
   alignSelf: CssItemAlignment;
 }>;
 
+/**
+ * 弹出层的为位置类型，可以适用于 LayoutPaenel，模式对话框，全局弹出框
+ */
+export type PopPosition =
+  | 'left'
+  | 'right'
+  | 'top'
+  | 'bottom'
+  | 'center'
+  | 'free'
+  | 'left-top'
+  | 'right-top'
+  | 'bottom-left'
+  | 'bottom-right';
+
 /*---------------------------------------------------
 
                   回调函数签名

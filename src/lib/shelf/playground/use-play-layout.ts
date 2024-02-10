@@ -1,4 +1,5 @@
 import { LayoutGridProps } from '../layout/grid/use-layout-grid';
+import { LayoutPanel } from '../layout/layout-panel';
 import { LayoutBlock } from '../layout/layout-support';
 import { PlayLayoutMode } from './use-play-mode';
 
@@ -81,6 +82,25 @@ export function useGridLayout(mode: PlayLayoutMode): LayoutGridProps {
     };
   }
 
+  function getPanels(): LayoutPanel[] {
+    if ('F' == mode) {
+      return [
+        {
+          name: 'conf',
+          position: 'bottom-left',
+          showMask: false,
+          left: '30px',
+          top: '30px',
+          width: '70%',
+          height: '50vh',
+          minWidth: '500px',
+          maxWidth: '1000px',
+        },
+      ];
+    }
+    return [];
+  }
+
   return {
     className: 'fit-parent as-card r-s',
     itemStyle: {
@@ -92,5 +112,6 @@ export function useGridLayout(mode: PlayLayoutMode): LayoutGridProps {
     },
     layout: getGridLayout(),
     blocks: getGridBlocks(),
+    panels: getPanels(),
   };
 }

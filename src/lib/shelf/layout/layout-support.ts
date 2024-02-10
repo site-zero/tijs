@@ -164,7 +164,7 @@ export type LayoutItem = LayoutBlock & {
   itemConfig?: Vars;
 };
 
-function autoSetLayoutItemType(it: LayoutItem) {
+export function autoSetLayoutItemType(it: LayoutItem) {
   if (!it.type) {
     // Grid
     if (it.layout) {
@@ -181,7 +181,7 @@ function autoSetLayoutItemType(it: LayoutItem) {
   }
 }
 
-function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
+export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
   // 布局块
   if ('block' == it.type && !it.comType) {
     let refName = it.body || it.name;

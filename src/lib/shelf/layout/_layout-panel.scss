@@ -1,0 +1,158 @@
+.layout-panel {
+  @include flex-center;
+  position: absolute;
+  z-index: $z-mask + 10;
+  //border: 1px solid red;
+  $R: var(--ti-measure-r-m);
+  //-----------------------------------
+  > .layout-panel-con {
+    background-color: var(--ti-color-card);
+    box-shadow:
+      -1px -1px var(--ti-color-light),
+      1px 1px var(--ti-color-dark),
+      6px 6px 15px var(--ti-color-mask-thin);
+    border-radius: $R;
+    overflow: hidden;
+  }
+  //-----------------------------------
+  &.show-mask {
+    @include pos-abs(0, 0, 100%, 100%);
+    background-color: var(--ti-color-mask-thin);
+    &.at-free > .layout-panel-con {
+      position: absolute;
+    }
+    &.at-left {
+      @include flex-as($j: flex-start);
+      > .layout-panel-con {
+        border-left: 0;
+        border-radius: 0 $R $R 0;
+      }
+    }
+    &.at-right {
+      @include flex-as($j: flex-end);
+      > .layout-panel-con {
+        border-right: 0;
+        border-radius: $R 0 0 $R;
+      }
+    }
+    &.at-top {
+      @include flex-as($a: flex-start);
+      > .layout-panel-con {
+        border-top: 0;
+        border-radius: 0 0 $R $R;
+      }
+    }
+    &.at-bottom {
+      @include flex-as($a: flex-end);
+      > .layout-panel-con {
+        border-bottom: 0;
+        border-radius: $R $R 0 0;
+      }
+    }
+    &.at-left-top {
+      @include flex-as($j: flex-start, $a: flex-start);
+      > .layout-panel-con {
+        border-radius: 0 0 $R 0;
+      }
+    }
+    &.at-right-top {
+      @include flex-as($j: flex-end, $a: flex-start);
+      > .layout-panel-con {
+        border-radius: 0 0 0 $R;
+      }
+    }
+    &.at-bottom-left {
+      @include flex-as($j: flex-start, $a: flex-end);
+      > .layout-panel-con {
+        border-radius: 0 $R 0 0;
+      }
+    }
+    &.at-bottom-right {
+      @include flex-as($j: flex-end, $a: flex-end);
+      > .layout-panel-con {
+        border-radius: $R 0 0 0;
+      }
+    }
+  }
+  //-----------------------------------
+  &.no-mask {
+    // If center, it should be mask by transparent
+    &.at-center {
+      @include pos-abs(0, 0, 100%, 100%);
+      @include flex-center;
+    }
+    //---------------------------------
+    &.at-free {
+      position: absolute;
+    }
+    &.at-left {
+      @include pos-abs($l: 0, $t: 0, $b: 0);
+      width: 1px;
+      justify-content: flex-start;
+      > .layout-panel-con {
+        border-left: 0;
+        border-radius: 0 $R $R 0;
+      }
+    }
+    &.at-right {
+      @include pos-abs($r: 0, $t: 0, $b: 0);
+      width: 1px;
+      justify-content: flex-end;
+      > .layout-panel-con {
+        border-right: 0;
+        border-radius: $R 0 0 $R;
+      }
+    }
+    &.at-top {
+      @include pos-abs($l: 0, $t: 0, $r: 0);
+      height: 1px;
+      align-content: flex-start;
+      > .layout-panel-con {
+        border-top: 0;
+        border-radius: 0 0 $R $R;
+      }
+    }
+    &.at-bottom {
+      @include pos-abs($l: 0, $b: 0, $r: 0);
+      height: 1px;
+      align-content: flex-end;
+      > .layout-panel-con {
+        border-bottom: 0;
+        border-radius: $R $R 0 0;
+      }
+    }
+    &.at-left-top {
+      @include pos-abs($l: 0, $t: 0);
+      > .layout-panel-con {
+        border-left: 0;
+        border-top: 0;
+        border-radius: 0 0 $R 0;
+      }
+    }
+    &.at-right-top {
+      @include pos-abs($r: 0, $t: 0);
+      > .layout-panel-con {
+        border-right: 0;
+        border-top: 0;
+        border-radius: 0 0 0 $R;
+      }
+    }
+    &.at-bottom-left {
+      @include pos-abs($b: 0, $l: 0);
+      > .layout-panel-con {
+        border-bottom: 0;
+        border-left: 0;
+        border-radius: 0 $R 0 0;
+      }
+    }
+    &.at-bottom-right {
+      @include pos-abs($b: 0, $r: 0);
+      > .layout-panel-con {
+        border-bottom: 0;
+        border-right: 0;
+        border-radius: $R 0 0 0;
+      }
+    }
+    //---------------------------------
+  }
+}

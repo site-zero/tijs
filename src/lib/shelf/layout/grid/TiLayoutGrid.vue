@@ -89,9 +89,12 @@ onMounted(() => {
 <template>
   <div class="ti-layout-grid" :class="Grid.TopClass" :style="Grid.TopStyle"
     ref="$main">
+    <!--
+      Grid Blocks
+    -->
     <div v-for="it in Grid.Items" :key="it.uniqKey" class="grid-item"
       :it-index="it.index" :it-ukey="it.uniqKey" :style="it.style">
-      <!-------- 块内容 -------->
+      <!-------- Block Container -------->
       <div class="grid-item-con" :class="it.className" :style="it.conStyle">
         <slot :item="it">
           <!-- 布局块-->
@@ -108,16 +111,42 @@ onMounted(() => {
           </div>
         </slot>
       </div>
-
       <!-------- 调整条 -------->
       <template v-if="it.adjustBars && it.adjustBars.length > 0">
         <div v-for="bar in it.adjustBars" class="adjust-bar" :bar-mode="bar.mode"
           :bar-adjust-index="bar.adjustIndex" :bar-position="bar.position"></div>
       </template>
     </div>
+    <!-- 
+      Pop Panel
+    -->
+    <template v-for="pan in Grid.Panels" :key="pan.uniqKey">
+      <template v-if="!pan.hidden">
+        <div class="layout-panel" :class="pan.className" :panel-index="pan.index"
+          :panel-ukey="pan.uniqKey" :style="pan.style">
+          <div class="layout-panel-con" :style="pan.conStyle">
+            <slot name="panel" :panel="pan">
+              <!-- 布局块-->
+              <TiBlock v-if="'block' == pan.type" v-bind="pan.itemConfig" />
+              <!-- 格子布局-->
+              <TiLayoutGrid v-else-if="'grid' == pan.type" v-bind="pan.itemConfig"
+                :schema="schema" />
+              <!-- 标签布局-->
+              <TiLayoutTabs v-else-if="'tabs' == pan.type" v-bind="pan.itemConfig"
+                :schema="schema" />
+              <!-- 未知布局-->
+              <div v-else>
+                Unknown layout item type: <code>{{ pan.type }}</code>
+              </div>
+            </slot>
+          </div>
+        </div>
+      </template>
+    </template>
   </div>
 </template>
 <style lang="scss">
 @use '../../../../assets/style/_all.scss' as *;
-@import './ti-layout-grid.scss';
+@import './ti-layout-grid';
+@import './../layout-panel';
 </style>

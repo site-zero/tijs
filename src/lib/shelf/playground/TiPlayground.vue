@@ -35,6 +35,12 @@ const _play_layout_mode: Ref<PlayLayoutMode> = ref(loadPlayLayoutMode());
  * 指明控件演示区的布局模式
  */
 const _live_bg_mode: Ref<LiveBgMode> = ref(loadLiveBgMode());
+/**
+ * 如果 play_mode == 'F' 那么需要指定是否隐藏显示 conf
+ */
+const _layout_shown: Ref<Record<string, boolean>> = ref({
+  conf: true
+})
 
 /**
  * 本控件要接入的属性
@@ -96,7 +102,7 @@ watch(() => [_live_bg_mode.value, _play_layout_mode.value], function (payload) {
     <TiLayoutGrid v-bind="Grid" :style="{
       flex: '1 1 auto',
       padding: '10px',
-    }">
+    }" :shown="_layout_shown">
       <template v-slot="{ item }">
         <!--
             Tabs
@@ -120,6 +126,14 @@ watch(() => [_live_bg_mode.value, _play_layout_mode.value], function (payload) {
           Conf
         -->
         <template v-else>
+          <PlayConf :config-data="_example.comConf"
+            :config-changed="ExampleChanged" @change="OnConfChange"
+            @reset="OnConfReset" />
+        </template>
+      </template>
+
+      <template name="panel" v-slot:panel="{ panel }">
+        <template v-if="'conf' == panel.name">
           <PlayConf :config-data="_example.comConf"
             :config-changed="ExampleChanged" @change="OnConfChange"
             @reset="OnConfReset" />

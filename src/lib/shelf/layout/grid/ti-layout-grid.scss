@@ -2,6 +2,7 @@
   display: grid;
   grid-template-columns: 1fr;
   grid-template-rows: 1fr;
+  position: relative;
 
   > .grid-item {
     display: grid;
@@ -16,56 +17,8 @@
       position: relative;
     }
 
-    > .adjust-bar {
-      user-select: none;
-      position: absolute;
-      background-color: var(--ti-color-mask-weak);
-      opacity: 0;
-      transition: opacity 500ms;
-      z-index: 1;
-      @include flex-center;
-      &::before {
-        display: block;
-        content: "";
-        background-color: var(--ti-color-mask-thin);
-      }
-      &:hover {
-        opacity: 1;
-      }
-      &[bar-mode="column"] {
-        top: 0;
-        bottom: 0;
-        width: 8px;
-        cursor: ew-resize;
-        &::before {
-          height: 100%;
-          width: 1px;
-        }
-        &[bar-position="prev"] {
-          left: -4px;
-        }
-        &[bar-position="next"] {
-          right: -4px;
-        }
-      }
-      &[bar-mode="row"] {
-        left: 0;
-        right: 0;
-        height: 8px;
-        cursor: ns-resize;
-        &::before {
-          width: 100%;
-          height: 1px;
-        }
-        &[bar-position="prev"] {
-          top: -4px;
-        }
-        &[bar-position="next"] {
-          bottom: -4px;
-        }
-      }
-    }
-  }
+    @import "./style/grid-adjust-bar";
+  } // > .grid-item {
 
   &.as-card {
     > .grid-item > .grid-item-con {
