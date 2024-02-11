@@ -36,6 +36,7 @@ export type LayoutPanelItem = LayoutItem & {
    * 计算出来的，当前段面板是否是隐藏
    */
   hidden: boolean;
+  visible: boolean;
 };
 
 export type LayoutPanelProps = {
@@ -53,9 +54,6 @@ export function getLayoutPanelItems(
 
   for (let i = 0; i < panels.length; i++) {
     let item = panels[i];
-    if (item.name && false === shown[item.name]) {
-      continue;
-    }
 
     // 准备布局项目
     let it = _.cloneDeep(item) as unknown as LayoutPanelItem;
@@ -110,7 +108,8 @@ export function getLayoutPanelItems(
     ]);
     it.style = CssUtils.mergeStyles([_out_style]);
 
-    it.hidden = shown[it.uniqKey] ? false : true;
+    it.visible = shown[it.uniqKey] ? true : false;
+    it.hidden = !it.visible;
 
     // 设置布局项的属性
     setLayoutItemConfig(it, schema);

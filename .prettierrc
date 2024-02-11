@@ -8,5 +8,6 @@
   "quoteProps": "consistent",
   "bracketSameLine": true,
   "vueIndentScriptAndStyle": true,
-  "jsxSingleQuote": true
+  "jsxSingleQuote": true,
+  "singleAttributePerLine": true
 }
