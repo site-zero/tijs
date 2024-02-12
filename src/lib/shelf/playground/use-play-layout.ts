@@ -87,14 +87,14 @@ export function useGridLayout(mode: PlayLayoutMode): LayoutGridProps {
       return [
         {
           name: 'conf',
-          position: 'bottom-left',
-          showMask: false,
+          position: 'left',
+          clickMaskToClose: true,
           left: '30px',
           top: '30px',
-          width: '70%',
-          height: '50vh',
-          minWidth: '500px',
-          maxWidth: '1000px',
+          width: '61.8%',
+          height: '98%',
+          minWidth: '200px',
+          maxWidth: '640px',
         },
       ];
     }

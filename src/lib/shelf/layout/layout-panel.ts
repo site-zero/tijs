@@ -9,8 +9,17 @@ import {
   setLayoutItemConfig,
 } from './layout-support';
 
+type TranSpeed = 'slow' | 'normal' | 'fast';
+type TranName =
+  | 'ti-slide-up'
+  | 'ti-slide-down'
+  | 'ti-slide-left'
+  | 'ti-slide-right'
+  | 'ti-zoom';
+
 type PopItemProps = {
   position: PopPosition;
+  tranSpeed?: TranSpeed;
   showMask?: boolean;
   clickMaskToClose?: boolean;
   width?: string;
@@ -26,12 +35,32 @@ type PopItemProps = {
   overflow?: string;
 };
 
+function _position_to_transName(pos: PopPosition): TranName {
+  return {
+    'left': 'ti-slide-left',
+    'right': 'ti-slide-right',
+    'top': 'ti-slide-up',
+    'bottom': 'ti-slide-down',
+    'center': 'ti-zoom',
+    'free': 'ti-zoom',
+    'left-top': 'ti-zoom',
+    'right-top': 'ti-zoom',
+    'bottom-left': 'ti-zoom',
+    'bottom-right': 'ti-zoom',
+  }[pos] as TranName;
+}
+
 export type LayoutPanel = LayoutBlock & PopItemProps;
 
 export type LayoutPanelItem = LayoutItem & {
   position: PopPosition;
   showMask?: boolean;
   clickMaskToClose?: boolean;
+  /**
+   * 得到过渡动画相关
+   */
+  tranSpeed?: TranSpeed;
+  tranName: TranName;
   /**
    * 计算出来的，当前段面板是否是隐藏
    */
@@ -73,11 +102,16 @@ export function getLayoutPanelItems(
       it.className,
       `as-${it.type}`,
       `at-${it.position || 'center'}`,
+      'ti-trans',
+      `origin-${it.position}`,
       {
         'show-mask': it.showMask,
         'no-mask': !it.showMask,
       }
     );
+    if (it.tranSpeed) {
+      it.className[`speed-${it.tranSpeed}`] = true;
+    }
 
     let _out_style = {} as Vars;
     let _con_style = {} as Vars;
@@ -108,13 +142,13 @@ export function getLayoutPanelItems(
     ]);
     it.style = CssUtils.mergeStyles([_out_style]);
 
-    it.visible = shown[it.uniqKey] ? true : false;
-    it.hidden = !it.visible;
-
     // 设置布局项的属性
     setLayoutItemConfig(it, schema);
 
     // 记入一下 Panel 相关属性
+    it.visible = shown[it.uniqKey] ? true : false;
+    it.hidden = !it.visible;
+    it.tranName = _position_to_transName(it.position);
 
     // 记入返回列表
     list.push(it);

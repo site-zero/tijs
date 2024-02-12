@@ -12,51 +12,62 @@
   opacity: 0;
 }
 /*------------------------------------*/
-//
-// List Item : slide left
-//
+// slide left
 /*------------------------------------*/
 .ti-slide-left-enter-active,
 .ti-slide-left-leave-active {
-  transition: 0.3s;
+  transition: opacity 0.3s;
+  > .trans-box {
+    transition: transform 0.3s;
+  }
 }
 .ti-slide-left-enter-from,
 .ti-slide-left-leave-to {
   opacity: 0;
-  transform: translateX(SZ(-100));
+  > .trans-box {
+    transform: translateX(SZ(-100));
+  }
 }
 .ti-slide-left-enter-to,
 .ti-slide-left-leave-from {
   opacity: 1;
-  transform: translateX(0);
+  > .trans-box {
+    transform: translateX(0);
+  }
 }
 /*------------------------------------*/
-//
-// List Item : slide right
-//
+// slide right
 /*------------------------------------*/
 .ti-slide-right-enter-active,
 .ti-slide-right-leave-active {
-  transition: 0.3s;
+  transition: opacity 0.3s;
+  > .trans-box {
+    transition: transform 0.3s;
+  }
 }
 .ti-slide-right-enter-from,
 .ti-slide-right-leave-to {
   opacity: 0;
-  transform: translateX(SZ(100));
+  > .trans-box {
+    transform: translateX(SZ(100));
+  }
 }
-.ti-slide-left-enter-to,
-.ti-slide-left-leave-from {
+.ti-slide-right-enter-to,
+.ti-slide-right-leave-from {
   opacity: 1;
-  transform: translateX(0);
+  > .trans-box {
+    transform: translateX(0);
+  }
 }
 /*------------------------------------*/
-//
-// List Item : slide up
-//
+// slide up
 /*------------------------------------*/
 .ti-slide-up-enter-active,
 .ti-slide-up-leave-active {
-  transition: 0.3s;
+  transition: opacity 0.3s;
+  > .trans-box {
+    transition: transform 0.3s;
+  }
 }
 .ti-slide-up-enter-from,
 .ti-slide-up-leave-to {
@@ -69,37 +80,66 @@
   transform: translateY(0);
 }
 /*------------------------------------*/
-//
-// List Item : slide down
-//
+// slide down
 /*------------------------------------*/
 .ti-slide-down-enter-active,
 .ti-slide-down-leave-active {
-  transition: 0.3s;
+  transition: opacity 0.3s;
+  > .trans-box {
+    transition: transform 0.3s;
+  }
 }
 .ti-slide-down-enter-from,
 .ti-slide-down-leave-to {
   opacity: 0;
-  transform: translateY(SZ(100));
+  > .trans-box {
+    transform: translateY(SZ(100));
+  }
 }
 .ti-slide-down-enter-to,
 .ti-slide-down-leave-from {
   opacity: 1;
-  transform: translateY(0);
+  > .trans-box {
+    transform: translateY(0);
+  }
+}
+/*------------------------------------*/
+// Zoom
+/*------------------------------------*/
+.ti-zoom-enter-active,
+.ti-zoom-leave-active {
+  transition: opacity 0.3s;
+  > .trans-box {
+    transition: transform 0.3s;
+  }
+}
+.ti-zoom-enter-from,
+.ti-zoom-leave-to {
+  opacity: 0;
+  > .trans-box {
+    transform: scale(0.1);
+  }
+}
+.ti-zoom-enter-to,
+.ti-zoom-leave-from {
+  opacity: 1;
+  > .trans-box {
+    transform: scale(1);
+  }
 }
 /*------------------------------------*/
 //
-// Box : folder down
+// Folder down
 //
 /*------------------------------------*/
-.folder-enter-active,
-.folder-leave-active {
+.ti-folder-enter-active,
+.ti-folder-leave-active {
   transition: 0.3s;
   overflow: hidden;
   height: 2rem;
 }
-.folder-enter-from,
-.folder-leave-to {
+.ti-folder-enter-from,
+.ti-folder-leave-to {
   height: 0;
   opacity: 0;
 }
@@ -117,4 +157,62 @@
 }
 .ti-trans-speed-fast {
   transition-duration: 0.3s;
+}
+/*------------------------------------*/
+//
+// origin
+//
+/*------------------------------------*/
+.ti-trans {
+  /*------------------------------------*/
+  &.speed-slow {
+    transition-duration: 0.8s;
+    > .trans-box {
+      transition-duration: 0.8s;
+    }
+  }
+  &.speed-normal {
+    transition-duration: 0.5s;
+    > .trans-box {
+      transition-duration: 0.5s;
+    }
+  }
+  &.speed-fast {
+    transition-duration: 0.3s;
+    > .trans-box {
+      transition-duration: 0.3s;
+    }
+  }
+  /*------------------------------------*/
+  &.origin-free,
+  &.origin-center {
+    > .trans-box {
+      transform-origin: center;
+    }
+  }
+  &.origin-left > .trans-box {
+    transform-origin: left;
+  }
+  &.origin-right > .trans-box {
+    transform-origin: right;
+  }
+  &.origin-bottom > .trans-box {
+    transform-origin: bottom;
+  }
+  &.origin-top > .trans-box {
+    transform-origin: top;
+  }
+  &.origin-left-top > .trans-box {
+    transform-origin: left top;
+  }
+  &.origin-right-top > .trans-box {
+    transform-origin: right top;
+  }
+  &.origin-bottom-left > .trans-box {
+    transform-origin: bottom left;
+  }
+  &.origin-bottom-right > .trans-box {
+    transform-origin: bottom right;
+  }
+  /*------------------------------------*/
 }

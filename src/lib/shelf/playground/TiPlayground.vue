@@ -9,18 +9,18 @@ import PlayLive from './PlayLive.vue';
 import PlayTabs from './PlayTabs.vue';
 import { useGridLayout } from './use-play-layout';
 import {
-LiveBgMode,
-PlayLayoutMode,
-loadLiveBgMode,
-loadPlayLayoutMode,
-saveLiveBgMode,
-savePlayLayoutMode,
+  LiveBgMode,
+  PlayLayoutMode,
+  loadLiveBgMode,
+  loadPlayLayoutMode,
+  saveLiveBgMode,
+  savePlayLayoutMode,
 } from './use-play-mode';
 import {
-ExampleState,
-PlaygroundProps,
-saveLocalSetting,
-selectExample,
+  ExampleState,
+  PlaygroundProps,
+  saveLocalSetting,
+  selectExample,
 } from './use-playground';
 /**
  * 指明当前的控件对象要展示的示例配置信息
@@ -70,6 +70,7 @@ function OnSelectExample(name: string) {
 function OnConfReset() {
   let dftComConf = PlayCom.value.checkProps(_example.value.name);
   _example.value.comConf = dftComConf;
+  saveLocalSetting(PlayCom.value, _example.value);
 }
 
 function OnConfChange(confData: Vars) {
@@ -112,7 +113,7 @@ watch(
     <TiLayoutGrid v-bind="Grid" :style="{
       flex: '1 1 auto',
       padding: '10px',
-    }" :shown="_layout_shown">
+    }" :shown="_layout_shown" @hide="OnToggleConfShown">
       <template v-slot="{ item }">
         <!--
             Tabs

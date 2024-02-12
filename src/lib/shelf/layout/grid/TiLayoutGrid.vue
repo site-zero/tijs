@@ -1,31 +1,26 @@
 <script lang="ts" setup>
 import _ from 'lodash';
 import {
-Ref,
-computed,
-inject,
-onMounted,
-onUnmounted,
-reactive,
-ref,
-watch,
+  Ref,
+  computed,
+  onMounted,
+  onUnmounted,
+  reactive,
+  ref,
+  watch
 } from 'vue';
 import {
-BUS_KEY,
-TiAppEvent,
-TiBlock,
-TiLayoutTabs,
-useBusEmit,
+  TiBlock,
+  TiLayoutTabs
 } from '../../../';
 import { Vars } from '../../../../core';
-import { TiLayoutGridInfo } from './ti-layout-grid-index';
+import { LayoutPanelItem } from '../layout-panel';
 import { loadAllState, useKeepLayoutGrid } from './use-grid-keep';
 import {
-COM_TYPE,
-LayoutGridEvents,
-LayoutGridProps,
-LayoutGridState,
-useLayoutGrid,
+  COM_TYPE,
+  LayoutGridProps,
+  LayoutGridState,
+  useLayoutGrid,
 } from './use-layout-grid';
 /*-------------------------------------------------------
 
@@ -36,6 +31,7 @@ defineOptions({
   name: COM_TYPE,
   inheritAttrs: true,
 });
+
 /*-------------------------------------------------------
 
                     Props
@@ -58,20 +54,23 @@ const state = reactive({
               Bus & Notify & Emit
 
 -------------------------------------------------------*/
-let outer_bus = inject(BUS_KEY);
 let emit = defineEmits<{
-  (event: LayoutGridEvents, payload: TiAppEvent): void;
+  (event: 'show' | 'hide', name: string): void
 }>();
-// 准备通知函数
-let notify = useBusEmit(TiLayoutGridInfo, props, emit, outer_bus);
 /*-------------------------------------------------------
 
                 Use features
 
 -------------------------------------------------------*/
-let Grid = computed(() => useLayoutGrid(state, props, { notify }));
+let Grid = computed(() => useLayoutGrid(state, props));
 let Keep = computed(() => useKeepLayoutGrid(props));
 
+
+function OnClickPanelMask(pan: LayoutPanelItem): void {
+  if (pan.clickMaskToClose) {
+    emit('hide', pan.uniqKey)
+  }
+}
 /*-------------------------------------------------------
 
               Life Hooks
@@ -127,7 +126,8 @@ onMounted(() => {
       Pop Panel
     -->
     <template v-for="pan in Grid.Panels">
-      <Transition name="ti-slide-down" class="ti-trans-speed-slow" appear @before-enter="console.log('before-enter')"
+      <Transition :name="pan.tranName" appear>
+        <!--@before-enter="console.log('before-enter')"
         @before-leave="console.log('before-leave')" @enter="console.log('enter')"
         @leave="console.log('leave')" @appear="console.log('appear')"
         @after-enter="console.log('after-enter')"
@@ -135,10 +135,11 @@ onMounted(() => {
         @after-appear="console.log('after-appear')"
         @enter-cancelled="console.log('enter-cancelled')"
         @leave-cancelled="console.log('leave-cancelled')"
-        @appear-cancelled="console.log('appear-cancelled')">
-        <div v-if="pan.visible" class="layout-panel" :class="pan.className"
-          :panel-index="pan.index" :panel-ukey="pan.uniqKey" :style="pan.style">
-          <div class="layout-panel-con" :style="pan.conStyle">
+        @appear-cancelled="console.log('appear-cancelled')"-->
+        <div v-if="pan.visible" class="layout-panel trans-mask" :class="pan.className"
+          :panel-index="pan.index" :panel-ukey="pan.uniqKey" :style="pan.style"
+          @click="OnClickPanelMask(pan)">
+          <div class="layout-panel-con trans-box" :style="pan.conStyle" @click.stop>
             <slot name="panel" :panel="pan">
               <!-- 布局块-->
               <TiBlock v-if="'block' == pan.type" v-bind="pan.itemConfig" />
@@ -159,7 +160,7 @@ onMounted(() => {
     </template>
   </div>
 </template>
-<style lang="scss">
+<style lang="scss" scoped>
 @use '../../../../assets/style/_all.scss' as *;
 @import './ti-layout-grid';
 @import './../layout-panel';

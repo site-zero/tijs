@@ -1,11 +1,12 @@
-> .adjust-bar {
+.adjust-bar {
+  @include flex-center;
   user-select: none;
   position: absolute;
   background-color: var(--ti-color-mask-weak);
   opacity: 0;
   transition: opacity 500ms;
   z-index: 1;
-  @include flex-center;
+  
   &::before {
     display: block;
     content: "";

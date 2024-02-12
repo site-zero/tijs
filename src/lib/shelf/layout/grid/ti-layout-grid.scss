@@ -4,6 +4,11 @@
   grid-template-rows: 1fr;
   position: relative;
 
+  &.cover-parent,
+  &.fit-parent {
+    overflow: hidden;
+  }
+
   > .grid-item {
     display: grid;
     grid-template-columns: 1fr;

@@ -29,7 +29,6 @@ export const COM_TYPE = 'TiLayoutGrid';
                     Events & Types
 
 -------------------------------------------------------*/
-export type LayoutGridEvents = 'shown';
 export type LayoutGridItem = LayoutItem & {
   adjustBars: LayoutBar[];
 };
@@ -49,14 +48,6 @@ export type LayoutGridProps = LayoutProps &
   LayoutPanelProps & {
     layout?: CssGridLayout;
   };
-/*-------------------------------------------------------
-
-                     Options
-
--------------------------------------------------------*/
-export type LayoutGridOptions = {
-  notify: TiEventTrigger<LayoutGridEvents, any>;
-};
 /*-------------------------------------------------------
 
                      Methods
@@ -99,8 +90,7 @@ export type LayoutGridFeature = {
 };
 export function useLayoutGrid(
   state: LayoutGridState,
-  props: LayoutGridProps,
-  _options: LayoutGridOptions
+  props: LayoutGridProps
 ): LayoutGridFeature {
   let Items = getLayoutGridItems(state, props);
   let Panels = getLayoutPanelItems(state, props);
