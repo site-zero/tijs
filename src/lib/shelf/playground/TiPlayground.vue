@@ -88,8 +88,8 @@ function OnToggleConfShown() {
 }
 
 watch(
-  () => props.example,
-  function (exampleName) {
+  () => [props.comType, props.example],
+  function ([_comType, exampleName]) {
     let com = PlayCom.value;
     selectExample(com, _example.value, exampleName);
   },
@@ -123,8 +123,8 @@ watch(
             :play-layout-mode="_play_layout_mode" :live-bg-mode="_live_bg_mode"
             :example-as-router-link="exampleAsRouterLink"
             @change="OnSelectExample"
-            @mode:layout="_play_layout_mode = $event as PlayLayoutMode"
-            @mode:live_bg="_live_bg_mode = $event as LiveBgMode"
+            @mode:layout="_play_layout_mode = ($event as PlayLayoutMode)"
+            @mode:live_bg="_live_bg_mode = ($event as LiveBgMode)"
             @toggle:conf="OnToggleConfShown" />
         </template>
         <!--
