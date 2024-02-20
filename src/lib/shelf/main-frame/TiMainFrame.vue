@@ -27,7 +27,9 @@
           v-html="getDemoContent()"></div>
       </div>
       <!--底栏-->
-      <div class="frame-part as-foot">Foot</div>
+      <div class="frame-part as-foot">
+        <slot name="foot"><span>{Slot Foot}</span></slot>
+      </div>
     </template>
     <!--
       =====Desktop Layout====== 
@@ -44,9 +46,13 @@
           v-html="getDemoContent()"></div>
       </div>
       <!--侧边栏-->
-      <div class="frame-part as-chute">Chute</div>
+      <div class="frame-part as-chute">
+        <slot name="chute"><span>{Slot Chute}</span></slot>
+      </div>
       <!--底栏-->
-      <div class="frame-part as-foot">Foot</div>
+      <div class="frame-part as-foot">
+        <slot name="foot"><span>{Slot Foot}</span></slot>
+      </div>
     </template>
   </div>
 </template>
