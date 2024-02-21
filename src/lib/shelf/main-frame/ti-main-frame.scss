@@ -78,6 +78,7 @@ App Main Frame layout, there is 3 modes below::after
   grid-template-rows: $H_SKY 1fr $H_FOOT;
 
   > .frame-part {
+    position: relative;
     &.as-sky {
       grid-area: sky;
       background-color: red;
