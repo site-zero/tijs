@@ -73,6 +73,7 @@ export interface TiComInfo {
   text: string;
   i18n: I18nSet;
   com: any;
+  events?: string[];
   install: Plugin<any[]>;
   defaultProps?: string;
   exampleProps: ComPropExample[];
@@ -104,6 +105,7 @@ export class TiCom implements TiComInfo {
   text: string;
   i18n: I18nSet;
   com: TiRawCom;
+  events?: string[];
   install: Plugin<any[]>;
   defaultProps?: string;
   exampleProps: ComPropExample[];
@@ -116,6 +118,7 @@ export class TiCom implements TiComInfo {
     this.race = info.race;
     this.name = info.name;
     this.text = info.text;
+    this.events = info.events;
     this.i18n = info.i18n;
     this.com = info.com;
     this.install = info.install;
@@ -204,7 +207,7 @@ export type EventInfo<T> = {
 
 export function isEventInfo<T>(
   input: any,
-  isT?: IsType<T>,
+  isT?: IsType<T>
 ): input is EventInfo<T> {
   if (_.isNil(input)) {
     return false;
@@ -262,3 +265,13 @@ export type TiAppBus = TiBus<TiAppEvent>;
 export type TiAppEventTrigger<K extends string> = TiEventTrigger<K, any>;
 
 export const BUS_KEY: InjectionKey<TiAppBus> = Symbol('EVENT_BUS');
+
+export type SideBarItem = {
+  key: string;
+  depth: number;
+  id: string;
+  path?: string;
+  icon?: IconInput;
+  title?: string;
+  items?: SideBarItem[];
+};

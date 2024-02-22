@@ -1,5 +1,5 @@
-import { TiComInfo, TiComRace } from '../../';
 import { App } from 'vue';
+import { TiComInfo, TiComRace } from '../../';
 import TiInput from './TiInput.vue';
 import { COM_TYPE } from './use-input-box';
 
@@ -23,6 +23,13 @@ const TiInputInfo: TiComInfo = {
     zh_hk: zh_cn,
   },
   com: TiInput,
+  events: [
+    'change',
+    'click-prefix-icon',
+    'click-prefix-text',
+    'click-suffix-icon',
+    'click-suffix-text',
+  ],
   install: (app: App) => {
     app.component(COM_TYPE, TiInput);
   },

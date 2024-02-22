@@ -7,6 +7,8 @@ import {
   IconTextOptions,
   IconTextProps,
   IconTextState,
+  UseIconEvents,
+  UseTextEvents,
   useIconText,
 } from '../../';
 import { CssUtils, I18n, Link } from '../../../core';
@@ -61,7 +63,7 @@ export type RoadblockProps = CommonProps &
                      Options
 
 -------------------------------------------------------*/
-export type RoadblockOptions = IconTextOptions<RoadblockEvents, undefined> & {
+export type RoadblockOptions = IconTextOptions<UseIconEvents, UseTextEvents> & {
   defaultIcon: IconInput;
   defaultText: string;
 };
@@ -93,7 +95,7 @@ function getIconClass(Roadblock: IconTextFeature, Size: RoadblockSize) {
 export function useRoadblock(
   state: IconTextState,
   props: RoadblockProps,
-  options: RoadblockOptions,
+  options: RoadblockOptions
 ) {
   //
   // 分析参数
@@ -112,7 +114,7 @@ export function useRoadblock(
       'OnClickIcon',
       'OnClickText',
       'setIconHover',
-      'setTextHover',
+      'setTextHover'
     ),
     //.......................................
     TopClass: Roadblock.getClassName(
@@ -123,7 +125,7 @@ export function useRoadblock(
       _.isString(props.opacity) ? props.opacity : null,
       {
         'has-links': hasLinks,
-      },
+      }
     ),
     //.......................................
     TopStyle: CssUtils.mergeStyles([

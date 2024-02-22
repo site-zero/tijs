@@ -1,7 +1,7 @@
-import { Callback, Callback1, CssUtils, I18n, Vars } from '../../core';
-import { IconInput, TiEventTrigger } from '../';
 import _ from 'lodash';
 import { CommonProps, TextShowProps, useClassStyle } from '.';
+import { IconInput } from '../';
+import { Callback, Callback1, CssUtils, I18n, Vars } from '../../core';
 export type IconTextState = {
   iconHovered?: boolean;
   textHovered?: boolean;
@@ -11,7 +11,9 @@ export type IconTextState = {
                      Events
 
 -------------------------------------------------------*/
-export type IconTextEvents = 'click-icon' | 'click-text';
+export type UseIconEvents = 'click-icon';
+export type UseTextEvents = 'click-text';
+export type IconTextEvents = UseIconEvents | UseTextEvents;
 /*-------------------------------------------------------
 
                      Props
@@ -63,10 +65,10 @@ export type IconTextFeature = {
                      Options
 
 -------------------------------------------------------*/
-export type IconTextOptions<K extends string, T> = {
-  notify?: TiEventTrigger<K, T>;
-  notifyIcon?: [K, T];
-  notifyText?: [K, T];
+export type IconTextOptions<I extends string, T extends string> = {
+  emit?: (event: I | T) => void;
+  emitIcon?: I;
+  emitText?: T;
 };
 /*-----------------------------------------------------
 
@@ -76,12 +78,12 @@ export type IconTextOptions<K extends string, T> = {
 /**
  * 如果想获得响应性，本特性推荐在 computed 里使用
  */
-export function useIconText<K extends string, T>(
+export function useIconText<I extends string, T extends string>(
   state: IconTextState,
   props: IconTextProps,
-  options: IconTextOptions<K, T> = {},
+  options: IconTextOptions<I, T> = {}
 ): IconTextFeature {
-  let { notify, notifyIcon, notifyText } = options;
+  let { emit, emitIcon, emitText } = options;
 
   //
   // 计算结果
@@ -105,7 +107,7 @@ export function useIconText<K extends string, T>(
 
   // 准备动态类型计算函数
   let evalClassAndStyle = (
-    info?: Pick<IconTextFeature, 'canHoverIcon' | 'canHoverText'>,
+    info?: Pick<IconTextFeature, 'canHoverIcon' | 'canHoverText'>
   ) => {
     //console.log("canHoverIcon", info.canHoverIcon);
     return {
@@ -152,14 +154,13 @@ export function useIconText<K extends string, T>(
     },
 
     OnClickIcon: function () {
-      console.log('OnClickIcon');
-      if (showIcon && canHoverIcon && notify && notifyIcon) {
-        notify(notifyIcon[0], notifyIcon[1]);
+      if (showIcon && canHoverIcon && emit && emitIcon) {
+        emit(emitIcon);
       }
     },
     OnClickText: function () {
-      if (showText && canHoverText && notify && notifyText) {
-        notify(notifyText[0], notifyText[1]);
+      if (showText && canHoverText && emit && emitText) {
+        emit(emitText);
       }
     },
     setIconHover: function (hovred: boolean) {

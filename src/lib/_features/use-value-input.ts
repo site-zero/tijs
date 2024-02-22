@@ -1,3 +1,5 @@
+import JSON5 from 'json5';
+import _ from 'lodash';
 import {
   AsyncFuncA1,
   DictName,
@@ -11,14 +13,6 @@ import {
   isDictSetup,
 } from '../../core';
 import { wrapPromiseFunc } from '../../core/util/util-lang.ts';
-import JSON5 from 'json5';
-import _ from 'lodash';
-/*-------------------------------------------------------
-
-                     Events
-
--------------------------------------------------------*/
-export type ValueInputEvents = 'change';
 /*-------------------------------------------------------
 
                         Props
@@ -101,15 +95,15 @@ function __build_dict(props: ValueInputProps): TiDict | undefined {
     if (dynamic) {
       if (!dictKey) {
         throw new Error(
-          `DynamicDict: "${JSON5.stringify(dictName)}" without {dictKey}`,
+          `DynamicDict: "${JSON5.stringify(dictName)}" without {dictKey}`
         );
       }
       let key = _.get(dictVars, dictKey);
       if (!key) {
         throw new Error(
           `DynamicDict: "${JSON5.stringify(
-            dictName,
-          )}" Fail to get key from dictVars: ${JSON5.stringify(dictVars)}`,
+            dictName
+          )}" Fail to get key from dictVars: ${JSON5.stringify(dictVars)}`
         );
       }
       return Dicts.checkDynamicDict(name, key, dictVars);
@@ -124,13 +118,13 @@ function __build_dict(props: ValueInputProps): TiDict | undefined {
  */
 function __build_process_pips(
   props: ValueInputProps,
-  dict?: TiDict,
+  dict?: TiDict
 ): FuncA1<any, any>[] {
   let processors = [] as AsyncFuncA1<any, string>[];
   //........................................
   // 自定义：前置
   let list = wrapPromiseFunc<FuncA1<any, string>, AsyncFuncA1<any, string>>(
-    props.beforeValueProcessors,
+    props.beforeValueProcessors
   );
   processors.push(...list);
   //........................................
@@ -153,7 +147,7 @@ function __build_process_pips(
   //........................................
   // 自定义：后置
   list = wrapPromiseFunc<FuncA1<any, string>, AsyncFuncA1<any, string>>(
-    props.afterValueProcessors,
+    props.afterValueProcessors
   );
   processors.push(...list);
 

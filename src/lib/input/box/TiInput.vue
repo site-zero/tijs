@@ -1,36 +1,20 @@
 <script setup lang="ts">
   import _ from 'lodash';
-  import { computed, inject, nextTick, reactive, ref } from 'vue';
-  import {
-    BUS_KEY,
-    TiEvent,
-    TiIcon,
-    tiGetDefaultComPropValue,
-    useBusEmit,
-  } from '../../';
+  import { computed, nextTick, reactive, ref } from 'vue';
+  import { PrefixSuffixEvents, TiIcon, ValueBoxEmits, tiGetDefaultComPropValue } from '../../';
   import { CssUtils } from '../../../core';
-  import { TiInputInfo } from './ti-input-index';
   import {
     COM_TYPE,
-    InputBoxEvents,
     InputBoxProps,
     InputBoxState,
     useInputBox,
   } from './use-input-box';
-  /*-------------------------------------------------------
-
-                     Com Options
-
--------------------------------------------------------*/
+  //-----------------------------------------------------
   defineOptions({
     name: COM_TYPE,
-    inheritAttrs: false,
+    inheritAttrs: true,
   });
-  /*-------------------------------------------------------
-
-                        State
-
--------------------------------------------------------*/
+  //-----------------------------------------------------
   const state = reactive({
     boxVal: null,
     boxText: '',
@@ -41,44 +25,26 @@
     suffixIconHovered: false,
     suffixTextHovered: false,
   } as InputBoxState);
-  /*-------------------------------------------------------
-
-                        Props
-
--------------------------------------------------------*/
+  //-----------------------------------------------------
   let props = withDefaults(defineProps<InputBoxProps>(), {
     value: tiGetDefaultComPropValue(COM_TYPE, 'value'),
     autoI18n: true,
   });
-  /*-------------------------------------------------------
-
-                    Event Bus 
-
--------------------------------------------------------*/
-  let bus = inject(BUS_KEY);
-  let emit = defineEmits<{
-    (event: InputBoxEvents, payload: TiEvent<undefined>): void;
-  }>();
-  let notify = useBusEmit(TiInputInfo, props, emit, bus);
-  /*-------------------------------------------------------
-
-                      Features
-
--------------------------------------------------------*/
+  //-----------------------------------------------------
+  let emit = defineEmits<ValueBoxEmits>();
+  // let emit = defineEmits<{
+  //   (event: PrefixSuffixEvents): void;
+  //   (event: 'change', payload: string): void;
+  // }>();
+  //-----------------------------------------------------
   const $el = ref<any>(null);
   const Box = computed(() =>
     useInputBox(state, props, {
-      notify,
-      valueChangeMode: 'both',
+      emit,
       getBoxElement: () => $el.value,
-    }),
+    })
   );
-
-  /*-------------------------------------------------------
-
-                      Computed
-
--------------------------------------------------------*/
+  //-----------------------------------------------------
   const hasValue = computed(() => _.isNil(state.boxVal));
   const Placeholder = computed(() => Box.value.getPlaceholder());
   const TopClass = computed(() =>
@@ -88,14 +54,11 @@
       'is-focused': state.boxFocused,
       'no-focused': !state.boxFocused,
       'show-border': !props.hideBorder,
-    }),
+    })
   );
-  /*-------------------------------------------------------
-
-                  Customized Methods
-
--------------------------------------------------------*/
+  //-----------------------------------------------------
   const _input = ref<any>(null);
+  //-----------------------------------------------------
   function OnInputFocused() {
     state.boxFocused = true;
     Box.value.doUpdateText();
@@ -105,10 +68,12 @@
       });
     }
   }
+  //-----------------------------------------------------
   function OnInputChanged() {
     let val = _input.value.value;
     Box.value.doChangeValue(val);
   }
+  //-----------------------------------------------------
 </script>
 
 <template>

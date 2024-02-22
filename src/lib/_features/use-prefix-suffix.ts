@@ -1,11 +1,11 @@
-import { Callback1, Vars } from '../../core';
-import { IconInput, TiEventTrigger } from '../';
 import {
   BusEmitProps,
   ClassStyleFeature,
   IconTextFeature,
   useIconText,
 } from '.';
+import { IconInput } from '../';
+import { Callback1, Vars } from '../../core';
 /*-------------------------------------------------------
 
                      Events
@@ -16,6 +16,10 @@ export type PrefixSuffixEvents =
   | 'click-prefix-text'
   | 'click-suffix-icon'
   | 'click-suffix-text';
+
+export type PrefixSuffixEmits = {
+  (event: PrefixSuffixEvents): void;
+};
 /*-------------------------------------------------------
 
                      State
@@ -91,11 +95,11 @@ export type PrefixSuffixFeature = {
 export function usePrefixSuffix(
   state: PrefixSuffixState,
   props: PrefixSuffixFeatureProps,
-  notify: TiEventTrigger<PrefixSuffixEvents, undefined>,
+  emit: PrefixSuffixEmits
 ): PrefixSuffixFeature {
   return {
     //.......................................
-    Prefix: useIconText(
+    Prefix: useIconText<'click-prefix-icon', 'click-prefix-text'>(
       {
         iconHovered: state.prefixIconHovered,
         textHovered: state.prefixTextHovered,
@@ -115,13 +119,13 @@ export function usePrefixSuffix(
         textClickable: props.prefixTextClickable,
       },
       {
-        notify,
-        notifyIcon: ['click-prefix-icon', undefined],
-        notifyText: ['click-prefix-text', undefined],
-      },
+        emit,
+        emitIcon: 'click-prefix-icon',
+        emitText: 'click-prefix-text',
+      }
     ),
     //.......................................
-    Suffix: useIconText(
+    Suffix: useIconText<'click-suffix-icon', 'click-suffix-text'>(
       {
         iconHovered: state.suffixIconHovered,
         textHovered: state.suffixTextHovered,
@@ -141,10 +145,10 @@ export function usePrefixSuffix(
         textClickable: props.suffixTextClickable,
       },
       {
-        notify,
-        notifyIcon: ['click-suffix-icon', undefined],
-        notifyText: ['click-suffix-text', undefined],
-      },
+        emit,
+        emitIcon: 'click-suffix-icon',
+        emitText: 'click-suffix-text',
+      }
     ),
     //.......................................
     setPrefixIconHover: function (hovred: boolean) {

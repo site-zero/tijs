@@ -1,46 +1,27 @@
 <script setup lang="ts">
-  import { computed, inject, reactive } from 'vue';
-  import { BUS_KEY, IconTextState, TiEvent, TiIcon, useBusEmit } from '../../';
-  import { TiInputInfo } from '../../input/box/ti-input-index.ts';
-  import {
-    RoadblockEvents,
-    RoadblockProps,
-    useRoadblock,
-  } from './use-roadblock';
-  /*-------------------------------------------------------
-
-                        State
-
--------------------------------------------------------*/
+  import { computed, reactive } from 'vue';
+import { IconTextState, TiIcon } from '../../';
+import {
+RoadblockEvents,
+RoadblockProps,
+useRoadblock,
+} from './use-roadblock';
+  //--------------------------------------------
   // 自己创建状态
   const state: IconTextState = reactive({
     iconHovered: false,
     textHovered: false,
   });
-  /*-------------------------------------------------------
-
-                        Props
-
--------------------------------------------------------*/
+  //--------------------------------------------
   let props = withDefaults(defineProps<RoadblockProps>(), {
     className: '',
     icon: 'fas-exclamation-triangle',
   });
-  /*-------------------------------------------------------
-
-                    Event Bus 
-
--------------------------------------------------------*/
+  //--------------------------------------------
   let emit = defineEmits<{
-    (event: RoadblockEvents, payload: TiEvent<undefined>): void;
+    (event: RoadblockEvents): void;
   }>();
-  let bus = inject(BUS_KEY);
-  let notify = useBusEmit(TiInputInfo, props, emit, bus);
-  /*-------------------------------------------------------
-
-                      Features
-
--------------------------------------------------------*/
+  //--------------------------------------------
   // const {
   //   Roadblock,
   //   TopClass,
@@ -59,13 +40,14 @@
   // });
   const Roadblock = computed(() =>
     useRoadblock(state, props, {
-      notify,
-      notifyIcon: ['click-icon', undefined],
-      notifyText: ['click-text', undefined],
+      emit,
+      emitIcon: 'click-icon',
+      emitText: 'click-text',
       defaultIcon: 'fas-exclamation-triangle',
       defaultText: 'i18n:nil',
-    }),
+    })
   );
+  //--------------------------------------------
 </script>
 
 <template>
@@ -74,7 +56,9 @@
     :class="Roadblock.TopClass"
     :style="Roadblock.TopStyle">
     <!--Icon---->
-    <section class="part-icon" v-if="Roadblock.showIcon">
+    <section
+      class="part-icon"
+      v-if="Roadblock.showIcon">
       <TiIcon
         :class="Roadblock.IconClass"
         :value="Roadblock.DisplayIcon"
@@ -95,14 +79,27 @@
       >
     </section>
     <!--Links-->
-    <section v-if="Roadblock.hasLinks" class="part-links">
+    <section
+      v-if="Roadblock.hasLinks"
+      class="part-links">
       <ul class="raw">
-        <li v-for="li in props.links" class="link-item">
-          <a :href="li.href" :target="li.target">
+        <li
+          v-for="li in props.links"
+          class="link-item">
+          <a
+            :href="li.href"
+            :target="li.target">
             <!--Link Icon-->
-            <TiIcon v-if="li.icon" class="link-icon" :value="li.icon" />
+            <TiIcon
+              v-if="li.icon"
+              class="link-icon"
+              :value="li.icon" />
             <!--Link Text-->
-            <span v-if="li.text" class="link-text">{{ li.text }}</span>
+            <span
+              v-if="li.text"
+              class="link-text"
+              >{{ li.text }}</span
+            >
           </a>
         </li>
       </ul>

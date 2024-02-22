@@ -1,5 +1,4 @@
 import {
-  ValueBoxEvents,
   ValueBoxFeature,
   ValueBoxOptions,
   ValueBoxProps,
@@ -12,7 +11,6 @@ import {
 
 -----------------------------------------------------*/
 export const COM_TYPE = 'TiInput';
-export type InputBoxEvents = ValueBoxEvents;
 export type InputBoxState = ValueBoxState<any>;
 export type InputBoxProps = ValueBoxProps<any> & {
   hideBorder?: boolean;
@@ -28,7 +26,7 @@ export type InputBoxFeature = ValueBoxFeature;
 export function useInputBox(
   state: InputBoxState,
   props: InputBoxProps,
-  options: InputBoxOptions,
+  options: InputBoxOptions
 ): InputBoxFeature {
   return useValueBox(state, props, options);
 }

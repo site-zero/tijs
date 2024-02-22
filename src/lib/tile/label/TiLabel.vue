@@ -1,36 +1,15 @@
 <script setup lang="ts">
   import _ from 'lodash';
-  import { computed, inject, reactive, ref } from 'vue';
-  import {
-    BUS_KEY,
-    TiEvent,
-    TiIcon,
-    tiGetDefaultComPropValue,
-    useBusEmit,
-  } from '../../';
+  import { computed, reactive, ref } from 'vue';
+  import { TiIcon, ValueBoxEmits, tiGetDefaultComPropValue } from '../../';
   import { CssUtils } from '../../../core';
-  import { TiInputInfo } from '../../input/box/ti-input-index.ts';
-  import {
-    COM_TYPE,
-    LabelEvents,
-    LabelProps,
-    LabelState,
-    useLabel,
-  } from './use-label';
-  /*-------------------------------------------------------
+  import { COM_TYPE, LabelProps, LabelState, useLabel } from './use-label';
 
-                     Com Options
-
--------------------------------------------------------*/
   defineOptions({
     name: COM_TYPE,
     inheritAttrs: true,
   });
-  /*-------------------------------------------------------
 
-                        State
-
--------------------------------------------------------*/
   const state = reactive({
     boxVal: null,
     boxText: '',
@@ -41,37 +20,21 @@
     suffixIconHovered: false,
     suffixTextHovered: false,
   } as LabelState);
-  /*-------------------------------------------------------
 
-                        Props
-
--------------------------------------------------------*/
   let props = withDefaults(defineProps<LabelProps>(), {
     value: tiGetDefaultComPropValue(COM_TYPE, 'value'),
     autoI18n: true,
   });
-  /*-------------------------------------------------------
 
-                    Event Bus
-
--------------------------------------------------------*/
-  let emit = defineEmits<{
-    (event: LabelEvents, payload: TiEvent<undefined>): void;
-  }>();
-  let bus = inject(BUS_KEY);
-  let notify = useBusEmit(TiInputInfo, props, emit, bus);
-  /*-------------------------------------------------------
-
-                      Features
-
--------------------------------------------------------*/
+  //-----------------------------------------------------
+  let emit = defineEmits<ValueBoxEmits>();
+  //-----------------------------------------------------
   const $el = ref<any>(null);
   const Box = computed(() =>
     useLabel(state, props, {
-      notify,
-      valueChangeMode: 'both',
+      emit,
       getBoxElement: () => $el.value,
-    }),
+    })
   );
   /*-------------------------------------------------------
 
@@ -86,7 +49,7 @@
     CssUtils.mergeClassName(props.className, () => ({
       'has-value': hasValue.value,
       'nil-value': !hasValue.value,
-    })),
+    }))
   );
   const LabelText = computed(() => {
     if (hasValue.value) {
@@ -97,7 +60,10 @@
 </script>
 
 <template>
-  <div class="ti-label prefix-suffix-box" :class="TopClass" ref="$el">
+  <div
+    class="ti-label prefix-suffix-box"
+    :class="TopClass"
+    ref="$el">
     <div
       v-if="Box.Prefix.show"
       class="part-prefix as-icon-text"
@@ -123,7 +89,11 @@
         >{{ Box.Prefix.text }}</span
       >
     </div>
-    <div class="part-value" ref="abc">{{ LabelText }}</div>
+    <div
+      class="part-value"
+      ref="abc">
+      {{ LabelText }}
+    </div>
     <div
       v-if="Box.Suffix.show"
       class="part-suffix as-icon-text"

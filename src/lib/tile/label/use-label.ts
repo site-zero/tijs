@@ -1,5 +1,4 @@
 import {
-  ValueBoxEvents,
   ValueBoxFeature,
   ValueBoxOptions,
   ValueBoxProps,
@@ -12,7 +11,6 @@ import {
 
 -----------------------------------------------------*/
 export const COM_TYPE = 'TiLabel';
-export type LabelEvents = ValueBoxEvents;
 export type LabelState = ValueBoxState<any>;
 export type LabelProps = ValueBoxProps<any>;
 export type LabelOptions = ValueBoxOptions;
@@ -26,7 +24,7 @@ export type LabelFeature = ValueBoxFeature;
 export function useLabel(
   state: LabelState,
   props: LabelProps,
-  options: LabelOptions,
+  options: LabelOptions
 ): LabelFeature {
   return useValueBox(state, props, options);
 }

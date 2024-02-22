@@ -1,5 +1,5 @@
-import { DateTime, Vars } from '../../../../core';
 import { Chance } from 'chance';
+import { Vars } from '../../../../core';
 
 // 创建一个 Chance 实例
 const chance = new Chance();

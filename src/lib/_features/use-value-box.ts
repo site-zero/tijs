@@ -1,28 +1,30 @@
+import _ from 'lodash';
 import {
   CommonProps,
   FormatValueProps,
   PlaceholderFeature,
   PlaceholderFeatureProps,
+  PrefixSuffixEmits,
   PrefixSuffixEvents,
   PrefixSuffixFeature,
   PrefixSuffixFeatureProps,
   PrefixSuffixState,
-  ValueInputEvents,
   ValueInputProps,
   useFormatValue,
   usePlaceholder,
   usePrefixSuffix,
   useValueInput,
 } from '..';
-import _ from 'lodash';
-import { TiEventTrigger } from '../';
 import { Be, Callback, Callback1, FuncA0, Str } from '../../core';
 /*-------------------------------------------------------
 
-                     Events
+                     Emit 
 
 -------------------------------------------------------*/
-export type ValueBoxEvents = PrefixSuffixEvents | ValueInputEvents;
+export type ValueBoxEmits = {
+  (event: PrefixSuffixEvents): void;
+  (event: 'change', payload: string): void;
+};
 /*-------------------------------------------------------
 
                      State
@@ -93,16 +95,16 @@ export type ValueBoxFeature = PlaceholderFeature &
 
 -------------------------------------------------------*/
 export type ValueBoxOptions = {
-  notify: TiEventTrigger<ValueBoxEvents, any>;
-  /**
-   * 当 doChangeValue 时的行为:
-   * - `notify`: 通知外部改动
-   * - `inner` : 修改自身的内部值（通过 doUpdateValue）
-   * -`both` : 以上两者都做
-   *
-   * @default `both`
-   */
-  valueChangeMode?: 'both' | 'notify' | 'inner';
+  emit: ValueBoxEmits;
+  // /**
+  //  * 当 doChangeValue 时的行为:
+  //  * - `notify`: 通知外部改动
+  //  * - `inner` : 修改自身的内部值（通过 doUpdateValue）
+  //  * -`both` : 以上两者都做
+  //  *
+  //  * @default `both`
+  //  */
+  // valueChangeMode?: 'both' | 'notify' | 'inner';
 
   /**
    * 如果 suffixIconForCopy, 那么复制之后需要自动闪烁一下 box。
@@ -120,11 +122,9 @@ export type ValueBoxOptions = {
 export function useValueBox<T extends any>(
   state: ValueBoxState<T>,
   props: ValueBoxProps<T>,
-  options: ValueBoxOptions,
+  options: ValueBoxOptions
 ): ValueBoxFeature {
-  let { notify, valueChangeMode = 'both', getBoxElement } = options;
-  let _value_change_notify = /^(both|notify)$/.test(valueChangeMode);
-  let _value_change_inner = /^(both|inner)$/.test(valueChangeMode);
+  let { emit, getBoxElement } = options;
   //
   // 准备处理值的方法
   let { tidyValue, translateValue } = useValueInput(props);
@@ -142,7 +142,7 @@ export function useValueBox<T extends any>(
     boxProps.suffixIcon = boxProps.suffixIcon || 'zmdi-copy';
     boxProps.suffixIconClickable = true;
   }
-  let _box = usePrefixSuffix(state, boxProps, notify);
+  let _box = usePrefixSuffix(state, boxProps, emit);
 
   //
   // 方法: 更新内部值
@@ -170,20 +170,14 @@ export function useValueBox<T extends any>(
   // 方法: 值发生了改变
   //
   async function doChangeValue(val: string) {
-    if (_value_change_inner) {
-      await doUpdateValue(val);
-    }
-    if (_value_change_notify) {
-      console.log('_value_change_notify');
-      let v = await tidyValue(val);
-      notify('change', v);
-    }
+    let v = await tidyValue(val);
+    emit('change', v);
   }
   //
   // 方法： 点击前缀按钮
   //
   async function OnClickPrefixIcon() {
-    console.log('OnClickPrefixIcon');
+    //console.log('OnClickPrefixIcon');
     if (props.prefixIconForClean) {
       await doChangeValue('');
     }
@@ -197,7 +191,7 @@ export function useValueBox<T extends any>(
   // 方法： 点击后缀按钮
   //
   function OnClickSuffixIcon() {
-    console.log('OnClickSuffixIcon');
+    //console.log('OnClickSuffixIcon');
     if (props.suffixIconForCopy) {
       Be.Clipboard.write(state.boxVal);
       Be.BlinkIt(getBoxElement());
