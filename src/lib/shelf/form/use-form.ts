@@ -1,6 +1,6 @@
-import { I18n, Size2D } from '../../../core';
-import { FieldPair, TiEvent, TiEventTrigger } from '../../';
 import _ from 'lodash';
+import { FieldPair } from '../../';
+import { I18n, Size2D, Vars } from '../../../core';
 import { joinPairs } from './form-util';
 import { buildFormFieldList } from './use-form-field';
 import { FormProps } from './use-form-props';
@@ -12,14 +12,17 @@ export const COM_TYPE = 'TiForm';
                      Events
 
 -------------------------------------------------------*/
-export type FormEvents = 'change' | 'field-change';
+export type FormEmits = {
+  (event: 'field-change', payload: FieldPair): void;
+  (event: 'change', payload: Vars): void;
+};
 /*-------------------------------------------------------
 
                      Options
 
 -------------------------------------------------------*/
 export type FormOptions = {
-  notify: TiEventTrigger<FormEvents, any>;
+  emit: FormEmits;
 };
 /*-------------------------------------------------------
 
@@ -35,24 +38,24 @@ export type FormOptions = {
 export function useForm(
   state: FormState,
   props: FormProps,
-  options: FormOptions,
+  options: FormOptions
 ) {
-  let { notify } = options;
+  let { emit } = options;
   //
   // 更新 state
   updateFormState(state, props);
 
   // 输出方法
-  const OnFieldChange = function (evt: TiEvent<FieldPair>) {
-    //console.log("Form Field Change", evt.name, evt.payload);
+  const OnFieldChange = function (payload: FieldPair) {
+    //console.log("Form Field Change", payload);
     // 修改本身状态
-    if (evt.payload) {
-      let part = joinPairs({}, evt.payload);
+    if (payload) {
+      let part = joinPairs({}, payload);
       _.assign(state.data, part);
     }
 
     // 通知改动
-    notify('field-change', evt.payload);
+    emit('field-change', payload);
   };
 
   return {

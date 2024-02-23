@@ -14,6 +14,12 @@ export type TextValue<T> = {
   value: T;
 };
 
+export type DateInput = string | number | Date;
+export type DateFormatOptions = {
+  fmt?:string;
+  trimZero?: boolean;
+}
+
 export type TextStrValue = TextValue<string>;
 
 export type NameValue<N, V> = {

@@ -15,8 +15,6 @@ export type ExampleState = {
   comConf: Vars; // 示例的控件配置
 };
 
-export type LiveBgMode = 'none' | 'fill';
-
 export function selectExample(com: TiCom, ex: ExampleState, name?: string) {
   ex.name = name;
   ex.comConf = loadLocalSetting(com, ex.name);

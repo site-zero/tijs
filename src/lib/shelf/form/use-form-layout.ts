@@ -86,7 +86,7 @@ export function normalizeGridLayout(
  */
 
 export function autoCountGrid(view: Size2D, layout: FormGridLayout) {
-  console.log('autoCountGrid', view, layout);
+  //console.log('autoCountGrid', view, layout);
   let by = function (arm: [number, any], view: Size2D): number | undefined {
     let width = view.width;
     let [v, m] = arm;
@@ -101,7 +101,7 @@ export function autoCountGrid(view: Size2D, layout: FormGridLayout) {
     }
   };
   let re = Util.selectValue(view, layout.autoGrid, { by });
-  console.log(' > ', re);
+  //console.log(' > selectValue => ', re);
   return re;
 }
 /*-----------------------------------------------------

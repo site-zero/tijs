@@ -11,7 +11,7 @@ import {
   useFieldSerializer,
   useFieldTransformer,
 } from '../../';
-import { Callback1, CssUtils, I18n, Vars } from '../../../core';
+import { Callback1, Callback2, CssUtils, I18n, Vars } from '../../../core';
 
 export const COM_TYPE = 'TiField';
 /*-------------------------------------------------------
@@ -19,7 +19,7 @@ export const COM_TYPE = 'TiField';
                      Events
 
 -------------------------------------------------------*/
-export type FieldEvents = 'change';
+export type FieldEmits = Callback2<'change', FieldPair>;
 /*-------------------------------------------------------
 
                      Props
@@ -86,7 +86,7 @@ export type FieldFeature = {
 
 -------------------------------------------------------*/
 export type FieldOptions = {
-  notify: TiEventTrigger<FieldEvents, FieldPair>;
+  emit: FieldEmits;
 };
 /*-------------------------------------------------------
 
@@ -96,10 +96,10 @@ export type FieldOptions = {
 -------------------------------------------------------*/
 export function useField(
   props: FieldProps,
-  options: FieldOptions,
+  options: FieldOptions
 ): Omit<FieldFeature, 'getActivatedComType' | 'getActivatedComConf'> {
   let { data, vars } = props;
-  let { notify } = options;
+  let { emit } = options;
   const { getFieldValue } = useFieldTransformer(props);
   const { prepareFieldValue } = useFieldSerializer(props);
   const { getComType, getComConf, getReadonlyComType, getReadonlyComConf } =
@@ -147,7 +147,7 @@ export function useField(
       if (props.disabled) {
         return;
       }
-      console.log('OnFieldChange', val);
+      //console.log('OnFieldChange', val);
       // 应用类型转换和默认值
       let v2 = prepareFieldValue(val, data);
 
@@ -160,7 +160,7 @@ export function useField(
       }
 
       // 通知改动
-      notify('change', {
+      emit('change', {
         name: props.name,
         value: v2,
       });

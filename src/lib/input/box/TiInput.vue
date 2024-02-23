@@ -109,9 +109,9 @@
         :value="state.boxText"
         spellcheck="false"
         :placeholder="Placeholder"
-        @focus="OnInputFocused"
-        @change="OnInputChanged"
-        @blur="state.boxFocused = false" />
+        @focus.stop="OnInputFocused"
+        @change.stop="OnInputChanged"
+        @blur.stop="state.boxFocused = false" />
     </div>
     <div
       class="part-suffix as-icon-text"

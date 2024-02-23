@@ -1,45 +1,26 @@
 <script lang="ts" setup>
+  import { FieldPair } from '../../../';
   import { Vars } from '../../../../core/ti.ts';
-  import { FieldPair, TiEvent } from '../../../';
   import TiFormItem from '../item/TiFormItem.vue';
   import { FormItem } from '../use-form-field';
   import { FormGridLayout } from '../use-form-layout';
-  /*-------------------------------------------------------
-
-                        Props
-
--------------------------------------------------------*/
+  //-------------------------------------------------
   defineProps<{
     fields: FormItem[];
     layout: FormGridLayout;
     data: Vars;
     maxFieldNameWidth?: number;
   }>();
-  /*-------------------------------------------------------
-
-                  Bus & Notify & Emit
-
--------------------------------------------------------*/
+  //-------------------------------------------------
   let emit = defineEmits<{
-    (event: 'field-change', payload: TiEvent<FieldPair>): void;
+    (event: 'field-change', payload: FieldPair): void;
   }>();
-  /*-------------------------------------------------------
-
-                    Methods
-
--------------------------------------------------------*/
-
-  /*-------------------------------------------------------
-
-                  Event Handler
-
-        直接将字段修改的事件传递到表单控件处来处理
-
--------------------------------------------------------*/
-  function OnFieldChange(evt: TiEvent<FieldPair>) {
-    // console.log("On Group Field Change", payload);
-    emit('field-change', evt);
+  //-------------------------------------------------
+  function OnFieldChange(payload: FieldPair) {
+    //console.log('On Group Field Change', payload);
+    emit('field-change', payload);
   }
+  //-------------------------------------------------
 </script>
 <template>
   <TiFormItem

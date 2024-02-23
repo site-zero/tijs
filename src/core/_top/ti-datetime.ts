@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { I18n, Str, getEnv } from '../ti';
+import { DateFormatOptions, DateInput, I18n, Str, getEnv } from '../ti';
 
 ///////////////////////////////////////////
 // const P_DATE = new RegExp(
@@ -16,7 +16,7 @@ const P_DATE = new RegExp(
     '(\\d{1,2})(:)(\\d{1,2})((:)(\\d{1,2}))?' +
     '((.)(\\d{1,3}))?)?' +
     '(([+-])(\\d{1,2})(:\\d{1,2})?)?' +
-    '(Z(\\d*))?$',
+    '(Z(\\d*))?$'
 );
 
 /**
@@ -190,6 +190,14 @@ export function genFormatContext(date: any) {
   };
 }
 
+export function format(date: undefined, options?: DateFormatOptions): undefined;
+export function format(date: null, options?: DateFormatOptions): null;
+export function format(date: DateInput, options?: DateFormatOptions): string;
+export function format(
+  date: DateInput[],
+  options?: DateFormatOptions
+): string[];
+
 /**
  * 格式化输出日期时间对象
  * 
@@ -200,12 +208,14 @@ export function genFormatContext(date: any) {
  * @returns 
  */
 export function format(
-  date: any,
-  { fmt = 'yyyy-MM-dd HH:mm:ss', trimZero = false } = {} as {
-    fmt?: string;
-    trimZero?: boolean;
-  },
-): string | string[] | null {
+  date: DateInput | DateInput[] | null | undefined,
+  options: DateFormatOptions = {}
+): string | string[] | null | undefined {
+  if (_.isNil(date)) {
+    return date;
+  }
+
+  let { fmt = 'yyyy-MM-dd HH:mm:ss', trimZero = false } = options;
   // Date Range or a group of date
   if (_.isArray(date)) {
     //console.log("formatDate", date, fmt)
@@ -281,7 +291,7 @@ export function timeText(
       'future-in-day': string;
       'future-in-week': string;
     };
-  },
+  }
 ) {
   d = parse(d);
   if (!_.isDate(d)) {
@@ -400,7 +410,7 @@ export function setTime(
   hours = 0,
   minutes = 0,
   seconds = 0,
-  milliseconds = 0,
+  milliseconds = 0
 ) {
   if (_.inRange(hours, 0, 24)) {
     d.setHours(hours);

@@ -109,9 +109,7 @@ export class TiCom implements TiComInfo {
   install: Plugin<any[]>;
   defaultProps?: string;
   exampleProps: ComPropExample[];
-  exampleModel?: {
-    [k: string]: TiComExampleModelTarget;
-  };
+  exampleModel?: Record<string, TiComExampleModelTarget>;
 
   constructor(info: TiComInfo) {
     this.icon = info.icon || 'fas-question';

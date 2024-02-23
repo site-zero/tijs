@@ -2,7 +2,7 @@
   import { computed } from 'vue';
   import { TiCom } from '../../';
   import { Vars } from '../../../core';
-  import { LiveBgMode } from './use-playground';
+  import { LiveBgMode } from './use-play-mode';
 
   /**
    * 本控件要接入的属性
@@ -13,13 +13,18 @@
     mode: LiveBgMode;
   }>();
 
+  const emit = defineEmits<{
+    (event: 'sub-event', name: string, args: any[]): void;
+  }>();
+
   // Get current component instance to access context
   function onSubEvents(event: string, args: any[]) {
     console.log('onSubEvents:', event, args);
+    emit('sub-event', event, args);
   }
 
   const OnAllEvents = computed(() => {
-    console.log(props.playCom.events);
+    //console.log(props.playCom.events);
     let listens = {} as Record<string, Function>;
     if (props.playCom.events) {
       for (let event of props.playCom.events) {

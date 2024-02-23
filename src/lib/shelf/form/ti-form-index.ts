@@ -12,6 +12,7 @@ const TiFormInfo: TiComInfo = {
   text: 'i18n:ti-form-com-name',
   i18n,
   com: TiForm,
+  events: ['change', 'field-change'],
   install: (app: App) => {
     app.component(COM_TYPE, TiForm);
   },
