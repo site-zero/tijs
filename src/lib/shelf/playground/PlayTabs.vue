@@ -1,8 +1,8 @@
 <script setup lang="ts">
   import { computed } from 'vue';
   import { TiCom, TiIcon } from '../../../lib';
-  import { PlayLayoutMode } from './use-play-mode';
-  import { LiveBgMode, getExampleList } from './use-playground';
+  import { LiveBgMode, PlayLayoutMode } from './use-play-mode';
+  import { getExampleList } from './use-playground';
 
   const emit = defineEmits<{
     (event: 'change' | 'mode:layout' | 'mode:live_bg', payload: string): void;
@@ -70,13 +70,23 @@
 </script>
 
 <template>
-  <div class="play-tabs" :mode="playLayoutMode">
+  <div
+    class="play-tabs"
+    :mode="playLayoutMode">
     <ul>
-      <li v-for="ex in ExampleList" :class="ex.className">
-        <RouterLink v-if="props.exampleAsRouterLink" :to="ex.href"
+      <li
+        v-for="ex in ExampleList"
+        :class="ex.className">
+        <RouterLink
+          v-if="props.exampleAsRouterLink"
+          :to="ex.href"
           >{{ ex.text }}
         </RouterLink>
-        <a v-else @click="emit('change', ex.name)">{{ ex.text }}</a>
+        <a
+          v-else
+          @click="emit('change', ex.name)"
+          >{{ ex.text }}</a
+        >
       </li>
     </ul>
     <div class="as-actions">
@@ -86,7 +96,9 @@
       <b @click="OnToggleLayoutMode">
         <TiIcon :value="PlayLayoutModeIcon" />
       </b>
-      <b v-if="'F' == playLayoutMode" @click="emit('toggle:conf')">
+      <b
+        v-if="'F' == playLayoutMode"
+        @click="emit('toggle:conf')">
         <TiIcon :value="ConfPanelStatusIcon" />
       </b>
     </div>

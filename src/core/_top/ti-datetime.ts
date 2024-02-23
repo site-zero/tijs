@@ -19,6 +19,9 @@ const P_DATE = new RegExp(
     '(Z(\\d*))?$'
 );
 
+export function parse(d: undefined | null | []): undefined;
+export function parse(d: DateInput): Date;
+
 /**
  * 把任何输入转换为日期对象。
  * 它支持:
@@ -37,10 +40,13 @@ const P_DATE = new RegExp(
  * @param d 输入对象
  * @returns  日期对象
  */
-export function parse(d: any): Date | null {
+export function parse(d: any): Date | undefined {
+  if (_.isNil(d)) {
+    return;
+  }
   //console.log("parseDate:", d)
   // Default return today
-  if (_.isUndefined(d) || 'now' === d) {
+  if ('now' === d) {
     return new Date();
   }
   if ('today' === d) {
@@ -49,8 +55,8 @@ export function parse(d: any): Date | null {
     return d;
   }
   // keep null
-  if (!d || (_.isArray(d) && _.isEmpty(d))) {
-    return null;
+  if (_.isArray(d) && d.length == 0) {
+    return;
   }
   // Date
   if (_.isDate(d)) {
@@ -190,8 +196,10 @@ export function genFormatContext(date: any) {
   };
 }
 
-export function format(date: undefined, options?: DateFormatOptions): undefined;
-export function format(date: null, options?: DateFormatOptions): null;
+export function format(
+  date: undefined | null,
+  options?: DateFormatOptions
+): undefined;
 export function format(date: DateInput, options?: DateFormatOptions): string;
 export function format(
   date: DateInput[],
@@ -210,9 +218,9 @@ export function format(
 export function format(
   date: DateInput | DateInput[] | null | undefined,
   options: DateFormatOptions = {}
-): string | string[] | null | undefined {
+): string | string[] | undefined {
   if (_.isNil(date)) {
-    return date;
+    return;
   }
 
   let { fmt = 'yyyy-MM-dd HH:mm:ss', trimZero = false } = options;
@@ -231,7 +239,7 @@ export function format(
   }
   // Guard it
   if (!date) {
-    return null;
+    return;
   }
 
   // Compare TimeZone with remote

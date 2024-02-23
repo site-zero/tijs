@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Vars, DateTime } from '../../ti';
+import { Vars, DateTime, DateInput } from '../../ti';
 import { DynElInfo } from '../ti-tmpl';
 import { DynEle } from './abstract_dyn_ele';
 
@@ -20,10 +20,10 @@ export class DynDateEle extends DynEle {
     if (_.isNil(v)) {
       this.joinDefaultValue(sb, context, showKey);
       return;
-      return;
     }
 
-    let s = DateTime.format(v, { fmt: this._fmt, trimZero: true }) as string;
+    let d = DateTime.parse(v as DateInput);
+    let s = DateTime.format(d, { fmt: this._fmt, trimZero: true }) as string;
     sb.push(s);
   }
 }

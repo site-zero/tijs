@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { expect, test } from 'vitest';
 import { DateTime, setEnv } from '../../core';
 
@@ -9,10 +10,7 @@ test('parse_format', () => {
 
 test('parse_undefined', function () {
   let reval = DateTime.parse(undefined);
-  expect(true).eq(reval != null);
-  let nowTs = new Date().getTime();
-  let interval = nowTs - reval!.getTime();
-  expect(true).eq(interval >= 0 && interval < 1000);
+  expect(true).eq(_.isUndefined(reval));
 });
 
 test('parse_today', function () {
@@ -32,9 +30,9 @@ test('parse_now', function () {
 
 test('parse_null_emptyArray', function () {
   let reval = DateTime.parse(null);
-  expect(reval).eq(null);
+  expect(reval).eq(undefined);
   reval = DateTime.parse([]);
-  expect(reval).eq(null);
+  expect(reval).eq(undefined);
 });
 
 test('parse_date', function () {
@@ -120,7 +118,7 @@ test('format', function () {
   expect(DateTime.format(d)).eq('2023-10-07 15:28:23');
   expect(DateTime.format(d, { fmt: 'yyyy/MM/dd' })).eq('2023/10/07');
   expect(DateTime.format(d, { fmt: 'yyyy/MM/dd/HH/mm/ss' })).eq(
-    '2023/10/07/15/28/23',
+    '2023/10/07/15/28/23'
   );
 
   setEnv('TIMEZONE_DIFF', 3600 * 1000);
@@ -219,59 +217,59 @@ test('getWeekDayValue', function () {
 test('setTime', function () {
   let d = DateTime.parse('2023-09-02 10:30:20');
   expect(DateTime.format(DateTime.setTime(d!, 0, 0, 0, 0))).eq(
-    '2023-09-02 00:00:00',
+    '2023-09-02 00:00:00'
   );
 
   d = DateTime.parse('2023-09-02 10:30:20');
   expect(DateTime.format(DateTime.setTime(d!, 1, 2, 3, 4))).eq(
-    '2023-09-02 01:02:03',
+    '2023-09-02 01:02:03'
   );
 
   d = DateTime.parse('2023-09-02 10:30:20');
   expect(
     DateTime.format(DateTime.setTime(d!, 1, 2, 3, 4), {
       fmt: 'yyyy-MM-dd HH:mm:ss.SSS',
-    }),
+    })
   ).eq('2023-09-02 01:02:03.004');
 
   d = DateTime.parse('2023-09-02 10:30:20');
   expect(DateTime.format(DateTime.setTime(d!, 59, 59, 59, 4))).eq(
-    '2023-09-02 10:59:59',
+    '2023-09-02 10:59:59'
   );
 
   d = DateTime.parse('2023-09-02 10:30:20');
   expect(DateTime.format(DateTime.setTime(d!, 59, 60, 60, 999))).eq(
-    '2023-09-02 10:30:20',
+    '2023-09-02 10:30:20'
   );
 });
 
 test('setDayLastTime', function () {
   let d = DateTime.parse('2023-08-02 10:30:20');
   expect(DateTime.format(DateTime.setDayLastTime(d!))).eq(
-    '2023-08-02 23:59:59',
+    '2023-08-02 23:59:59'
   );
 
   d = DateTime.parse('2025-02-28 10:30:20');
   expect(DateTime.format(DateTime.setDayLastTime(d!))).eq(
-    '2025-02-28 23:59:59',
+    '2025-02-28 23:59:59'
   );
 
   d = new Date();
   expect(DateTime.format(DateTime.setDayLastTime(d))).eq(
-    DateTime.format(d, { fmt: 'yyyy-MM-dd' }) + ' 23:59:59',
+    DateTime.format(d, { fmt: 'yyyy-MM-dd' }) + ' 23:59:59'
   );
 });
 
 test('today', function () {
   let d = new Date();
   expect(DateTime.format(DateTime.today())).eq(
-    DateTime.format(d, { fmt: 'yyyy-MM-dd' }) + ' 00:00:00',
+    DateTime.format(d, { fmt: 'yyyy-MM-dd' }) + ' 00:00:00'
   );
 });
 
 test('todayInMs', function () {
   let d = DateTime.parse(
-    DateTime.format(new Date(), { fmt: 'yyyy-MM-dd' }) + ' 00:00:00',
+    DateTime.format(new Date(), { fmt: 'yyyy-MM-dd' }) + ' 00:00:00'
   );
   expect(DateTime.todayInMs()).eq(d!.getTime());
 });
@@ -293,11 +291,11 @@ test('countMonthDay', function () {
 test('moveToLastDateOfMonth', function () {
   let d = DateTime.parse('2023-02-26');
   expect(DateTime.format(DateTime.moveToLastDateOfMonth(d!))).eq(
-    '2023-02-28 00:00:00',
+    '2023-02-28 00:00:00'
   );
 
   d = DateTime.parse('2023-08-01');
   expect(DateTime.format(DateTime.moveToLastDateOfMonth(d!))).eq(
-    '2023-08-31 00:00:00',
+    '2023-08-31 00:00:00'
   );
 });

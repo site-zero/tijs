@@ -1,16 +1,19 @@
 import _ from 'lodash';
-import { I18n, DateTime } from '../ti';
+import { I18n, DateTime, DateInput } from '../ti';
 import { NumRange } from './num-range';
 
 export class MsRange extends NumRange {
   //--------------------------------
   containsDate(d: any) {
-    let date = DateTime.parse(d);
-    if (!date) {
-      return false;
+    if (!_.isNil(d)) {
+      let date = DateTime.parse(d as DateInput);
+      if (!date) {
+        return false;
+      }
+      let ms = date.getTime();
+      return this.contains(ms);
     }
-    let ms = date.getTime();
-    return this.contains(ms);
+    return false;
   }
   //--------------------------------
   toDateString(
@@ -19,7 +22,7 @@ export class MsRange extends NumRange {
     leftOpen = '(',
     leftClose = '[',
     rightOpen = ')',
-    rightClose = ']',
+    rightClose = ']'
   ) {
     let dfmt = I18n.text(fmt);
     return this.toString({
@@ -40,7 +43,7 @@ export class MsRange extends NumRange {
     leftOpen = '(',
     leftClose = '[',
     rightOpen = ')',
-    rightClose = ']',
+    rightClose = ']'
   ) {
     let dfmt = I18n.text(fmt);
     return this.toString({

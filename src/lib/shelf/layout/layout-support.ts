@@ -224,7 +224,7 @@ export function getLayoutItem(state: LayoutState, props: LayoutProps) {
 
   for (let i = 0; i < blocks.length; i++) {
     let item = blocks[i];
-    if (item.name && false === shown[item.name]) {
+    if (item.name && shown && false === shown[item.name]) {
       continue;
     }
 

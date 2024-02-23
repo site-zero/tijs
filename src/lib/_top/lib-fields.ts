@@ -2,6 +2,7 @@ import JSON5 from 'json5';
 import _ from 'lodash';
 import {
   Convertor,
+  DateInput,
   DateTime,
   FuncA2,
   FuncA3,
@@ -240,7 +241,7 @@ function toBoolean(input: any) {
 }
 
 function toAMS(input: any) {
-  let dt = DateTime.parse(input);
+  let dt = DateTime.parse(input as DateInput);
   if (_.isDate(dt)) {
     return dt.getTime();
   }
