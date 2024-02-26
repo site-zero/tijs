@@ -192,6 +192,7 @@ export function useDraggable(options: DraggalbeOptions) {
   // 准备监听指针按下的事件
   function OnPointerDown(evt: Event) {
     //console.log("OnPointerDown", evt);
+    evt.stopPropagation();
     // 获取视口信息
     let $viewport = getViewport ? getViewport() : $watchTarget;
     let viewport = Rects.createBy($viewport);
@@ -267,7 +268,7 @@ export function useDraggable(options: DraggalbeOptions) {
   $watchTarget.removeEventListener(POINTER_DOWN, OnPointerDown);
   _.delay(() => {
     $watchTarget.addEventListener(POINTER_DOWN, OnPointerDown);
-  },0);
+  }, 0);
 
   onDestroy(function () {
     console.log('销毁 dragging down');

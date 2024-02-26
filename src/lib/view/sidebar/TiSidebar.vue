@@ -1,12 +1,20 @@
 <script lang="ts" setup>
   import _ from 'lodash';
-  import { computed, getCurrentInstance } from 'vue';
+  import { computed } from 'vue';
   import { SideBarItem } from '../..';
   import TiSidebarItem from './TiSidebarItem.vue';
 
-  const props = defineProps<{
-    items: SideBarItem[];
-  }>();
+  const props = withDefaults(
+    defineProps<{
+      items: SideBarItem[];
+      useCapture?: boolean;
+      openNewTab?: boolean;
+    }>(),
+    {
+      useCapture: false,
+      openNewTab: true,
+    }
+  );
 
   function tidyBarItem(
     it: SideBarItem,
@@ -40,6 +48,8 @@
     <TiSidebarItem
       v-for="child in BarItems"
       v-bind="child"
+      :useCapture="useCapture"
+      :openNewTab="openNewTab"
       :uniq-key="child.key" />
   </nav>
 </template>

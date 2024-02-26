@@ -269,6 +269,7 @@ export type SideBarItem = {
   depth: number;
   id: string;
   path?: string;
+  href?: string;
   icon?: IconInput;
   title?: string;
   items?: SideBarItem[];

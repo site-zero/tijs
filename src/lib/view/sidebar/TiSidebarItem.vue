@@ -4,8 +4,12 @@
   import { SideBarItem, TiIcon } from '../..';
   import { I18n } from '../../../core';
 
+  let emit = defineEmits<(event: 'fire', payload: SideBarItem) => void>();
+
   type BarItemProps = Omit<SideBarItem, 'key'> & {
     uniqKey: string;
+    useCapture: boolean;
+    openNewTab: boolean;
   };
   const props = defineProps<BarItemProps>();
 
@@ -25,6 +29,20 @@
     'at-top': 0 == props.depth,
     'at-sub': props.depth > 0,
   }));
+
+  function OnClickItem(evt: Event) {
+    console.log("haha", props.id)
+    if (props.useCapture) {
+      evt.preventDefault();
+    }
+    if (props.useCapture || !props.href) {
+      let it: SideBarItem = _.assign(
+        { key: props.uniqKey },
+        _.cloneDeep(props)
+      );
+      emit('fire', it);
+    }
+  }
 </script>
 <template>
   <dl
@@ -34,13 +52,28 @@
       <TiIcon
         v-if="props.icon"
         :value="props.icon" />
-      <div class="as-title">{{ ItemTitle }}</div>
+      <div class="as-title">
+        <a
+          v-if="href"
+          :href="$props.href"
+          :target="props.openNewTab ? '_blank' : undefined"
+          @click="OnClickItem"
+          >{{ ItemTitle }}</a
+        >
+        <span
+          v-else
+          @click="OnClickItem"
+          >{{ ItemTitle }}</span
+        >
+      </div>
     </dt>
     <dd v-if="hasChild">
       <div class="bar-items-con">
         <TiSidebarItem
           v-for="child in props.items"
           v-bind="child"
+          :useCapture="useCapture"
+          :openNewTab="openNewTab"
           :uniq-key="child.key" />
       </div>
     </dd>
