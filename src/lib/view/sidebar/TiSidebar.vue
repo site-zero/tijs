@@ -1,8 +1,10 @@
 <script lang="ts" setup>
   import _ from 'lodash';
-  import { computed } from 'vue';
-  import { SideBarItem } from '../..';
-  import TiSidebarItem from './TiSidebarItem.vue';
+import { computed } from 'vue';
+import { SideBarItem } from '../..';
+import TiSidebarItem from './TiSidebarItem.vue';
+
+  let emit = defineEmits<(event: 'fire', payload: SideBarItem) => void>();
 
   const props = withDefaults(
     defineProps<{
@@ -42,6 +44,10 @@
     }
     return items;
   });
+
+  function OnClickItem(it: SideBarItem) {
+    emit('fire', it);
+  }
 </script>
 <template>
   <nav class="ti-sidebar">
@@ -50,11 +56,13 @@
       v-bind="child"
       :useCapture="useCapture"
       :openNewTab="openNewTab"
-      :uniq-key="child.key" />
+      :uniq-key="child.key"
+      @click-item="OnClickItem" />
   </nav>
 </template>
 <style lang="scss">
   @use '../../../assets/style/_all.scss' as *;
+
   nav {
     padding: SZ(1);
     width: 100%;

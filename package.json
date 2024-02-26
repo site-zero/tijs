@@ -35,6 +35,7 @@
       "types": "./index.d.ts"
     },
     "./style.css": "./dist/style.css",
+    "./style.scss": "./src/style.scss",
     "./scss": "./src/assets/style/_all.scss"
   },
   "scripts": {

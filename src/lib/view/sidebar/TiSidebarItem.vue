@@ -4,7 +4,7 @@
   import { SideBarItem, TiIcon } from '../..';
   import { I18n } from '../../../core';
 
-  let emit = defineEmits<(event: 'fire', payload: SideBarItem) => void>();
+  let emit = defineEmits<(event: 'click-item', payload: SideBarItem) => void>();
 
   type BarItemProps = Omit<SideBarItem, 'key'> & {
     uniqKey: string;
@@ -31,16 +31,17 @@
   }));
 
   function OnClickItem(evt: Event) {
-    console.log("haha", props.id)
     if (props.useCapture) {
       evt.preventDefault();
     }
     if (props.useCapture || !props.href) {
       let it: SideBarItem = _.assign(
         { key: props.uniqKey },
-        _.cloneDeep(props)
+        _.cloneDeep(
+          _.omit(props, 'uniqKey', 'useCapture', 'openNewTab', 'items')
+        )
       );
-      emit('fire', it);
+      emit('click-item', it);
     }
   }
 </script>
@@ -49,6 +50,9 @@
     :depth="props.depth"
     :class="TopClass">
     <dt :class="DTClass">
+      <div
+        v-for="_index in props.depth"
+        class="as-indent-block"></div>
       <TiIcon
         v-if="props.icon"
         :value="props.icon" />
@@ -74,7 +78,8 @@
           v-bind="child"
           :useCapture="useCapture"
           :openNewTab="openNewTab"
-          :uniq-key="child.key" />
+          :uniq-key="child.key"
+          @click-item="emit('click-item', $event)" />
       </div>
     </dd>
   </dl>
@@ -93,23 +98,33 @@
   dt {
     @include flex-align-nowrap;
     padding: var(--ti-measure-box-pad);
+    cursor: pointer;
+    > .as-indent-block {
+      width: SZ(30);
+    }
     > .ti-icon {
       width: 24px;
       font-size: 16px;
     }
     > .as-title {
       padding: 0 SZ(6);
-      font-weight: bold;
     }
     &.at-top {
       border-bottom: 1px solid var(--ti-color-border-shallow);
+      > .as-title {
+        font-weight: bold;
+      }
     }
     &.at-sub > .as-title {
       font-size: 0.8em;
     }
+    &:hover {
+      background-color: var(--ti-color-hightlight);
+      color: var(--ti-color-hightlight-f);
+    }
   }
 
   dd {
-    margin-inline-start: SZ(30);
+    margin: 0;
   }
 </style>
