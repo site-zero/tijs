@@ -25,6 +25,7 @@ const TiCellInfo: TiComInfo = {
     zh_hk: zh_cn,
   },
   com: TiCell,
+  asInner: true,
   install: (app: App) => {
     app.component(COM_TYPE, TiCell);
   },

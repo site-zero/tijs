@@ -1,9 +1,8 @@
 import { App } from 'vue';
-import { I18n } from '../../core';
 
 export function createTi() {
   return {
-    install(_app: App<Element>): void {
+    install(_app: App): void {
       // TODO ..
     },
   };

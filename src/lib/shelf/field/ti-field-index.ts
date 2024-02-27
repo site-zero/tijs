@@ -24,6 +24,7 @@ const TiFieldInfo: TiComInfo = {
     zh_hk: zh_cn,
   },
   com: TiField,
+  asInner: true,
   install: (app: App) => {
     app.component(COM_TYPE, TiField);
   },

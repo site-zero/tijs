@@ -73,7 +73,7 @@ export interface TiComInfo {
   text: string;
   i18n: I18nSet;
   com: any;
-  events?: string[];
+  asInner?: boolean;
   install: Plugin<any[]>;
   defaultProps?: string;
   exampleProps: ComPropExample[];
@@ -105,7 +105,8 @@ export class TiCom implements TiComInfo {
   text: string;
   i18n: I18nSet;
   com: TiRawCom;
-  events?: string[];
+  events: string[];
+  asInner?: boolean;
   install: Plugin<any[]>;
   defaultProps?: string;
   exampleProps: ComPropExample[];
@@ -116,13 +117,18 @@ export class TiCom implements TiComInfo {
     this.race = info.race;
     this.name = info.name;
     this.text = info.text;
-    this.events = info.events;
     this.i18n = info.i18n;
     this.com = info.com;
+    this.asInner = info.asInner;
     this.install = info.install;
     this.defaultProps = info.defaultProps;
     this.exampleProps = _.cloneDeep(info.exampleProps);
     this.exampleModel = _.cloneDeep(info.exampleModel);
+
+    this.events = [];
+    if (this.com.emits) {
+      _.forEach(this.com.emits, (eventName) => this.events.push(eventName));
+    }
   }
 
   getProps(name?: string) {

@@ -13,7 +13,6 @@ const TiSidebarInfo: TiComInfo = {
   text: 'i18n:ti-sidebar-com-name',
   i18n,
   com: TiSidebar,
-  events: ['fire'],
   install: (app: App) => {
     app.component(COM_TYPE, TiSidebar);
   },

@@ -23,6 +23,7 @@ const TiBlockInfo: TiComInfo = {
     zh_hk: zh_cn,
   },
   com: TiBlock,
+  asInner: true,
   install: (app: App) => {
     app.component(COM_TYPE, TiBlock);
   },

@@ -1,5 +1,5 @@
-import { TiComInfo, TiComRace } from '../../';
 import { App } from 'vue';
+import { TiComInfo, TiComRace } from '../../';
 import TiLabel from './TiLabel.vue';
 import { COM_TYPE } from './use-label';
 //const TiLabel = defineAsyncComponent(() => import("./TiLabel.vue"));
@@ -25,13 +25,6 @@ const TiLabelInfo: TiComInfo = {
     zh_hk: zh_cn,
   },
   com: TiLabel,
-  events: [
-    'change',
-    'click-prefix-icon',
-    'click-prefix-text',
-    'click-suffix-icon',
-    'click-suffix-text',
-  ],
   install: (app: App) => {
     app.component(COM_TYPE, TiLabel);
   },
