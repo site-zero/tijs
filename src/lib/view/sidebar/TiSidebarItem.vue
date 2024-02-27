@@ -100,7 +100,10 @@
     padding: var(--ti-measure-box-pad);
     cursor: pointer;
     > .as-indent-block {
-      width: SZ(30);
+      &::before{
+        display: inline; content:"";
+      }
+      min-width: SZ(30);
     }
     > .ti-icon {
       width: 24px;
@@ -108,6 +111,7 @@
     }
     > .as-title {
       padding: 0 SZ(6);
+      white-space: nowrap;
     }
     &.at-top {
       border-bottom: 1px solid var(--ti-color-border-shallow);

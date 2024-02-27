@@ -1,9 +1,7 @@
-import { App } from 'vue';
+import { App, ObjectPlugin } from 'vue';
 
-export function createTi() {
+export function createTi(): ObjectPlugin<any[]> {
   return {
-    install(_app: App): void {
-      // TODO ..
-    },
+    install: (_app: App): void => {},
   };
 }
