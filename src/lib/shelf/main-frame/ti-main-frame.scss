@@ -69,7 +69,7 @@ App Main Frame layout, there is 3 modes below::after
   width: 100%;
   height: 100%;
 
-  $W_CHUTE: 8em;
+  $W_CHUTE: 12em;
   $H_SKY: 50px;
   $H_FOOT: 30px;
 
@@ -90,16 +90,21 @@ App Main Frame layout, there is 3 modes below::after
     &.as-arena {
       grid-area: arena;
       position: relative;
-      > .arena-con {
-        @include pos-abs-full;
-        padding: 1px;
-        background-color: pink;
-        overflow: auto;
-      }
+      background-color: pink;
     }
     &.as-foot {
       grid-area: foot;
       background-color: blueviolet;
+    }
+    > .part-con {
+      @include pos-abs-full;
+      > .part-scroller {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        padding: 1px;
+      }
     }
   }
 

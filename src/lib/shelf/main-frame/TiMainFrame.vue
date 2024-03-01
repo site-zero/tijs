@@ -1,17 +1,31 @@
 <script lang="ts" setup>
-  import { computed } from 'vue';
+  import { computed, ref } from 'vue';
   import { MainFrameProps, getDemoContent } from './use-main-frame';
+
+  const _chute_width = ref(200);
 
   const props = withDefaults(defineProps<MainFrameProps>(), {
     mode: 'Z',
+    minChuteWidth: 50,
   });
 
   const MFMode = computed(() => props.mode || 'T');
+
+  const TopStyle = computed(() => {
+    //  Only in desktop mode,  we can support adjust chute size.
+    if (/^[TCZ]$/.test(MFMode.value)) {
+      let w = Math.max(props.minChuteWidth, _chute_width.value);
+      return {
+        'grid-template-columns': `${w}px 1fr`,
+      };
+    }
+  });
 </script>
 <template>
   <div
     class="ti-main-frame"
-    :mode="MFMode">
+    :mode="MFMode"
+    :style="TopStyle">
     <!-- 
       =====Mobile Layout======  
     -->
@@ -22,9 +36,11 @@
       </div>
       <!--主区域-->
       <div class="frame-part as-arena">
-        <div
-          class="arena-con"
-          v-html="getDemoContent()"></div>
+        <slot>
+          <div
+            class="arena-con"
+            v-html="getDemoContent()"></div>
+        </slot>
       </div>
       <!--底栏-->
       <div class="frame-part as-foot">
@@ -41,13 +57,23 @@
       </div>
       <!--主区域-->
       <div class="frame-part as-arena">
-        <div
-          class="arena-con"
-          v-html="getDemoContent()"></div>
+        <div class="part-con">
+          <div class="part-scroller">
+            <slot>
+              <div v-html="getDemoContent()"></div>
+            </slot>
+          </div>
+        </div>
       </div>
       <!--侧边栏-->
       <div class="frame-part as-chute">
-        <slot name="chute"><span>{Slot Chute}</span></slot>
+        <div class="part-con">
+          <div class="part-scroller">
+            <slot name="chute"><span>{Slot Chute}</span></slot>
+          </div>
+        </div>
+        <!--调整条-->
+        <div class="adjust-bar"></div>
       </div>
       <!--底栏-->
       <div class="frame-part as-foot">

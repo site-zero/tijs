@@ -11,4 +11,5 @@ export function getDemoContent() {
 export type MainFrameMode = 'T' | 'C' | 'Z' | 'mobile';
 export type MainFrameProps = {
   mode?: MainFrameMode;
+  minChuteWidth?: number;
 };

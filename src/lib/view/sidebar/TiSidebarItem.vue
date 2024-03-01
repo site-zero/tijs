@@ -100,13 +100,14 @@
     padding: var(--ti-measure-box-pad);
     cursor: pointer;
     > .as-indent-block {
-      &::before{
-        display: inline; content:"";
+      &::before {
+        display: inline;
+        content: '';
       }
-      min-width: SZ(30);
+      min-width: SZ(16);
     }
     > .ti-icon {
-      width: 24px;
+      min-width: 24px;
       font-size: 16px;
     }
     > .as-title {
@@ -119,8 +120,13 @@
         font-weight: bold;
       }
     }
-    &.at-sub > .as-title {
-      font-size: 0.8em;
+    &.at-sub {
+      > .ti-icon {
+        font-size: 0.9em;
+      }
+      > .as-title {
+        font-size: 0.8em;
+      }
     }
     &:hover {
       background-color: var(--ti-color-hightlight);
