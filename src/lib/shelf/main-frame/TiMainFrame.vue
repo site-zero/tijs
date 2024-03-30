@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import { computed, ref } from 'vue';
   import { MainFrameProps, getDemoContent } from './use-main-frame';
+  import { TiRoadblock } from '../../';
 
   const _chute_width = ref(200);
 
@@ -60,7 +61,7 @@
         <div class="part-con">
           <div class="part-scroller">
             <slot>
-              <div v-html="getDemoContent()"></div>
+              <TiRoadblock icon="zmdi-widgets" text="Main Area" />
             </slot>
           </div>
         </div>
