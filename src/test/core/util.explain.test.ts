@@ -12,7 +12,7 @@ test('BaseExplain', () => {
     Util.explainObj(context, {
       a: '=name',
       b: '=age',
-    }),
+    })
   );
 });
 
@@ -34,8 +34,8 @@ test('InvokeExplain', () => {
             return _.upperFirst(_.camelCase(str));
           },
         },
-      },
-    ),
+      }
+    )
   );
 });
 
@@ -58,7 +58,7 @@ test('MapExplain', () => {
   } as Vars;
 
   expect(
-    Util.explainObj(context, { a: '=name', b: '=pet.name', c: '=age' }),
+    Util.explainObj(context, { a: '=name', b: '=pet.name', c: '=age' })
   ).toStrictEqual({
     a: 'abc',
     b: 'xx',
@@ -76,6 +76,18 @@ test('ArrayExplain', () => {
   } as Vars;
 
   expect(
-    Util.explainObj(context, ['=name', { b: '=pet.name' }, '=age']),
+    Util.explainObj(context, ['=name', { b: '=pet.name' }, '=age'])
   ).toStrictEqual(['abc', { b: 'xx' }, 12]);
+});
+
+test('WholeContextExplain', () => {
+  let context = {
+    name: 'abc',
+    age: 12,
+    pet: {
+      name: 'xx',
+    },
+  } as Vars;
+
+  expect(_.get(Util.explainObj(context, '=..'), 'name')).toStrictEqual('abc');
 });

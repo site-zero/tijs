@@ -7,20 +7,19 @@ import {
   Vars,
   invoke_partial,
 } from '../../ti';
+import { Context } from 'typedoc';
 
-type ReType = { (context: Vars, options: ExplainOptions): any };
-type MakeReType = {
-  (val: string, getDft: ReType): ReType;
-};
+type ValueGetter = (context: Vars, options: ExplainOptions) => any;
+type MakeValueGetter = (val: string, getDft: ValueGetter) => ValueGetter;
 
 // 静态值：任何
-function __static_val(val: any): ReType {
+function __static_val(val: any): ValueGetter {
   let v = Str.toJsValue(val);
   return () => v;
 }
 
 // 静态值：布尔
-function __static_bool(val: any, not: boolean = false): ReType {
+function __static_bool(val: any, not: boolean = false): ValueGetter {
   let v = Str.toJsValue(val);
   let b = v ? true : false;
   if (not) {
@@ -30,10 +29,10 @@ function __static_bool(val: any, not: boolean = false): ReType {
 }
 
 // 自动取值: 任何值
-interface Get_Val {
-  (path: string, options: { getDft: ReType; autoJsValue: boolean }): ReType;
-}
-const __get_val: Get_Val = (path, { getDft, autoJsValue }) => {
+function __get_val(
+  path: string,
+  { getDft, autoJsValue } = {} as { getDft: ValueGetter; autoJsValue?: boolean }
+): ValueGetter {
   return (context, options) => {
     let v = _.get(context, path);
     if (_.isNil(v)) {
@@ -44,13 +43,13 @@ const __get_val: Get_Val = (path, { getDft, autoJsValue }) => {
     }
     return v;
   };
-};
+}
 
 // 自动取值: 布尔值
-interface Get_Bool {
-  (path: string, options: { getDft: ReType; not?: boolean }): ReType;
-}
-const __get_bool: Get_Bool = (path, { getDft, not = false }) => {
+function __get_bool(
+  path: string,
+  { getDft, not = false } = {} as { getDft: ValueGetter; not?: boolean }
+): ValueGetter {
   return (context, options) => {
     let b = _.get(context, path);
     if (_.isNil(b)) {
@@ -61,7 +60,7 @@ const __get_bool: Get_Bool = (path, { getDft, not = false }) => {
     }
     return b ? true : false;
   };
-};
+}
 
 // 函数
 function __get_func(path: string, partial: invoke_partial) {
@@ -102,7 +101,7 @@ function __get_tmpl(str: string) {
 }
 
 type MakerMap = {
-  [k: string]: MakeReType;
+  [k: string]: MakeValueGetter;
 };
 
 const _makers: MakerMap = {
@@ -134,7 +133,7 @@ const _makers: MakerMap = {
 
 export class StringExplainer implements Explainer {
   // 解析后的处理函数
-  private _func: ReType = (v) => v;
+  private _func: ValueGetter = (v) => v;
 
   // 构造函数，进行编译
   constructor(input: string) {
@@ -142,6 +141,7 @@ export class StringExplainer implements Explainer {
   }
 
   valueOf(input: string): void {
+    //console.log('StringExplainer.valueOf', input);
     //
     // 逃逸
     //
@@ -156,7 +156,7 @@ export class StringExplainer implements Explainer {
     //
     let m_type: string | undefined;
     let m_val: string | undefined;
-    let the_dft = __static_val(input);
+    let func = __static_val(input);
     // Match template or function call
     m = /^(==?>>?\??|->)(.*)$/.exec(input);
     if (m) {
@@ -169,24 +169,34 @@ export class StringExplainer implements Explainer {
       if (m) {
         m_type = m[1];
         m_val = _.trim(m[2]);
-        let m_dft = m[4];
-        // starts with "=" auto covert to JS value
+
+        // support dynamic default getter
+        let m_dft = _.trim(m[4]);
+        let _get_dft: ValueGetter;
         if (/^=/.test(m_dft)) {
           let s = m_dft.substring(1).trim();
-          the_dft = __get_val(s, { getDft: the_dft, autoJsValue: true });
+          _get_dft = __get_val(s, { getDft: () => s, autoJsValue: true });
+        } else {
+          _get_dft = __static_val(m_dft);
         }
+
         // starts with "!=" or "==" auto covert to Boolean
-        else if ('==' == m_type) {
-          the_dft = __static_bool(m_dft);
+        if ('==' == m_type) {
+          func = __static_bool(m_dft);
         }
         // starts with "!=" or "==" auto covert to Boolean
         else if ('!=' == m_type) {
-          the_dft = __static_bool(m_dft, true);
+          func = __static_bool(m_dft, true);
         }
-        // Others, just trim the value
-        else if (m_dft) {
-          m_dft = _.trim(m_dft);
-          the_dft = __static_val(m_dft);
+        // whole context  "=.."
+        else if ('..' == m_val) {
+          func = (context) => {
+            return _.cloneDeep(context);
+          };
+        }
+        // Others, must starts with "=" auto covert to JS value
+        else {
+          func = __get_val(m_val, { getDft: _get_dft, autoJsValue: true });
         }
       }
     }
@@ -194,13 +204,13 @@ export class StringExplainer implements Explainer {
     //
     // 获取处理器
     //
-    this._func = the_dft;
+    this._func = func;
 
     // 看看是否找到特殊处理器
     if (m_val) {
       let _maker = m_type ? _makers[m_type] : undefined;
       if (_maker) {
-        this._func = _maker(m_val, the_dft);
+        this._func = _maker(m_val, func);
       }
     }
   }
