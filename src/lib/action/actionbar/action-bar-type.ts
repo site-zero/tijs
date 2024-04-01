@@ -1,5 +1,5 @@
 import { InjectionKey } from 'vue';
-import { EventInfo, IconInput } from '../../';
+import { AltBarItemisplay, BarItem, BarItemDisplay, EventInfo, IconInput } from '../../';
 import {
   Callback,
   Invoke,
@@ -8,7 +8,6 @@ import {
   TiMatch,
   Vars,
 } from '../../../core';
-import { BarItemType } from './action-bar-item';
 
 export const COM_TYPE = 'TiActionBar';
 
@@ -50,29 +49,9 @@ export type BarState = {
   vars: Vars;
 };
 
-type BarItemDisplay = {
-  icon?: IconInput;
-  text?: string;
-  tip?: string;
-};
 
-type BarItem = BarItemDisplay & {
-  type: BarItemType;
-  name?: string;
-  shortcut?: string;
-};
 
-export type AltBarItemisplay<T> = BarItemDisplay & {
-  test?: T;
-};
 
-export type BarItemAction = Callback | EventInfo<any> | Invoke | string;
-
-export type ActionBarItem = Optional<BarItem, 'type'> & {
-  altDisplay?: AltBarItemisplay<any> | AltBarItemisplay<any>[];
-  items?: ActionBarItem[];
-  action?: BarItemAction;
-};
 
 export type BuiltedBarItem = BarItem & {
   uniqKey: string;

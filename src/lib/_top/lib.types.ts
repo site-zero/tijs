@@ -1,10 +1,13 @@
 import _ from 'lodash';
 import { DefineComponent, InjectionKey, Plugin } from 'vue';
 import {
+  Callback,
   Callback2,
   I18n,
   I18nSet,
+  Invoke,
   IsType,
+  Optional,
   TiBus,
   TiIconObj,
   Vars,
@@ -279,4 +282,35 @@ export type SideBarItem = {
   icon?: IconInput;
   title?: string;
   items?: SideBarItem[];
+};
+
+export type BarItemDisplay = {
+  icon?: IconInput;
+  text?: string;
+  tip?: string;
+};
+
+export type BarItemType =
+  | 'action'
+  | 'group'
+  | 'inline-group'
+  | 'status'
+  | 'sep';
+
+export type BarItem = BarItemDisplay & {
+  type: BarItemType;
+  name?: string;
+  shortcut?: string;
+};
+
+export type AltBarItemisplay<T> = BarItemDisplay & {
+  test?: T;
+};
+
+export type BarItemAction = Callback | EventInfo<any> | Invoke | string;
+
+export type ActionBarItem = Optional<BarItem, 'type'> & {
+  altDisplay?: AltBarItemisplay<any> | AltBarItemisplay<any>[];
+  items?: ActionBarItem[];
+  action?: BarItemAction;
 };

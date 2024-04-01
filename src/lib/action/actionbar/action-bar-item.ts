@@ -1,14 +1,13 @@
-import { Callback, I18n, Match, TiMatch, Util, isInvoke } from '../../../core';
-import { isEventInfo } from '../../';
 import _ from 'lodash';
 import {
   ActionBarItem,
   AltBarItemisplay,
   BarItemAction,
-  BarState,
-  BuiltedBarItem,
-  ItemAncestors,
-} from './action-bar-type';
+  BarItemType,
+  isEventInfo,
+} from '../../';
+import { Callback, I18n, Match, TiMatch, Util, isInvoke } from '../../../core';
+import { BarState, BuiltedBarItem, ItemAncestors } from './action-bar-type';
 import { ActionBarOptions } from './use-action-bar';
 
 function __gen_group_children(
@@ -16,7 +15,7 @@ function __gen_group_children(
   items: ActionBarItem[] | undefined,
   state: BarState,
   options: ActionBarOptions,
-  depth: number[],
+  depth: number[]
 ) {
   if (items) {
     let subItems: BuiltedBarItem[] = [];
@@ -31,13 +30,6 @@ function __gen_group_children(
   }
 }
 
-export type BarItemType =
-  | 'action'
-  | 'group'
-  | 'inline-group'
-  | 'status'
-  | 'sep';
-
 const TIDY_BAR_ITEMS = {
   'action': () => {},
   'group': (aItem, bItem, state, options, depth) => {
@@ -50,7 +42,7 @@ const TIDY_BAR_ITEMS = {
       aItem.items,
       state,
       options,
-      depth,
+      depth
     );
   },
   'inline-group': (aItem, bItem, state, options, depth) => {
@@ -59,7 +51,7 @@ const TIDY_BAR_ITEMS = {
       aItem.items,
       state,
       options,
-      depth,
+      depth
     );
   },
   'status': () => {},
@@ -71,7 +63,7 @@ const TIDY_BAR_ITEMS = {
     bItem: BuiltedBarItem,
     state: BarState,
     options: ActionBarOptions,
-    depth: number[],
+    depth: number[]
   ) => void
 >;
 
@@ -80,7 +72,7 @@ function tidyItem(
   bItem: BuiltedBarItem,
   state: BarState,
   options: ActionBarOptions,
-  depth: number[],
+  depth: number[]
 ) {
   TIDY_BAR_ITEMS[bItem.type](aItem, bItem, state, options, depth);
 }
@@ -89,7 +81,7 @@ function tidyItem(
 function parseItemAction(
   action: BarItemAction | undefined,
   state: BarState,
-  options: ActionBarOptions,
+  options: ActionBarOptions
 ): Callback | undefined {
   // Guard
   if (!action) {
@@ -131,7 +123,7 @@ function createItem(
   options: ActionBarOptions,
   it: ActionBarItem,
   index: number,
-  depth: number[] = [],
+  depth: number[] = []
 ): BuiltedBarItem {
   let type: BarItemType;
   if (!it.type) {
@@ -189,7 +181,7 @@ function createItem(
 export function buildBarViewItems(
   state: BarState,
   items: ActionBarItem[],
-  options: ActionBarOptions,
+  options: ActionBarOptions
 ): BuiltedBarItem[] {
   let re = [] as BuiltedBarItem[];
   for (let i = 0; i < items.length; i++) {

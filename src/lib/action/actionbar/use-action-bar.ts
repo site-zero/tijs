@@ -1,7 +1,7 @@
-import { CommonProps, TiEventTrigger } from '../../';
+import { ActionBarItem, CommonProps, TiEventTrigger } from '../../';
 import { Callback } from '../../../core';
 import { buildBarViewItems, buildItemsAncestors } from './action-bar-item';
-import { ActionBarItem, BarState } from './action-bar-type';
+import { BarState } from './action-bar-type';
 
 /*-----------------------------------------------------
 
@@ -20,7 +20,7 @@ export type ActionBarOptions = {
   parseAction: (
     action: string,
     state: BarState,
-    options: ActionBarOptions,
+    options: ActionBarOptions
   ) => Callback;
 };
 // /*-----------------------------------------------------
@@ -41,7 +41,7 @@ export type ActionBarOptions = {
 export function useActionBar(
   state: BarState,
   props: ActionBarProps,
-  options: ActionBarOptions,
+  options: ActionBarOptions
 ) {
   let hasOpenedGroup = false;
   for (let en of state.opened.entries()) {

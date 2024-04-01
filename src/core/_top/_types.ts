@@ -16,9 +16,9 @@ export type TextValue<T> = {
 
 export type DateInput = string | number | Date;
 export type DateFormatOptions = {
-  fmt?:string;
+  fmt?: string;
   trimZero?: boolean;
-}
+};
 
 export type TextStrValue = TextValue<string>;
 
@@ -132,9 +132,7 @@ export type I18nSet = {
 
 export type I18nLang = keyof I18nSet;
 
-export interface Vars {
-  [k: string]: any;
-}
+export type Vars = Record<string, any>;
 
 export type ExplainI18n = {
   and: string;
@@ -284,10 +282,20 @@ export type Render<F, T> = (input: F, vars?: Vars) => T;
 
 export type StrRender<T> = Render<T, string>;
 
-export type TiMatch = {
+export interface TiMatch {
   test: (it: any) => boolean;
   explainText: (i18n: ExplainI18n) => string;
-};
+}
+
+export function isTiMatch(input: any): input is TiMatch {
+  if (_.isNil(input)) {
+    return false;
+  }
+  if (_.isFunction(input.test) && _.isFunction(input.explainText)) {
+    return true;
+  }
+  return false;
+}
 
 export type Predicate<T> = (t: T) => boolean;
 export type Iteratee<T> = (t: T) => T;
