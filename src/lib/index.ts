@@ -48,6 +48,7 @@ export const updateInstalledComponentsLangs: {
   (lang: I18nLang): void;
   (lang: string): void;
 } = function (lang: string | I18nLang): void {
+  console.log("updateInstalledComponentsLangs", lang)
   let langKey: I18nLang;
   if (_.isString(lang)) {
     langKey = I18n.toLangKey(lang);
@@ -73,10 +74,10 @@ export const updateInstalledComponentsLangs: {
   }
 };
 
-export function installTiCoreI18n(lang: string) {
+export function installTiCoreI18n(lang: string, updateComponents = false) {
   let cn = zh_cn as MessageMap;
   let en = en_us as MessageMap;
-
+  console.log("installTiCoreI18n", lang)
   const app_i18ns = {
     zh_cn: cn,
     en_us: en,
@@ -86,8 +87,9 @@ export function installTiCoreI18n(lang: string) {
 
   let langKey = I18n.toLangKey(lang);
   I18n.putAll(app_i18ns[langKey]);
-
-  updateInstalledComponentsLangs(langKey);
+  if (updateComponents) {
+    updateInstalledComponentsLangs(langKey);
+  }
 }
 
 export function tiPutComponents(coms: TiComSet) {
@@ -96,7 +98,7 @@ export function tiPutComponents(coms: TiComSet) {
 
 export function tiGetComponent(
   key: string,
-  dft: string = 'TiUnknown',
+  dft: string = 'TiUnknown'
 ): TiCom | undefined {
   let comType = Str.toComType(key);
   let com = ALL_TI_COMS.get(comType);
@@ -139,7 +141,7 @@ function _dft_com_prop_key(comType: string, propName: string) {
 export function tiGetDefaultComPropValue<T>(
   comType: string,
   propName: string,
-  dft?: T,
+  dft?: T
 ): T {
   let k = _dft_com_prop_key(comType, propName);
   return getEnv(k, dft);
@@ -157,7 +159,7 @@ export function tiGetDefaultComPropValue<T>(
 export function tiSetDefaultComPropValue(
   comType: string,
   propName: string,
-  value: any,
+  value: any
 ): void {
   let k = _dft_com_prop_key(comType, propName);
   return setEnv(k, value);

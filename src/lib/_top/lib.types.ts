@@ -273,6 +273,11 @@ export type TiAppEventTrigger<K extends string> = TiEventTrigger<K, any>;
 
 export const BUS_KEY: InjectionKey<TiAppBus> = Symbol('EVENT_BUS');
 
+/*---------------------------------------------------
+
+                      Sidebar
+
+---------------------------------------------------*/
 export type SideBarItem = {
   key: string;
   depth: number;
@@ -314,3 +319,27 @@ export type ActionBarItem = Optional<BarItem, 'type'> & {
   items?: ActionBarItem[];
   action?: BarItemAction;
 };
+/*---------------------------------------------------
+
+                      Pager
+
+---------------------------------------------------*/
+export interface ShortNamePager {
+  pn: number; //"pageNumber",
+  pgsz: number; //"pageSize",
+  pgc: number; //"pageCount",
+  sum: number; //"totalCount",
+  count: number; //"count",
+  skip: number; //"skip",
+  limit: number; //"limit"
+}
+
+export interface LongNamePager {
+  pageNumber: number;
+  pageSize: number;
+  pageCount: number;
+  totalCount: number;
+  count: number;
+  skip: number;
+  limit: number;
+}
