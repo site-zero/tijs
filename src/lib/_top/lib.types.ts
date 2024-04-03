@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _, { extend } from 'lodash';
 import { DefineComponent, InjectionKey, Plugin } from 'vue';
 import {
   Callback,
@@ -324,6 +324,7 @@ export type ActionBarItem = Optional<BarItem, 'type'> & {
                       Pager
 
 ---------------------------------------------------*/
+export type Pager = ShortNamePager & LongNamePager;
 export interface ShortNamePager {
   pn: number; //"pageNumber",
   pgsz: number; //"pageSize",
