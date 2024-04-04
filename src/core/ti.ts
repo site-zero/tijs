@@ -55,4 +55,5 @@ export * as Str from './text/ti-str';
 export * as Tmpl from './tmpl/ti-tmpl';
 export * as Util from './util';
 export * from './web';
+export * from './log/ti-log';
 export * as Be from './web/behaviors';

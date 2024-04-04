@@ -7,6 +7,7 @@ import {
   MessageMap,
   Str,
   getEnv,
+  getLogger,
   setEnv,
 } from '../core/ti';
 import en_us from '../i18n/en-us';
@@ -17,6 +18,8 @@ import _com_set_input from './input/all-input';
 import _com_set_shelf from './shelf/all-shelf';
 import _com_set_tile from './tile/all-tiles';
 import _com_set_view from './view/all-views';
+
+const log = getLogger('ti.lib');
 
 /**
  * 定义一个组件的集合
@@ -48,7 +51,7 @@ export const updateInstalledComponentsLangs: {
   (lang: I18nLang): void;
   (lang: string): void;
 } = function (lang: string | I18nLang): void {
-  console.log("updateInstalledComponentsLangs", lang)
+  log.debug("updateInstalledComponentsLangs", lang)
   let langKey: I18nLang;
   if (_.isString(lang)) {
     langKey = I18n.toLangKey(lang);
@@ -77,7 +80,7 @@ export const updateInstalledComponentsLangs: {
 export function installTiCoreI18n(lang: string, updateComponents = false) {
   let cn = zh_cn as MessageMap;
   let en = en_us as MessageMap;
-  console.log("installTiCoreI18n", lang)
+  log.debug("installTiCoreI18n", lang)
   const app_i18ns = {
     zh_cn: cn,
     en_us: en,
