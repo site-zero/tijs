@@ -26,4 +26,4 @@ export { TiLayoutGrid } from './layout/grid/ti-layout-grid-index';
 export { TiLayoutTabs } from './layout/tabs/ti-layout-tabs-index';
 export { TiMainFrame } from './main-frame/ti-main-frame-index';
 export { TiPlayground };
-
+export * from './layout/layout-support';
