@@ -57,3 +57,4 @@ export * as Util from './util';
 export * from './web';
 export * from './log/ti-log';
 export * as Be from './web/behaviors';
+export * as Net from './net/ti-net';

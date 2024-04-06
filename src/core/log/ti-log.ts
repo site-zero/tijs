@@ -19,6 +19,8 @@ function _find_logger_level(name?: string): LogLevel {
       return row[1];
     }
   }
+
+  return LogLevel.INFO;
 }
 
 export function getLogger(name?: string): Logger {
@@ -70,18 +72,20 @@ export function addLogger(name: string, logLevel: LogLevel) {
 }
 
 export function tidyLogger() {
-  LL._LVS.sort((a, b) => {
-    // 返回负数表示 a 应该在 b 前面
-    if (a[0] < b[0]) {
-      return -1;
-    }
-    // 返回正数表示 b 应该在 a 前面
-    if (a[0] > b[0]) {
-      return 1;
-    }
-    // 返回0表示 a 和 b 相等
-    return 0;
-  }).reverse();
+  LL._LVS
+    .sort((a, b) => {
+      // 返回负数表示 a 应该在 b 前面
+      if (a[0] < b[0]) {
+        return -1;
+      }
+      // 返回正数表示 b 应该在 a 前面
+      if (a[0] > b[0]) {
+        return 1;
+      }
+      // 返回0表示 a 和 b 相等
+      return 0;
+    })
+    .reverse();
   //console.log(LL._LVS.join("\n"))
 
   for (let logger of _.values(LL._loggers)) {
