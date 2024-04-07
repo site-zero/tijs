@@ -59,9 +59,9 @@ export async function loadESModule(url: string) {
     let UA = window.navigator.userAgent || '';
     if (UA.indexOf('QQBrowser') > 0) {
       //console.log("QQBrowser dynamic importModule:", url)
-      return await importESModule(url);
+      return await importESModule(/* @vite-ignore */ url);
     }
-    return await import(url);
+    return await import(/* @vite-ignore */ url);
   } catch (E) {
     if (log.isWarnEnabled()) {
       log.warn('ti.load.mjs', url, E);
