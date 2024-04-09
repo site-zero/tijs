@@ -1,4 +1,4 @@
-import { getLogger } from '..';
+import { getLogger } from '../log/ti-log';
 
 const log = getLogger('ti.core.net');
 

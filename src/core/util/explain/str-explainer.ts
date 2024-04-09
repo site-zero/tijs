@@ -14,8 +14,8 @@ type MakeValueGetter = (val: string, getDft: ValueGetter) => ValueGetter;
 
 // 静态值：任何
 function __static_val(val: any): ValueGetter {
-  let v = Str.toJsValue(val);
-  return () => v;
+  //let v = Str.toJsValue(val);
+  return () => val;
 }
 
 // 静态值：布尔

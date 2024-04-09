@@ -61,7 +61,7 @@ export function scaleSize(scale = 1.0, W: number, H: number): Size2D {
 export function toPixel(
   input: null | undefined | number | string,
   base = 100,
-  dft = 0,
+  dft = 0
 ) {
   if (_.isNil(input)) {
     return dft;
@@ -86,7 +86,7 @@ export function toPixel(
 //-----------------------------------
 export function toAbsPixel(
   input: number | string,
-  { base = 100, dft = 0, remBase = 100, emBase = 14 } = {},
+  { base = 100, dft = 0, remBase = 100, emBase = 14 } = {}
 ) {
   if (_.isNumber(input)) {
     return input;
@@ -115,7 +115,7 @@ export type ToSizeOptions = {
 };
 export function toSize(
   sz: any,
-  { autoPercent = false, remBase = 0 } = {} as ToSizeOptions,
+  { autoPercent = false, remBase = 0 } = {} as ToSizeOptions
 ): string {
   if (_.isNumber(sz) || /^[0-9]+$/.test(sz)) {
     if (0 == sz) return sz;
@@ -227,7 +227,7 @@ export type MergetStyleOptions = {
 //-----------------------------------
 export function mergeStyles(
   styles: Vars[] | Vars,
-  options: MergetStyleOptions = {},
+  options: MergetStyleOptions = {}
 ): Vars {
   let styleList: Vars[];
   if (!_.isArray(styles)) {
@@ -263,7 +263,7 @@ export function joinClassNames(...args: any[]) {
 //----------------------------------------------------
 export function parseCssRule(
   rule: undefined | null | string,
-  flt: AttrFilter = true,
+  flt: AttrFilter = true
 ): Vars {
   let re = {} as Vars;
   if (!rule) {
@@ -318,7 +318,7 @@ export function parseAndTidyCssRule(
     parseBackground: need_parse_background = true,
     nameCase = 'kebab',
     urlRewrite,
-  } = {} as ParseAndTidyCssOptions,
+  } = {} as ParseAndTidyCssOptions
 ) {
   if (_.isString(rule)) {
     rule = parseCssRule(rule, filter);
@@ -341,7 +341,7 @@ export function parseAndTidyCssRule(
     if (rule[bgPosKey]) {
       const toPosName = function (
         str: string | undefined,
-        cans = [] as string[],
+        cans = [] as string[]
       ) {
         if (str) {
           if (/^0(%|px|rem|em|pt)?$/.test(str)) {
@@ -379,7 +379,7 @@ export function parseBackground(
   str = '',
   { nameCase = 'kebab' } = {} as {
     nameCase: StrCaseMode;
-  },
+  }
 ): MessageMap {
   let toNameCase = Str.getCaseFunc(nameCase);
   // 首先整理字符串，去掉多余的空格，确保 backgroundPosition|backgroundSize 之间是没有空格的

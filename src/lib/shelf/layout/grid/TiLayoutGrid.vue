@@ -87,6 +87,7 @@ watch(() => props.shown, (shown: Vars) => {
   state.shown = _.cloneDeep(shown)
 })
 onMounted(() => {
+  console.log("TiLayoutGrid onMounted")
   Grid.value.bindResizing($main.value, state, onUnmounted, Keep);
   loadAllState(props, state, Keep.value);
 });

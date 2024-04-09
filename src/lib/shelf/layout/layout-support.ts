@@ -212,7 +212,7 @@ export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
       'blocks',
       'tabAt',
       'tabAlign',
-      'defaultTab',
+      'defaultTab'
     );
   }
 }
@@ -230,6 +230,7 @@ export function getLayoutItem(state: LayoutState, props: LayoutProps) {
 
     // 准备布局项目
     let it = _.cloneDeep(item) as LayoutItem;
+    //console.log(i, it);
     it.index = i;
     if (!it.uniqKey) {
       it.uniqKey = it.name ?? `B${i}`;

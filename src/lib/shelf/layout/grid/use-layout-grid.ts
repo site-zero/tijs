@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { ComputedRef } from 'vue';
-import { TiEventTrigger } from '../../../';
 import {
   Callback,
   Callback1,
@@ -59,6 +58,7 @@ function getLayoutGridItems(
 ): LayoutGridItem[] {
   let items = getLayoutItem(state, props) as LayoutGridItem[];
   for (let item of items) {
+    //console.log('item-', item.bar, item);
     if (item.bar) {
       if (!_.isArray(item.bar)) {
         item.adjustBars = [item.bar];
@@ -77,6 +77,7 @@ function getLayoutGridItems(
                 
 -----------------------------------------------------*/
 export type LayoutGridFeature = {
+  isAdjustable: boolean;
   TopClass: Vars;
   TopStyle: Vars;
   Items: LayoutGridItem[];
@@ -102,6 +103,7 @@ export function useLayoutGrid(
       break;
     }
   }
+  console.log('isAdjustable', isAdjustable, Items.length);
 
   // 计算顶部的样式
   let TopStyle = CssUtils.mergeStyles(props.layout || {});
@@ -114,6 +116,7 @@ export function useLayoutGrid(
 
   // 返回
   return {
+    isAdjustable,
     TopClass: CssUtils.mergeClassName(props.className),
     TopStyle,
     Items,
@@ -124,6 +127,14 @@ export function useLayoutGrid(
       onDestroy: Callback1<Callback>,
       Keep: ComputedRef<LayoutGridKeepFeature>
     ) {
+      let abc = false;
+      for (let it of Items) {
+        if (!_.isEmpty(it.adjustBars)) {
+          abc = true;
+          break;
+        }
+      }
+      console.log('bindResizing', isAdjustable, abc, Items.length);
       if (isAdjustable) {
         useGridResizing($main, resizing, onDestroy, Keep);
       }

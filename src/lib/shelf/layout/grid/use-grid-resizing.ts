@@ -216,6 +216,7 @@ export function useGridResizing(
   onDestroy: Callback1<Callback>,
   Keep: ComputedRef<LayoutGridKeepFeature>
 ) {
+  console.log("useGridResizing", $main)
   useDraggable({
     onDestroy,
     getWatchTarget: () => $main,
@@ -223,11 +224,13 @@ export function useGridResizing(
       return Dom.closest(target, '.adjust-bar', { includeSelf: true });
     },
     onReady: (ing: Dragging) => {
+      console.log('onReady', ing);
       //ing.watchZone = Rects.createBy(ing.body!);
       ing.watchMode = 'stop';
       //console.log("onReady", ing.activated, ing.client);
     },
     onStart: (ing: Dragging) => {
+      console.log('onStart', ing);
       if (!ing.target || !ing.viwportElement) {
         return;
       }
@@ -260,13 +263,14 @@ export function useGridResizing(
       // console.log("onStart", bar, mea);
     },
     onMoving: (ing: Dragging) => {
+      console.log('onMoving', ing);
       let moving = ing.getVar('moving');
       if (_.isFunction(moving)) {
         moving();
       }
     },
     onEnd: (ing: Dragging) => {
-      //console.log("onEnd", ing);
+      console.log('onEnd', ing);
       let fn = ing.getVar('move_end');
       if (_.isFunction(fn)) {
         fn();

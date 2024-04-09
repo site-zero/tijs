@@ -170,7 +170,7 @@ export function useDraggable(options: DraggalbeOptions) {
   let $body = $watchTarget.ownerDocument.body;
   let ing: Dragging;
 
-  //console.log("useDraggable", $watchTarget);
+  console.log("useDraggable", $watchTarget);
   // 准备监听
   let { POINTER_DOWN, POINTER_UP, POINTER_MOVE, getPointerEvent, getPoint2D } =
     getWatchEvent();
