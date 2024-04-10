@@ -1,9 +1,9 @@
 import { TiComInfo, TiComRace } from '../../../';
 import { App } from 'vue';
 import TiLayoutGrid from './TiLayoutGrid.vue';
-import { nested, simple } from './example';
+import { simple } from './example';
 import i18n from './i18n';
-import { COM_TYPE } from './use-layout-grid';
+import { COM_TYPE } from './grid.types';
 
 const TiLayoutGridInfo: TiComInfo = {
   icon: 'zmdi-view-dashboard',
@@ -16,7 +16,7 @@ const TiLayoutGridInfo: TiComInfo = {
     app.component(COM_TYPE, TiLayoutGrid);
   },
   defaultProps: 'simple',
-  exampleProps: [simple, nested],
+  exampleProps: [simple],
 };
 
 export { TiLayoutGrid, TiLayoutGridInfo };

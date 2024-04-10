@@ -1,17 +1,14 @@
 import _ from 'lodash';
-import { Dragging, useDraggable } from '../../../';
+import { ComputedRef } from 'vue';
+import { Dragging, LayoutBar, useDraggable } from '../../../';
 import {
-  Callback,
-  Callback1,
   CssUtils,
   Dom,
   NameStrValue,
   Num,
-  Str,
+  Str
 } from '../../../../core';
-import { LayoutBar } from '../layout-support';
 import { LayoutGridKeepFeature, keepSizesState } from './use-grid-keep';
-import { ComputedRef } from 'vue';
 
 export type GridResizingState = {
   /**
@@ -213,24 +210,22 @@ const MoveEnd = {
 export function useGridResizing(
   $main: HTMLElement,
   resizing: GridResizingState,
-  onDestroy: Callback1<Callback>,
   Keep: ComputedRef<LayoutGridKeepFeature>
-) {
-  console.log("useGridResizing", $main)
-  useDraggable({
-    onDestroy,
+): () => void {
+  //console.log('useGridResizing', $main);
+  return useDraggable({
     getWatchTarget: () => $main,
     getDragTarget: (target: HTMLElement): HTMLElement | undefined => {
       return Dom.closest(target, '.adjust-bar', { includeSelf: true });
     },
     onReady: (ing: Dragging) => {
-      console.log('onReady', ing);
+      //console.log('onReady', ing);
       //ing.watchZone = Rects.createBy(ing.body!);
       ing.watchMode = 'stop';
       //console.log("onReady", ing.activated, ing.client);
     },
     onStart: (ing: Dragging) => {
-      console.log('onStart', ing);
+      //console.log('onStart', ing);
       if (!ing.target || !ing.viwportElement) {
         return;
       }
@@ -263,14 +258,14 @@ export function useGridResizing(
       // console.log("onStart", bar, mea);
     },
     onMoving: (ing: Dragging) => {
-      console.log('onMoving', ing);
+      //console.log('onMoving', ing);
       let moving = ing.getVar('moving');
       if (_.isFunction(moving)) {
         moving();
       }
     },
     onEnd: (ing: Dragging) => {
-      console.log('onEnd', ing);
+      //console.log('onEnd', ing);
       let fn = ing.getVar('move_end');
       if (_.isFunction(fn)) {
         fn();

@@ -72,7 +72,7 @@ export type DraggalbeOptions = {
    * 一个销毁的注册函数，通常是控件 onUnmounted
    * 这样控件销毁时，会调用到 draggable 的销毁，即，删除对元素的监听
    */
-  onDestroy: Callback1<Callback>;
+  onDestroy?: Callback1<Callback>;
 };
 
 type WATCH_EVENT = {
@@ -170,7 +170,7 @@ export function useDraggable(options: DraggalbeOptions) {
   let $body = $watchTarget.ownerDocument.body;
   let ing: Dragging;
 
-  console.log("useDraggable", $watchTarget);
+  //console.log('useDraggable', $watchTarget);
   // 准备监听
   let { POINTER_DOWN, POINTER_UP, POINTER_MOVE, getPointerEvent, getPoint2D } =
     getWatchEvent();
@@ -270,8 +270,17 @@ export function useDraggable(options: DraggalbeOptions) {
     $watchTarget.addEventListener(POINTER_DOWN, OnPointerDown);
   }, 0);
 
-  onDestroy(function () {
+  //
+  // 准备销毁程序
+  //
+  function release_draggable() {
     console.log('销毁 dragging down');
     $watchTarget.removeEventListener(POINTER_DOWN, OnPointerDown);
-  });
+  }
+
+  if (onDestroy) {
+    onDestroy(release_draggable);
+  }
+
+  return release_draggable;
 }

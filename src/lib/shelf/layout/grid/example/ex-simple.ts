@@ -13,7 +13,7 @@ export default {
       padding: '10px',
     },
     itemStyle: {
-      backgroundColor: '#FFEE66',
+      backgroundColor: '#33EE66',
     },
     layout: {
       gridTemplateColumns: '1fr 2fr',

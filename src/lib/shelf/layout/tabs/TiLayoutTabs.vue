@@ -1,7 +1,6 @@
 <script lang="ts" setup>
   import { inject, reactive } from 'vue';
-  import { BUS_KEY, TiAppEvent, useBusEmit } from '../../../';
-  import { LayoutState } from '../layout-support.ts';
+  import { BUS_KEY, LayoutState, TiAppEvent, useBusEmit } from '../../../';
   import { TiLayoutTabsInfo } from './ti-layout-tabs-index';
   import {
     COM_TYPE,
@@ -36,24 +35,6 @@
     tabAlign: 'center',
     defaultTab: 0,
   });
-
-  /*-------------------------------------------------------
-
-                  Bus & Notify & Emit
-
--------------------------------------------------------*/
-  let outer_bus = inject(BUS_KEY);
-  let emit = defineEmits<{
-    (event: LayoutTabsEvents, payload: TiAppEvent): void;
-  }>();
-  // 准备通知函数
-  let notify = useBusEmit(TiLayoutTabsInfo, props, emit, outer_bus);
-  /*-------------------------------------------------------
-
-                    Use features
-
--------------------------------------------------------*/
-  let Grid = useLayoutTabs(state, props, { notify });
 </script>
 <template>tabs</template>
 <style lang="scss" scoped>

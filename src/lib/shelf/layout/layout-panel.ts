@@ -1,13 +1,8 @@
 import _ from 'lodash';
+import { LayoutBlock, LayoutItem, LayoutProps, LayoutState } from '../../';
 import { CssUtils, PopPosition, Vars } from '../../../core';
-import {
-  LayoutBlock,
-  LayoutItem,
-  LayoutProps,
-  LayoutState,
-  autoSetLayoutItemType,
-  setLayoutItemConfig,
-} from './layout-support';
+
+import { autoSetLayoutItemType, setLayoutItemConfig } from './layout-support';
 
 type TranSpeed = 'slow' | 'normal' | 'fast';
 type TranName =
