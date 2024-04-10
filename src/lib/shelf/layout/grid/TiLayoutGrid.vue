@@ -77,7 +77,7 @@ import { getTopStyle } from './use-grid-util.ts';
     }
   );
   onMounted(() => {
-    console.log('TiLayoutGrid onMounted');
+    //console.log('TiLayoutGrid onMounted');
     if (isAdjustable.value) {
       release_resizing.value = useGridResizing($main.value, state, Keep);
     }
