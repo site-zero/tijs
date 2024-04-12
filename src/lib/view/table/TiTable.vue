@@ -10,10 +10,10 @@
     ref,
     watch,
   } from 'vue';
-  import { BUS_KEY, TiIcon, useLargeScrolling } from '../../';
+  import { BUS_KEY, TableProps, TiIcon, useLargeScrolling } from '../../';
   import { CssUtils, Size2D, Util } from '../../../core';
   import TableRow from './row/TableRow.vue';
-  import { ColResizingState, TableProps, useTable } from './use-table';
+  import { ColResizingState, useTable } from './use-table';
   import { loadColumnSizes, useKeepTable } from './use-table-keep';
   import { useViewMeasure } from './use-view-measure';
   //-------------------------------------------------------
@@ -27,7 +27,7 @@
 -------------------------------------------------------*/
   defineOptions({
     name: 'TiTable',
-    inheritAttrs: false,
+    inheritAttrs: true,
   });
   let GBus = inject(BUS_KEY);
   /*-------------------------------------------------------
@@ -112,7 +112,7 @@
     return Table.value.getTableData(selection);
   });
   const ShowRowMarker = computed(
-    () => props.showCheckbox || props.showRowIndex,
+    () => props.showCheckbox || props.showRowIndex
   );
   const RowCheckStatus = computed(() => Table.value.getCheckStatus(selection));
   const RowCheckStatusIcon = computed(() => {
@@ -225,7 +225,7 @@
       scrolling.lineHeights = [];
       scrolling.lineMarkers = [];
       selection.ids = Table.value.getRowIds();
-    },
+    }
   );
 
   watch(
@@ -233,21 +233,21 @@
     () => {
       selection.currentId = props.currentId;
       selection.checkedIds = Util.objToMap(props.checkedIds);
-    },
+    }
   );
 
   watch(
     () => TableColumns.value,
     () => {
       console.log('columns changed', TableColumns.value.length);
-    },
+    }
   );
 
   watch(
     () => TableColumns.value,
     () => {
       console.log('columns changed', TableColumns.value.length);
-    },
+    }
   );
 
   watch(
@@ -255,7 +255,7 @@
     () => {
       console.log('keepColumns changed', props.keepColumns);
       loadColumnSizes(columnSizes, Keep.value);
-    },
+    }
   );
 
   onMounted(() => {
@@ -265,18 +265,24 @@
       columnSizes,
       ShowRowMarker.value,
       onUnmounted,
-      Keep.value,
+      Keep.value
     );
     loadColumnSizes(columnSizes, Keep.value);
   });
 </script>
 <template>
-  <div class="ti-table" :class="TopClass">
-    <main ref="$main" :style="MainStyle">
+  <div
+    class="ti-table"
+    :class="TopClass">
+    <main
+      ref="$main"
+      :style="MainStyle">
       <!-- 表格头 -->
       <template v-if="showHeader">
         <!-- 表头: 标记块 -->
-        <div v-if="ShowRowMarker" class="table-cell as-head as-marker">
+        <div
+          v-if="ShowRowMarker"
+          class="table-cell as-head as-marker">
           <div
             class="as-checker"
             @click="Table.OnTableHeadCheckerClick(selection, RowCheckStatus)">
@@ -306,7 +312,9 @@
         </div>
       </template>
       <!-- 表格体 -->
-      <template v-for="row in TableData" :key="row.id">
+      <template
+        v-for="row in TableData"
+        :key="row.id">
         <!--================== < 表格行 > ================-->
         <div
           v-if="!isInRenderZone(row.index)"
@@ -340,7 +348,9 @@
       :style="ResizingBarStyle"
       v-if="colResizing.activated"></div>
     <!-- vvvvvvvvvvvvv 下面是调试信息，无需在意 vvvvvvvvvvvvv-->
-    <div class="table-debug-info" v-if="showDebug">
+    <div
+      class="table-debug-info"
+      v-if="showDebug">
       <template v-if="showDebugResizing">
         {{ columnSizes }} <br />
         [{{ colResizing.colIndex }}] -> {{ colResizing.left }}

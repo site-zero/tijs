@@ -1,8 +1,8 @@
+import { App } from 'vue';
 import { TiComInfo, TiComRace } from '../../';
-import { App, defineAsyncComponent } from 'vue';
-//import TiTable from "./TiTable.vue";
-const TiTable = defineAsyncComponent(() => import('./TiTable.vue'));
-import { d1k, simple, d10k, d300 } from './example';
+import TiTable from './TiTable.vue';
+//const TiTable = defineAsyncComponent(() => import('./TiTable.vue'));
+import { d10k, d1k, d300, simple } from './example';
 import i18n from './i18n';
 
 const COM_TYPE = 'TiTable';

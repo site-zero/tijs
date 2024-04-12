@@ -10,6 +10,7 @@ import {
   Str,
   Vars,
 } from '../../core';
+import { CommonProps, FieldComProps } from '..';
 
 export type Field = {
   /**
@@ -42,6 +43,47 @@ export type Field = {
   transformer?: FuncA2<any, Vars, any>;
   serializer?: FuncA3<any, Vars, FieldName, any>;
 };
+
+export type CellProps = CommonProps &
+  Field &
+  Omit<FieldComProps, 'redonlyComType' | 'redonlyComConf'> & {
+    title?: string;
+    tip?: string;
+    disabled?: boolean;
+    activated?: boolean;
+    /**
+     * 行下标： 0 BASE
+     */
+    rowIndex?: number;
+    /**
+     * 列下标： 0 BASE
+     */
+    colIndex?: number;
+
+    /**
+     * 传入的数据对象
+     */
+    data: Vars;
+    /**
+     * 传入的上下文变量字段
+     */
+    vars?: Vars;
+
+    /**
+     * 在字段改动后，是否需要比对一下，不同才通知改动
+     *
+     * @default true
+     */
+    checkEquals?: boolean;
+  };
+
+/**
+ * 单元格定义
+ */
+export type TableCell = Omit<
+  CellProps,
+  'activated' | 'rowIndex' | 'colIndex' | 'data' | 'vars'
+>;
 
 export type FieldConvertor = {
   transform: Convertor<any, any>;
@@ -171,7 +213,7 @@ function toInteger(
     dft: number;
     range?: [number, number];
     border?: [boolean, boolean];
-  },
+  }
 ) {
   let n = INT_CONVERTERS[mode](input);
   // Apply the default
@@ -210,7 +252,7 @@ function toFloat(
   { precision = 2, dft = NaN } = {} as {
     precision: number;
     dft: number;
-  },
+  }
 ) {
   //console.log("toFloat", val, precision, dft)
   if (_.isNil(input)) {

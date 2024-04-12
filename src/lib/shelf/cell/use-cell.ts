@@ -1,8 +1,6 @@
 import _ from 'lodash';
 import {
-  CommonProps,
-  Field,
-  FieldComProps,
+  CellProps,
   FieldPair,
   TiEventTrigger,
   TiRawCom,
@@ -28,38 +26,7 @@ export type CellChanged = FieldPair & {
                      Props
 
 -------------------------------------------------------*/
-export type CellProps = CommonProps &
-  Field &
-  Omit<FieldComProps, 'redonlyComType' | 'redonlyComConf'> & {
-    title?: string;
-    tip?: string;
-    disabled?: boolean;
-    activated?: boolean;
-    /**
-     * 行下标： 0 BASE
-     */
-    rowIndex?: number;
-    /**
-     * 列下标： 0 BASE
-     */
-    colIndex?: number;
 
-    /**
-     * 传入的数据对象
-     */
-    data: Vars;
-    /**
-     * 传入的上下文变量字段
-     */
-    vars?: Vars;
-
-    /**
-     * 在字段改动后，是否需要比对一下，不同才通知改动
-     *
-     * @default true
-     */
-    checkEquals?: boolean;
-  };
 /*-------------------------------------------------------
 
                      Feature
@@ -89,7 +56,7 @@ export type CellOptions = {
 -------------------------------------------------------*/
 export function useField(
   props: CellProps,
-  options: CellOptions,
+  options: CellOptions
 ): Omit<CellFeature, 'getReadonlyComType' | 'getReadonlyComConf'> {
   let { data, vars } = props;
   let { notify } = options;

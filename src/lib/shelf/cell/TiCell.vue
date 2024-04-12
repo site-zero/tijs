@@ -1,15 +1,9 @@
 <script lang="ts" setup>
   import { computed, onUnmounted, provide } from 'vue';
-  import { BUS_KEY, TiAppEvent, TiEvent, useBusEmit } from '../../';
+  import { BUS_KEY, CellProps, TiAppEvent, TiEvent, useBusEmit } from '../../';
   import { createBus } from '../../../core';
   import { TiCellInfo } from './ti-cell-index';
-  import {
-    COM_TYPE,
-    CellChanged,
-    CellEvents,
-    CellProps,
-    useField,
-  } from './use-cell';
+  import { COM_TYPE, CellChanged, CellEvents, useField } from './use-cell';
   /*-------------------------------------------------------
 
                      Com Options
@@ -72,7 +66,9 @@
 <template>
   <div class="ti-cell">
     <div class="ti-cell-con">
-      <component :is="Cell.CellComType" v-bind="Cell.CellComConf" />
+      <component
+        :is="Cell.CellComType"
+        v-bind="Cell.CellComConf" />
     </div>
   </div>
 </template>

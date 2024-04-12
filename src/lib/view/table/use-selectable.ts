@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {
   Callback2,
   Callback3,
@@ -9,7 +10,7 @@ import {
   Vars,
 } from '../../../core';
 import { objToMap } from '../../../core/util';
-import _ from 'lodash';
+import { SelectableProps } from '../../../lib';
 /*-----------------------------------------------------
 
                       Types
@@ -26,38 +27,6 @@ export type SelectableState<ID> = {
   currentId?: ID;
   checkedIds: Map<ID, boolean>;
   ids: ID[];
-};
-/*-----------------------------------------------------
-
-                   Input Props
-                
------------------------------------------------------*/
-export type SelectableProps<ID extends string | number> = {
-  /**
-   * 传入的数据对象
-   */
-  data: Vars[];
-  /**
-   * 从指定的对象获取 ID
-   *
-   * - `string` : 表示一个数据键，将通过 `_.get` 获取值，这个值必须是 `T`
-   *              或者可以被 `anyConvertor` 转换的值
-   * - `Function` : 一个获取 ID 的函数
-   */
-  getId: Convertor<Vars, ID | undefined> | string;
-
-  /**
-   * 是否支持多重选择
-   */
-  multi?: boolean;
-
-  /**
-   * 将任何值转换为 `T`
-   */
-  convertToId: Convertor<any, ID | undefined>;
-
-  currentId?: ID;
-  checkedIds?: Record<ID, boolean> | Map<ID, boolean>;
 };
 
 /*-----------------------------------------------------
@@ -86,7 +55,7 @@ export type SelectableFeature<ID extends string | number> = {
                 
 -----------------------------------------------------*/
 export function useSelectable<ID extends string | number>(
-  props: SelectableProps<ID>,
+  props: SelectableProps<ID>
 ): SelectableFeature<ID> {
   let { getId, convertToId } = props;
 
@@ -220,7 +189,7 @@ export function useSelectable<ID extends string | number>(
   function selectRange(
     state: SelectableState<ID>,
     ids: ID[],
-    range: [ID, ID?],
+    range: [ID, ID?]
   ) {
     // 没有内容
     if (_.isEmpty(ids)) {

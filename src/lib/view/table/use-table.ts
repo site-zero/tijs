@@ -1,6 +1,12 @@
 import _ from 'lodash';
 import { Ref } from 'vue';
-import { CommonProps, getFieldUniqKey } from '../../';
+import {
+  TableCell,
+  TableProps,
+  TableRowData,
+  TableRowID,
+  getFieldUniqKey,
+} from '../../';
 import {
   Callback,
   Callback1,
@@ -9,30 +15,20 @@ import {
   Str,
   Vars,
 } from '../../../core';
-import { TableBehaviorsProps, TableCell, TableRowEvent } from './table-types';
+import { TableRowEvent } from './table-types';
 import {
   CheckStatus,
   SelectableFeature,
-  SelectableProps,
   SelectableState,
   useSelectable,
 } from './use-selectable';
-import { TableKeepFeature, TableKeepProps } from './use-table-keep';
+import { TableKeepFeature } from './use-table-keep';
 import { useTableResizing } from './use-table-resizing';
 /*-------------------------------------------------------
 
                         Types
 
 -------------------------------------------------------*/
-export type TableRowID = number | string;
-export type TableRowData = {
-  index: number;
-  id: TableRowID;
-  activated: boolean;
-  checked: boolean;
-  indent: number;
-  rawData: Vars;
-};
 
 /**
  * 拖动时的状态
@@ -52,96 +48,6 @@ export type ColResizingState = {
    */
   colIndex: number;
 };
-
-/*-------------------------------------------------------
-
-                        Props
-
--------------------------------------------------------*/
-export type TableProps = CommonProps &
-  TableBehaviorsProps &
-  TableKeepProps &
-  Partial<SelectableProps<TableRowID>> & {
-    /**
-     * 传入的数据对象
-     */
-    data: Vars[];
-    /**
-     * 传入的上下文变量字段
-     */
-    vars?: Vars;
-
-    /*......................................
-
-               Cell Compoinents
-    
-    ......................................*/
-    defaultCellComType?: string;
-    defaultCellComConf?: Vars;
-    defaultCellActivatedComType?: string;
-    defaultCellActivatedComConf?: Vars;
-    /*......................................
-
-                  Behaviors
-    
-    ......................................*/
-    /**
-     * 表格的列是否可以被调整大小
-     *
-     * @default false
-     */
-    columnResizable?: boolean;
-
-    /**
-     * 列调整大小时是否即时更新表格列布局
-     *
-     * - true : 即时更新（数据超过500行时有点卡）
-     * - false : 只有拖拽完成后才更新（数据量大时可以维持基本的平滑）
-     * - number : 只有小于给定的数量时才相当于 true，否则相当于 false
-     *
-     * @default `50`
-     */
-    columnResizeInTime?: boolean | number;
-
-    /**
-     * 是否显示表头
-     *
-     * **注意!** 如果隐藏表头，那么即使 `columnResizable==true`
-     * 你也没有办法调整列尺寸了
-     *
-     * @default true
-     */
-    showHeader?: boolean;
-    /*......................................
-
-                  Aspect
-    
-    ......................................*/
-    mainStyle?: Vars;
-    /**
-     * 行间距，即水平表格线的尺寸
-     *
-     * @default 1
-     */
-    rowGap?: number;
-    /**
-     * 列间距，即垂直表格线的尺寸
-     *
-     * @default 1
-     */
-    colGap?: number;
-    /**
-     * 如果不指定表格行最小高度，则无法计算滚动渲染区。
-     * 单位为`px`
-     */
-    rowMinHeight?: number;
-  };
-
-/*-------------------------------------------------------
-
-                     Options
-
--------------------------------------------------------*/
 
 /*-------------------------------------------------------
 
@@ -186,7 +92,7 @@ function _get_table_columns(props: TableProps) {
 function _get_table_data(
   selectable: SelectableFeature<TableRowID>,
   state: SelectableState<TableRowID>,
-  data: Vars[],
+  data: Vars[]
 ): TableRowData[] {
   // 启用特性
   let { getDataId, isIDChecked } = selectable;
@@ -215,7 +121,7 @@ function _get_table_data(
 function _on_row_select(
   selectable: SelectableFeature<TableRowID>,
   selection: SelectableState<TableRowID>,
-  rowEvent: TableRowEvent,
+  rowEvent: TableRowEvent
 ) {
   let { event, row } = rowEvent;
   let se = EventUtils.getKeyboardStatus(event);
@@ -262,7 +168,7 @@ export function useTable(props: TableProps) {
       columnSizes: Ref<number[]>,
       showRowMarker: boolean,
       onDestroy: Callback1<Callback>,
-      Keep: TableKeepFeature,
+      Keep: TableKeepFeature
     ) => {
       if (props.columnResizable) {
         useTableResizing(
@@ -278,7 +184,7 @@ export function useTable(props: TableProps) {
             let n = props.columnResizeInTime ?? 50;
             return props.data.length <= n;
           },
-          Keep,
+          Keep
         );
       }
     },
@@ -293,7 +199,7 @@ export function useTable(props: TableProps) {
 
     OnTableHeadCheckerClick(
       selection: SelectableState<TableRowID>,
-      status: CheckStatus,
+      status: CheckStatus
     ) {
       let { ids, checkedIds } = selection;
       checkedIds.clear();
@@ -306,28 +212,28 @@ export function useTable(props: TableProps) {
 
     OnRowSelect(
       selection: SelectableState<TableRowID>,
-      rowEvent: TableRowEvent,
+      rowEvent: TableRowEvent
     ) {
       _on_row_select(selectable, selection, rowEvent);
     },
 
     OnRowCheck(
       selection: SelectableState<TableRowID>,
-      rowEvent: TableRowEvent,
+      rowEvent: TableRowEvent
     ) {
       selectable.toggleId(selection, rowEvent.row.id);
     },
 
     OnRowOpen(
       _selection: SelectableState<TableRowID>,
-      rowEvent: TableRowEvent,
+      rowEvent: TableRowEvent
     ) {
       console.log('row Open', rowEvent);
     },
 
     OnCellSelect(
       selection: SelectableState<TableRowID>,
-      rowEvent: TableRowEvent,
+      rowEvent: TableRowEvent
     ) {
       let { row } = rowEvent;
       if (!selection.checkedIds.get(row.id)) {
@@ -338,7 +244,7 @@ export function useTable(props: TableProps) {
 
     OnCellOpen(
       _selection: SelectableState<TableRowID>,
-      rowEvent: TableRowEvent,
+      rowEvent: TableRowEvent
     ) {
       console.log('cell open', rowEvent);
     },

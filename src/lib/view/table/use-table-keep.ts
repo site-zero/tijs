@@ -1,10 +1,6 @@
 import _ from 'lodash';
 import { Ref } from 'vue';
-import { KeepFeature, KeepInfo, useKeep } from '../../';
-
-export type TableKeepProps = {
-  keepColumns?: KeepInfo;
-};
+import { KeepFeature, TableKeepProps, useKeep } from '../../';
 
 export type TableKeepFeature = {
   KeepColumns: KeepFeature;
@@ -17,8 +13,8 @@ export function useKeepTable(props: TableKeepProps): TableKeepFeature {
         {
           keepMode: 'local',
         },
-        props.keepColumns,
-      ),
+        props.keepColumns
+      )
     ),
   };
 }
@@ -31,7 +27,7 @@ export function keepColumnSizes(columnSizes: number[], Keep: TableKeepFeature) {
 
 export function loadColumnSizes(
   columnSizes: Ref<number[]>,
-  Keep: TableKeepFeature,
+  Keep: TableKeepFeature
 ) {
   let col_sizes = Keep.KeepColumns.loadArray();
   if (col_sizes) {
