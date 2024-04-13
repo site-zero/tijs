@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import { computed, reactive } from 'vue';
-import { IconTextState, TiIcon } from '../../';
-import {
-RoadblockEvents,
-RoadblockProps,
-useRoadblock,
-} from './use-roadblock';
+  import { IconTextState, TiIcon } from '../../';
+  import {
+    RoadblockEvents,
+    RoadblockProps,
+    useRoadblock,
+  } from './use-roadblock';
   //--------------------------------------------
   // 自己创建状态
   const state: IconTextState = reactive({

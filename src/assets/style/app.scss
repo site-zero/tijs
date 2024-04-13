@@ -1,10 +1,10 @@
-@import "./_mixins.scss";
-@import "./color/light";
-@import "./color/dark";
-@import "./measure/comfy";
-@import "./measure/tight";
-@import "./feature/prefix-suffix-box";
-@import "./feature/roadblock.scss";
+@import './_mixins.scss';
+@import './color/light';
+@import './color/dark';
+@import './measure/comfy';
+@import './measure/tight';
+@import './feature/prefix-suffix-box';
+@import './feature/roadblock.scss';
 
 :root {
   @include use_color_theme_light;
@@ -123,4 +123,8 @@ ul.raw {
 
 .cover-parent {
   @include pos-abs-full;
+}
+
+.pos-relative {
+  position: relative;
 }
