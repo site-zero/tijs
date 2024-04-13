@@ -244,13 +244,6 @@
   );
 
   watch(
-    () => TableColumns.value,
-    () => {
-      console.log('columns changed', TableColumns.value.length);
-    }
-  );
-
-  watch(
     () => props.keepColumns,
     () => {
       console.log('keepColumns changed', props.keepColumns);
@@ -365,7 +358,7 @@
           </li>
         </ul>
         <div class="scroll-marker">
-          {{ _.map(scrolling.lineMarkers, (v) => (v ? 'x' : '-')).join('') }}
+          {{ _.map(scrolling.lineMarkers, (v:any) => (v ? 'x' : '-')).join('') }}
         </div>
       </template>
     </div>
