@@ -7,5 +7,5 @@
   <div class="ti-app-modal">I am modal</div>
 </template>
 <style lang="scss" scoped>
-  @use '../../../assets/style/_all.scss' as *;
+  @use '../../assets/style/_all.scss' as *;
 </style>
