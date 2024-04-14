@@ -33,11 +33,11 @@
     font-size: SZ($sz);
   }
 
-  &.sz16 {
+  &.s16 {
     @include icon_size(16);
   }
 
-  &.sz24 {
+  &.s24 {
     @include icon_size(24);
   }
 

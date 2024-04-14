@@ -1,34 +1,16 @@
 import _ from 'lodash';
-import { LayoutBlock, LayoutItem, LayoutProps, LayoutState } from '../../';
+import {
+  LayoutBlock,
+  LayoutItem,
+  LayoutProps,
+  LayoutState,
+  PopItemProps,
+  TranName,
+  TranSpeed,
+} from '../../';
 import { CssUtils, PopPosition, Vars } from '../../../core';
 
 import { autoSetLayoutItemType, setLayoutItemConfig } from './layout-support';
-
-type TranSpeed = 'slow' | 'normal' | 'fast';
-type TranName =
-  | 'ti-slide-up'
-  | 'ti-slide-down'
-  | 'ti-slide-left'
-  | 'ti-slide-right'
-  | 'ti-zoom';
-
-type PopItemProps = {
-  position: PopPosition;
-  tranSpeed?: TranSpeed;
-  showMask?: boolean;
-  clickMaskToClose?: boolean;
-  width?: string;
-  height?: string;
-  maxWidth?: string;
-  maxHeight?: string;
-  minWidth?: string;
-  minHeight?: string;
-  left?: string;
-  right?: string;
-  top?: string;
-  bottom?: string;
-  overflow?: string;
-};
 
 function _position_to_transName(pos: PopPosition): TranName {
   return {

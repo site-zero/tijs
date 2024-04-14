@@ -8,9 +8,12 @@ import {
   Point2D,
   Rect,
   Rects,
+  getLogger,
 } from '../../core';
 import { Dragging } from './drag/dragging';
 export { Dragging } from './drag/dragging';
+
+const log = getLogger('ti.lib.draggalbe');
 /*-----------------------------------------------------
 
                       Types
@@ -274,7 +277,7 @@ export function useDraggable(options: DraggalbeOptions) {
   // 准备销毁程序
   //
   function release_draggable() {
-    console.log('销毁 dragging down');
+    log.debug('release_draggable');
     $watchTarget.removeEventListener(POINTER_DOWN, OnPointerDown);
   }
 

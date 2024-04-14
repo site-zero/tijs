@@ -158,7 +158,6 @@
 
 -------------------------------------------------------*/
   onMounted(() => {
-    console.log('bar mounted!');
     state.opened.clear();
   });
 </script>

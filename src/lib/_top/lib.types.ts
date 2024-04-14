@@ -1,4 +1,4 @@
-import _, { extend } from 'lodash';
+import _ from 'lodash';
 import { DefineComponent, InjectionKey, Plugin } from 'vue';
 import {
   Callback,

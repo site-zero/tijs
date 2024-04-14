@@ -12,7 +12,7 @@ let cn = {
 };
 
 const TiMainFrameInfo: TiComInfo = {
-  icon: 'zmdi-view-dashboard',
+  icon: 'zmdi-tv',
   race: TiComRace.SHELF,
   name: COM_TYPE,
   text: 'i18n:ti-main-frame-com-name',

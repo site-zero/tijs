@@ -1,4 +1,4 @@
-import { TableCell } from '../table-types';
+import { TableCell } from '../../../';
 import { mockData } from './mock-table-row';
 
 export default {

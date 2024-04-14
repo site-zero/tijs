@@ -1,5 +1,5 @@
-import { ComRef, CommonProps, IconInput } from '../';
-import { CssGridItem, CssGridLayout, Vars } from '../../core';
+import { ComRef, CommonProps, IconInput } from '..';
+import { CssGridItem, CssGridLayout, PopPosition, Vars } from '../../core';
 
 export type LayoutSchema = Record<string, ComRef>;
 
@@ -162,3 +162,49 @@ export type LayoutItem = LayoutBlock & {
   conStyle?: Vars;
   itemConfig?: Vars;
 };
+
+export type TranSpeed = 'slow' | 'normal' | 'fast';
+export type TranName =
+  | 'ti-slide-up'
+  | 'ti-slide-down'
+  | 'ti-slide-left'
+  | 'ti-slide-right'
+  | 'ti-zoom';
+
+export type PopItemProps = {
+  position: PopPosition;
+  tranSpeed?: TranSpeed;
+  showMask?: boolean;
+  clickMaskToClose?: boolean;
+  width?: string;
+  height?: string;
+  maxWidth?: string;
+  maxHeight?: string;
+  minWidth?: string;
+  minHeight?: string;
+  left?: string;
+  right?: string;
+  top?: string;
+  bottom?: string;
+  overflow?: string;
+};
+
+export type BlockInfoProps = {
+  // 声明标题栏，如果有 icon || title 就显示标题栏
+  icon?: IconInput;
+  title?: string;
+
+  /**
+   * 块名称
+   */
+  name?: string;
+
+  // TODO 这里需要支持 actions
+
+  //
+  // 外观样式
+  //
+  headStyle?: Vars;
+  mainStyle?: Vars;
+};
+export type BlockProps = CommonProps & CssGridItem & BlockInfoProps & ComRef;

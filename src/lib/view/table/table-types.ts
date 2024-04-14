@@ -1,5 +1,4 @@
-import { Vars } from '../../../core';
-import { TableCell, TableRowData } from '../../../lib';
+import { TableRowData } from '../../';
 
 /**
  * - `click` : 点击行头

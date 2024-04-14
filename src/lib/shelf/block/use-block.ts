@@ -1,4 +1,6 @@
 import {
+  BlockProps,
+  ComRef,
   CommonProps,
   FieldComProps,
   IconInput,
@@ -19,38 +21,6 @@ import {
 } from '../../../core';
 
 export const COM_TYPE = 'TiBlock';
-/*-------------------------------------------------------
-
-                     Events
-
--------------------------------------------------------*/
-
-/*-------------------------------------------------------
-
-                     Props
-
--------------------------------------------------------*/
-export type BlockComProps = Pick<FieldComProps, 'comType' | 'comConf'>;
-export type BlockInfoProps = CommonProps &
-  CssGridItem & {
-    // 声明标题栏，如果有 icon || title 就显示标题栏
-    icon?: IconInput;
-    title?: string;
-
-    /**
-     * 块名称
-     */
-    name?: string;
-
-    // TODO 这里需要支持 actions
-
-    //
-    // 外观样式
-    //
-    headStyle?: Vars;
-    mainStyle?: Vars;
-  };
-export type BlockProps = BlockInfoProps & BlockComProps & {};
 
 /*-------------------------------------------------------
 
