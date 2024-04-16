@@ -9,7 +9,7 @@
     "target": "ESNext",
     "lib": ["ES2021", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
-
+    "rootDir": "./src",
     "baseUrl": ".",
 
     /* Bundler mode */

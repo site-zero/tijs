@@ -21,12 +21,37 @@ $z-top: 999999;
 }
 //-------------------------------------------------------------
 @mixin color-box($name) {
-  color: var(--ti-color-$name);
+  color: var(--ti-color-#{$name});
   background-color: var(--ti-color-#{$name}-r);
 }
 @mixin color-box-r($name) {
   color: var(--ti-color-#{$name}-r);
-  background-color: var(--ti-color-$name);
+  background-color: var(--ti-color-#{$name});
+}
+//-------------------------------------------------------------
+//
+//          控件
+//
+//-------------------------------------------------------------
+@mixin button($name) {
+  @include color-box-r($name);
+  cursor: pointer;
+  padding: SZ(8) SZ(12);
+  border-radius: SZ(4);
+  user-select: none;
+  font-size: 0.9em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &:active {
+    @include color-box($name);
+  }
+
+  .as-text {
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
 }
 //-------------------------------------------------------------
 //
