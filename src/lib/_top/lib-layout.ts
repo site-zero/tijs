@@ -172,7 +172,7 @@ export type TranName =
   | 'ti-zoom';
 
 export type PopItemProps = {
-  position: PopPosition;
+  position?: PopPosition;
   tranSpeed?: TranSpeed;
   showMask?: boolean;
   clickMaskToClose?: boolean;
