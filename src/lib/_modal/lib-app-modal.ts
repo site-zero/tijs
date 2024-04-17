@@ -1,5 +1,5 @@
 import { createApp } from 'vue';
-import { ComRef } from '..';
+import { ComRef, CommonProps } from '..';
 import { Dom, EleOptions, PopPosition } from '../../core';
 import {
   ActionBarItem,
@@ -9,7 +9,8 @@ import {
 } from '../_top';
 import TiAppModal from './TiAppModal.vue';
 
-export type AppModalProps = BlockInfoProps &
+export type AppModalProps = CommonProps &
+  BlockInfoProps &
   ComRef &
   PopItemProps &
   Partial<{
@@ -20,6 +21,7 @@ export type AppModalProps = BlockInfoProps &
     textCancel: string;
     cancel: (re: any) => void;
     actions: ActionBarItem[];
+    result?: any;
   }>;
 
 export async function openAppModal(props: AppModalProps): Promise<any> {
