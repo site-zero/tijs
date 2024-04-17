@@ -293,6 +293,7 @@ export type SideBarItem = {
 export type BarItemDisplay = {
   icon?: IconInput;
   text?: string;
+  className?: Vars;
   tip?: string;
 };
 
@@ -341,3 +342,15 @@ export type Pager = {
   skip?: number; //"skip",
   limit?: number; //"limit"
 };
+/*---------------------------------------------------
+
+                      逻辑类型
+
+---------------------------------------------------*/
+export type LogicType =
+  | 'info'
+  | 'success'
+  | 'warn'
+  | 'error'
+  | 'track'
+  | 'disable';

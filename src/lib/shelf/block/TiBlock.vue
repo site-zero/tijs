@@ -1,32 +1,25 @@
 <script lang="ts" setup>
+  import _ from 'lodash';
   import { computed, inject, onUnmounted, provide } from 'vue';
-  import { BUS_KEY, BlockProps, TiAppBus, TiAppEvent, TiIcon } from '../../';
+  import {
+    BUS_KEY,
+    BlockProps,
+    TiActionBar,
+    TiAppBus,
+    TiAppEvent,
+    TiIcon,
+  } from '../../';
   import { createBus } from '../../../core';
   import { COM_TYPE, useBlock, useBusAdaptor } from './use-block';
 
-  /*-------------------------------------------------------
-
-                   Com Options
-
--------------------------------------------------------*/
   defineOptions({
     name: COM_TYPE,
     inheritAttrs: false,
     nameWidth: 0,
   });
-  /*-------------------------------------------------------
-
-                      Props
-
--------------------------------------------------------*/
   let props = withDefaults(defineProps<BlockProps>(), {});
-  /*-------------------------------------------------------
-
-                  Bus & Notify & Emit
-
--------------------------------------------------------*/
   //
-  // 获取上层总线
+  //  Bus & Notify & Emit
   //
   let parentBus = inject(BUS_KEY);
   //
@@ -41,18 +34,13 @@
     useBusAdaptor(onUnmounted, parentBus, blockBus, props.name);
     provide(BUS_KEY, blockBus);
   }
-  /*-------------------------------------------------------
-
-                    Features
-
--------------------------------------------------------*/
+  //
+  //  Features
+  //
   const Block = computed(() => useBlock(props, {}));
-
-  /*-------------------------------------------------------
-
-                Life Hooks
-
--------------------------------------------------------*/
+  //
+  // Life Hooks
+  //
   onUnmounted(() => {});
 </script>
 
@@ -73,6 +61,9 @@
         v-if="Block.BlockTitle">
         {{ Block.BlockTitle }}
       </div>
+      <TiActionBar
+        v-if="!_.isEmpty(Block.HeadActions)"
+        :items="Block.HeadActions" />
     </header>
     <!--Block:Main-->
     <main :style="Block.MainStyle">
@@ -85,7 +76,7 @@
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
   @use '../../../assets/style/_all.scss' as *;
   @import './ti-block.scss';
 </style>

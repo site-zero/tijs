@@ -1,5 +1,13 @@
 import _ from 'lodash';
-import { IconInput } from '../../lib';
+import {
+  ActionBarItem,
+  BlockInfoProps,
+  ComRef,
+  CommonProps,
+  IconInput,
+  LogicType,
+  PopItemProps,
+} from '../../lib';
 import { Rect } from './ti-rect';
 export { Rect } from './ti-rect';
 
@@ -474,4 +482,31 @@ export type KeyboardStatus = {
   ctrlKey?: boolean;
   shiftKey?: boolean;
   metaKey?: boolean;
+};
+
+/*-------------------------------------------
+
+              模式框
+
+--------------------------------------------*/
+
+export type AppModalProps = CommonProps &
+  BlockInfoProps &
+  ComRef &
+  PopItemProps &
+  Partial<{
+    type?: LogicType;
+    iconOk: IconInput;
+    textOk: string;
+    ok: (re: any) => Promise<boolean>;
+    iconCancel: IconInput;
+    textCancel: string;
+    cancel: (re: any) => Promise<boolean>;
+    actions: ActionBarItem[];
+    result?: any;
+  }>;
+
+export type AppModalInitProps = AppModalProps & {
+  returnValue: (re: any) => void;
+  releaseDom: () => void;
 };

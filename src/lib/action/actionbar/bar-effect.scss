@@ -1,0 +1,12 @@
+.ti-actionbar {
+  .bar-item {
+    &.spining-scale {
+      > .bar-item-head > .item-icon {
+        transition: transform 300ms;
+      }
+      > .bar-item-head:hover > .item-icon {
+        transform: scale(1.4) rotate(360deg);
+      }
+    }
+  }
+}

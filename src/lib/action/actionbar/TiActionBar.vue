@@ -19,7 +19,7 @@
 -------------------------------------------------------*/
   defineOptions({
     name: COM_TYPE,
-    inheritAttrs: false,
+    inheritAttrs: true,
   });
   /*-------------------------------------------------------
 
@@ -179,5 +179,7 @@
 </template>
 <style lang="scss">
   @use '../../../assets/style/_all.scss' as *;
-  @import './ti-action-bar.scss';
+  @import './bar.scss';
+  @import './bar-effect.scss';
+  @import './bar-as-button-group.scss';
 </style>

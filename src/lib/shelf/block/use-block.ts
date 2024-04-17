@@ -1,9 +1,6 @@
+import { computed } from 'vue';
 import {
   BlockProps,
-  ComRef,
-  CommonProps,
-  FieldComProps,
-  IconInput,
   TiAppBus,
   TiAppEvent,
   TiRawCom,
@@ -13,31 +10,15 @@ import {
   BusMsg,
   Callback,
   Callback1,
-  CssGridItem,
   CssGridLayout,
   CssUtils,
   I18n,
   Vars,
 } from '../../../core';
+import _ from 'lodash';
 
 export const COM_TYPE = 'TiBlock';
 
-/*-------------------------------------------------------
-
-                     Feature
-
--------------------------------------------------------*/
-export type BlockFeature = {
-  FieldTitle?: string;
-  FieldTip?: string;
-  hasTip: boolean;
-  FieldValue?: any;
-  FieldComType: TiRawCom;
-  FieldComConf: Vars;
-  OnFieldChange: Callback1<any>;
-
-  FieldNameStyle?: Vars;
-};
 /*-------------------------------------------------------
 
                      Options
@@ -53,7 +34,7 @@ export function useBusAdaptor(
   onUnmouned: Callback1<Callback>,
   parentBus: TiAppBus,
   blockBus: TiAppBus,
-  blockName?: string,
+  blockName?: string
 ) {
   blockBus.onAny((msg: BusMsg<TiAppEvent>) => {
     if (blockName) {
@@ -82,6 +63,7 @@ export function useBlock(props: BlockProps, _options: BlockOptions) {
 
   //
   // 计算布局
+  //
   let gridStyle = {
     gridTemplateRows: '1fr',
   } as CssGridLayout;
@@ -94,10 +76,15 @@ export function useBlock(props: BlockProps, _options: BlockOptions) {
   const TopClass = CssUtils.mergeClassName(props.className);
   const TopStyle = CssUtils.mergeStyles(
     gridStyle,
-    CssUtils.pickGridItemStyle(props),
+    CssUtils.pickGridItemStyle(props)
   );
   const HeadStyle = CssUtils.mergeStyles({}, props.headStyle);
   const MainStyle = CssUtils.mergeStyles({}, props.mainStyle);
+
+  //
+  // 标题动作条
+  //
+  const HeadActions = props.actions || [];
 
   //
   // 获取控件`
@@ -109,6 +96,7 @@ export function useBlock(props: BlockProps, _options: BlockOptions) {
     TopClass,
     TopStyle,
     HeadStyle,
+    HeadActions,
     MainStyle,
     BlockIcon,
     BlockTitle,

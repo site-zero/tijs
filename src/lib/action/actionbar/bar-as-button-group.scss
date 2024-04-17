@@ -1,0 +1,19 @@
+.ti-actionbar.as-button-group > .bar-top-group {
+  padding: 0.2em;
+  > .bar-item[item-depth="0"] {
+    margin: 0 0.2em;
+    > .bar-item-head {
+      padding: 0.3em 0;
+      min-width: 6em;
+      @include flex-center($wp: nowrap);
+      .item-icon {
+        width: auto;
+        margin-right:.2em;
+      }
+      .item-text {
+        padding: 0;
+        flex: 0 0 auto;
+      }
+    }
+  }
+}

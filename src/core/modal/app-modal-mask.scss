@@ -1,0 +1,112 @@
+// body 下面的包裹插槽，虽然在根节点外面，但是因为 css 不是 scoped，
+// 因此这里定义的样式还是能对其起作用的
+.app-modal-wrapper {
+  z-index: $z-top;
+}
+
+// 遮罩层
+.app-modal-mask {
+  position: fixed;
+
+  /*
+  Show mask
+  */
+  &.show-mask {
+    display: flex;
+    background-color: var(--ti-color-mask-thin);
+    inset: 0;
+    &[modal-at="left"] {
+      justify-content: flex-start;
+      align-items: center;
+    }
+    &[modal-at="right"] {
+      justify-content: flex-end;
+      align-items: center;
+    }
+    &[modal-at="top"] {
+      justify-content: center;
+      align-items: flex-start;
+    }
+    &[modal-at="bottom"] {
+      justify-content: center;
+      align-items: flex-end;
+    }
+    &[modal-at="center"] {
+      justify-content: center;
+      align-items: center;
+    }
+    &[modal-at="free"] {
+      justify-content: center;
+      align-items: center;
+    }
+    &[modal-at="left-top"] {
+      justify-content: flex-start;
+      align-items: flex-start;
+    }
+    &[modal-at="right-top"] {
+      justify-content: flex-end;
+      align-items: flex-start;
+    }
+    &[modal-at="bottom-left"] {
+      justify-content: flex-start;
+      align-items: flex-end;
+    }
+    &[modal-at="bottom-right"] {
+      justify-content: flex-end;
+      align-items: flex-end;
+    }
+  }
+
+  /*
+  Hide Mask
+  */
+  &.hide-mask {
+    &[modal-at="left"] {
+      left: 0;
+      top: 0;
+      bottom: 0;
+    }
+    &[modal-at="right"] {
+      right: 0;
+      top: 0;
+      bottom: 0;
+    }
+    &[modal-at="top"] {
+      left: 0;
+      right: 0;
+      top: 0;
+    }
+    &[modal-at="bottom"] {
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    &[modal-at="center"] {
+      inset: 0;
+    }
+    &[modal-at="free"] {
+      inset: 0;
+    }
+    &[modal-at="left-top"] {
+      left: 0;
+      top: 0;
+    }
+    &[modal-at="right-top"] {
+      right: 0;
+      top: 0;
+    }
+    &[modal-at="bottom-left"] {
+      left: 0;
+      bottom: 0;
+    }
+    &[modal-at="bottom-right"] {
+      right: 0;
+      bottom: 0;
+    }
+  }
+
+  &[modal-at="center"],
+  &[modal-at="free"] {
+    padding-bottom: 15vh;
+  }
+}

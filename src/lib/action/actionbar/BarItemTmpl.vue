@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { inject, ref } from 'vue';
+  import { computed, inject, ref } from 'vue';
   import { TiIcon } from '../../';
   import { BAR_SUPPORT, BarItemProp } from './action-bar-type';
   defineOptions({
@@ -12,6 +12,13 @@
   // Props
   //
   let props = defineProps<BarItemProp>();
+
+  const hideIconPart = computed(() => {
+    if (props.depth == 0 && !props.icon) {
+      return true;
+    }
+    return false;
+  });
   //
   // Methods
   //
@@ -41,10 +48,14 @@
       class="bar-item-head"
       @click.left="emit('click')"
       @mouseenter="OnEnter">
-      <div class="item-icon">
-        <TiIcon v-if="props.icon" :value="props.icon" />
+      <div class="item-icon" v-if="!hideIconPart">
+        <TiIcon
+          v-if="props.icon"
+          :value="props.icon" />
       </div>
-      <div class="item-text" v-if="props.text">
+      <div
+        class="item-text"
+        v-if="props.text">
         {{ props.text }}
       </div>
       <slot name="suffix"></slot>

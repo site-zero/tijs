@@ -48,5 +48,6 @@ let router = createRouter({
 let app = createApp(TiDemoApp);
 //app.config.devtools = true;
 app.use(router);
+console.log("hahahah")
 
 app.mount('#app');

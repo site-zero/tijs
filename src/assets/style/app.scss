@@ -5,6 +5,7 @@
 @import './measure/tight';
 @import './feature/prefix-suffix-box';
 @import './feature/roadblock.scss';
+@import './feature/transition.scss';
 
 :root {
   @include use_color_theme_light;

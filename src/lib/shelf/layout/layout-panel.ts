@@ -7,25 +7,11 @@ import {
   PopItemProps,
   TranName,
   TranSpeed,
+  positionToTransName,
 } from '../../';
 import { CssUtils, PopPosition, Vars } from '../../../core';
 
 import { autoSetLayoutItemType, setLayoutItemConfig } from './layout-support';
-
-function _position_to_transName(pos: PopPosition): TranName {
-  return {
-    'left': 'ti-slide-left',
-    'right': 'ti-slide-right',
-    'top': 'ti-slide-up',
-    'bottom': 'ti-slide-down',
-    'center': 'ti-zoom',
-    'free': 'ti-zoom',
-    'left-top': 'ti-zoom',
-    'right-top': 'ti-zoom',
-    'bottom-left': 'ti-zoom',
-    'bottom-right': 'ti-zoom',
-  }[pos] as TranName;
-}
 
 export type LayoutPanel = LayoutBlock & PopItemProps;
 
@@ -125,7 +111,7 @@ export function getLayoutPanelItems(
     // 记入一下 Panel 相关属性
     it.visible = shown[it.uniqKey] ? true : false;
     it.hidden = !it.visible;
-    it.tranName = _position_to_transName(it.position);
+    it.tranName = positionToTransName(it.position);
 
     // 记入返回列表
     list.push(it);

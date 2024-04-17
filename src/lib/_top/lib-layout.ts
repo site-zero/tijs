@@ -1,4 +1,4 @@
-import { ComRef, CommonProps, IconInput } from '..';
+import { ActionBarItem, ComRef, CommonProps, IconInput } from '..';
 import { CssGridItem, CssGridLayout, PopPosition, Vars } from '../../core';
 
 export type LayoutSchema = Record<string, ComRef>;
@@ -199,7 +199,10 @@ export type BlockInfoProps = {
    */
   name?: string;
 
-  // TODO 这里需要支持 actions
+  //
+  // 右上角菜单
+  //
+  actions?: ActionBarItem[];
 
   //
   // 外观样式

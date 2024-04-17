@@ -171,7 +171,6 @@ export function tiSetDefaultComPropValue(
 export * from './_features';
 export * from './_top';
 export * from './_vue';
-export * from './_modal';
 export * from './action/all-actions';
 export * from './input/all-input';
 export * from './shelf/all-shelf';

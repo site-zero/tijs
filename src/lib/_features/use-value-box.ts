@@ -4,16 +4,16 @@ import {
   FormatValueProps,
   PlaceholderFeature,
   PlaceholderFeatureProps,
-  PrefixSuffixEmits,
   PrefixSuffixEvents,
   PrefixSuffixFeature,
   PrefixSuffixFeatureProps,
   PrefixSuffixState,
   ValueInputProps,
+  tiGetDefaultComPropValue,
   useFormatValue,
   usePlaceholder,
   usePrefixSuffix,
-  useValueInput,
+  useValueInput
 } from '..';
 import { Be, Callback, Callback1, FuncA0, Str } from '../../core';
 /*-------------------------------------------------------
@@ -113,6 +113,8 @@ export type ValueBoxOptions = {
    * 如果绘制提示框，也会用这个元素的盒子模型作为弹出提示框的参考位置
    */
   getBoxElement: FuncA0<HTMLElement>;
+
+  COM_TYPE: string;
 };
 /*-----------------------------------------------------
 
@@ -124,21 +126,25 @@ export function useValueBox<T extends any>(
   props: ValueBoxProps<T>,
   options: ValueBoxOptions
 ): ValueBoxFeature {
-  let { emit, getBoxElement } = options;
+  let { emit, getBoxElement, COM_TYPE } = options;
+
+  let boxProps = _.cloneDeep(props);
+  if (_.isUndefined(boxProps.value)) {
+    boxProps.value = tiGetDefaultComPropValue(COM_TYPE, 'value');
+  }
   //
   // 准备处理值的方法
-  let { tidyValue, translateValue } = useValueInput(props);
+  let { tidyValue, translateValue } = useValueInput(boxProps);
 
   // 启用 format 特性
-  let formatValue = useFormatValue(props);
+  let formatValue = useFormatValue(boxProps);
 
   // 准备前后缀框
-  let boxProps = _.cloneDeep(props);
-  if (props.prefixIconForClean) {
+  if (boxProps.prefixIconForClean) {
     boxProps.prefixIcon = boxProps.prefixIcon || 'zmdi-close';
     boxProps.prefixIconClickable = true;
   }
-  if (props.suffixIconForCopy) {
+  if (boxProps.suffixIconForCopy) {
     boxProps.suffixIcon = boxProps.suffixIcon || 'zmdi-copy';
     boxProps.suffixIconClickable = true;
   }

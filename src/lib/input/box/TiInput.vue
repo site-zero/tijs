@@ -27,7 +27,6 @@
   } as InputBoxState);
   //-----------------------------------------------------
   let props = withDefaults(defineProps<InputBoxProps>(), {
-    value: tiGetDefaultComPropValue(COM_TYPE, 'value'),
     autoI18n: true,
   });
   //-----------------------------------------------------
@@ -42,6 +41,7 @@
     useInputBox(state, props, {
       emit,
       getBoxElement: () => $el.value,
+      COM_TYPE
     })
   );
   //-----------------------------------------------------

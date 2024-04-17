@@ -151,7 +151,7 @@ function createItem(
     tip: I18n.textOr(it.tip),
     opened: state.opened.get(uniqKey),
     depth: depth.length,
-    className: {},
+    className: _.cloneDeep(it.className) || {},
   };
 
   // 判断显示

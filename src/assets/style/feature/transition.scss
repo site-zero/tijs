@@ -72,12 +72,16 @@
 .ti-slide-up-enter-from,
 .ti-slide-up-leave-to {
   opacity: 0;
-  transform: translateY(SZ(-100));
+  > .trans-box {
+    transform: translateY(SZ(-100));
+  }
 }
 .ti-slide-up-enter-to,
 .ti-slide-up-leave-from {
   opacity: 1;
-  transform: translateY(0);
+  > .trans-box {
+    transform: translateY(0);
+  }
 }
 /*------------------------------------*/
 // slide down
@@ -164,6 +168,7 @@
 //
 /*------------------------------------*/
 .ti-trans {
+  background-color: red;
   /*------------------------------------*/
   &.speed-slow {
     transition-duration: 0.8s;

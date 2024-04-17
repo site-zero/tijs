@@ -1,0 +1,79 @@
+.ti-app-modal {
+  $RA: var(--ti-measure-r-b);
+
+  /*
+  Hide Mask
+  */
+  &[pos-at="left"] {
+    border-radius: 0 $RA $RA 0;
+    > .ti-block > header {
+      border-radius: 0 $RA 0 0;
+    }
+    > footer {
+      border-radius: 0 0 $RA 0;
+    }
+  }
+  &[pos-at="right"] {
+    border-radius: $RA 0 0 $RA;
+    > .ti-block > header {
+      border-radius: $RA 0 0 0;
+    }
+    > footer {
+      border-radius: 0 0 0 $RA;
+    }
+  }
+  &[pos-at="top"] {
+    border-radius: 0 0 $RA $RA;
+    > footer {
+      border-radius: 0 0 $RA $RA;
+    }
+  }
+  &[pos-at="bottom"] {
+    border-radius: $RA $RA 0 0;
+    > .ti-block > header {
+      border-radius: $RA $RA 0 0;
+    }
+  }
+  &[pos-at="center"] {
+    border-radius: $RA;
+    > .ti-block > header {
+      border-radius: $RA $RA 0 0;
+    }
+    > footer {
+      border-radius: 0 0 $RA $RA;
+    }
+  }
+  &[pos-at="free"] {
+    border-radius: $RA;
+    > .ti-block > header {
+      border-radius: $RA $RA 0 0;
+    }
+    > footer {
+      border-radius: 0 0 $RA $RA;
+    }
+  }
+  &[pos-at="left-top"] {
+    border-radius: 0 0 $RA 0;
+    > footer {
+      border-radius: 0 0 $RA 0;
+    }
+  }
+  &[pos-at="right-top"] {
+    border-radius: 0 0 0 $RA;
+    > footer {
+      border-radius: 0 0 0 $RA;
+    }
+  }
+  &[pos-at="bottom-left"] {
+    border-radius: 0 $RA 0 0;
+    > .ti-block > header {
+      border-radius: 0 $RA 0 0;
+    }
+  }
+  &[pos-at="bottom-right"] {
+    border-radius: $RA 0 0 0;
+    > .ti-block > header {
+      border-radius: $RA 0 0 0;
+    }
+  }
+}

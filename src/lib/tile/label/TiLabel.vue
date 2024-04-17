@@ -22,7 +22,6 @@
   } as LabelState);
 
   let props = withDefaults(defineProps<LabelProps>(), {
-    value: tiGetDefaultComPropValue(COM_TYPE, 'value'),
     autoI18n: true,
   });
 
@@ -34,6 +33,7 @@
     useLabel(state, props, {
       emit,
       getBoxElement: () => $el.value,
+      COM_TYPE,
     })
   );
   /*-------------------------------------------------------
