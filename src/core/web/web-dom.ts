@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import {
   DockOptions,
   DomQueryContext,
@@ -12,7 +13,6 @@ import {
   SeekUtilOptions,
   StrCaseMode,
 } from '../';
-import _ from 'lodash';
 import {
   CssUtils,
   Match,
@@ -20,8 +20,8 @@ import {
   Point2D,
   Predicate,
   Rects,
-  Str,
   Size2D,
+  Str,
   Util,
   Vars,
 } from '../ti';
@@ -33,7 +33,7 @@ import {
   -------------------------------------------*/
 export function createElement(
   options: EleOptions,
-  $doc = document,
+  $doc = document
 ): HTMLElement {
   let {
     tagName = 'div',
@@ -227,7 +227,7 @@ export function getClassList(
   { filter = () => true, dftList = [] } = {} as {
     filter: Predicate<string>;
     dftList: any[];
-  },
+  }
 ) {
   if (!className) {
     return dftList;
@@ -369,7 +369,7 @@ export function setData($el: Element, data = {}) {
 export function copyAttributes(
   $el: Element,
   $ta: Element,
-  attrFilter: AttrPredicate = () => true,
+  attrFilter: AttrPredicate = () => true
 ) {
   let attrs = $el.attributes;
   for (let i = 0; i < attrs.length; i++) {
@@ -384,7 +384,7 @@ export function copyAttributes(
 export function renameElement(
   $el: Element,
   newTagName: string,
-  attrFilter: AttrPredicate = () => true,
+  attrFilter: AttrPredicate = () => true
 ) {
   if (!_.isString(newTagName)) return $el;
   newTagName = newTagName.toUpperCase();
@@ -418,14 +418,14 @@ export function getMyHeadingLevel($el: HTMLElement) {
       if (el.parentElement) {
         return el.parentElement;
       }
-    },
+    }
   );
   return getHeadingLevel($hp);
 }
 //----------------------------------------------------
 export function remove(
   selectorOrElement: DomSelector,
-  context?: DomQueryContext,
+  context?: DomQueryContext
 ) {
   if (_.isString(selectorOrElement)) {
     let $els = findAll(selectorOrElement, context);
@@ -460,7 +460,7 @@ export function findAll(selector = '*', qc?: DomQueryContext): Element[] {
 //----------------------------------------------------
 export function find(
   selector: DomSelector | undefined | null,
-  qc?: DomQueryContext,
+  qc?: DomQueryContext
 ): HTMLElement | undefined {
   let $doc = qc || document;
   if (_.isUndefined(selector)) {
@@ -489,7 +489,7 @@ export function find(
 }
 //----------------------------------------------------
 export function elementFilter<T extends Element>(
-  test?: EleFilter<T>,
+  test?: EleFilter<T>
 ): ElePredicate<T> {
   if (!test) {
     return () => false;
@@ -545,7 +545,7 @@ export function seekUntil<T extends Element>(
     includeSelf = false,
     includeStop = true,
     reverse = false,
-  } = {} as SeekUtilOptions<T>,
+  } = {} as SeekUtilOptions<T>
 ) {
   if (!flt || !_.isFunction(by)) {
     return [$el];
@@ -591,7 +591,7 @@ export function seekUntil<T extends Element>(
 export function seek<T extends Element>(
   $el: T,
   flt: EleFilter<T>,
-  by: EleIteratee<T>,
+  by: EleIteratee<T>
 ): T | undefined {
   if (!_.isFunction(by)) {
     return $el;
@@ -617,7 +617,7 @@ export function seek<T extends Element>(
 export function seekByTagName<T extends Element>(
   $el: T,
   tagName: string,
-  by: EleIteratee<T>,
+  by: EleIteratee<T>
 ) {
   if (!tagName || !_.isFunction(by)) {
     return;
@@ -629,7 +629,7 @@ export function seekByTagName<T extends Element>(
     (el) => {
       return am.test(el.tagName);
     },
-    by,
+    by
   );
 }
 //
@@ -644,7 +644,7 @@ export function prevByTagName<T extends Element>($el: T, tagName: string) {
 export function prevUtil<T extends Element>(
   $el: T,
   test?: EleFilter<T>,
-  setup = {} as SeekUtilOptions<T>,
+  setup = {} as SeekUtilOptions<T>
 ) {
   return seekUntil($el, test, {
     ...setup,
@@ -663,7 +663,7 @@ export function nextByTagName($el: Element, tagName: string) {
 export function nextUtil<T extends Element>(
   $el: T,
   test?: EleFilter<T>,
-  setup = {} as SeekUtilOptions<T>,
+  setup = {} as SeekUtilOptions<T>
 ) {
   return seekUntil($el, test, {
     ...setup,
@@ -676,7 +676,7 @@ export function nextUtil<T extends Element>(
 export function closest<T extends Element>(
   $el: T,
   filter: EleFilter<T>,
-  { includeSelf = false } = {},
+  { includeSelf = false } = {}
 ): T | undefined {
   if (!_.isElement($el)) {
     return;
@@ -699,7 +699,7 @@ export function closest<T extends Element>(
 export function closestByTagName<T extends Element>(
   $el: T,
   tagName: string,
-  { includeSelf = false } = {},
+  { includeSelf = false } = {}
 ) {
   if (!_.isElement($el)) {
     return;
@@ -722,7 +722,7 @@ export function closestByTagName<T extends Element>(
 export function parentsUntil<T extends Element>(
   $el: T,
   selector: DomSelector,
-  setup = {} as SeekUtilOptions<T>,
+  setup = {} as SeekUtilOptions<T>
 ) {
   if (!_.isElement($el)) {
     return;
@@ -742,7 +742,7 @@ export function parentsUntil<T extends Element>(
 export function eventCurrentTarget(
   evt: Event,
   selector?: DomSelector,
-  scope?: Element,
+  scope?: Element
 ) {
   let $el: Element | null = evt.target as Element;
   if (!selector) {
@@ -793,7 +793,7 @@ export function autoRootFontSize(
     max = 100,
     min = 80,
     callback,
-  } = {} as FontSizeOptions,
+  } = {} as FontSizeOptions
 ) {
   const $doc = $win.document;
   const $root = $doc.documentElement;
@@ -806,8 +806,8 @@ export function autoRootFontSize(
       win_rect.width > tabletMaxWidth
         ? 'desktop'
         : win_rect.width > phoneMaxWidth
-          ? 'tablet'
-          : 'phone';
+        ? 'tablet'
+        : 'phone';
 
     callback({
       $win,
@@ -823,14 +823,14 @@ export function autoRootFontSize(
 //----------------------------------------------------
 export function watchDocument(
   event: any,
-  handler: { (this: any, ev: any): any },
+  handler: { (this: any, ev: any): any }
 ) {
   document.addEventListener(event, handler);
 }
 //----------------------------------------------------
 export function unwatchDocument(
   event: any,
-  handler: { (this: any, ev: any): any },
+  handler: { (this: any, ev: any): any }
 ) {
   document.removeEventListener(event, handler);
 }
@@ -838,7 +838,7 @@ export function unwatchDocument(
 export function watchAutoRootFontSize(
   setup = {} as FontSizeOptions | FontSizeCallback,
   callback: FontSizeCallback | Window,
-  $win: Window = window,
+  $win: Window = window
 ) {
   let opt: FontSizeOptions | undefined;
   if (_.isFunction(setup)) {
@@ -882,7 +882,7 @@ export function setStyleValue(
   $el: HTMLElement,
   name: string,
   val: any,
-  oldVal: any,
+  oldVal: any
 ) {
   if (!_.isUndefined(oldVal) && oldVal == val) return;
   if (!val || 'none' == val) {
@@ -934,7 +934,7 @@ export function updateStyle($el: HTMLElement, css = {}) {
 export function setAttrs(
   $el: HTMLElement,
   attrs = {} as Vars,
-  prefix?: string,
+  prefix?: string
 ) {
   // Guard
   if (!$el || !_.isElement($el)) {
@@ -1073,7 +1073,7 @@ export function applyRect(
   $el: HTMLElement,
   rect: Rect,
   keys = 'tlwh',
-  viewport?: Size2D,
+  viewport?: Size2D
 ) {
   let $win = $el.ownerDocument.defaultView;
   if (!$win) {
@@ -1108,7 +1108,7 @@ export function dockTo(
     coord = 'win', // win | target
     viewportBorder = 4,
     position,
-  } = {} as DomDockOptions,
+  } = {} as DomDockOptions
 ) {
   // Guard
   if (!_.isElement($src) || !_.isElement($ta)) {
@@ -1248,7 +1248,7 @@ export function pendingMoreWhenScrolling(
   { $view, $more } = {} as {
     $view: Element;
     $more: Element;
-  },
+  }
 ) {
   if (!_.isElement($view) || !_.isElement($more)) {
     return;
@@ -1271,7 +1271,7 @@ export function getFromClipBoard(
   clipboardData: any,
   filter: {
     (it: any, i: number): any;
-  },
+  }
 ) {
   let items = clipboardData && clipboardData.items;
   if (_.isEmpty(items)) {
@@ -1300,7 +1300,7 @@ export async function loadImageRawData(
     asBase64: boolean;
     dataUrlPrefix?: string;
   },
-  $doc = document,
+  $doc = document
 ) {
   const __make_data = function (img: HTMLImageElement) {
     let canvas = createElement({ tagName: 'canvas' }) as HTMLCanvasElement;
@@ -1400,7 +1400,7 @@ export function scrollIntoView(
   } = {} as {
     to: 'top' | 'bottom' | 'center' | 'auto';
     axis: 'x' | 'y' | 'xy';
-  },
+  }
 ) {
   if (!_.isElement($view) || !_.isElement($row)) {
     return;
@@ -1449,3 +1449,6 @@ export function scrollIntoView(
     $view.scrollTop += off;
   }
 }
+
+export * from './web-dom-html';
+

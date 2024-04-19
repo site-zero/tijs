@@ -44,6 +44,19 @@ export type TiIconObj = {
   style?: Vars; // font/image container style
 };
 
+export function isIconObj(input: any): input is TiIconObj {
+  if (!input) {
+    return false;
+  }
+  if ('font' == input.type && input.className) {
+    return true;
+  }
+  if ('image' == input.type && input.src) {
+    return true;
+  }
+  return false;
+}
+
 export type TimeInfo = {
   hours?: number;
   minutes?: number;
