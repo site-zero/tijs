@@ -76,25 +76,27 @@ App Main Frame layout, there is 3 modes below::after
   display: grid;
   grid-template-columns: $W_CHUTE 1fr;
   grid-template-rows: $H_SKY 1fr $H_FOOT;
+  gap: 1px;
 
   > .frame-part {
     position: relative;
+    background-color: var(--ti-color-card);
     &.as-sky {
       grid-area: sky;
-      background-color: red;
+      //background-color: red;
     }
     &.as-chute {
       grid-area: chute;
-      background-color: yellow;
+      //background-color: yellow;
     }
     &.as-arena {
       grid-area: arena;
       position: relative;
-      background-color: pink;
+      //background-color: pink;
     }
     &.as-foot {
       grid-area: foot;
-      background-color: blueviolet;
+      //background-color: blueviolet;
     }
     > .part-con {
       @include pos-abs-full;
