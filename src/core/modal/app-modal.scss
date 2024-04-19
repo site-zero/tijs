@@ -7,9 +7,9 @@
 
   > footer {
     @include flex-align-nowrap($ai: stretch, $jc: flex-end);
-    padding: SZ(8);
-    background-color: var(--ti-color-bar);
-    color: var(--ti-color-bar-f);
+    padding: SZ(4);
+    background-color: var(--ti-color-body);
+    color: var(--ti-color-body-f);
     > .at-left {
       flex: 1 1 auto;
       width: 100px;

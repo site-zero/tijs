@@ -1,0 +1,55 @@
+.color-as-success {
+  color: var(--ti-color-success);
+}
+.color-as-warn {
+  color: var(--ti-color-warn);
+}
+.color-as-info {
+  color: var(--ti-color-info);
+}
+.color-as-error {
+  color: var(--ti-color-error);
+}
+.color-as-track {
+  color: var(--ti-color-track);
+}
+.color-as-disable {
+  color: var(--ti-color-disable);
+}
+
+.box-as-success {
+  @include color-box-r(success);
+  &.active-reverse:active {
+    @include color-box(success);
+  }
+}
+.box-as-warn {
+  @include color-box-r(warn);
+  &.active-reverse:active {
+    @include color-box(warn);
+  }
+}
+.box-as-info {
+  @include color-box-r(info);
+  &.active-reverse:active {
+    @include color-box(info);
+  }
+}
+.box-as-error {
+  @include color-box-r(error);
+  &.active-reverse:active {
+    @include color-box(error);
+  }
+}
+.box-as-track {
+  @include color-box-r(track);
+  &.active-reverse:active {
+    @include color-box(track);
+  }
+}
+.box-as-disable {
+  @include color-box-r(disable);
+  &.active-reverse:active {
+    @include color-box(disable);
+  }
+}

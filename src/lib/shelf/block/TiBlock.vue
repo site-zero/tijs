@@ -53,14 +53,19 @@
     <header
       v-if="Block.showHeadBar"
       :style="Block.HeadStyle">
-      <TiIcon
-        v-if="Block.BlockIcon"
-        :value="Block.BlockIcon" />
+      <!---------Icon------------>
+      <div
+        class="as-icon"
+        v-if="Block.BlockIcon">
+        <TiIcon class="s16" :value="Block.BlockIcon" />
+      </div>
+      <!--------Title----------->
       <div
         class="as-title"
         v-if="Block.BlockTitle">
         {{ Block.BlockTitle }}
       </div>
+      <!--------ActionBar--------->
       <TiActionBar
         v-if="!_.isEmpty(Block.HeadActions)"
         :items="Block.HeadActions" />

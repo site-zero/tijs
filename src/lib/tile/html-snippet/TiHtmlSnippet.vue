@@ -14,6 +14,7 @@
     class="ti-html-snippet"
     v-html="snippetInnerHtml"></div>
 </template>
-<style scoped lang="scss">
+<style lang="scss">
   @use '../../../assets/style/_all.scss' as *;
+  @import './msg-box.scss';
 </style>

@@ -24,8 +24,8 @@
     position: 'center',
     textOk: 'i18n:ok',
     textCancel: 'i18n:cancel',
-    width: '61.8vw',
-    height: '61.8vh',
+    minWidth: '200px',
+    minHeight: '125px',
     showMask: true,
   });
 

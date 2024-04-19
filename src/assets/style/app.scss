@@ -6,6 +6,7 @@
 @import './feature/prefix-suffix-box';
 @import './feature/roadblock.scss';
 @import './feature/transition.scss';
+@import './feature/colorized.scss';
 
 :root {
   @include use_color_theme_light;

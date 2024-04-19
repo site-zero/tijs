@@ -65,29 +65,59 @@ export type AlertOptions = PopItemProps & {
 
 function __get_msg_box_html(
   msg: string,
-  bodyIcon: IconInput = 'zmdi-alert-circle-o',
+  type: LogicType,
+  bodyIcon: IconInput | undefined,
   msgAsHtml: boolean
 ) {
   // Build html
   let msgWithI18n = I18n.text(msg);
-  let msgIcon = isIconObj(bodyIcon) ? bodyIcon : Icons.parseIcon(bodyIcon);
 
-  let html = [`<div class="msg-box"'>`] as string[];
-  // 左侧的显示图标
-  html.push(`<aside>`);
-  // 嵌入图像图标
-  if (msgIcon.type == 'image' && msgIcon.src) {
-    html.push(`<img src="${msgIcon.src}"/>`);
+  // --------------- msgIcon ---------
+  let msgIcon;
+  if (bodyIcon) {
+    msgIcon = isIconObj(bodyIcon) ? bodyIcon : Icons.parseIcon(bodyIcon);
   }
-  // 嵌入字体图标
-  else if (msgIcon.type == 'font' && msgIcon.className) {
-    html.push(`<i class="${msgIcon.className}"></i>`);
-  }
-  // 嵌入默认图标
+  // from type
   else {
-    html.push(`<i class="zmdi zmdi-info-outline"></i>`);
+    let icon_str = {
+      info: 'zmdi-info',
+      success: 'zmdi-check-circle',
+      warn: 'zmdi-alert-triangle',
+      error: 'zmdi-alert-polygon',
+      track: 'zmdi-help',
+      disable: 'zmdi-alert-octagon',
+    }[type];
+    msgIcon = Icons.parseIcon(icon_str);
   }
-  html.push(`</aside>`);
+
+  // --------------- class ---------
+  let hasMsgIcon =
+    msgIcon &&
+    /^(font|image)$/.test(msgIcon.type) &&
+    (msgIcon.src || msgIcon.className);
+
+  let msgClass = [hasMsgIcon ? 'with-msg-icon' : 'no-msg-icon'];
+  msgClass.push(`color-as-${type || 'info'}`);
+
+  // --------------- build html ---------
+  let html = [`<div class="ti-msg-box ${msgClass.join(' ')}"'>`] as string[];
+  // 左侧的显示图标
+  if (hasMsgIcon) {
+    html.push(`<aside>`);
+    // 嵌入图像图标
+    if (msgIcon.type == 'image' && msgIcon.src) {
+      html.push(`<img src="${msgIcon.src}"/>`);
+    }
+    // 嵌入字体图标
+    else if (msgIcon.type == 'font' && msgIcon.className) {
+      html.push(`<i class="${msgIcon.className}"></i>`);
+    }
+    // 嵌入默认图标
+    else {
+      html.push(`<i class="zmdi zmdi-info-outline"></i>`);
+    }
+    html.push(`</aside>`);
+  }
   // 右侧显示消息正文
   html.push(`<main>`);
   // 本身就是 html 文本
@@ -96,7 +126,7 @@ function __get_msg_box_html(
   }
   // 变成普通文本
   else {
-    html.push(`<pre>${Dom.textToHtml(msgWithI18n)}</pre>`);
+    html.push(Dom.textToHtml(msgWithI18n));
   }
   html.push('</main></div>');
 
@@ -107,6 +137,7 @@ export async function Alert(msg: string, options: AlertOptions): Promise<void> {
   // Build html
   let html = __get_msg_box_html(
     msg,
+    options.type || 'info',
     options.bodyIcon,
     'html' == options.contentType
   );
@@ -116,15 +147,16 @@ export async function Alert(msg: string, options: AlertOptions): Promise<void> {
     title: 'i18n:info',
     type: 'info',
     textOk: 'i18n:ok',
+    textCancel: null,
     position: 'center',
-    width: '5rem',
-    height: '1.9rem',
+    maxWidth: '80vw',
     comType: 'TiHtmlSnippet',
     comConf: {
       content: html,
     },
     showMask: true,
     clickMaskToClose: false,
+    ..._.omit(options, 'bodyIcon', 'contentType'),
   } as AppModalProps;
 
   return openAppModal(dialog);

@@ -1,0 +1,25 @@
+.ti-html-snippet .ti-msg-box {
+  padding: SZ(10);
+  display: grid;
+  &.with-msg-icon {
+    grid-template-columns: 100px 1fr;
+    grid-template-rows: 1fr;
+  }
+  &.no-msg-icon {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+  }
+  // msg icon
+  > aside {
+    @include flex-center;
+    font-size: 4em;
+    min-height: 1.2em;
+    max-height: 2em;
+  }
+  // msg body
+  > main {
+    font-size: var(--ti-fontsz-alert);
+    padding: 1em;
+    color: var(--ti-color-box-f);
+  }
+}

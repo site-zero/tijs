@@ -7,6 +7,10 @@
     background-color: var(--ti-color-bar);
     color: var(--ti-color-bar-f);
     padding: 1px;
+    > .as-icon {
+      @include flex-center;
+      padding-left:0.618em;
+    }
     > .as-title {
       flex: 1 1 auto;
       padding: 0.5em;
