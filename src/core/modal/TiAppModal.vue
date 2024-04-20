@@ -1,17 +1,24 @@
 <script setup lang="ts">
   import _ from 'lodash';
   import { computed, onUnmounted, provide, ref } from 'vue';
-  import { AppModalInitProps, CssUtils } from '../../core';
+  import { AppModalInitProps, CssUtils, getLogger } from '../../core';
   import {
     ActionBarItem,
+    AppModelBinding,
     BUS_KEY,
     BlockProps,
+    EmitAdaptor,
     TiActionBar,
     TiBlock,
     createAppBus,
+    getAppModelListenEvents,
+    makeAppModelDataProps,
+    makeAppModelEventListeners,
     positionToTransName,
     watchAppResize,
   } from '../../lib';
+
+  const log = getLogger('TiAppModal');
 
   //
   // Global Bus
@@ -28,6 +35,11 @@
     minHeight: '125px',
     showMask: true,
   });
+
+  const model: AppModelBinding = props.model || {
+    event: 'change',
+    data: 'value',
+  };
 
   const _result = ref<any>(props.result);
   const _isdead = ref(false);
@@ -72,7 +84,29 @@
         action: _do_close_modal,
       },
     ];
+    // 绑定输入数据
+    if (model.data) {
+      _.assign(
+        conf,
+        makeAppModelDataProps(model.data, () => _result.value)
+      );
+    }
+
     return conf;
+  });
+
+  // 监控控件的事件以便更新 result
+  const OnAllEvents = computed(() =>
+    makeAppModelEventListeners('TiAppModal', model?.event, _result)
+  );
+
+  const BlockEmitAdaptors = computed(() => {
+    let re = {} as Record<string, EmitAdaptor>;
+    let eventNames = getAppModelListenEvents(model.event);
+    for (let event of eventNames) {
+      re[event] = event;
+    }
+    return re;
   });
 
   const ModalRightActions = computed(() => {
@@ -138,6 +172,13 @@
   });
 
   function _do_close_modal(withResult: boolean) {
+    if (log.isDebugEnabled()) {
+      log.debug(
+        `_do_close_modal(withResult=${withResult})`,
+        `_result="${_result.value}"::`,
+        _result.value
+      );
+    }
     _isdead.value = true;
     if (withResult) {
       props.returnValue(_result.value);
@@ -175,7 +216,9 @@
         <!------------------------------>
         <TiBlock
           v-bind="BlockConfig"
-          :com-conf="BodyConfig" />
+          :com-conf="BodyConfig"
+          :emit-adaptors="BlockEmitAdaptors"
+          v-on="OnAllEvents" />
         <!------------------------------>
         <footer v-if="hasModalActions">
           <div class="at-right">

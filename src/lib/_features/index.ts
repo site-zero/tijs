@@ -1,6 +1,7 @@
 export * from './_com_props';
 export * from './field/';
 export * from './use-app-bus';
+export * from './use-app-model-binding.ts';
 export * from './use-bus-emit';
 export * from './use-class-style';
 export * from './use-draggable';

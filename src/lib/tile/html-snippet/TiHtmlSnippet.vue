@@ -1,9 +1,9 @@
 <script setup lang="ts">
-  import { HtmlSnippetListenner } from 'src/lib/_top';
-  import { Dom, Vars, getLogger } from '../../../core';
-  import { computed, onMounted, ref } from 'vue';
-  import { COM_TYPE } from './html-snippet-index';
   import _ from 'lodash';
+  import { computed, onMounted, ref } from 'vue';
+  import { HtmlSnippetListenner } from '../../';
+  import { Dom, getLogger } from '../../../core';
+  import { COM_TYPE } from './html-snippet-index';
 
   const emit = defineEmits<{
     (name: string, playload?: any): void;

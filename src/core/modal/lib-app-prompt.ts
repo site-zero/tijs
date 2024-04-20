@@ -6,7 +6,7 @@ import {
   LogicType,
   PopItemProps,
 } from '../../lib';
-import { __get_msg_box_html } from './lib-app-modal';
+import { __get_msg_box_html } from './get-msg-box-html';
 
 export type PromptOptions = PopItemProps & {
   icon?: IconInput;
@@ -34,7 +34,6 @@ export async function Prompt(
     'html' == options.contentType,
     `<div class="part-input" spellcheck="false"><input></div>`
   );
-  console.log('Prompt:', options.value);
   // Prepare dialog
   let dialog = {
     icon: 'zmdi-mouse',
@@ -53,7 +52,6 @@ export async function Prompt(
           selector: '.part-input > input',
           eventName: 'change',
           setup: ($el) => {
-            console.log('setup $input', $el);
             let $input = $el as HTMLInputElement;
             if (!_.isNil(options.value)) {
               $input.value = options.value;
@@ -66,7 +64,6 @@ export async function Prompt(
             let $input = evt.target;
             if (_.isElement($input) && $input instanceof HTMLInputElement) {
               let val = _.trim($input.value);
-              console.log('emit', val);
               emit('change', val);
             }
           },
@@ -78,8 +75,5 @@ export async function Prompt(
     ..._.omit(options, 'bodyIcon', 'contentType'),
   } as AppModalProps;
 
-  console.log(dialog);
-  let re = await openAppModal(dialog);
-
-  return re ? true : false;
+  return await openAppModal(dialog);
 }

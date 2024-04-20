@@ -8,8 +8,9 @@
     TiAppBus,
     TiAppEvent,
     TiIcon,
+    useEmitAdaptor,
   } from '../../';
-  import { createBus } from '../../../core';
+  import { Callback2, createBus } from '../../../core';
   import { COM_TYPE, useBlock, useBusAdaptor } from './use-block';
 
   defineOptions({
@@ -38,6 +39,8 @@
   //  Features
   //
   const Block = computed(() => useBlock(props, {}));
+  let emit = defineEmits<Callback2<string, any>>();
+  const OnAllEvents = useEmitAdaptor(COM_TYPE, props, emit);
 
   //
   // Life Hooks

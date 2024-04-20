@@ -1,6 +1,8 @@
 import _ from 'lodash';
-import { Logger, LogLevel, LogLvNames, LogLvNameTable } from './log-types';
 import { ConsoleLogger } from './console-logger';
+import { Logger, LogLevel, LogLvNames, LogLvNameTable } from './log-types';
+
+export * from './log-types';
 
 type LOG_LV_ROW = [string, LogLevel];
 const LL = {
@@ -9,7 +11,7 @@ const LL = {
   _loggers: {} as Record<string, Logger>,
 };
 
-function _find_logger_level(name?: string): LogLevel {
+export function _find_logger_level(name?: string): LogLevel {
   if (!name || '_DFT' == name) {
     return LL._DFT;
   }
@@ -29,8 +31,7 @@ export function getLogger(name?: string): Logger {
   if (re) {
     return re;
   }
-  let lv = _find_logger_level(name);
-  re = new ConsoleLogger(lv, key);
+  re = new ConsoleLogger(key);
   LL._loggers[re.getName()] = re;
   return re;
 }

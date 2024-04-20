@@ -1,13 +1,18 @@
 import JSON5 from 'json5';
 import _ from 'lodash';
-import { CommonProps, TiCom } from '../../';
+import { ComPropExample, CommonProps, TiCom } from '../../';
 import { I18n, TiStore, Vars } from '../../../core';
-import { ComPropExampleDisplay } from '../playground_old/use-playground';
 
 export type PlaygroundProps = CommonProps & {
   comType: string;
   example?: string;
   exampleAsRouterLink?: boolean;
+};
+
+export type ComPropExampleDisplay = ComPropExample & {
+  highlight?: boolean;
+  className?: any;
+  href: string;
 };
 
 export type ExampleState = {

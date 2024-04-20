@@ -1,9 +1,11 @@
 import _ from 'lodash';
 import {
   ActionBarItem,
+  AppModelBinding,
   BlockInfoProps,
   ComRef,
   CommonProps,
+  EmitAdaptorProps,
   IconInput,
   LogicType,
   PopItemProps,
@@ -507,6 +509,7 @@ export type AppModalProps = CommonProps &
   BlockInfoProps &
   ComRef &
   PopItemProps &
+  EmitAdaptorProps &
   Partial<{
     type?: LogicType;
     iconOk?: IconInput;
@@ -517,9 +520,12 @@ export type AppModalProps = CommonProps &
     cancel: (re: any) => Promise<boolean>;
     actions: ActionBarItem[];
     result?: any;
+    // 默认 {data:"value",event:"change"}
+    model?: AppModelBinding;
   }>;
 
 export type AppModalInitProps = AppModalProps & {
   returnValue: (re: any) => void;
   releaseDom: () => void;
 };
+
