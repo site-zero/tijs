@@ -26,6 +26,7 @@
       padding: 1em 0;
       input {
         @include font-fixed;
+        border-radius: var(--ti-measure-r-s);
         outline: none;
         border: 1px solid var(--ti-color-border-dark);
         padding: 0.8em 1em;

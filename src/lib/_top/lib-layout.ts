@@ -1,4 +1,4 @@
-import { ActionBarItem, ComRef, CommonProps, IconInput } from '..';
+import { ActionBarItem, ComRef, CommonProps, EmitAdaptorProps, IconInput } from '..';
 import { CssGridItem, CssGridLayout, PopPosition, Vars } from '../../core';
 
 export type LayoutSchema = Record<string, ComRef>;
@@ -210,4 +210,8 @@ export type BlockInfoProps = {
   headStyle?: Vars;
   mainStyle?: Vars;
 };
-export type BlockProps = CommonProps & CssGridItem & BlockInfoProps & ComRef;
+export type BlockProps = CommonProps &
+  CssGridItem &
+  BlockInfoProps &
+  ComRef &
+  EmitAdaptorProps;

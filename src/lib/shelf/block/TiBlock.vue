@@ -38,6 +38,7 @@
   //  Features
   //
   const Block = computed(() => useBlock(props, {}));
+
   //
   // Life Hooks
   //
@@ -57,7 +58,9 @@
       <div
         class="as-icon"
         v-if="Block.BlockIcon">
-        <TiIcon class="s16" :value="Block.BlockIcon" />
+        <TiIcon
+          class="s16"
+          :value="Block.BlockIcon" />
       </div>
       <!--------Title----------->
       <div
@@ -75,7 +78,8 @@
       <slot>
         <component
           :is="Block.BlockComType"
-          v-bind="Block.BlockComConf" />
+          v-bind="Block.BlockComConf"
+          v-on="OnAllEvents" />
       </slot>
     </main>
   </div>

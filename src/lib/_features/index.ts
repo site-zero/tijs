@@ -4,6 +4,7 @@ export * from './use-app-bus';
 export * from './use-bus-emit';
 export * from './use-class-style';
 export * from './use-draggable';
+export * from './use-emit-adaptor';
 export * from './use-format-value';
 export * from './use-icon-text';
 export * from './use-keep';

@@ -3,7 +3,7 @@ import { TiComInfo, TiComRace } from '../../../lib';
 import TiHtmlSnippet from './TiHtmlSnippet.vue';
 import { simple } from './example/index.ts';
 
-const COM_TYPE = 'TiHtmlSnippet';
+export const COM_TYPE = 'TiHtmlSnippet';
 
 let en = {
   'com-name': 'HTML Snippet',
