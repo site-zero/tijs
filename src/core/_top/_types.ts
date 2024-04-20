@@ -509,10 +509,10 @@ export type AppModalProps = CommonProps &
   PopItemProps &
   Partial<{
     type?: LogicType;
-    iconOk?: IconInput | null;
+    iconOk?: IconInput;
     textOk?: string | null;
     ok: (re: any) => Promise<boolean>;
-    iconCancel?: IconInput | null;
+    iconCancel?: IconInput;
     textCancel?: string | null;
     cancel: (re: any) => Promise<boolean>;
     actions: ActionBarItem[];

@@ -21,5 +21,17 @@
     font-size: var(--ti-fontsz-alert);
     padding: 1em;
     color: var(--ti-color-box-f);
+
+    > .part-input {
+      padding: 1em 0;
+      input {
+        @include font-fixed;
+        outline: none;
+        border: 1px solid var(--ti-color-border-dark);
+        padding: 0.8em 1em;
+        font-size: 1.3em;
+        width: 100%;
+      }
+    }
   }
 }

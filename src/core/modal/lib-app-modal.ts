@@ -9,7 +9,7 @@ import {
   Icons,
   isIconObj,
 } from '..';
-import { IconInput, LogicType, PopItemProps } from '../../lib';
+import { IconInput, LogicType } from '../../lib';
 import TiAppModal from './TiAppModal.vue';
 
 export async function openAppModal(props: AppModalProps): Promise<any> {
@@ -53,21 +53,12 @@ export async function openAppModal(props: AppModalProps): Promise<any> {
   });
 }
 
-export type AlertOptions = PopItemProps & {
-  icon?: IconInput;
-  title?: string;
-  type?: LogicType;
-  iconOk?: IconInput;
-  textOk?: string;
-  bodyIcon?: IconInput;
-  contentType?: 'text' | 'html';
-};
-
-function __get_msg_box_html(
+export function __get_msg_box_html(
   msg: string,
   type: LogicType,
   bodyIcon: IconInput | undefined,
-  msgAsHtml: boolean
+  msgAsHtml: boolean,
+  mainSuffixHtml?:string
 ) {
   // Build html
   let msgWithI18n = I18n.text(msg);
@@ -78,7 +69,7 @@ function __get_msg_box_html(
     msgIcon = isIconObj(bodyIcon) ? bodyIcon : Icons.parseIcon(bodyIcon);
   }
   // from type
-  else {
+  else if (_.isUndefined(bodyIcon)) {
     let icon_str = {
       info: 'zmdi-info',
       success: 'zmdi-check-circle',
@@ -102,7 +93,7 @@ function __get_msg_box_html(
   // --------------- build html ---------
   let html = [`<div class="ti-msg-box ${msgClass.join(' ')}"'>`] as string[];
   // 左侧的显示图标
-  if (hasMsgIcon) {
+  if (msgIcon && hasMsgIcon) {
     html.push(`<aside>`);
     // 嵌入图像图标
     if (msgIcon.type == 'image' && msgIcon.src) {
@@ -128,36 +119,10 @@ function __get_msg_box_html(
   else {
     html.push(Dom.textToHtml(msgWithI18n));
   }
+  if(mainSuffixHtml){
+    html.push(mainSuffixHtml)
+  }
   html.push('</main></div>');
 
   return html.join('\n');
-}
-
-export async function Alert(msg: string, options: AlertOptions): Promise<void> {
-  // Build html
-  let html = __get_msg_box_html(
-    msg,
-    options.type || 'info',
-    options.bodyIcon,
-    'html' == options.contentType
-  );
-  // Prepare dialog
-  let dialog = {
-    icon: 'zmdi-notifications',
-    title: 'i18n:info',
-    type: 'info',
-    textOk: 'i18n:ok',
-    textCancel: null,
-    position: 'center',
-    maxWidth: '80vw',
-    comType: 'TiHtmlSnippet',
-    comConf: {
-      content: html,
-    },
-    showMask: true,
-    clickMaskToClose: false,
-    ..._.omit(options, 'bodyIcon', 'contentType'),
-  } as AppModalProps;
-
-  return openAppModal(dialog);
 }
