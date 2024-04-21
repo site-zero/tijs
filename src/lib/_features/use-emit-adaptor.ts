@@ -3,12 +3,19 @@ import { Callback2, Tmpl, getLogger } from '../../core';
 
 const log = getLogger('ti.use-emit-adaptor');
 
-export type EmitAdaptor =
-  | string
-  | {
-      // 这个适配函数，接收捕获的事件以及事件参数，然后自行决定 emit 什么
-      (eventName: string, payload: any, emit: Callback2<string, any>): void;
-    };
+// 这个适配函数，接收捕获的事件以及事件参数，然后自行决定 emit 什么
+export type CustomizedEmitAdaptor = (
+  eventName: string,
+  payload: any,
+  emit: Callback2<string, any>
+) => void;
+export function isCustomizedEmitAdaptor(
+  input: any
+): input is CustomizedEmitAdaptor {
+  return _.isFunction(input);
+}
+
+export type EmitAdaptor = string | CustomizedEmitAdaptor;
 
 export type EmitAdaptorProps = {
   emitAdaptors?: Record<string, EmitAdaptor>;
@@ -43,7 +50,7 @@ export function useEmitAdaptor(
           }
           // 路由事件名称
           log.debug(`👽<${COM_TYPE}>`, `String adaptEmit`, eventName, payload);
-          let newEventName = Tmpl.exec(adaptEmit, {
+          let newEventName = Tmpl.exec(adaptEmit as string, {
             eventName,
             payload,
           });
@@ -55,6 +62,7 @@ export function useEmitAdaptor(
       // 纯自定义
       else {
         //.............<监听函数: Customized>.................
+        let customizedAdapt = adaptEmit as CustomizedEmitAdaptor;
         listens[eventName] = (payload: any) => {
           // 忽略原生事件
           if (ignoreNativeEvents) {
@@ -69,7 +77,7 @@ export function useEmitAdaptor(
             eventName,
             payload
           );
-          adaptEmit(eventName, payload, emit);
+          customizedAdapt(eventName, payload, emit);
         };
         //.............<监听函数: Customized>.................
       }

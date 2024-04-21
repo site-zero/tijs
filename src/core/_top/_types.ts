@@ -15,6 +15,14 @@ export { Rect } from './ti-rect';
 
 /*---------------------------------------------------`
 
+                     补足原生
+
+---------------------------------------------------*/
+export function isArray<T>(input: any): input is T[] {
+  return Array.isArray(input);
+}
+/*---------------------------------------------------`
+
                       结构/联合类型
 
 ---------------------------------------------------*/
@@ -528,4 +536,3 @@ export type AppModalInitProps = AppModalProps & {
   returnValue: (re: any) => void;
   releaseDom: () => void;
 };
-

@@ -1,6 +1,6 @@
-import _, { bind } from 'lodash';
+import _ from 'lodash';
 import { Ref } from 'vue';
-import { Callback1, getLogger } from '../../core';
+import { Callback1, getLogger, isArray } from '../../core';
 
 const log = getLogger('ti.use-app-model-binding');
 
@@ -107,32 +107,34 @@ export function makeAppModelEventListeners(
       let handler = bindingEvent[eventName];
       // 3. `{change:["a","b"]}`
       //     将 change 事件的 payload.a =>result.a,payload.b => result.b
-      if (_.isArray(handler)) {
+      if (isArray<string>(handler)) {
+        let asKeys = handler as string[];
         listeners[eventName] = (payload: any) => {
           log.debug(
             `🎃<${COM_TYPE}>`,
             eventName,
-            `handler=${JSON.stringify(handler)}`,
+            `handler=${JSON.stringify(asKeys)}`,
             '=',
             payload
           );
-          let meta = _.pick(payload, handler);
+          let meta = _.pick(payload, ...asKeys);
           _.assign(result.value, meta);
         };
       }
       // 4. `{change:{a:"x",b:"y"}}`
       //     将 change 事件的 payload.a =>result.x,payload.b => result.y
       else {
+        let asMapping = handler as Record<string, string>;
         listeners[eventName] = (payload: any) => {
           log.debug(
             `🎃<${COM_TYPE}>`,
             eventName,
-            `handler=${JSON.stringify(handler)}`,
+            `handler=${JSON.stringify(asMapping)}`,
             '=',
             payload
           );
-          for (let fromKey of _.keys(handler)) {
-            let toKey = handler[fromKey];
+          for (let fromKey of _.keys(asMapping)) {
+            let toKey = asMapping[fromKey];
             let val = _.get(payload, fromKey);
             _.set(result.value, toKey, val);
           }
