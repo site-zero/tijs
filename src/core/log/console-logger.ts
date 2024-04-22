@@ -1,5 +1,5 @@
 import { Logger, LogLevel } from './log-types';
-import { _find_logger_level } from './ti-log';
+import { _find_logger_level, getCallerInfo } from './ti-log';
 
 export class ConsoleLogger implements Logger {
   private _allow_lv: LogLevel = LogLevel.INFO;
@@ -25,16 +25,17 @@ export class ConsoleLogger implements Logger {
     }
   }
 
-  _print(reqL: LogLevel, ...msg: any[]) {
+  _print(reqLvl: LogLevel, ...msg: any[]) {
     this.__check_log_ready();
-    if (this._allow_lv >= reqL) {
-      let lvName = ['ERROR', 'WARN', 'INFO', 'DEBUG', 'TRACE'][reqL];
-      let prefix = `[${lvName}] ${this._name}:`;
-      if (reqL == LogLevel.ERROR) {
+    if (this._allow_lv >= reqLvl) {
+      let lvName = ['ERROR', 'WARN', 'INFO', 'DEBUG', 'TRACE'][reqLvl];
+      let caller = getCallerInfo()
+      let prefix = `[${lvName}] (${caller}) ${this._name}:`;
+      if (reqLvl == LogLevel.ERROR) {
         console.error(prefix, ...msg);
-      } else if (reqL == LogLevel.WARN) {
+      } else if (reqLvl == LogLevel.WARN) {
         console.warn(prefix, ...msg);
-      } else if (reqL == LogLevel.INFO) {
+      } else if (reqLvl == LogLevel.INFO) {
         console.info(prefix, ...msg);
       } else {
         console.log(prefix, ...msg);

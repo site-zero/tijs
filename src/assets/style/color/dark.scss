@@ -1,8 +1,8 @@
 @mixin use_color_theme_dark {
   /*区域*/
-  --ti-color-body: #000;
+  --ti-color-body: #3d3d3d;
   --ti-color-body-f: #ddd;
-  --ti-color-card: #222;
+  --ti-color-card: #444;
   --ti-color-card-f: #eee;
   --ti-color-menu: #222;
   --ti-color-menu-f: #eee;
@@ -12,10 +12,10 @@
   --ti-color-tab-f: #666;
   --ti-color-box: #000;
   --ti-color-box-f: #eee;
-  --ti-color-mask-heavy: rgba(0, 0, 0, 0.95);
-  --ti-color-mask-bushy: rgba(50, 50, 50, 0.8);
-  --ti-color-mask-thin: rgba(50, 50, 50, 0.4);
-  --ti-color-mask-weak: rgba(100, 100, 100, 0.4);
+  --ti-color-mask-heavy: rgba(0, 0, 0, 0.9);
+  --ti-color-mask-bushy: rgba(0, 0, 0, 0.7);
+  --ti-color-mask-thin: rgba(0, 0, 0, 0.5);
+  --ti-color-mask-weak: rgba(0, 0, 0, 0.2);
   /* 边框/线 */
   --ti-color-border-shallow: #444;
   --ti-color-border-dark: #888;
@@ -26,8 +26,8 @@
   --ti-color-selected-f: #ff0;
   --ti-color-hightlight: rgba(255, 255, 0, 0.1);
   --ti-color-hightlight-f: #fff;
-  --ti-color-light: #fff;
-  --ti-color-dark: #f00;
+  --ti-color-light: #567;
+  --ti-color-dark: #000;
   /* 内容颜色 */
   --ti-color-primary: #2196f3;
   --ti-color-primary-r: #d0e7fc;

@@ -1,8 +1,17 @@
 import { Ref } from 'vue';
 import { Dragging, useDraggable } from '../../';
-import { Callback, Callback1, Dom, FuncA0, Num } from '../../../core';
+import {
+  Callback,
+  Callback1,
+  Dom,
+  FuncA0,
+  Num,
+  getLogger,
+} from '../../../core';
 import { ColResizingState } from './use-table';
 import { TableKeepFeature } from './use-table-keep';
+
+const log = getLogger('TiTable.resizing');
 
 /**
  * 为表格绑定拖拽调整列宽的特性
@@ -16,7 +25,7 @@ export function useTableResizing(
   showRowMarker: boolean,
   onDestroy: Callback1<Callback>,
   isColumnResizeInTime: FuncA0<boolean>,
-  Keep: TableKeepFeature,
+  Keep: TableKeepFeature
 ) {
   const __update_colmun_sizes = function (ing: Dragging) {
     let colLeftInView = Num.round(ing.getMeasure('col_offset_x') ?? 0, 100);
@@ -25,10 +34,12 @@ export function useTableResizing(
     let colSize = Num.round(colResizing.left + scrollLeft - colLeftInView, 100);
     columnSizes.value[i] = Math.max(10, colSize);
 
-    console.log(
-      'moving',
-      `${colResizing.left} + ${scrollLeft} - ${colLeftInView} = ${colSize}`,
-    );
+    if (log.isDebugEnabled()) {
+      log.debug(
+        'moving',
+        `${colResizing.left} + ${scrollLeft} - ${colLeftInView} = ${colSize}`
+      );
+    }
   };
 
   useDraggable({
@@ -41,7 +52,7 @@ export function useTableResizing(
       //ing.watchZone = Rects.createBy(ing.body!);
       ing.watchMode = 'play';
       ing.setVar('resize-in-time', isColumnResizeInTime());
-      console.log('onReady', ing.activated, ing.client);
+      log.info('onReady', ing.activated, ing.client);
     },
     onStart: (ing: Dragging) => {
       if (!ing.target || !ing.viwportElement) {
@@ -60,11 +71,7 @@ export function useTableResizing(
       colResizing.activated = true;
       colResizing.left = ing.inview.x;
 
-      console.log(
-        `onStart[${isForPrev ? 'prev' : 'self'}]`,
-        ing.activated,
-        ing,
-      );
+      log.info(`onStart[${isForPrev ? 'prev' : 'self'}]`, ing.activated, ing);
 
       // 获取标题初始列宽
       for (let $cell of $head_cells) {
@@ -85,7 +92,9 @@ export function useTableResizing(
       let colLeftInView = cellLeft + scrollLeft - viewLeft;
       ing.setMeasure('col_offset_x', Num.round(colLeftInView, 100));
 
-      console.log('onStart', `${cellLeft} - ${viewLeft} = ${colLeftInView}`);
+      if (log.isDebugEnabled()) {
+        log.debug('onStart', `${cellLeft} - ${viewLeft} = ${colLeftInView}`);
+      }
     },
     onMoving: (ing: Dragging) => {
       let resizeInTime = ing.getVar('resize-in-time');
@@ -96,7 +105,9 @@ export function useTableResizing(
     },
     onEnd: (ing: Dragging) => {
       __update_colmun_sizes(ing);
-      console.log('onEnd', ing.activated, ing);
+      if (log.isInfoEnabled()) {
+        log.info('onEnd', ing.activated, ing);
+      }
       colResizing.activated = false;
       colResizing.left = -1;
       colResizing.colIndex = -1;

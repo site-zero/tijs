@@ -1,7 +1,15 @@
-import { Callback, Callback1, FuncA0, Rects, Size2D } from '../../../core';
-import { AppEvents, TiAppBus } from '../../';
-import _ from 'lodash';
 import { nextTick } from 'vue';
+import {
+  Callback,
+  Callback1,
+  FuncA0,
+  Rects,
+  Size2D,
+  getLogger,
+} from '../../../core';
+import _ from 'lodash';
+
+const log = getLogger('ti.use-view-measure');
 
 export type ViewMeasureProps = {
   getMainElement: FuncA0<HTMLElement | undefined>;
@@ -9,7 +17,6 @@ export type ViewMeasureProps = {
   setScrollTop?: Callback1<number>;
   onMounted?: Callback1<Callback>;
   onUnmounted?: Callback1<Callback>;
-  GBus?: TiAppBus;
   debounce?: number;
 };
 
@@ -26,47 +33,59 @@ export function useViewMeasure(props: ViewMeasureProps) {
     setScrollTop,
     onMounted,
     onUnmounted,
-    GBus,
     debounce = 500,
   } = props;
-  let updateViewport = function () {
-    let $main = getMainElement();
-    if ($main) {
-      nextTick(() => {
-        //console.log("FormItem:updateViewport");
-        let rect = Rects.createBy($main!);
-        let viewport = rect.toSize2D();
-        setViewport(viewport);
-      });
-    }
+  let updateViewport = function ($main: HTMLElement) {
+    log.debug('updateViewport =>', $main);
+    nextTick(() => {
+      //console.log("FormItem:updateViewport");
+      let rect = Rects.createBy($main!);
+      let viewport = rect.toSize2D();
+      setViewport(viewport);
+    });
   };
 
-  let updateScrollTop = function () {
-    let $main = getMainElement();
+  let updateScrollTop = function ($main?: HTMLElement) {
+    if (!$main) {
+      $main = getMainElement();
+    }
     if ($main && setScrollTop) {
+      log.debug('updateScrollTop =>', $main);
       setScrollTop($main!.scrollTop);
     }
   };
 
-  function updateMeasure() {
-    updateViewport();
-    updateScrollTop();
+  function updateMeasure($main: HTMLElement) {
+    if ($main) {
+      updateViewport($main);
+      updateScrollTop($main);
+    }
   }
 
-  let debounceUpdateScrollTop = _.debounce(updateMeasure, debounce);
-  let debounceUpdateMeasure = _.debounce(updateMeasure, debounce);
+  let debounceUpdateScrollTop = _.debounce(updateScrollTop, debounce);
+  // let debounceUpdateMeasure = _.debounce(updateMeasure, debounce);
+
+  function onTopScroll() {
+    debounceUpdateScrollTop();
+  }
+
+  // Create a ResizeObserver instance
+  const resizeObserver = new ResizeObserver((entries) => {
+    for (const entry of entries) {
+      if (log.isTraceEnabled()) {
+        log.trace('objserve resize', entry.target);
+      }
+      updateMeasure(entry.target as HTMLElement);
+    }
+  });
 
   if (onMounted) {
     onMounted(() => {
-      updateMeasure();
-
       let $main = getMainElement();
       if ($main) {
-        $main.addEventListener('scroll', debounceUpdateScrollTop);
-      }
-
-      if (GBus) {
-        GBus.on(AppEvents.APP_RESIZE, debounceUpdateMeasure);
+        updateMeasure($main);
+        $main.addEventListener('scroll', onTopScroll);
+        resizeObserver.observe($main);
       }
     });
   }
@@ -75,18 +94,16 @@ export function useViewMeasure(props: ViewMeasureProps) {
     onUnmounted(() => {
       let $main = getMainElement();
       if ($main) {
-        $main.removeEventListener('scroll', debounceUpdateScrollTop);
-      }
-      if (GBus) {
-        GBus.off(debounceUpdateMeasure, AppEvents.APP_RESIZE);
+        $main.removeEventListener('scroll', onTopScroll);
+        resizeObserver.disconnect();
       }
     });
   }
 
-  return {
-    updateViewport,
-    updateScrollTop,
-    updateMeasure,
-    debounceUpdateMeasure,
-  };
+  // 貌似啥也不用返回
+  // return {
+  //   updateViewport,
+  //   updateScrollTop,
+  //   updateMeasure,
+  // };
 }
