@@ -11,27 +11,52 @@ const LL = {
   _loggers: {} as Record<string, Logger>,
 };
 
-export function getCallerInfo(callerAt=4) {
+type CallerInfo = {
+  fileName: string;
+  methodName: string;
+  line: number;
+  column: number;
+  source?: string;
+};
+
+export function getCallerInfo(callerAt = 4): CallerInfo {
   try {
     // 抛出一个错误，然后立即捕获它
     throw new Error();
   } catch (error) {
     let err = error as any;
     // Error 的 stack 属性包含了堆栈追踪信息
-    if (err.stack) {
-      // 处理这个 stack 信息以找到调用者信息
-      // 注意：这种方式依赖于特定的运行环境和堆栈格式，可能需要根据环境不同进行调整
-      const stackLines = err.stack.split('\n');
-      // 以一种通用方式，我们可能需要找到除当前函数外的第一个“at ”位置
-      // 这通常是调用者的堆栈行，格式和具体的 JavaScript 引擎实现有关
 
-      // 例如，假设我们的函数调用在栈中的第四行
-      // 这可能需根据您的实际堆栈结构进行调整
+    let info: CallerInfo = {
+      methodName: 'unknown',
+      fileName: 'unknown',
+      line: -1,
+      column: -1,
+    };
+    if (err.stack) {
+      const stackLines = err.stack.split('\n');
       if (stackLines[callerAt]) {
-        console.log(stackLines[callerAt]); // 这里输出调用者信息
-        return stackLines[callerAt];
+        let stackLine = stackLines[callerAt];
+        let m = /^\s*at\s+([^()]+)\s+\((.+)\)$/.exec(stackLine);
+        if (m) {
+          info.methodName = _.trim(m[1]);
+          info.source = _.trim(m[2]);
+          let ss = info.source.split(/\/+/g);
+          let str = ss[ss.length - 1];
+          let flds = str.split(/[?:]+/g);
+          info.fileName = flds[0];
+          info.line = parseInt(flds[flds.length - 2]);
+          info.column = parseInt(flds[flds.length - 1]);
+        }
+        // 警告一下
+        else {
+          info.source = stackLine;
+          console.warn(`Fail to parse stackLine[${callerAt}]: `, stackLine);
+        }
       }
     }
+
+    return info;
   }
 }
 

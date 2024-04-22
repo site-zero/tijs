@@ -14,22 +14,20 @@ import {
   I18n,
   Str,
   Vars,
+  getLogger,
 } from '../../../core';
 import { TableRowEvent } from './table-types';
 import {
   CheckStatus,
   SelectableFeature,
   SelectableState,
+  SelectionEmitInfo,
   useSelectable,
 } from './use-selectable';
 import { TableKeepFeature } from './use-table-keep';
 import { useTableResizing } from './use-table-resizing';
-/*-------------------------------------------------------
 
-                        Types
-
--------------------------------------------------------*/
-
+const log = getLogger('TiTable.use-table');
 /**
  * 拖动时的状态
  */
@@ -49,9 +47,15 @@ export type ColResizingState = {
   colIndex: number;
 };
 
+export type TableEmit = {
+  (eventName: 'select', payload: SelectionEmitInfo<TableRowID>): void;
+  (eventName: 'open', payload: TableRowData): void;
+  (eventName: 'open:cell', payload: TableRowEvent): void;
+};
+
 /*-------------------------------------------------------
 
-                     Methods
+                     Help methods
 
 -------------------------------------------------------*/
 function _get_table_columns(props: TableProps) {
@@ -132,7 +136,7 @@ function _on_row_select(
   }
   // shiftKey
   else if (se.shiftKey) {
-    console.log('shift mode');
+    log.debug('shift mode');
     let ids = selection.ids;
     selectable.selectRange(selection, ids, [row.id, selection.currentId]);
   }
@@ -146,7 +150,7 @@ function _on_row_select(
                    Use Feature
                 
 -----------------------------------------------------*/
-export function useTable(props: TableProps) {
+export function useTable(props: TableProps, emit: TableEmit) {
   // 启用特性
   let selectable = useSelectable<TableRowID>({
     getId: props.getId!,
@@ -154,6 +158,34 @@ export function useTable(props: TableProps) {
     data: props.data,
     multi: props.multi,
   });
+
+  function getCurrentRow(
+    selection: SelectableState<TableRowID>,
+    rows: TableRowData[]
+  ) {
+    if (!_.isNil(selection.currentId)) {
+      for (let row of rows) {
+        if (row.id == selection.currentId) {
+          return row;
+        }
+      }
+    }
+  }
+
+  function getCheckedRows(
+    selection: SelectableState<TableRowID>,
+    rows: TableRowData[]
+  ): TableRowData[] {
+    let checked = [] as TableRowData[];
+    if (selection.checkedIds.size > 0) {
+      for (let row of rows) {
+        if (row.checked) {
+          checked.push(row);
+        }
+      }
+    }
+    return checked;
+  }
 
   return {
     getTableColumns: () => {
@@ -193,9 +225,12 @@ export function useTable(props: TableProps) {
 
     getRowIds: selectable.getRowIds,
 
-    getCheckStatus: (selection: SelectableState<TableRowID>) => {
+    getCheckStatus(selection: SelectableState<TableRowID>) {
       return selectable.getCheckStatus(selection);
     },
+
+    getCurrentRow,
+    getCheckedRows,
 
     OnTableHeadCheckerClick(
       selection: SelectableState<TableRowID>,
@@ -214,21 +249,34 @@ export function useTable(props: TableProps) {
       selection: SelectableState<TableRowID>,
       rowEvent: TableRowEvent
     ) {
+      log.debug('OnRowSelect', rowEvent);
+      let oldCurrentId = _.cloneDeep(selection.currentId);
+      let oldCheckedIds = _.cloneDeep(selection.checkedIds);
       _on_row_select(selectable, selection, rowEvent);
+      let emitInfo = selectable.getSelectionEmitInfo(
+        selection,
+        props.data,
+        oldCheckedIds,
+        oldCurrentId
+      );
+      emit('select', emitInfo);
     },
 
     OnRowCheck(
       selection: SelectableState<TableRowID>,
       rowEvent: TableRowEvent
     ) {
+      log.debug('OnRowCheck', rowEvent);
+      let oldCurrentId = _.cloneDeep(selection.currentId);
+      let oldCheckedIds = _.cloneDeep(selection.checkedIds);
       selectable.toggleId(selection, rowEvent.row.id);
-    },
-
-    OnRowOpen(
-      _selection: SelectableState<TableRowID>,
-      rowEvent: TableRowEvent
-    ) {
-      console.log('row Open', rowEvent);
+      let emitInfo = selectable.getSelectionEmitInfo(
+        selection,
+        props.data,
+        oldCheckedIds,
+        oldCurrentId
+      );
+      emit('select', emitInfo);
     },
 
     OnCellSelect(
@@ -237,16 +285,34 @@ export function useTable(props: TableProps) {
     ) {
       let { row } = rowEvent;
       if (!selection.checkedIds.get(row.id)) {
+        let oldCurrentId = _.cloneDeep(selection.currentId);
+        let oldCheckedIds = _.cloneDeep(selection.checkedIds);
+        log.debug('OnCellSelect', rowEvent);
         selectable.selectId(selection, row.id);
+        let emitInfo = selectable.getSelectionEmitInfo(
+          selection,
+          props.data,
+          oldCheckedIds,
+          oldCurrentId
+        );
+        emit('select', emitInfo);
       }
-      console.log('cell select', rowEvent);
+    },
+
+    OnRowOpen(
+      _selection: SelectableState<TableRowID>,
+      rowEvent: TableRowEvent
+    ) {
+      log.debug('OnRowOpen', rowEvent);
+      emit('open', rowEvent.row);
     },
 
     OnCellOpen(
       _selection: SelectableState<TableRowID>,
       rowEvent: TableRowEvent
     ) {
-      console.log('cell open', rowEvent);
+      log.debug('OnCellOpen', rowEvent);
+      emit('open:cell', rowEvent);
     },
   };
 }

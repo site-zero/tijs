@@ -29,16 +29,22 @@ export class ConsoleLogger implements Logger {
     this.__check_log_ready();
     if (this._allow_lv >= reqLvl) {
       let lvName = ['ERROR', 'WARN', 'INFO', 'DEBUG', 'TRACE'][reqLvl];
-      let caller = getCallerInfo()
-      let prefix = `[${lvName}] (${caller}) ${this._name}:`;
+      let caller = getCallerInfo();
+      let prefix = `[${lvName}]`;
+      let callAt = caller.fileName || this._name;
+      // let an = document.createElement('a') as HTMLAnchorElement
+      // an.setAttribute('href',source||'#')
+      // an.textContent = `${fileName}:${line}`
+
+      // console.log(`${fileName}:${line}: ${source}`);
       if (reqLvl == LogLevel.ERROR) {
-        console.error(prefix, ...msg);
+        console.error(prefix, callAt, ':', ...msg);
       } else if (reqLvl == LogLevel.WARN) {
-        console.warn(prefix, ...msg);
+        console.warn(prefix, callAt, ':', ...msg);
       } else if (reqLvl == LogLevel.INFO) {
-        console.info(prefix, ...msg);
+        console.info(prefix, callAt, ':', ...msg);
       } else {
-        console.log(prefix, ...msg);
+        console.log(prefix, callAt, ':', ...msg);
       }
     }
   }

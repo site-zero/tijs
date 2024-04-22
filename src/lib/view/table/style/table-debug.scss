@@ -1,0 +1,23 @@
+.ti-table > .table-debug-info {
+  @include pos-abs($b: 8px, $l: 60px, $r: 10px);
+  @include font-fixed($sz: 10px);
+  padding: 1em 2em;
+  background-color: var(--ti-color-mask-bushy);
+  color: var(--ti-color-bar);
+  > ul {
+    font-size: 14px;
+    color: var(--ti-color-card);
+    code {
+      font-family: inherit;
+    }
+  }
+  > .scroll-marker {
+    color: var(--ti-color-card);
+    padding: 2em;
+    line-height: 2em;
+    font-size: 5px;
+    overflow-wrap: break-word;
+    word-break: break-all;
+    word-wrap: break-word;
+  }
+} // ~ .table-debug-info`

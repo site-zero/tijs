@@ -73,6 +73,6 @@
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
   @import './ti-cell.scss';
 </style>

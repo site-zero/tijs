@@ -11,29 +11,22 @@ import {
 } from '../../../core';
 import { objToMap } from '../../../core/util';
 import { SelectableProps } from '../../../lib';
-/*-----------------------------------------------------
-
-                      Types
-                
------------------------------------------------------*/
+// -----------------------------------------------------
+//  Types
 export type CheckStatus = 'all' | 'none' | 'part';
-
-/*-----------------------------------------------------
-
-                      State
-                
------------------------------------------------------*/
+// -----------------------------------------------------
 export type SelectableState<ID> = {
   currentId?: ID;
   checkedIds: Map<ID, boolean>;
   ids: ID[];
 };
-
-/*-----------------------------------------------------
-
-                   Output Feature
-                
------------------------------------------------------*/
+export type SelectionEmitInfo<ID> = Omit<SelectableState<ID>, 'ids'> & {
+  current?: Vars;
+  checked: Vars[];
+  oldCurrentId?: ID;
+  oldCheckedIds: Map<ID, boolean>;
+};
+// -----------------------------------------------------
 export type SelectableFeature<ID extends string | number> = {
   getRowIds: FuncA0<ID[]>;
   createSelection: FuncA0<SelectableState<ID>>;
@@ -43,17 +36,28 @@ export type SelectableFeature<ID extends string | number> = {
   isDataChecked: FuncA2<SelectableState<ID>, Vars | undefined, boolean>;
   isDataActived: FuncA2<SelectableState<ID>, Vars | undefined, boolean>;
 
+  getCheckedData: (list: Vars[], state: SelectableState<ID>) => Vars[];
+  getCurrentData: (
+    list: Vars[],
+    state: SelectableState<ID>
+  ) => Vars | undefined;
+  getSelectionEmitInfo: (
+    state: SelectableState<ID>,
+    list: Vars[],
+    oldCheckedIds: Map<ID, boolean>,
+    oldCurrentId?: ID
+  ) => SelectionEmitInfo<ID>;
+
   getCheckStatus: FuncA1<SelectableState<ID>, CheckStatus>;
 
   selectId: Callback2<SelectableState<ID>, ID>;
   toggleId: Callback2<SelectableState<ID>, ID>;
   selectRange: Callback3<SelectableState<ID>, ID[], [ID, ID?]>;
 };
-/*-----------------------------------------------------
-
-                   Use Feature
-                
------------------------------------------------------*/
+// -----------------------------------------------------
+//
+// Use Feature
+//
 export function useSelectable<ID extends string | number>(
   props: SelectableProps<ID>
 ): SelectableFeature<ID> {
@@ -111,6 +115,46 @@ export function useSelectable<ID extends string | number>(
     }
     let id = getDataId(data);
     return id === state.currentId;
+  }
+
+  function getCheckedData(list: Vars[], state: SelectableState<ID>): Vars[] {
+    let re = [] as Vars[];
+    for (let li of list) {
+      if (isDataChecked(state, li)) {
+        re.push(li);
+      }
+    }
+    return re;
+  }
+  function getCurrentData(
+    list: Vars[],
+    state: SelectableState<ID>
+  ): Vars | undefined {
+    for (let li of list) {
+      if (isDataChecked(state, li)) {
+        return li;
+      }
+    }
+  }
+
+  function getSelectionEmitInfo(
+    state: SelectableState<ID>,
+    list: Vars[],
+    oldCheckedIds: Map<ID, boolean>,
+    oldCurrentId?: ID
+  ): SelectionEmitInfo<ID> {
+    let currentId = state.currentId;
+    let checkedIds = state.checkedIds;
+    let current = getCurrentData(list, state);
+    let checked = getCheckedData(list, state);
+    return {
+      currentId,
+      checkedIds,
+      current,
+      checked,
+      oldCurrentId,
+      oldCheckedIds,
+    };
   }
 
   /*-----------------------------------------------------
@@ -262,6 +306,10 @@ export function useSelectable<ID extends string | number>(
     isIDChecked,
     isDataChecked,
     isDataActived,
+
+    getCheckedData,
+    getCurrentData,
+    getSelectionEmitInfo,
 
     getCheckStatus,
 

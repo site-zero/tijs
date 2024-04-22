@@ -1,6 +1,6 @@
 .prefix-suffix-box {
   @include flex-align-nowrap($ai: stretch);
-  background-color: var(--ti-color-box);
+  //background-color: var(--ti-color-box);
 
   > .part-value {
     padding: 0 var(--ti-measure-box-pad);

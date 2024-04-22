@@ -3,17 +3,18 @@
   import {
     Ref,
     computed,
-    inject,
     onMounted,
     onUnmounted,
     reactive,
     ref,
     watch,
   } from 'vue';
-  import { BUS_KEY, TableProps, TiIcon, useLargeScrolling } from '../../';
-  import { CssUtils, Size2D, Util } from '../../../core';
+  import { TableProps, TableRowData, TableRowID, TiIcon, useLargeScrolling } from '../../';
+  import { CssUtils, Size2D, Util, Vars } from '../../../core';
   import TableRow from './row/TableRow.vue';
-  import { ColResizingState, useTable } from './use-table';
+  import { SelectionEmitInfo } from './use-selectable';
+  import { ColResizingState, TableEmit, useTable } from './use-table';
+  import { TableScrolling, getTableDebugInfo } from './use-table-debug-info';
   import { loadColumnSizes, useKeepTable } from './use-table-keep';
   import { useViewMeasure } from './use-view-measure';
   //-------------------------------------------------------
@@ -29,7 +30,6 @@
     name: 'TiTable',
     inheritAttrs: true,
   });
-  let GBus = inject(BUS_KEY);
   /*-------------------------------------------------------
 
                         Props
@@ -49,15 +49,17 @@
     canSelect: true,
     canCheck: true,
   });
-
-  let Table = computed(() => useTable(props));
+  let emit = defineEmits<TableEmit>();
+  let Table = computed(() => useTable(props, emit));
   /*-------------------------------------------------------
 
                       State
 
 -------------------------------------------------------*/
   const $main: Ref<HTMLElement> = ref() as Ref<HTMLElement>;
-  const scrolling = reactive({
+
+  // 如果采用 IntersectionObserver 就没必要监控 scrolling 的变化了
+  const scrolling: TableScrolling = reactive({
     viewport: { width: 0, height: 0 },
     lineHeights: [] as number[],
     defaultLineHeight: props.rowMinHeight,
@@ -179,32 +181,11 @@
   //
   // 调试滚动信息
   //
-  const DebugInfo = computed(() => {
-    let scopes = [];
-    if (showDebug) {
-      let from: number = -1;
-      let marks = scrolling.lineMarkers;
-      for (let i = 0; i < marks.length; i++) {
-        if (!marks[i]) {
-          if (from >= 0) {
-            scopes.push(`${from + 1}-${i}`);
-          }
-          from = -1;
-        } else if (from < 0) {
-          from = i;
-        }
-      }
-      if (from >= 0 && from < marks.length) {
-        scopes.push(`${from + 1}-${marks.length}`);
-      }
-    }
-    return scopes;
-  });
-  /*-------------------------------------------------------
-
-                    Methods
-
--------------------------------------------------------*/
+  const DebugInfo = computed(() => getTableDebugInfo(scrolling, showDebug));
+  //
+  // Methods
+  //
+  // TODO 如果采用 IntersectionObserver ，那么这个就没必要了
   function updateRowHeight(rowIndex: number, height: number) {
     // 如果没有设置过真实行高，那么也更新一下默认
     if (_.isEmpty(scrolling.lineHeights)) {
@@ -357,7 +338,9 @@
           </li>
         </ul>
         <div class="scroll-marker">
-          {{ _.map(scrolling.lineMarkers, (v:any) => (v ? 'x' : '-')).join('') }}
+          {{
+            _.map(scrolling.lineMarkers, (v: any) => (v ? 'x' : '-')).join('')
+          }}
         </div>
       </template>
     </div>
@@ -366,5 +349,8 @@
 </template>
 <style lang="scss">
   @use '../../../assets/style/_all.scss' as *;
-  @import './ti-table.scss';
+  @import './style/ti-table.scss';
+  @import './style/table-head.scss';
+  @import './style/table-resize.scss';
+  @import './style/table-debug.scss';
 </style>

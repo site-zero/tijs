@@ -1,0 +1,9 @@
+.ti-table > .resizing-bar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 100px;
+  width: 2px;
+  background-color: var(--ti-color-mask-thin);
+  z-index: $z-top;
+}
