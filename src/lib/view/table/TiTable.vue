@@ -9,14 +9,16 @@
     ref,
     watch,
   } from 'vue';
-  import { TableProps, TableRowData, TableRowID, TiIcon, useLargeScrolling } from '../../';
-  import { CssUtils, Size2D, Util, Vars } from '../../../core';
+  import { TableProps, TiIcon, useLargeScrolling } from '../../';
+  import { CssUtils, Size2D, Util, getLogger } from '../../../core';
   import TableRow from './row/TableRow.vue';
-  import { SelectionEmitInfo } from './use-selectable';
+  import { COM_TYPE } from './table-types';
   import { ColResizingState, TableEmit, useTable } from './use-table';
   import { TableScrolling, getTableDebugInfo } from './use-table-debug-info';
   import { loadColumnSizes, useKeepTable } from './use-table-keep';
   import { useViewMeasure } from './use-view-measure';
+
+  const log = getLogger(COM_TYPE);
   //-------------------------------------------------------
   const showDebugScrolling = false;
   const showDebugResizing = false;
@@ -216,17 +218,17 @@
     }
   );
 
-  watch(
-    () => TableColumns.value,
-    () => {
-      console.log('columns changed', TableColumns.value.length);
-    }
-  );
+  // watch(
+  //   () => TableColumns.value,
+  //   () => {
+  //     //console.log('columns changed', TableColumns.value.length);
+  //   }
+  // );
 
   watch(
     () => props.keepColumns,
     () => {
-      console.log('keepColumns changed', props.keepColumns);
+      log.debug('keepColumns changed', props.keepColumns);
       loadColumnSizes(columnSizes, Keep.value);
     }
   );

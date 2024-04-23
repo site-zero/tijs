@@ -174,6 +174,7 @@ export function useDraggable(options: DraggalbeOptions) {
   let ing: Dragging;
 
   //console.log('useDraggable', $watchTarget);
+  log.debug('useDraggable', $watchTarget);
   // 准备监听
   let { POINTER_DOWN, POINTER_UP, POINTER_MOVE, getPointerEvent, getPoint2D } =
     getWatchEvent();

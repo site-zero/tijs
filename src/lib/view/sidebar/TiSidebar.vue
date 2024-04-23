@@ -64,6 +64,7 @@
   @use '../../../assets/style/_all.scss' as *;
 
   nav {
+    user-select: none;
     padding: SZ(1);
     width: 100%;
     height: 100%;

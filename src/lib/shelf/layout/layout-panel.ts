@@ -1,40 +1,14 @@
 import _ from 'lodash';
 import {
-  LayoutBlock,
-  LayoutItem,
+  LayoutPanelItem,
+  LayoutPanelProps,
   LayoutProps,
   LayoutState,
-  PopItemProps,
-  TranName,
-  TranSpeed,
   positionToTransName,
 } from '../../';
-import { CssUtils, PopPosition, Vars } from '../../../core';
+import { CssUtils, Vars } from '../../../core';
 
 import { autoSetLayoutItemType, setLayoutItemConfig } from './layout-support';
-
-export type LayoutPanel = LayoutBlock & PopItemProps;
-
-export type LayoutPanelItem = LayoutItem & {
-  position: PopPosition;
-  showMask?: boolean;
-  clickMaskToClose?: boolean;
-  /**
-   * 得到过渡动画相关
-   */
-  tranSpeed?: TranSpeed;
-  tranName: TranName;
-  /**
-   * 计算出来的，当前段面板是否是隐藏
-   */
-  hidden: boolean;
-  visible: boolean;
-};
-
-export type LayoutPanelProps = {
-  panels?: LayoutPanel[];
-  panelStyle?: Vars;
-};
 
 export function getLayoutPanelItems(
   state: LayoutState,

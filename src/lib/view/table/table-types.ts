@@ -1,5 +1,7 @@
 import { TableRowData } from '../../';
 
+export const COM_TYPE = 'TiTable';
+
 /**
  * - `click` : 点击行头
  * - `check` : 点击行头选择框

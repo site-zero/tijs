@@ -1,12 +1,18 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { Ref, computed, onMounted, reactive, ref, watch } from 'vue';
-  import { TiBlock, TiLayoutTabs } from '../../../';
+  import {
+    LayoutGridProps,
+    LayoutGridState,
+    LayoutPanelItem,
+    TiBlock,
+    TiLayoutTabs,
+  } from '../../../';
   import { CssUtils, Vars } from '../../../../core';
   import { loadAllState, useKeepLayoutGrid } from '../grid/use-grid-keep';
   import { useGridResizing } from '../grid/use-grid-resizing.ts';
-  import { LayoutPanelItem, getLayoutPanelItems } from '../layout-panel';
-  import { COM_TYPE, LayoutGridProps, LayoutGridState } from './grid.types.ts';
+  import { getLayoutPanelItems } from '../layout-panel';
+  import { COM_TYPE } from './grid.types.ts';
   import { getLayoutGridItems, isLayoutAdjustable } from './use-grid-items';
   import { getTopStyle } from './use-grid-util.ts';
   defineOptions({

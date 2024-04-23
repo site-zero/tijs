@@ -1,5 +1,13 @@
-import { ActionBarItem, ComRef, CommonProps, EmitAdaptorProps, IconInput } from '..';
+import {
+  ActionBarItem,
+  ComRef,
+  CommonProps,
+  EmitAdaptorProps,
+  IconInput,
+} from '..';
 import { CssGridItem, CssGridLayout, PopPosition, Vars } from '../../core';
+import { LayoutGridKeepProps } from './lib-keep';
+import { GridResizingState } from './lib-resizing';
 
 export type LayoutSchema = Record<string, ComRef>;
 
@@ -17,6 +25,48 @@ export type LayoutProps = CommonProps &
     itemStyle?: Vars;
   };
 
+//
+// Grid Layout
+//
+export type LayoutGridItem = LayoutItem & {
+  adjustBars: LayoutBar[];
+};
+export type LayoutGridState = LayoutState & GridResizingState;
+export type LayoutGridProps = LayoutProps &
+  LayoutGridKeepProps &
+  LayoutPanelProps & {
+    layout?: CssGridLayout;
+  };
+
+//
+// Layout Panel
+//
+export type LayoutPanel = LayoutBlock & PopItemProps;
+
+export type LayoutPanelItem = LayoutItem & {
+  position: PopPosition;
+  showMask?: boolean;
+  clickMaskToClose?: boolean;
+  /**
+   * 得到过渡动画相关
+   */
+  tranSpeed?: TranSpeed;
+  tranName: TranName;
+  /**
+   * 计算出来的，当前段面板是否是隐藏
+   */
+  hidden: boolean;
+  visible: boolean;
+};
+
+export type LayoutPanelProps = {
+  panels?: LayoutPanel[];
+  panelStyle?: Vars;
+};
+
+//
+// Tab Layout
+//
 export type TabsProps = {
   /**
    * @default `top`

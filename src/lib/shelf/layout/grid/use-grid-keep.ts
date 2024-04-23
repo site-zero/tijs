@@ -1,20 +1,13 @@
 import _ from 'lodash';
-import { KeepFeature, KeepInfo, useKeep } from '../../../';
+import {
+  GridResizingState,
+  LayoutGridKeepFeature,
+  LayoutGridKeepProps,
+  LayoutGridProps,
+  LayoutGridState,
+  useKeep,
+} from '../../../';
 import { Vars } from '../../../../core';
-import { LayoutGridProps, LayoutGridState } from './grid.types';
-import { GridResizingState } from './use-grid-resizing';
-
-export type LayoutGridKeepProps = {
-  keepShown?: KeepInfo;
-  keepSizes?: KeepInfo;
-  shown?: Vars;
-  sizes?: GridResizingState;
-};
-
-export type LayoutGridKeepFeature = {
-  KeepShown: KeepFeature;
-  KeepSizes: KeepFeature;
-};
 
 export function useKeepLayoutGrid(
   props: LayoutGridProps

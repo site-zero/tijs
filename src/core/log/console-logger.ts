@@ -30,7 +30,7 @@ export class ConsoleLogger implements Logger {
     if (this._allow_lv >= reqLvl) {
       let lvName = ['ERROR', 'WARN', 'INFO', 'DEBUG', 'TRACE'][reqLvl];
       let caller = getCallerInfo();
-      let prefix = `[${lvName}]`;
+      let prefix = `[${lvName}]${this._name}:`;
       let callAt = caller.fileName || this._name;
       // let an = document.createElement('a') as HTMLAnchorElement
       // an.setAttribute('href',source||'#')
