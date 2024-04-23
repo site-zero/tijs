@@ -1,8 +1,8 @@
 <script lang="ts" setup>
   import _ from 'lodash';
-import { computed } from 'vue';
-import { SideBarItem } from '../..';
-import TiSidebarItem from './TiSidebarItem.vue';
+  import { computed } from 'vue';
+  import { SideBarItem } from '../..';
+  import TiSidebarItem from './TiSidebarItem.vue';
 
   let emit = defineEmits<(event: 'fire', payload: SideBarItem) => void>();
 
@@ -14,7 +14,7 @@ import TiSidebarItem from './TiSidebarItem.vue';
     }>(),
     {
       useCapture: false,
-      openNewTab: true,
+      openNewTab: false,
     }
   );
 

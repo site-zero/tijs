@@ -1,0 +1,50 @@
+dl.sidebar-item {
+  margin: 0;
+  &.at-top {
+    margin-block-start: SZ(6);
+    margin-block-end: 1.2em;
+  }
+}
+
+dl.sidebar-item dt {
+  @include flex-align-nowrap;
+  padding: var(--ti-measure-box-pad);
+  cursor: pointer;
+  > .as-indent-block {
+    &::before {
+      display: inline;
+      content: '';
+    }
+    min-width: SZ(16);
+  }
+  > .ti-icon {
+    min-width: 24px;
+    font-size: 16px;
+  }
+  > .as-title {
+    padding: 0 SZ(6);
+    white-space: nowrap;
+  }
+  &.at-top {
+    border-bottom: 1px solid var(--ti-color-border-shallow);
+    > .as-title {
+      font-weight: bold;
+    }
+  }
+  &.at-sub {
+    > .ti-icon {
+      font-size: 0.9em;
+    }
+    > .as-title {
+      font-size: 0.8em;
+    }
+  }
+  &:hover {
+    background-color: var(--ti-color-hightlight);
+    color: var(--ti-color-hightlight-f);
+  }
+}
+
+dl.sidebar-item dd {
+  margin: 0;
+}

@@ -37,10 +37,10 @@ export function getCallerInfo(callerAt = 4): CallerInfo {
       const stackLines = err.stack.split('\n');
       if (stackLines[callerAt]) {
         let stackLine = stackLines[callerAt];
-        let m = /^\s*at\s+([^()]+)\s+\((.+)\)$/.exec(stackLine);
+        let m = /^\s*at\s+(([^()]+)\s+)?(\((.+)\)|(.+))$/.exec(stackLine);
         if (m) {
-          info.methodName = _.trim(m[1]);
-          info.source = _.trim(m[2]);
+          info.methodName = _.trim(m[2]);
+          info.source = _.trim(m[4] || m[5]);
           let ss = info.source.split(/\/+/g);
           let str = ss[ss.length - 1];
           let flds = str.split(/[?:]+/g);
