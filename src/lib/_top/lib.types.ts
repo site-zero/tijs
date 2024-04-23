@@ -342,6 +342,15 @@ export type Pager = {
   skip?: number; //"skip",
   limit?: number; //"limit"
 };
+
+export type SqlPager = {
+  pageNumber: number;
+  pageSize: number;
+  pageCount: number;
+  totalCount: number;
+};
+
+export type SqlResult = Record<string, any>;
 /*---------------------------------------------------
 
                       逻辑类型
