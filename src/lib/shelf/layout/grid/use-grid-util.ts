@@ -1,10 +1,9 @@
 import _ from 'lodash';
+import { GridResizingState, LayoutGridProps } from '../../..';
 import { CssUtils } from '../../../../core';
-import { LayoutGridProps } from './grid.types';
-import { GridResizingState } from './use-grid-resizing';
 
 export function getTopStyle(state: GridResizingState, props: LayoutGridProps) {
-  let css = CssUtils.mergeStyles(props.layout || {});
+  let css = CssUtils.mergeStyles([props.gridStyle || {}, props.layout || {}]);
   if (!_.isEmpty(state.rows)) {
     css.gridTemplateRows = state.rows.join(' ');
   }

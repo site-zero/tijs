@@ -1,6 +1,4 @@
-import { LayoutBlock } from '../../';
-import { LayoutGridProps } from '../layout/grid/grid.types';
-import { LayoutPanel } from '../layout/layout-panel';
+import { LayoutBlock, LayoutGridProps, LayoutPanel } from '../../';
 import { PlayLayoutMode } from './use-play-mode';
 
 export function useGridLayout(mode: PlayLayoutMode): LayoutGridProps {

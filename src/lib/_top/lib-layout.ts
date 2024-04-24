@@ -36,6 +36,7 @@ export type LayoutGridProps = LayoutProps &
   LayoutGridKeepProps &
   LayoutPanelProps & {
     layout?: CssGridLayout;
+    gridStyle?: Vars;
   };
 
 //

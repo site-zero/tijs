@@ -200,7 +200,6 @@
 </template>
 <style lang="scss" scoped>
   @use '../../../../assets/style/_all.scss' as *;
-  @import './ti-layout-grid';
+  @import 'style/ti-layout-grid';
   @import '../layout-panel';
-  @import './style/_grid-adjust-bar';
 </style>

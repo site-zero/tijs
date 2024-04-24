@@ -1,7 +1,6 @@
 import _ from 'lodash';
-import { LayoutState } from '../../../';
+import { LayoutGridItem, LayoutState } from '../../../';
 import { LayoutItemsInput, getLayoutItem } from '../layout-support';
-import { LayoutGridItem } from './grid.types';
 
 export function getLayoutGridItems(
   state: LayoutState,
