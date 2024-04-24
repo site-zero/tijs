@@ -57,17 +57,27 @@ export type KeepFeature = {
   load: (dft?: string) => string | null;
   loadObj: (dft?: Vars) => Vars | null;
   loadArray: (dft?: any[]) => any[] | null;
+  reset: () => void;
 };
 export function useKeep(info: KeepInfo): KeepFeature {
+  //------------------------------------------------
   let props = parseInfo(info);
   let keep = TiStore[props.keepMode ?? 'session'];
   let keepAt = props.keepAt;
-  const load = function (dft?: string) {
+  //------------------------------------------------
+  function load(dft?: string) {
     if (!keepAt) {
       return null;
     }
     return keep.getString(keepAt, dft) || null;
-  };
+  }
+  //------------------------------------------------
+  function reset() {
+    if (keepAt) {
+      keep.remove(keepAt);
+    }
+  }
+  //------------------------------------------------
   return {
     _store_key: keepAt,
     _enabled: !_.isEmpty(keepAt),
@@ -98,5 +108,6 @@ export function useKeep(info: KeepInfo): KeepFeature {
       }
       return JSON5.parse(json) as any[];
     },
+    reset,
   };
 }

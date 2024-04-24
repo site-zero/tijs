@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed, inject, onMounted, provide, reactive, ref } from 'vue';
-  import { BUS_KEY, TiEvent, useBusEmit } from '../../';
+  import { BUS_KEY, TiEvent, useBusEmit, ActionBarProps } from '../../';
   import { Callback, CssUtils, Util } from '../../../core';
   import BarItemChildren from './BarItemChildren.vue';
   import {
@@ -11,7 +11,7 @@
     COM_TYPE,
   } from './action-bar-type';
   import { TiActionBarInfo } from './ti-action-bar-index';
-  import { ActionBarProps, useActionBar } from './use-action-bar';
+  import { useActionBar } from './use-action-bar';
   /*-------------------------------------------------------
 
                    Com Options
@@ -62,7 +62,7 @@
           },
         }) as Callback;
       },
-    }),
+    })
   );
 
   // 注册一个总线，给所有的子元素用来控制显示隐藏
@@ -89,7 +89,7 @@
   const TopClass = computed(() =>
     CssUtils.mergeClassName(props.className, {
       'show-click-mask': Bar.value.hasOpenedGroup,
-    }),
+    })
   );
   /*-------------------------------------------------------
 
@@ -113,7 +113,7 @@
     },
     setBarOpenState(
       uniqKey: string | string[],
-      status: BarItemOpenStatus | null,
+      status: BarItemOpenStatus | null
     ) {
       let uniqKeys = _.concat(uniqKey);
       if (!status) {
@@ -162,7 +162,10 @@
   });
 </script>
 <template>
-  <div class="ti-actionbar" :class="TopClass" ref="$root">
+  <div
+    class="ti-actionbar"
+    :class="TopClass"
+    ref="$root">
     <div
       class="bar-mask"
       v-if="Bar.hasOpenedGroup"

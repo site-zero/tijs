@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { DefineComponent, InjectionKey, Plugin } from 'vue';
+import { CommonProps, VisibilityProps } from '..';
 import {
   Callback,
   Callback2,
@@ -316,11 +317,12 @@ export type AltBarItemisplay<T> = BarItemDisplay & {
 
 export type BarItemAction = Callback | EventInfo<any> | Invoke | string;
 
-export type ActionBarItem = Optional<BarItem, 'type'> & {
-  altDisplay?: AltBarItemisplay<any> | AltBarItemisplay<any>[];
-  items?: ActionBarItem[];
-  action?: BarItemAction;
-};
+export type ActionBarItem = Optional<BarItem, 'type'> &
+  VisibilityProps & {
+    altDisplay?: AltBarItemisplay<any> | AltBarItemisplay<any>[];
+    items?: ActionBarItem[];
+    action?: BarItemAction;
+  };
 /*---------------------------------------------------
 
                       Pager
@@ -369,4 +371,10 @@ export type HtmlSnippetListenner = {
   handler?: (evt: Event, emit: Callback2<string, any>) => void;
   // 如何初始化
   setup?: (el: HTMLElement) => void;
+};
+
+export type ActionBarProps = CommonProps & {
+  // 指明一个名称，可以方便调试的时候区分各个菜单
+  name?: string;
+  items: ActionBarItem[];
 };

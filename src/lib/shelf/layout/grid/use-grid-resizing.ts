@@ -11,6 +11,7 @@ import { CssUtils, Dom, NameStrValue, Num, Str } from '../../../../core';
 import { keepSizesState } from './use-grid-keep';
 
 type ResizeMeasure = {
+  tracks: string[];
   template: number[];
   gap: number;
   pad0: number;
@@ -60,17 +61,29 @@ function getLayouBar($bar: HTMLElement): LayoutBar {
 
 function getGridMeasure(bar: LayoutBar, $grid: HTMLElement): ResizeMeasure {
   let toPixel = CssUtils.toPixel;
-  let tmp = Dom.getComputedStyle($grid, `grid-template-${bar.mode}s`);
+  // 根据 mode 得出属性键 gridTemplateColumns | gridTemplateRows
+  let styleKey = _.camelCase(`grid-template-${bar.mode}s`);
+  // 经过计算后的轨道尺寸
+  let tmp = Dom.getComputedStyle($grid, styleKey);
+  // 轨道间距
   let gap = Dom.getComputedStyle($grid, `${bar.mode}-gap`);
+  // 真正在 CSS 里的轨道定义
+  let trk = _.get($grid.style, styleKey);
+
+  // 布局块的边距：开始边距
   let pad0 = Dom.getComputedStyle(
     $grid,
     bar.mode == 'row' ? 'padding-top' : 'padding-left'
   );
+  // 布局块的边距：结束边距
   let pad1 = Dom.getComputedStyle(
     $grid,
     bar.mode == 'row' ? 'padding-bottom' : 'padding-right'
   );
+
+  // 返回手机的尺寸信息
   return {
+    tracks: Str.splitIgnoreBlank(trk, /\s+/g),
     template: _.map(Str.splitIgnoreBlank(tmp, /\s+/), (v) =>
       toPixel(v)
     ) as number[],
@@ -116,9 +129,13 @@ const Moving = {
       let ta = scope[1] - scope[0] - gap - my;
       my = Num.round(my, 100);
       ta = Num.round(ta, 100);
+      //let old = resizing.rows.join(',');
       resizing.rows[myIndex] = `${my}px`;
       resizing.rows[taIndex] = `${ta}px`;
-      //console.log(`bar_row_prev my=${my} + ta=${ta}  == ${my + ta}`);
+      // let rel = resizing.rows.join(',');
+      // console.log(
+      //   `bar_row_prev my(${my})+ta(${ta})==${my + ta} : [${old}]=>[${rel}]`
+      // );
     };
   },
   bar_row_next(resizing: GridResizingState, mea: ResizeMeasure, ing: Dragging) {
@@ -170,14 +187,25 @@ const Moving = {
   },
 };
 
-function toPercent(ns: number[], gap: number) {
+function toPercent(ns: number[], gap: number, tracks: string[]) {
   let tota = _.sum(ns) + Math.max(0, ns.length - 1) * gap;
   let re = [];
   for (let i = 0; i < ns.length; i++) {
+    // 对于 auto/1fr 等，采用原来的值
+    let track = tracks[i];
+    if (/^(auto|\d+fr)$/.test(track)) {
+      re.push(track);
+      continue;
+    }
+    // 绝对像素的，就采用像素
+    if (/(px|rem|em)$/.test(track)) {
+      re.push(`${ns[i]}px`);
+      continue;
+    }
+    // 默认转化为百分比
     let per = Str.toPercent(ns[i] / tota);
     re.push(per);
   }
-  re[re.length - 1] = '1fr';
   return re;
 }
 
@@ -185,13 +213,13 @@ const MoveEnd = {
   column: function (resizing: GridResizingState, mea: ResizeMeasure) {
     return () => {
       let ns = _.map(resizing.columns, (s) => CssUtils.toPixel(s));
-      resizing.columns = toPercent(ns, mea.gap);
+      resizing.columns = toPercent(ns, mea.gap, mea.tracks);
     };
   },
   row: function (resizing: GridResizingState, mea: ResizeMeasure) {
     return () => {
       let ns = _.map(resizing.rows, (s) => CssUtils.toPixel(s));
-      resizing.rows = toPercent(ns, mea.gap);
+      resizing.rows = toPercent(ns, mea.gap, mea.tracks);
     };
   },
 };
@@ -228,6 +256,7 @@ export function useGridResizing(
       // 获取整个格子的布局
       // 因为采用了计算属性，所以直接获得就是 '300.578px 541.047px' 这样的数组
       let mea = getGridMeasure(bar, $view);
+      //console.log('mea', mea);
       mea.myIndex = bar.adjustIndex;
 
       // 我需要知道调整哪两个列
@@ -236,7 +265,16 @@ export function useGridResizing(
         next: () => bar.adjustIndex + 1,
       }[bar.position]();
 
+      // 确保拖动的时候不会超过这个区域
       setMeasureScope(mea);
+
+      // 设置初始化尺寸
+      let initSizing = _.map(mea.template, (v) => `${v}px`);
+      if ('row' == bar.mode) {
+        resizing.rows = initSizing;
+      } else {
+        resizing.columns = initSizing;
+      }
 
       // 记录
       ing.setVar(

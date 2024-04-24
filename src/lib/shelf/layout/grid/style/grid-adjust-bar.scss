@@ -5,12 +5,16 @@
   background-color: var(--ti-color-mask-weak);
   opacity: 0;
   transition: opacity 500ms;
-  z-index: 1;
-  
+  z-index: $z-over + $z-above;
+
+  $BARSZ: 5px;
+
   &::before {
     display: block;
     content: "";
-    background-color: var(--ti-color-mask-thin);
+    overflow: hidden;
+    opacity: 0.4;
+    //background-color: var(--ti-color-mask-thin);
   }
   &:hover {
     opacity: 1;
@@ -18,33 +22,35 @@
   &[bar-mode="column"] {
     top: 0;
     bottom: 0;
-    width: 8px;
+    width: $BARSZ * 2;
     cursor: ew-resize;
     &::before {
       height: 100%;
-      width: 1px;
+      width: 0px;
+      border-left: 2px dashed var(--ti-color-primary);
     }
     &[bar-position="prev"] {
-      left: -4px;
+      left: $BARSZ * -1;
     }
     &[bar-position="next"] {
-      right: -4px;
+      right: $BARSZ * -1;
     }
   }
   &[bar-mode="row"] {
     left: 0;
     right: 0;
-    height: 8px;
+    height: $BARSZ * 2;
     cursor: ns-resize;
     &::before {
       width: 100%;
-      height: 1px;
+      height: 0px;
+      border-bottom: 2px dashed var(--ti-color-primary);
     }
     &[bar-position="prev"] {
-      top: -4px;
+      top: $BARSZ * -1;
     }
     &[bar-position="next"] {
-      bottom: -4px;
+      bottom: $BARSZ * -1;
     }
   }
 }

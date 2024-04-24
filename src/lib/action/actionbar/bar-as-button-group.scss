@@ -3,12 +3,12 @@
   > .bar-item[item-depth="0"] {
     margin: 0 0.2em;
     > .bar-item-head {
-      padding: 0.3em 0;
-      min-width: 6em;
+      padding: 0.3em .6em;
+      min-width: 4em;
       @include flex-center($wp: nowrap);
       .item-icon {
         width: auto;
-        margin-right:.2em;
+        margin-right:.37em;
       }
       .item-text {
         padding: 0;

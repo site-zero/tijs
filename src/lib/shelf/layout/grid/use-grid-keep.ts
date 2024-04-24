@@ -84,3 +84,20 @@ export function keepSizesState(
     Keep.KeepSizes.save(sizes);
   }
 }
+
+export function resetSizeState(
+  state: GridResizingState,
+  Keep: LayoutGridKeepFeature
+) {
+  state.columns = [];
+  state.rows = [];
+  Keep.KeepSizes.reset();
+}
+
+export function resetShownState(
+  state: LayoutGridState,
+  Keep: LayoutGridKeepFeature
+) {
+  state.shown = {};
+  Keep.KeepShown.reset();
+}

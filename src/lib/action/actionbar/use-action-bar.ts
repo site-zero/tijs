@@ -1,4 +1,7 @@
-import { ActionBarItem, CommonProps, TiEventTrigger } from '../../';
+import {
+  ActionBarProps,
+  TiEventTrigger
+} from '../../';
 import { Callback } from '../../../core';
 import { buildBarViewItems, buildItemsAncestors } from './action-bar-item';
 import { BarState } from './action-bar-type';
@@ -8,12 +11,6 @@ import { BarState } from './action-bar-type';
                    Props
                 
 -----------------------------------------------------*/
-export type ActionBarProps = CommonProps & {
-  // 指明一个名称，可以方便调试的时候区分各个菜单
-  name?: string;
-  items: ActionBarItem[];
-};
-
 export type ActionBarOptions = {
   getRootElement: () => HTMLElement | undefined;
   notify: TiEventTrigger<string, any>;

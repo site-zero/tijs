@@ -2,6 +2,7 @@
   import _ from 'lodash';
   import { Ref, computed, onMounted, reactive, ref, watch } from 'vue';
   import {
+    LayoutBar,
     LayoutGridProps,
     LayoutGridState,
     LayoutPanelItem,
@@ -9,7 +10,11 @@
     TiLayoutTabs,
   } from '../../../';
   import { CssUtils, Vars } from '../../../../core';
-  import { loadAllState, useKeepLayoutGrid } from '../grid/use-grid-keep';
+  import {
+    loadAllState,
+    resetSizeState,
+    useKeepLayoutGrid,
+  } from '../grid/use-grid-keep';
   import { useGridResizing } from '../grid/use-grid-resizing.ts';
   import { getLayoutPanelItems } from '../layout-panel';
   import { COM_TYPE } from './grid.types.ts';
@@ -53,6 +58,10 @@
       emit('hide', pan.uniqKey);
     }
   }
+  function onDblClickAdjustBar(_bar: LayoutBar) {
+    resetSizeState(state, Keep.value);
+  }
+
   //
   // Life Hooks
   //
@@ -139,7 +148,9 @@
           class="adjust-bar"
           :bar-mode="bar.mode"
           :bar-adjust-index="bar.adjustIndex"
-          :bar-position="bar.position"></div>
+          :bar-position="bar.position"
+          @dblclick="onDblClickAdjustBar(bar)"
+          @click="console.log('click bar', bar)"></div>
       </template>
     </div>
     <!-- 

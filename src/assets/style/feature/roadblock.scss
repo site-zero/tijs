@@ -59,7 +59,7 @@
   /---------------------------------------*/
   &.mode-cover {
     @include pos-abs-full;
-    z-index: $z-mask;
+    z-index: $z-cover;
   }
   &.mode-fit {
     width: 100%;
