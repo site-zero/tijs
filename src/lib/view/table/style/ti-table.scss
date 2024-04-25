@@ -31,52 +31,5 @@
     > .virtual-row {
       background-color: var(--ti-color-card);
     }
-
-    > .table-row-marker {
-      @include flex-align-nowrap($ai: stretch);
-      border-right: 1px solid var(--ti-color-card);
-      color: var(--ti-color-track);
-      background-color: var(--ti-color-bar);
-      position: sticky;
-      left: 0;
-      z-index: $z-above;
-      user-select: none;
-      cursor: pointer;
-      //.................................................
-      > .as-checker {
-        @include flex-align-nowrap($jc: right);
-        font-size: SZ(12);
-        padding: 0 SZ(2) 0;
-        margin-left: SZ(6);
-        > i {
-          transition: transform 300ms;
-        }
-        &:hover {
-          > i {
-            transform: scale(1.5);
-            color: var(--ti-color-secondary);
-          }
-        }
-      }
-      //.................................................
-      > .as-actived {
-        @include flex-align-nowrap($jc: center, $ai: center);
-        width: SZ(16);
-      }
-      //.................................................
-      > .as-row-index {
-        @include flex-align-nowrap($jc: center, $ai: center);
-        @include font-fixed($sz: 0.6em);
-        flex: 1 1 auto;
-        width: 10px;
-        text-align: right;
-      }
-      //.................................................
-      &.is-checked {
-        color: var(--ti-color-selected-f);
-        background-color: var(--ti-color-selected);
-      }
-      //.................................................
-    } // > .table-row-marker
   } // ~ main
 }

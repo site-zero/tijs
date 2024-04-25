@@ -10,10 +10,9 @@
     watch,
   } from 'vue';
   import { TableProps, TiIcon, useLargeScrolling } from '../../';
-  import { CssUtils, Size2D, Util, getLogger } from '../../../core';
+  import { Alert, CssUtils, Size2D, Util, getLogger } from '../../../core';
   import TableRow from './row/TableRow.vue';
-  import { COM_TYPE } from './table-types';
-  import { ColResizingState, TableEmit, useTable } from './use-table';
+  import { COM_TYPE, ColResizingState, TableEmit, useTable } from './use-table';
   import { TableScrolling, getTableDebugInfo } from './use-table-debug-info';
   import { loadColumnSizes, useKeepTable } from './use-table-keep';
   import { useViewMeasure } from './use-view-measure';
@@ -25,18 +24,18 @@
   const showDebug = showDebugScrolling || showDebugResizing;
   /*-------------------------------------------------------
 
-                     Com Options
+                       Com Options
 
--------------------------------------------------------*/
+  -------------------------------------------------------*/
   defineOptions({
     name: 'TiTable',
     inheritAttrs: true,
   });
   /*-------------------------------------------------------
 
-                        Props
+                          Props
 
--------------------------------------------------------*/
+  -------------------------------------------------------*/
   let props = withDefaults(defineProps<TableProps>(), {
     getId: 'id',
     showHeader: true,
@@ -55,9 +54,9 @@
   let Table = computed(() => useTable(props, emit));
   /*-------------------------------------------------------
 
-                      State
+                        State
 
--------------------------------------------------------*/
+  -------------------------------------------------------*/
   const $main: Ref<HTMLElement> = ref() as Ref<HTMLElement>;
 
   // 如果采用 IntersectionObserver 就没必要监控 scrolling 的变化了
@@ -84,9 +83,9 @@
   } as ColResizingState);
   /*-------------------------------------------------------
 
-                    Features
+                      Features
 
--------------------------------------------------------*/
+  -------------------------------------------------------*/
   const Keep = computed(() => useKeepTable(props));
   //......................................................
   //                   View Measure
@@ -105,9 +104,9 @@
   });
   /*-------------------------------------------------------
 
-                    Computed
+                      Computed
 
--------------------------------------------------------*/
+  -------------------------------------------------------*/
   const isInRenderZone = computed(() => useLargeScrolling(scrolling));
   const TopClass = computed(() => CssUtils.mergeClassName(props.className));
   const TableColumns = computed(() => Table.value.getTableColumns());
@@ -195,11 +194,28 @@
     }
     scrolling.lineHeights[rowIndex] = height + props.rowGap;
   }
+
+  function onClickSettings() {
+    Alert(
+      `设置包括：
+       - 表格列布局(显示隐藏哪些列，以及列的顺序)，
+       - 如何与其他用户分享设置
+      同时我还没想好这个设置按钮放在哪里比较好，放在这里好像有点丑
+      我可以有下面的选择:
+       A. 放到最右侧
+       B. 不放按钮，右键点击标题栏在菜单中体现
+       C. 鼠标移动到标题第一栏，显示设置按钮`,
+      {
+        bodyIcon: 'far-lightbulb',
+        clickMaskToClose: true,
+      }
+    );
+  }
   /*-------------------------------------------------------
 
-                  Life Hooks
+                    Life Hooks
 
--------------------------------------------------------*/
+  -------------------------------------------------------*/
   watch(
     () => props.data,
     () => {
@@ -263,7 +279,9 @@
             @click="Table.OnTableHeadCheckerClick(selection, RowCheckStatus)">
             <TiIcon :value="RowCheckStatusIcon" />
           </div>
-          <div class="as-settings">
+          <div
+            class="as-settings"
+            @click="onClickSettings">
             <TiIcon :value="'fas-bars'" />
           </div>
         </div>

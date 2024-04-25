@@ -2,6 +2,8 @@ import _ from 'lodash';
 import { Ref } from 'vue';
 import {
   TableCell,
+  TableColumn,
+  TableEvent,
   TableProps,
   TableRowData,
   TableRowID,
@@ -16,7 +18,6 @@ import {
   Vars,
   getLogger,
 } from '../../../core';
-import { TableRowEvent } from './table-types';
 import {
   CheckStatus,
   SelectableFeature,
@@ -27,6 +28,7 @@ import {
 import { TableKeepFeature } from './use-table-keep';
 import { useTableResizing } from './use-table-resizing';
 
+export const COM_TYPE = 'TiTable';
 const log = getLogger('TiTable.use-table');
 /**
  * 拖动时的状态
@@ -50,7 +52,7 @@ export type ColResizingState = {
 export type TableEmit = {
   (eventName: 'select', payload: SelectionEmitInfo<TableRowID>): void;
   (eventName: 'open', payload: TableRowData): void;
-  (eventName: 'open:cell', payload: TableRowEvent): void;
+  (eventName: 'open:cell', payload: TableEvent): void;
 };
 
 /*-------------------------------------------------------
@@ -59,15 +61,18 @@ export type TableEmit = {
 
 -------------------------------------------------------*/
 function _get_table_columns(props: TableProps) {
-  let list = [] as TableCell[];
+  let list = [] as TableColumn[];
   for (let col of props.columns) {
+    if (col.candidate) {
+      continue;
+    }
     // 列唯一键
     let uniqKey = col.uniqKey || getFieldUniqKey(col.name);
     let colItem = { uniqKey, ...col } as TableCell;
 
     // 列标题
     if (!col.title) {
-      colItem.title = _.upperFirst(uniqKey);
+      colItem.title = _.upperCase(uniqKey);
     } else {
       colItem.title = I18n.text(col.title);
     }
@@ -125,7 +130,7 @@ function _get_table_data(
 function _on_row_select(
   selectable: SelectableFeature<TableRowID>,
   selection: SelectableState<TableRowID>,
-  rowEvent: TableRowEvent
+  rowEvent: TableEvent
 ) {
   let { event, row } = rowEvent;
   let se = EventUtils.getKeyboardStatus(event);
@@ -245,10 +250,11 @@ export function useTable(props: TableProps, emit: TableEmit) {
       }
     },
 
-    OnRowSelect(
-      selection: SelectableState<TableRowID>,
-      rowEvent: TableRowEvent
-    ) {
+    OnRowSelect(selection: SelectableState<TableRowID>, rowEvent: TableEvent) {
+      // Guard actived
+      if (rowEvent.row.activated) {
+        return;
+      }
       log.debug('OnRowSelect', rowEvent);
       let oldCurrentId = _.cloneDeep(selection.currentId);
       let oldCheckedIds = _.cloneDeep(selection.checkedIds);
@@ -262,10 +268,7 @@ export function useTable(props: TableProps, emit: TableEmit) {
       emit('select', emitInfo);
     },
 
-    OnRowCheck(
-      selection: SelectableState<TableRowID>,
-      rowEvent: TableRowEvent
-    ) {
+    OnRowCheck(selection: SelectableState<TableRowID>, rowEvent: TableEvent) {
       log.debug('OnRowCheck', rowEvent);
       let oldCurrentId = _.cloneDeep(selection.currentId);
       let oldCheckedIds = _.cloneDeep(selection.checkedIds);
@@ -279,10 +282,7 @@ export function useTable(props: TableProps, emit: TableEmit) {
       emit('select', emitInfo);
     },
 
-    OnCellSelect(
-      selection: SelectableState<TableRowID>,
-      rowEvent: TableRowEvent
-    ) {
+    OnCellSelect(selection: SelectableState<TableRowID>, rowEvent: TableEvent) {
       let { row } = rowEvent;
       if (!selection.checkedIds.get(row.id)) {
         let oldCurrentId = _.cloneDeep(selection.currentId);
@@ -299,18 +299,12 @@ export function useTable(props: TableProps, emit: TableEmit) {
       }
     },
 
-    OnRowOpen(
-      _selection: SelectableState<TableRowID>,
-      rowEvent: TableRowEvent
-    ) {
+    OnRowOpen(_selection: SelectableState<TableRowID>, rowEvent: TableEvent) {
       log.debug('OnRowOpen', rowEvent);
       emit('open', rowEvent.row);
     },
 
-    OnCellOpen(
-      _selection: SelectableState<TableRowID>,
-      rowEvent: TableRowEvent
-    ) {
+    OnCellOpen(_selection: SelectableState<TableRowID>, rowEvent: TableEvent) {
       log.debug('OnCellOpen', rowEvent);
       emit('open:cell', rowEvent);
     },

@@ -13,7 +13,10 @@ export type AlertOptions = PopItemProps & {
   contentType?: 'text' | 'html';
 };
 
-export async function Alert(msg: string, options: AlertOptions): Promise<void> {
+export async function Alert(
+  msg: string,
+  options: AlertOptions = {}
+): Promise<void> {
   // Build html
   let html = __get_msg_box_html(
     msg,

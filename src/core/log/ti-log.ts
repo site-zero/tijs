@@ -38,6 +38,7 @@ export function getCallerInfo(callerAt = 4): CallerInfo {
       if (stackLines[callerAt]) {
         let stackLine = stackLines[callerAt];
         let m = /^\s*at\s+(([^()]+)\s+)?(\((.+)\)|(.+))$/.exec(stackLine);
+        //console.error("+++", stackLine)
         if (m) {
           info.methodName = _.trim(m[2]);
           info.source = _.trim(m[4] || m[5]);

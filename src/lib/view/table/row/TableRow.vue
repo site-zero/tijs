@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-  import { CssUtils } from '../../../../core';
-  import { TiCell } from '../../../';
   import _ from 'lodash';
   import { Ref, computed, onMounted, ref } from 'vue';
-  import { TableRowEvent, TableRowEventName } from '../table-types';
+  import { TableEvent, TableEventName, TiCell } from '../../../';
+  import { CssUtils } from '../../../../core';
   import { TableRowProps } from './use-table-row';
   /*-------------------------------------------------------
 
@@ -35,7 +34,7 @@
 
 -------------------------------------------------------*/
   let emit = defineEmits<{
-    (event: TableRowEventName, payload: TableRowEvent): void;
+    (event: TableEventName, payload: TableEvent): void;
   }>();
   /*-------------------------------------------------------
 
@@ -49,7 +48,7 @@
       'is-actived': props.activated,
       'is-checked': props.checked,
       'can-hover': props.canHover,
-    }),
+    })
   );
   const RowIndentStyle = computed(() => {
     if (props.indent && props.indent > 0) {
@@ -89,29 +88,39 @@
     :class="RowCellClass"
     :row-id="props.row.id"
     :row-index="props.row.index"
-    @click="emit('select', { row: props.row, event: $event })">
+    @click="emit('select', { row: props.row, event: $event })"
+    @dblclick="emit('open', { row: props.row, event: $event })">
     <!--选择框-->
     <template v-if="props.showCheckbox">
       <span
         class="as-checker"
         @click.stop="emit('check', { row: props.row, event: $event })">
-        <i v-if="props.checked" class="zmdi zmdi-check-square"></i>
-        <i v-else class="zmdi zmdi-square-o"></i>
+        <i
+          v-if="props.checked"
+          class="zmdi zmdi-check-square"></i>
+        <i
+          v-else
+          class="zmdi zmdi-square-o"></i>
       </span>
     </template>
     <!--行号-->
-    <span v-if="props.showRowIndex" class="as-row-index">{{
-      props.row.index + 1
-    }}</span>
+    <span
+      v-if="props.showRowIndex"
+      class="as-row-index"
+      >{{ props.row.index + 1 }}</span
+    >
     <!--Activated 指示器-->
     <span
-      class="as-actived"
-      @click="emit('open', { row: props.row, event: $event })"
-      ><i v-if="props.activated" class="zmdi zmdi-caret-right"></i
+      v-if="props.activated"
+      class="as-active-indicator"
+      @click.stop="emit('open', { row: props.row, event: $event })"
+      ><i class="zmdi zmdi-caret-right"></i><i class="zmdi zmdi-open-in-new"></i
     ></span>
   </div>
   <!--正式列单元格-->
-  <template v-for="(cell, i) in props.columns" :key="cell.uniqKey">
+  <template
+    v-for="(cell, i) in props.columns"
+    :key="cell.uniqKey">
     <div
       class="table-cell as-body"
       :row-id="props.row.id"
@@ -140,5 +149,6 @@
   </template>
 </template>
 <style lang="scss">
+  @use '../../../../assets/style/_all.scss' as *;
   @import './table-row.scss';
 </style>

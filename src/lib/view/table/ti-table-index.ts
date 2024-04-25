@@ -4,7 +4,7 @@ import TiTable from './TiTable.vue';
 //const TiTable = defineAsyncComponent(() => import('./TiTable.vue'));
 import { d10k, d1k, d300, simple } from './example';
 import i18n from './i18n';
-import { COM_TYPE } from './table-types';
+import { COM_TYPE } from './use-table';
 
 const TiTableInfo: TiComInfo = {
   icon: 'fas-table-cells',

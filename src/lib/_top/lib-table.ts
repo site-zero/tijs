@@ -17,14 +17,9 @@ export type TableRowData = {
  * - `open`  : 点击行动态打开图标
  * - `cell`  : 点击行单元格
  */
-export type TableRowEventName =
-  | 'select'
-  | 'check'
-  | 'open'
-  | 'cell'
-  | 'cell-open';
+export type TableEventName = 'select' | 'check' | 'open' | 'cell' | 'cell-open';
 
-export type TableRowEvent = {
+export type TableEvent = {
   colIndex?: number;
   event: Event;
   row: TableRowData;
@@ -34,8 +29,12 @@ export type TableKeepProps = {
   keepColumns?: KeepInfo;
 };
 
+export type TableColumn = TableCell & {
+  candidate?: boolean;
+};
+
 export type TableBehaviorsProps = {
-  columns: TableCell[];
+  columns: TableColumn[];
   /**
    * 传入的上下文变量字段
    */

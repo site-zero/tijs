@@ -31,19 +31,34 @@ export class ConsoleLogger implements Logger {
       let lvName = ['ERROR', 'WARN', 'INFO', 'DEBUG', 'TRACE'][reqLvl];
       let caller = getCallerInfo();
       let prefix = `[${lvName}]${this._name}:`;
-      let callAt = caller.fileName || this._name;
+      let callAts = [caller.fileName || this._name];
+      if (caller.line >= 0) {
+        callAts.push(`#${caller.line}`);
+      }
+      if (caller.methodName) {
+        if (/^Object\./.test(caller.methodName)) {
+          callAts.push(caller.methodName.substring(7));
+        } else {
+          callAts.push(caller.methodName);
+        }
+      }
+      let callAt = callAts.join(':');
       // let an = document.createElement('a') as HTMLAnchorElement
       // an.setAttribute('href',source||'#')
       // an.textContent = `${fileName}:${line}`
 
       // console.log(`${fileName}:${line}: ${source}`);
       if (reqLvl == LogLevel.ERROR) {
+        console.error(`>>>`, caller.source);
         console.error(prefix, callAt, ':', ...msg);
       } else if (reqLvl == LogLevel.WARN) {
+        console.warn(`>>>`, caller.source);
         console.warn(prefix, callAt, ':', ...msg);
       } else if (reqLvl == LogLevel.INFO) {
+        console.info(`>>>`, caller.source);
         console.info(prefix, callAt, ':', ...msg);
       } else {
+        console.log(`>>>`, caller.source);
         console.log(prefix, callAt, ':', ...msg);
       }
     }
