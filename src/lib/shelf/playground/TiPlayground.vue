@@ -7,7 +7,7 @@
   import PlayConf from './PlayConf.vue';
   import PlayLive from './PlayLive.vue';
   import PlayTabs from './PlayTabs.vue';
-  import { useGridLayout } from './use-play-layout';
+  import { usePlaygroundLayout } from './use-play-layout';
   import {
     LiveBgMode,
     PlayLayoutMode,
@@ -61,7 +61,7 @@
     return !_.isEqual(_example.value.comConf, dftComConf);
   });
 
-  const Grid = computed(() => useGridLayout(_play_layout_mode.value));
+  const Grid = computed(() => usePlaygroundLayout(_play_layout_mode.value));
 
   function OnSelectExample(name: string) {
     selectExample(PlayCom.value, _example.value, name);

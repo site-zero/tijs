@@ -187,13 +187,14 @@ const Moving = {
   },
 };
 
-function toPercent(ns: number[], gap: number, tracks: string[]) {
+function toPercent(ns: number[], mea: ResizeMeasure) {
+  let { gap, tracks } = mea;
   let tota = _.sum(ns) + Math.max(0, ns.length - 1) * gap;
   let re = [];
   for (let i = 0; i < ns.length; i++) {
     // 对于 auto/1fr 等，采用原来的值
     let track = tracks[i];
-    if (/^(auto|\d+fr)$/.test(track)) {
+    if (/^(auto|\d+fr)$/.test(track) && i != mea.taIndex) {
       re.push(track);
       continue;
     }
@@ -213,13 +214,14 @@ const MoveEnd = {
   column: function (resizing: GridResizingState, mea: ResizeMeasure) {
     return () => {
       let ns = _.map(resizing.columns, (s) => CssUtils.toPixel(s));
-      resizing.columns = toPercent(ns, mea.gap, mea.tracks);
+      console.log('column ns', ns);
+      resizing.columns = toPercent(ns, mea);
     };
   },
   row: function (resizing: GridResizingState, mea: ResizeMeasure) {
     return () => {
       let ns = _.map(resizing.rows, (s) => CssUtils.toPixel(s));
-      resizing.rows = toPercent(ns, mea.gap, mea.tracks);
+      resizing.rows = toPercent(ns, mea);
     };
   },
 };
@@ -292,7 +294,7 @@ export function useGridResizing(
       }
     },
     onEnd: (ing: Dragging) => {
-      //console.log('onEnd', ing);
+      console.log('onEnd', ing);
       let fn = ing.getVar('move_end');
       if (_.isFunction(fn)) {
         fn();

@@ -4,16 +4,16 @@ export default {
   comConf: {
     className: 'fit-parent as-card r-b',
     keepShown: {
-      keepAt: 'Ti-Demo-simple-Shown',
+      keepAt: 'Ti-Demo-TiLayoutGrid-simple-Shown',
     },
     keepSizes: {
-      keepAt: 'Ti-Demo-simple-Sizes',
+      keepAt: 'Ti-Demo-TiLayoutGrid-simple-Sizes',
     },
     style: {
       padding: '10px',
     },
     itemStyle: {
-      backgroundColor: '#33EE66',
+      backgroundColor: '#FFEE66',
     },
     layout: {
       gridTemplateColumns: '1fr 2fr',

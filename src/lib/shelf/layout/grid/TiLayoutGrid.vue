@@ -149,8 +149,7 @@
           :bar-mode="bar.mode"
           :bar-adjust-index="bar.adjustIndex"
           :bar-position="bar.position"
-          @dblclick="onDblClickAdjustBar(bar)"
-          @click="console.log('click bar', bar)"></div>
+          @dblclick="onDblClickAdjustBar(bar)"></div>
       </template>
     </div>
     <!-- 

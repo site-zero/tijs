@@ -1,7 +1,7 @@
 import { LayoutBlock, LayoutGridProps, LayoutPanel } from '../../';
 import { PlayLayoutMode } from './use-play-mode';
 
-export function useGridLayout(mode: PlayLayoutMode): LayoutGridProps {
+export function usePlaygroundLayout(mode: PlayLayoutMode): LayoutGridProps {
   function getGridBlocks(): LayoutBlock[] {
     if ('F' == mode) {
       return [
