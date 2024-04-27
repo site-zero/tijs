@@ -59,11 +59,15 @@ export type KeepFeature = {
   loadArray: (dft?: any[]) => any[] | null;
   reset: () => void;
 };
-export function useKeep(info: KeepInfo): KeepFeature {
+export function useKeep(info?: KeepInfo): KeepFeature {
+  let keepAt: string | undefined;
+  let keep = TiStore.session;
   //------------------------------------------------
-  let props = parseInfo(info);
-  let keep = TiStore[props.keepMode ?? 'session'];
-  let keepAt = props.keepAt;
+  if (info) {
+    let props = parseInfo(info);
+    keep = TiStore[props.keepMode ?? 'session'];
+    keepAt = props.keepAt;
+  }
   //------------------------------------------------
   function load(dft?: string) {
     if (!keepAt) {
@@ -71,6 +75,7 @@ export function useKeep(info: KeepInfo): KeepFeature {
     }
     return keep.getString(keepAt, dft) || null;
   }
+
   //------------------------------------------------
   function reset() {
     if (keepAt) {
@@ -78,36 +83,42 @@ export function useKeep(info: KeepInfo): KeepFeature {
     }
   }
   //------------------------------------------------
+  function save(data: any) {
+    if (keepAt) {
+      if (_.isString(data) || _.isBoolean(data) || _.isNumber(data)) {
+        keep.set(keepAt, data);
+      }
+      // 变成 json 存储
+      else {
+        let json = JSON5.stringify(data);
+        keep.set(keepAt, json);
+      }
+    }
+  }
+  //------------------------------------------------
+  function loadObj(dft?: Vars) {
+    let json = load();
+    if (!json) {
+      return dft ?? null;
+    }
+    return JSON5.parse(json) as Vars;
+  }
+  //------------------------------------------------
+  function loadArray(dft?: any[]) {
+    let json = load();
+    if (!json) {
+      return dft ?? null;
+    }
+    return JSON5.parse(json) as any[];
+  }
+  //------------------------------------------------
   return {
     _store_key: keepAt,
     _enabled: !_.isEmpty(keepAt),
-    save(data: any) {
-      if (keepAt) {
-        if (_.isString(data) || _.isBoolean(data) || _.isNumber(data)) {
-          keep.set(keepAt, data);
-        }
-        // 变成 json 存储
-        else {
-          let json = JSON5.stringify(data);
-          keep.set(keepAt, json);
-        }
-      }
-    },
+    save,
     load,
-    loadObj(dft?: Vars) {
-      let json = load();
-      if (!json) {
-        return dft ?? null;
-      }
-      return JSON5.parse(json) as Vars;
-    },
-    loadArray(dft?: any[]) {
-      let json = load();
-      if (!json) {
-        return dft ?? null;
-      }
-      return JSON5.parse(json) as any[];
-    },
+    loadObj,
+    loadArray,
     reset,
   };
 }

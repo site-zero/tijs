@@ -1,42 +1,57 @@
 <script lang="ts" setup>
-  import { inject, reactive } from 'vue';
-  import { BUS_KEY, LayoutState, TiAppEvent, useBusEmit } from '../../../';
-  import { TiLayoutTabsInfo } from './ti-layout-tabs-index';
-  import {
-    COM_TYPE,
-    LayoutTabsEvents,
-    LayoutTabsProps,
-    useLayoutTabs,
-  } from './use-layout-tabs';
-  /*-------------------------------------------------------
+  import _ from 'lodash';
+  import { Ref, computed, reactive, ref, watch } from 'vue';
+  import { LayoutState, LayoutTabsProps, TabInfo, useKeep } from '../../../';
+  import { CssUtils } from '../../../../core';
+  import { COM_TYPE } from './tabs.types';
+  import { findCurrentTab, getLayoutTabItems } from './use-layout-tabs';
 
-                     Com Options
-
--------------------------------------------------------*/
   defineOptions({
     name: COM_TYPE,
     inheritAttrs: true,
   });
-  /*-------------------------------------------------------
 
-                        State
-
--------------------------------------------------------*/
+  const props = defineProps<LayoutTabsProps>();
+  const $main: Ref<HTMLElement> = ref() as Ref<HTMLElement>;
   const state = reactive({
     shown: {},
-  }) as LayoutState;
-  /*-------------------------------------------------------
-
-                        Props
-
--------------------------------------------------------*/
-  const props = withDefaults(defineProps<LayoutTabsProps>(), {
-    tabAt: 'top',
-    tabAlign: 'center',
-    defaultTab: 0,
-  });
+  } as LayoutState);
+  const _current_tab = ref<TabInfo | undefined>(findCurrentTab(props));
+  let emit = defineEmits<(current: TabInfo, old?: TabInfo) => void>();
+  //
+  // Computed
+  //
+  const TopClass = computed(() => CssUtils.mergeClassName(props.className));
+  const Keep = useKeep(props.keepTab);
+  let TabItems = computed(() => getLayoutTabItems(_current_tab, props));
+  let CurrentTabItem = computed(() =>
+    _.find(TabItems.value, (it) => it.current)
+  );
+  //
+  // Event Handle
+  //
+  //
+  // Watcher
+  //
+  watch(
+    () => _current_tab.value,
+    (tab, old) => {
+      if (tab && !_.isEqual(tab, old)) {
+        state.shown = {
+          [tab.name || `Tab-${tab.index}`]: true,
+        };
+      }
+    }
+  );
 </script>
-<template>tabs</template>
+<template>
+  <div class="ti-layout-tabs">
+    <!--======== Head Tabs =======-->
+    <header></header>
+    <!--======== Main Block =======-->
+    <main></main>
+  </div>
+</template>
 <style lang="scss" scoped>
   @import './ti-layout-tabs.scss';
 </style>

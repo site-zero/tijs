@@ -4,6 +4,7 @@ import {
   CommonProps,
   EmitAdaptorProps,
   IconInput,
+  KeepInfo,
 } from '..';
 import { CssGridItem, CssGridLayout, PopPosition, Vars } from '../../core';
 import { LayoutGridKeepProps } from './lib-keep';
@@ -38,6 +39,19 @@ export type LayoutGridProps = LayoutProps &
     layout?: CssGridLayout;
     gridStyle?: Vars;
   };
+
+//
+// Tab Layout
+//
+export type LayoutTabsProps = LayoutProps &
+  LayoutPanelProps &
+  TabsProps & {
+    keepTab?: KeepInfo;
+  };
+
+export type LayoutTabItem = LayoutItem & {
+  current?: boolean;
+};
 
 //
 // Layout Panel
@@ -83,6 +97,14 @@ export type TabsProps = {
   defaultTab?: string | number;
 };
 
+export type TabInfo = {
+  name?: string;
+  index: number;
+};
+
+//
+// Layout Adjust Bar
+//
 export type LayoutBar = {
   /**
    * 拖动条模式：

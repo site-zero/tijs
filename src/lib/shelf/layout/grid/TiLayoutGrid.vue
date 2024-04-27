@@ -25,7 +25,7 @@
     inheritAttrs: true,
   });
 
-  const props = withDefaults(defineProps<LayoutGridProps>(), {});
+  const props = defineProps<LayoutGridProps>();
   const $main: Ref<HTMLElement> = ref() as Ref<HTMLElement>;
   const state = reactive({
     shown: _.cloneDeep(props.shown),
