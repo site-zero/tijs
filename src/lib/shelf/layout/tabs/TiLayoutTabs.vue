@@ -1,57 +1,105 @@
 <script lang="ts" setup>
   import _ from 'lodash';
-  import { Ref, computed, reactive, ref, watch } from 'vue';
-  import { LayoutState, LayoutTabsProps, TabInfo, useKeep } from '../../../';
+  import { ComputedRef, computed, ref, watch } from 'vue';
+  import {
+    LayoutTabItem,
+    LayoutTabsProps,
+    TabDisplayItem,
+    TiRoadblock,
+    TiTabs,
+    getLayoutItem,
+    useKeep,
+  } from '../../../';
   import { CssUtils } from '../../../../core';
   import { COM_TYPE } from './tabs.types';
-  import { findCurrentTab, getLayoutTabItems } from './use-layout-tabs';
+  import {
+    buildLayoutTabBlocks,
+    buildLayoutTabsConfig,
+    findCurrentTabKey,
+  } from './use-layout-tabs';
 
   defineOptions({
     name: COM_TYPE,
-    inheritAttrs: true,
+    inheritAttrs: false,
   });
 
-  const props = defineProps<LayoutTabsProps>();
-  const $main: Ref<HTMLElement> = ref() as Ref<HTMLElement>;
-  const state = reactive({
-    shown: {},
-  } as LayoutState);
-  const _current_tab = ref<TabInfo | undefined>(findCurrentTab(props));
-  let emit = defineEmits<(current: TabInfo, old?: TabInfo) => void>();
+  const props = withDefaults(defineProps<LayoutTabsProps>(), {
+    wrapTabs: false,
+    tabItemSpace: 'm',
+    tabsAt: 'top',
+    tabsAlign: 'center',
+  });
+  const Keep = computed(() => useKeep(props.keepTab));
+  console.log(props.keepTab);
+  const TabBlocks = computed(() => getLayoutItem({ shown: {} }, props));
+
+  //const $main: Ref<HTMLElement> = ref() as Ref<HTMLElement>;
+  // const state = reactive({
+  //   shown: {},
+  // } as LayoutState);
+  const _current_tab_key = ref<string | undefined>();
   //
   // Computed
   //
   const TopClass = computed(() => CssUtils.mergeClassName(props.className));
-  const Keep = useKeep(props.keepTab);
-  let TabItems = computed(() => getLayoutTabItems(_current_tab, props));
-  let CurrentTabItem = computed(() =>
-    _.find(TabItems.value, (it) => it.current)
+
+  let TabDisplayBlocks = computed(() =>
+    buildLayoutTabBlocks(TabBlocks.value, _current_tab_key.value)
+  );
+  const TabsConfig = computed(() =>
+    buildLayoutTabsConfig(props, TabDisplayBlocks.value)
+  );
+  let CurrentTabItem: ComputedRef<LayoutTabItem | undefined> = computed(() =>
+    _.find(TabDisplayBlocks.value, (it) => (it.current ? true : false))
   );
   //
   // Event Handle
   //
+  function OnTabChange(item: TabDisplayItem) {
+    _current_tab_key.value = item.value;
+    Keep.value.save(item.value);
+  }
   //
   // Watcher
   //
   watch(
-    () => _current_tab.value,
-    (tab, old) => {
-      if (tab && !_.isEqual(tab, old)) {
-        state.shown = {
-          [tab.name || `Tab-${tab.index}`]: true,
-        };
-      }
+    () => Keep.value,
+    () => {
+      _current_tab_key.value = findCurrentTabKey(props, Keep.value);
+    },
+    {
+      immediate: true,
     }
   );
 </script>
 <template>
-  <div class="ti-layout-tabs">
+  <div
+    class="ti-layout-tabs"
+    :class="TopClass"
+    :tabs-at="props.tabsAt">
     <!--======== Head Tabs =======-->
-    <header></header>
+    <header>
+      <TiTabs
+        v-bind="TabsConfig"
+        @change="OnTabChange" />
+    </header>
     <!--======== Main Block =======-->
-    <main></main>
+    <main>
+      <!----------------------------->
+      <component
+        v-if="CurrentTabItem"
+        :is="CurrentTabItem.comType"
+        v-bind="CurrentTabItem.comConf" />
+      <!----------------------------->
+      <TiRoadblock
+        v-else
+        mode="fit"
+        icon="fas-pen-ruler"
+        text="No GUI" />
+    </main>
   </div>
 </template>
 <style lang="scss" scoped>
+  @use '../../../../assets/style/_all.scss' as *;
   @import './ti-layout-tabs.scss';
 </style>

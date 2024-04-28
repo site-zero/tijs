@@ -1,0 +1,19 @@
+.ti-layout-tabs {
+  @include flex-align-v-nowrap;
+  > header {
+    flex: 0 0 auto;
+  }
+  > main {
+    flex: 1 1 auto;
+    position: relative;
+  }
+
+  &[tabs-at="bottom"] {
+    > header {
+      order: 2;
+    }
+    > main {
+      order: 1;
+    }
+  }
+}

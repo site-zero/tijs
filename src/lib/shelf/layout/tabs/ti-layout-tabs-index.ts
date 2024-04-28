@@ -1,22 +1,37 @@
-import { TiComInfo, TiComRace } from '../../../';
 import { App } from 'vue';
+import { TiComInfo, TiComRace } from '../../../';
 import TiLayoutTabs from './TiLayoutTabs.vue';
-import { nested, simple } from './example';
-import i18n from './i18n';
-import { COM_TYPE } from './use-layout-tabs';
+import { atBottom, atTop } from './example';
+import { COM_TYPE } from './tabs.types';
+
+const en_us = {
+  'com-name': 'Tabs Layout',
+  'example-at-top': 'Tabs At Top',
+  'example-at-bottom': 'Tabs At Bottom',
+};
+const zh_cn = {
+  'com-name': '标签布局',
+  'example-at-top': '标签组位于顶部',
+  'example-at-bottom': '标签组位于底部',
+};
 
 const TiLayoutTabsInfo: TiComInfo = {
   icon: 'zmdi-tab',
   race: TiComRace.SHELF,
   name: COM_TYPE,
   text: 'i18n:ti-layout-tabs-com-name',
-  i18n,
+  i18n: {
+    en_us: en_us,
+    en_uk: en_us,
+    zh_cn: zh_cn,
+    zh_hk: zh_cn,
+  },
   com: TiLayoutTabs,
   install: (app: App) => {
     app.component(COM_TYPE, TiLayoutTabs);
   },
-  defaultProps: 'simple',
-  exampleProps: [simple, nested],
+  defaultProps: 'at-top',
+  exampleProps: [atTop, atBottom],
 };
 
 export { TiLayoutTabs, TiLayoutTabsInfo };

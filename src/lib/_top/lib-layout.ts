@@ -6,7 +6,14 @@ import {
   IconInput,
   KeepInfo,
 } from '..';
-import { CssGridItem, CssGridLayout, PopPosition, Vars } from '../../core';
+import {
+  CssGridItem,
+  CssGridLayout,
+  OptionItem,
+  OptionValueProps,
+  PopPosition,
+  Vars,
+} from '../../core';
 import { LayoutGridKeepProps } from './lib-keep';
 import { GridResizingState } from './lib-resizing';
 
@@ -45,7 +52,8 @@ export type LayoutGridProps = LayoutProps &
 //
 export type LayoutTabsProps = LayoutProps &
   LayoutPanelProps &
-  TabsProps & {
+  TabsAspect & {
+    defaultTab?: string | number;
     keepTab?: KeepInfo;
   };
 
@@ -82,26 +90,32 @@ export type LayoutPanelProps = {
 //
 // Tab Layout
 //
-export type TabsProps = {
+export type TabsAt = 'top' | 'bottom';
+export type TabsAlign = 'left' | 'right' | 'center';
+export type TabsAspect = {
   /**
    * @default `top`
    */
-  tabAt?: 'top' | 'bottom';
+  tabsAt?: TabsAt;
   /**
    * @default `center`
    */
-  tabAlign?: 'left' | 'right' | 'center';
+  tabsAlign?: TabsAlign;
+
   /**
-   * @default `0`
+   * @default false
    */
-  defaultTab?: string | number;
+  wrapTabs?: boolean;
+
+  tabItemSpace?: 's' | 'm' | 'b';
 };
 
-export type TabInfo = {
-  name?: string;
+export type TabsProps = OptionValueProps & TabsAspect;
+export type TabDisplayItem = OptionItem & {
+  className: Vars;
+  current: boolean;
   index: number;
 };
-
 //
 // Layout Adjust Bar
 //
@@ -151,7 +165,7 @@ export type LayoutBar = {
 };
 
 export type LayoutItemType = 'block' | 'grid' | 'tabs';
-export type LayoutBlock = TabsProps & {
+export type LayoutBlock = TabsAspect & {
   /**
    * 块的布局内唯一键，如果不指定，则会依次尝试：
    *

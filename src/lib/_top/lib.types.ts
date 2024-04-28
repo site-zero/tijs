@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { DefineComponent, InjectionKey, Plugin } from 'vue';
-import { CommonProps, VisibilityProps } from '..';
+import { CommonProps, TabsAspect, VisibilityProps } from '..';
 import {
   Callback,
   Callback2,
@@ -8,6 +8,8 @@ import {
   I18nSet,
   Invoke,
   IsType,
+  OptionItem,
+  OptionValueProps,
   Optional,
   TiBus,
   TiIconObj,
@@ -378,3 +380,9 @@ export type ActionBarProps = CommonProps & {
   name?: string;
   items: ActionBarItem[];
 };
+/*---------------------------------------------------
+
+       不知道如何分类，但是控件里还有用的类型
+
+---------------------------------------------------*/
+

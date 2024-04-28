@@ -32,6 +32,17 @@ export type TextValue<T> = {
   value: T;
 };
 
+export type OptionItem = {
+  icon?: IconInput;
+  text?: string;
+  value: any;
+};
+
+export type OptionValueProps = {
+  value: any;
+  options: OptionItem[];
+};
+
 export type DateInput = string | number | Date;
 export type DateFormatOptions = {
   fmt?: string;

@@ -1,5 +1,3 @@
-import { genItems } from './_mock-sidebar';
-
 export default {
   name: 'simple',
   text: 'i18n:simple',

@@ -1,4 +1,4 @@
-import { CommonProps } from '../../';
+import { CommonProps, TabsAspect } from '../../';
 import { Vars } from '../../../core';
 import { FormField, FormFieldAboutProps } from './use-form-field';
 
@@ -99,6 +99,10 @@ export type FormProps = CommonProps &
      *  - `group` 字段分标签页显示
      */
     mode?: 'group' | 'tab';
-  };
+    /**
+     * @default `0`
+     */
+    defaultTab?: string | number;
+  } & TabsAspect;
 
 export type FormGridHint = [number, number] | number;
