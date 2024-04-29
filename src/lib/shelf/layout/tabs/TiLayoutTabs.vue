@@ -86,10 +86,13 @@
     <!--======== Main Block =======-->
     <main>
       <!----------------------------->
-      <component
-        v-if="CurrentTabItem"
-        :is="CurrentTabItem.comType"
-        v-bind="CurrentTabItem.comConf" />
+      <template v-if="CurrentTabItem">
+        <slot :item="CurrentTabItem">
+          <component
+            :is="CurrentTabItem.comType"
+            v-bind="CurrentTabItem.comConf" />
+        </slot>
+      </template>
       <!----------------------------->
       <TiRoadblock
         v-else
