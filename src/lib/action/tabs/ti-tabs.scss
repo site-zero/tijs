@@ -10,12 +10,15 @@
     li {
       @include flex-align-nowrap;
       cursor: pointer;
-      margin: 0 0.1em;
+      margin: 0 4px;
       color: var(--ti-color-track);
       border: 1px solid transparent;
       > span {
         display: block;
         white-space: nowrap;
+        &.as-text {
+          padding:0 .5em;
+        }
       }
     }
     li.is-current {
@@ -61,6 +64,7 @@
       margin-bottom: -1px;
       &.is-current {
         border-top-color: var(--ti-color-primary);
+        box-shadow: 0 -4px 6px var(--ti-color-mask-weak);
       }
     }
   }
@@ -74,6 +78,7 @@
       margin-top: -1px;
       &.is-current {
         border-bottom-color: var(--ti-color-primary);
+        box-shadow: 0 4px 6px var(--ti-color-mask-weak);
       }
     }
   }

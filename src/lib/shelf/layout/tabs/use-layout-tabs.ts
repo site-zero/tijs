@@ -5,8 +5,35 @@ import {
   LayoutTabItem,
   LayoutTabsProps,
   TabsProps,
+  TiRawCom,
+  useFieldCom,
 } from '../../../';
-import { OptionItem } from '../../../../core';
+import { OptionItem, Vars } from '../../../../core';
+
+export type TabMain = {
+  item: LayoutTabItem;
+  com: TiRawCom;
+  config: Vars;
+};
+
+export function buildTabMain(items: LayoutTabItem[]): TabMain | undefined {
+  for (let item of items) {
+    if (!item.current) {
+      continue;
+    }
+    let comType = item?.itemConfig?.comType;
+    let comConf = item?.itemConfig?.comConf;
+    const { getComType } = useFieldCom({
+      comType,
+      comConf,
+    });
+    return {
+      item,
+      com: getComType(),
+      config: comConf,
+    };
+  }
+}
 
 export function buildLayoutTabBlocks(
   blocks: LayoutItem[],

@@ -15,6 +15,7 @@
   import {
     buildLayoutTabBlocks,
     buildLayoutTabsConfig,
+    buildTabMain,
     findCurrentTabKey,
   } from './use-layout-tabs';
 
@@ -49,9 +50,9 @@
   const TabsConfig = computed(() =>
     buildLayoutTabsConfig(props, TabDisplayBlocks.value)
   );
-  let CurrentTabItem: ComputedRef<LayoutTabItem | undefined> = computed(() =>
-    _.find(TabDisplayBlocks.value, (it) => (it.current ? true : false))
-  );
+  let TabMain = computed(() => {
+    return buildTabMain(TabDisplayBlocks.value);
+  });
   //
   // Event Handle
   //
@@ -86,11 +87,11 @@
     <!--======== Main Block =======-->
     <main>
       <!----------------------------->
-      <template v-if="CurrentTabItem">
-        <slot :item="CurrentTabItem">
+      <template v-if="TabMain">
+        <slot :item="TabMain">
           <component
-            :is="CurrentTabItem.comType"
-            v-bind="CurrentTabItem.comConf" />
+            :is="TabMain.com"
+            v-bind="TabMain.config" />
         </slot>
       </template>
       <!----------------------------->

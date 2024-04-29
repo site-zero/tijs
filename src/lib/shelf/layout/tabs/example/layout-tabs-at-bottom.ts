@@ -8,22 +8,30 @@ export default {
     keepTab: 'Ti-Demo-TiLayoutTabs-At-Bottom',
     tabsAt: 'bottom',
     tabsAlign: 'right',
+    wrapTabs: false,
+    tabItemSpace: 'b',
     blocks: [
       {
+        icon: 'zmdi-info',
         name: 'info',
+        title: 'Information',
       },
       {
+        icon: 'zmdi-navigation',
         name: 'detail',
+        title: 'Detail Settings',
       },
       {
+        icon: 'zmdi-car-taxi',
         name: 'more',
+        title: 'More Information',
       },
     ],
     schema: {
       info: {
         comType: 'TiRoadblock',
         comConf: {
-          className: 'is-text',
+          className: 'is-text-r',
           text: '信息区',
           icon: 'zmdi-info',
         },
@@ -39,7 +47,8 @@ export default {
       more: {
         comType: 'TiRoadblock',
         comConf: {
-          className: 'is-primary',
+          className: 'is-info-r',
+          size: 'large',
           text: '更多信息',
           icon: 'zmdi-navigation',
         },
