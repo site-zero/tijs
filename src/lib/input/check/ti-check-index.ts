@@ -5,9 +5,11 @@ import { COM_TYPE } from './check.type';
 
 const en_us = {
   'com-name': 'CheckBox',
+  'example-customized-values': 'Customized Values'
 };
 const zh_cn = {
   'com-name': '勾选框',
+  'example-customized-values': '指定值',
 };
 
 const TiCheckInfo: TiComInfo = {
@@ -33,6 +35,15 @@ const TiCheckInfo: TiComInfo = {
       comConf: {
         value: true,
         text: 'hello',
+      },
+    },
+    {
+      name: 'customized-values',
+      text: 'i18n:ti-check-example-customized-values',
+      comConf: {
+        value: 'No',
+        text: 'I like coding',
+        values: ['No', 'Yes'],
       },
     },
   ],
