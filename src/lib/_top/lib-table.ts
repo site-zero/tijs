@@ -1,5 +1,11 @@
 import { Vars } from '../../core';
-import { CommonProps, KeepInfo, SelectableProps, TableCell } from '../../lib';
+import {
+  CommonProps,
+  KeepInfo,
+  SelectableProps,
+  TableCell,
+  SelectionEmitInfo,
+} from '../../lib';
 
 export type TableRowID = number | string;
 export type TableRowData = {
@@ -31,6 +37,11 @@ export type TableKeepProps = {
 
 export type TableColumn = TableCell & {
   candidate?: boolean;
+};
+
+export type TableSelection = SelectionEmitInfo<TableRowID> & {
+  colIndex?: number;
+  column?: TableCell;
 };
 
 export type TableBehaviorsProps = {

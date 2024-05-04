@@ -21,6 +21,7 @@ export type ExampleState = {
 };
 
 export function selectExample(com: TiCom, ex: ExampleState, name?: string) {
+  //console.log('selectExample', name);
   ex.name = name;
   ex.comConf = loadLocalSetting(com, ex.name);
 }
@@ -58,6 +59,7 @@ function getExampleStoreKey(com: TiCom, exampleName?: string) {
 export function loadLocalSetting(com: TiCom, exName?: string) {
   let key = getExampleStoreKey(com, exName);
   let comConf = com.checkProps(exName);
+  //console.log("loadLocalSetting", comConf)
   if (key) {
     return TiStore.local.getObject(key, comConf);
   }

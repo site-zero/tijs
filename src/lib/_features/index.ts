@@ -4,6 +4,7 @@ export * from './use-app-bus';
 export * from './use-app-model-binding.ts';
 export * from './use-bus-emit';
 export * from './use-class-style';
+export * from './use-selectable.ts';
 export * from './use-draggable';
 export * from './use-emit-adaptor';
 export * from './use-format-value';

@@ -1,21 +1,15 @@
 import _ from 'lodash';
 import { Ref } from 'vue';
-import { KeepFeature, TableKeepProps, useKeep } from '../../';
+import { KeepFeature, TableKeepProps, makeKeepProps, useKeep } from '../../';
 
 export type TableKeepFeature = {
   KeepColumns: KeepFeature;
 };
 
 export function useKeepTable(props: TableKeepProps): TableKeepFeature {
+  let kept = makeKeepProps(props.keepColumns ?? null, 'local');
   return {
-    KeepColumns: useKeep(
-      _.assign(
-        {
-          keepMode: 'local',
-        },
-        props.keepColumns
-      )
-    ),
+    KeepColumns: useKeep(kept),
   };
 }
 

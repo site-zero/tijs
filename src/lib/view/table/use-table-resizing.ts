@@ -1,4 +1,4 @@
-import { Ref } from 'vue';
+import { ComputedRef, Ref } from 'vue';
 import { Dragging, useDraggable } from '../../';
 import {
   Callback,
@@ -25,7 +25,7 @@ export function useTableResizing(
   showRowMarker: boolean,
   onDestroy: Callback1<Callback>,
   isColumnResizeInTime: FuncA0<boolean>,
-  Keep: TableKeepFeature
+  Keep: ComputedRef<TableKeepFeature>
 ) {
   const __update_colmun_sizes = function (ing: Dragging) {
     let colLeftInView = Num.round(ing.getMeasure('col_offset_x') ?? 0, 100);
@@ -111,7 +111,9 @@ export function useTableResizing(
       colResizing.activated = false;
       colResizing.left = -1;
       colResizing.colIndex = -1;
-      Keep.KeepColumns.save(columnSizes.value);
+      if (Keep.value) {
+        Keep.value.KeepColumns.save(columnSizes.value);
+      }
     },
   });
 }

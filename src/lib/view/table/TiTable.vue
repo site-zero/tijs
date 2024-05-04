@@ -256,7 +256,7 @@
       columnSizes,
       ShowRowMarker.value,
       onUnmounted,
-      Keep.value
+      Keep
     );
     loadColumnSizes(columnSizes, Keep.value);
   });

@@ -122,3 +122,16 @@ export function useKeep(info?: KeepInfo): KeepFeature {
     reset,
   };
 }
+
+export function makeKeepProps(
+  info: KeepInfo | null,
+  dftKeepMode: KeepMode = 'local'
+): KeepProps {
+  let re = { keepMode: dftKeepMode } as KeepProps;
+  if (_.isString(info)) {
+    re.keepAt = info;
+  } else {
+    _.assign(re, info);
+  }
+  return re;
+}

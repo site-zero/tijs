@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { SelectableProps } from '../../lib';
 import {
   Callback2,
   Callback3,
@@ -8,9 +9,8 @@ import {
   FuncA2,
   Util,
   Vars,
-} from '../../../core';
-import { objToMap } from '../../../core/util';
-import { SelectableProps } from '../../../lib';
+} from '../../core';
+import { objToMap } from '../../core/util';
 // -----------------------------------------------------
 //  Types
 export type CheckStatus = 'all' | 'none' | 'part';

@@ -74,6 +74,7 @@
   }
 
   function OnConfChange(confData: Vars) {
+    console.log("OnConfChange!!!!", confData)
     _example.value.comConf = confData;
     saveLocalSetting(PlayCom.value, _example.value);
   }

@@ -2,17 +2,21 @@ import { TableCell } from '../../../';
 import { mockData } from './mock-table-row';
 
 export default {
-  name: '10k',
-  text: 'i18n:ti-table-example-10k',
+  name: 'editable',
+  text: 'i18n:ti-table-example-editable',
   comConf: () => {
     return {
       className: 'fit-parent',
+      keepColumns: {
+        keepAt: 'Ti-Demo-table-editable-columns',
+      },
       columns: [
         {
           name: 'id',
         },
         {
           name: 'name',
+          activatedComType: 'TiInput',
         },
         {
           name: 'age',
@@ -33,7 +37,7 @@ export default {
           name: 'local_ip',
         },
       ] as TableCell[],
-      data: mockData(10000),
+      data: mockData(10),
     };
   },
 };

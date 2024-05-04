@@ -1,6 +1,10 @@
 import _ from 'lodash';
-import { Ref } from 'vue';
+import { ComputedRef, Ref } from 'vue';
 import {
+  CheckStatus,
+  SelectableFeature,
+  SelectableState,
+  SelectionEmitInfo,
   TableCell,
   TableColumn,
   TableEvent,
@@ -8,6 +12,7 @@ import {
   TableRowData,
   TableRowID,
   getFieldUniqKey,
+  useSelectable,
 } from '../../';
 import {
   Callback,
@@ -18,13 +23,7 @@ import {
   Vars,
   getLogger,
 } from '../../../core';
-import {
-  CheckStatus,
-  SelectableFeature,
-  SelectableState,
-  SelectionEmitInfo,
-  useSelectable,
-} from './use-selectable';
+
 import { TableKeepFeature } from './use-table-keep';
 import { useTableResizing } from './use-table-resizing';
 
@@ -205,7 +204,7 @@ export function useTable(props: TableProps, emit: TableEmit) {
       columnSizes: Ref<number[]>,
       showRowMarker: boolean,
       onDestroy: Callback1<Callback>,
-      Keep: TableKeepFeature
+      Keep: ComputedRef<TableKeepFeature>
     ) => {
       if (props.columnResizable) {
         useTableResizing(
@@ -289,12 +288,13 @@ export function useTable(props: TableProps, emit: TableEmit) {
         let oldCheckedIds = _.cloneDeep(selection.checkedIds);
         log.debug('OnCellSelect', rowEvent);
         selectable.selectId(selection, row.id);
-        let emitInfo = selectable.getSelectionEmitInfo(
-          selection,
-          props.data,
-          oldCheckedIds,
-          oldCurrentId
-        );
+        let emitInfo: SelectionEmitInfo<TableRowID> =
+          selectable.getSelectionEmitInfo(
+            selection,
+            props.data,
+            oldCheckedIds,
+            oldCurrentId
+          );
         emit('select', emitInfo);
       }
     },

@@ -69,7 +69,7 @@ export interface ComPropExample {
   /**
    * 样例配置内容
    */
-  comConf: Vars;
+  comConf: Vars | (() => Vars);
 }
 
 export interface TiComInfo {
@@ -137,11 +137,14 @@ export class TiCom implements TiComInfo {
     }
   }
 
-  getProps(name?: string) {
+  getProps(name?: string): Vars | undefined {
     if (!name) {
       name = this.defaultProps;
     }
     let it = _.find(this.exampleProps, (it) => it.name == name);
+    if (_.isFunction(it?.comConf)) {
+      return it?.comConf() as Vars;
+    }
     return _.cloneDeep(it?.comConf);
   }
 
@@ -385,4 +388,3 @@ export type ActionBarProps = CommonProps & {
        不知道如何分类，但是控件里还有用的类型
 
 ---------------------------------------------------*/
-
