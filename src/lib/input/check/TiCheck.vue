@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-  import { computed } from 'vue';
-  import { IconInput, TiIcon } from '../../';
-  import { FuncA0, I18n } from '../../../core';
-  import { CheckProps } from './check.type';
   import _ from 'lodash';
+  import { computed } from 'vue';
+  import { TiIcon } from '../../';
+  import { I18n, IconInput } from '../../../core';
+  import { CheckProps } from './check.type';
 
   const props = withDefaults(defineProps<CheckProps>(), {
     value: false,

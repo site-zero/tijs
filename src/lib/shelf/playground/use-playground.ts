@@ -1,7 +1,13 @@
 import JSON5 from 'json5';
 import _ from 'lodash';
-import { ComPropExample, CommonProps, TiCom } from '../../';
-import { I18n, TiStore, Vars } from '../../../core';
+import {
+  ComPropExample,
+  CommonProps,
+  I18n,
+  TiCom,
+  TiStore,
+  Vars,
+} from '../../../core';
 
 export type PlaygroundProps = CommonProps & {
   comType: string;

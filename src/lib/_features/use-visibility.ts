@@ -1,28 +1,5 @@
-import { FuncA1, Match, Vars } from '../../core';
+import { FuncA1, Match, Vars, VisibilityProps } from '../../core';
 
-/*-------------------------------------------------------
-
-                        Props
-
--------------------------------------------------------*/
-export type VisibilityProps = {
-  /**
-   * 字段是否可见，是一个 `TiMatch` 匹配 `FormContext`
-   */
-  visible?: any;
-  /**
-   * 字段是否隐藏，是一个 `TiMatch` 匹配 `FormContext`
-   */
-  hidden?: any;
-  /**
-   * 字段是否不可用，是一个 `TiMatch` 匹配 `FormContext`
-   */
-  disabled?: any;
-  /**
-   * 字段是否启用，是一个 `TiMatch` 匹配 `FormContext`
-   */
-  enabled?: any;
-};
 /*-------------------------------------------------------
 
                      Feature

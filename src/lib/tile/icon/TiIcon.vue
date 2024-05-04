@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import { CssUtils, Icons } from '../../../core';
   import { computed } from 'vue';
+  import { CssUtils, Icons } from '../../../core';
   import { IconProps } from './icon-props';
   import { getIconStyle } from './use-icon';
   defineOptions({
@@ -24,20 +24,23 @@
   const TopClass = computed(() =>
     CssUtils.mergeClassName(props.className, () => {
       return `is-type-${Icon.value.type}`;
-    }),
+    })
   );
   const TopStyle = computed(() =>
     CssUtils.toStyle({
       width: props.width,
       height: props.height,
       opacity: props.opacity,
-    }),
+    })
   );
   const IconStyle = computed(() => getIconStyle(props, Icon));
 </script>
 
 <template>
-  <div class="ti-icon" :class="TopClass" :style="TopStyle">
+  <div
+    class="ti-icon"
+    :class="TopClass"
+    :style="TopStyle">
     <!-- Font Icon-->
     <div
       class="part-main as-font"
@@ -46,7 +49,11 @@
       <i :class="Icon.className"></i>
     </div>
     <!-- Image Icon-->
-    <img v-else :src="Icon.src" class="part-main as-image" :style="IconStyle" />
+    <img
+      v-else
+      :src="Icon.src"
+      class="part-main as-image"
+      :style="IconStyle" />
   </div>
 </template>
 <style lang="scss">

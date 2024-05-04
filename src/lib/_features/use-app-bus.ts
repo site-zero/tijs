@@ -1,5 +1,4 @@
-import { createBus, setEnv } from '../../core';
-import { AppEvents, TiAppBus, TiAppEvent } from '../';
+import { AppEvents, TiAppBus, TiAppEvent, createBus, setEnv } from '../../core';
 import { makeAnonymouseEvent } from './use-bus-emit';
 
 type BusDeposeCallback = (hook: () => any) => false | Function | undefined;
@@ -22,7 +21,7 @@ export function createAppBus(deposer: BusDeposeCallback) {
 export function createAppSubBus(
   bus: TiAppBus,
   name: string,
-  deposer: BusDeposeCallback,
+  deposer: BusDeposeCallback
 ) {
   let sub = bus.createSubBus(name, [
     AppEvents.APP_RESIZE,

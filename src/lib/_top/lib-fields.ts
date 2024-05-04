@@ -1,6 +1,8 @@
 import JSON5 from 'json5';
 import _ from 'lodash';
+import { FieldComProps } from '..';
 import {
+  CommonProps,
   Convertor,
   DateInput,
   DateTime,
@@ -10,7 +12,6 @@ import {
   Str,
   Vars,
 } from '../../core';
-import { CommonProps, FieldComProps } from '..';
 
 export type Field = {
   /**
@@ -44,9 +45,15 @@ export type Field = {
   serializer?: FuncA3<any, Vars, FieldName, any>;
 };
 
+export type CellEvents = 'value-change';
+export type CellChanged = FieldPair & {
+  rowIndex: number;
+  colIndex: number;
+};
+
 export type CellProps = CommonProps &
   Field &
-  Omit<FieldComProps, 'redonlyComType' | 'redonlyComConf'> & {
+  Omit<FieldComProps, 'readonlyComType' | 'readonlyComConf'> & {
     title?: string;
     tip?: string;
     disabled?: boolean;

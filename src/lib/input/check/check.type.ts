@@ -1,4 +1,4 @@
-import { IconInput } from '../../';
+import { IconInput } from '../../../core';
 
 export const COM_TYPE = 'TiCheck';
 

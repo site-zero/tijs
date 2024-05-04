@@ -1,9 +1,8 @@
 import { InjectionKey } from 'vue';
-import { AltBarItemisplay, BarItem, BarItemDisplay, EventInfo, IconInput } from '../../';
 import {
+  AltBarItemisplay,
+  BarItem,
   Callback,
-  Invoke,
-  Optional,
   TiBus,
   TiMatch,
   Vars,
@@ -48,10 +47,6 @@ export type BarState = {
    */
   vars: Vars;
 };
-
-
-
-
 
 export type BuiltedBarItem = BarItem & {
   uniqKey: string;

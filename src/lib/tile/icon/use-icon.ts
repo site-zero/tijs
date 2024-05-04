@@ -1,6 +1,6 @@
-import { CssUtils, FuncSet, TiIconObj, Vars, colorToStr } from '../../../core';
 import _ from 'lodash';
 import { ComputedRef } from 'vue';
+import { CssUtils, FuncSet, TiIconObj, Vars, colorToStr } from '../../../core';
 import { IconProps } from './icon-props';
 
 export function getIconStyle(props: IconProps, icon: ComputedRef<TiIconObj>) {
@@ -16,7 +16,7 @@ export function getIconStyle(props: IconProps, icon: ComputedRef<TiIconObj>) {
             fontSize: props.fontSize,
             color: colorToStr(props.color),
           },
-          props.fontStyle,
+          props.fontStyle
         );
       },
       image: () => {
@@ -25,7 +25,7 @@ export function getIconStyle(props: IconProps, icon: ComputedRef<TiIconObj>) {
           {
             objectFit: props.objectFit,
           },
-          props.imgStyle,
+          props.imgStyle
         );
       },
     }) as FuncSet

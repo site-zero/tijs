@@ -1,11 +1,4 @@
-import { computed } from 'vue';
-import {
-  BlockProps,
-  TiAppBus,
-  TiAppEvent,
-  TiRawCom,
-  useFieldCom,
-} from '../../';
+import { BlockProps, useFieldCom } from '../../';
 import {
   BusMsg,
   Callback,
@@ -13,9 +6,9 @@ import {
   CssGridLayout,
   CssUtils,
   I18n,
-  Vars,
+  TiAppBus,
+  TiAppEvent,
 } from '../../../core';
-import _ from 'lodash';
 
 export const COM_TYPE = 'TiBlock';
 

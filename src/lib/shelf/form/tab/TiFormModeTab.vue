@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-  import { FieldPair, TiEvent } from '../../../';
-  import { Vars } from '../../../../core/ti.ts';
+  import { FieldPair } from '../../../';
+  import { TiEvent, Vars } from '../../../../core/';
   import { FormItem } from '../use-form-field';
   import { FormGridLayout } from '../use-form-layout';
   /*-------------------------------------------------------
@@ -34,7 +34,9 @@
 </script>
 <template>
   <!-- 这里显示标签栏-->
-  <main class="form-body" mode="tab">
+  <main
+    class="form-body"
+    mode="tab">
     <!-- 之显示当前组 -->
     Form Mode Tab
   </main>

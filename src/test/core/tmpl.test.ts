@@ -2,6 +2,17 @@ import { expect, test } from 'vitest';
 import _ from 'lodash';
 import { Tmpl, DateTime, Vars } from '../../core/ti';
 
+test('list_index', () => {
+  let vars = {
+    index: 0,
+  };
+  let s = 'index=${index}';
+  let tmpl = Tmpl.parse(s);
+
+  let str = tmpl.render(vars);
+  expect(str).eq('index=0');
+});
+
 test('loop_in_loop', () => {
   let vars = {
     users: [
@@ -138,7 +149,7 @@ test('string_replace', () => {
   expect(
     Tmpl.exec("${path<:@trim;@replace'/','-';@replace'~'>}", {
       path: '  ~/a/b/c  ',
-    }),
+    })
   ).eq('-a-b-c');
 });
 
@@ -148,10 +159,10 @@ test('EL', () => {
 
 test('string_mapping', () => {
   expect(Tmpl.exec('${fruit(::A=Apple,B=Banana,C=Cherry)}', { fruit: 'A' })).eq(
-    'Apple',
+    'Apple'
   );
   expect(Tmpl.exec('${fruit(::A=Apple,B=Banana,C=Cherry)}', { fruit: 'C' })).eq(
-    'Cherry',
+    'Cherry'
   );
 });
 
@@ -164,10 +175,10 @@ test('json_format', () => {
   expect(Tmpl.exec('${a<json>}')).eq('null');
   expect(Tmpl.exec('${a<json>}', { a: null })).eq('null');
   expect(Tmpl.exec('${a<json:c>}', { a: { x: 100, y: 99 } })).eq(
-    `{x:100,y:99}`,
+    `{x:100,y:99}`
   );
   expect(Tmpl.exec('${a<json:cq>}', { a: { x: 100, y: 99 } })).eq(
-    `{"x":100,"y":99}`,
+    `{"x":100,"y":99}`
   );
   expect(Tmpl.exec('${a<json>?}')).eq(`''`);
   expect(Tmpl.exec('${a<json>?[]}')).eq(`[]`);
@@ -175,7 +186,7 @@ test('json_format', () => {
   expect(Tmpl.exec('${a<json>?-obj-}')).eq(`{}`);
   expect(Tmpl.exec('${a<json>?-obj-}', { a: 'xyz' })).eq(`'xyz'`);
   expect(Tmpl.exec('${a<json:cq>?-obj-}', { a: { k: [3, true, 'a'] } })).eq(
-    `{"k":[3,true,"a"]}`,
+    `{"k":[3,true,"a"]}`
   );
 });
 
@@ -202,10 +213,10 @@ test('special_key', () => {
   expect(Tmpl.exec('A${a-b}C', { 'a-b': 'B' })).eq('ABC');
   expect(Tmpl.exec("A${'a.b'}C", { 'a.b': 'B' })).eq('ABC');
   expect(
-    Tmpl.exec("A${pos[0].'x.x'}C", { pos: [{ 'x.x': 1 }, { 'y.y': 2 }] }),
+    Tmpl.exec("A${pos[0].'x.x'}C", { pos: [{ 'x.x': 1 }, { 'y.y': 2 }] })
   ).eq('A1C');
   expect(
-    Tmpl.exec("A${pos[1].'y.y'}C", { pos: [{ 'x.x': 1 }, { 'y.y': 2 }] }),
+    Tmpl.exec("A${pos[1].'y.y'}C", { pos: [{ 'x.x': 1 }, { 'y.y': 2 }] })
   ).eq('A2C');
 });
 
@@ -231,7 +242,7 @@ test('date', () => {
   let sd = DateTime.format(d, { fmt: 'yyyy-MM-dd HH:mm:ss' });
   expect(Tmpl.exec('${d<date>}', { d: ms })).eq(sd);
   expect(Tmpl.exec('${d<date:yyyy-MM-dd>}', { d: sd })).eq(
-    DateTime.format(d, { fmt: 'yyyy-MM-dd' }),
+    DateTime.format(d, { fmt: 'yyyy-MM-dd' })
   );
   expect(Tmpl.exec('${xyz<date:yyyy-MM-dd>?}', {})).eq('');
 });

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed } from 'vue';
-  import { TiCom, TiIcon } from '../../../lib';
+  import { TiCom } from '../../../core';
+  import { TiIcon } from '../../../lib';
   import { LiveBgMode, PlayLayoutMode } from './use-play-mode';
   import { getExampleList } from './use-playground';
 

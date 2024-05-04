@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { AppModalProps, openAppModal } from '..';
-import { IconInput, LogicType, PopItemProps } from '../../lib';
+import { openAppModal } from '..';
+import { AppModalProps, IconInput, LogicType, PopItemProps } from '../../core';
 import { __get_msg_box_html } from './get-msg-box-html';
 
 export type AlertOptions = PopItemProps & {

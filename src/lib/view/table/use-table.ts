@@ -1,16 +1,18 @@
 import _ from 'lodash';
 import { ComputedRef, Ref } from 'vue';
 import {
+  CellChanged,
   CheckStatus,
   SelectableFeature,
   SelectableState,
-  SelectionEmitInfo,
   TableCell,
   TableColumn,
   TableEvent,
   TableProps,
   TableRowData,
   TableRowID,
+  TableSelectEmitInfo,
+  TableSelection,
   getFieldUniqKey,
   useSelectable,
 } from '../../';
@@ -22,6 +24,7 @@ import {
   Str,
   Vars,
   getLogger,
+  Util,
 } from '../../../core';
 
 import { TableKeepFeature } from './use-table-keep';
@@ -49,9 +52,10 @@ export type ColResizingState = {
 };
 
 export type TableEmit = {
-  (eventName: 'select', payload: SelectionEmitInfo<TableRowID>): void;
+  (eventName: 'select', payload: TableSelectEmitInfo): void;
   (eventName: 'open', payload: TableRowData): void;
-  (eventName: 'open:cell', payload: TableEvent): void;
+  (eventName: 'cell-open', payload: TableEvent): void;
+  (eventName: 'cell-change', payload: CellChanged): void;
 };
 
 /*-------------------------------------------------------
@@ -83,6 +87,17 @@ function _get_table_columns(props: TableProps) {
         className: 'is-nowrap',
       };
 
+    // 表格默认激活控件
+    colItem.activatedComType = Util.fallback(
+      col.activatedComType,
+      props.defaultCellActivatedComType
+    );
+
+    colItem.activatedComConf = Util.fallback(
+      col.activatedComConf,
+      props.defaultCellActivatedComConf
+    );
+
     // 记入列表
     list.push(colItem);
   }
@@ -99,7 +114,7 @@ function _get_table_columns(props: TableProps) {
  */
 function _get_table_data(
   selectable: SelectableFeature<TableRowID>,
-  state: SelectableState<TableRowID>,
+  _state: TableSelection,
   data: Vars[]
 ): TableRowData[] {
   // 启用特性
@@ -115,8 +130,8 @@ function _get_table_data(
       id: id ?? `row-${index}`,
       index,
       indent: 0,
-      activated: id == state.currentId,
-      checked: isIDChecked(state, id),
+      // activated: id == state.currentId,
+      // checked: isIDChecked(state, id),
       rawData,
     });
   }
@@ -128,7 +143,7 @@ function _get_table_data(
  */
 function _on_row_select(
   selectable: SelectableFeature<TableRowID>,
-  selection: SelectableState<TableRowID>,
+  selection: TableSelection,
   rowEvent: TableEvent
 ) {
   let { event, row } = rowEvent;
@@ -163,10 +178,7 @@ export function useTable(props: TableProps, emit: TableEmit) {
     multi: props.multi,
   });
 
-  function getCurrentRow(
-    selection: SelectableState<TableRowID>,
-    rows: TableRowData[]
-  ) {
+  function getCurrentRow(selection: TableSelection, rows: TableRowData[]) {
     if (!_.isNil(selection.currentId)) {
       for (let row of rows) {
         if (row.id == selection.currentId) {
@@ -177,13 +189,13 @@ export function useTable(props: TableProps, emit: TableEmit) {
   }
 
   function getCheckedRows(
-    selection: SelectableState<TableRowID>,
+    selection: TableSelection,
     rows: TableRowData[]
   ): TableRowData[] {
     let checked = [] as TableRowData[];
     if (selection.checkedIds.size > 0) {
       for (let row of rows) {
-        if (row.checked) {
+        if (selectable.isIDChecked(selection, row.id)) {
           checked.push(row);
         }
       }
@@ -192,10 +204,16 @@ export function useTable(props: TableProps, emit: TableEmit) {
   }
 
   return {
+    selectable,
+    getTableHeadClass: (selection: TableSelection, colIndex: number) => {
+      return {
+        'is-actived-column': selection.columnIndex == colIndex,
+      };
+    },
     getTableColumns: () => {
       return _get_table_columns(props);
     },
-    getTableData: (state: SelectableState<TableRowID>) => {
+    getTableData: (state: TableSelection) => {
       return _get_table_data(selectable, state, props.data);
     },
     bindTableResizing: (
@@ -225,21 +243,22 @@ export function useTable(props: TableProps, emit: TableEmit) {
       }
     },
 
-    createSelection: () => selectable.createSelection(),
+    createSelection: (): TableSelection => {
+      let re = selectable.createSelection() as TableSelection;
+      re.columnIndex = -1;
+      return re;
+    },
 
     getRowIds: selectable.getRowIds,
 
-    getCheckStatus(selection: SelectableState<TableRowID>) {
+    getCheckStatus(selection: TableSelection) {
       return selectable.getCheckStatus(selection);
     },
 
     getCurrentRow,
     getCheckedRows,
 
-    OnTableHeadCheckerClick(
-      selection: SelectableState<TableRowID>,
-      status: CheckStatus
-    ) {
+    OnTableHeadCheckerClick(selection: TableSelection, status: CheckStatus) {
       let { ids, checkedIds } = selection;
       checkedIds.clear();
       if ('all' != status) {
@@ -249,64 +268,91 @@ export function useTable(props: TableProps, emit: TableEmit) {
       }
     },
 
-    OnRowSelect(selection: SelectableState<TableRowID>, rowEvent: TableEvent) {
+    OnRowSelect(selection: TableSelection, rowEvent: TableEvent) {
+      selection.columnIndex = -1;
       // Guard actived
-      if (rowEvent.row.activated) {
+      if (selection.currentId == rowEvent.row.id) {
         return;
       }
       log.debug('OnRowSelect', rowEvent);
       let oldCurrentId = _.cloneDeep(selection.currentId);
       let oldCheckedIds = _.cloneDeep(selection.checkedIds);
       _on_row_select(selectable, selection, rowEvent);
-      let emitInfo = selectable.getSelectionEmitInfo(
+
+      //
+      // Prepare the emit info
+      //
+      let info = selectable.getSelectionEmitInfo(
         selection,
         props.data,
         oldCheckedIds,
         oldCurrentId
-      );
-      emit('select', emitInfo);
+      ) as TableSelectEmitInfo;
+
+      emit('select', info);
     },
 
-    OnRowCheck(selection: SelectableState<TableRowID>, rowEvent: TableEvent) {
+    OnRowCheck(selection: TableSelection, rowEvent: TableEvent) {
       log.debug('OnRowCheck', rowEvent);
       let oldCurrentId = _.cloneDeep(selection.currentId);
       let oldCheckedIds = _.cloneDeep(selection.checkedIds);
       selectable.toggleId(selection, rowEvent.row.id);
-      let emitInfo = selectable.getSelectionEmitInfo(
+      selection.columnIndex = -1;
+
+      //
+      // Prepare the emit info
+      //
+      let info = selectable.getSelectionEmitInfo(
         selection,
         props.data,
         oldCheckedIds,
         oldCurrentId
-      );
-      emit('select', emitInfo);
+      ) as TableSelectEmitInfo;
+
+      emit('select', info);
     },
 
-    OnCellSelect(selection: SelectableState<TableRowID>, rowEvent: TableEvent) {
-      let { row } = rowEvent;
+    OnCellSelect(
+      selection: TableSelection,
+      rowEvent: TableEvent,
+      columns: TableColumn[]
+    ) {
+      let { row, colIndex } = rowEvent;
+      selection.columnIndex = colIndex ?? -1;
       if (!selection.checkedIds.get(row.id)) {
         let oldCurrentId = _.cloneDeep(selection.currentId);
         let oldCheckedIds = _.cloneDeep(selection.checkedIds);
         log.debug('OnCellSelect', rowEvent);
         selectable.selectId(selection, row.id);
-        let emitInfo: SelectionEmitInfo<TableRowID> =
-          selectable.getSelectionEmitInfo(
-            selection,
-            props.data,
-            oldCheckedIds,
-            oldCurrentId
-          );
-        emit('select', emitInfo);
+
+        //
+        // Prepare the emit info
+        //
+        let info = selectable.getSelectionEmitInfo(
+          selection,
+          props.data,
+          oldCheckedIds,
+          oldCurrentId
+        ) as TableSelectEmitInfo;
+
+        // add Column info
+        if (colIndex && colIndex >= 0) {
+          info.colIndex = colIndex;
+          info.column = columns[colIndex];
+        }
+
+        emit('select', info);
       }
     },
 
-    OnRowOpen(_selection: SelectableState<TableRowID>, rowEvent: TableEvent) {
+    OnRowOpen(_selection: TableSelection, rowEvent: TableEvent) {
       log.debug('OnRowOpen', rowEvent);
       emit('open', rowEvent.row);
     },
 
-    OnCellOpen(_selection: SelectableState<TableRowID>, rowEvent: TableEvent) {
+    OnCellOpen(_selection: TableSelection, rowEvent: TableEvent) {
       log.debug('OnCellOpen', rowEvent);
-      emit('open:cell', rowEvent);
+      emit('cell-open', rowEvent);
     },
   };
 }

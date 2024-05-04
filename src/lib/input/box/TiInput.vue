@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import _ from 'lodash';
-  import { computed, nextTick, reactive, ref } from 'vue';
-  import { PrefixSuffixEvents, TiIcon, ValueBoxEmits, tiGetDefaultComPropValue } from '../../';
+  import { computed, nextTick, onMounted, reactive, ref } from 'vue';
+  import { TiIcon, ValueBoxEmits } from '../../';
   import { CssUtils } from '../../../core';
   import {
     COM_TYPE,
@@ -41,7 +41,7 @@
     useInputBox(state, props, {
       emit,
       getBoxElement: () => $el.value,
-      COM_TYPE
+      COM_TYPE,
     })
   );
   //-----------------------------------------------------
@@ -57,22 +57,31 @@
     })
   );
   //-----------------------------------------------------
-  const _input = ref<any>(null);
+  const $input = ref<any>(null);
   //-----------------------------------------------------
   function OnInputFocused() {
     state.boxFocused = true;
     Box.value.doUpdateText();
     if (props.autoSelect) {
-      nextTick(() => {
-        _input.value.select();
-      });
+      $input.value.select();
+      // nextTick(() => {
+      //   $input.value.select();
+      // });
     }
   }
   //-----------------------------------------------------
   function OnInputChanged() {
-    let val = _input.value.value;
+    let val = $input.value.value;
     Box.value.doChangeValue(val);
   }
+  //-----------------------------------------------------
+  onMounted(()=>{
+    //console.log("TiInput mounted")
+    if(props.boxFocused){
+      $input.value.select()
+      //console.log($input)
+    }
+  })
   //-----------------------------------------------------
 </script>
 
@@ -105,7 +114,7 @@
     </div>
     <div class="part-value">
       <input
-        ref="_input"
+        ref="$input"
         :value="state.boxText"
         spellcheck="false"
         :placeholder="Placeholder"

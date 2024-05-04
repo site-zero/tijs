@@ -4,9 +4,14 @@ import {
   AltBarItemisplay,
   BarItemAction,
   BarItemType,
+  Callback,
+  I18n,
+  Match,
+  TiMatch,
+  Util,
   isEventInfo,
-} from '../../';
-import { Callback, I18n, Match, TiMatch, Util, isInvoke } from '../../../core';
+  isInvoke,
+} from '../../../core';
 import { BarState, BuiltedBarItem, ItemAncestors } from './action-bar-type';
 import { ActionBarOptions } from './use-action-bar';
 

@@ -1,16 +1,15 @@
 import _ from 'lodash';
 import {
-  CommonProps,
   Field,
   FieldComProps,
   FieldStatus,
   FieldStatusIcons,
   FieldValueType,
-  VisibilityProps,
   getFieldUniqKey,
   useVisibility,
 } from '../../';
 import {
+  CommonProps,
   CssGridItem,
   CssUtils,
   FuncA2,
@@ -18,6 +17,7 @@ import {
   Match,
   Util,
   Vars,
+  VisibilityProps,
   invoke_partial,
 } from '../../../core';
 import { FieldProps } from '../field/use-field';
@@ -201,7 +201,7 @@ export function buildFormFieldList(
   fields: FormField[],
   context: Vars,
   indexes: number[] = [],
-  maxFieldNameWidth?: number,
+  maxFieldNameWidth?: number
 ): FormItem[] {
   let list = [] as FormItem[];
   for (let i = 0; i < fields.length; i++) {
@@ -211,7 +211,7 @@ export function buildFormFieldList(
       props,
       field,
       context,
-      maxFieldNameWidth,
+      maxFieldNameWidth
     );
     if (fld) {
       list.push(fld);
@@ -232,7 +232,7 @@ function buildFormField(
   props: FormFieldAboutProps,
   field: FormField,
   vars: Vars,
-  maxFieldNameWidth?: number,
+  maxFieldNameWidth?: number
 ): FormItem | undefined {
   maxFieldNameWidth =
     field.maxFieldNameWidth ?? maxFieldNameWidth ?? props.maxFieldNameWidth;
@@ -257,7 +257,7 @@ function buildFormField(
 
     // 记入默认组样式
     fItem.className = CssUtils.mergeClassName(
-      field.className ?? props.defaultGroupClassName ?? 'as-legend',
+      field.className ?? props.defaultGroupClassName ?? 'as-legend'
     );
 
     // 字段组布局
@@ -279,7 +279,7 @@ function buildFormField(
       field.fields,
       vars,
       indexes,
-      maxFieldNameWidth,
+      maxFieldNameWidth
     );
     // 空组就无视
     if (_.isEmpty(fItem.fields)) {
@@ -290,14 +290,14 @@ function buildFormField(
   else if (!field.name) {
     fItem.race = 'label';
     fItem.className = CssUtils.mergeClassName(
-      field.className ?? props.defaultLabelClassName,
+      field.className ?? props.defaultLabelClassName
     );
   }
   // 普通字段
   else {
     fItem.race = 'field';
     fItem.className = CssUtils.mergeClassName(
-      field.className ?? props.defaultFieldClassName,
+      field.className ?? props.defaultFieldClassName
     );
     // 测试显示隐藏性
     let { isHidden, isDisabled } = useVisibility(field);
@@ -336,7 +336,7 @@ function buildFormField(
         vars,
         field.transformer,
         field.transArgs,
-        field.transPartial,
+        field.transPartial
       );
     }
 
@@ -346,7 +346,7 @@ function buildFormField(
         vars,
         field.serializer,
         field.serialArgs,
-        field.serialPartial,
+        field.serialPartial
       );
     }
   }
@@ -358,7 +358,7 @@ function prepareFieldConverter(
   context: Vars,
   converter: string | Function,
   args?: any[],
-  partial?: invoke_partial,
+  partial?: invoke_partial
 ): FuncA2<any, Vars, any> {
   let conv = Util.genInvoking(converter, {
     context,

@@ -1,17 +1,18 @@
+import { KeepInfo } from '..';
 import {
-  ActionBarItem,
+  BlockInfoProps,
   ComRef,
   CommonProps,
-  EmitAdaptorProps,
-  IconInput,
-  KeepInfo,
-} from '..';
-import {
   CssGridItem,
   CssGridLayout,
+  EmitAdaptorProps,
+  IconInput,
   OptionItem,
   OptionValueProps,
+  PopItemProps,
   PopPosition,
+  TranName,
+  TranSpeed,
   Vars,
 } from '../../core';
 import { LayoutGridKeepProps } from './lib-keep';
@@ -250,53 +251,6 @@ export type LayoutItem = LayoutBlock & {
   itemConfig?: Vars;
 };
 
-export type TranSpeed = 'slow' | 'normal' | 'fast';
-export type TranName =
-  | 'ti-slide-up'
-  | 'ti-slide-down'
-  | 'ti-slide-left'
-  | 'ti-slide-right'
-  | 'ti-zoom';
-
-export type PopItemProps = {
-  position?: PopPosition;
-  tranSpeed?: TranSpeed;
-  showMask?: boolean;
-  clickMaskToClose?: boolean;
-  width?: string;
-  height?: string;
-  maxWidth?: string;
-  maxHeight?: string;
-  minWidth?: string;
-  minHeight?: string;
-  left?: string;
-  right?: string;
-  top?: string;
-  bottom?: string;
-  overflow?: string;
-};
-
-export type BlockInfoProps = {
-  // 声明标题栏，如果有 icon || title 就显示标题栏
-  icon?: IconInput;
-  title?: string;
-
-  /**
-   * 块名称
-   */
-  name?: string;
-
-  //
-  // 右上角菜单
-  //
-  actions?: ActionBarItem[];
-
-  //
-  // 外观样式
-  //
-  headStyle?: Vars;
-  mainStyle?: Vars;
-};
 export type BlockProps = CommonProps &
   CssGridItem &
   BlockInfoProps &

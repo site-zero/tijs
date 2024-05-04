@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import {
-  CommonProps,
   FormatValueProps,
   PlaceholderFeature,
   PlaceholderFeatureProps,
@@ -13,9 +12,9 @@ import {
   useFormatValue,
   usePlaceholder,
   usePrefixSuffix,
-  useValueInput
+  useValueInput,
 } from '..';
-import { Be, Callback, Callback1, FuncA0, Str } from '../../core';
+import { Be, Callback, Callback1, CommonProps, FuncA0, Str } from '../../core';
 /*-------------------------------------------------------
 
                      Emit 

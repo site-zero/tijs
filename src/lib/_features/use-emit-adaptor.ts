@@ -1,25 +1,12 @@
 import _ from 'lodash';
-import { Callback2, Tmpl, getLogger } from '../../core';
+import {
+  CustomizedEmitAdaptor,
+  EmitAdaptorProps,
+  Tmpl,
+  getLogger,
+} from '../../core';
 
 const log = getLogger('ti.use-emit-adaptor');
-
-// 这个适配函数，接收捕获的事件以及事件参数，然后自行决定 emit 什么
-export type CustomizedEmitAdaptor = (
-  eventName: string,
-  payload: any,
-  emit: Callback2<string, any>
-) => void;
-export function isCustomizedEmitAdaptor(
-  input: any
-): input is CustomizedEmitAdaptor {
-  return _.isFunction(input);
-}
-
-export type EmitAdaptor = string | CustomizedEmitAdaptor;
-
-export type EmitAdaptorProps = {
-  emitAdaptors?: Record<string, EmitAdaptor>;
-};
 
 export type EmitAdaptorOptions = {
   ignoreNativeEvents?: boolean;

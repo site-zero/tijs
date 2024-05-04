@@ -1,6 +1,5 @@
 import _ from 'lodash';
-import { Dom, I18n, Icons, isIconObj } from '..';
-import { IconInput, LogicType } from '../../lib';
+import { Dom, I18n, IconInput, Icons, LogicType, isIconObj } from '../../core';
 
 export function __get_msg_box_html(
   msg: string,

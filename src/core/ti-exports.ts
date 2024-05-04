@@ -15,7 +15,6 @@ export * as Dicts from './dict/ti-dict';
 export * as G2D from './g2d/ti-g2d';
 export * from './log/ti-log';
 export * as Match from './match/ti-match';
-export * from './modal';
 export * as Net from './net/ti-net';
 export * as Num from './num/ti-num';
 export * as TiStore from './storage/ti-storage';
@@ -25,3 +24,4 @@ export * as Tmpl from './tmpl/ti-tmpl';
 export * as Util from './util';
 export * from './web';
 export * as Be from './web/behaviors';
+

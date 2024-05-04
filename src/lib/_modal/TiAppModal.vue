@@ -1,13 +1,17 @@
 <script setup lang="ts">
   import _ from 'lodash';
   import { computed, onUnmounted, provide, ref } from 'vue';
-  import { AppModalInitProps, CssUtils, getLogger } from '../../core';
   import {
     ActionBarItem,
+    AppModalInitProps,
     AppModelBinding,
     BUS_KEY,
-    BlockProps,
+    CssUtils,
     EmitAdaptor,
+    getLogger,
+  } from '../../core';
+  import {
+    BlockProps,
     TiActionBar,
     TiBlock,
     createAppBus,

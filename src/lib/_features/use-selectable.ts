@@ -20,7 +20,7 @@ export type SelectableState<ID> = {
   checkedIds: Map<ID, boolean>;
   ids: ID[];
 };
-export type SelectionEmitInfo<ID> = Omit<SelectableState<ID>, 'ids'> & {
+export type SelectEmitInfo<ID> = Omit<SelectableState<ID>, 'ids'> & {
   current?: Vars;
   checked: Vars[];
   oldCurrentId?: ID;
@@ -28,13 +28,13 @@ export type SelectionEmitInfo<ID> = Omit<SelectableState<ID>, 'ids'> & {
 };
 // -----------------------------------------------------
 export type SelectableFeature<ID extends string | number> = {
-  getRowIds: FuncA0<ID[]>;
-  createSelection: FuncA0<SelectableState<ID>>;
+  getRowIds: () => ID[];
+  createSelection: () => SelectableState<ID>;
 
   getDataId: Convertor<Vars, ID | undefined>;
-  isIDChecked: FuncA2<SelectableState<ID>, ID | undefined, boolean>;
-  isDataChecked: FuncA2<SelectableState<ID>, Vars | undefined, boolean>;
-  isDataActived: FuncA2<SelectableState<ID>, Vars | undefined, boolean>;
+  isIDChecked: (state: SelectableState<ID>, id?: ID) => boolean;
+  isDataChecked: (state: SelectableState<ID>, checked?: Vars) => boolean;
+  isDataActived: (state: SelectableState<ID>, checked?: Vars) => boolean;
 
   getCheckedData: (list: Vars[], state: SelectableState<ID>) => Vars[];
   getCurrentData: (
@@ -46,13 +46,17 @@ export type SelectableFeature<ID extends string | number> = {
     list: Vars[],
     oldCheckedIds: Map<ID, boolean>,
     oldCurrentId?: ID
-  ) => SelectionEmitInfo<ID>;
+  ) => SelectEmitInfo<ID>;
 
-  getCheckStatus: FuncA1<SelectableState<ID>, CheckStatus>;
+  getCheckStatus: (state: SelectableState<ID>) => CheckStatus;
 
-  selectId: Callback2<SelectableState<ID>, ID>;
-  toggleId: Callback2<SelectableState<ID>, ID>;
-  selectRange: Callback3<SelectableState<ID>, ID[], [ID, ID?]>;
+  selectId: (state: SelectableState<ID>, id: ID) => void;
+  toggleId: (state: SelectableState<ID>, id: ID) => void;
+  selectRange: (
+    state: SelectableState<ID>,
+    ids: ID[],
+    range: [ID, ID?]
+  ) => void;
 };
 // -----------------------------------------------------
 //
@@ -142,7 +146,7 @@ export function useSelectable<ID extends string | number>(
     list: Vars[],
     oldCheckedIds: Map<ID, boolean>,
     oldCurrentId?: ID
-  ): SelectionEmitInfo<ID> {
+  ): SelectEmitInfo<ID> {
     let currentId = state.currentId;
     let checkedIds = state.checkedIds;
     let current = getCurrentData(list, state);

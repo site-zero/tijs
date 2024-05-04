@@ -1,9 +1,9 @@
-import { TiComInfo, TiComRace } from '../../';
 import { App } from 'vue';
+import { TiComInfo, TiComRace } from '../../../core';
 import TiActionBar from './TiActionBar.vue';
+import { COM_TYPE } from './action-bar-type';
 import { simple } from './example';
 import i18n from './i18n';
-import { COM_TYPE } from './action-bar-type';
 
 const TiActionBarInfo: TiComInfo = {
   icon: 'fas-hanukiah',

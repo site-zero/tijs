@@ -1,20 +1,24 @@
-import { Vars } from '../../core';
+import { CommonProps, Vars } from '../../core';
 import {
-  CommonProps,
   KeepInfo,
+  SelectEmitInfo,
   SelectableProps,
+  SelectableState,
   TableCell,
-  SelectionEmitInfo,
 } from '../../lib';
 
 export type TableRowID = number | string;
 export type TableRowData = {
   index: number;
   id: TableRowID;
-  activated: boolean;
-  checked: boolean;
+  // activated: boolean;
+  // checked: boolean;
   indent: number;
   rawData: Vars;
+};
+
+export type TableSelection = SelectableState<TableRowID> & {
+  columnIndex: number;
 };
 
 /**
@@ -39,7 +43,7 @@ export type TableColumn = TableCell & {
   candidate?: boolean;
 };
 
-export type TableSelection = SelectionEmitInfo<TableRowID> & {
+export type TableSelectEmitInfo = SelectEmitInfo<TableRowID> & {
   colIndex?: number;
   column?: TableCell;
 };

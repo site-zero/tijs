@@ -11,9 +11,9 @@
     flex: 1 1 auto;
   }
 
-  /**
-       * 表头固定
-       */
+  //
+  // 表头固定
+  //
   &.as-head {
     @include flex-align-nowrap($ai: stretch);
     user-select: none;
@@ -22,6 +22,7 @@
     z-index: $z-above;
     height: 2em;
     background-color: var(--ti-color-bar);
+    //---------------------------------
     // 固定指示块
     &.as-marker {
       @include flex-align-nowrap;
@@ -40,7 +41,8 @@
         font-size: SZ(16);
         @include hover-scale($s: 1.3, $c: primary);
       }
-    }
+    } // &.as-marker {
+    //---------------------------------
     // 表头列单元格
     > .head-cell-con {
       @include flex-align-nowrap($jc: center);
@@ -88,6 +90,17 @@
         white-space: nowrap;
         text-overflow: ellipsis;
       }
+    } // > .head-cell-con {
+    //---------------------------------
+    &.is-actived-column {
+      color: var(--ti-color-selected-r);
+      background-color: var(--ti-color-selected);
+      > .head-cell-con {
+        > .head-text {
+          font-weight: bold;
+        }
+      }
     }
-  }
+    //---------------------------------
+  } // &.as-head {
 } // >.table-cell

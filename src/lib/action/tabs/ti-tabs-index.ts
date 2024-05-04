@@ -1,5 +1,5 @@
 import { App } from 'vue';
-import { TiComInfo, TiComRace } from '../../';
+import { TiComInfo, TiComRace } from '../../../core';
 import TiTabs from './TiTabs.vue';
 import { atBottom, atTop } from './example';
 

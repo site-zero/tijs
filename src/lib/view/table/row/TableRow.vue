@@ -1,7 +1,13 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { Ref, computed, onMounted, ref } from 'vue';
-  import { TableEvent, TableEventName, TiCell } from '../../../';
+  import {
+    CellChanged,
+    CellEvents,
+    TableEvent,
+    TableEventName,
+    TiCell,
+  } from '../../../';
   import { CssUtils } from '../../../../core';
   import { TableRowProps } from './use-table-row';
   /*-------------------------------------------------------
@@ -35,6 +41,7 @@
 -------------------------------------------------------*/
   let emit = defineEmits<{
     (event: TableEventName, payload: TableEvent): void;
+    (event: 'cell-change', payload: CellChanged): void;
   }>();
   /*-------------------------------------------------------
 
@@ -43,13 +50,7 @@
 -------------------------------------------------------*/
   // 是否显示行前的空白标记单元格
   const ShowIndentor = computed(() => (props.indent ?? 0) > 0);
-  const RowCellClass = computed(() =>
-    CssUtils.mergeClassName({
-      'is-actived': props.activated,
-      'is-checked': props.checked,
-      'can-hover': props.canHover,
-    })
-  );
+
   const RowIndentStyle = computed(() => {
     if (props.indent && props.indent > 0) {
       let indent;
@@ -63,6 +64,21 @@
       };
     }
   });
+
+  function getRowCellClass(colIndex: number) {
+    let isActived = false;
+    if (props.activated) {
+      // 如果本行是激活的，那么 -1 表示 marker 列，以及内容列需要判断一下
+      isActived = colIndex < 0 || colIndex == props.activedColIndex;
+    }
+    let col = props.columns[colIndex];
+    return CssUtils.mergeClassName({
+      'is-actived': isActived,
+      'is-checked': props.checked,
+      'has-actived-com': col?.activatedComType ? true : false,
+      'can-hover': props.canHover,
+    });
+  }
 
   onMounted(() => {
     let els = $cells.value;
@@ -85,7 +101,7 @@
   <div
     v-if="props.showRowMarker"
     class="table-row-marker"
-    :class="RowCellClass"
+    :class="getRowCellClass(-1)"
     :row-id="props.row.id"
     :row-index="props.row.index"
     @click="emit('select', { row: props.row, event: $event })"
@@ -126,7 +142,7 @@
       :row-id="props.row.id"
       :row-index="props.row.index"
       :col="i"
-      :class="RowCellClass"
+      :class="getRowCellClass(i)"
       ref="$cells">
       <!--首列，这里有可能插入缩进占位块-->
       <div
@@ -144,7 +160,8 @@
         @click="emit('cell', { row: props.row, event: $event, colIndex: i })"
         @dblclick="
           emit('cell-open', { row: props.row, event: $event, colIndex: i })
-        " />
+        "
+        @value-change="emit('cell-change', $event)" />
     </div>
   </template>
 </template>

@@ -1,4 +1,4 @@
-import { TiComSet } from '../';
+import { TiComSet } from '../../core';
 import { TiBlockInfo } from './block/ti-block-index';
 import { TiCellInfo } from './cell/ti-cell-index';
 import { TiFieldInfo } from './field/ti-field-index';
@@ -27,4 +27,3 @@ export * from './layout/layout-support';
 export { TiLayoutTabs } from './layout/tabs/ti-layout-tabs-index';
 export { TiMainFrame } from './main-frame/ti-main-frame-index';
 export { TiPlayground };
-

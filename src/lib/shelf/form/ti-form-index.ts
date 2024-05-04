@@ -1,4 +1,4 @@
-import { TiComInfo, TiComRace } from '../../';
+import { TiComInfo, TiComRace } from '../../../core';
 import { App } from 'vue';
 import TiForm from './TiForm.vue';
 import { nested, simple } from './example';

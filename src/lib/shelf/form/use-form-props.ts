@@ -1,5 +1,5 @@
-import { CommonProps, TabsAspect } from '../../';
-import { Vars } from '../../../core';
+import { TabsAspect } from '../../';
+import { CommonProps, Vars } from '../../../core';
 import { FormField, FormFieldAboutProps } from './use-form-field';
 
 export type FormProps = CommonProps &

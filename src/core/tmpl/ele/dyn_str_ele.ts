@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import { StrCaseMode } from '../../';
 import { Str, StrConvertor, Vars } from '../../ti';
 import { DynElInfo } from '../ti-tmpl';
@@ -53,7 +54,7 @@ export class DynStrEle extends DynEle {
   join(sb: string[], context: Vars, showKey?: boolean) {
     let val = this._get_value(context);
 
-    if (!val) {
+    if (_.isNil(val) || (_.isString(val) && !val)) {
       this.joinDefaultValue(sb, context, showKey);
       return;
     }

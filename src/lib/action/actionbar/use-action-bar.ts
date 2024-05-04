@@ -1,8 +1,4 @@
-import {
-  ActionBarProps,
-  TiEventTrigger
-} from '../../';
-import { Callback } from '../../../core';
+import { ActionBarProps, Callback, TiEventTrigger } from '../../../core';
 import { buildBarViewItems, buildItemsAncestors } from './action-bar-item';
 import { BarState } from './action-bar-type';
 

@@ -1,5 +1,5 @@
 import { App } from 'vue';
-import { TiComInfo, TiComRace } from '../../_top/lib.types';
+import { TiComInfo, TiComRace } from '../../../core';
 import TiUnknown from './TiUnknown.vue';
 
 const en_us = {

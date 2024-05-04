@@ -1,4 +1,4 @@
-import { TiComSet } from '../';
+import { TiComSet } from '../../core';
 import { TiUnkownInfo } from '../tile/unknown/ti-unknown-index';
 import { TiHtmlSnippetInfo } from './html-snippet/html-snippet-index';
 import { TiIconInfo } from './icon/ti-icon-index';

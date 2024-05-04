@@ -1,8 +1,8 @@
 import { App } from 'vue';
-import { TiComInfo, TiComRace } from '../../';
+import { TiComInfo, TiComRace } from '../../../core';
 import TiTable from './TiTable.vue';
 //const TiTable = defineAsyncComponent(() => import('./TiTable.vue'));
-import { d10k, d1k, d300, simple, editable } from './example';
+import { d10k, d1k, d300, editable, simple } from './example';
 import i18n from './i18n';
 import { COM_TYPE } from './use-table';
 
@@ -18,6 +18,12 @@ const TiTableInfo: TiComInfo = {
   },
   defaultProps: 'simple',
   exampleProps: [simple, d300, d1k, d10k, editable],
+  exampleModel: {
+    'cell-change': {
+      key: 'data.${rowIndex}.${name}',
+      val: '=value',
+    },
+  },
 };
 
 export { TiTable, TiTableInfo };

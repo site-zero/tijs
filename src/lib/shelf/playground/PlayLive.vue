@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import { computed } from 'vue';
-  import { TiCom } from '../../';
-  import { Vars } from '../../../core';
+  import { TiCom, Vars } from '../../../core';
   import { LiveBgMode } from './use-play-mode';
 
   /**

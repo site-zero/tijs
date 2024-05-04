@@ -1,6 +1,6 @@
-import { expect, test } from 'vitest';
-import { Vars, Util } from '../../core/ti';
 import _ from 'lodash';
+import { expect, test } from 'vitest';
+import { Util, Vars } from '../../core/ti';
 
 test('BaseExplain', () => {
   let context = {
@@ -90,4 +90,13 @@ test('WholeContextExplain', () => {
   } as Vars;
 
   expect(_.get(Util.explainObj(context, '=..'), 'name')).toStrictEqual('abc');
+});
+
+test('ZeroIndexExplain', () => {
+  expect(Util.explainObj({ index: 1 }, '->list.${index}')).toStrictEqual(
+    'list.1'
+  );
+  expect(Util.explainObj({ index: 0 }, '->list.${index}')).toStrictEqual(
+    'list.0'
+  );
 });

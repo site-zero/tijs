@@ -1,4 +1,4 @@
-import { TiComInfo, TiComRace } from '../../';
+import { TiComInfo, TiComRace } from '../../../core';
 import { App } from 'vue';
 import TiField from './TiField.vue';
 import { COM_TYPE } from './use-field';

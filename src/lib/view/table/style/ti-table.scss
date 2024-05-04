@@ -22,6 +22,10 @@
       &.is-checked {
         color: var(--ti-color-selected-r);
         background-color: var(--ti-color-selected);
+        &.is-actived.has-actived-com {
+          color: var(--ti-color-box-f);
+          background-color: var(--ti-color-box);
+        }
       }
       > .ti-cell {
         flex: 1 1 auto;

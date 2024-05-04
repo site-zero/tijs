@@ -1,16 +1,14 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed, inject, onUnmounted, provide } from 'vue';
+  import { BlockProps, TiActionBar, TiIcon, useEmitAdaptor } from '../../';
   import {
     BUS_KEY,
-    BlockProps,
-    TiActionBar,
+    Callback2,
     TiAppBus,
     TiAppEvent,
-    TiIcon,
-    useEmitAdaptor,
-  } from '../../';
-  import { Callback2, createBus } from '../../../core';
+    createBus,
+  } from '../../../core';
   import { COM_TYPE, useBlock, useBusAdaptor } from './use-block';
 
   defineOptions({

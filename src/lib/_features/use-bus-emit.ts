@@ -1,7 +1,13 @@
-import { TiAppBus, TiComInfo, TiEmit, TiEvent, TiEventTrigger } from '../';
-import { TiUnkownInfo } from '../tile/unknown/ti-unknown-index';
 import _ from 'lodash';
-import { CommonProps } from '.';
+import {
+  CommonProps,
+  TiAppBus,
+  TiComInfo,
+  TiEmit,
+  TiEvent,
+  TiEventTrigger,
+} from '../../core';
+import { TiUnkownInfo } from '../tile/unknown/ti-unknown-index';
 
 export type BusEmitProps = Pick<CommonProps, 'emitMode'>;
 
@@ -9,7 +15,7 @@ export function useBusEmit<K extends string, T>(
   com: TiComInfo,
   props: BusEmitProps,
   emit: TiEmit<K, T>,
-  bus?: TiAppBus,
+  bus?: TiAppBus
 ): TiEventTrigger<K, T> {
   return (name: K, payload?: T): void => {
     // 判断事件模式
@@ -37,7 +43,7 @@ export function useBusEmit<K extends string, T>(
 export function makeEvent<K extends string, T>(
   com: TiComInfo,
   name: K,
-  payload?: T,
+  payload?: T
 ): TiEvent<T> {
   return {
     created: new Date(),
@@ -51,7 +57,7 @@ export function makeEvent<K extends string, T>(
 
 export function makeAnonymouseEvent<K extends string, T>(
   name: K,
-  payload?: T,
+  payload?: T
 ): TiEvent<T> {
   return {
     created: new Date(),

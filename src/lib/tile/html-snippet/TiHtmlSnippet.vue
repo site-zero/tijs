@@ -1,8 +1,7 @@
 <script setup lang="ts">
   import _ from 'lodash';
   import { computed, onMounted, ref } from 'vue';
-  import { HtmlSnippetListenner } from '../../';
-  import { Dom, getLogger } from '../../../core';
+  import { Dom, HtmlSnippetListenner, getLogger } from '../../../core';
   import { COM_TYPE } from './html-snippet-index';
 
   const emit = defineEmits<{

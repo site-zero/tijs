@@ -1,8 +1,15 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed, inject, onMounted, provide, reactive, ref } from 'vue';
-  import { BUS_KEY, TiEvent, useBusEmit, ActionBarProps } from '../../';
-  import { Callback, CssUtils, Util } from '../../../core';
+  import { useBusEmit } from '../../';
+  import {
+    ActionBarProps,
+    BUS_KEY,
+    Callback,
+    CssUtils,
+    TiEvent,
+    Util,
+  } from '../../../core';
   import BarItemChildren from './BarItemChildren.vue';
   import {
     BAR_SUPPORT,

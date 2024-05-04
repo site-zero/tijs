@@ -1,5 +1,5 @@
 import { App } from 'vue';
-import { TiComInfo, TiComRace } from '../../_top/lib.types.ts';
+import { TiComInfo, TiComRace } from '../../../core';
 import TiIcon from './TiIcon.vue';
 import en_us from './i18n/en-us.json';
 import zh_cn from './i18n/zh-cn.json';

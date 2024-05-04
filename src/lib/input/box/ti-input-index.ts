@@ -1,5 +1,5 @@
 import { App } from 'vue';
-import { TiComInfo, TiComRace } from '../../';
+import { TiComInfo, TiComRace } from '../../../core';
 import TiInput from './TiInput.vue';
 import { COM_TYPE } from './use-input-box';
 

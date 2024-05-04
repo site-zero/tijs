@@ -1,5 +1,5 @@
-import { CommonProps, TableBehaviorsProps, TableRowData } from '../../../';
-import { Callback2 } from '../../../../core';
+import { TableBehaviorsProps, TableRowData } from '../../../';
+import { Callback2, CommonProps } from '../../../../core';
 /*-------------------------------------------------------
 
                         Props

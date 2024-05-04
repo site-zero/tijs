@@ -14,6 +14,7 @@ export const COM_TYPE = 'TiInput';
 export type InputBoxState = ValueBoxState<any>;
 export type InputBoxProps = ValueBoxProps<any> & {
   hideBorder?: boolean;
+  boxFocused?:boolean;
 };
 export type InputBoxOptions = ValueBoxOptions;
 export type InputBoxFeature = ValueBoxFeature;

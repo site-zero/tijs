@@ -1,32 +1,15 @@
 import _ from 'lodash';
 import {
+  CellChanged,
+  CellEvents,
   CellProps,
-  FieldPair,
-  TiEventTrigger,
-  TiRawCom,
   useFieldCom,
   useFieldSerializer,
   useFieldTransformer,
 } from '../../';
-import { Callback1, I18n, Vars } from '../../../core';
+import { I18n, TiRawCom, Vars } from '../../../core';
 
 export const COM_TYPE = 'TiCell';
-/*-------------------------------------------------------
-
-                     Events
-
--------------------------------------------------------*/
-export type CellEvents = 'change';
-export type CellChanged = FieldPair & {
-  rowIndex: number;
-  colIndex: number;
-};
-/*-------------------------------------------------------
-
-                     Props
-
--------------------------------------------------------*/
-
 /*-------------------------------------------------------
 
                      Feature
@@ -38,7 +21,7 @@ export type CellFeature = {
   CellValue?: any;
   CellComType: TiRawCom;
   CellComConf: Vars;
-  OnCellChange: Callback1<any>;
+  CellListeners: Record<string, Function>;
 };
 /*-------------------------------------------------------
 
@@ -46,7 +29,8 @@ export type CellFeature = {
 
 -------------------------------------------------------*/
 export type CellOptions = {
-  notify: TiEventTrigger<CellEvents, CellChanged>;
+  //notify: TiEventTrigger<CellEvents, CellChanged>;
+  emit: (eventName: CellEvents, payload: CellChanged) => void;
 };
 /*-------------------------------------------------------
 
@@ -54,12 +38,12 @@ export type CellOptions = {
 
         建议在 computed 中使用以便获得最大响应性
 -------------------------------------------------------*/
-export function useField(
+export function useCell(
   props: CellProps,
   options: CellOptions
 ): Omit<CellFeature, 'getReadonlyComType' | 'getReadonlyComConf'> {
   let { data, vars } = props;
-  let { notify } = options;
+  let { emit } = options;
   const { getFieldValue } = useFieldTransformer(props);
   const { prepareFieldValue } = useFieldSerializer(props);
   const { getComType, getComConf, getActivatedComType, getActivatedComConf } =
@@ -78,12 +62,48 @@ export function useField(
   // 获取控件
   let context: Vars = { data, vars };
   let FieldComType, FieldComConf;
-  if (props.activated) {
+  if (props.activated && props.activatedComType) {
     FieldComType = getActivatedComType();
     FieldComConf = getActivatedComConf(context, CellValue);
   } else {
     FieldComType = getComType();
     FieldComConf = getComConf(context, CellValue);
+  }
+
+  // 当值改动时的回调
+  function onCellChange(val: any) {
+    if (props.disabled) {
+      return;
+    }
+    console.log('OnCellChange', val);
+    // 应用类型转换和默认值
+    let v2 = prepareFieldValue(val, data);
+
+    // 是否通知
+    if (checkEqual) {
+      let old = getFieldValue(data);
+      if (_.isEqual(v2, old)) {
+        return;
+      }
+    }
+
+    // 通知改动
+    emit('value-change', {
+      rowIndex: props.rowIndex ?? 0,
+      colIndex: props.colIndex ?? 0,
+      name: props.name,
+      value: v2,
+    });
+  }
+
+  // 监听子控件改动
+  let eventName = props.changeEventName;
+  if (!eventName && props.activatedComType) {
+    eventName = 'change';
+  }
+  let listens = {} as Record<string, Function>;
+  if (eventName) {
+    listens[eventName] = onCellChange;
   }
 
   return {
@@ -92,29 +112,6 @@ export function useField(
     CellValue: CellValue,
     CellComType: FieldComType,
     CellComConf: FieldComConf,
-    OnCellChange(val: any) {
-      if (props.disabled) {
-        return;
-      }
-      console.log('OnCellChange', val);
-      // 应用类型转换和默认值
-      let v2 = prepareFieldValue(val, data);
-
-      // 是否通知
-      if (checkEqual) {
-        let old = getFieldValue(data);
-        if (_.isEqual(v2, old)) {
-          return;
-        }
-      }
-
-      // 通知改动
-      notify('change', {
-        rowIndex: props.rowIndex ?? 0,
-        colIndex: props.colIndex ?? 0,
-        name: props.name,
-        value: v2,
-      });
-    },
+    CellListeners: listens,
   };
 }

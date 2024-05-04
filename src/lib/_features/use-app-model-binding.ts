@@ -1,44 +1,14 @@
 import _ from 'lodash';
 import { Ref } from 'vue';
-import { Callback1, getLogger, isArray } from '../../core';
+import {
+  AppModelBindingData,
+  AppModelBindingEvent,
+  Callback1,
+  getLogger,
+  isArray,
+} from '../../core';
 
 const log = getLogger('ti.use-app-model-binding');
-
-/**
- * 对应到主控件的哪个 Key, 有下面几种绑定方法：
- *
- * 1. `null` 不传递
- * 2. `"value"` 【默认】将 result 传递给 value 属性
- * 3. `["a","b"] 将 result.a 传递给 a 属性，result.b 传递给 b 属性
- * 4. `{a:"x",b:"y"}` 将 result.a 传递给 x 属性，result.b 传递给 y 属性
- */
-export type AppModelBindingData =
-  | null
-  | string
-  | string[]
-  | Record<string, string>;
-/**
- * 主控件的事件，怎么传递给 result
- *
- * 1. `null` 不传递
- * 2. `"change"` 【默认】将 change 事件的 payload 设置为 result
- * 3. `{change:["a","b"]}`
- *     将 change 事件的 payload.a =>result.a,payload.b => result.b
- * 4. `{change:{a:"x",b:"y"}}`
- *     将 change 事件的 payload.a =>result.x,payload.b => result.y
- */
-export type AppModelBindingEvent =
-  | null
-  | string
-  | Record<string, string[] | Record<string, string>>;
-
-/**
- * 如何将模式框的 result 绑定到主控件上
- */
-export type AppModelBinding = {
-  data: AppModelBindingData;
-  event: AppModelBindingEvent;
-};
 
 /**
  * 通常这个函数会被用到计算属性里。 它会生产一个控件的属性表

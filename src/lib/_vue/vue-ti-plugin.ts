@@ -1,6 +1,5 @@
 import { App, ObjectPlugin } from 'vue';
-import { PopPosition } from '../../core';
-import { TranName } from '../_top';
+import { PopPosition, TranName } from '../../core';
 
 export function positionToTransName(pos: PopPosition): TranName {
   return {

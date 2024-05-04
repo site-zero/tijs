@@ -1,4 +1,4 @@
-import { TiComInfo, TiComRace } from '../../';
+import { TiComInfo, TiComRace } from '../../../core';
 import { App } from 'vue';
 import TiBlock from './TiBlock.vue';
 import { COM_TYPE } from './use-block';

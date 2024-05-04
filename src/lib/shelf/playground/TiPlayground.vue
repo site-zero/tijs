@@ -74,7 +74,7 @@
   }
 
   function OnConfChange(confData: Vars) {
-    console.log("OnConfChange!!!!", confData)
+    console.log('OnConfChange!!!!', confData);
     _example.value.comConf = confData;
     saveLocalSetting(PlayCom.value, _example.value);
   }
@@ -112,6 +112,7 @@
     }
     // 适配模式
     let model = PlayCom.value.exampleModel ?? { change: 'value' };
+    console.log(model);
     let target = model[eventName];
     if (target) {
       // {"change": "value"}
@@ -139,6 +140,7 @@
     function ([_comType, exampleName]) {
       let com = PlayCom.value;
       selectExample(com, _example.value, exampleName);
+      cleanSubEvents();
     },
     {
       immediate: true,

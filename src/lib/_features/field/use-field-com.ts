@@ -1,17 +1,7 @@
-import { FuncA0, FuncA2, Util, Vars } from '../../../core';
-import { TiRawCom, tiCheckComponent } from '../../';
 import _ from 'lodash';
+import { tiCheckComponent } from '../../';
+import { ComRef, FuncA0, FuncA2, TiRawCom, Util, Vars } from '../../../core';
 
-export type ComRef = {
-  /**
-   * 字段控件定义
-   */
-  comType?: string;
-  /**
-   * 字段控件配置
-   */
-  comConf?: Vars;
-};
 /*-------------------------------------------------------
 
                      Props
@@ -50,6 +40,14 @@ export type FieldComProps = ComRef & {
    * 激活模式时的控件属性，如果未指定，则默认采用 `comConf`
    */
   activatedComConf?: Vars;
+
+  /**
+   * 捕获字段控件修改事件的名称，默认的，如果你声明了 `activatedComType`
+   * 那么这个属性就是 "change"，否则将不会捕获子控件的修改事件。
+   * 当然，像 TiForm 这样的控件会有自己的定制，它无论是否有 `activatedComType`
+   * 都会捕获 "change" 事件
+   */
+  changeEventName?: string;
 };
 /*-------------------------------------------------------
 

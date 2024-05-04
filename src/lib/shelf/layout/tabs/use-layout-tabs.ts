@@ -5,13 +5,14 @@ import {
   LayoutTabItem,
   LayoutTabsProps,
   TabsProps,
-  TiRawCom,
   useFieldCom,
 } from '../../../';
-import { OptionItem, Vars } from '../../../../core';
+import { IconInput, OptionItem, TiRawCom, Vars } from '../../../../core';
 
 export type TabMain = {
   item: LayoutTabItem;
+  title?: string;
+  icon?: IconInput;
   com: TiRawCom;
   config: Vars;
 };
@@ -29,6 +30,8 @@ export function buildTabMain(items: LayoutTabItem[]): TabMain | undefined {
     });
     return {
       item,
+      title: item?.title,
+      icon: item?.icon,
       com: getComType(),
       config: comConf,
     };

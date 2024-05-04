@@ -1,5 +1,5 @@
 import { App } from 'vue';
-import { TiComInfo, TiComRace } from '../../../lib';
+import { TiComInfo, TiComRace } from '../../../core';
 import TiHtmlSnippet from './TiHtmlSnippet.vue';
 import { simple } from './example/index.ts';
 

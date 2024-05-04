@@ -1,7 +1,5 @@
 import _ from 'lodash';
 import {
-  CommonProps,
-  IconInput,
   IconTextEvents,
   IconTextFeature,
   IconTextOptions,
@@ -11,7 +9,7 @@ import {
   UseTextEvents,
   useIconText,
 } from '../../';
-import { CssUtils, I18n, Link } from '../../../core';
+import { CommonProps, CssUtils, I18n, IconInput, Link } from '../../../core';
 /*-------------------------------------------------------
 
                      Types

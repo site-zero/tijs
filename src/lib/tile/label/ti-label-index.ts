@@ -1,5 +1,5 @@
 import { App } from 'vue';
-import { TiComInfo, TiComRace } from '../../';
+import { TiComInfo, TiComRace } from '../../../core';
 import TiLabel from './TiLabel.vue';
 import { COM_TYPE } from './use-label';
 //const TiLabel = defineAsyncComponent(() => import("./TiLabel.vue"));

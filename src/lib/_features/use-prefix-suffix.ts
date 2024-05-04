@@ -4,8 +4,7 @@ import {
   IconTextFeature,
   useIconText,
 } from '.';
-import { IconInput } from '../';
-import { Callback1, Vars } from '../../core';
+import { Callback1, IconInput, Vars } from '../../core';
 /*-------------------------------------------------------
 
                      Events

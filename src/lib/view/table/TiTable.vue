@@ -9,8 +9,8 @@
     ref,
     watch,
   } from 'vue';
-  import { TableProps, TiIcon, useLargeScrolling } from '../../';
-  import { Alert, CssUtils, Size2D, Util, getLogger } from '../../../core';
+  import { Alert, TableProps, TiIcon, useLargeScrolling } from '../../';
+  import { CssUtils, Size2D, Util, getLogger } from '../../../core';
   import TableRow from './row/TableRow.vue';
   import { COM_TYPE, ColResizingState, TableEmit, useTable } from './use-table';
   import { TableScrolling, getTableDebugInfo } from './use-table-debug-info';
@@ -289,6 +289,7 @@
         <div
           v-for="(col, i) in TableColumns"
           class="table-cell as-head"
+          :class="Table.getTableHeadClass(selection, i)"
           :col-index="i"
           :key="col.uniqKey"
           :col-key="col.uniqKey">
@@ -324,15 +325,19 @@
           :canSelect="canSelect"
           :row="row"
           :vars="vars"
-          :activated="row.activated"
-          :checked="row.checked"
+          :activated="row.id == selection.currentId"
+          :checked="Table.selectable.isIDChecked(selection, row.id)"
           :indent="row.indent"
+          :activedColIndex="
+            row.id == selection.currentId ? selection.columnIndex : -1
+          "
           :updateRowHeight="updateRowHeight"
           @select="Table.OnRowSelect(selection, $event)"
           @check="Table.OnRowCheck(selection, $event)"
           @open="Table.OnRowOpen(selection, $event)"
-          @cell="Table.OnCellSelect(selection, $event)"
-          @cell-open="Table.OnCellOpen(selection, $event)" />
+          @cell="Table.OnCellSelect(selection, $event, TableColumns)"
+          @cell-open="Table.OnCellOpen(selection, $event)"
+          @cell-change="emit('cell-change', $event)" />
       </template>
     </main>
     <!-- 显示拖拽的列分割条-->

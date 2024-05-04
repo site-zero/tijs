@@ -1,8 +1,8 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed } from 'vue';
-  import { CommonProps, TabDisplayItem, TabsProps, TiIcon } from '../../';
-  import { CssUtils, I18n } from '../../../core';
+  import { TabDisplayItem, TabsProps, TiIcon } from '../../';
+  import { CommonProps, CssUtils, I18n } from '../../../core';
 
   const props = withDefaults(defineProps<CommonProps & TabsProps>(), {
     wrapTabs: false,

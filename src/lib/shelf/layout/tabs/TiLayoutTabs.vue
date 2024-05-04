@@ -1,8 +1,6 @@
 <script lang="ts" setup>
-  import _ from 'lodash';
-  import { ComputedRef, computed, ref, watch } from 'vue';
+  import { computed, ref, watch } from 'vue';
   import {
-    LayoutTabItem,
     LayoutTabsProps,
     TabDisplayItem,
     TiRoadblock,
@@ -88,7 +86,7 @@
     <main>
       <!----------------------------->
       <template v-if="TabMain">
-        <slot :item="TabMain">
+        <slot :main="TabMain">
           <component
             :is="TabMain.com"
             v-bind="TabMain.config" />

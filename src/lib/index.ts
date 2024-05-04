@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { App } from 'vue';
+import { ComInfoFilter, TiCom, TiComSet } from '../core';
 import {
   I18n,
   I18nLang,
@@ -12,7 +13,6 @@ import {
 } from '../core/ti';
 import en_us from '../i18n/en-us';
 import zh_cn from '../i18n/zh-cn';
-import { ComInfoFilter, TiCom, TiComSet } from './_top';
 import _com_set_action from './action/all-actions';
 import _com_set_input from './input/all-input';
 import _com_set_shelf from './shelf/all-shelf';
@@ -51,7 +51,7 @@ export const updateInstalledComponentsLangs: {
   (lang: I18nLang): void;
   (lang: string): void;
 } = function (lang: string | I18nLang): void {
-  log.debug("updateInstalledComponentsLangs", lang)
+  log.debug('updateInstalledComponentsLangs', lang);
   let langKey: I18nLang;
   if (_.isString(lang)) {
     langKey = I18n.toLangKey(lang);
@@ -80,7 +80,7 @@ export const updateInstalledComponentsLangs: {
 export function installTiCoreI18n(lang: string, updateComponents = false) {
   let cn = zh_cn as MessageMap;
   let en = en_us as MessageMap;
-  log.debug("installTiCoreI18n", lang)
+  log.debug('installTiCoreI18n', lang);
   const app_i18ns = {
     zh_cn: cn,
     en_us: en,
@@ -169,6 +169,7 @@ export function tiSetDefaultComPropValue(
 }
 
 export * from './_features';
+export * from './_modal';
 export * from './_top';
 export * from './_vue';
 export * from './action/all-actions';
