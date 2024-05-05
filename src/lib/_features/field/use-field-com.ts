@@ -23,7 +23,7 @@ export type FieldComProps = ComRef & {
    *
    * @default `TiLabel`
    */
-  readonlyComType?: string;
+  readonlyComType?: string | null;
   /**
    * 只读模式时的控件属性，默认的，会自动分析 `comType/comConf`
    * 提取必要的属性
@@ -35,7 +35,7 @@ export type FieldComProps = ComRef & {
    *
    * @default `TiLabel`
    */
-  activatedComType?: string;
+  activatedComType?: string | null;
   /**
    * 激活模式时的控件属性，如果未指定，则默认采用 `comConf`
    */
