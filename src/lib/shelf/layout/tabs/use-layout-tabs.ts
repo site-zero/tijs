@@ -8,6 +8,7 @@ import {
   useFieldCom,
 } from '../../../';
 import { IconInput, OptionItem, TiRawCom, Vars } from '../../../../core';
+import { ComputedRef, Ref } from 'vue';
 
 export type TabMain = {
   item: LayoutTabItem;
@@ -78,35 +79,60 @@ export function buildLayoutTabsConfig(
   };
 }
 
+export function autoSetCurrentTablKey(
+  tabKey: Ref<string | undefined>,
+  blocks: ComputedRef<LayoutItem[]>,
+  Keep: ComputedRef<KeepFeature>,
+  defaultTab?: string | number
+) {
+  // 如果已经有了，则看看是否在块列表里
+  if (tabKey.value) {
+    if (blocks.value) {
+      for (let block of blocks.value) {
+        if (block.uniqKey == tabKey.value) {
+          return;
+        }
+      }
+    }
+  }
+
+  // 那么就需要选择默认标签
+  tabKey.value = findCurrentTabKey(blocks, Keep, defaultTab);
+}
+
 export function findCurrentTabKey(
-  props: LayoutTabsProps,
-  Keep: KeepFeature
+  blocks: ComputedRef<LayoutItem[]>,
+  Keep: ComputedRef<KeepFeature>,
+  defaultTab?: string | number
 ): string | undefined {
-  if (!props.blocks || _.isEmpty(props.blocks)) {
+  if (!blocks.value || _.isEmpty(blocks.value)) {
     return;
   }
 
   // 从默认恢复
   let dftKey: string | undefined;
-  if (!_.isNil(props.defaultTab)) {
-    for (let i = 0; i < props.blocks.length; i++) {
-      let block = props.blocks[i];
-      if (_.isNumber(props.defaultTab) && i == props.defaultTab) {
+  if (!_.isNil(defaultTab)) {
+    for (let i = 0; i < blocks.value.length; i++) {
+      let block = blocks.value[i];
+      // 默认标签是下标
+      if (_.isNumber(defaultTab) && i == defaultTab) {
         dftKey = block.uniqKey;
-      } else if (
-        _.isString(props.defaultTab) &&
+      }
+      // 默认标签是块名
+      else if (
+        _.isString(defaultTab) &&
         block.name &&
-        props.defaultTab == block.name
+        defaultTab == block.name
       ) {
         dftKey = block.uniqKey;
       }
     }
   }
   // 默认选择第一个
-  if (!dftKey && props.blocks && props.blocks.length > 0) {
-    dftKey = props.blocks[0].uniqKey;
+  if (!dftKey && blocks.value && blocks.value.length > 0) {
+    dftKey = blocks.value[0].uniqKey;
   }
 
   // 从本地恢复
-  return Keep.load(dftKey) || undefined;
+  return Keep.value.load(dftKey) || undefined;
 }

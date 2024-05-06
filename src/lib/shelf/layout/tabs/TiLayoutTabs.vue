@@ -11,10 +11,10 @@
   import { CssUtils } from '../../../../core';
   import { COM_TYPE } from './tabs.types';
   import {
+    autoSetCurrentTablKey,
     buildLayoutTabBlocks,
     buildLayoutTabsConfig,
     buildTabMain,
-    findCurrentTabKey,
   } from './use-layout-tabs';
 
   defineOptions({
@@ -62,9 +62,14 @@
   // Watcher
   //
   watch(
-    () => Keep.value,
+    () => [Keep.value, TabBlocks.value, props.defaultTab],
     () => {
-      _current_tab_key.value = findCurrentTabKey(props, Keep.value);
+      autoSetCurrentTablKey(
+        _current_tab_key,
+        TabBlocks,
+        Keep,
+        props.defaultTab
+      );
     },
     {
       immediate: true,
