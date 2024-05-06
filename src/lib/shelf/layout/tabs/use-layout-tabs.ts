@@ -18,7 +18,7 @@ export type TabMain = {
   config: Vars;
 };
 
-export function buildTabMain(items: LayoutTabItem[]): TabMain | undefined {
+export function buildMainTab(items: LayoutTabItem[]): TabMain | undefined {
   for (let item of items) {
     if (!item.current) {
       continue;

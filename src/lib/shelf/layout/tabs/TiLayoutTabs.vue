@@ -14,7 +14,7 @@
     autoSetCurrentTablKey,
     buildLayoutTabBlocks,
     buildLayoutTabsConfig,
-    buildTabMain,
+    buildMainTab,
   } from './use-layout-tabs';
 
   defineOptions({
@@ -48,15 +48,23 @@
   const TabsConfig = computed(() =>
     buildLayoutTabsConfig(props, TabDisplayBlocks.value)
   );
-  let TabMain = computed(() => {
-    return buildTabMain(TabDisplayBlocks.value);
+  let MainTab = computed(() => {
+    return buildMainTab(TabDisplayBlocks.value);
   });
   //
   // Event Handle
   //
-  function OnTabChange(item: TabDisplayItem) {
+  const emit = defineEmits<{
+    (
+      eventName: 'tab-change',
+      current: TabDisplayItem,
+      old?: TabDisplayItem
+    ): void;
+  }>();
+  function OnTabChange(item: TabDisplayItem, old?: TabDisplayItem) {
     _current_tab_key.value = item.value;
     Keep.value.save(item.value);
+    emit('tab-change', item, old);
   }
   //
   // Watcher
@@ -70,6 +78,14 @@
         Keep,
         props.defaultTab
       );
+      emit('tab-change', {
+        className: MainTab.value?.item.className,
+        current: true,
+        index: MainTab.value?.item.index || 0,
+        icon: MainTab.value?.item.icon,
+        text: MainTab.value?.item.title,
+        value: MainTab.value?.item.uniqKey,
+      });
     },
     {
       immediate: true,
@@ -90,11 +106,11 @@
     <!--======== Main Block =======-->
     <main>
       <!----------------------------->
-      <template v-if="TabMain">
-        <slot :main="TabMain">
+      <template v-if="MainTab">
+        <slot :main="MainTab">
           <component
-            :is="TabMain.com"
-            v-bind="TabMain.config" />
+            :is="MainTab.com"
+            v-bind="MainTab.config" />
         </slot>
       </template>
       <!----------------------------->
