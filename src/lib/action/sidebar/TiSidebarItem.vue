@@ -8,7 +8,7 @@
 
   type BarItemProps = Omit<SideBarItem, 'key'> & {
     uniqKey: string;
-    //useCapture: boolean;
+    useCapture?: boolean;
     openNewTab: boolean;
   };
   const props = defineProps<BarItemProps>();

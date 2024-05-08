@@ -4,9 +4,16 @@ dl.sidebar-item {
     margin-block-start: SZ(6);
     margin-block-end: 1.2em;
   }
-  &.is-current > dt {
-    color: var(--ti-color-hightlight-f);
-    background-color: var(--ti-color-hightlight);
+  &.is-current {
+    > dt,
+    > dt:hover {
+      color: var(--ti-color-selected-f);
+      background-color: var(--ti-color-selected);
+      > .ti-icon {
+        color: var(--ti-color-primary);
+        transform: scale(1.5);
+      }
+    }
   }
 }
 
@@ -17,13 +24,14 @@ dl.sidebar-item dt {
   > .as-indent-block {
     &::before {
       display: inline;
-      content: '';
+      content: "";
     }
     min-width: SZ(16);
   }
   > .ti-icon {
     min-width: 24px;
     font-size: 16px;
+    transition: transform 0.5s;
   }
   > .as-title {
     padding: 0 SZ(6);
