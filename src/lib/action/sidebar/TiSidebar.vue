@@ -9,6 +9,7 @@
   const props = withDefaults(
     defineProps<{
       items: SideBarItem[];
+      isCurrent?: (item: SideBarItem) => boolean;
       useCapture?: boolean;
       openNewTab?: boolean;
     }>(),
@@ -25,6 +26,9 @@
     it.depth = depth;
     it.key = it.key ?? `D${depth}-I${index}`;
     it.id = it.id ?? it.key;
+    if (_.isFunction(props.isCurrent)) {
+      it.current = props.isCurrent(it);
+    }
     if (it.items) {
       let list = [] as SideBarItem[];
       for (let i = 0; i < it.items.length; i++) {

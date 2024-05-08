@@ -4,6 +4,10 @@ dl.sidebar-item {
     margin-block-start: SZ(6);
     margin-block-end: 1.2em;
   }
+  &.is-current > dt {
+    color: var(--ti-color-hightlight-f);
+    background-color: var(--ti-color-hightlight);
+  }
 }
 
 dl.sidebar-item dt {

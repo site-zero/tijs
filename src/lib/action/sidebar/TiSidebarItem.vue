@@ -23,6 +23,7 @@
     'has-child': hasChild.value,
     'at-top': 0 == props.depth,
     'at-sub': props.depth > 0,
+    'is-current': props.current,
   }));
 
   const DTClass = computed(() => ({

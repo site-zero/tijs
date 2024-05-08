@@ -40,6 +40,7 @@ export type WnObjStatus = {
 export type SideBarItem = {
   key: string;
   depth: number;
+  current?: boolean;
   id: string;
   path?: string;
   href?: string;
