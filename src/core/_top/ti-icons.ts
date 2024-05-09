@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _, { isEmpty } from 'lodash';
 import { MessageMap, TiIconObj } from '../ti';
 
 //-----------------------------------
@@ -134,6 +134,10 @@ export interface Iconable {
   icon?: string | TiIconObj;
 }
 
+export function isEmoji(str: string) {
+  return /[\u{1F300}-\u{1F6FF}]/u.test(str);
+}
+
 export function getIcon(input: string | Iconable, dft = _DFT_FONT_ICON) {
   // Default icon
   if (!input) {
@@ -180,8 +184,13 @@ export function parseIcon(val: string, dft?: string | TiIconObj): TiIconObj {
   }
   let icon = { type: 'font' } as TiIconObj;
 
+  // String as emoji
+  if (isEmoji(val)) {
+    icon.type = 'emoji';
+    icon.value = val;
+  }
   // String as Image
-  if (/\.(png|gif|jpe?g|webp|svg)$/i.test(val)) {
+  else if (/\.(png|gif|jpe?g|webp|svg)$/i.test(val)) {
     icon.type = 'image';
     icon.src = val;
   }
@@ -209,7 +218,7 @@ export function parseIcon(val: string, dft?: string | TiIconObj): TiIconObj {
 
 export function fontIconHtml(
   val: string | TiIconObj,
-  dft?: string | TiIconObj,
+  dft?: string | TiIconObj
 ) {
   let icon = _.isString(val) ? parseIcon(val, dft) : val;
   return `<i class="${icon.className}"></i>`;
