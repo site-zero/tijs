@@ -60,7 +60,7 @@ export function useMainFrameResizing(
       //console.log('onMoving', w);
       chuteWidth.value = w;
     },
-    onEnd: (ing: Dragging) => {
+    onEnd: (_ing: Dragging) => {
       //console.log('onEnd', ing);
       saveChuteWidthToLocal(KeepChute, chuteWidth.value);
     },
