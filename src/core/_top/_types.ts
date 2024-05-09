@@ -54,10 +54,13 @@ export type NameStrValue = NameValue<string, string>;
  */
 export type IconInput = string | TiIconObj;
 
+export type IconType = 'font' | 'image' | 'emoji';
+
 export type TiIconObj = {
-  type: 'font' | 'image';
+  type: IconType;
   src?: string; // for image icon
   className?: any; // for font icon
+  value?:string; // for emojie
   style?: Vars; // font/image container style
 };
 
@@ -978,7 +981,6 @@ export type PopItemProps = {
   bottom?: string;
   overflow?: string;
 };
-
 
 /*---------------------------------------------------
 

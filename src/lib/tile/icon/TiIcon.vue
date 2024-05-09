@@ -41,11 +41,18 @@
     class="ti-icon"
     :class="TopClass"
     :style="TopStyle">
+    <!-- Emoji Icon-->
+    <div
+      class="part-main as-emoji"
+      :style="IconStyle"
+      v-if="'emoji' == Icon.type">
+      <span>{{ Icon.value }}</span>
+    </div>
     <!-- Font Icon-->
     <div
       class="part-main as-font"
       :style="IconStyle"
-      v-if="'font' == Icon.type">
+      v-else-if="'font' == Icon.type">
       <i :class="Icon.className"></i>
     </div>
     <!-- Image Icon-->

@@ -22,14 +22,18 @@
       position: relative;
     }
 
-    @import './grid-adjust-bar';
+    @import "./grid-adjust-bar";
   } // > .grid-item {
 
   &.as-card {
+    background-color: var(--ti-color-body);
     > .grid-item > .grid-item-con {
       background-color: var(--ti-color-card);
-      box-shadow: 2px 2px 6px var(--ti-color-mask-thin);
       overflow: hidden;
+    }
+
+    &.with-shadown {
+      box-shadow: 2px 2px 6px var(--ti-color-mask-weak);
     }
 
     &.r-b > .grid-item > .grid-item-con {

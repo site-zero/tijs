@@ -9,6 +9,17 @@ export function getIconStyle(props: IconProps, icon: ComputedRef<TiIconObj>) {
 
   (
     ({
+      emoji: () => {
+        _.assign(
+          style,
+          {
+            fontSize: props.fontSize,
+            color: colorToStr(props.color),
+            //filter: 'grayscale(100%) contrast(200%)'
+          },
+          props.fontStyle
+        );
+      },
       font: () => {
         _.assign(
           style,
