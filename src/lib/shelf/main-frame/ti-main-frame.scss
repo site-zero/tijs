@@ -83,11 +83,36 @@ App Main Frame layout, there is 3 modes below::after
     background-color: var(--ti-color-card);
     &.as-sky {
       grid-area: sky;
-      //background-color: red;
     }
     &.as-chute {
+      position: relative;
       grid-area: chute;
-      //background-color: yellow;
+      > .adjust-bar {
+        @include flex-center;
+        user-select: none;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: $BARSZ * 2;
+        right: $BARSZ * -1;
+        cursor: ew-resize;
+        background-color: var(--ti-color-mask-weak);
+        opacity: 0;
+        transition: opacity 500ms;
+        z-index: $z-over + $z-above;
+        &:hover {
+          opacity: 1;
+        }
+        &::before {
+          display: block;
+          content: "";
+          overflow: hidden;
+          opacity: 0.4;
+          height: 100%;
+          width: 0px;
+          border-left: 2px dashed var(--ti-color-primary);
+        }
+      }
     }
     &.as-arena {
       grid-area: arena;

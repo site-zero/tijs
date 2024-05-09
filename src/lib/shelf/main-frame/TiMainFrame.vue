@@ -1,9 +1,17 @@
 <script lang="ts" setup>
-  import { computed, ref } from 'vue';
-  import { MainFrameProps, getDemoContent } from './use-main-frame';
-  import { TiRoadblock } from '../../';
+  import _ from 'lodash';
+  import { Ref, computed, onMounted, ref } from 'vue';
+  import { TiRoadblock, useKeep } from '../../';
+  import {
+    MainFrameProps,
+    getDemoContent,
+    loadChuteWidthFromLocal,
+  } from './use-main-frame';
+  import { useMainFrameResizing } from './use-main-frame-resizing';
 
   const _chute_width = ref(200);
+  const release_resizing = ref<() => void>();
+  const $chute = ref() as Ref<HTMLElement>;
 
   const props = withDefaults(defineProps<MainFrameProps>(), {
     mode: 'Z',
@@ -11,6 +19,8 @@
   });
 
   const MFMode = computed(() => props.mode || 'T');
+  const KeepChute = computed(() => useKeep(props.keepFrame));
+  loadChuteWidthFromLocal(_chute_width, KeepChute);
 
   const TopStyle = computed(() => {
     //  Only in desktop mode,  we can support adjust chute size.
@@ -20,6 +30,14 @@
         'grid-template-columns': `${w}px 1fr`,
       };
     }
+  });
+
+  onMounted(() => {
+    release_resizing.value = useMainFrameResizing(
+      $chute.value,
+      _chute_width,
+      KeepChute
+    );
   });
 </script>
 <template>
@@ -61,13 +79,17 @@
         <div class="part-con">
           <div class="part-scroller">
             <slot>
-              <TiRoadblock icon="zmdi-widgets" text="Main Area" />
+              <TiRoadblock
+                icon="zmdi-widgets"
+                text="Main Area" />
             </slot>
           </div>
         </div>
       </div>
       <!--侧边栏-->
-      <div class="frame-part as-chute">
+      <div
+        class="frame-part as-chute"
+        ref="$chute">
         <div class="part-con">
           <div class="part-scroller">
             <slot name="chute"><span>{Slot Chute}</span></slot>

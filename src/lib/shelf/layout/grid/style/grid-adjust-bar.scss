@@ -7,8 +7,6 @@
   transition: opacity 500ms;
   z-index: $z-over + $z-above;
 
-  $BARSZ: 5px;
-
   &::before {
     display: block;
     content: "";

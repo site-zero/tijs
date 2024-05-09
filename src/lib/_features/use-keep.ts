@@ -36,10 +36,10 @@ function parseInfo(info: KeepInfo): KeepProps {
   if (_.isString(info)) {
     let m = /^((session|local):\s*)?(.+)/.exec(info);
     let keepAt = info;
-    let keepMode: KeepMode = 'session';
+    let keepMode = 'session' as KeepMode;
     if (m) {
       keepAt = _.trim(m[3]);
-      keepMode = m[1] as KeepMode;
+      keepMode = (m[2] || 'session') as KeepMode;
     }
     return { keepAt, keepMode };
   }
@@ -53,6 +53,7 @@ function parseInfo(info: KeepInfo): KeepProps {
 export type KeepFeature = {
   _store_key: string | undefined;
   _enabled: boolean;
+  _mode: KeepMode;
   save: Callback1<any>;
   load: (dft?: string) => string | null;
   loadObj: (dft?: Vars) => Vars | null;
@@ -62,11 +63,14 @@ export type KeepFeature = {
 export function useKeep(info?: KeepInfo): KeepFeature {
   let keepAt: string | undefined;
   let keep = TiStore.session;
+  let keepMode: KeepMode = 'session';
+  console.log(info);
   //------------------------------------------------
   if (info) {
     let props = parseInfo(info);
     keep = TiStore[props.keepMode ?? 'session'];
     keepAt = props.keepAt;
+    keepMode = props.keepMode || 'session';
   }
   //------------------------------------------------
   function load(dft?: string) {
@@ -115,6 +119,7 @@ export function useKeep(info?: KeepInfo): KeepFeature {
   return {
     _store_key: keepAt,
     _enabled: !_.isEmpty(keepAt),
+    _mode: keepMode,
     save,
     load,
     loadObj,

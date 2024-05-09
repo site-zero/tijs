@@ -13,22 +13,8 @@ export function useKeepLayoutGrid(
   props: LayoutGridProps
 ): LayoutGridKeepFeature {
   return {
-    KeepShown: useKeep(
-      _.assign(
-        {
-          keepMode: 'session',
-        },
-        props.keepShown
-      )
-    ),
-    KeepSizes: useKeep(
-      _.assign(
-        {
-          keepMode: 'local',
-        },
-        props.keepSizes
-      )
-    ),
+    KeepShown: useKeep(_.assign({ keepMode: 'session' }, props.keepShown)),
+    KeepSizes: useKeep(_.assign({ keepMode: 'local' }, props.keepSizes)),
   };
 }
 
