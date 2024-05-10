@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { KeepFeature, LayoutItem, TabsProps, useFieldCom } from '../../../';
 
 import { ComputedRef, Ref } from 'vue';
-import { IconInput, OptionItem, TiRawCom, Vars } from '../../../../core';
+import { IconInput, StrOptionItem, TiRawCom, Vars } from '../../../../core';
 import { LayoutTabItem, LayoutTabsProps } from './ti-layout-tabs-types';
 
 export type TabMain = {
@@ -50,7 +50,7 @@ export function buildLayoutTabsConfig(
   blocks: LayoutTabItem[]
 ): TabsProps {
   let value = undefined;
-  let options = [] as OptionItem[];
+  let options = [] as StrOptionItem[];
   for (let block of blocks) {
     if (block.current) {
       value = block.uniqKey;

@@ -1,6 +1,6 @@
 import { App } from 'vue';
-import { COM_TYPES } from '../../lib-com-types';
 import { TiComInfo, TiComRace } from '../../../core';
+import { COM_TYPES } from '../../lib-com-types';
 import TiList from './TiList.vue';
 import example from './example';
 
@@ -11,6 +11,7 @@ const zh_cn = {
   'com-name': '列表',
   'example-with-icon': '带图标列表',
   'example-with-tip': '带备注列表',
+  'example-multi-with-icon': '多选带图标',
 };
 
 const COM_TYPE = COM_TYPES.List;
@@ -31,8 +32,13 @@ const TiListInfo: TiComInfo = {
   install: (app: App) => {
     app.component(COM_TYPE, TiList);
   },
-  defaultProps: 'jumper',
-  exampleProps: [example.simple, example.withIcon, example.withTip],
+  defaultProps: 'simple',
+  exampleProps: [
+    example.simple,
+    example.withIcon,
+    example.withTip,
+    example.multiWithIcon,
+  ],
 };
 
 export * from './ti-list-types';

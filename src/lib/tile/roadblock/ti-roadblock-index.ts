@@ -1,6 +1,6 @@
 import { App } from 'vue';
-import { COM_TYPES } from '../../lib-com-types';
 import { TiComInfo, TiComRace } from '../../../core';
+import { COM_TYPES } from '../../lib-com-types';
 import TiRoadblock from './TiRoadblock.vue';
 
 const en_us = {
@@ -166,4 +166,5 @@ const TiRoadblockInfo: TiComInfo = {
   ],
 };
 
+export * from './ti-roadblock-types';
 export { TiRoadblock, TiRoadblockInfo };

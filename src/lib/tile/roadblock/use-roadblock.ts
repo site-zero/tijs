@@ -10,16 +10,13 @@ import {
   useIconText,
 } from '../../';
 import { CommonProps, CssUtils, I18n, IconInput, Link } from '../../../core';
+import { RoadblockProps, RoadblockSize } from './ti-roadblock-types';
 /*-------------------------------------------------------
 
                      Types
 
 -------------------------------------------------------*/
-export type RoadblockMode = 'cover' | 'fit' | 'auto';
-export type RoadblockLayout = 'A' | 'B';
-export type RoadblockSize = 'small' | 'normal' | 'big' | 'large';
-export type RoadblockOpacity = 'faint' | 'shadowy' | number;
-export type RoadblockLink = Link;
+
 /*-------------------------------------------------------
 
                      Events
@@ -31,14 +28,7 @@ export type RoadblockEvents = IconTextEvents;
                      Props
 
 -------------------------------------------------------*/
-export type RoadblockProps = CommonProps &
-  IconTextProps & {
-    mode?: RoadblockMode;
-    layout?: RoadblockLayout;
-    size?: RoadblockSize;
-    opacity?: RoadblockOpacity;
-    links?: RoadblockLink[];
-  };
+
 /*-------------------------------------------------------
 
                      Feature

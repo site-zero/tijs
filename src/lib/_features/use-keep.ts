@@ -64,7 +64,6 @@ export function useKeep(info?: KeepInfo): KeepFeature {
   let keepAt: string | undefined;
   let keep = TiStore.session;
   let keepMode: KeepMode = 'session';
-  console.log(info);
   //------------------------------------------------
   if (info) {
     let props = parseInfo(info);

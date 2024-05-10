@@ -23,15 +23,20 @@ export type TextValue<T> = {
   value: T;
 };
 
-export type OptionItem = {
+export type OptionItem<V> = {
   icon?: IconInput;
   text?: string;
-  value: any;
+  tip?: string;
+  value: V;
 };
+
+export type StrOptionItem = OptionItem<string>;
+export type NumOptionItem = OptionItem<number>;
+export type AnyOptionItem = OptionItem<any>;
 
 export type OptionValueProps = {
   value: any;
-  options: OptionItem[];
+  options: AnyOptionItem[];
 };
 
 export type DateInput = string | number | Date;
@@ -60,7 +65,7 @@ export type TiIconObj = {
   type: IconType;
   src?: string; // for image icon
   className?: any; // for font icon
-  value?:string; // for emojie
+  value?: string; // for emojie
   style?: Vars; // font/image container style
 };
 

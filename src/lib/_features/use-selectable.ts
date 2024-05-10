@@ -21,7 +21,7 @@ export type SelectableProps<ID extends string | number> = {
   /**
    * 传入的数据对象
    */
-  data: Vars[];
+  data?: Vars[];
   /**
    * 从指定的对象获取 ID
    *
@@ -29,17 +29,12 @@ export type SelectableProps<ID extends string | number> = {
    *              或者可以被 `anyConvertor` 转换的值
    * - `Function` : 一个获取 ID 的函数
    */
-  getId: Convertor<Vars, ID | undefined> | string;
+  getId?: string | Convertor<Vars, ID | undefined>;
 
   /**
    * 是否支持多重选择
    */
   multi?: boolean;
-
-  /**
-   * 将任何值转换为 `T`
-   */
-  convertToId: Convertor<any, ID | undefined>;
 
   currentId?: ID;
   checkedIds?: Record<ID, boolean> | Map<ID, boolean>;
@@ -84,21 +79,18 @@ export type SelectableFeature<ID extends string | number> = {
 export function useSelectable<ID extends string | number>(
   props: SelectableProps<ID>
 ): SelectableFeature<ID> {
-  let { getId, convertToId } = props;
+  let { getId = (data) => data.id ?? data.value } = props;
 
   /**
    * 获取数据的 ID
    */
-  let getDataId: Convertor<Vars, ID | undefined>;
-  if (_.isString(getId)) {
-    let key = getId;
-    getDataId = (data: Vars): ID | undefined => {
-      let v = _.get(data, key);
-      let id = convertToId(v);
-      return id;
-    };
-  } else {
-    getDataId = getId;
+  function getDataId(it: Vars): ID | undefined {
+    if (getId) {
+      if (_.isString(getId)) {
+        return _.get(it, getId);
+      }
+      return getId(it);
+    }
   }
 
   /**
@@ -187,7 +179,8 @@ export function useSelectable<ID extends string | number>(
   -----------------------------------------------------*/
   function getRowIds(): ID[] {
     let ids = [] as ID[];
-    for (let it of props.data) {
+    let data = props.data || [];
+    for (let it of data) {
       let id = getDataId(it);
       if (!_.isUndefined(id)) {
         ids.push(id);

@@ -2,11 +2,12 @@ import { ComPropExample } from '../../../../core';
 import { ListProps } from '../ti-list-types';
 
 export default {
-  name: 'with_icon',
-  text: 'i18n:ti-list-example-with-icon',
+  name: 'multi_with_icon',
+  text: 'i18n:ti-list-example-multi-with-icon',
   comConf: {
-    className: 'border-dashed',
-    size:"b",
+    className: 'border-dotted',
+    multi: true,
+    size: 'b',
     data: [
       { value: 1, text: 'This is a DOG', icon: 'fas-dog' },
       { value: 2, text: 'This is a CAT', icon: 'fas-cat' },

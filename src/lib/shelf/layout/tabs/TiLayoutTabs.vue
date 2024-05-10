@@ -7,7 +7,7 @@
     getLayoutItem,
     useKeep,
   } from '../../../';
-  import { CssUtils } from '../../../../core';
+  import { CssUtils, getLogger } from '../../../../core';
   import { TabDisplayItem } from '../layout-types';
   import { LayoutTabsProps } from './ti-layout-tabs-types';
   import {
@@ -17,8 +17,10 @@
     buildMainTab,
   } from './use-layout-tabs';
 
+  const COM_TYPE = COM_TYPES.LayoutTabs;
+  const log = getLogger(COM_TYPE);
+
   defineOptions({
-    name: COM_TYPES.LayoutTabs,
     inheritAttrs: false,
   });
 
@@ -29,7 +31,7 @@
     tabsAlign: 'center',
   });
   const Keep = computed(() => useKeep(props.keepTab));
-  console.log(props.keepTab);
+
   const TabBlocks = computed(() => getLayoutItem({ shown: {} }, props));
 
   //const $main: Ref<HTMLElement> = ref() as Ref<HTMLElement>;
@@ -78,14 +80,20 @@
         Keep,
         props.defaultTab
       );
-      emit('tab-change', {
-        className: MainTab.value?.item.className,
-        current: true,
-        index: MainTab.value?.item.index || 0,
-        icon: MainTab.value?.item.icon,
-        text: MainTab.value?.item.title,
-        value: MainTab.value?.item.uniqKey,
-      });
+      if (MainTab.value) {
+        emit('tab-change', {
+          className: MainTab.value.item.className,
+          current: true,
+          index: MainTab.value.item.index || 0,
+          icon: MainTab.value.item.icon,
+          text: MainTab.value.item.title,
+          value: MainTab.value.item.uniqKey,
+        });
+      } else {
+        log.warn(
+          `Fail to evel MainTab: [${_current_tab_key.value}] defaultTab=${props.defaultTab}`
+        );
+      }
     },
     {
       immediate: true,

@@ -6,10 +6,10 @@ import {
   CssGridLayout,
   EmitAdaptorProps,
   IconInput,
-  OptionItem,
   OptionValueProps,
   PopItemProps,
   PopPosition,
+  StrOptionItem,
   TranName,
   TranSpeed,
   Vars,
@@ -81,7 +81,7 @@ export type TabsAspect = {
 };
 
 export type TabsProps = OptionValueProps & TabsAspect;
-export type TabDisplayItem = OptionItem & {
+export type TabDisplayItem = StrOptionItem & {
   className: Vars;
   current: boolean;
   index: number;

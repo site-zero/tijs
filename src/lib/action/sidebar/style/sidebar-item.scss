@@ -11,7 +11,7 @@ dl.sidebar-item {
       background-color: var(--ti-color-selected);
       > .ti-icon {
         color: var(--ti-color-primary);
-        transform: scale(1.5);
+        transform: scale(1.2) rotate(-360deg);
       }
     }
   }
@@ -45,10 +45,10 @@ dl.sidebar-item dt {
   }
   &.at-sub {
     > .ti-icon {
-      font-size: 0.9em;
+      font-size: 1em;
     }
     > .as-title {
-      font-size: 0.8em;
+      font-size: 1em;
     }
   }
   &:hover {
