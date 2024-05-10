@@ -34,4 +34,6 @@ const TiLayoutTabsInfo: TiComInfo = {
   exampleProps: [atTop, atBottom],
 };
 
+export * from './ti-layout-tabs-types';
 export { TiLayoutTabs, TiLayoutTabsInfo };
+

@@ -1,13 +1,11 @@
 import _ from 'lodash';
 import { ComputedRef } from 'vue';
-import {
-  Dragging,
-  GridResizingState,
-  LayoutBar,
-  LayoutGridKeepFeature,
-  useDraggable,
-} from '../../../';
+import { Dragging, LayoutBar, useDraggable } from '../../../';
 import { CssUtils, Dom, NameStrValue, Num, Str } from '../../../../core';
+import {
+  GridResizingState,
+  LayoutGridKeepFeature,
+} from './ti-layout-grid-types';
 import { keepSizesState } from './use-grid-keep';
 
 type ResizeMeasure = {

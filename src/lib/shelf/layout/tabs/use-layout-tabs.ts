@@ -1,14 +1,9 @@
 import _ from 'lodash';
-import {
-  KeepFeature,
-  LayoutItem,
-  LayoutTabItem,
-  LayoutTabsProps,
-  TabsProps,
-  useFieldCom,
-} from '../../../';
-import { IconInput, OptionItem, TiRawCom, Vars } from '../../../../core';
+import { KeepFeature, LayoutItem, TabsProps, useFieldCom } from '../../../';
+
 import { ComputedRef, Ref } from 'vue';
+import { IconInput, OptionItem, TiRawCom, Vars } from '../../../../core';
+import { LayoutTabItem, LayoutTabsProps } from './ti-layout-tabs-types';
 
 export type TabMain = {
   item: LayoutTabItem;

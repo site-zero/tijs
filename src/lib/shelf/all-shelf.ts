@@ -28,10 +28,4 @@ export { TiMainFrame } from './main-frame/ti-main-frame-index';
 export { TiPlayground };
 
 export * from './layout/layout-support';
-
-//
-// 导出内部控件类型
-//
-export * from './layout/grid/ti-layout-grid-types';
 export * from './layout/layout-types';
-export * from './layout/tabs/ti-layout-tabs-types';

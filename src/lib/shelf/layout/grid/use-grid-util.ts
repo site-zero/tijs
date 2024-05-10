@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { GridResizingState, LayoutGridProps } from '../../..';
 import { CssUtils } from '../../../../core';
+import { GridResizingState, LayoutGridProps } from './ti-layout-grid-types';
 
 export function getTopStyle(state: GridResizingState, props: LayoutGridProps) {
   let css = CssUtils.mergeStyles([props.gridStyle || {}, props.layout || {}]);

@@ -1,4 +1,6 @@
-import { LayoutBlock, LayoutGridProps, LayoutPanel } from '../../';
+import { LayoutBlock, LayoutPanel } from '../../';
+import { LayoutGridProps } from '../layout/grid/ti-layout-grid-types';
+
 import { PlayLayoutMode } from './use-play-mode';
 
 export function usePlaygroundLayout(mode: PlayLayoutMode): LayoutGridProps {

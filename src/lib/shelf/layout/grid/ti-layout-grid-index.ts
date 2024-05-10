@@ -20,3 +20,4 @@ const TiLayoutGridInfo: TiComInfo = {
 };
 
 export { TiLayoutGrid, TiLayoutGridInfo };
+export * from './ti-layout-grid-types';

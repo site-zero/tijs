@@ -1,13 +1,13 @@
 import _ from 'lodash';
+import { useKeep } from '../../../';
+import { Vars } from '../../../../core';
 import {
   GridResizingState,
   LayoutGridKeepFeature,
   LayoutGridKeepProps,
   LayoutGridProps,
   LayoutGridState,
-  useKeep,
-} from '../../../';
-import { Vars } from '../../../../core';
+} from './ti-layout-grid-types';
 
 export function useKeepLayoutGrid(
   props: LayoutGridProps
