@@ -2,7 +2,9 @@
   import _ from 'lodash';
   import { computed, onMounted, ref } from 'vue';
   import { Dom, HtmlSnippetListenner, getLogger } from '../../../core';
-  import { COM_TYPE } from './html-snippet-index';
+  import { COM_TYPES } from '../../lib-com-types';
+
+  const COM_TYPE = COM_TYPES.HtmlSnippet;
 
   const emit = defineEmits<{
     (name: string, playload?: any): void;

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed, inject, onMounted, provide, reactive, ref } from 'vue';
-  import { useBusEmit } from '../../';
+  import { COM_TYPES, useBusEmit } from '../../';
   import {
     ActionBarProps,
     BUS_KEY,
@@ -11,21 +11,11 @@
     Util,
   } from '../../../core';
   import BarItemChildren from './BarItemChildren.vue';
-  import {
-    BAR_SUPPORT,
-    BarItemOpenStatus,
-    BarState,
-    COM_TYPE,
-  } from './action-bar-type';
+  import { BAR_SUPPORT, BarItemOpenStatus, BarState } from './action-bar-type';
   import { TiActionBarInfo } from './ti-action-bar-index';
   import { useActionBar } from './use-action-bar';
-  /*-------------------------------------------------------
 
-                   Com Options
-
--------------------------------------------------------*/
   defineOptions({
-    name: COM_TYPE,
     inheritAttrs: true,
   });
   /*-------------------------------------------------------

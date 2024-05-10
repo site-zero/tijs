@@ -1,9 +1,10 @@
 <script lang="ts" setup>
   import { computed } from 'vue';
+  import { COM_TYPES } from '../../lib-com-types';
   import { CellChanged, CellEvents, CellProps } from '../../';
-  import { COM_TYPE, useCell } from './use-cell';
+  import { useCell } from './use-cell';
   defineOptions({
-    name: COM_TYPE,
+    name: COM_TYPES.Cell,
     inheritAttrs: true,
   });
   let props = withDefaults(defineProps<CellProps>(), {

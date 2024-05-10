@@ -1,6 +1,6 @@
 import { App } from 'vue';
-import { COM_TYPES } from '../../../';
 import { TiComInfo, TiComRace } from '../../../../core';
+import { COM_TYPES } from '../../../lib-com-types';
 import TiLayoutTabs from './TiLayoutTabs.vue';
 import { atBottom, atTop } from './example';
 

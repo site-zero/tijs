@@ -1,12 +1,14 @@
 <script setup lang="ts">
   import _ from 'lodash';
   import { computed, reactive, ref } from 'vue';
-  import { TiIcon, ValueBoxEmits, tiGetDefaultComPropValue } from '../../';
+  import { TiIcon, ValueBoxEmits } from '../../';
   import { CssUtils } from '../../../core';
-  import { COM_TYPE, LabelProps, LabelState, useLabel } from './use-label';
+  import { COM_TYPES } from '../../lib-com-types';
+  import { LabelProps, LabelState, useLabel } from './use-label';
+
+  const COM_TYPE = COM_TYPES.Label;
 
   defineOptions({
-    name: COM_TYPE,
     inheritAttrs: true,
   });
 

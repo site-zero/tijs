@@ -1,17 +1,13 @@
 <script setup lang="ts">
   import _ from 'lodash';
-  import { computed, nextTick, onMounted, reactive, ref } from 'vue';
+  import { computed, onMounted, reactive, ref } from 'vue';
   import { TiIcon, ValueBoxEmits } from '../../';
   import { CssUtils } from '../../../core';
-  import {
-    COM_TYPE,
-    InputBoxProps,
-    InputBoxState,
-    useInputBox,
-  } from './use-input-box';
+  import { COM_TYPES } from '../../lib-com-types';
+  import { InputBoxProps, InputBoxState, useInputBox } from './use-input-box';
   //-----------------------------------------------------
+  const COM_TYPE = COM_TYPES.Input;
   defineOptions({
-    name: COM_TYPE,
     inheritAttrs: true,
   });
   //-----------------------------------------------------
@@ -75,13 +71,13 @@
     Box.value.doChangeValue(val);
   }
   //-----------------------------------------------------
-  onMounted(()=>{
+  onMounted(() => {
     //console.log("TiInput mounted")
-    if(props.boxFocused){
-      $input.value.select()
+    if (props.boxFocused) {
+      $input.value.select();
       //console.log($input)
     }
-  })
+  });
   //-----------------------------------------------------
 </script>
 

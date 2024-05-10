@@ -11,12 +11,15 @@
   } from 'vue';
   import { Alert, TiIcon, useLargeScrolling } from '../../';
   import { CssUtils, Size2D, Util, getLogger } from '../../../core';
+  import { COM_TYPES } from '../../lib-com-types';
   import TableRow from './row/TableRow.vue';
-  import { COM_TYPE, ColResizingState, TableEmit, useTable } from './use-table';
+  import { TableProps } from './ti-table-type';
+  import { ColResizingState, TableEmit, useTable } from './use-table';
   import { TableScrolling, getTableDebugInfo } from './use-table-debug-info';
   import { loadColumnSizes, useKeepTable } from './use-table-keep';
   import { useViewMeasure } from './use-view-measure';
-  import { TableProps } from './ti-table-type';
+
+  const COM_TYPE = COM_TYPES.Table;
 
   const log = getLogger(COM_TYPE);
   //-------------------------------------------------------

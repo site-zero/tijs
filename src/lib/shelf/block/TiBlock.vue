@@ -9,10 +9,12 @@
     TiAppEvent,
     createBus,
   } from '../../../core';
-  import { COM_TYPE, useBlock, useBusAdaptor } from './use-block';
+  import { COM_TYPES } from '../../lib-com-types';
+  import { useBlock, useBusAdaptor } from './use-block';
+
+  const COM_TYPE = COM_TYPES.Block;
 
   defineOptions({
-    name: COM_TYPE,
     inheritAttrs: false,
     nameWidth: 0,
   });

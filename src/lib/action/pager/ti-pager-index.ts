@@ -1,5 +1,5 @@
 import { App } from 'vue';
-import { COM_TYPES } from '../../';
+import { COM_TYPES } from '../../lib-com-types';
 import { TiComInfo, TiComRace } from '../../../core';
 import TiPager from './TiPager.vue';
 import example from './example';

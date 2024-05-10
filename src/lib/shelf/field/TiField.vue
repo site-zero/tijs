@@ -1,11 +1,12 @@
 <script lang="ts" setup>
   import { computed } from 'vue';
   import { FieldPair } from '../../';
-  import { COM_TYPE, FieldProps, useField } from './use-field';
+  import { COM_TYPES } from '../../lib-com-types';
+  import { FieldProps, useField } from './use-field';
 
   //-------------------------------------------------
   defineOptions({
-    name: COM_TYPE,
+    name: COM_TYPES.Field,
     inheritAttrs: false,
     nameWidth: 0,
   });

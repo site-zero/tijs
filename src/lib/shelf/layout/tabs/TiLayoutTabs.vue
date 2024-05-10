@@ -1,9 +1,14 @@
 <script lang="ts" setup>
   import { computed, ref, watch } from 'vue';
-  import { TiRoadblock, TiTabs, getLayoutItem, useKeep } from '../../../';
+  import {
+    COM_TYPES,
+    TiRoadblock,
+    TiTabs,
+    getLayoutItem,
+    useKeep,
+  } from '../../../';
   import { CssUtils } from '../../../../core';
   import { TabDisplayItem } from '../layout-types';
-  import { COM_TYPE } from './ti-layout-tabs-index';
   import { LayoutTabsProps } from './ti-layout-tabs-types';
   import {
     autoSetCurrentTablKey,
@@ -13,7 +18,7 @@
   } from './use-layout-tabs';
 
   defineOptions({
-    name: COM_TYPE,
+    name: COM_TYPES.LayoutTabs,
     inheritAttrs: false,
   });
 

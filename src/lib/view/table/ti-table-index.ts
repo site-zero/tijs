@@ -1,12 +1,12 @@
 import { App } from 'vue';
-import { COM_TYPES } from '../../';
+import { COM_TYPES } from '../../lib-com-types';
 import { TiComInfo, TiComRace } from '../../../core';
 import TiTable from './TiTable.vue';
 //const TiTable = defineAsyncComponent(() => import('./TiTable.vue'));
 import { d10k, d1k, d300, editable, simple } from './example';
 import i18n from './i18n';
 
-export const COM_TYPE = COM_TYPES.Table;
+const COM_TYPE = COM_TYPES.Table;
 
 const TiTableInfo: TiComInfo = {
   icon: 'fas-table-cells',

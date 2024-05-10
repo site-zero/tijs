@@ -1,5 +1,5 @@
 import { TiComInfo, TiComRace } from '../../../core';
-import { COM_TYPES } from '../../';
+import { COM_TYPES } from '../../lib-com-types';
 import { App } from 'vue';
 import TiLoading from './TiLoading.vue';
 

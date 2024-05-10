@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { Ref, computed, onMounted, reactive, ref, watch } from 'vue';
-  import { TiBlock, TiLayoutTabs } from '../../../';
+  import { COM_TYPES, TiBlock, TiLayoutTabs } from '../../../';
   import { CssUtils, Vars } from '../../../../core';
   import {
     loadAllState,
@@ -11,12 +11,11 @@
   import { useGridResizing } from '../grid/use-grid-resizing.ts';
   import { getLayoutPanelItems } from '../layout-panel';
   import { LayoutBar, LayoutPanelItem } from '../layout-types';
-  import { COM_TYPE } from './grid.types.ts';
   import { LayoutGridProps, LayoutGridState } from './ti-layout-grid-types';
   import { getLayoutGridItems, isLayoutAdjustable } from './use-grid-items';
   import { getTopStyle } from './use-grid-util.ts';
   defineOptions({
-    name: COM_TYPE,
+    name: COM_TYPES.LayoutGrid,
     inheritAttrs: true,
   });
 

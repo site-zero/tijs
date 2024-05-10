@@ -1,8 +1,8 @@
 import { App } from 'vue';
 import { TiComInfo, TiComRace } from '../../../core';
+import { COM_TYPES } from '../../lib-com-types';
 import TiMainFrame from './TiMainFrame.vue';
 import { simple } from './example';
-import { COM_TYPES } from 'src/lib/lib-com-types';
 
 let en = {
   'com-name': 'Main Frame',
@@ -33,3 +33,4 @@ const TiMainFrameInfo: TiComInfo = {
 };
 
 export { TiMainFrame, TiMainFrameInfo };
+

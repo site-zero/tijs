@@ -1,6 +1,6 @@
 import { App } from 'vue';
-import { COM_TYPES } from '../../../';
 import { TiComInfo, TiComRace } from '../../../../core';
+import { COM_TYPES } from '../../../lib-com-types';
 import TiLayoutGrid from './TiLayoutGrid.vue';
 import { simple } from './example';
 import i18n from './i18n';
