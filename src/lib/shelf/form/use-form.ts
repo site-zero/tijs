@@ -6,7 +6,6 @@ import { buildFormFieldList } from './use-form-field';
 import { FormProps } from './use-form-props';
 import { FormState, updateFormState } from './use-form-state';
 
-export const COM_TYPE = 'TiForm';
 /*-------------------------------------------------------
 
                      Events

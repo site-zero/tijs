@@ -1,9 +1,11 @@
-import { TiComInfo, TiComRace } from '../../../core';
 import { App } from 'vue';
+import { COM_TYPES } from '../../';
+import { TiComInfo, TiComRace } from '../../../core';
 import TiForm from './TiForm.vue';
 import { nested, simple } from './example';
 import i18n from './i18n';
-import { COM_TYPE } from './use-form';
+
+const COM_TYPE = COM_TYPES.Form;
 
 const TiFormInfo: TiComInfo = {
   icon: 'fas-clipboard-list',

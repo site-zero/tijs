@@ -1,8 +1,8 @@
 import { App } from 'vue';
+import { COM_TYPES } from '../../../';
 import { TiComInfo, TiComRace } from '../../../../core';
 import TiLayoutTabs from './TiLayoutTabs.vue';
 import { atBottom, atTop } from './example';
-export const COM_TYPE = 'TiLayoutTabs';
 
 const en_us = {
   'com-name': 'Tabs Layout',
@@ -14,6 +14,8 @@ const zh_cn = {
   'example-at-top': '标签组位于顶部',
   'example-at-bottom': '标签组位于底部',
 };
+
+const COM_TYPE = COM_TYPES.LayoutTabs;
 
 const TiLayoutTabsInfo: TiComInfo = {
   icon: 'zmdi-tab',
@@ -36,4 +38,3 @@ const TiLayoutTabsInfo: TiComInfo = {
 
 export * from './ti-layout-tabs-types';
 export { TiLayoutTabs, TiLayoutTabsInfo };
-

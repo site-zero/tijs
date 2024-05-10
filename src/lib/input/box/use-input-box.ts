@@ -10,7 +10,6 @@ import {
                 Type Defination
 
 -----------------------------------------------------*/
-export const COM_TYPE = 'TiInput';
 export type InputBoxState = ValueBoxState<any>;
 export type InputBoxProps = ValueBoxProps<any> & {
   hideBorder?: boolean;

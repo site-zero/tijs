@@ -1,11 +1,12 @@
 import { App } from 'vue';
+import { COM_TYPES } from '../../';
 import { TiComInfo, TiComRace } from '../../../core';
 import TiCheck from './TiCheck.vue';
-import { COM_TYPE } from './check.type';
+export const COM_TYPE = COM_TYPES.Check;
 
 const en_us = {
   'com-name': 'CheckBox',
-  'example-customized-values': 'Customized Values'
+  'example-customized-values': 'Customized Values',
 };
 const zh_cn = {
   'com-name': '勾选框',

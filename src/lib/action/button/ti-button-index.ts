@@ -1,5 +1,6 @@
-import { TiComInfo, TiComRace } from '../../../core';
 import { App } from 'vue';
+import { COM_TYPES } from '../../';
+import { TiComInfo, TiComRace } from '../../../core';
 import TiButton from './TiButton.vue';
 
 const en_us = {
@@ -9,10 +10,12 @@ const zh_cn = {
   'com-name': '按钮',
 };
 
+const COM_TYPE = COM_TYPES.Button;
+
 const TiButtonInfo: TiComInfo = {
   icon: 'fas-hand-pointer',
   race: TiComRace.ACTION,
-  name: 'TiButton',
+  name: COM_TYPE,
   text: 'i18n:ti-button-com-name',
   i18n: {
     en_us: en_us,
@@ -22,7 +25,7 @@ const TiButtonInfo: TiComInfo = {
   },
   com: TiButton,
   install: (app: App) => {
-    app.component('TiButton', TiButton);
+    app.component(COM_TYPE, TiButton);
   },
   defaultProps: 'simple-button',
   exampleProps: [

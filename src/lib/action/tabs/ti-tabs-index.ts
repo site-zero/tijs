@@ -1,4 +1,5 @@
 import { App } from 'vue';
+import { COM_TYPES } from '../../';
 import { TiComInfo, TiComRace } from '../../../core';
 import TiTabs from './TiTabs.vue';
 import { atBottom, atTop } from './example';
@@ -24,7 +25,7 @@ const zh_cn = {
   'example-t4': '标签 4',
 };
 
-const COM_TYPE = 'TiTabs';
+const COM_TYPE = COM_TYPES.Tabs;
 
 const TiTabsInfo: TiComInfo = {
   icon: 'zmdi-tab-unselected',

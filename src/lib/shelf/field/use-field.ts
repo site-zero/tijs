@@ -18,7 +18,6 @@ import {
   Vars,
 } from '../../../core';
 
-export const COM_TYPE = 'TiField';
 /*-------------------------------------------------------
 
                      Events

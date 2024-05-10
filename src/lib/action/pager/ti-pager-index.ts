@@ -1,4 +1,5 @@
 import { App } from 'vue';
+import { COM_TYPES } from '../../';
 import { TiComInfo, TiComRace } from '../../../core';
 import TiPager from './TiPager.vue';
 import example from './example';
@@ -12,7 +13,7 @@ const zh_cn = {
   'example-buttons': '按钮翻页',
 };
 
-const COM_TYPE = 'TiPager';
+const COM_TYPE = COM_TYPES.Pager;
 
 const TiPagerInfo: TiComInfo = {
   //icon: 'fas-pager',

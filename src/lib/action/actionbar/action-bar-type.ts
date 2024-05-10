@@ -8,8 +8,6 @@ import {
   Vars,
 } from '../../../core';
 
-export const COM_TYPE = 'TiActionBar';
-
 export const BAR_BUS_KEY: InjectionKey<TiBus<BuiltedBarItem>> =
   Symbol('BUS_KEY');
 

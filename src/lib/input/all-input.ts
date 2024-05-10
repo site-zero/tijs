@@ -9,6 +9,7 @@ export default {
   TiTransfer: TiTransferInfo,
 } as TiComSet;
 
-export { TiInput } from './box/ti-input-index';
-export { TiCheck } from './check/ti-check-index';
-export { TiTransfer } from './transfer/ti-transfer-index';
+export * from './box/ti-input-index';
+export * from './check/ti-check-index';
+export * from './transfer/ti-transfer-index';
+

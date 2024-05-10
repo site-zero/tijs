@@ -1,8 +1,7 @@
 import { App } from 'vue';
+import { COM_TYPES } from '../../';
 import { TiComInfo, TiComRace } from '../../../core';
 import TiLabel from './TiLabel.vue';
-import { COM_TYPE } from './use-label';
-//const TiLabel = defineAsyncComponent(() => import("./TiLabel.vue"));
 
 const en_us = {
   'com-name': 'Label',
@@ -12,6 +11,8 @@ const zh_cn = {
   'com-name': '标签',
   'example-prefix-suffix': '前缀后缀',
 };
+
+const COM_TYPE = COM_TYPES.Label;
 
 const TiLabelInfo: TiComInfo = {
   icon: 'fas-tag',

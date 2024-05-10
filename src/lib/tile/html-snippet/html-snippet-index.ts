@@ -1,9 +1,10 @@
 import { App } from 'vue';
+import { COM_TYPES } from '../../';
 import { TiComInfo, TiComRace } from '../../../core';
 import TiHtmlSnippet from './TiHtmlSnippet.vue';
 import { simple } from './example/index.ts';
 
-export const COM_TYPE = 'TiHtmlSnippet';
+export const COM_TYPE = COM_TYPES.HtmlSnippet;
 
 let en = {
   'com-name': 'HTML Snippet',

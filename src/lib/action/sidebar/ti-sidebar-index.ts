@@ -1,10 +1,11 @@
 import { App } from 'vue';
+import { COM_TYPES } from '../../';
 import { TiComInfo, TiComRace } from '../../../core';
 import TiSidebar from './TiSidebar.vue';
 import { simple } from './example';
 import i18n from './i18n';
 
-const COM_TYPE = 'TiSidebar';
+const COM_TYPE = COM_TYPES.Sidebar;
 
 const TiSidebarInfo: TiComInfo = {
   icon: 'fas-hill-rockslide',

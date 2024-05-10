@@ -1,8 +1,7 @@
-import { TiComInfo, TiComRace } from '../../../core';
 import { App } from 'vue';
+import { COM_TYPES } from '../../';
+import { TiComInfo, TiComRace } from '../../../core';
 import TiField from './TiField.vue';
-import { COM_TYPE } from './use-field';
-//const TiField = defineAsyncComponent(() => import("./TiField.vue"));
 
 const en_us = {
   'com-name': 'Field',
@@ -11,6 +10,8 @@ const zh_cn = {
   'com-name': '字段',
   'example-input': '输入',
 };
+
+const COM_TYPE = COM_TYPES.Field;
 
 const TiFieldInfo: TiComInfo = {
   icon: 'fas-feather',

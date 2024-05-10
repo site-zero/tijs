@@ -1,4 +1,5 @@
 import { App } from 'vue';
+import { COM_TYPES } from '../../';
 import { TiComInfo, TiComRace } from '../../../core';
 import TiList from './TiList.vue';
 import example from './example';
@@ -12,7 +13,7 @@ const zh_cn = {
   'example-with-tip': '带备注列表',
 };
 
-const COM_TYPE = 'TiList';
+const COM_TYPE = COM_TYPES.List;
 
 const TiListInfo: TiComInfo = {
   //icon: 'fas-list',
@@ -34,4 +35,5 @@ const TiListInfo: TiComInfo = {
   exampleProps: [example.simple, example.withIcon, example.withTip],
 };
 
+export * from './ti-list-types';
 export { TiList, TiListInfo };

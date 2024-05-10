@@ -1,7 +1,5 @@
 import { IconInput } from '../../../core';
 
-export const COM_TYPE = 'TiCheck';
-
 export type CheckProps = {
   value: any;
   text?: string;

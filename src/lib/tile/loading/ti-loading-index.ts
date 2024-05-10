@@ -1,8 +1,8 @@
 import { TiComInfo, TiComRace } from '../../../core';
+import { COM_TYPES } from '../../';
 import { App } from 'vue';
 import TiLoading from './TiLoading.vue';
 
-const COM_TYPE = 'TiLoading';
 const en_us = {
   'com-name': 'Loading',
   'example-simple-loading': 'Simple Loading',
@@ -13,6 +13,8 @@ const zh_cn = {
   'example-simple-loading': '简单加载标牌',
   'example-color-loading': '彩色加载标牌',
 };
+
+const COM_TYPE = COM_TYPES.Loading;
 
 const TiLoadingInfo: TiComInfo = {
   icon: 'fas-hourglass-half',

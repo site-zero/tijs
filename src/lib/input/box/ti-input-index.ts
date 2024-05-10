@@ -1,7 +1,7 @@
 import { App } from 'vue';
+import { COM_TYPES } from '../../';
 import { TiComInfo, TiComRace } from '../../../core';
 import TiInput from './TiInput.vue';
-import { COM_TYPE } from './use-input-box';
 import example from './example';
 
 const en_us = {
@@ -12,6 +12,8 @@ const zh_cn = {
   'example-options': '带选项',
   'example-formated': '格式显示值',
 };
+
+const COM_TYPE = COM_TYPES.Input;
 
 const TiInputInfo: TiComInfo = {
   icon: 'fas-i-cursor',

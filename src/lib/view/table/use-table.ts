@@ -4,7 +4,6 @@ import {
   CellChanged,
   CheckStatus,
   SelectableFeature,
-  SelectableState,
   TableCell,
   TableColumn,
   TableEvent,
@@ -22,15 +21,14 @@ import {
   EventUtils,
   I18n,
   Str,
+  Util,
   Vars,
   getLogger,
-  Util,
 } from '../../../core';
 
 import { TableKeepFeature } from './use-table-keep';
 import { useTableResizing } from './use-table-resizing';
 
-export const COM_TYPE = 'TiTable';
 const log = getLogger('TiTable.use-table');
 /**
  * 拖动时的状态

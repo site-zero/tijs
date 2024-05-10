@@ -1,8 +1,9 @@
-import { TiComInfo, TiComRace } from '../../../core';
 import { App } from 'vue';
+import { COM_TYPES } from '../../';
+import { TiComInfo, TiComRace } from '../../../core';
 import TiCell from './TiCell.vue';
-import { COM_TYPE } from './use-cell';
-//const TiCell = defineAsyncComponent(() => import("./TiCell.vue"));
+
+const COM_TYPE = COM_TYPES.Cell;
 
 const en_us = {
   'com-name': 'Cell',

@@ -10,8 +10,6 @@ import {
   TiAppEvent,
 } from '../../../core';
 
-export const COM_TYPE = 'TiBlock';
-
 /*-------------------------------------------------------
 
                      Options

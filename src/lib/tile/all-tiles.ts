@@ -15,9 +15,9 @@ export default {
   TiHtmlSnippet: TiHtmlSnippetInfo,
 } as TiComSet;
 
-export { TiUnknown } from '../tile/unknown/ti-unknown-index';
-export { TiHtmlSnippet } from './html-snippet/html-snippet-index';
-export { TiIcon } from './icon/ti-icon-index';
-export { TiLabel } from './label/ti-label-index';
-export { TiLoading } from './loading/ti-loading-index';
-export { TiRoadblock } from './roadblock/ti-roadblock-index';
+export * from '../tile/unknown/ti-unknown-index';
+export * from './html-snippet/html-snippet-index';
+export * from './icon/ti-icon-index';
+export * from './label/ti-label-index';
+export * from './loading/ti-loading-index';
+export * from './roadblock/ti-roadblock-index';

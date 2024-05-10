@@ -168,6 +168,8 @@ export function tiSetDefaultComPropValue(
   return setEnv(k, value);
 }
 
+export { COM_TYPES } from './lib-com-types';
+
 export * from './_features';
 export * from './_modal';
 export * from './_top';

@@ -9,7 +9,6 @@ import {
 } from '../../';
 import { I18n, TiRawCom, Vars } from '../../../core';
 
-export const COM_TYPE = 'TiCell';
 /*-------------------------------------------------------
 
                      Feature

@@ -1,8 +1,8 @@
-import { TiComInfo, TiComRace } from '../../../core';
 import { App } from 'vue';
+import { COM_TYPES } from '../../';
+import { TiComInfo, TiComRace } from '../../../core';
 import TiRoadblock from './TiRoadblock.vue';
 
-const COM_TYPE = 'TiRoadblock';
 const en_us = {
   'com-name': 'Roadblock',
   'example-simple': 'Simple',
@@ -19,6 +19,8 @@ const zh_cn = {
   'example-customized': '定制',
   'example-links': '链接',
 };
+
+const COM_TYPE = COM_TYPES.Roadblock;
 
 const TiRoadblockInfo: TiComInfo = {
   icon: 'fas-road-barrier',

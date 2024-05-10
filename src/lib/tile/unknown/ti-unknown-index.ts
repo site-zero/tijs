@@ -1,4 +1,5 @@
 import { App } from 'vue';
+import { COM_TYPES } from '../../';
 import { TiComInfo, TiComRace } from '../../../core';
 import TiUnknown from './TiUnknown.vue';
 
@@ -9,10 +10,12 @@ const zh_cn = {
   'com-name': '未知',
 };
 
+const COM_TYPE = COM_TYPES.Unknown;
+
 const TiUnkownInfo: TiComInfo = {
   icon: 'fas-circle-question',
   race: TiComRace.TILE,
-  name: 'TiUnknown',
+  name: COM_TYPE,
   text: 'i18n:ti-unknown-com-name',
   i18n: {
     en_us: en_us,
@@ -22,7 +25,7 @@ const TiUnkownInfo: TiComInfo = {
   },
   com: TiUnknown,
   install: (app: App) => {
-    app.component('TiUnknown', TiUnknown);
+    app.component(COM_TYPE, TiUnknown);
   },
   defaultProps: 'general',
   exampleProps: [

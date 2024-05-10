@@ -1,8 +1,6 @@
 import { KeepFeature, KeepInfo } from '../../';
 import { ComputedRef, Ref } from 'vue';
 
-export const COM_TYPE = 'TiMainFrame';
-
 export function getDemoContent() {
   let html = [];
   for (let i = 0; i < 100; i++) {

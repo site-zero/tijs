@@ -1,14 +1,25 @@
 import { App } from 'vue';
+import { COM_TYPES } from '../../';
 import { TiComInfo, TiComRace } from '../../../core';
 import TiIcon from './TiIcon.vue';
-import en_us from './i18n/en-us.json';
-import zh_cn from './i18n/zh-cn.json';
-//const TiIcon = defineAsyncComponent(() => import("./TiIcon.vue"));
+
+const en_us = {
+  'com-name': 'Icon',
+};
+const zh_cn = {
+  'com-name': '图标',
+  'example-simple-icon': '简单图标',
+  'example-color-icon': '颜色图标',
+  'example-image-icon': '图片图标',
+  'example-svg-icon': 'SVG图标',
+};
+
+const COM_TYPE = COM_TYPES.Icon;
 
 const TiIconInfo: TiComInfo = {
   icon: 'fas-fan',
   race: TiComRace.TILE,
-  name: 'TiIcon',
+  name: COM_TYPE,
   text: 'i18n:ti-icon-com-name',
   i18n: {
     en_us,
@@ -18,7 +29,7 @@ const TiIconInfo: TiComInfo = {
   },
   com: TiIcon,
   install: (app: App) => {
-    app.component('TiIcon', TiIcon);
+    app.component(COM_TYPE, TiIcon);
   },
   defaultProps: 'simple-icon',
   exampleProps: [

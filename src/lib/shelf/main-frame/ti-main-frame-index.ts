@@ -2,7 +2,7 @@ import { App } from 'vue';
 import { TiComInfo, TiComRace } from '../../../core';
 import TiMainFrame from './TiMainFrame.vue';
 import { simple } from './example';
-import { COM_TYPE } from './use-main-frame';
+import { COM_TYPES } from 'src/lib/lib-com-types';
 
 let en = {
   'com-name': 'Main Frame',
@@ -10,6 +10,8 @@ let en = {
 let cn = {
   'com-name': '应用主框架',
 };
+
+const COM_TYPE = COM_TYPES.MainFrame;
 
 const TiMainFrameInfo: TiComInfo = {
   icon: 'zmdi-tv',

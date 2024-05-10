@@ -1,8 +1,7 @@
-import { TiComInfo, TiComRace } from '../../../core';
 import { App } from 'vue';
+import { COM_TYPES } from '../../';
+import { TiComInfo, TiComRace } from '../../../core';
 import TiBlock from './TiBlock.vue';
-import { COM_TYPE } from './use-block';
-//const TiBlock = defineAsyncComponent(() => import("./TiBlock.vue"));
 
 const en_us = {
   'com-name': 'Block',
@@ -10,6 +9,8 @@ const en_us = {
 const zh_cn = {
   'com-name': '布局块',
 };
+
+const COM_TYPE = COM_TYPES.Block;
 
 const TiBlockInfo: TiComInfo = {
   icon: 'zmdi-border-outer',

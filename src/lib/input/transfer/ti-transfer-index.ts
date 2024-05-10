@@ -1,4 +1,5 @@
 import { App } from 'vue';
+import { COM_TYPES } from '../../';
 import { TiComInfo, TiComRace } from '../../../core';
 import TiTransfer from './TiTransfer.vue';
 import example from './example';
@@ -12,7 +13,7 @@ const zh_cn = {
   'example-table': '表格穿梭框',
 };
 
-const COM_TYPE = 'TiTransfer';
+const COM_TYPE = COM_TYPES.Transfer;
 
 const TiTransferInfo: TiComInfo = {
   //icon: 'fas-list',
