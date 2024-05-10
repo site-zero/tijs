@@ -1,11 +1,11 @@
-import { CommonProps, Vars } from '../../core';
+import { CommonProps, Vars } from '../../../core';
 import {
   KeepInfo,
   SelectEmitInfo,
   SelectableProps,
   SelectableState,
   TableCell,
-} from '../../lib';
+} from '../../';
 
 export type TableRowID = number | string;
 export type TableRowData = {

@@ -9,3 +9,9 @@ export default {
 
 export { TiList } from './list/ti-list-index';
 export { TiTable } from './table/ti-table-index';
+
+//
+// 导出内部控件类型
+//
+export * from './table/ti-table-type';
+export * from './list/ti-list-types';

@@ -2,7 +2,7 @@ import { App } from 'vue';
 import { TiComInfo, TiComRace } from '../../../../core';
 import TiLayoutTabs from './TiLayoutTabs.vue';
 import { atBottom, atTop } from './example';
-import { COM_TYPE } from './tabs.types';
+export const COM_TYPE = 'TiLayoutTabs';
 
 const en_us = {
   'com-name': 'Tabs Layout',

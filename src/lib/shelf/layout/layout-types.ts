@@ -1,4 +1,3 @@
-import { KeepInfo } from '..';
 import {
   BlockInfoProps,
   ComRef,
@@ -14,9 +13,7 @@ import {
   TranName,
   TranSpeed,
   Vars,
-} from '../../core';
-import { LayoutGridKeepProps } from './lib-keep';
-import { GridResizingState } from './lib-resizing';
+} from '../../../core';
 
 export type LayoutSchema = Record<string, ComRef>;
 
@@ -33,34 +30,6 @@ export type LayoutProps = CommonProps &
      */
     itemStyle?: Vars;
   };
-
-//
-// Grid Layout
-//
-export type LayoutGridItem = LayoutItem & {
-  adjustBars: LayoutBar[];
-};
-export type LayoutGridState = LayoutState & GridResizingState;
-export type LayoutGridProps = LayoutProps &
-  LayoutGridKeepProps &
-  LayoutPanelProps & {
-    layout?: CssGridLayout;
-    gridStyle?: Vars;
-  };
-
-//
-// Tab Layout
-//
-export type LayoutTabsProps = LayoutProps &
-  LayoutPanelProps &
-  TabsAspect & {
-    defaultTab?: string | number;
-    keepTab?: KeepInfo;
-  };
-
-export type LayoutTabItem = LayoutItem & {
-  current?: boolean;
-};
 
 //
 // Layout Panel

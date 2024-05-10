@@ -1,14 +1,7 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { Ref, computed, onMounted, reactive, ref, watch } from 'vue';
-  import {
-    LayoutBar,
-    LayoutGridProps,
-    LayoutGridState,
-    LayoutPanelItem,
-    TiBlock,
-    TiLayoutTabs,
-  } from '../../../';
+  import { TiBlock, TiLayoutTabs } from '../../../';
   import { CssUtils, Vars } from '../../../../core';
   import {
     loadAllState,
@@ -17,7 +10,9 @@
   } from '../grid/use-grid-keep';
   import { useGridResizing } from '../grid/use-grid-resizing.ts';
   import { getLayoutPanelItems } from '../layout-panel';
+  import { LayoutBar, LayoutPanelItem } from '../layout-types';
   import { COM_TYPE } from './grid.types.ts';
+  import { LayoutGridProps, LayoutGridState } from './ti-layout-grid-types';
   import { getLayoutGridItems, isLayoutAdjustable } from './use-grid-items';
   import { getTopStyle } from './use-grid-util.ts';
   defineOptions({
@@ -213,3 +208,4 @@
   @import 'style/ti-layout-grid';
   @import '../layout-panel';
 </style>
+../layout-types.ts

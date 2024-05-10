@@ -23,7 +23,15 @@ export { TiCell } from './cell/ti-cell-index';
 export { TiField } from './field/ti-field-index';
 export { TiForm } from './form/ti-form-index';
 export { TiLayoutGrid } from './layout/grid/ti-layout-grid-index';
-export * from './layout/layout-support';
 export { TiLayoutTabs } from './layout/tabs/ti-layout-tabs-index';
 export { TiMainFrame } from './main-frame/ti-main-frame-index';
 export { TiPlayground };
+
+export * from './layout/layout-support';
+
+//
+// 导出内部控件类型
+//
+export * from './layout/grid/ti-layout-grid-types';
+export * from './layout/layout-types';
+export * from './layout/tabs/ti-layout-tabs-types';
