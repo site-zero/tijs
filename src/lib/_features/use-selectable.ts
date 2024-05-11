@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Convertor, Util, Vars } from '../../core';
+import { Convertor, KeyboardStatus, Util, Vars } from '../../core';
 import { objToMap } from '../../core/util';
 // -----------------------------------------------------
 //  Types
@@ -64,6 +64,11 @@ export type SelectableFeature<ID extends string | number> = {
 
   getCheckStatus: (state: SelectableState<ID>) => CheckStatus;
 
+  select: (
+    selection: SelectableState<ID>,
+    rowId: ID,
+    keyboard: KeyboardStatus
+  ) => void;
   selectId: (state: SelectableState<ID>, id: ID) => void;
   toggleId: (state: SelectableState<ID>, id: ID) => void;
   selectRange: (
@@ -231,6 +236,26 @@ export function useSelectable<ID extends string | number>(
                 
   -----------------------------------------------------*/
 
+  function select(
+    selection: SelectableState<ID>,
+    rowId: ID,
+    se: KeyboardStatus
+  ) {
+    // Toggle Mode
+    if (se.ctrlKey || se.metaKey) {
+      toggleId(selection, rowId);
+    }
+    // shiftKey
+    else if (se.shiftKey) {
+      let ids = selection.ids;
+      selectRange(selection, ids, [rowId, selection.currentId]);
+    }
+    // Default Simple Mode
+    else {
+      selectId(selection, rowId);
+    }
+  }
+
   function selectId(state: SelectableState<ID>, id: ID) {
     state.checkedIds.clear();
     state.currentId = id;
@@ -329,6 +354,7 @@ export function useSelectable<ID extends string | number>(
 
     getCheckStatus,
 
+    select,
     selectId,
     toggleId,
     selectRange,

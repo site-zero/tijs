@@ -147,20 +147,7 @@ function _on_row_select(
   let { event, row } = rowEvent;
   let se = EventUtils.getKeyboardStatus(event);
 
-  // Toggle Mode
-  if (se.ctrlKey || se.metaKey) {
-    selectable.toggleId(selection, row.id);
-  }
-  // shiftKey
-  else if (se.shiftKey) {
-    log.debug('shift mode');
-    let ids = selection.ids;
-    selectable.selectRange(selection, ids, [row.id, selection.currentId]);
-  }
-  // Default Simple Mode
-  else {
-    selectable.selectId(selection, row.id);
-  }
+  selectable.select(selection, row.id, se);
 }
 /*-----------------------------------------------------
 
