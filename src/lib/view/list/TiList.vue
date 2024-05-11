@@ -1,9 +1,9 @@
 <script lang="ts" setup>
   import _ from 'lodash';
-  import { computed, reactive } from 'vue';
+  import { computed, reactive, watch } from 'vue';
   import { TiIcon, TiRoadblock } from '../../';
   import { CssUtils } from '../../../core';
-  import { ListProps } from './ti-list-types';
+  import { ListEmitter, ListProps } from './ti-list-types';
   import { useList } from './use-list';
 
   const props = withDefaults(defineProps<ListProps>(), {
@@ -11,9 +11,12 @@
     size: 'm',
     selectable: true,
     hoverable: true,
+    allowUserSelect: false,
   });
 
-  const List = computed(() => useList(props));
+  const emit = defineEmits<ListEmitter>();
+  console.log('TiList', props.currentId);
+  const List = computed(() => useList(props, emit));
   const selection = reactive(List.value.selectable.createSelection());
   const roadblock = computed(() => List.value.getRoadblock());
   const Items = computed(() => List.value.buildOptionItems(selection));
@@ -26,6 +29,7 @@
       {
         'is-hoverable': props.hoverable,
         'is-selectable': props.selectable,
+        'none-user-select': !props.allowUserSelect,
       },
       `size-${props.size ?? 'm'}`
     )
@@ -46,6 +50,15 @@
       'grid-template-columns': cols.join(' '),
     };
   });
+
+  watch(
+    () => {
+      return { currentId: props.currentId, checkedIds: props.checkedIds };
+    },
+    ({ currentId, checkedIds }) => {
+      List.value.selectable.updateSelection(selection, currentId, checkedIds);
+    }
+  );
 </script>
 <template>
   <div
@@ -60,12 +73,17 @@
       <div
         v-for="it in Items"
         class="list-item"
-        :style="ListItemStyle">
+        :class="it.className"
+        :style="ListItemStyle"
+        @click="List.OnItemSelect(selection, { event: $event, item: it })">
         <!--***********************************-->
         <!--=Check=-->
         <div
           v-if="props.multi"
-          class="list-part as-check">
+          class="list-part as-check"
+          @click.stop="
+            List.OnItemCheck(selection, { event: $event, item: it })
+          ">
           <i
             v-if="it.checked"
             class="zmdi zmdi-check-square"></i>

@@ -604,7 +604,10 @@ export class TiCom implements TiComInfo {
   install: (app: App) => void;
   defaultProps?: string;
   exampleProps: ComPropExample[];
-  exampleModel?: Record<string, TiComExampleModelTarget>;
+  exampleModel?: Record<
+    string,
+    TiComExampleModelTarget | TiComExampleModelTarget[]
+  >;
 
   constructor(info: TiComInfo) {
     this.icon = info.icon || 'fas-question';
@@ -671,7 +674,7 @@ export interface TiComInfo {
    * @default `{change:"value"}`
    */
   exampleModel?: {
-    [k: string]: TiComExampleModelTarget;
+    [k: string]: TiComExampleModelTarget | TiComExampleModelTarget[];
   };
 }
 

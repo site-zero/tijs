@@ -112,7 +112,7 @@
   .play-tabs {
     position: relative;
     padding: 0.2em SZ(42) 0.2em 0.2em;
-
+    font-size: SZ(12);
     > .as-actions {
       @include flex-align-nowrap($ai: center);
       @include pos-abs($t: 0, $b: 0, $r: 0);
@@ -144,9 +144,9 @@
     border: 1px solid var(--ti-color-border-shallow);
     color: var(--ti-color-tab-f);
     background-color: var(--ti-color-tab);
-    padding: SZ(8) SZ(10);
-    border-radius: SZ(4);
-    margin: SZ(3);
+    padding: .2em .7em;
+    border-radius: .4em;
+    margin: .2em;
     cursor: pointer;
   }
 

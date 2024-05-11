@@ -12,6 +12,10 @@ export default {
   comConf: {
     className: 'border-solid',
     size: 'b',
+    currentId: 3,
+    checkedIds: {
+      '3': true,
+    },
     data: getListData({ icon: false, tip: false }),
   } as ListProps,
 } as ComPropExample;

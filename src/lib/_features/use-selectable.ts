@@ -17,6 +17,10 @@ export type SelectEmitInfo<ID> = Omit<SelectableState<ID>, 'ids'> & {
   oldCheckedIds: Map<ID, boolean>;
 };
 // -----------------------------------------------------
+export type CheckedIds<ID extends string | number> =
+  | Record<ID, boolean>
+  | Map<ID, boolean>;
+// -----------------------------------------------------
 export type SelectableProps<ID extends string | number> = {
   /**
    * 传入的数据对象
@@ -37,13 +41,14 @@ export type SelectableProps<ID extends string | number> = {
   multi?: boolean;
 
   currentId?: ID;
-  checkedIds?: Record<ID, boolean> | Map<ID, boolean>;
+  checkedIds?: CheckedIds<ID>;
 };
 
 // -----------------------------------------------------
 export type SelectableFeature<ID extends string | number> = {
-  getRowIds: () => ID[];
   createSelection: () => SelectableState<ID>;
+
+  getRowIds: () => ID[];
 
   getDataId: Convertor<Vars, ID | undefined>;
   isIDChecked: (state: SelectableState<ID>, id?: ID) => boolean;
@@ -63,6 +68,12 @@ export type SelectableFeature<ID extends string | number> = {
   ) => SelectEmitInfo<ID>;
 
   getCheckStatus: (state: SelectableState<ID>) => CheckStatus;
+
+  updateSelection: (
+    selection: SelectableState<ID>,
+    currentId?: ID | undefined,
+    checkedIds?: CheckedIds<ID>
+  ) => void;
 
   select: (
     selection: SelectableState<ID>,
@@ -85,7 +96,7 @@ export function useSelectable<ID extends string | number>(
   props: SelectableProps<ID>
 ): SelectableFeature<ID> {
   let { getId = (data) => data.id ?? data.value } = props;
-
+  console.log('use selectable', props.currentId, props.checkedIds);
   /**
    * 获取数据的 ID
    */
@@ -177,6 +188,35 @@ export function useSelectable<ID extends string | number>(
     };
   }
 
+  function updateSelection(
+    selection: SelectableState<ID>,
+    currentId?: ID | undefined,
+    checkedIds?: CheckedIds<ID>
+  ) {
+    let ids = new Map<ID, boolean>();
+    if (!_.isNil(currentId)) {
+      ids.set(currentId, true);
+    }
+
+    let _is_checked = (_id: ID) => false;
+    if (checkedIds) {
+      if (checkedIds instanceof Map) {
+        _is_checked = (id: ID) => (checkedIds.get(id) ? true : false);
+      } else {
+        _is_checked = (id: ID) => (checkedIds[id] ? true : false);
+      }
+    }
+
+    for (let id of selection.ids) {
+      if (_is_checked(id)) {
+        ids.set(id, true);
+      }
+    }
+
+    selection.checkedIds = ids;
+    selection.currentId = currentId;
+  }
+
   /*-----------------------------------------------------
 
                        State
@@ -259,6 +299,7 @@ export function useSelectable<ID extends string | number>(
   function selectId(state: SelectableState<ID>, id: ID) {
     state.checkedIds.clear();
     state.currentId = id;
+    state.checkedIds.clear();
     state.checkedIds.set(id, true);
   }
 
@@ -354,6 +395,7 @@ export function useSelectable<ID extends string | number>(
 
     getCheckStatus,
 
+    updateSelection,
     select,
     selectId,
     toggleId,

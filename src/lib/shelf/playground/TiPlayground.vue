@@ -1,7 +1,13 @@
 <script setup lang="ts">
   import _ from 'lodash';
   import { Ref, computed, ref, watch } from 'vue';
-  import { DateTime, Tmpl, Util, Vars } from '../../../core';
+  import {
+    DateTime,
+    TiComExampleModelTarget,
+    Tmpl,
+    Util,
+    Vars,
+  } from '../../../core';
   import { tiCheckComponent } from '../../../lib';
   import TiLayoutGrid from '../layout/grid/TiLayoutGrid.vue';
   import PlayConf from './PlayConf.vue';
@@ -115,17 +121,31 @@
     console.log(model);
     let target = model[eventName];
     if (target) {
-      // {"change": "value"}
-      if (_.isString(target)) {
-        let key = Tmpl.exec(target, payload);
-        _.set(_example.value.comConf, key, payload);
+      let targets: TiComExampleModelTarget[];
+      if (_.isArray(target)) {
+        targets = target;
+      } else {
+        targets = [target];
       }
-      // {"field-change": {key:"data.${name}", value:"=value"}}
-      else {
-        let key = Tmpl.exec(target.key, payload);
-        let val = Util.explainObj(payload, target.val);
-        _.set(_example.value.comConf, key, val);
+      let updateMeta = {} as Vars;
+      for (let target of targets) {
+        // {"change": "value"}
+        if (_.isString(target)) {
+          let key = Tmpl.exec(target, payload);
+          _.set(updateMeta, key, payload);
+        }
+        // {"field-change": {key:"data.${name}", value:"=value"}}
+        else {
+          let key = Tmpl.exec(target.key, payload);
+          let val = Util.explainObj(payload, target.val);
+          // 确保是普通 Js 对象
+          if (val && val instanceof Map) {
+            val = Util.mapToObj(val);
+          }
+          _.set(updateMeta, key, val);
+        }
       }
+      _.assign(_example.value.comConf, updateMeta);
     }
   }
   function cleanSubEvents() {

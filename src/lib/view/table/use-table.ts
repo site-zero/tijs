@@ -156,11 +156,7 @@ function _on_row_select(
 -----------------------------------------------------*/
 export function useTable(props: TableProps, emit: TableEmit) {
   // 启用特性
-  let selectable = useSelectable<TableRowID>({
-    getId: props.getId,
-    data: props.data,
-    multi: props.multi,
-  });
+  let selectable = useSelectable<TableRowID>(props);
 
   function getCurrentRow(selection: TableSelection, rows: TableRowData[]) {
     if (!_.isNil(selection.currentId)) {

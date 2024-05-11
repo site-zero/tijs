@@ -18,7 +18,7 @@ export function wrapPromise<E>(reValue: E): Promise<E> {
 }
 
 export function wrapPromiseFunc<F extends Function, W extends Function>(
-  funcs?: F | F[],
+  funcs?: F | F[]
 ): W[] {
   let list: W[] = [];
   if (!funcs) {
@@ -245,11 +245,28 @@ export function mapTruthyKeys<T>(map?: Map<T, any>): T[] {
 }
 
 /**
+ * @param map  Map 对象转换为普通对象
+ *
+ * @returns  `Record<K,V>`
+ */
+export function mapToObj<K extends string | number, V>(
+  map: Map<K, V>
+): Record<K, V> {
+  let re = {} as Record<K, V>;
+  if (map && map instanceof Map) {
+    for (let [k, v] of map.entries()) {
+      re[k] = v;
+    }
+  }
+  return re;
+}
+
+/**
  * @param obj 原生对象或者 Map
  * @returns  `Map<K,V>`
  */
 export function objToMap<K extends string | number, V>(
-  obj?: Record<K, V> | Map<K, V>,
+  obj?: Record<K, V> | Map<K, V>
 ): Map<K, V> {
   if (obj instanceof Map) {
     return obj;
@@ -270,7 +287,7 @@ export function objToMap<K extends string | number, V>(
  */
 export function assignMap<K extends string | number, V>(
   a: Map<K, V>,
-  b: Map<K, V>,
+  b: Map<K, V>
 ) {
   for (let en of b.entries()) {
     let [k, v] = en;

@@ -18,8 +18,7 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.List;
 
 const TiListInfo: TiComInfo = {
-  //icon: 'fas-list',
-  icon: '🚜',
+  icon: 'fas-list',
   race: TiComRace.VIEW,
   name: COM_TYPE,
   text: 'i18n:ti-list-com-name',
@@ -41,6 +40,18 @@ const TiListInfo: TiComInfo = {
     example.multiWithIcon,
     example.multiWithTip,
   ],
+  exampleModel: {
+    select: [
+      {
+        key: 'currentId',
+        val: '=currentId',
+      },
+      {
+        key: 'checkedIds',
+        val: '=checkedIds',
+      },
+    ],
+  },
 };
 
 export * from './ti-list-types';

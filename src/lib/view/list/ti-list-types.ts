@@ -6,7 +6,10 @@ import {
   IconInput,
   Vars,
 } from '../../../core';
-import { SelectableProps } from '../../../lib/_features/use-selectable';
+import {
+  SelectEmitInfo,
+  SelectableProps,
+} from '../../../lib/_features/use-selectable';
 import { TableRowID } from '../table/ti-table-type';
 
 export type ListProps = CommonProps &
@@ -44,6 +47,9 @@ export type ListProps = CommonProps &
 
     // 是否显示列表鼠标 hover 高亮
     hoverable?: boolean;
+
+    // 可以鼠标选择文字，默认是 false
+    allowUserSelect?: boolean;
   };
 
 export type ListItem = AnyOptionItem & {
@@ -51,4 +57,14 @@ export type ListItem = AnyOptionItem & {
   checked: boolean;
   className: Vars;
   index: number;
+};
+
+export type ListEvent = {
+  event: Event;
+  item: ListItem;
+};
+
+export type ListSelectEmitInfo = SelectEmitInfo<TableRowID>;
+export type ListEmitter = {
+  (event: 'select', payload: ListSelectEmitInfo): void;
 };

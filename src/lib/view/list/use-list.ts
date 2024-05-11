@@ -1,17 +1,21 @@
 import _ from 'lodash';
-import { IconInput, Vars } from '../../../core';
+import { EventUtils, IconInput, Vars, getLogger } from '../../../core';
 import { SelectableState, useSelectable } from '../../_features';
 import { RoadblockProps } from '../../tile/roadblock/ti-roadblock-types';
 import { TableRowID } from '../table/ti-table-type';
-import { ListItem, ListProps } from './ti-list-types';
+import {
+  ListEmitter,
+  ListEvent,
+  ListItem,
+  ListProps,
+  ListSelectEmitInfo,
+} from './ti-list-types';
 
-export function useList(props: ListProps) {
+const log = getLogger('TiList.use-list');
+
+export function useList(props: ListProps, emit: ListEmitter) {
   // 启用特性
-  let selectable = useSelectable<TableRowID>({
-    getId: props.getId!,
-    data: props.data,
-    multi: props.multi,
-  });
+  let selectable = useSelectable<TableRowID>(props);
 
   let {
     getIcon = (item: Vars) => item.icon,
@@ -103,6 +107,59 @@ export function useList(props: ListProps) {
     return false;
   }
 
+  function OnItemSelect(
+    selection: SelectableState<TableRowID>,
+    itemEvent: ListEvent
+  ) {
+    // Guard
+    if (!props.selectable) {
+      return;
+    }
+    log.debug('OnItemSelect', itemEvent);
+    let oldCurrentId = _.cloneDeep(selection.currentId);
+    let oldCheckedIds = _.cloneDeep(selection.checkedIds);
+    let se = EventUtils.getKeyboardStatus(itemEvent.event);
+    if (props.multi) {
+      selectable.select(selection, itemEvent.item.value, se);
+    } else {
+      selectable.selectId(selection, itemEvent.item.value);
+    }
+
+    let info = selectable.getSelectionEmitInfo(
+      selection,
+      props.data || [],
+      oldCheckedIds,
+      oldCurrentId
+    ) as ListSelectEmitInfo;
+    emit('select', info);
+  }
+
+  function OnItemCheck(
+    selection: SelectableState<TableRowID>,
+    itemEvent: ListEvent
+  ) {
+    // Guard
+    if (!props.selectable) {
+      return;
+    }
+    log.debug('OnItemCheck', itemEvent);
+    let oldCurrentId = _.cloneDeep(selection.currentId);
+    let oldCheckedIds = _.cloneDeep(selection.checkedIds);
+    if (props.multi) {
+      selectable.toggleId(selection, itemEvent.item.value);
+    } else {
+      selectable.selectId(selection, itemEvent.item.value);
+    }
+
+    let info = selectable.getSelectionEmitInfo(
+      selection,
+      props.data || [],
+      oldCheckedIds,
+      oldCurrentId
+    ) as ListSelectEmitInfo;
+    emit('select', info);
+  }
+
   return {
     selectable,
     getItemValue,
@@ -113,5 +170,8 @@ export function useList(props: ListProps) {
     buildOptionItems,
     itemsHasIcon,
     itemsHasTip,
+
+    OnItemSelect,
+    OnItemCheck,
   };
 }

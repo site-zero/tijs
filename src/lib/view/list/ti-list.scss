@@ -1,12 +1,13 @@
 .ti-list {
-  $GAP: SZ(1);
+  &.none-user-select {
+    user-select: none;
+  }
   //--------------------------------
   > .list-item {
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto;
-    gap: $GAP;
-    padding: $GAP;
+    gap: 1px;
     //------------------------------
     > .list-part {
       height: 2.4em;
@@ -39,6 +40,7 @@
       &.as-tip {
         @include flex-align-nowrap;
         width: 100%;
+        color: var(--ti-color-track);
         > div {
           @include flex-center($jc: flex-start);
           width: 10px;
@@ -46,13 +48,13 @@
           white-space: nowrap;
           overflow: hidden;
           text-overflow: ellipsis;
-          color: var(--ti-color-track);
           font-size: 0.8em;
           padding: 0 0.62em;
         }
       }
       //----------------------------
     } // > .list-part
+    //------------------------------
   } // > .list-item
   //--------------------------------
   &.size-s {
@@ -78,20 +80,41 @@
     }
   }
   //--------------------------------
-  &.is-selectable {
-    cursor: pointer;
+  &.is-hoverable {
+    &.tip-block > .list-item {
+      &:hover {
+        color: var(--ti-color-hightlight-f);
+        background-color: var(--ti-color-hightlight);
+        > .list-part.as-tip {
+          color: var(--ti-color-hightlight-f);
+          background-color: var(--ti-color-hightlight);
+        }
+      }
+    }
   }
   //--------------------------------
-  &.is-hoverable {
-    &.tip-block > .list-item:hover > .list-part.as-tip {
-      color: var(--ti-color-selected-f);
-      background-color: var(--ti-color-selected);
-    }
-    > .list-item:hover {
-      color: var(--ti-color-hightlight-f);
-      background-color: var(--ti-color-hightlight);
+  &.is-selectable {
+    cursor: pointer;
+    > .list-item {
+      border-left: 3px solid transparent;
+      //----------------------------
+      &.is-checked,
+      &.is-checked:hover {
+        color: var(--ti-color-selected-f);
+        background-color: var(--ti-color-selected);
+        > .list-part.as-tip {
+          color: var(--ti-color-selected-f);
+          background-color: var(--ti-color-mask-thin);
+        }
+      }
+      //----------------------------
+      &.is-current {
+        border-left-color: var(--ti-color-primary);
+      }
+      //----------------------------
     }
   }
+
   //--------------------------------
   &.border-solid > .list-item {
     border-top: 1px solid var(--ti-color-border-shallow);
