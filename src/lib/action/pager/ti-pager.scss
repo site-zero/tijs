@@ -1,0 +1,75 @@
+.ti-pager {
+  @include flex-align($jc: center);
+  font-size: var(--ti-fontsz-s);
+  padding: 0.5em;
+  //-------------------------------------------
+  > .part {
+    @include flex-align-nowrap;
+    //-----------------------------------------
+    // 页码部分
+    &.pages {
+      padding: 0 1em;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    //-----------------------------------------
+    > a {
+      display: block;
+      padding: 0.1em 0.6em;
+      margin: 1px;
+      // 按钮
+      &.b {
+        color: var(--ti-color-primary-r);
+        background-color: var(--ti-color-primary);
+        border-radius: 0.3em;
+        &:hover {
+          color: var(--ti-color-secondary-r);
+          background-color: var(--ti-color-secondary);
+        }
+      }
+      // 页码按钮
+      &.pn.as-btn {
+        border-radius: 0.3em;
+        &.is-current,
+        &.is-current:hover {
+          color: var(--ti-color-selected-f);
+          background-color: var(--ti-color-selected);
+          font-weight: bold;
+        }
+        &:hover {
+          border-radius: 0.3em;
+          color: var(--ti-color-hightlight-f);
+          background-color: var(--ti-color-hightlight);
+        }
+      }
+      // 页码指示器
+      &.pn.as-dotted {
+        @include flex-center;
+        width: 2em;
+        height: 2em;
+        border-radius: 50%;
+        overflow: hidden;
+        color: var(--ti-color-body-f);
+        background-color: var(--ti-color-mask-weak);
+        &.is-current,
+        &.is-current:hover {
+        color: var(--ti-color-body);
+          background-color: var(--ti-color-mask-bushy);
+        }
+      }
+    }
+    //-----------------------------------------
+  }
+  //-------------------------------------------
+  &.mode-jumper > .part {
+    > a.is-current {
+      font-weight: bold;
+      color: var(--ti-color-body-f);
+      font-size: 1.3em;
+      &:hover {
+        color: var(--ti-color-link-hover);
+      }
+    }
+  }
+  //-------------------------------------------
+}

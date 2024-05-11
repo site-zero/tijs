@@ -65,8 +65,8 @@ export type Pager = {
   pageSize?: number;
   pageCount?: number;
   totalCount?: number;
-  // Suammary
   count?: number; //"count",
+  // Suammary
   skip?: number; //"skip",
   limit?: number; //"limit"
 };

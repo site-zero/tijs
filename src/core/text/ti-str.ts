@@ -1,6 +1,13 @@
 import _ from 'lodash';
 import JSON5 from 'json5';
-import { Vars, StrConvertor, Tmpl, StrCaseFunc, StrCaseMode } from '../ti';
+import {
+  Vars,
+  StrConvertor,
+  Tmpl,
+  StrCaseFunc,
+  StrCaseMode,
+  Util,
+} from '../ti';
 import * as DateTime from '../_top/ti-datetime';
 
 /*---------------------------------------------------
@@ -57,7 +64,7 @@ export function sBlank(str: string, dft: string): string {
  */
 export function splitIgnoreBlank(
   input: string,
-  sep: string | RegExp = ',',
+  sep: string | RegExp = ','
 ): string[] {
   if (!input) {
     return [];
@@ -164,6 +171,8 @@ type toJsValueOptions = {
   autoJson?: boolean;
   autoDate?: boolean;
   autoNil?: boolean;
+  autoMap?: boolean;
+  autoList?: boolean;
   trimed?: boolean;
   context?: Vars;
 };
@@ -193,6 +202,7 @@ export function toJsValue(v: any = '', options = {} as toJsValueOptions): any {
     autoJson = true,
     autoDate = true,
     autoNil = false,
+    autoMap = true,
     trimed = true,
     context = {},
   } = options || {};
@@ -203,6 +213,15 @@ export function toJsValue(v: any = '', options = {} as toJsValueOptions): any {
   if (_.isNil(v) || _.isBoolean(v) || _.isNumber(v)) {
     return v;
   }
+  //...............................................
+  // Map
+  if (v instanceof Map) {
+    if (autoMap) {
+      return Util.mapToObj(v);
+    }
+    return v;
+  }
+
   //...............................................
   // Must by string
   let str = trimed ? _.trim(v) : v;
@@ -268,7 +287,7 @@ export function toJsValue(v: any = '', options = {} as toJsValueOptions): any {
 export function joinArgs(
   s: string | any[],
   args: any[] = [],
-  iteratee = toJsValue,
+  iteratee = toJsValue
 ) {
   // String to split
   if (_.isString(s)) {
@@ -341,7 +360,7 @@ export function anyToStrOrNum(val: any): string | number {
 ---------------------------------------------------*/
 export function intToChineseNumber(
   input: string | number,
-  capitalized = false,
+  capitalized = false
 ) {
   // 预处理，兼容字符串
   let n: number;
@@ -623,7 +642,7 @@ interface JoinIteratee<T> {
 export function join(
   list: any[] = [],
   sep: string = '',
-  iteratee: JoinIteratee<any> | null,
+  iteratee: JoinIteratee<any> | null
 ): string {
   let list1 = _.flattenDeep(list);
   let list2;
@@ -646,7 +665,7 @@ export function join(
 export function joinAs(
   list: any[] = [],
   sep: string = '',
-  key: string | null = null,
+  key: string | null = null
 ): string {
   let iter: JoinIteratee<any> | null = null;
   if (!_.isEmpty(key)) {
@@ -669,7 +688,7 @@ export function toArray(
   { sep = /[:,;\t\n\/]+/g, ignoreNil = true } = {} as {
     sep?: RegExp | string;
     ignoreNil?: boolean;
-  },
+  }
 ): any[] {
   // Nil
   if (_.isNil(s)) {
@@ -722,7 +741,7 @@ export function toObject(
     sep?: RegExp | string;
     ignoreNil?: boolean;
     keys?: string[] | string;
-  },
+  }
 ) {
   // Split value to array
   let vs = toArray(s, { sep, ignoreNil });
@@ -787,7 +806,7 @@ export function toObjList(
     sepPair?: RegExp | string;
     ignoreNil?: boolean;
     keys?: string[] | string;
-  },
+  }
 ): any[] {
   // console.log(s, sepLine, sepPair, ignoreNil, keys);
   let list = toArray(s, { sep: sepLine, ignoreNil });
@@ -796,7 +815,7 @@ export function toObjList(
       sep: sepPair,
       ignoreNil,
       keys,
-    }),
+    })
   );
 }
 
@@ -842,7 +861,7 @@ export function sizeText(
     M?: number;
     bytes: boolean;
     units: string[];
-  },
+  }
 ) {
   let nb = byte;
   let i = 0;
@@ -880,7 +899,7 @@ export function toPercent(
   { fixed = 2, auto = true } = {} as {
     fixed?: number;
     auto: boolean;
-  },
+  }
 ): string {
   if (!_.isNumber(n)) return 'NaN';
   let nb = n * 100;

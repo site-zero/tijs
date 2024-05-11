@@ -100,3 +100,15 @@ test('ZeroIndexExplain', () => {
     'list.0'
   );
 });
+
+test('MapValExplain', () => {
+  let pos = new Map<string, number>();
+  pos.set('x', 100);
+  pos.set('y', 99);
+  let posObj = Util.mapToObj(pos);
+  expect(Util.explainObj({ pos }, '=pos')).toStrictEqual(posObj);
+
+  let aa = new Map();
+  aa.set(0, 'a');
+  expect(Util.explainObj({ aa }, '=aa')).toStrictEqual({ '0': 'a' });
+});

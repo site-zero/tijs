@@ -9,6 +9,8 @@ export default {
     className: 'border-dotted',
     multi: true,
     size: 'b',
+    currentId: null,
+    checkedIds: {},
     data: getListData({ icon: true, tip: false }),
   } as ListProps,
 } as ComPropExample;

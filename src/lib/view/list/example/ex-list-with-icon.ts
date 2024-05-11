@@ -8,6 +8,8 @@ export default {
   comConf: {
     className: 'border-dashed',
     size: 'b',
+    currentId: null,
+    checkedIds: {},
     data: getListData({ icon: true, tip: false }),
   } as ListProps,
 } as ComPropExample;

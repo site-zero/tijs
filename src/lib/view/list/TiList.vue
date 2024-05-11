@@ -15,7 +15,6 @@
   });
 
   const emit = defineEmits<ListEmitter>();
-  console.log('TiList', props.currentId);
   const List = computed(() => useList(props, emit));
   const selection = reactive(List.value.selectable.createSelection());
   const roadblock = computed(() => List.value.getRoadblock());

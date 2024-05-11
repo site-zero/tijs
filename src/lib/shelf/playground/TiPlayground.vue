@@ -118,7 +118,6 @@
     }
     // 适配模式
     let model = PlayCom.value.exampleModel ?? { change: 'value' };
-    console.log(model);
     let target = model[eventName];
     if (target) {
       let targets: TiComExampleModelTarget[];

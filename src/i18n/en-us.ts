@@ -378,7 +378,8 @@ export default {
   'paging-last': 'Tail',
   'paging-next': 'Next',
   'paging-prev': 'Prev',
-  'paging-sum': 'Total ${pgc} pages, ${sum} records，current ${count}/${pgsz}',
+  'paging-brief':
+    'Total ${pageCount} pages, ${totalCount} records，current ${count}/${pageSize}',
   'params': 'Params',
   'passwd': 'Password',
   'passwd-reset': 'Reset password',

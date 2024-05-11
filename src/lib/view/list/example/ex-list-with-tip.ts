@@ -12,6 +12,8 @@ export default {
   comConf: {
     className: 'tip-block',
     size: 'm',
+    currentId: null,
+    checkedIds: {},
     data: getListData({icon:false, tip:true}),
   } as ListProps,
 } as ComPropExample;

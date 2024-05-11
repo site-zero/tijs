@@ -2,15 +2,15 @@ import { ComPropExample } from '../../../../core';
 import { PagerProps } from '../ti-pager-types';
 
 export default {
-  name: 'jumper',
-  text: 'i18n:ti-pager-example-jumper',
+  name: 'button',
+  text: 'i18n:ti-pager-example-button',
   comConf: {
-    mode: 'jumper',
+    mode: 'button',
     pageNumber: 3,
     pageCount: 30,
     pageSize: 100,
     totalCount: 2997,
     count: 100,
-    maxShowPages:10
+    maxShowPages: 10,
   } as PagerProps,
 } as ComPropExample;

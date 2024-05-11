@@ -9,6 +9,8 @@ export default {
     className: 'tip-block border-dotted',
     size: 'm',
     multi: true,
+    currentId: null,
+    checkedIds: {},
     data: getListData({ icon: true, tip: true }),
   } as ListProps,
 } as ComPropExample;

@@ -26,7 +26,7 @@ test('splitIgnoreBlank', function () {
   expect(_.isEqual(Str.splitIgnoreBlank('a,b', '-'), ['a', 'b'])).eq(false);
   expect(_.isEqual(Str.splitIgnoreBlank('a:b', ':'), ['a', 'b'])).eq(true);
   expect(_.isEqual(Str.splitIgnoreBlank(' a : b \n', ':'), ['a', 'b'])).eq(
-    true,
+    true
   );
 });
 
@@ -70,19 +70,19 @@ test('intToChineseNumber', () => {
   expect(Str.intToChineseNumber(24)).toBe('二十四');
   expect(Str.intToChineseNumber(98465)).toBe('九万八千四百六十五');
   expect(Str.intToChineseNumber(119846500)).toBe(
-    '一亿一千九百八十四万六千五百',
+    '一亿一千九百八十四万六千五百'
   );
   expect(Str.intToChineseNumber(119846050)).toBe(
-    '一亿一千九百八十四万六千零五十',
+    '一亿一千九百八十四万六千零五十'
   );
 
   expect(Str.intToChineseNumber(24, true)).toBe('贰拾肆');
   expect(Str.intToChineseNumber(98465, true)).toBe('玖万捌仟肆佰陆拾伍');
   expect(Str.intToChineseNumber(119846500, true)).toBe(
-    '壹亿壹仟玖佰捌拾肆万陆仟伍佰',
+    '壹亿壹仟玖佰捌拾肆万陆仟伍佰'
   );
   expect(Str.intToChineseNumber(119846050, true)).toBe(
-    '壹亿壹仟玖佰捌拾肆万陆仟零伍拾',
+    '壹亿壹仟玖佰捌拾肆万陆仟零伍拾'
   );
 });
 
@@ -122,13 +122,13 @@ test('join', function () {
   expect(
     Str.join(['a', 'bb', 'ccc'], ',', function (value, _index, _list) {
       return value;
-    }),
+    })
   ).eq('a,bb,ccc');
 
   expect(
     Str.join(['a', 'bb', 'ccc'], ';', function (value, _index, _list) {
       return value.length;
-    }),
+    })
   ).eq('1;2;3');
 });
 
@@ -154,7 +154,7 @@ test('joinAs', function () {
 test('toArray', function () {
   let result = ['hello', 'world', 'good', 'day'];
   expect(
-    Str.toArray('hello--world-good-day', { sep: '-', ignoreNil: true }),
+    Str.toArray('hello--world-good-day', { sep: '-', ignoreNil: true })
   ).toStrictEqual(result);
   expect(Str.toArray('hello;;world;good;day')).toStrictEqual(result);
 });
@@ -180,4 +180,18 @@ test('toPercent', function () {
   expect(Str.toPercent(12.67328)).eq('1267.33%');
   expect(Str.toPercent(0.000001)).eq('0%');
   expect(Str.toPercent(0.01011)).eq('1.01%');
+});
+
+test('toJsValueMap', function () {
+  let pos = new Map<string, number>();
+  pos.set('x', 100);
+  pos.set('y', 99);
+  expect(Str.toJsValue(pos)).toStrictEqual({ x: 100, y: 99 });
+
+  let pos2 = _.cloneDeep(pos);
+  expect(
+    Str.toJsValue(pos, {
+      autoMap: false,
+    })
+  ).toStrictEqual(pos2);
 });

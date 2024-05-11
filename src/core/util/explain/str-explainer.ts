@@ -7,7 +7,6 @@ import {
   Vars,
   invoke_partial,
 } from '../../ti';
-import { Context } from 'typedoc';
 
 type ValueGetter = (context: Vars, options: ExplainOptions) => any;
 type MakeValueGetter = (val: string, getDft: ValueGetter) => ValueGetter;

@@ -10,14 +10,15 @@ const en_us = {
 const zh_cn = {
   'com-name': '翻页器',
   'example-jumper': '跳转翻页',
-  'example-buttons': '按钮翻页',
+  'example-button': '按钮翻页',
+  'example-dotted': '指示器翻页',
 };
 
 const COM_TYPE = COM_TYPES.Pager;
 
 const TiPagerInfo: TiComInfo = {
   //icon: 'fas-pager',
-  icon: '🏗️',
+  icon: '🚜',
   race: TiComRace.ACTION,
   name: COM_TYPE,
   text: 'i18n:ti-pager-com-name',
@@ -32,7 +33,8 @@ const TiPagerInfo: TiComInfo = {
     app.component(COM_TYPE, TiPager);
   },
   defaultProps: 'jumper',
-  exampleProps: [example.jumper, example.buttons],
+  exampleProps: [example.jumper, example.button, example.dotted],
 };
 
 export { TiPager, TiPagerInfo };
+export * from './ti-pager-types';
