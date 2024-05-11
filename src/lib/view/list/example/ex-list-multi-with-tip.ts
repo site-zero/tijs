@@ -3,12 +3,12 @@ import { ListProps } from '../ti-list-types';
 import { getListData } from './mock_date';
 
 export default {
-  name: 'multi_with_icon',
-  text: 'i18n:ti-list-example-multi-with-icon',
+  name: 'multi_with_tip',
+  text: 'i18n:ti-list-example-multi-with-tip',
   comConf: {
-    className: 'border-dotted',
+    className: 'tip-block',
+    size: 'm',
     multi: true,
-    size: 'b',
-    data: getListData({ icon: true, tip: false }),
+    data: getListData({ icon: true, tip: true }),
   } as ListProps,
 } as ComPropExample;

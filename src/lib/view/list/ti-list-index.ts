@@ -12,6 +12,7 @@ const zh_cn = {
   'example-with-icon': '带图标列表',
   'example-with-tip': '带备注列表',
   'example-multi-with-icon': '多选带图标',
+  'example-multi-with-tip': '多选带备注',
 };
 
 const COM_TYPE = COM_TYPES.List;
@@ -38,6 +39,7 @@ const TiListInfo: TiComInfo = {
     example.withIcon,
     example.withTip,
     example.multiWithIcon,
+    example.multiWithTip,
   ],
 };
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { TiRoadblock } from '../../';
-  import { RoadblockProps } from '../roadblock/use-roadblock';
+  import { RoadblockProps } from '../roadblock/ti-roadblock-types';
 
   let props = withDefaults(defineProps<RoadblockProps>(), {
     className: '',
@@ -11,5 +11,7 @@
 </script>
 
 <template>
-  <TiRoadblock class="ti-loading" v-bind="props" />
+  <TiRoadblock
+    class="ti-loading"
+    v-bind="props" />
 </template>
