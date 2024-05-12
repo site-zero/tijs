@@ -1,6 +1,11 @@
 import { CommonProps, Vars } from '../../../core';
 import { Pager } from '../../../lib/_top';
 
+export type PagerEmitter = (
+  eventName: 'change-page-number' | 'change-page-size',
+  payload: number
+) => void;
+
 /**
  * 翻页器可以使用的场景
  * 1. jumper: 长列表的底部翻页条

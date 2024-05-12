@@ -2,6 +2,7 @@
   @include flex-align($jc: center);
   font-size: var(--ti-fontsz-s);
   padding: 0.5em;
+  user-select: none;
   //-------------------------------------------
   > .part {
     @include flex-align-nowrap;
@@ -53,7 +54,7 @@
         background-color: var(--ti-color-mask-weak);
         &.is-current,
         &.is-current:hover {
-        color: var(--ti-color-body);
+          color: var(--ti-color-body);
           background-color: var(--ti-color-mask-bushy);
         }
       }
@@ -61,11 +62,36 @@
     //-----------------------------------------
   }
   //-------------------------------------------
+  &.no-avaliable {
+    @include flex-align-nowrap($jc: flex-start);
+    color: var(--ti-color-disable);
+    > i {
+      margin-left: 0.6em;
+      font-size: 1.2em;
+    }
+    > ul {
+      @include flex-align($ai: center, $ac: center);
+      padding: 1px;
+      margin: 0 0 0 0.4em;
+      height: 2em;
+      list-style: none;
+      > li {
+        width: 1.2em;
+        height: 1.2em;
+        border-radius: 10%;
+        background-color: var(--ti-color-bar);
+        margin: 0 0.2em;
+      }
+    }
+  }
+  //-------------------------------------------
   &.mode-jumper > .part {
     > a.is-current {
       font-weight: bold;
       color: var(--ti-color-body-f);
       font-size: 1.3em;
+      min-width: 2.6em;
+      text-align: center;
       &:hover {
         color: var(--ti-color-link-hover);
       }

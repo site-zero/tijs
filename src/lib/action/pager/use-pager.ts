@@ -1,8 +1,18 @@
 import _ from 'lodash';
 import { I18n } from '../../../core';
-import { PageNumberItem, PagerMode, PagerProps } from './ti-pager-types';
+import {
+  PageNumberItem,
+  PagerEmitter,
+  PagerMode,
+  PagerProps,
+} from './ti-pager-types';
 
-export function usePager(props: PagerProps) {
+type UsePagerOptions = {
+  emit: PagerEmitter;
+};
+
+export function usePager(props: PagerProps, options: UsePagerOptions) {
+  let { emit } = options;
   let {
     pageNumber = 0,
     pageSize = 0,
@@ -63,17 +73,31 @@ export function usePager(props: PagerProps) {
     });
   }
 
+  function jumpPage(offset: number) {
+    let pn = currentPN + offset;
+    pn = _.clamp(pn, 1, pageCount);
+    emit('change-page-number', pn);
+  }
+
+  function gotoPage(pn: number) {
+    pn = _.clamp(pn, 1, pageCount);
+    emit('change-page-number', pn);
+  }
+
   return {
     displayMode,
     avaliable,
     briefText,
     startPN,
     stopPN,
+    lastPN: pageCount,
     notStartFromHead,
     notStopAtTail,
     currentPN, // 当前页码
     atFirstPage: 1 == currentPN, // 当前页是首页
     atLastPage: pageCount == currentPN, // 当前页是尾页
     PageNumberList,
+    jumpPage,
+    gotoPage,
   };
 }

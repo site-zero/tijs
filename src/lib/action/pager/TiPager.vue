@@ -1,13 +1,15 @@
 <script lang="ts" setup>
   import { computed } from 'vue';
   import { CssUtils, I18n } from '../../../core';
-  import { PagerProps } from './ti-pager-types';
+  import { PagerEmitter, PagerProps } from './ti-pager-types';
   import { usePager } from './use-pager';
+
+  const emit = defineEmits<PagerEmitter>();
 
   const props = withDefaults(defineProps<PagerProps>(), {
     brief: true,
   });
-  const Page = computed(() => usePager(props));
+  const Page = computed(() => usePager(props, { emit }));
   const TopClass = computed(() =>
     CssUtils.mergeClassName(props.className, `mode-${Page.value.displayMode}`, {
       'is-avaliable': Page.value.avaliable,
@@ -31,18 +33,46 @@
   <div
     class="ti-pager"
     :class="TopClass">
+    <!--==========<Not Avliable>===========-->
+    <template v-if="!Page.avaliable">
+      <i class="fa-solid fa-pager"></i>
+      <ul>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+      </ul>
+    </template>
     <!--==========<Jumper>===========-->
-    <template v-if="'jumper' == Page.displayMode">
+    <template v-else-if="'jumper' == Page.displayMode">
       <div class="part head">
-        <a class="b"><i :class="Icon.head"></i> {{ Text.head }}</a>
-        <a class="b"><i :class="Icon.prev"></i> {{ Text.prev }}</a>
+        <a
+          class="b"
+          @click="Page.gotoPage(1)"
+          ><i :class="Icon.head"></i> {{ Text.head }}</a
+        >
+        <a
+          class="b"
+          @click="Page.jumpPage(-1)"
+          ><i :class="Icon.prev"></i> {{ Text.prev }}</a
+        >
       </div>
       <div class="part pages">
         <a class="is-current">{{ Page.currentPN }}</a>
       </div>
       <div class="part tail">
-        <a class="b">{{ Text.next }} <i :class="Icon.next"></i></a>
-        <a class="b">{{ Text.tail }} <i :class="Icon.tail"></i></a>
+        <a
+          class="b"
+          @click="Page.jumpPage(1)"
+          >{{ Text.next }} <i :class="Icon.next"></i
+        ></a>
+        <a
+          class="b"
+          @click="Page.gotoPage(Page.lastPN)"
+          >{{ Text.tail }} <i :class="Icon.tail"></i
+        ></a>
       </div>
       <div
         class="part brief"
@@ -64,20 +94,37 @@
     <!--==========<Button>===========-->
     <template v-else>
       <div class="part head">
-        <a class="b"><i :class="Icon.head"></i> {{ Text.head }}</a>
-        <a class="b"><i :class="Icon.prev"></i> {{ Text.prev }}</a>
+        <a
+          class="b"
+          @click="Page.gotoPage(1)"
+          ><i :class="Icon.head"></i> {{ Text.head }}</a
+        >
+        <a
+          class="b"
+          @click="Page.jumpPage(-1)"
+          ><i :class="Icon.prev"></i> {{ Text.prev }}</a
+        >
       </div>
       <div class="part pages">
         <a
           v-for="it in Page.PageNumberList"
           class="pn as-btn"
           :class="it.className"
+          @click="Page.gotoPage(it.value)"
           >{{ it.value }}</a
         >
       </div>
       <div class="part tail">
-        <a class="b">{{ Text.next }} <i :class="Icon.next"></i></a>
-        <a class="b">{{ Text.tail }} <i :class="Icon.tail"></i></a>
+        <a
+          class="b"
+          @click="Page.jumpPage(1)"
+          >{{ Text.next }} <i :class="Icon.next"></i
+        ></a>
+        <a
+          class="b"
+          @click="Page.gotoPage(Page.lastPN)"
+          >{{ Text.tail }} <i :class="Icon.tail"></i
+        ></a>
       </div>
     </template>
     <!--==========<-End->===========-->

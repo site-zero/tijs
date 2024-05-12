@@ -34,6 +34,9 @@ const TiPagerInfo: TiComInfo = {
   },
   defaultProps: 'jumper',
   exampleProps: [example.jumper, example.button, example.dotted],
+  exampleModel: {
+    'change-page-number': 'pageNumber',
+  },
 };
 
 export { TiPager, TiPagerInfo };
