@@ -7,7 +7,7 @@ import {
   TiEvent,
   TiEventTrigger,
 } from '../../core';
-import { TiUnkownInfo } from '../tile/unknown/ti-unknown-index';
+import { TiUnknownInfo } from '../tile/unknown/ti-unknown-index';
 
 export type BusEmitProps = Pick<CommonProps, 'emitMode'>;
 
@@ -61,7 +61,7 @@ export function makeAnonymouseEvent<K extends string, T>(
 ): TiEvent<T> {
   return {
     created: new Date(),
-    sourceCom: TiUnkownInfo,
+    sourceCom: TiUnknownInfo,
     name,
     // TODO 或许以后可以加入调用控件的实例路径
     // 获取控件实例的方法，可以提供一个全局特性

@@ -78,6 +78,17 @@
       color: var(--ti-color-selected-f);
       background-color: var(--ti-color-selected);
     }
+    &.is-selectable {
+      > .list-item {
+        &.is-checked,
+        &.is-checked:hover {
+          > .list-part.as-tip {
+            color: var(--ti-color-selected-f);
+            background-color: var(--ti-color-mask-thin);
+          }
+        }
+      }
+    }
   }
   //--------------------------------
   &.is-hoverable {
@@ -102,10 +113,6 @@
       &.is-checked:hover {
         color: var(--ti-color-selected-f);
         background-color: var(--ti-color-selected);
-        > .list-part.as-tip {
-          color: var(--ti-color-selected-f);
-          background-color: var(--ti-color-mask-thin);
-        }
       }
       //----------------------------
       &.is-current {

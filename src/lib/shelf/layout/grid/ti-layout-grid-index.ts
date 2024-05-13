@@ -8,7 +8,7 @@ import i18n from './i18n';
 const COM_TYPE = COM_TYPES.LayoutGrid;
 
 const TiLayoutGridInfo: TiComInfo = {
-  icon: 'zmdi-view-dashboard',
+  icon: 'zmdi-view-quilt',
   race: TiComRace.SHELF,
   name: COM_TYPE,
   text: 'i18n:ti-layout-grid-com-name',

@@ -599,6 +599,7 @@ export class TiCom implements TiComInfo {
   name: string;
   text: string;
   i18n: I18nSet;
+  tags: string[];
   com: TiRawCom;
   events: string[];
   asInner?: boolean;
@@ -616,6 +617,7 @@ export class TiCom implements TiComInfo {
     this.name = info.name;
     this.text = info.text;
     this.i18n = info.i18n;
+    this.tags = info.tags || [];
     this.com = info.com;
     this.asInner = info.asInner;
     this.install = info.install;
@@ -666,6 +668,7 @@ export interface TiComInfo {
   i18n: I18nSet;
   com: any;
   asInner?: boolean;
+  tags?: string[];
   install: (app: App) => void;
   defaultProps?: string;
   exampleProps: ComPropExample[];

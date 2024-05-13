@@ -8,7 +8,7 @@ import i18n from './i18n';
 const COM_TYPE = COM_TYPES.ActionBar;
 
 const TiActionBarInfo: TiComInfo = {
-  icon: 'fas-hanukiah',
+  icon: 'fas-bars',
   race: TiComRace.ACTION,
   name: COM_TYPE,
   text: 'i18n:ti-action-bar-com-name',

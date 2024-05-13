@@ -14,6 +14,7 @@ import {
 import en_us from '../i18n/en-us';
 import zh_cn from '../i18n/zh-cn';
 import _com_set_action from './action/all-actions';
+import _com_set_edit from './edit/all-edit';
 import _com_set_input from './input/all-input';
 import _com_set_shelf from './shelf/all-shelf';
 import _com_set_tile from './tile/all-tiles';
@@ -34,10 +35,12 @@ function _put_com_set(coms: TiComSet) {
 }
 
 _put_com_set(_com_set_action);
-_put_com_set(_com_set_tile);
+_put_com_set(_com_set_edit);
 _put_com_set(_com_set_input);
 _put_com_set(_com_set_shelf);
+_put_com_set(_com_set_tile);
 _put_com_set(_com_set_view);
+
 
 export function installTiComponents(app: App) {
   let coms = ALL_TI_COMS.values();
@@ -179,3 +182,4 @@ export * from './input/all-input';
 export * from './shelf/all-shelf';
 export * from './tile/all-tiles';
 export * from './view/all-views';
+export * from './edit/all-edit';

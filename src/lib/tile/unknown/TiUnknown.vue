@@ -1,3 +1,8 @@
+<script lang="ts" setup></script>
 <template>
-  <main>Unkown Component</main>
+  <div>Unknown Components</div>
 </template>
+<style lang="scss" scoped>
+  @use '../../../assets/style/_all.scss' as *;
+  @import './ti-unknown.scss';
+</style>

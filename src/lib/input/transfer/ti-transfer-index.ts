@@ -16,8 +16,8 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.Transfer;
 
 const TiTransferInfo: TiComInfo = {
-  //icon: 'fas-list',
-  icon: '🚜',
+  icon: 'fas-right-left',
+  tags: ['ing'],
   race: TiComRace.INPUT,
   name: COM_TYPE,
   text: 'i18n:ti-transfer-com-name',

@@ -15,7 +15,7 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.Label;
 
 const TiLabelInfo: TiComInfo = {
-  icon: 'fas-tag',
+  icon: 'zmdi-label',
   race: TiComRace.TILE,
   name: COM_TYPE,
   text: 'i18n:ti-label-com-name',
