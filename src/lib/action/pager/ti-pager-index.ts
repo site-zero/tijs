@@ -17,8 +17,7 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.Pager;
 
 const TiPagerInfo: TiComInfo = {
-  //icon: 'fas-pager',
-  icon: '🚜',
+  icon: 'fas-pager',
   race: TiComRace.ACTION,
   name: COM_TYPE,
   text: 'i18n:ti-pager-com-name',
