@@ -33,99 +33,160 @@
   <div
     class="ti-pager"
     :class="TopClass">
-    <!--==========<Not Avliable>===========-->
-    <template v-if="!Page.avaliable">
-      <i class="fa-solid fa-pager"></i>
-      <ul>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-        <li></li>
-      </ul>
-    </template>
     <!--==========<Jumper>===========-->
-    <template v-else-if="'jumper' == Page.displayMode">
-      <div class="part head">
-        <a
-          class="b"
-          @click="Page.gotoPage(1)"
-          ><i :class="Icon.head"></i> {{ Text.head }}</a
-        >
-        <a
-          class="b"
-          @click="Page.jumpPage(-1)"
-          ><i :class="Icon.prev"></i> {{ Text.prev }}</a
-        >
-      </div>
-      <div class="part pages">
-        <a class="is-current">{{ Page.currentPN }}</a>
-      </div>
-      <div class="part tail">
-        <a
-          class="b"
-          @click="Page.jumpPage(1)"
-          >{{ Text.next }} <i :class="Icon.next"></i
-        ></a>
-        <a
-          class="b"
-          @click="Page.gotoPage(Page.lastPN)"
-          >{{ Text.tail }} <i :class="Icon.tail"></i
-        ></a>
-      </div>
-      <div
-        class="part brief"
-        v-if="Page.briefText">
-        <a>{{ Page.briefText }}</a>
-      </div>
+    <template v-if="'jumper' == Page.displayMode">
+      <template v-if="!Page.avaliable">
+        <div class="part head">
+          <b><i :class="Icon.head"></i> {{ Text.head }}</b>
+          <b><i :class="Icon.prev"></i> {{ Text.prev }}</b>
+        </div>
+        <div class="part pages">
+          <span class="is-current">0</span>
+        </div>
+        <div class="part tail">
+          <b>{{ Text.next }} <i :class="Icon.next"></i></b>
+          <b>{{ Text.tail }} <i :class="Icon.tail"></i></b>
+        </div>
+      </template>
+      <template v-else>
+        <div
+          class="part head"
+          :class="Page.headPartClass">
+          <a
+            class="b"
+            @click="Page.gotoPage(1)"
+            ><i :class="Icon.head"></i> {{ Text.head }}</a
+          >
+          <a
+            class="b"
+            @click="Page.jumpPage(-1)"
+            ><i :class="Icon.prev"></i> {{ Text.prev }}</a
+          >
+        </div>
+        <div class="part pages">
+          <a
+            class="is-current"
+            @click="Page.askPageNumber"
+            >{{ Page.currentPN }}</a
+          >
+        </div>
+        <div
+          class="part tail"
+          :class="Page.tailPartClass">
+          <a
+            class="b"
+            @click="Page.jumpPage(1)"
+            >{{ Text.next }} <i :class="Icon.next"></i
+          ></a>
+          <a
+            class="b"
+            @click="Page.gotoPage(Page.lastPN)"
+            >{{ Text.tail }} <i :class="Icon.tail"></i
+          ></a>
+        </div>
+        <div
+          class="part brief"
+          v-if="Page.briefText"
+          @click="Page.askPageSize">
+          <a>{{ Page.briefText }}</a>
+        </div>
+      </template>
     </template>
     <!--==========<Dotted>===========-->
     <template v-else-if="'dotted' == Page.displayMode">
-      <div class="part pages">
+      <div
+        class="part pages"
+        v-if="!Page.avaliable">
+        <a class="pn as-dotted"></a>
+        <a class="pn as-dotted"></a>
+        <a class="pn as-dotted"></a>
+      </div>
+      <div
+        class="part pages"
+        v-else>
+        <a
+          v-if="Page.notStartFromHead"
+          @click="Page.askPageNumber"
+          >...</a
+        >
         <a
           v-for="it in Page.PageNumberList"
           class="pn as-dotted"
           :class="it.className"
+          @click="Page.gotoPage(it.value)"
           ><span>{{ it.value }}</span></a
+        >
+        <a
+          v-if="Page.notStopAtTail"
+          @click="Page.askPageNumber"
+          >...</a
         >
       </div>
     </template>
     <!--==========<Button>===========-->
     <template v-else>
-      <div class="part head">
-        <a
-          class="b"
-          @click="Page.gotoPage(1)"
-          ><i :class="Icon.head"></i> {{ Text.head }}</a
-        >
-        <a
-          class="b"
-          @click="Page.jumpPage(-1)"
-          ><i :class="Icon.prev"></i> {{ Text.prev }}</a
-        >
-      </div>
-      <div class="part pages">
-        <a
-          v-for="it in Page.PageNumberList"
-          class="pn as-btn"
-          :class="it.className"
-          @click="Page.gotoPage(it.value)"
-          >{{ it.value }}</a
-        >
-      </div>
-      <div class="part tail">
-        <a
-          class="b"
-          @click="Page.jumpPage(1)"
-          >{{ Text.next }} <i :class="Icon.next"></i
-        ></a>
-        <a
-          class="b"
-          @click="Page.gotoPage(Page.lastPN)"
-          >{{ Text.tail }} <i :class="Icon.tail"></i
-        ></a>
-      </div>
+      <template v-if="!Page.avaliable">
+        <div class="part head">
+          <b><i :class="Icon.head"></i> {{ Text.head }}</b>
+          <b><i :class="Icon.prev"></i> {{ Text.prev }}</b>
+        </div>
+        <div class="part pages">
+          <span class="pn as-btn">...</span>
+        </div>
+        <div class="part tail">
+          <b>{{ Text.next }} <i :class="Icon.next"></i></b>
+          <b>{{ Text.tail }} <i :class="Icon.tail"></i></b>
+        </div>
+      </template>
+      <template v-else>
+        <div
+          class="part head"
+          :class="Page.headPartClass">
+          <a
+            class="b"
+            @click="Page.gotoPage(1)"
+            ><i :class="Icon.head"></i> {{ Text.head }}</a
+          >
+          <a
+            class="b"
+            @click="Page.jumpPage(-1)"
+            ><i :class="Icon.prev"></i> {{ Text.prev }}</a
+          >
+        </div>
+        <div class="part pages">
+          <a
+            v-if="Page.notStartFromHead"
+            @click="Page.askPageNumber"
+            >...</a
+          >
+          <a
+            v-for="it in Page.PageNumberList"
+            class="pn as-btn"
+            :class="it.className"
+            @click="Page.gotoPage(it.value)"
+            >{{ it.value }}</a
+          >
+          <a
+            v-if="Page.notStopAtTail"
+            @click="Page.askPageNumber"
+            >...</a
+          >
+        </div>
+        <div
+          class="part tail"
+          :class="Page.tailPartClass">
+          <a
+            class="b"
+            @click="Page.jumpPage(1)"
+            >{{ Text.next }} <i :class="Icon.next"></i
+          ></a>
+          <a
+            class="b"
+            @click="Page.gotoPage(Page.lastPN)"
+            >{{ Text.tail }} <i :class="Icon.tail"></i
+          ></a>
+        </div>
+      </template>
     </template>
     <!--==========<-End->===========-->
   </div>

@@ -364,18 +364,19 @@ export default {
   'org-add': '添加机构',
   'org-choose': '选择机构',
   'others': '其他',
-  'paging-change-pgsz': '当前每页有${pgsz}条记录，您想修改为：',
+  'paging-change-pgsz': '当前每页有${pageSize}条记录，您想修改为：',
   'paging-change-pgsz-invalid':
     '页大小必须是整数数字，而且必须大于0，可您... -_-!',
   'paging-change-pn':
-    '当前第${pn}页，您想跳转到：（请输入 1 至 ${pgc} 之间的数字）',
+    '当前第${pageNumber}页，您想跳转到：（请输入 1 至 ${pageCount} 之间的数字）',
   'paging-change-pn-invalid':
-    '页码必须是整数数字，而且必须为 1 至 ${pgc} 之间的数字',
+    '页码必须是整数数字，而且必须为 1 至 ${pageCount} 之间的数字',
   'paging-first': '首页',
   'paging-last': '尾页',
   'paging-next': '后页',
   'paging-prev': '前页',
-  'paging-brief': '共${pageCount}页${totalCount}条记录，当前${count}/${pageSize}',
+  'paging-brief':
+    '共${pageCount}页${totalCount}条记录，当前${count}/${pageSize}',
   'params': '参数',
   'passwd': '密码',
   'passwd-reset': '重置密码',

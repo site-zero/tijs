@@ -1,6 +1,6 @@
 import { App } from 'vue';
 import { COM_TYPES } from '../../lib-com-types';
-import { TiComInfo, TiComRace } from '../../../core';
+import { TiComInfo, TiComRace, Vars } from '../../../core';
 import TiPager from './TiPager.vue';
 import example from './example';
 
@@ -36,6 +36,16 @@ const TiPagerInfo: TiComInfo = {
   exampleProps: [example.jumper, example.button, example.dotted],
   exampleModel: {
     'change-page-number': 'pageNumber',
+    'change-page-size': (pageSize, config) => {
+      let { pageCount, totalCount, count } = config;
+      let re = { pageSize } as Vars;
+      if (pageSize > 1) {
+        pageCount = Math.ceil(totalCount / pageSize);
+        re.count = Math.min(count, pageSize);
+        re.pageCount = pageCount;
+      }
+      return re;
+    },
   },
 };
 

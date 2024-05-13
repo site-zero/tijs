@@ -120,6 +120,7 @@
     let model = PlayCom.value.exampleModel ?? { change: 'value' };
     let target = model[eventName];
     if (target) {
+      console.log(target);
       let targets: TiComExampleModelTarget[];
       if (_.isArray(target)) {
         targets = target;
@@ -132,6 +133,12 @@
         if (_.isString(target)) {
           let key = Tmpl.exec(target, payload);
           _.set(updateMeta, key, payload);
+        }
+        // {"field-change": (val: any) => Vars}
+        else if (_.isFunction(target)) {
+          let conf = _.cloneDeep(_example.value.comConf);
+          let metas = target(payload, conf);
+          _.assign(updateMeta, metas);
         }
         // {"field-change": {key:"data.${name}", value:"=value"}}
         else {

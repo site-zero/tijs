@@ -20,13 +20,7 @@
       margin: 1px;
       // 按钮
       &.b {
-        color: var(--ti-color-primary-r);
-        background-color: var(--ti-color-primary);
         border-radius: 0.3em;
-        &:hover {
-          color: var(--ti-color-secondary-r);
-          background-color: var(--ti-color-secondary);
-        }
       }
       // 页码按钮
       &.pn.as-btn {
@@ -58,6 +52,29 @@
           background-color: var(--ti-color-mask-bushy);
         }
       }
+    } // > a {
+    //-----------------------------------------
+    &.is-enabled {
+      // 按钮
+      > a.b {
+        color: var(--ti-color-primary);
+        //background-color: var(--ti-color-primary);
+        border-radius: 0.3em;
+        &:hover {
+          color: var(--ti-color-secondary-r);
+          background-color: var(--ti-color-secondary);
+        }
+      }
+    }
+    //-----------------------------------------
+    &.is-disabled {
+      > a.b {
+        color: var(--ti-color-disable);
+        //background-color: var(--ti-color-disable-r);
+        text-decoration: none;
+        opacity: 0.6;
+        cursor: default;
+      }
     }
     //-----------------------------------------
   }
@@ -65,22 +82,18 @@
   &.no-avaliable {
     @include flex-align-nowrap($jc: flex-start);
     color: var(--ti-color-disable);
-    > i {
-      margin-left: 0.6em;
-      font-size: 1.2em;
-    }
-    > ul {
-      @include flex-align($ai: center, $ac: center);
-      padding: 1px;
-      margin: 0 0 0 0.4em;
-      height: 2em;
-      list-style: none;
-      > li {
-        width: 1.2em;
-        height: 1.2em;
-        border-radius: 10%;
-        background-color: var(--ti-color-bar);
-        margin: 0 0.2em;
+    > .part {
+      > b {
+        display: block;
+        padding: 0.1em 0.6em;
+        font-weight: normal;
+        margin: 1px;
+        color: var(--ti-color-disable-r);
+        //background-color: var(--ti-color-disable-r);
+        border-radius: 0.3em;
+      }
+      > .is-current {
+        color: var(--ti-color-disable-r);
       }
     }
   }

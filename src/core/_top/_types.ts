@@ -587,6 +587,7 @@ export type TiRawCom = DefineComponent<{}, {}, any>;
 
 export type TiComExampleModelTarget =
   | string
+  | ((val: any, comConf: Vars) => Vars)
   | {
       key: string;
       val: any;

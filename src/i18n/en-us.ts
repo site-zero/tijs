@@ -367,13 +367,13 @@ export default {
   'org-choose': 'Choose Organization',
   'others': 'Others',
   'paging-change-pgsz':
-    'Current page contains ${pgsz} records maximumly, you want to change it to：',
+    'Current page contains ${pageSize} records maximumly, you want to change it to：',
   'paging-change-pgsz-invalid':
     'Page size must be integer, and great than 0, but ... -_-!',
   'paging-change-pn':
-    'Current page number is ${pn}, please enter number between 1 to ${pgc}:',
+    'Current page number is ${pageNumber}, please enter number between 1 to ${pageCount}:',
   'paging-change-pn-invalid':
-    'Page number must be integer, and must between 1 to ${pgc}',
+    'Page number must be integer, and must between 1 to ${pageCount}',
   'paging-first': 'Head',
   'paging-last': 'Tail',
   'paging-next': 'Next',

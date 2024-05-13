@@ -20,13 +20,13 @@ export type PromptOptions = PopItemProps & {
   bodyIcon?: IconInput;
   contentType?: 'text' | 'html';
   placeholder?: string;
-  value?: string;
+  value?: any;
 };
 
 export async function Prompt(
   msg: string,
   options: PromptOptions
-): Promise<boolean> {
+): Promise<string> {
   // Build html
   let html = __get_msg_box_html(
     msg,
