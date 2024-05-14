@@ -44,7 +44,9 @@
     :depth="props.depth"
     class="sidebar-item"
     :class="TopClass">
-    <dt :class="DTClass">
+    <dt
+      :class="DTClass"
+      @click="OnClickItem">
       <div
         v-for="_index in props.depth"
         class="as-indent-block"></div>
@@ -56,14 +58,10 @@
           v-if="href"
           :href="$props.href"
           :target="props.openNewTab ? '_blank' : undefined"
-          @click.prevent="OnClickItem"
+          @click.prevent
           >{{ ItemTitle }}</a
         >
-        <span
-          v-else
-          @click="OnClickItem"
-          >{{ ItemTitle }}</span
-        >
+        <span v-else>{{ ItemTitle }}</span>
       </div>
     </dt>
     <dd v-if="hasChild">
