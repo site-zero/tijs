@@ -49,16 +49,16 @@ export class ConsoleLogger implements Logger {
 
       // console.log(`${fileName}:${line}: ${source}`);
       if (reqLvl == LogLevel.ERROR) {
-        console.error(`>>>`, caller.source);
+        //console.error(`>>>`, caller.source);
         console.error(prefix, callAt, ':', ...msg);
       } else if (reqLvl == LogLevel.WARN) {
-        console.warn(`>>>`, caller.source);
+        //console.warn(`>>>`, caller.source);
         console.warn(prefix, callAt, ':', ...msg);
       } else if (reqLvl == LogLevel.INFO) {
-        console.info(`>>>`, caller.source);
+        //console.info(`>>>`, caller.source);
         console.info(prefix, callAt, ':', ...msg);
       } else {
-        console.log(`>>>`, caller.source);
+        //console.log(`>>>`, caller.source);
         console.log(prefix, callAt, ':', ...msg);
       }
     }

@@ -1,7 +1,7 @@
 import JSON5 from 'json5';
 import _ from 'lodash';
 import { CssGridLayout, CssUtils, Size2D, Util, Vars } from '../../../core';
-import { FormField } from './use-form-field';
+import { FormField } from './ti-form-types';
 
 const DFT_LAYOUT: AutoGridHint = [[5, 1500], [4, 1200], [3, 900], [2, 500], 1];
 /**
@@ -43,7 +43,7 @@ export type AutoGridHint = string | AutoGridHintItem | AutoGridHintItem[];
                 
 -----------------------------------------------------*/
 export function normalizeGridLayout(
-  layout?: AutoGridHint | FormGridLayout,
+  layout?: AutoGridHint | FormGridLayout
 ): FormGridLayout {
   if (_.isNil(layout)) {
     return {
@@ -63,7 +63,7 @@ export function normalizeGridLayout(
 
   if (!(layout instanceof Object)) {
     throw new Error(
-      'Invalid layout and it is impossiable: ' + JSON5.stringify(layout),
+      'Invalid layout and it is impossiable: ' + JSON5.stringify(layout)
     );
   }
   layout = _.cloneDeep(layout);
@@ -111,7 +111,7 @@ export function autoCountGrid(view: Size2D, layout: FormGridLayout) {
 -----------------------------------------------------*/
 export function buildFieldsGroupStyle(
   layout: FormGridLayout,
-  autoTrackCount: number,
+  autoTrackCount: number
 ): Vars {
   // 自动模式
   if (layout.autoGrid) {

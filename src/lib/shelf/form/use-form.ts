@@ -2,8 +2,8 @@ import _ from 'lodash';
 import { FieldPair } from '../../';
 import { I18n, Size2D, Vars } from '../../../core';
 import { joinPairs } from './form-util';
+import { FormProps } from './ti-form-types';
 import { buildFormFieldList } from './use-form-field';
-import { FormProps } from './use-form-props';
 import { FormState, updateFormState } from './use-form-state';
 
 /*-------------------------------------------------------

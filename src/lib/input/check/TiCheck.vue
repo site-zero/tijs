@@ -8,6 +8,7 @@
     value: false,
     icons: () =>
       ['zmdi-square-o', 'zmdi-check-square'] as [IconInput, IconInput],
+    text: 'i18n:yes',
     values: () => [false, true] as [any, any],
   });
   const emit = defineEmits<BooleanEmitter>();

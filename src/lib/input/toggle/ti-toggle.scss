@@ -1,6 +1,6 @@
 .ti-toggle {
   @include flex-align-nowrap;
-  padding: 0 SZ(6);
+  padding: 1px;
   user-select: none;
   aside {
     position: relative;

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { FieldPair } from '../../../';
   import { TiEvent, Vars } from '../../../../core/';
-  import { FormItem } from '../use-form-field';
+  import { FormItem } from '../ti-form-types';
   import { FormGridLayout } from '../use-form-layout';
   /*-------------------------------------------------------
 

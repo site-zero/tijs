@@ -5,9 +5,9 @@
   import { COM_TYPES } from '../../lib-com-types';
   import TiFormModeGroup from './group/TiFormModeGroup.vue';
   import TiFormModeTab from './tab/TiFormModeTab.vue';
+  import { FormProps } from './ti-form-types';
   import { FormEmits, useForm } from './use-form';
   import { normalizeGridLayout } from './use-form-layout';
-  import { FormProps } from './use-form-props';
   import { FormState } from './use-form-state';
   //-------------------------------------------------
   defineOptions({

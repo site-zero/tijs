@@ -2,7 +2,7 @@
   import { FieldPair } from '../../../';
   import { Vars } from '../../../../core/ti.ts';
   import TiFormItem from '../item/TiFormItem.vue';
-  import { FormItem } from '../use-form-field';
+  import { FormItem } from '../ti-form-types';
   import { FormGridLayout } from '../use-form-layout';
   //-------------------------------------------------
   defineProps<{

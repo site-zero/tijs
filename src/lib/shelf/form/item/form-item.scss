@@ -58,7 +58,17 @@
 
   ------------------------------------------*/
   &[type="field"] {
-    @include flex-align-nowrap;
+    //@include flex-align-nowrap;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    //---------------------------------------
+    &.nil-tip {
+      grid-template-rows: auto;
+    }
+    &.has-tip {
+      grid-template-rows: auto auto;
+    }
+    //---------------------------------------
     > .ti-field-name {
       @include flex-align-nowrap($jc: flex-end, $ai: center);
       box-sizing: content-box;
@@ -73,9 +83,27 @@
         }
       }
     }
+    //---------------------------------------
     > .ti-field-value {
       flex: 1 1 auto;
-      width: 10px;
     }
-  }
+    //---------------------------------------
+    > .ti-field-tip {
+      grid-column-end: span 2;
+      font-size: 0.8em;
+      line-height: 1.4em;
+      text-align: justify;
+      padding: 0.5em 0;
+    }
+    //---------------------------------------
+    &.name-v-top {
+      > .ti-field-name {
+        padding-top: 0.5em;
+        align-items: flex-start;
+      }
+    }
+    //---------------------------------------
+    //---------------------------------------
+    //---------------------------------------
+  } // &[type="field"] {
 }

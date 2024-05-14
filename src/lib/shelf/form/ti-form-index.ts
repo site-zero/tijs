@@ -29,3 +29,4 @@ const TiFormInfo: TiComInfo = {
 };
 
 export { TiForm, TiFormInfo };
+export * from './ti-form-types';

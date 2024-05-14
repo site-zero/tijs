@@ -1,10 +1,9 @@
 <script lang="ts" setup>
-  import _ from 'lodash';
   import { Ref, computed, nextTick, onMounted, onUnmounted, ref } from 'vue';
   import { TiField } from '../../../';
   import { CssUtils, Dom, Rects, Size2D, Vars } from '../../../../core';
   import { FieldEmits } from '../../field/use-field';
-  import { FormItem } from '../use-form-field';
+  import { FormItem } from '../ti-form-types';
   import {
     autoCountGrid,
     buildFieldsGroupStyle,
@@ -30,6 +29,13 @@
   const FItem = withDefaults(defineProps<FormItemProps>(), {
     autoFieldNameMaxWidth: 0,
     maxFieldNameWidth: 0,
+  });
+  //-------------------------------------------------
+  const TopClass = computed(() => {
+    return CssUtils.mergeClassName(FItem.className, {
+      'has-tip': FItem.props?.tip ? true : false,
+      'nil-tip': FItem.props?.tip ? false : true,
+    });
   });
   //-------------------------------------------------
   const TopStyle = computed(() => {
@@ -93,10 +99,6 @@
     updateMaxFieldNameWidth();
   }
   //-------------------------------------------------
-  // const debounceUpdateViewport = _.debounce(updateViewport, 300, {
-  //   leading: true,
-  //   trailing: true,
-  // });
   const obResize = new ResizeObserver((_entries) => {
     updateViewport();
   });
@@ -116,7 +118,7 @@
   <section
     class="ti-form-item"
     :type="FItem.race"
-    :class="FItem.className"
+    :class="TopClass"
     :style="TopStyle">
     <!--字段组-->
     <template v-if="'group' == FItem.race">

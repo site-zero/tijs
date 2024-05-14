@@ -35,17 +35,15 @@
     </div>
   </div>
   <div class="ti-field-value">
-    <div class="field-value-com">
-      <component
-        :is="Fld.FieldComType"
-        v-bind="Fld.FieldComConf"
-        @change="Fld.OnFieldChange" />
-    </div>
-    <div
-      class="field-value-tip"
-      v-if="Fld.hasTip">
-      {{ tip }}
-    </div>
+    <component
+      :is="Fld.FieldComType"
+      v-bind="Fld.FieldComConf"
+      @change="Fld.OnFieldChange" />
+  </div>
+  <div
+    class="ti-field-tip"
+    v-if="Fld.hasTip">
+    {{ tip }}
   </div>
 </template>
 
