@@ -1,3 +1,3 @@
-import { CommonProps } from '../../../core';
+import { BooleanProps, ReadonlyProps } from '../../../lib/_features';
 
-export type ToggleProps = CommonProps & {};
+export type ToggleProps = BooleanProps & ReadonlyProps & {};

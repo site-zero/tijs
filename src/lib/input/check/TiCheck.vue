@@ -1,9 +1,8 @@
 <script lang="ts" setup>
-  import _ from 'lodash';
   import { computed } from 'vue';
-  import { TiIcon } from '../../';
+  import { BooleanEmitter, TiIcon, useBooleanInput } from '../../';
   import { I18n, IconInput } from '../../../core';
-  import { CheckProps } from './check.type';
+  import { CheckProps } from './ti-check-types';
 
   const props = withDefaults(defineProps<CheckProps>(), {
     value: false,
@@ -11,38 +10,18 @@
       ['zmdi-square-o', 'zmdi-check-square'] as [IconInput, IconInput],
     values: () => [false, true] as [any, any],
   });
-
-  function getTrueValue() {
-    return _.nth(props.values, 1) ?? true;
-  }
-
-  function isTrue(val: any) {
-    if (_.isFunction(props.isTrue)) {
-      return props.isTrue(val);
-    }
-    let trueValue: any = getTrueValue();
-    return trueValue === val;
-  }
+  const emit = defineEmits<BooleanEmitter>();
+  const Bool = computed(() => useBooleanInput(props, { emit }));
 
   const CheckIcon = computed(() => {
-    let II = isTrue(props.value) ? 1 : 0;
+    let II = Bool.value.isTrue(props.value) ? 1 : 0;
     return props.icons[II];
   });
-
-  const emit = defineEmits<{
-    (eventName: 'change', payload: any): void;
-  }>();
-
-  function onClick() {
-    let I = isTrue(props.value) ? 0 : 1;
-    let val = props.values[I];
-    emit('change', val);
-  }
 </script>
 <template>
   <div
     class="ti-check"
-    @click.stop="onClick">
+    @click.stop="Bool.emitToggle">
     <div class="part-icon"><TiIcon :value="CheckIcon" /></div>
     <div
       class="part-text"
@@ -67,3 +46,4 @@
     }
   }
 </style>
+./ti-check-types

@@ -1,2 +1,42 @@
 .ti-toggle {
+  @include flex-align-nowrap;
+  padding: 0 SZ(6);
+  user-select: none;
+  aside {
+    position: relative;
+    width: SZ(40);
+    padding: 1px;
+    cursor: pointer;
+    border-radius: SZ(20);
+    transition: background-color 0.2s;
+    b {
+      display: block;
+      border-radius: 50%;
+      width: SZ(18);
+      height: SZ(18);
+      transition: margin-left 0.2s;
+    }
+  }
+  //-----------------------------------------
+  &.is-off aside {
+    color: var(--ti-color-body);
+    background-color: var(--ti-color-body-r);
+    border: 1px solid var(--ti-color-border-dark);
+    b {
+      background-color: var(--ti-color-bar);
+      border: 1px solid var(--ti-color-border-thin);
+    }
+  }
+  //-----------------------------------------
+  &.is-on aside {
+    color: var(--ti-color-primary-r);
+    background-color: var(--ti-color-primary);
+    border: 1px solid var(--ti-color-primary-r);
+    b {
+      background-color: var(--ti-color-primary-r);
+      border: 1px solid transparent;
+      margin-left: SZ(18);
+    }
+  }
+  //-----------------------------------------
 }
