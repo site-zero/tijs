@@ -12,7 +12,7 @@
   const Bool = computed(() => useBooleanInput(props, { emit }));
 
   const TopClass = computed(() => {
-    let yes = Bool.value.getTrueValue();
+    let yes = Bool.value.yes;
     return CssUtils.mergeClassName({
       'is-on': yes,
       'is-off': !yes,

@@ -33,6 +33,10 @@ const TiRoadblockInfo: TiComInfo = {
     zh_cn: zh_cn,
     zh_hk: zh_cn,
   },
+  liveStyle: {
+    width: '100%',
+    height: '100%',
+  },
   com: TiRoadblock,
   install: (app: App) => {
     app.component(COM_TYPE, TiRoadblock);

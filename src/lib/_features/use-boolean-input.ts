@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { ReadonlyProps, useReadonly } from './use-readonly';
 
 export type BooleanProps = {
-  value: any;
+  value?: any;
   // [falseText, trueText]
   values?: [any, any];
   isTrue?: (val: any) => boolean;
@@ -45,6 +45,7 @@ export function useBooleanInput(
   }
 
   return {
+    yes: isTrue(props.value),
     getTrueValue,
     isTrue,
     emitToggle,

@@ -14,7 +14,7 @@
   const Bool = computed(() => useBooleanInput(props, { emit }));
 
   const CheckIcon = computed(() => {
-    let II = Bool.value.isTrue(props.value) ? 1 : 0;
+    let II = Bool.value.yes ? 1 : 0;
     return props.icons[II];
   });
 </script>
@@ -35,6 +35,7 @@
   .ti-check {
     @include flex-align-nowrap;
     cursor: pointer;
+    user-select: none;
     > .part-icon {
       font-size: 1.2em;
     }

@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { computed } from 'vue';
-  import { TiCom, Vars } from '../../../core';
+  import { CssUtils, TiCom, Vars } from '../../../core';
   import { LiveBgMode } from './use-play-mode';
 
   /**
@@ -11,6 +11,26 @@
     playConf?: Vars;
     mode: LiveBgMode;
   }>();
+
+  const PlayLiveStyle = computed(() => {
+    let { race, liveStyle } = props.playCom;
+    if (liveStyle) {
+      return CssUtils.toStyle(liveStyle);
+    }
+    // 根据模式给个默认
+    else if (/^(SHELF|VIEW)$/.test(race)) {
+      return {
+        position: 'absolute',
+        inset: 0,
+      };
+    }
+    // 其他的稍微靠上一点
+    else {
+      return {
+        paddingBottom: '30%',
+      };
+    }
+  });
 
   const emit = defineEmits<{
     (event: 'sub-event', name: string, args: any[]): void;
@@ -42,10 +62,14 @@
     :mode="mode"
     :com-race="playCom.race">
     <div class="play-live-con">
-      <component
-        :is="playCom.com"
-        v-bind="playConf"
-        v-on="OnAllEvents" />
+      <div
+        class="live-com-wrap"
+        :style="PlayLiveStyle">
+        <component
+          :is="playCom.com"
+          v-bind="playConf"
+          v-on="OnAllEvents" />
+      </div>
     </div>
   </div>
 </template>
@@ -63,24 +87,12 @@
     &[mode='fill'] {
       background-color: var(--ti-color-card);
     }
-
-    &[com-race='INPUT'],
-    &[com-race='TILE'] {
-      > .play-live-con {
-        @include flex-center;
-      }
-    }
-
-    &[com-race='INPUT'] > .play-live-con {
-      > * {
-        min-width: 200px;
-      }
-    }
   }
 
   .play-live-con {
     width: 100%;
     height: 100%;
     position: relative;
+    @include flex-center;
   }
 </style>

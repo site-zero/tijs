@@ -600,6 +600,7 @@ export class TiCom implements TiComInfo {
   text: string;
   i18n: I18nSet;
   tags: string[];
+  liveStyle?: Vars;
   com: TiRawCom;
   events: string[];
   asInner?: boolean;
@@ -618,6 +619,7 @@ export class TiCom implements TiComInfo {
     this.text = info.text;
     this.i18n = info.i18n;
     this.tags = info.tags || [];
+    this.liveStyle = info.liveStyle;
     this.com = info.com;
     this.asInner = info.asInner;
     this.install = info.install;
@@ -671,6 +673,9 @@ export interface TiComInfo {
   tags?: string[];
   install: (app: App) => void;
   defaultProps?: string;
+  // 在 playground 中，显示时， .play-live-con 应该有什么样的样式
+  // 通常是为TiInput 等自适应宽度的控件设置一个演示区的默认尺寸等
+  liveStyle?: Vars;
   exampleProps: ComPropExample[];
   /**
    * 当事件发生，需要将 key 对应的事件，存放到comConf 的哪个字段里

@@ -14,7 +14,6 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.Toggle;
 
 const TiToggleInfo: TiComInfo = {
-  tags: ['ing'],
   icon: 'fas-toggle-off',
   race: TiComRace.INPUT,
   name: COM_TYPE,

@@ -27,6 +27,12 @@ const TiInputInfo: TiComInfo = {
     zh_hk: zh_cn,
   },
   com: TiInput,
+  liveStyle: {
+    width:"80%",
+    minWidth: "120px",
+    maxWidth: "300px",
+    paddingBottom: '30%',
+  },
   install: (app: App) => {
     app.component(COM_TYPE, TiInput);
   },
