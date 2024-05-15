@@ -42,14 +42,30 @@ export type GridFieldsProps = CommonProps &
 
     // 直接指定名称部分的显示控件，默认的用纯DOM渲染文字
     // 如果控件有 change 事件，则会 emit('name-change')
-    nameBy?: ComRef;
+    titleBy?: ComRef;
     //------------------------------------
     // 约束
     //------------------------------------
+    /**
+     * 字段唯一键，如果未定义，则会根据 name 来生成
+     *
+     * @see getFieldUniqKey
+     */
+    uniqKey?: string;
     // 字段是否必选，是一个 `TiMatch` 匹配 `FormContext`
     required?: any;
     // 修改前是否检查相同，默认为true
     checkEquals?: boolean;
+    // 读取字段值后，经过一个定制转换，再传递给字段
+    // data[name] ===(transformer) ==> FieldCom
+    transformer?: string | Function;
+    transArgs?: any[];
+    transPartial?: InvokePartial;
+    // 字段值修改后，经过一个定制转换，再向外抛出消息
+    // FieldCom.change ===(serializer) ==> emit('change')
+    serializer?: string | Function;
+    serialArgs?: any[];
+    serialPartial?: InvokePartial;
 
     //------------------------------------
     // 布局样式
@@ -130,6 +146,14 @@ type GridLayoutHintItem = number | [number, number];
  */
 export type GridLayoutHint = string | number | GridLayoutHintItem[];
 
+export const DFT_GRID_LAYOUT_HINT: GridLayoutHint = [
+  [5, 1500],
+  [4, 1200],
+  [3, 900],
+  [2, 500],
+  1,
+];
+
 export type TextContentType = 'html' | 'text';
 
 /**
@@ -137,12 +161,6 @@ export type TextContentType = 'html' | 'text';
  * TODO 以后提到全局，给 Table Cell 也用上
  */
 export type AbstractField = {
-  /**
-   * 字段唯一键，如果未定义，则会根据 name 来生成
-   *
-   * @see getFieldUniqKey
-   */
-  uniqKey?: string;
   /**
    * 字段名称， 如果是 `string[]` 则会从数据中提取子对象
    * `string` 时，支持 `.` 分割的属性路径
@@ -153,27 +171,19 @@ export type AbstractField = {
    *
    * @default `String`
    */
-  type?: FieldValueType;
+  type: FieldValueType;
   /**
    * 字段默认值
    */
-  defaultAs?: any;
+  defaultAs: any;
 
   /**
    * 当字段为空时的默认值
    */
-  emptyAs?: any;
+  emptyAs: any;
 
-  // 读取字段值后，经过一个定制转换，再传递给字段
-  // data[name] ===(transformer) ==> FieldCom
-  transformer?: string | Function;
-  transArgs?: any[];
-  transPartial?: InvokePartial;
-  // 字段值修改后，经过一个定制转换，再向外抛出消息
-  // FieldCom.change ===(serializer) ==> emit('change')
-  serializer?: string | Function;
-  serialArgs?: any[];
-  serialPartial?: InvokePartial;
+  transformer?: (val: any, data: Vars, name: FieldName) => any;
+  serializer?: (val: any, data: Vars, name: FieldName) => any;
 };
 
 export type GridFieldsStrictAbstractItem = {
@@ -181,32 +191,33 @@ export type GridFieldsStrictAbstractItem = {
   index: number;
   race: GridFieldsItemRace;
   title: null | string;
-  titleType?: TextContentType; // 默认 text
+  titleType: TextContentType; // 默认 text
+  titleBy: null | ComRef;
   tip: null | string;
   tipType: TextContentType; // 默认 text
   // Tip 的显示模式
-  tipMode: null | GridFieldTipMode;
+  tipMode: GridFieldTipMode;
   // 仅仅当 tipMode = 'xxx-prefix|suffix-icon' 时生效
   // 默认为 'zmdi-help-outline'
-  tipIcon: null | IconInput;
+  tipIcon: IconInput;
   className?: Vars;
   style?: Vars;
 };
 export type GridFieldsStrictGroup = GridFieldsStrictAbstractItem & {
   race: 'group';
-  layout: CssGridLayout;
+  maxFieldNameWidth?: number;
+  layout?: CssGridLayout;
+  layoutHint: GridLayoutHint;
+  layoutGridTracks: string[] | ((trackIndex: number) => string);
+  fields: GridFieldsStrictItem[];
 };
-export type GridFieldsStrictField = GridFieldsStrictAbstractItem & {
-  race: 'field';
-  name: FieldName;
-  type: FieldValueType;
-  defaultAs: any;
-  emptyAs: any;
-  required: (val: any, data: Vars, name: FieldName) => any;
-  checkEquals: boolean;
-  transformer?: (val: any, data: Vars, name: FieldName) => any;
-  serializer?: (val: any, data: Vars, name: FieldName) => any;
-};
+export type GridFieldsStrictField = GridFieldsStrictAbstractItem &
+  AbstractField & {
+    race: 'field';
+    required: (data: Vars) => any;
+    checkEquals: boolean;
+    maxFieldNameWidth?: number;
+  };
 export type GridFieldsStrictLabel = GridFieldsStrictAbstractItem & {
   race: 'label';
 };
