@@ -1,16 +1,14 @@
 import _ from 'lodash';
+import { CssUtils, Match, Vars } from '../../../core';
 import { getFieldUniqKey } from '../../../lib/_top';
 import {
   DFT_GRID_LAYOUT_HINT,
-  GridFieldTipMode,
-  GridFieldsItemRace,
   GridFieldsProps,
   GridFieldsStrictAbstractItem,
   GridFieldsStrictField,
   GridFieldsStrictGroup,
   GridFieldsStrictItem,
 } from './ti-grid-fields-types';
-import { CssUtils, Match, Vars } from '../../../core';
 
 function makeFieldUniqKey(indexes: number[], field: GridFieldsProps): string {
   if (field.uniqKey) {
@@ -67,7 +65,7 @@ export function buildOneGridField(
     grp.layoutHint = field.layoutHint ?? dft.layoutHint ?? DFT_GRID_LAYOUT_HINT;
     grp.layoutGridTracks =
       field.layoutGridTracks ?? dft.layoutGridTracks ?? ((_i: number) => '1fr');
-    grp.fields = [];
+    grp.fields = buildGridFields(indexes, field.fields, grp as GridFieldsProps);
   }
   // 标签
   else {
@@ -78,11 +76,16 @@ export function buildOneGridField(
 }
 
 export function buildGridFields(
+  indexes: number[],
   fields: GridFieldsProps[],
-  dft: GridFieldsProps,
-  indexes: number[]
+  dft: GridFieldsProps
 ): GridFieldsStrictItem[] {
+  let items: GridFieldsStrictItem[] = [];
   for (let i = 0; i < fields.length; i++) {
     let is = _.concat(indexes, i);
+    let field = fields[i];
+    let it = buildOneGridField(is, field, dft);
+    items.push(it);
   }
+  return items;
 }
