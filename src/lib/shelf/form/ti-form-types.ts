@@ -11,7 +11,7 @@ import {
   CssGridItem,
   Vars,
   VisibilityProps,
-  invoke_partial,
+  InvokePartial,
 } from '../../../core';
 import { FieldProps } from '../field/use-field';
 import { AutoGridHint, FormGridLayout } from './use-form-layout';
@@ -250,10 +250,10 @@ export type FormField = CommonProps &
     checkEquals?: boolean;
     transformer?: string | Function;
     transArgs?: any[];
-    transPartial?: invoke_partial;
+    transPartial?: InvokePartial;
     serializer?: string | Function;
     serialArgs?: any[];
-    serialPartial?: invoke_partial;
+    serialPartial?: InvokePartial;
   };
 
 /*-----------------------------------------------------

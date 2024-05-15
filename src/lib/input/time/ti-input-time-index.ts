@@ -14,7 +14,7 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.InputTime;
 
 const TiInputTimeInfo: TiComInfo = {
-  tags: ['ing'],
+  tags: ['scaffold'],
   icon: 'far-clock',
   race: TiComRace.INPUT,
   name: COM_TYPE,

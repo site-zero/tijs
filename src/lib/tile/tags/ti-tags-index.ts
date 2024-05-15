@@ -17,7 +17,7 @@ const COM_TYPE = COM_TYPES.Tags;
 
 const TiTagsInfo: TiComInfo = {
   icon: 'zmdi-labels',
-  tags: ['ing'],
+  tags: ['scaffold'],
   race: TiComRace.TILE,
   name: COM_TYPE,
   text: 'i18n:ti-tags-com-name',

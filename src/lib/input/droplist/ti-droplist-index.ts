@@ -19,7 +19,7 @@ const COM_TYPE = COM_TYPES.Droplist;
 
 const TiDroplistInfo: TiComInfo = {
   icon: 'fas-square-caret-down',
-  tags: ['ing'],
+  tags: ['scaffold'],
   race: TiComRace.INPUT,
   name: COM_TYPE,
   text: 'i18n:ti-droplist-com-name',

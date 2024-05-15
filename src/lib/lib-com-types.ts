@@ -38,6 +38,7 @@ export const COM_TYPES = {
   Cell: 'TiCell',
   Field: 'TiField',
   Form: 'TiForm',
+  GridFields: 'TiGridFields',
   LayoutGrid: 'TiLayoutGrid',
   LayoutTabs: 'TiLayoutTabs',
   MainFrame: 'TiMainFrame',

@@ -5,7 +5,7 @@ import {
   Str,
   Util,
   Vars,
-  invoke_partial,
+  InvokePartial,
 } from '../../ti';
 
 type ValueGetter = (context: Vars, options: ExplainOptions) => any;
@@ -62,7 +62,7 @@ function __get_bool(
 }
 
 // 函数
-function __get_func(path: string, partial: invoke_partial) {
+function __get_func(path: string, partial: InvokePartial) {
   return (context: Vars, options: ExplainOptions) => {
     let func = _.get(options.funcSet || globalThis, path);
     if (!_.isFunction(func)) {
@@ -77,7 +77,7 @@ function __get_func(path: string, partial: invoke_partial) {
 }
 
 // 获取调用结果
-function __get_call(path: string, partial: invoke_partial) {
+function __get_call(path: string, partial: InvokePartial) {
   return (context: Vars, options: ExplainOptions) => {
     let func = _.get(options.funcSet || globalThis, path);
     if (!_.isFunction(func)) {

@@ -15,7 +15,7 @@ const COM_TYPE = COM_TYPES.Falls;
 
 const TiFallsInfo: TiComInfo = {
   icon: 'zmdi-view-dashboard',
-  tags: ['ing'],
+  tags: ['scaffold'],
   race: TiComRace.VIEW,
   name: COM_TYPE,
   text: 'i18n:ti-falls-com-name',

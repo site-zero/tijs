@@ -7,7 +7,7 @@ import {
   Match,
   Util,
   Vars,
-  invoke_partial,
+  InvokePartial,
 } from '../../../core';
 import { FieldProps } from '../field/use-field';
 import { FormField, FormFieldAboutProps, FormItem } from './ti-form-types';
@@ -183,7 +183,7 @@ function prepareFieldConverter(
   context: Vars,
   converter: string | Function,
   args?: any[],
-  partial?: invoke_partial
+  partial?: InvokePartial
 ): FuncA2<any, Vars, any> {
   let conv = Util.genInvoking(converter, {
     context,

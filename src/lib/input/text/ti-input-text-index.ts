@@ -14,7 +14,7 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.InputText;
 
 const TiInputTextInfo: TiComInfo = {
-  tags: ['ing'],
+  tags: ['scaffold'],
   icon: 'fas-message',
   race: TiComRace.INPUT,
   name: COM_TYPE,

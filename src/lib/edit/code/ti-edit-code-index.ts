@@ -14,7 +14,7 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.EditCode;
 
 const TiEditCodeInfo: TiComInfo = {
-  tags: ['ing'],
+  tags: ['scaffold'],
   icon: 'fas-code',
   race: TiComRace.EIDT,
   name: COM_TYPE,

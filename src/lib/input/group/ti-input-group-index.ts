@@ -14,7 +14,7 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.InputGroup;
 
 const TiInputGroupInfo: TiComInfo = {
-  tags: ['ing'],
+  tags: ['scaffold'],
   icon: 'zmdi-group',
   race: TiComRace.INPUT,
   name: COM_TYPE,

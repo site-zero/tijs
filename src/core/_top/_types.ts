@@ -389,11 +389,11 @@ export interface InvokeOptions {
    * 返回函数调用时的 this， 默认为 context
    */
   funcSet?: any;
-  partial?: invoke_partial;
+  partial?: InvokePartial;
   dft?: Function;
 }
 
-export type invoke_partial = 'left' | 'right' | 'left?' | 'right?';
+export type InvokePartial = 'left' | 'right' | 'left?' | 'right?';
 
 export type Invoke = {
   /**
@@ -404,7 +404,7 @@ export type Invoke = {
   /**
    * "left" | "right" | "right?" | Falsy,
    */
-  partial?: invoke_partial;
+  partial?: InvokePartial;
 };
 
 export function isInvoke(input: any): input is Invoke {

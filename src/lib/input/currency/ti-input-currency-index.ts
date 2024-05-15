@@ -14,7 +14,7 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.InputCurrency;
 
 const TiInputCurrencyInfo: TiComInfo = {
-  tags: ['ing'],
+  tags: ['scaffold'],
   icon: 'fas-money-bill',
   race: TiComRace.INPUT,
   name: COM_TYPE,

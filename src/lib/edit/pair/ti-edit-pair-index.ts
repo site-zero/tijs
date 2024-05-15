@@ -14,7 +14,7 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.EditPair;
 
 const TiEditPairInfo: TiComInfo = {
-  tags: ['ing'],
+  tags: ['scaffold'],
   icon: 'zmdi-view-web',
   race: TiComRace.EIDT,
   name: COM_TYPE,

@@ -14,7 +14,7 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.InputColor;
 
 const TiInputColorInfo: TiComInfo = {
-  tags: ['ing'],
+  tags: ['scaffold'],
   icon: 'fas-palette',
   race: TiComRace.INPUT,
   name: COM_TYPE,
