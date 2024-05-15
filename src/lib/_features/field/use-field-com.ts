@@ -1,6 +1,16 @@
 import _ from 'lodash';
 import { tiCheckComponent } from '../../';
-import { ComRef, FuncA0, FuncA2, TiRawCom, Util, Vars } from '../../../core';
+import { ComRef, TiRawCom, Util, Vars } from '../../../core';
+
+export type FieldStatus = {
+  readonly?: boolean;
+  actived?: boolean;
+};
+
+export type FieldCom = {
+  comType: TiRawCom;
+  comConf: Vars;
+};
 
 /*-------------------------------------------------------
 
@@ -55,12 +65,15 @@ export type FieldComProps = ComRef & {
 
 -------------------------------------------------------*/
 export type FieldComFeature = {
-  getComType: FuncA0<TiRawCom>;
-  getComConf: FuncA2<Vars, any, Vars>;
-  getReadonlyComType: FuncA0<TiRawCom>;
-  getReadonlyComConf: FuncA2<Vars, any, Vars>;
-  getActivatedComType: FuncA0<TiRawCom>;
-  getActivatedComConf: FuncA2<Vars, any, Vars>;
+  getComType: () => TiRawCom;
+  getComConf: (context: Vars, val?: any) => Vars;
+  getReadonlyComType: () => TiRawCom;
+  getReadonlyComConf: (context: Vars, val?: any) => Vars;
+  getActivatedComType: () => TiRawCom;
+  getActivatedComConf: (context: Vars, val?: any) => Vars;
+  autoGetComType: (status: FieldStatus) => TiRawCom;
+  autoGetComConf: (status: FieldStatus, context: Vars, val?: any) => Vars;
+  autoGetCom: (status: FieldStatus, context: Vars, val?: any) => FieldCom;
 };
 /*-------------------------------------------------------
 
@@ -68,60 +81,101 @@ export type FieldComFeature = {
 
 -------------------------------------------------------*/
 export function useFieldCom(props: FieldComProps): FieldComFeature {
+  //
+  //             Normal Com
+  //
+  function getComType() {
+    return tiCheckComponent(props.comType || 'TiLabel').com;
+  }
+  function getComConf(context: Vars, val?: any): Vars {
+    let comConf = Util.explainObj(context, props.comConf) ?? {};
+    // 自动为控件添加值属性
+    let valueKey = props.autoValue ?? 'value';
+    if (!_.isNull(props.autoValue) && _.isUndefined(comConf[valueKey])) {
+      comConf[valueKey] = val;
+    }
+    return comConf;
+  }
+
+  function getReadonlyComType() {
+    return tiCheckComponent(props.readonlyComType || 'TiLabel').com;
+  }
+  function getReadonlyComConf(context: Vars, val?: any): Vars {
+    let comConf = Util.explainObj(context, props.readonlyComConf) || {};
+    // TODO 自动分析 comConf ，构建一个自己对应的  comConf
+
+    // 自动为控件添加值属性
+    if (!_.isNull(props.autoValue) && _.isUndefined(comConf.value)) {
+      let valueKey = props.autoValue ?? 'value';
+      comConf[valueKey] = val;
+    }
+
+    // 尽量确保只读
+    comConf.readonly = true;
+
+    // 搞定
+    return comConf;
+  }
+
+  function getActivatedComType() {
+    return tiCheckComponent(props.activatedComType || 'TiInput').com;
+  }
+  function getActivatedComConf(context: Vars, val?: any): Vars {
+    let comConf = props.activatedComConf ?? props.comConf ?? {};
+    comConf = Util.explainObj(context, comConf);
+
+    // 自动为控件添加值属性
+    if (!_.isNull(props.autoValue) && _.isUndefined(comConf.value)) {
+      let valueKey = props.autoValue ?? 'value';
+      comConf[valueKey] = val;
+    }
+    return comConf;
+  }
+
+  function autoGetComType(status: FieldStatus = {}): TiRawCom {
+    if (status.readonly) {
+      if (props.readonlyComType) {
+        return getReadonlyComType();
+      }
+    }
+    if (status.actived) {
+      if (props.activatedComType) {
+        return getActivatedComType();
+      }
+    }
+    return getComType();
+  }
+
+  function autoGetComConf(status: FieldStatus, context: Vars, val?: any): Vars {
+    if (status.readonly) {
+      if (props.readonlyComConf) {
+        return getReadonlyComConf(context, val);
+      }
+    }
+    if (status.actived) {
+      if (props.activatedComConf) {
+        return getActivatedComConf(context, val);
+      }
+    }
+    return getComConf(context, val);
+  }
+
+  function autoGetCom(status: FieldStatus, context: Vars, val?: any): FieldCom {
+    return {
+      comType: autoGetComType(status),
+      comConf: autoGetComConf(status, context, val),
+    };
+  }
+
   return {
-    //
-    //             Normal Com
-    //
-    getComType() {
-      return tiCheckComponent(props.comType || 'TiLabel').com;
-    },
-    getComConf(context, val?) {
-      let comConf = Util.explainObj(context, props.comConf) ?? {};
-      // 自动为控件添加值属性
-      if (!_.isNull(props.autoValue) && _.isUndefined(comConf.value)) {
-        let valueKey = props.autoValue ?? 'value';
-        comConf[valueKey] = val;
-      }
-      return comConf;
-    },
-    //
-    //             Readonly Com
-    //
-    getReadonlyComType() {
-      return tiCheckComponent(props.readonlyComType || 'TiLabel').com;
-    },
-    getReadonlyComConf(context, val) {
-      let comConf = Util.explainObj(context, props.readonlyComConf) || {};
-      // TODO 自动分析 comConf ，构建一个自己对应的  comConf
-
-      // 自动为控件添加值属性
-      if (!_.isNull(props.autoValue) && _.isUndefined(comConf.value)) {
-        let valueKey = props.autoValue ?? 'value';
-        comConf[valueKey] = val;
-      }
-
-      // 尽量确保只读
-      comConf.readonly = true;
-
-      // 搞定
-      return comConf;
-    },
-    //
-    //             Activated Com
-    //
-    getActivatedComType() {
-      return tiCheckComponent(props.activatedComType || 'TiInput').com;
-    },
-    getActivatedComConf(context, val) {
-      let comConf = props.activatedComConf ?? props.comConf ?? {};
-      comConf = Util.explainObj(context, comConf);
-
-      // 自动为控件添加值属性
-      if (!_.isNull(props.autoValue) && _.isUndefined(comConf.value)) {
-        let valueKey = props.autoValue ?? 'value';
-        comConf[valueKey] = val;
-      }
-      return comConf;
-    },
+    getComType,
+    getComConf,
+    getReadonlyComType,
+    getReadonlyComConf,
+    getActivatedComType,
+    getActivatedComConf,
+    autoGetComType,
+    autoGetComConf,
+    autoGetCom,
   };
 }

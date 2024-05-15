@@ -1,8 +1,8 @@
 import { ComPropExample } from '../../../../core';
-import { GridFieldsProps } from '../ti-grid-fields-types';
+import { GridFieldsInput } from '../ti-grid-fields-types';
 
 export default {
   name: 'simple',
   text: 'i18n:simple',
-  comConf: {} as GridFieldsProps,
+  comConf: {} as GridFieldsInput,
 } as ComPropExample;
