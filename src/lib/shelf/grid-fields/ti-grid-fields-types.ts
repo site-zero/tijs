@@ -57,8 +57,10 @@ export type GridFieldsInput = CommonProps &
     //------------------------------------
     title?: string;
     titleType?: TextContentType; // 默认 text
+    titleStyle?: Vars;
     tip?: string;
     tipType?: TextContentType; // 默认 text
+    tipStyle?: Vars;
 
     // 仅仅当 tipMode = 'xxx-prefix|suffix-icon' 时生效
     // 默认为 'zmdi-help-outline'
@@ -237,8 +239,10 @@ export type GridFieldsStrictAbstractItem = FieldComProps &
     race: GridFieldsItemRace;
     title: null | string;
     titleType: TextContentType; // 默认 text
+    titleStyle?: Vars;
     tip: null | string;
     tipType: TextContentType; // 默认 text
+    tipStyle?: Vars;
     className?: Vars;
     style?: Vars;
   };

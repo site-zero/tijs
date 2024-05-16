@@ -25,10 +25,9 @@ export default {
       {
         title: 'Id',
         name: 'id',
-        className: 'haha-title',
+        className: 'is-warn',
         style: {
-          color: 'red',
-          gridColumnEnd: 'span 1',
+          gridColumnEnd: 'span 2',
         },
         comType: 'TiLabel',
       },
@@ -47,7 +46,7 @@ export default {
       },
       {
         title: 'Brief',
-        name: 'breif',
+        name: 'brief',
       },
       {
         title: 'Client',

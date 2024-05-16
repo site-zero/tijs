@@ -95,3 +95,7 @@
     </div>
   </div>
 </template>
+<style lang="scss" scoped>
+  @use '../../../assets/style/_all.scss' as *;
+  @import './style/gf-it-field.scss';
+</style>

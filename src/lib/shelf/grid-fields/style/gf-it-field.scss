@@ -1,0 +1,11 @@
+.part-field {
+  @include colorized;
+
+}
+
+.h-name-icon-prefix,
+.h-name-icon-suffix,
+.h-value-icon-prefix,
+.h-value-icon-suffix{
+    @include flex-align-nowrap;
+}

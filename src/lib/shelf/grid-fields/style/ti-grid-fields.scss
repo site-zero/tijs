@@ -1,9 +1,11 @@
 .ti-grid-fields {
+  overflow: auto;
   > .part-title {
     display: block;
     text-align: center;
     font-size: 1.4em;
     padding: 0.6em 0;
+    border-bottom: 1px solid var(--ti-color-border-weak);
   }
   > .part-body {
     display: grid;
@@ -21,11 +23,11 @@
       font-size: var(--ti-fontsz-#{$sz});
     }
   }
-  @include __aspect_fontsz("t");
-  @include __aspect_fontsz("s");
-  @include __aspect_fontsz("m");
-  @include __aspect_fontsz("b");
-  @include __aspect_fontsz("h");
+  @include __aspect_fontsz('t');
+  @include __aspect_fontsz('s');
+  @include __aspect_fontsz('m');
+  @include __aspect_fontsz('b');
+  @include __aspect_fontsz('h');
 
   //-------------------------------------------------------------
   @mixin __aspect_body_gap($sz) {
@@ -34,9 +36,9 @@
       padding: var(--ti-gap-#{$sz});
     }
   }
-  @include __aspect_body_gap("t");
-  @include __aspect_body_gap("s");
-  @include __aspect_body_gap("m");
-  @include __aspect_body_gap("b");
-  @include __aspect_body_gap("h");
+  @include __aspect_body_gap('t');
+  @include __aspect_body_gap('s');
+  @include __aspect_body_gap('m');
+  @include __aspect_body_gap('b');
+  @include __aspect_body_gap('h');
 }

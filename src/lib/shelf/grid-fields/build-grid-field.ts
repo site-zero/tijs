@@ -41,8 +41,10 @@ export function buildOneGridField(
     // 标题 & 提示
     title: field.title ?? null,
     titleType: field.titleType ?? 'text',
+    titleStyle: field.titleStyle,
     tip: field.tip ?? null,
     tipType: field.tipType ?? 'text',
+    tipStyle: field.tipStyle,
     style: field.style,
     readonly: field.readonly ?? dft.readonly,
     autoValue: field.autoValue,

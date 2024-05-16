@@ -1,20 +1,20 @@
 <script lang="ts" setup>
   import _ from 'lodash';
-  import { computed, onMounted, onUnmounted, ref } from 'vue';
-  import { CssUtils } from '../../../core';
-  import GFItField from './GFItField.vue';
-  import GFItGroup from './GFItGroup.vue';
-  import GFItLabel from './GFItLabel.vue';
-  import GFText from './GFText.vue';
-  import { buildGridFieldsLayoutStyle } from './build-grid-field-layout';
-  import {
-    GridFieldsEmitter,
-    GridFieldsProps,
-    GridFieldsStrictField,
-    GridFieldsStrictGroup,
-    GridFieldsStrictLabel,
-  } from './ti-grid-fields-types';
-  import { useGridFields } from './use-grid-fields';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
+import { CssUtils } from '../../../core';
+import GFItField from './GFItField.vue';
+import GFItGroup from './GFItGroup.vue';
+import GFItLabel from './GFItLabel.vue';
+import GFText from './GFText.vue';
+import { buildGridFieldsLayoutStyle } from './build-grid-field-layout';
+import {
+  GridFieldsEmitter,
+  GridFieldsProps,
+  GridFieldsStrictField,
+  GridFieldsStrictGroup,
+  GridFieldsStrictLabel,
+} from './ti-grid-fields-types';
+import { useGridFields } from './use-grid-fields';
   //-------------------------------------------------
   defineOptions({
     inheritAttrs: false,
@@ -71,6 +71,7 @@
       <GFText
         v-if="props.title"
         class-name="part-title"
+        :style="props.titleStyle"
         :text="props.title || ''"
         :text-type="props.titleType"
         :com-type="props.comType"
@@ -87,9 +88,7 @@
       ref="$main"
       class="part-body"
       :style="BodyStyle">
-      <div
-        class="grid-group-cell"
-        v-for="fld in Grid.strictItems">
+      <template v-for="fld in Grid.strictItems">
         <!------[:Field:]---------->
         <GFItField
           v-if="'field' == fld.race"
@@ -109,13 +108,14 @@
           Invalid Field: -------------------------------------------
           {{ fld }}
         </blockquote>
-      </div>
+      </template>
     </div>
     <!--===============: 表单尾 :===================-->
     <slot name="foot">
       <GFText
         v-if="props.tip"
         class-name="part-foot"
+        :style="props.tipStyle"
         :text="props.tip || ''"
         :text-type="props.tipType"
         :com-type="props.fieldTipBy?.comType"
