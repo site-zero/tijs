@@ -19,7 +19,7 @@ export type GridFieldsEmitter = {
   (evetName: 'value-change', payload: GridPartChange<any>): void;
 };
 
-export type GridFieldsBodyGap = 's' | 'm' | 'b';
+export type AspectSize = 't' | 's' | 'm' | 'b' | 'h';
 
 export type GridFieldsProps = GridFieldsInput & {
   vars?: Vars;
@@ -28,8 +28,9 @@ export type GridFieldsProps = GridFieldsInput & {
   defaultComConf?: Vars;
 
   bodyPartStyle?: Vars;
+  bodyPartFontSize?: AspectSize;
   // 默认为 'm'
-  bodyPartGap?: GridFieldsBodyGap;
+  bodyPartGap?: AspectSize;
 };
 /*
 栅格字段组，是一个支持无穷嵌套的字段组合，依靠 CSS Grid 布局。

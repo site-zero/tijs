@@ -52,7 +52,7 @@
       <GFText
         class-name="field-name-text"
         :text="props.title || ''"
-        :type="props.titleType"
+        :text-type="props.titleType"
         :com-type="props.fieldNameBy?.comType"
         :com-conf="props.fieldNameBy?.comConf"
         :auto-value="props.fieldNameBy?.autoValue"
@@ -78,7 +78,7 @@
       <GFText
         class-name="field-part as-tip"
         :text="props.tip || ''"
-        :type="props.tipType"
+        :text-type="props.tipType"
         :com-type="props.fieldTipBy?.comType"
         :com-conf="props.fieldTipBy?.comConf"
         :auto-value="props.fieldTipBy?.autoValue"

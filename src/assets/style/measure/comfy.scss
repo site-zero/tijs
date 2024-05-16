@@ -17,6 +17,12 @@
   --ti-measure-menu-fontsz: 12px;
   --ti-measure-menu-lineheight: 2em;
 
+  --ti-gap-t: 0.2em;  // tiny
+  --ti-gap-s: 0.5em;  // small
+  --ti-gap-m: 0.8em;  // middle
+  --ti-gap-b: 1.2em;  // big
+  --ti-gap-h: 1.4em;  // hug
+
   --ti-fontsz-page: 14px;
   --ti-fontsz-box: 12px;
   --ti-fontsz-label: 1em;
@@ -25,7 +31,9 @@
   --ti-fontsz-block-head: 0.8em;
   --ti-fontsz-alert: 14px;
   --ti-fontsz-tabs: 12px;
-  --ti-fontsz-s: 12px;
-  --ti-fontsz-m: 14px;
-  --ti-fontsz-b: 16px;
+  --ti-fontsz-t: 10px;  // tiny
+  --ti-fontsz-s: 12px;  // small
+  --ti-fontsz-m: 14px;  // middle
+  --ti-fontsz-b: 16px;  // big
+  --ti-fontsz-h: 18px;  // hug
 }

@@ -31,7 +31,7 @@
       v-if="props.title"
       class-name="as-label-title"
       :text="props.title || ''"
-      :type="props.titleType"
+      :text-type="props.titleType"
       :com-type="props.comType"
       :com-conf="props.comConf"
       :auto-value="props.autoValue"

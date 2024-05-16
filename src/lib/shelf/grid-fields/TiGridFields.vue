@@ -24,6 +24,7 @@
   const props = withDefaults(defineProps<GridFieldsProps>(), {
     fields: () => [],
     bodyPartGap: 'm',
+    bodyPartFontSize: 's',
   });
   const _viewport_width = ref(0);
   //-------------------------------------------------
@@ -31,7 +32,11 @@
   const getLayoutCss = computed(() => buildGridFieldsLayoutStyle(props));
   //-------------------------------------------------
   const TopClass = computed(() =>
-    CssUtils.mergeClassName(props.className, `body-gap-${props.bodyPartGap}`)
+    CssUtils.mergeClassName(
+      props.className,
+      `body-gap-${props.bodyPartGap}`,
+      `fsz-${props.bodyPartFontSize}`
+    )
   );
   //-------------------------------------------------
   const BodyStyle = computed(() => {
@@ -67,7 +72,7 @@
         v-if="props.title"
         class-name="part-title"
         :text="props.title || ''"
-        :type="props.titleType"
+        :text-type="props.titleType"
         :com-type="props.comType"
         :com-conf="props.comConf"
         :auto-value="props.autoValue"
@@ -107,7 +112,21 @@
       </div>
     </div>
     <!--===============: 表单尾 :===================-->
-    <slot name="tail"></slot>
+    <slot name="foot">
+      <GFText
+        v-if="props.tip"
+        class-name="part-foot"
+        :text="props.tip || ''"
+        :text-type="props.tipType"
+        :com-type="props.fieldTipBy?.comType"
+        :com-conf="props.fieldTipBy?.comConf"
+        :auto-value="props.fieldTipBy?.autoValue"
+        :readonly-com-type="props.fieldTipBy?.readonlyComType"
+        :readonly-com-conf="props.fieldTipBy?.readonlyComConf"
+        :activated-com-type="props.fieldTipBy?.activatedComType"
+        :activated-com-conf="props.fieldTipBy?.activatedComConf"
+        :change-event-name="props.fieldTipBy?.changeEventName" />
+    </slot>
   </div>
 </template>
 <style lang="scss" scoped>

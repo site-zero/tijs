@@ -17,6 +17,10 @@ export default {
     },
     defaultComType: 'TiInput',
     layoutHint: '[[3,800],[2,400],1]',
+    title: '<b style="color:red">Hello</b> world',
+    titleType: 'html',
+    bodyPartGap:'b',
+    bodyPartFontSize:'m',
     fields: [
       {
         title: 'Id',

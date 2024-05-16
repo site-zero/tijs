@@ -1,28 +1,42 @@
 .ti-grid-fields {
+  > .part-title {
+    display: block;
+    text-align: center;
+    font-size: 1.4em;
+    padding: 0.6em 0;
+  }
   > .part-body {
     display: grid;
     grid-auto-rows: auto;
   }
-  $gap_s: 0.4em;
-  $gap_m: 1em;
-  $gap_b: 1.6em;
+  > .part-foot {
+    display: block;
+    font-size: 0.8em;
+    padding: 1em;
+  }
 
-  &.body-gap-s {
-    padding: $gap_s;
-    > .part-body {
-      gap: $gap_s;
+  //-------------------------------------------------------------
+  @mixin __aspect_fontsz($sz) {
+    &.fsz-#{$sz} {
+      font-size: var(--ti-fontsz-#{$sz});
     }
   }
-  &.body-gap-m {
-    padding: $gap_m;
-    > .part-body {
-      gap: $gap_m;
+  @include __aspect_fontsz("t");
+  @include __aspect_fontsz("s");
+  @include __aspect_fontsz("m");
+  @include __aspect_fontsz("b");
+  @include __aspect_fontsz("h");
+
+  //-------------------------------------------------------------
+  @mixin __aspect_body_gap($sz) {
+    &.body-gap-#{$sz} > .part-body {
+      gap: var(--ti-gap-#{$sz});
+      padding: var(--ti-gap-#{$sz});
     }
   }
-  &.body-gap-b {
-    padding: $gap_b;
-    > .part-body {
-      gap: $gap_b;
-    }
-  }
+  @include __aspect_body_gap("t");
+  @include __aspect_body_gap("s");
+  @include __aspect_body_gap("m");
+  @include __aspect_body_gap("b");
+  @include __aspect_body_gap("h");
 }
