@@ -1,8 +1,9 @@
 import _ from 'lodash';
-import { CssUtils, Match, Vars } from '../../../core';
-import { getFieldUniqKey } from '../../../lib/_top';
+import { CssUtils, InvokePartial, Match, Util, Vars } from '../../../core';
+import { FieldName, getFieldUniqKey } from '../../../lib/_top';
 import {
   GridFieldsInput,
+  GridFieldsProps,
   GridFieldsStrictAbstractItem,
   GridFieldsStrictField,
   GridFieldsStrictGroup,
@@ -22,7 +23,7 @@ function makeFieldUniqKey(indexes: number[], field: GridFieldsInput): string {
 export function buildOneGridField(
   indexes: number[],
   field: GridFieldsInput,
-  dft: GridFieldsInput
+  dft: GridFieldsProps
 ): GridFieldsStrictItem {
   // 准备返回值
   let re: GridFieldsStrictAbstractItem = {
@@ -37,11 +38,11 @@ export function buildOneGridField(
       : undefined,
     // 标题 & 提示
     title: field.title ?? null,
-    titleType: field.titleType || 'text',
+    titleType: field.titleType ?? 'text',
     tip: field.tip ?? null,
-    tipType: field.tipType || 'text',
+    tipType: field.tipType ?? 'text',
     style: field.style,
-    readonly: field.readonly,
+    readonly: field.readonly ?? dft.readonly,
     autoValue: field.autoValue,
     comType: field.comType,
     comConf: field.comConf,
@@ -56,11 +57,37 @@ export function buildOneGridField(
   if (field.name) {
     re.race = 'field';
     let fld = re as GridFieldsStrictField;
-    let isRequired = Match.parse(field.required, false);
-    fld.required = (data: Vars) => isRequired.test(data);
+
+    fld.name = field.name;
+    fld.type = field.type ?? 'String';
     fld.fieldNameBy = field.fieldNameBy;
     fld.fieldTipBy = field.fieldTipBy;
+
+    _.defaults(fld, {
+      comType: dft.defaultComType,
+      comConf: dft.defaultComConf,
+    });
+
+    let isRequired = Match.parse(field.required, false);
+    fld.required = (data: Vars) => isRequired.test(data);
+
     fld.checkEquals = field.checkEquals ?? true;
+    fld.emptyAs = field.emptyAs ?? null;
+    fld.defaultAs = field.defaultAs ?? null;
+
+    fld.transformer = parseFieldConverter(
+      dft.vars || {},
+      field.transformer,
+      field.transArgs,
+      field.transPartial
+    );
+    fld.serializer = parseFieldConverter(
+      dft.vars || {},
+      field.serializer,
+      field.serialArgs,
+      field.serialPartial
+    );
+
     fld.maxFieldNameWidth = field.maxFieldNameWidth ?? dft.maxFieldNameWidth;
     fld.tipIcon = field.tipIcon || 'zmdi-help-outline';
     fld.fieldLayoutMode =
@@ -86,6 +113,24 @@ export function buildOneGridField(
   }
 
   return re as GridFieldsStrictItem;
+}
+
+function parseFieldConverter(
+  context: Vars,
+  converter?: string | Function,
+  args?: any[],
+  partial?: InvokePartial
+): undefined | ((val: any, data: Vars, name: FieldName) => any) {
+  // Guard
+  if (!converter) {
+    return;
+  }
+  let conv = Util.genInvoking(converter, {
+    context,
+    args,
+    partial: partial || 'right',
+  });
+  return conv as (val: any, data: Vars, name: FieldName) => any;
 }
 
 export function buildGridFields(

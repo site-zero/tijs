@@ -1,2 +1,28 @@
 .ti-grid-fields {
+  > .part-body {
+    display: grid;
+    grid-auto-rows: auto;
+  }
+  $gap_s: 0.4em;
+  $gap_m: 1em;
+  $gap_b: 1.6em;
+
+  &.body-gap-s {
+    padding: $gap_s;
+    > .part-body {
+      gap: $gap_s;
+    }
+  }
+  &.body-gap-m {
+    padding: $gap_m;
+    > .part-body {
+      gap: $gap_m;
+    }
+  }
+  &.body-gap-b {
+    padding: $gap_b;
+    > .part-body {
+      gap: $gap_b;
+    }
+  }
 }

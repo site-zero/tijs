@@ -45,12 +45,12 @@
     :style="props.style">
     <!--===============: 字段名 :===================-->
     <div
-      v-if="props.tip"
-      class="as-field-name"
+      v-if="props.title"
+      class="field-part as-name"
       :class="TopClass"
       :style="NameStyle">
       <GFText
-        class-name="field-part as-name"
+        class-name="field-name-text"
         :text="props.title || ''"
         :type="props.titleType"
         :com-type="props.fieldNameBy?.comType"

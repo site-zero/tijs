@@ -1,7 +1,7 @@
 import {
   Field,
   FieldComProps,
-  FieldStatus,
+  FieldMode,
   FieldStatusIcons,
   FieldValueType,
   TabsAspect,
@@ -137,7 +137,7 @@ export type FormFieldAboutProps = {
    * 字段状态对象
    */
   fieldStatus?: {
-    [k: string]: FieldStatus;
+    [k: string]: FieldMode;
   };
 
   defaultGroupClassName?: string;

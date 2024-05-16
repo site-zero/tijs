@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-  import { CssUtils } from 'src/core';
   import { computed } from 'vue';
+  import { CssUtils } from '../../../core';
   import GFText from './GFText.vue';
   import { GridFieldsStrictLabel } from './ti-grid-fields-types';
 

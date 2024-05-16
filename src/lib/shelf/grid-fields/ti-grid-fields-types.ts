@@ -19,7 +19,18 @@ export type GridFieldsEmitter = {
   (evetName: 'value-change', payload: GridPartChange<any>): void;
 };
 
-export type GridFieldsProps = GridFieldsInput & {};
+export type GridFieldsBodyGap = 's' | 'm' | 'b';
+
+export type GridFieldsProps = GridFieldsInput & {
+  vars?: Vars;
+
+  defaultComType?: string;
+  defaultComConf?: Vars;
+
+  bodyPartStyle?: Vars;
+  // 默认为 'm'
+  bodyPartGap?: GridFieldsBodyGap;
+};
 /*
 栅格字段组，是一个支持无穷嵌套的字段组合，依靠 CSS Grid 布局。
 每一层嵌套支持下面三种类型:
@@ -56,9 +67,9 @@ export type GridFieldsInput = CommonProps &
     // 普通字段的布局模式
     // 仅仅当 `race=field` 时有效
     fieldLayoutMode?: GridFieldLayoutMode;
-    fieldNameStyle?:Vars;
-    fieldValueStyle?:Vars;
-    fieldTipStyle?:Vars;
+    fieldNameStyle?: Vars;
+    fieldValueStyle?: Vars;
+    fieldTipStyle?: Vars;
     //------------------------------------
     // 约束
     //------------------------------------
@@ -166,14 +177,6 @@ export type GridLayoutHintItem = number | [number, number];
  */
 export type GridLayoutHint = string | number | GridLayoutHintItem[];
 
-export const DFT_GRID_LAYOUT_HINT: GridLayoutHint = [
-  [5, 1500],
-  [4, 1200],
-  [3, 900],
-  [2, 500],
-  1,
-];
-
 export type GridFieldsItemLayoutProps = {
   // 指明一个字段组是怎么布局的
   // > 仅当 `group` 有效
@@ -251,9 +254,9 @@ export type GridFieldsStrictField = GridFieldsStrictAbstractItem &
     fieldNameBy?: FieldComProps;
     fieldTipBy?: FieldComProps;
     fieldLayoutMode: GridFieldLayoutMode;
-    fieldNameStyle?:Vars;
-    fieldValueStyle?:Vars;
-    fieldTipStyle?:Vars;
+    fieldNameStyle?: Vars;
+    fieldValueStyle?: Vars;
+    fieldTipStyle?: Vars;
     tipIcon: IconInput;
   };
 export type GridFieldsStrictLabel = GridFieldsStrictAbstractItem & {

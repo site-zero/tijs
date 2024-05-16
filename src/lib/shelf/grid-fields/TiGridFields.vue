@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import _ from 'lodash';
-  import { computed, ref } from 'vue';
+  import { computed, onMounted, onUnmounted, ref } from 'vue';
+  import { CssUtils } from '../../../core';
   import GFItField from './GFItField.vue';
   import GFItGroup from './GFItGroup.vue';
   import GFItLabel from './GFItLabel.vue';
@@ -14,29 +15,52 @@
     GridFieldsStrictLabel,
   } from './ti-grid-fields-types';
   import { useGridFields } from './use-grid-fields';
-
+  //-------------------------------------------------
   defineOptions({
     inheritAttrs: false,
   });
-
+  //-------------------------------------------------
   const emit = defineEmits<GridFieldsEmitter>();
   const props = withDefaults(defineProps<GridFieldsProps>(), {
     fields: () => [],
+    bodyPartGap: 'm',
   });
   const _viewport_width = ref(0);
-
+  //-------------------------------------------------
   const Grid = computed(() => useGridFields(props));
   const getLayoutCss = computed(() => buildGridFieldsLayoutStyle(props));
-  const TopStyle = computed(() => {
+  //-------------------------------------------------
+  const TopClass = computed(() =>
+    CssUtils.mergeClassName(props.className, `body-gap-${props.bodyPartGap}`)
+  );
+  //-------------------------------------------------
+  const BodyStyle = computed(() => {
     let css = getLayoutCss.value(_viewport_width.value);
-    return _.assign({}, props.style, css);
+    console.log('BodyStyle', css);
+    return _.assign({}, props.bodyPartStyle, css);
+  });
+  //-------------------------------------------------
+  const $main = ref<HTMLElement>();
+  //-------------------------------------------------
+  const obResize = new ResizeObserver((_entries) => {
+    _viewport_width.value = $main.value?.clientWidth ?? 0;
+    console.log('obResize', _viewport_width.value);
+  });
+  //-------------------------------------------------
+  onMounted(() => {
+    if ($main.value) {
+      obResize.observe($main.value);
+    }
+  });
+  onUnmounted(() => {
+    obResize.disconnect();
   });
 </script>
 <template>
   <div
     class="ti-grid-fields"
-    :class="Grid.className"
-    :style="TopStyle">
+    :class="TopClass"
+    :style="props.style">
     <!--===============: 表单头 :===================-->
     <slot name="head">
       <GFText
@@ -54,7 +78,10 @@
         :change-event-name="props.changeEventName" />
     </slot>
     <!--===============: 表单体 :===================-->
-    <div class="part-body">
+    <div
+      ref="$main"
+      class="part-body"
+      :style="BodyStyle">
       <div
         class="grid-group-cell"
         v-for="fld in Grid.strictItems">

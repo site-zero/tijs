@@ -1,16 +1,23 @@
 import _ from 'lodash';
 import { Util, Vars } from '../../../core';
 import {
-  DFT_GRID_LAYOUT_HINT,
   GridFieldsItemLayoutProps,
   GridLayoutHint,
   GridLayoutHintItem,
   GridLayoutTrackGetter,
 } from './ti-grid-fields-types';
 
+const DFT_GRID_LAYOUT_HINT: GridLayoutHint = [
+  [5, 1500],
+  [4, 1200],
+  [3, 900],
+  [2, 500],
+  1,
+];
+
 /**
  * 根据网格的宽度和布局提示，计算要显示的网格字段数量。
- * 
+ *
  * @param width - 网格的宽度。
  * @param hint - 网格的布局提示。
  * @returns 要显示的网格字段的数量。

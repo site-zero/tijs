@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { tiCheckComponent } from '../../';
 import { ComRef, TiRawCom, Util, Vars } from '../../../core';
 
-export type FieldStatus = {
+export type FieldMode = {
   readonly?: boolean;
   actived?: boolean;
 };
@@ -71,24 +71,34 @@ export type FieldComFeature = {
   getReadonlyComConf: (context: Vars, val?: any) => Vars;
   getActivatedComType: () => TiRawCom;
   getActivatedComConf: (context: Vars, val?: any) => Vars;
-  autoGetComType: (status: FieldStatus) => TiRawCom;
-  autoGetComConf: (status: FieldStatus, context: Vars, val?: any) => Vars;
-  autoGetCom: (status: FieldStatus, context: Vars, val?: any) => FieldCom;
+  autoGetComType: (status: FieldMode) => TiRawCom;
+  autoGetComConf: (status: FieldMode, context: Vars, val?: any) => Vars;
+  autoGetCom: (status: FieldMode, context: Vars, val?: any) => FieldCom;
+};
+
+export type FieldComOptions = {
+  defaultComType?: string;
+  defaultComConf?: Vars;
 };
 /*-------------------------------------------------------
 
                    Use Feature
 
 -------------------------------------------------------*/
-export function useFieldCom(props: FieldComProps): FieldComFeature {
+export function useFieldCom(
+  props: FieldComProps,
+  options: FieldComOptions = {}
+): FieldComFeature {
+  let { defaultComType = 'TiLabel', defaultComConf = {} } = options;
   //
   //             Normal Com
   //
   function getComType() {
-    return tiCheckComponent(props.comType || 'TiLabel').com;
+    return tiCheckComponent(props.comType || defaultComType).com;
   }
   function getComConf(context: Vars, val?: any): Vars {
-    let comConf = Util.explainObj(context, props.comConf) ?? {};
+    let comConf =
+      Util.explainObj(context, props.comConf) ?? _.cloneDeep(defaultComConf);
     // 自动为控件添加值属性
     let valueKey = props.autoValue ?? 'value';
     if (!_.isNull(props.autoValue) && _.isUndefined(comConf[valueKey])) {
@@ -98,10 +108,12 @@ export function useFieldCom(props: FieldComProps): FieldComFeature {
   }
 
   function getReadonlyComType() {
-    return tiCheckComponent(props.readonlyComType || 'TiLabel').com;
+    return tiCheckComponent(props.readonlyComType || defaultComType).com;
   }
   function getReadonlyComConf(context: Vars, val?: any): Vars {
-    let comConf = Util.explainObj(context, props.readonlyComConf) || {};
+    let comConf =
+      Util.explainObj(context, props.readonlyComConf) ||
+      _.cloneDeep(defaultComConf);
     // TODO 自动分析 comConf ，构建一个自己对应的  comConf
 
     // 自动为控件添加值属性
@@ -121,7 +133,8 @@ export function useFieldCom(props: FieldComProps): FieldComFeature {
     return tiCheckComponent(props.activatedComType || 'TiInput').com;
   }
   function getActivatedComConf(context: Vars, val?: any): Vars {
-    let comConf = props.activatedComConf ?? props.comConf ?? {};
+    let comConf =
+      props.activatedComConf ?? props.comConf ?? _.cloneDeep(defaultComConf);
     comConf = Util.explainObj(context, comConf);
 
     // 自动为控件添加值属性
@@ -132,7 +145,7 @@ export function useFieldCom(props: FieldComProps): FieldComFeature {
     return comConf;
   }
 
-  function autoGetComType(status: FieldStatus = {}): TiRawCom {
+  function autoGetComType(status: FieldMode = {}): TiRawCom {
     if (status.readonly) {
       if (props.readonlyComType) {
         return getReadonlyComType();
@@ -146,7 +159,7 @@ export function useFieldCom(props: FieldComProps): FieldComFeature {
     return getComType();
   }
 
-  function autoGetComConf(status: FieldStatus, context: Vars, val?: any): Vars {
+  function autoGetComConf(status: FieldMode, context: Vars, val?: any): Vars {
     if (status.readonly) {
       if (props.readonlyComConf) {
         return getReadonlyComConf(context, val);
@@ -160,7 +173,7 @@ export function useFieldCom(props: FieldComProps): FieldComFeature {
     return getComConf(context, val);
   }
 
-  function autoGetCom(status: FieldStatus, context: Vars, val?: any): FieldCom {
+  function autoGetCom(status: FieldMode, context: Vars, val?: any): FieldCom {
     return {
       comType: autoGetComType(status),
       comConf: autoGetComConf(status, context, val),

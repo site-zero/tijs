@@ -3,7 +3,7 @@ import {
   Field,
   FieldComProps,
   FieldPair,
-  FieldStatus,
+  FieldMode,
   useFieldCom,
   useFieldSerializer,
   useFieldTransformer,
@@ -59,7 +59,7 @@ export type FieldProps = CommonProps &
     /**
      * 从表单传入的字段状态对象
      */
-    status?: FieldStatus;
+    status?: FieldMode;
 
     /**
      * 在字段改动后，是否需要比对一下，不同才通知改动

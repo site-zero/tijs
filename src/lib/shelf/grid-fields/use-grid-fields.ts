@@ -14,10 +14,8 @@ export function useGridFields(props: GridFieldsProps) {
     // 标题 & 提示
     title: props.title ?? null,
     titleType: props.titleType || 'text',
-    titleBy: props.titleBy ?? null,
     tip: props.tip ?? null,
     tipType: props.tipType || 'text',
-    tipMode: props.tipMode || 'name-suffix-icon',
     tipIcon: props.tipIcon || 'zmdi-help-outline',
     style: props.style,
   };
