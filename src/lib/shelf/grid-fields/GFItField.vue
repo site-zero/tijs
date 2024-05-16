@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { computed } from 'vue';
-  import { useFieldCom } from '../../';
+  import { useFieldCom, useFieldTransformer } from '../../';
   import { CssUtils } from '../../../core';
   import GFText from './GFText.vue';
   import { GridFieldsStrictField } from './ti-grid-fields-types';
@@ -10,11 +10,7 @@
     inheritAttrs: false,
   });
 
-  const props = defineProps<
-    GridFieldsStrictField & {
-      value?: any;
-    }
-  >();
+  const props = defineProps<GridFieldsStrictField>();
   const TopClass = computed(() => {
     return CssUtils.mergeClassName(props.className, props.fieldLayoutMode);
   });
@@ -29,12 +25,21 @@
     return css;
   });
 
+  const FieldValue = computed(() => {
+    let trans = useFieldTransformer({
+      name: props.name,
+      type: props.type,
+      transformer: props.transformer,
+    });
+    return trans.getFieldValue(props.data);
+  });
+
   const FieldCom = computed(() => {
     let com = useFieldCom(props);
     return com.autoGetCom(
       { readonly: props.readonly },
-      { value: props.value },
-      props.value
+      { value: FieldValue.value },
+      FieldValue.value
     );
   });
 </script>

@@ -98,11 +98,16 @@ export function buildGridFieldsLayoutStyle(
   // 这个函数接受一个数字参数 i，返回 layoutGridTracks 中的第 i 个元素，
   // 如果该元素不存在，则返回 '1fr'。
   let getTrackSize: (_i: number) => string;
+
+  // customized function call
   if (_.isFunction(layoutGridTracks)) {
     getTrackSize = layoutGridTracks;
-  } else {
+  }
+  // pick from string arry
+  else {
+    let tracks = layoutGridTracks as string[]
     getTrackSize = (i: number) => {
-      return _.nth(layoutGridTracks, i) ?? '1fr';
+      return tracks[i] ?? '1fr';
     };
   }
   // 最后，它返回一个函数，这个函数接受一个数字参数 w，生成一个 CSS 格式的网格布局。

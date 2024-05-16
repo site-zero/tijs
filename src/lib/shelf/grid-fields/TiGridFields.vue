@@ -25,6 +25,7 @@
     fields: () => [],
     bodyPartGap: 'm',
     bodyPartFontSize: 's',
+    data: () => ({}),
   });
   const _viewport_width = ref(0);
   //-------------------------------------------------
@@ -41,7 +42,6 @@
   //-------------------------------------------------
   const BodyStyle = computed(() => {
     let css = getLayoutCss.value(_viewport_width.value);
-    console.log('BodyStyle', css);
     return _.assign({}, props.bodyPartStyle, css);
   });
   //-------------------------------------------------

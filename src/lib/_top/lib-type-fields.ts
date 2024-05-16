@@ -41,7 +41,7 @@ export type Field = {
    */
   emptyAs?: any;
 
-  transformer?: FuncA2<any, Vars, any>;
+  transformer?: FuncA3<any, Vars, FieldName, any>;
   serializer?: FuncA3<any, Vars, FieldName, any>;
 };
 

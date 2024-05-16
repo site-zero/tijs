@@ -25,7 +25,7 @@ export type FieldTransformerFeature = {
 
 -------------------------------------------------------*/
 export function useFieldTransformer(
-  props: FieldTransformerProps,
+  props: FieldTransformerProps
 ): FieldTransformerFeature {
   return {
     getFieldValue(data: Vars) {
@@ -46,7 +46,7 @@ export function useFieldTransformer(
 
       // 定制转换器
       if (transformer) {
-        val = transformer(val, data);
+        val = transformer(val, data, name);
       }
 
       return val;

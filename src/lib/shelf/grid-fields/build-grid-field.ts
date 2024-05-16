@@ -30,6 +30,8 @@ export function buildOneGridField(
     // 下标
     index: _.nth(indexes, -1) ?? 0,
     race: 'field',
+    // 数据
+    data: dft.data!,
     // 唯一键
     uniqKey: makeFieldUniqKey(indexes, field),
     // 动态类选择器

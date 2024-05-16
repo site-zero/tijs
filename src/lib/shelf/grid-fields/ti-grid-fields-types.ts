@@ -22,7 +22,10 @@ export type GridFieldsEmitter = {
 export type AspectSize = 't' | 's' | 'm' | 'b' | 'h';
 
 export type GridFieldsProps = GridFieldsInput & {
+  // 动态 explain 时的变量
   vars?: Vars;
+  // 输入的数据
+  data?: Vars;
 
   defaultComType?: string;
   defaultComConf?: Vars;
@@ -228,6 +231,7 @@ export type AbstractField = {
 
 export type GridFieldsStrictAbstractItem = FieldComProps &
   ReadonlyProps & {
+    data: Vars;
     uniqKey: string;
     index: number;
     race: GridFieldsItemRace;
