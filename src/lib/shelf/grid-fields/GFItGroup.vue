@@ -2,6 +2,7 @@
   import _ from 'lodash';
   import { computed, ref } from 'vue';
   import GFItField from './GFItField.vue';
+  import GFItLabel from './GFItLabel.vue';
   import GFText from './GFText.vue';
   import { buildGridFieldsLayoutStyle } from './build-grid-field-layout';
   import {
