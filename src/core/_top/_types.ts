@@ -58,19 +58,20 @@ export type NameStrValue = NameValue<string, string>;
 /**
  * 可以被转换为 Icon 对象的类型
  */
-export type IconInput = string | TiIconObj;
+export type IconInput = string | IconObj;
 
 export type IconType = 'font' | 'image' | 'emoji';
 
-export type TiIconObj = {
+export type IconObj = {
   type: IconType;
   src?: string; // for image icon
   className?: any; // for font icon
   value?: string; // for emojie
   style?: Vars; // font/image container style
+  topClass?: any;
 };
 
-export function isIconObj(input: any): input is TiIconObj {
+export function isIconObj(input: any): input is IconObj {
   if (!input) {
     return false;
   }
@@ -232,8 +233,12 @@ export type ExplainI18n = {
 export type TextContentType = 'html' | 'text';
 
 export type ValueChanged<T> = {
-  newVal: T;
+  value: T;
   oldVal: T;
+};
+
+export type FieldValueChanged = ValueChanged<any> & {
+  name: string;
 };
 
 /*---------------------------------------------------
@@ -514,7 +519,7 @@ export type TiRawCom = DefineComponent<{}, {}, any>;
 
 export type TiComExampleModelTarget =
   | string
-  | ((val: any, comConf: Vars) => Vars)
+  | ((val: any, comConf: Vars) => void)
   | {
       key: string;
       val: any;

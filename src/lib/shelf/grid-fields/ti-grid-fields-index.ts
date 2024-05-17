@@ -9,6 +9,9 @@ const en_us = {
 };
 const zh_cn = {
   'com-name': '栅格字段组',
+  'example-nested': '嵌套',
+  'example-sameline': '整行字段',
+  'example-editname': '编辑名称',
 };
 
 const COM_TYPE = COM_TYPES.GridFields;
@@ -30,7 +33,19 @@ const TiGridFieldsInfo: TiComInfo = {
     app.component(COM_TYPE, TiGridFields);
   },
   defaultProps: 'simple',
-  exampleProps: [example.simple],
+  exampleProps: [
+    example.simple,
+    example.nested,
+    example.sameline,
+    example.editname,
+  ],
+  exampleModel: {
+    'value-change': {
+      key: 'data.${name}',
+      val: '=value',
+    },
+    'change': 'data',
+  },
 };
 
 export * from './ti-grid-fields-types';

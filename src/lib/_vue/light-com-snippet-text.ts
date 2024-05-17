@@ -21,6 +21,8 @@ export type TextSnippetProps = FieldComProps & {
   tagName?: string;
   attrs?: Vars;
   props?: Vars;
+  // 用来动态 explain 传入的 comConf
+  vars?: Vars;
   text: string;
   textType?: TextContentType;
   autoI18n?: boolean;
@@ -30,13 +32,15 @@ export type TextSnippetProps = FieldComProps & {
 
 export function TextSnippet(
   props: TextSnippetProps,
-  _context: SetupContext<TextSnippetEmitter>
+  context: SetupContext<TextSnippetEmitter>
 ) {
+  //........................................
   let tag = props.tagName ?? 'div';
   let tagProps = {
     class: CssUtils.mergeClassName(props.className),
     style: props.style,
   } as Vars;
+  //........................................
   // 添加自定义属性
   _.forEach(props.attrs, (v, k) => {
     if (_.isNil(v)) return;
@@ -46,6 +50,7 @@ export function TextSnippet(
     }
     tagProps[k] = v;
   });
+  //........................................
   // 添加自定义选项
   _.forEach(props.props, (v, k) => {
     if (_.isNil(v)) return;
@@ -55,20 +60,27 @@ export function TextSnippet(
     }
     tagProps[k] = v;
   });
-
+  //........................................
   let text = props.autoI18n ? I18n.text(props.text) : props.text;
   //
   // 自定义控件
   //
   if (props.comType) {
-    //console.log('TextSnippet', props);
-    let com = useFieldCom(props);
-    let DynamicCom = com.autoGetCom({}, { value: text }, text);
-    let vnode = h(DynamicCom.comType, DynamicCom.comConf);
-    tagProps.class['customized-com'] = true;
-    return h(tag, tagProps, [vnode]);
-  }
+    let eventKey = _.camelCase(`on-${props.changeEventName ?? 'change'}`);
+    let emit = context.emit as TextSnippetEmitter;
 
+    let com = useFieldCom(props);
+    let CustomizedCom = com.autoGetCom({}, props.vars ?? { text }, text);
+    let { comType, comConf } = CustomizedCom;
+    comConf[eventKey] = (val: any) => {
+      emit('change', { value: val, oldVal: props.text });
+    };
+
+    let cusComNode = h(comType, comConf);
+    tagProps.class['customized-com'] = true;
+    return h(tag, tagProps, [cusComNode]);
+  }
+  //........................................
   // 准备子内容
   let children = [] as VNode[];
 

@@ -1,5 +1,5 @@
 import _, { isEmpty } from 'lodash';
-import { MessageMap, TiIconObj } from '../ti';
+import { MessageMap, IconObj, CssUtils } from '../ti';
 
 //-----------------------------------
 const TYPES = {
@@ -99,7 +99,7 @@ const _DFT_FONT_ICON = 'zmdi-cake';
 const _DFT_FONT_ICON_OBJ = {
   type: 'font',
   className: 'zmdi zmdi-cake',
-} as TiIconObj;
+} as IconObj;
 
 export function getDefaultIcon() {
   return _DFT_FONT_ICON;
@@ -131,7 +131,7 @@ export interface Iconable {
   mime?: string;
   race?: string;
   name?: string;
-  icon?: string | TiIconObj;
+  icon?: string | IconObj;
 }
 
 export function isEmoji(str: string) {
@@ -168,21 +168,26 @@ export function getIcon(input: string | Iconable, dft = _DFT_FONT_ICON) {
   );
 }
 
-export function toIconObj(val?: string | TiIconObj): TiIconObj {
+export function toIconObj(val?: string | IconObj): IconObj {
   if (!val) {
     return _DFT_FONT_ICON_OBJ;
   }
   if (_.isString(val)) {
     return parseIcon(val);
   }
+  if ('font' == val.type && val.value) {
+    let icon = parseIcon(val.value);
+    icon.topClass = val.className;
+    return icon;
+  }
   return val;
 }
 
-export function parseIcon(val: string, dft?: string | TiIconObj): TiIconObj {
+export function parseIcon(val: string, dft?: string | IconObj): IconObj {
   if (!val) {
     return toIconObj(dft);
   }
-  let icon = { type: 'font' } as TiIconObj;
+  let icon = { type: 'font' } as IconObj;
 
   // String as emoji
   if (isEmoji(val)) {
@@ -216,10 +221,7 @@ export function parseIcon(val: string, dft?: string | TiIconObj): TiIconObj {
   return icon;
 }
 
-export function fontIconHtml(
-  val: string | TiIconObj,
-  dft?: string | TiIconObj
-) {
+export function fontIconHtml(val: string | IconObj, dft?: string | IconObj) {
   let icon = _.isString(val) ? parseIcon(val, dft) : val;
   return `<i class="${icon.className}"></i>`;
 }

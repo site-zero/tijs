@@ -2,19 +2,20 @@ import { FieldName, FieldValueType } from 'src/lib/_top';
 import {
   CommonProps,
   CssGridLayout,
-  ValueChanged,
+  CssTextAlign,
+  FieldValueChanged,
   IconInput,
   InvokePartial,
   TextContentType,
+  ValueChanged,
   Vars,
   VisibilityProps,
-  CssTextAlign,
 } from '../../../core';
 import { FieldComProps, ReadonlyProps } from '../../../lib/_features';
 
 export type GridFieldsEmitter = {
   (evetName: 'name-change', payload: ValueChanged<string>): void;
-  (evetName: 'value-change', payload: ValueChanged<any>): void;
+  (evetName: 'value-change', payload: FieldValueChanged): void;
 };
 
 export type AspectSize = 't' | 's' | 'm' | 'b' | 'h';
@@ -29,6 +30,7 @@ export type GridFieldsProps = Omit<
   | 'serializer'
   | 'serialArgs'
   | 'serialPartial'
+  | 'changeEventName'
 > & {
   // 动态 explain 时的变量
   vars?: Vars;
@@ -78,6 +80,7 @@ export type GridFieldsInput = CommonProps &
 
     // 仅仅当 `race=field` 时有效
     fieldTitleBy?: FieldComProps;
+
     // 仅仅当 `race=field` 时有效
     fieldTipBy?: FieldComProps;
     // 普通字段的布局模式
@@ -117,13 +120,16 @@ export type GridFieldsInput = CommonProps &
     // 单元格项目的自定义样式，当这个属性被作用到 group 时， group.layout 更加优先
     style?: Vars;
     // 限制一个字段名称最大宽度
-    maxFieldNameWidth?: number;
+    maxFieldNameWidth?: number | string;
     rowSpan?: number; // 指定格子的行跨度，比 style.gridRowEnd 优先
     colSpan?: number; // 指定格子的列跨度，比 style.gridColumnEnd 优先
     //------------------------------------
     // 字段组专有属性
     //------------------------------------
     fields?: GridFieldsInput[];
+
+    defaultFieldTitleBy?: FieldComProps;
+    defaultFieldTipBy?: FieldComProps;
   };
 
 /**
@@ -264,20 +270,25 @@ export type GridFieldsStrictGroup = GridFieldsStrictAbstractItem &
     race: 'group';
     fields: GridFieldsStrictItem[];
     // 用来传递给下属字段
-    maxFieldNameWidth?: number;
+    maxFieldNameWidth?: number | string;
     fieldLayoutMode?: GridFieldLayoutMode;
+
+    defaultFieldTitleBy?: FieldComProps;
+    defaultFieldTipBy?: FieldComProps;
   };
 export type GridFieldsStrictField = GridFieldsStrictAbstractItem &
   AbstractField & {
     race: 'field';
     required: (data: Vars) => any;
     checkEquals: boolean;
-    maxFieldNameWidth?: number;
-    fieldTitleBy?: FieldComProps;
-    fieldTipBy?: FieldComProps;
+    maxFieldNameWidth?: number | string;
     fieldLayoutMode: GridFieldLayoutMode;
+
+    fieldTitleBy?: FieldComProps;
     fieldTitleStyle?: Vars;
     fieldValueStyle?: Vars;
+
+    fieldTipBy?: FieldComProps;
     fieldTipStyle?: Vars;
     tipIcon: IconInput;
   };

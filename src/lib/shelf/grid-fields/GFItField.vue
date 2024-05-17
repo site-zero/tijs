@@ -1,19 +1,24 @@
 <script lang="ts" setup>
-  import _ from 'lodash';
-import { computed } from 'vue';
-import { TextSnippet, useFieldCom, useFieldTransformer } from '../../';
-import { CssUtils, Vars } from '../../../core';
-import { GridFieldsStrictField } from './ti-grid-fields-types';
-import {
-  getFieldTipIcon,
-  useFieldStyle,
-  useGridItemStyle,
-} from './use-field-style';
+  import { computed } from 'vue';
+  import { TextSnippet, useFieldCom, useFieldTransformer } from '../../';
+  import { CssUtils, ValueChanged } from '../../../core';
+  import {
+    GridFieldsEmitter,
+    GridFieldsStrictField,
+  } from './ti-grid-fields-types';
+  import {
+    getFieldIcon,
+    getFieldTitle,
+    getFieldTitleAlign,
+    getFieldTitleStyle,
+    getFieldTopStyle,
+  } from './use-field-style';
 
   defineOptions({
     inheritAttrs: false,
   });
 
+  const emit = defineEmits<GridFieldsEmitter>();
   const props = defineProps<GridFieldsStrictField>();
 
   const hasTitle = computed(() =>
@@ -30,46 +35,15 @@ import {
     });
   });
 
-  const TitleAlign = computed(() => {
-    if (!props.titleAlign) {
-      return /^h-/.test(props.fieldLayoutMode) ? 'right' : undefined;
-    }
-    return props.titleAlign;
-  });
-
-  const TopStyle = computed(() => {
-    let css_1 = useGridItemStyle(props);
-    let css_2 = useFieldStyle(
-      props.fieldLayoutMode,
-      props.maxFieldNameWidth ?? 100,
-      hasTitle.value,
-      hasTip.value
-    );
-    return _.assign({}, props.style, css_1, css_2) as Vars;
-  });
-
-  const FieldTitleStyle = computed(() => {
-    let css = _.cloneDeep(props.fieldTitleStyle) || {};
-    if (props.maxFieldNameWidth && /^h-/.test(props.fieldLayoutMode)) {
-      css.maxWidth = CssUtils.toSize2(props.maxFieldNameWidth);
-    }
-    css['grid-area'] = 'title';
-    if (_.isEmpty(css)) {
-      return;
-    }
-    return css;
-  });
-
-  const TipIcon = computed(() => {
-    let icon = getFieldTipIcon(props);
-    // 标题区提示图标
-    if (icon && icon.position == 'title' && icon.type) {
-      icon[`${icon.type}Icon`] = props.tipIcon;
-    }
-    // 值区提示图标
-    return icon;
-  });
-
+  const TopStyle = computed(() =>
+    getFieldTopStyle(props, hasTitle.value, hasTip.value)
+  );
+  const FieldTitleStyle = computed(() => getFieldTitleStyle(props));
+  const TitleAlign = computed(() => getFieldTitleAlign(props));
+  const FieldTitle = computed(() => getFieldTitle(props));
+  const FieldIcon = computed(() =>
+    getFieldIcon(props, hasTitle.value, hasTip.value)
+  );
   const FieldValue = computed(() => {
     let trans = useFieldTransformer({
       name: props.name,
@@ -77,6 +51,19 @@ import {
       transformer: props.transformer,
     });
     return trans.getFieldValue(props.data);
+  });
+  const FieldTitleVars = computed(() => {
+    let required = props.required(props.data);
+    return {
+      uniqKey: props.uniqKey,
+      title: props.title,
+      name: props.name,
+      tip: props.tip,
+      value: FieldValue.value,
+      data: props.data,
+      required,
+      readonly: props.readonly,
+    };
   });
 
   const FieldCom = computed(() => {
@@ -87,6 +74,27 @@ import {
       FieldValue.value
     );
   });
+
+  const ListenValueChange = computed(() => {
+    let key = props.changeEventName ?? 'change';
+    return {
+      [key]: (val: any) => {
+        emit('value-change', {
+          name: props.uniqKey,
+          value: val,
+          oldVal: FieldValue.value,
+        });
+      },
+    };
+  });
+
+  function onTitleChange(payload: ValueChanged<string>) {
+    console.log('onTitleChange', payload);
+    emit('name-change', {
+      value: payload.value,
+      oldVal: props.uniqKey,
+    });
+  }
 </script>
 <template>
   <div
@@ -99,8 +107,9 @@ import {
       class="field-part as-title"
       :style="FieldTitleStyle"
       :attrs="{ dataAlign: TitleAlign }"
-      :text="props.title || ''"
-      :textType="props.titleType"
+      :text="FieldTitle.title"
+      :textType="FieldTitle.type"
+      :autoI18n="false"
       :comType="props.fieldTitleBy?.comType"
       :comConf="props.fieldTitleBy?.comConf"
       :autoValue="props.fieldTitleBy?.autoValue"
@@ -109,8 +118,10 @@ import {
       :activatedComType="props.fieldTitleBy?.activatedComType"
       :activatedComConf="props.fieldTitleBy?.activatedComConf"
       :changeEventName="props.fieldTitleBy?.changeEventName"
-      :prefixIcon="TipIcon?.prefixIcon"
-      :suffixIcon="TipIcon?.suffixIcon" />
+      :prefixIcon="FieldIcon?.titlePrefixIcon"
+      :suffixIcon="FieldIcon?.titleSuffixIcon"
+      :vars="FieldTitleVars"
+      @change="onTitleChange" />
     <!--===============: 字段值 :===================-->
     <div
       class="field-part as-value"
@@ -118,11 +129,12 @@ import {
       :style="props.fieldValueStyle">
       <component
         :is="FieldCom.comType"
-        v-bind="FieldCom.comConf" />
+        v-bind="FieldCom.comConf"
+        v-on="ListenValueChange" />
     </div>
     <!--==============: 提示信息 :==================-->
     <TextSnippet
-      v-if="hasTip && !TipIcon"
+      v-if="hasTip && !FieldIcon.tipAsIcon"
       class="field-part as-tip"
       style="grid-area: tip"
       :style="props.fieldTipStyle"
@@ -136,7 +148,8 @@ import {
       :readonlyComConf="props.fieldTipBy?.readonlyComConf"
       :activatedComType="props.fieldTipBy?.activatedComType"
       :activatedComConf="props.fieldTipBy?.activatedComConf"
-      :changeEventName="props.fieldTipBy?.changeEventName" />
+      :changeEventName="props.fieldTipBy?.changeEventName"
+      :vars="FieldTitleVars" />
   </div>
 </template>
 <style lang="scss">

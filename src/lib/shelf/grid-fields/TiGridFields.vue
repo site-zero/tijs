@@ -26,6 +26,7 @@
     bodyPartGap: 'm',
     bodyPartFontSize: 's',
     fieldLayoutMode: 'h-wrap',
+    maxFieldNameWidth: '36%',
     data: () => ({}),
   });
   const _viewport_width = ref(0);
@@ -81,8 +82,7 @@
         :readonlyComType="props.readonlyComType"
         :readonlyComConf="props.readonlyComConf"
         :activatedComType="props.activatedComType"
-        :activatedComConf="props.activatedComConf"
-        :changeEventName="props.changeEventName" />
+        :activatedComConf="props.activatedComConf" />
     </slot>
     <!--===============: 表单体 :===================-->
     <div
@@ -93,11 +93,15 @@
         <!------[:Field:]---------->
         <GFItField
           v-if="'field' == fld.race"
-          v-bind="(fld as GridFieldsStrictField)" />
+          v-bind="(fld as GridFieldsStrictField)"
+          @name-change="emit('name-change', $event)"
+          @value-change="emit('value-change', $event)" />
         <!------[:Group:]---------->
         <GFItGroup
           v-else-if="'group' == fld.race"
-          v-bind="(fld as GridFieldsStrictGroup)" />
+          v-bind="(fld as GridFieldsStrictGroup)"
+          @name-change="emit('name-change', $event)"
+          @value-change="emit('value-change', $event)" />
         <!------[:Label:]---------->
         <GFItLabel
           v-else-if="'label' == fld.race"
@@ -130,7 +134,7 @@
     </slot>
   </div>
 </template>
-<style lang="scss" scoped>
+<style lang="scss">
   @use '../../../assets/style/_all.scss' as *;
   @import './style/ti-grid-fields.scss';
 </style>

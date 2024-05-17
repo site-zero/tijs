@@ -45,12 +45,12 @@ export function buildExplainer(obj: any): Explainer {
 export function explainObj<T>(
   context: Vars,
   obj: T,
-  options = {} as ExplainOptions,
+  options = {} as ExplainOptions
 ): T {
   // 指定默认值
   _.defaults(options, {
     funcSet: globalThis,
-    evalFunc: false,
+    evalFunc: true,
     iteratee: (v: any) => v,
   });
 

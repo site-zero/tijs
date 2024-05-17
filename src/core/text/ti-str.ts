@@ -243,8 +243,12 @@ export function toJsValue(v: any = '', options = {} as toJsValueOptions): any {
   }
   //...............................................
   // Number
-  if (/^-?[\d.]+$/.test(str)) {
-    return str * 1;
+  if (/^-?\d*\.?\d+$/.test(str)) {
+    let n = str * 1;
+    if (n == str) {
+      return n;
+    }
+    return str;
   }
   //...............................................
   // Try to get from context

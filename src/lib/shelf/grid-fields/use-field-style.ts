@@ -1,18 +1,39 @@
 import _ from 'lodash';
-import { CssGridLayout, Vars } from '../../../core';
+import {
+  CssGridLayout,
+  CssUtils,
+  IconInput,
+  TextContentType,
+  Vars,
+} from '../../../core';
 import {
   GridFieldLayoutMode,
   GridFieldsStrictAbstractItem,
   GridFieldsStrictField,
 } from './ti-grid-fields-types';
 
-export function useFieldStyle(
-  layoutMode: GridFieldLayoutMode,
-  nameWidth: number,
+export function getFieldTopStyle(
+  props: GridFieldsStrictField,
   hasTitle: boolean,
   hasTip: boolean
 ) {
-  let NW = `${nameWidth}px`;
+  let css_1 = getGridItemStyle(props);
+  let css_2 = getFieldLayoutStyle(
+    props.fieldLayoutMode,
+    props.maxFieldNameWidth ?? 100,
+    hasTitle,
+    hasTip
+  );
+  return _.assign({}, props.style, css_1, css_2) as Vars;
+}
+
+function getFieldLayoutStyle(
+  layoutMode: GridFieldLayoutMode,
+  nameWidth: number | string,
+  hasTitle: boolean,
+  hasTip: boolean
+) {
+  let NW = _.isNumber(nameWidth) ? `${nameWidth}px` : nameWidth;
   let css = {
     gridTemplateColumns: `${NW} 1fr`,
   } as CssGridLayout;
@@ -130,7 +151,7 @@ export function useFieldStyle(
   return css;
 }
 
-export function useGridItemStyle(item: GridFieldsStrictAbstractItem) {
+export function getGridItemStyle(item: GridFieldsStrictAbstractItem) {
   let css = _.cloneDeep(item.style || {});
   if (item.rowSpan) {
     css.gridRowEnd = `span ${item.rowSpan}`;
@@ -141,16 +162,93 @@ export function useGridItemStyle(item: GridFieldsStrictAbstractItem) {
   return css;
 }
 
-export function getFieldTipIcon(
-  field: GridFieldsStrictField
-): Vars | undefined {
-  let m = /^[hv]-(title|value)-icon-(suffix|prefix)$/.exec(
-    field.fieldLayoutMode
-  );
-  if (m) {
-    return {
-      position: m[1],
-      type: m[2],
-    };
+export function getFieldTitleStyle(field: GridFieldsStrictField) {
+  return _.assign({}, field.fieldTitleStyle, {
+    'grid-area': 'title',
+  });
+}
+
+type FieldTipIconInfo = {
+  position: 'title' | 'value';
+  type: 'prefix' | 'suffix';
+};
+
+function getFieldTipIcon(
+  field: GridFieldsStrictField,
+  hasTip: boolean
+): FieldTipIconInfo | undefined {
+  if (hasTip) {
+    let m = /^[hv]-(title|value)-icon-(suffix|prefix)$/.exec(
+      field.fieldLayoutMode
+    );
+    if (m) {
+      return {
+        position: m[1],
+        type: m[2],
+      } as FieldTipIconInfo;
+    }
   }
+}
+
+export function getFieldTitleAlign(field: GridFieldsStrictField): string {
+  if (!field.titleAlign) {
+    return /^h-/.test(field.fieldLayoutMode) ? 'right' : 'left';
+  }
+  return field.titleAlign;
+}
+
+export type FieldpTitleIcon = {
+  tipAsIcon: boolean;
+  titlePrefixIcon?: IconInput;
+  titleSuffixIcon?: IconInput;
+  tipPrefixIcon?: IconInput;
+  tipSuffixIcon?: IconInput;
+};
+
+/**
+ * 包括提示信息图标，以及 required 图标
+ */
+export function getFieldIcon(
+  field: GridFieldsStrictField,
+  hasTitle: boolean,
+  hasTip: boolean
+): FieldpTitleIcon {
+  let tipIcon = getFieldTipIcon(field, hasTip);
+  let reIcon: FieldpTitleIcon = { tipAsIcon: tipIcon ? true : false };
+  // 标题区提示图标
+  if (hasTitle) {
+    if (tipIcon && tipIcon.position == 'title' && tipIcon.type) {
+      // 提示在前缀
+      if ('prefix' == tipIcon.type) {
+        reIcon.titlePrefixIcon = field.tipIcon;
+      }
+      // 提示在后缀
+      else if ('suffix' == tipIcon.type) {
+        reIcon.titleSuffixIcon = field.tipIcon;
+      }
+    }
+  }
+  // 值区提示图标
+  return reIcon;
+}
+
+export type FieldTitleTextInfo = {
+  title: string;
+  type?: TextContentType;
+};
+
+export function getFieldTitle(
+  field: GridFieldsStrictField
+): FieldTitleTextInfo {
+  let { title, titleType, fieldTitleBy, required } = field;
+  title = title || '';
+  if (required(field.data) && title && !fieldTitleBy) {
+    if ('text' == titleType) {
+      title = _.escape(title);
+    }
+    title = '<b class="required-mark">*</b>' + title;
+    titleType = 'html';
+  }
+
+  return { title, type: titleType };
 }

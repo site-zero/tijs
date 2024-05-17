@@ -1,11 +1,10 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed } from 'vue';
-  import { CssUtils } from '../../../core';
-  import GFText from './GFText.vue';
-  import { GridFieldsStrictLabel } from './ti-grid-fields-types';
-  import { useGridItemStyle } from './use-field-style';
   import { TextSnippet } from '../../';
+  import { CssUtils } from '../../../core';
+  import { GridFieldsStrictLabel } from './ti-grid-fields-types';
+  import { getGridItemStyle } from './use-field-style';
 
   defineOptions({
     inheritAttrs: false,
@@ -26,7 +25,7 @@
     return CssUtils.mergeClassName(props.className, `part-${props.labelType}`);
   });
   const TopStyle = computed(() => {
-    let css_1 = useGridItemStyle(props);
+    let css_1 = getGridItemStyle(props);
     return _.assign({}, props.style, css_1);
   });
 </script>

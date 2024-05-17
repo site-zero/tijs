@@ -127,18 +127,16 @@
       } else {
         targets = [target];
       }
-      let updateMeta = {} as Vars;
+      let comConf = _.cloneDeep(_example.comConf || {}) as Vars;
       for (let target of targets) {
         // {"change": "value"}
         if (_.isString(target)) {
           let key = Tmpl.exec(target, payload);
-          _.set(updateMeta, key, payload);
+          _.set(comConf, key, payload);
         }
-        // {"field-change": (val: any) => Vars}
+        // {"field-change": (val: any, comConf) => void}
         else if (_.isFunction(target)) {
-          let conf = _.cloneDeep(_example.comConf);
-          let metas = target(payload, conf);
-          _.assign(updateMeta, metas);
+          target(payload, comConf);
         }
         // {"field-change": {key:"data.${name}", value:"=value"}}
         else {
@@ -148,10 +146,10 @@
           if (val && val instanceof Map) {
             val = Util.mapToObj(val);
           }
-          _.set(updateMeta, key, val);
+          _.set(comConf, key, val);
         }
       }
-      _.assign(_example.comConf, updateMeta);
+      _example.comConf = comConf;
     }
   }
   function cleanSubEvents() {
@@ -185,7 +183,7 @@
   onMounted(() => {
     console.log('haha', PlayCom.value);
     if (PlayCom.value) {
-      selectExample(PlayCom.value, _example, PlayCom.value.defaultProps);
+      selectExample(PlayCom.value, _example, props.example);
     }
   });
 </script>

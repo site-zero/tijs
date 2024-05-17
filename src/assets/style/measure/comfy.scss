@@ -17,11 +17,11 @@
   --ti-measure-menu-fontsz: 12px;
   --ti-measure-menu-lineheight: 2em;
 
-  --ti-gap-t: 0.3em;  // tiny
-  --ti-gap-s: 0.6em;  // small
-  --ti-gap-m: 1em;  // middle
-  --ti-gap-b: 1.5em;  // big
-  --ti-gap-h: 2em;  // hug
+  --ti-gap-t: 1px; // tiny
+  --ti-gap-s: 4px; // small
+  --ti-gap-m: 8px; // middle
+  --ti-gap-b: 12px; // big
+  --ti-gap-h: 16px; // hug
 
   --ti-fontsz-page: 14px;
   --ti-fontsz-box: 12px;
@@ -31,9 +31,9 @@
   --ti-fontsz-block-head: 0.8em;
   --ti-fontsz-alert: 14px;
   --ti-fontsz-tabs: 12px;
-  --ti-fontsz-t: 10px;  // tiny
-  --ti-fontsz-s: 12px;  // small
-  --ti-fontsz-m: 14px;  // middle
-  --ti-fontsz-b: 16px;  // big
-  --ti-fontsz-h: 18px;  // hug
+  --ti-fontsz-t: 10px; // tiny
+  --ti-fontsz-s: 12px; // small
+  --ti-fontsz-m: 14px; // middle
+  --ti-fontsz-b: 16px; // big
+  --ti-fontsz-h: 18px; // hug
 }

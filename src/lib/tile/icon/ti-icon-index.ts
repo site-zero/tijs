@@ -1,7 +1,8 @@
 import { App } from 'vue';
-import { COM_TYPES } from '../../lib-com-types';
 import { TiComInfo, TiComRace } from '../../../core';
+import { COM_TYPES } from '../../lib-com-types';
 import TiIcon from './TiIcon.vue';
+import { IconProps } from './icon-props';
 
 const en_us = {
   'com-name': 'Icon',
@@ -38,7 +39,7 @@ const TiIconInfo: TiComInfo = {
       text: 'i18n:ti-icon-example-simple-icon',
       comConf: {
         value: 'zmdi-slideshare',
-      },
+      } as IconProps,
     },
     {
       name: 'color-icon',
@@ -48,7 +49,7 @@ const TiIconInfo: TiComInfo = {
         value: 'fas-snowflake',
         color: '#F00',
         opacity: 0.8,
-      },
+      } as IconProps,
     },
     {
       name: 'image-icon',
@@ -56,7 +57,7 @@ const TiIconInfo: TiComInfo = {
       comConf: {
         className: 's128',
         value: '/ti-logo.png',
-      },
+      } as IconProps,
     },
     {
       name: 'svg-icon',
@@ -64,7 +65,7 @@ const TiIconInfo: TiComInfo = {
       comConf: {
         className: 's256',
         value: '/dna.svg',
-      },
+      } as IconProps,
     },
   ],
 };

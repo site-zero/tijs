@@ -5,7 +5,6 @@ export default {
   name: 'simple',
   text: 'i18n:simple',
   comConf: {
-    className: 'fit-parent',
     data: {
       id: 'Um5Cub2yX',
       name: 'Mahanta Lloyd',
@@ -51,6 +50,7 @@ export default {
         title: 'Name',
         name: 'name',
         tip: 'This is Name',
+        required: true,
         fieldLayoutMode: 'v-wrap',
       },
       {
@@ -85,14 +85,12 @@ export default {
         title: 'Email',
         name: 'email',
         fieldLayoutMode: 'v-title-icon-prefix',
-        type: 'Email',
       },
       {
         title: 'Phone',
         name: 'phone',
         tip: 'This is Phone',
         fieldLayoutMode: 'v-title-icon-suffix',
-        type: 'PhoneNumber',
       },
       {
         title: 'Address',

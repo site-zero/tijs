@@ -58,7 +58,6 @@ export function buildOneGridField(
     readonlyComConf: field.readonlyComConf,
     activatedComType: field.activatedComType,
     activatedComConf: field.activatedComConf,
-    changeEventName: field.changeEventName ?? 'change',
   };
 
   // 自动得到控件族类
@@ -68,8 +67,8 @@ export function buildOneGridField(
 
     fld.name = field.name;
     fld.type = field.type ?? 'String';
-    fld.fieldTitleBy = field.fieldTitleBy;
-    fld.fieldTipBy = field.fieldTipBy;
+    fld.fieldTitleBy = field.fieldTitleBy ?? dft.defaultFieldTitleBy;
+    fld.fieldTipBy = field.fieldTipBy ?? dft.defaultFieldTipBy;
 
     _.defaults(fld, {
       comType: dft.defaultComType,
@@ -82,6 +81,7 @@ export function buildOneGridField(
     fld.checkEquals = field.checkEquals ?? true;
     fld.emptyAs = field.emptyAs ?? null;
     fld.defaultAs = field.defaultAs ?? null;
+    fld.changeEventName = field.changeEventName ?? 'change';
 
     fld.transformer = parseFieldConverter(
       dft.vars || {},
@@ -114,6 +114,9 @@ export function buildOneGridField(
     grp.layoutGridTracks = field.layoutGridTracks;
     grp.fields = buildGridFields(indexes, field.fields, grp as GridFieldsInput);
     grp.fieldLayoutMode = field.fieldLayoutMode ?? dft.fieldLayoutMode;
+    grp.defaultFieldTitleBy =
+      field.defaultFieldTitleBy ?? dft.defaultFieldTitleBy;
+    grp.defaultFieldTipBy = field.defaultFieldTipBy ?? dft.defaultFieldTipBy;
   }
   // 标签
   else {

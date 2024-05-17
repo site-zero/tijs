@@ -1,10 +1,9 @@
 .ti-grid-fiels-item.part-field {
   @include colorized;
   display: grid;
-  grid-column-gap: 0.3em;
   //-------------------------------------------------------------
   @mixin __data_align($align, $jc) {
-    &[data-align='#{$align}'] {
+    &[data-align="#{$align}"] {
       justify-content: $jc;
     }
   }
@@ -19,16 +18,22 @@
     @include __data_align(justify, space-between);
     @include __data_align(start, flex-start);
     @include __data_align(end, flex-end);
-    &[data-align='start'] {
+    &[data-align="start"] {
       text-align: start;
     }
-    &[data-align='end'] {
+    &[data-align="end"] {
       text-align: end;
     }
     //-----------------------------------------------------------
     &.as-title {
       line-height: var(--ti-measure-box-height);
       flex-wrap: nowrap;
+      > .as-snippet-text .required-mark {
+        @include font-fixed;
+        color: var(--ti-color-error);
+        font-weight: bolder;
+        margin:0 0.2em;
+      }
       > .ti-icon {
         flex: 0 0 auto;
         opacity: 0.6;
@@ -43,7 +48,6 @@
         }
         &:hover {
           opacity: 1;
-          color: var(--ti-color-primary);
           transform: scale(1.5) translateY(-2px);
         }
       }

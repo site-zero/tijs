@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import { ComputedRef } from 'vue';
-import { CssUtils, FuncSet, TiIconObj, Vars, colorToStr } from '../../../core';
+import { CssUtils, FuncSet, IconObj, Vars, colorToStr } from '../../../core';
 import { IconProps } from './icon-props';
 
-export function getIconStyle(props: IconProps, icon: ComputedRef<TiIconObj>) {
+export function getIconStyle(props: IconProps, icon: ComputedRef<IconObj>) {
   // 通过 props 获取的属性
   let style = {} as Vars;
 
