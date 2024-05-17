@@ -258,7 +258,7 @@ export type CssGridLayout = Partial<{
     "footer footer footer footer",
   ]
    */
-  gridTemplateAreas: string[];
+  gridTemplateAreas: string;
   // Gap
   gridColumnGap: string;
   gridRowGap: string;

@@ -1,11 +1,11 @@
 .part-field {
   @include colorized;
+  display: grid;
 
-}
-
-.h-name-icon-prefix,
-.h-name-icon-suffix,
-.h-value-icon-prefix,
-.h-value-icon-suffix{
-    @include flex-align-nowrap;
+  > .field-part {
+    .as-tip {
+      opacity: 0.6;
+      font-size: 0.8em;
+    }
+  }
 }

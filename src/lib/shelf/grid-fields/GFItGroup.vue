@@ -10,6 +10,7 @@
     GridFieldsStrictGroup,
     GridFieldsStrictLabel,
   } from './ti-grid-fields-types';
+  import { useGridItemStyle } from './use-field-style';
 
   defineOptions({
     inheritAttrs: false,
@@ -20,8 +21,9 @@
   const props = defineProps<GridFieldsStrictGroup>();
   const getLayoutCss = computed(() => buildGridFieldsLayoutStyle(props));
   const TopStyle = computed(() => {
-    let css = getLayoutCss.value(_viewport_width.value);
-    return _.assign({}, props.style, css);
+    let css_1 = useGridItemStyle(props);
+    let css_2 = getLayoutCss.value(_viewport_width.value);
+    return _.assign({}, props.style, css_1, css_2);
   });
 </script>
 <template>

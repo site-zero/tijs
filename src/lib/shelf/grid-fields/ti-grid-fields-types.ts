@@ -21,7 +21,17 @@ export type GridFieldsEmitter = {
 
 export type AspectSize = 't' | 's' | 'm' | 'b' | 'h';
 
-export type GridFieldsProps = GridFieldsInput & {
+export type GridFieldsProps = Omit<
+  GridFieldsInput,
+  | 'rowSpan'
+  | 'colSpan'
+  | 'transformer'
+  | 'transArgs'
+  | 'transPartial'
+  | 'serializer'
+  | 'serialArgs'
+  | 'serialPartial'
+> & {
   // 动态 explain 时的变量
   vars?: Vars;
   // 输入的数据
@@ -108,7 +118,8 @@ export type GridFieldsInput = CommonProps &
     style?: Vars;
     // 限制一个字段名称最大宽度
     maxFieldNameWidth?: number;
-
+    rowSpan?: number; // 指定格子的行跨度，比 style.gridRowEnd 优先
+    colSpan?: number; // 指定格子的列跨度，比 style.gridColumnEnd 优先
     //------------------------------------
     // 字段组专有属性
     //------------------------------------
@@ -136,7 +147,7 @@ export type GridFieldsInput = CommonProps &
  * v-name-icon-prefix : 上下布局，提示作为图标，作为名称前缀
  * v-name-icon-suffix : 上下布局，提示作为图标，作为名称后缀
  * v-value-icon-prefix : 上下布局，提示作为图标，作为值前缀
- * v-value-icon-presuffixfix : 上下布局，提示作为图标，作为值后缀
+ * v-value-icon-suffix : 上下布局，提示作为图标，作为值后缀
  * ```
  */
 export type GridFieldLayoutMode =
@@ -245,6 +256,8 @@ export type GridFieldsStrictAbstractItem = FieldComProps &
     tipStyle?: Vars;
     className?: Vars;
     style?: Vars;
+    rowSpan?: number; // 指定格子的行跨度，比 style.gridRowEnd 优先
+    colSpan?: number; // 指定格子的列跨度，比 style.gridColumnEnd 优先
   };
 export type GridFieldsStrictGroup = GridFieldsStrictAbstractItem &
   GridFieldsItemLayoutProps & {

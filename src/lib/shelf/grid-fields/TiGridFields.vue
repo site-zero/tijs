@@ -25,6 +25,7 @@ import { useGridFields } from './use-grid-fields';
     fields: () => [],
     bodyPartGap: 'm',
     bodyPartFontSize: 's',
+    fieldLayoutMode: 'h-wrap',
     data: () => ({}),
   });
   const _viewport_width = ref(0);

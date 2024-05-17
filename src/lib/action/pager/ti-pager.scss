@@ -33,8 +33,7 @@
         }
         &:hover {
           border-radius: 0.3em;
-          color: var(--ti-color-hightlight-f);
-          background-color: var(--ti-color-hightlight);
+          background-color: var(--ti-color-mask-weak);
         }
       }
       // 页码指示器
@@ -61,8 +60,7 @@
         //background-color: var(--ti-color-primary);
         border-radius: 0.3em;
         &:hover {
-          color: var(--ti-color-secondary-r);
-          background-color: var(--ti-color-secondary);
+          background-color: var(--ti-color-mask-weak);
         }
       }
     }

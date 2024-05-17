@@ -1,19 +1,43 @@
 <script lang="ts" setup>
+  import _ from 'lodash';
   import { computed } from 'vue';
   import { useFieldCom, useFieldTransformer } from '../../';
-  import { CssUtils } from '../../../core';
+  import { CssUtils, Vars } from '../../../core';
   import GFText from './GFText.vue';
   import { GridFieldsStrictField } from './ti-grid-fields-types';
-  import _ from 'lodash';
+  import { useFieldStyle, useGridItemStyle } from './use-field-style';
 
   defineOptions({
     inheritAttrs: false,
   });
 
   const props = defineProps<GridFieldsStrictField>();
+
+  const hasTitle = computed(() =>
+    props.title || props.fieldNameBy ? true : false
+  );
+  const hasTip = computed(() => (props.tip || props.fieldTipBy ? true : false));
+
   const TopClass = computed(() => {
-    return CssUtils.mergeClassName(props.className, props.fieldLayoutMode);
+    return CssUtils.mergeClassName(props.className, props.fieldLayoutMode, {
+      'with-title': hasTitle.value,
+      'with-tip': hasTip.value,
+      'no-title': !hasTitle.value,
+      'no-tip': !hasTip.value,
+    });
   });
+
+  const TopStyle = computed(() => {
+    let css_1 = useGridItemStyle(props);
+    let css_2 = useFieldStyle(
+      props.fieldLayoutMode,
+      props.maxFieldNameWidth ?? 100,
+      hasTitle.value,
+      hasTip.value
+    );
+    return _.assign({}, props.style, css_1, css_2) as Vars;
+  });
+
   const NameStyle = computed(() => {
     let css = _.cloneDeep(props.fieldNameStyle) || {};
     if (props.maxFieldNameWidth) {
@@ -47,12 +71,13 @@
   <div
     class="part-field"
     :class="TopClass"
-    :style="props.style">
+    :style="TopStyle">
     <!--===============: 字段名 :===================-->
     <div
-      v-if="props.title"
+      v-if="hasTitle"
       class="field-part as-name"
       :class="TopClass"
+      style="grid-area: title"
       :style="NameStyle">
       <GFText
         class-name="field-name-text"
@@ -70,6 +95,7 @@
     <!--===============: 字段值 :===================-->
     <div
       class="field-part as-value"
+      style="grid-area: value"
       :style="props.fieldValueStyle">
       <component
         :is="FieldCom.comType"
@@ -77,8 +103,9 @@
     </div>
     <!--==============: 提示信息 :==================-->
     <div
-      v-if="props.tip"
+      v-if="hasTip"
       class="field-part as-tip"
+      style="grid-area: tip"
       :style="props.fieldTipStyle">
       <GFText
         class-name="field-part as-tip"
