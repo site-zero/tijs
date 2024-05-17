@@ -309,6 +309,13 @@ export type PopPosition =
   | 'bottom-left'
   | 'bottom-right';
 
+export type TextContentType = 'html' | 'text';
+
+export type ValueChanged<T> = {
+  newVal: T;
+  oldVal: T;
+};
+
 /*---------------------------------------------------
 
                   回调函数签名

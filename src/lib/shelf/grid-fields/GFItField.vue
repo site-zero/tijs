@@ -1,11 +1,14 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed } from 'vue';
-  import { useFieldCom, useFieldTransformer } from '../../';
+  import { TextSnippet, useFieldCom, useFieldTransformer } from '../../';
   import { CssUtils, Vars } from '../../../core';
-  import GFText from './GFText.vue';
   import { GridFieldsStrictField } from './ti-grid-fields-types';
-  import { useFieldStyle, useGridItemStyle } from './use-field-style';
+  import {
+    getFieldTipIcon,
+    useFieldStyle,
+    useGridItemStyle,
+  } from './use-field-style';
 
   defineOptions({
     inheritAttrs: false,
@@ -14,7 +17,7 @@
   const props = defineProps<GridFieldsStrictField>();
 
   const hasTitle = computed(() =>
-    props.title || props.fieldNameBy ? true : false
+    props.title || props.fieldTitleBy ? true : false
   );
   const hasTip = computed(() => (props.tip || props.fieldTipBy ? true : false));
 
@@ -38,15 +41,25 @@
     return _.assign({}, props.style, css_1, css_2) as Vars;
   });
 
-  const NameStyle = computed(() => {
-    let css = _.cloneDeep(props.fieldNameStyle) || {};
-    if (props.maxFieldNameWidth) {
+  const FieldTitleStyle = computed(() => {
+    let css = _.cloneDeep(props.fieldTitleStyle) || {};
+    if (props.maxFieldNameWidth && /^h-/.test(props.fieldLayoutMode)) {
       css.maxWidth = CssUtils.toSize2(props.maxFieldNameWidth);
     }
     if (_.isEmpty(css)) {
       return;
     }
     return css;
+  });
+
+  const TipIcon = computed(() => {
+    let icon = getFieldTipIcon(props);
+    // 标题区提示图标
+    if (icon && icon.position == 'title' && icon.type) {
+      icon[`${icon.type}Icon`] = props.tipIcon;
+    }
+    // 值区提示图标
+    return icon;
   });
 
   const FieldValue = computed(() => {
@@ -69,28 +82,30 @@
 </script>
 <template>
   <div
-    class="part-field"
+    class="ti-grid-fiels-item part-field"
     :class="TopClass"
     :style="TopStyle">
     <!--===============: 字段名 :===================-->
     <div
       v-if="hasTitle"
-      class="field-part as-name"
+      class="field-part as-title"
       :class="TopClass"
       style="grid-area: title"
-      :style="NameStyle">
-      <GFText
-        class-name="field-name-text"
+      :style="FieldTitleStyle">
+      <TextSnippet
+        className="field-title-snippet"
         :text="props.title || ''"
-        :text-type="props.titleType"
-        :com-type="props.fieldNameBy?.comType"
-        :com-conf="props.fieldNameBy?.comConf"
-        :auto-value="props.fieldNameBy?.autoValue"
-        :readonly-com-type="props.fieldNameBy?.readonlyComType"
-        :readonly-com-conf="props.fieldNameBy?.readonlyComConf"
-        :activated-com-type="props.fieldNameBy?.activatedComType"
-        :activated-com-conf="props.fieldNameBy?.activatedComConf"
-        :change-event-name="props.fieldNameBy?.changeEventName" />
+        :textType="props.titleType"
+        :comType="props.fieldTitleBy?.comType"
+        :comConf="props.fieldTitleBy?.comConf"
+        :autoValue="props.fieldTitleBy?.autoValue"
+        :readonlyComType="props.fieldTitleBy?.readonlyComType"
+        :readonlyComConf="props.fieldTitleBy?.readonlyComConf"
+        :activatedComType="props.fieldTitleBy?.activatedComType"
+        :activatedComConf="props.fieldTitleBy?.activatedComConf"
+        :changeEventName="props.fieldTitleBy?.changeEventName"
+        :prefixIcon="TipIcon?.prefixIcon"
+        :suffixIcon="TipIcon?.suffixIcon" />
     </div>
     <!--===============: 字段值 :===================-->
     <div
@@ -103,26 +118,27 @@
     </div>
     <!--==============: 提示信息 :==================-->
     <div
-      v-if="hasTip"
+      v-if="hasTip && !TipIcon"
       class="field-part as-tip"
       style="grid-area: tip"
       :style="props.fieldTipStyle">
-      <GFText
-        class-name="field-part as-tip"
+      <TextSnippet
+        className="field-part as-tip"
         :text="props.tip || ''"
-        :text-type="props.tipType"
-        :com-type="props.fieldTipBy?.comType"
-        :com-conf="props.fieldTipBy?.comConf"
-        :auto-value="props.fieldTipBy?.autoValue"
-        :readonly-com-type="props.fieldTipBy?.readonlyComType"
-        :readonly-com-conf="props.fieldTipBy?.readonlyComConf"
-        :activated-com-type="props.fieldTipBy?.activatedComType"
-        :activated-com-conf="props.fieldTipBy?.activatedComConf"
-        :change-event-name="props.fieldTipBy?.changeEventName" />
+        :textType="props.tipType"
+        :comType="props.fieldTipBy?.comType"
+        :comConf="props.fieldTipBy?.comConf"
+        :autoValue="props.fieldTipBy?.autoValue"
+        :readonlyComType="props.fieldTipBy?.readonlyComType"
+        :readonlyComConf="props.fieldTipBy?.readonlyComConf"
+        :activatedComType="props.fieldTipBy?.activatedComType"
+        :activatedComConf="props.fieldTipBy?.activatedComConf"
+        :changeEventName="props.fieldTipBy?.changeEventName" />
     </div>
   </div>
 </template>
-<style lang="scss" scoped>
+<style lang="scss">
   @use '../../../assets/style/_all.scss' as *;
   @import './style/gf-it-field.scss';
 </style>
+./light-com-text ./light-com-snippet-text

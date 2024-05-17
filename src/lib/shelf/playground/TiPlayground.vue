@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import _ from 'lodash';
-  import { Ref, computed, ref, watch } from 'vue';
+  import { Ref, computed, onMounted, reactive, ref, watch } from 'vue';
   import {
     DateTime,
     TiComExampleModelTarget,
@@ -31,7 +31,7 @@
   /**
    * 指明当前的控件对象要展示的示例配置信息
    */
-  const _example = ref({} as ExampleState);
+  const _example = reactive({} as ExampleState);
 
   /*
    * 指明布局显示模式
@@ -63,26 +63,26 @@
   });
 
   const ExampleChanged = computed(() => {
-    let dftComConf = PlayCom.value.checkProps(_example.value.name);
-    return !_.isEqual(_example.value.comConf, dftComConf);
+    let dftComConf = PlayCom.value.checkProps(_example.name);
+    return !_.isEqual(_example.comConf, dftComConf);
   });
 
   const Grid = computed(() => usePlaygroundLayout(_play_layout_mode.value));
 
   function OnSelectExample(name: string) {
-    selectExample(PlayCom.value, _example.value, name);
+    selectExample(PlayCom.value, _example, name);
   }
 
   function OnConfReset() {
-    let dftComConf = PlayCom.value.checkProps(_example.value.name);
-    _example.value.comConf = dftComConf;
-    saveLocalSetting(PlayCom.value, _example.value);
+    let dftComConf = PlayCom.value.checkProps(_example.name);
+    _example.comConf = dftComConf;
+    saveLocalSetting(PlayCom.value, _example);
   }
 
   function OnConfChange(confData: Vars) {
     console.log('OnConfChange!!!!', confData);
-    _example.value.comConf = confData;
-    saveLocalSetting(PlayCom.value, _example.value);
+    _example.comConf = confData;
+    saveLocalSetting(PlayCom.value, _example);
   }
 
   function OnPlayLayoutChange(mode: string) {
@@ -136,7 +136,7 @@
         }
         // {"field-change": (val: any) => Vars}
         else if (_.isFunction(target)) {
-          let conf = _.cloneDeep(_example.value.comConf);
+          let conf = _.cloneDeep(_example.comConf);
           let metas = target(payload, conf);
           _.assign(updateMeta, metas);
         }
@@ -151,7 +151,7 @@
           _.set(updateMeta, key, val);
         }
       }
-      _.assign(_example.value.comConf, updateMeta);
+      _.assign(_example.comConf, updateMeta);
     }
   }
   function cleanSubEvents() {
@@ -165,7 +165,7 @@
     () => [props.comType, props.example],
     function ([_comType, exampleName]) {
       let com = PlayCom.value;
-      selectExample(com, _example.value, exampleName);
+      selectExample(com, _example, exampleName);
       cleanSubEvents();
     },
     {
@@ -181,6 +181,13 @@
       savePlayLayoutMode(play_layout as PlayLayoutMode);
     }
   );
+
+  onMounted(() => {
+    console.log('haha', PlayCom.value);
+    if (PlayCom.value) {
+      selectExample(PlayCom.value, _example, PlayCom.value.defaultProps);
+    }
+  });
 </script>
 
 <template>

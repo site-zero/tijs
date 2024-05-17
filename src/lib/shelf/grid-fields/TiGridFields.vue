@@ -1,20 +1,20 @@
 <script lang="ts" setup>
   import _ from 'lodash';
-import { computed, onMounted, onUnmounted, ref } from 'vue';
-import { CssUtils } from '../../../core';
-import GFItField from './GFItField.vue';
-import GFItGroup from './GFItGroup.vue';
-import GFItLabel from './GFItLabel.vue';
-import GFText from './GFText.vue';
-import { buildGridFieldsLayoutStyle } from './build-grid-field-layout';
-import {
-  GridFieldsEmitter,
-  GridFieldsProps,
-  GridFieldsStrictField,
-  GridFieldsStrictGroup,
-  GridFieldsStrictLabel,
-} from './ti-grid-fields-types';
-import { useGridFields } from './use-grid-fields';
+  import { computed, onMounted, onUnmounted, ref } from 'vue';
+  import { TextSnippet } from '../../';
+  import { CssUtils } from '../../../core';
+  import GFItField from './GFItField.vue';
+  import GFItGroup from './GFItGroup.vue';
+  import GFItLabel from './GFItLabel.vue';
+  import { buildGridFieldsLayoutStyle } from './build-grid-field-layout';
+  import {
+    GridFieldsEmitter,
+    GridFieldsProps,
+    GridFieldsStrictField,
+    GridFieldsStrictGroup,
+    GridFieldsStrictLabel,
+  } from './ti-grid-fields-types';
+  import { useGridFields } from './use-grid-fields';
   //-------------------------------------------------
   defineOptions({
     inheritAttrs: false,
@@ -50,7 +50,7 @@ import { useGridFields } from './use-grid-fields';
   //-------------------------------------------------
   const obResize = new ResizeObserver((_entries) => {
     _viewport_width.value = $main.value?.clientWidth ?? 0;
-    console.log('obResize', _viewport_width.value);
+    //console.log('obResize', _viewport_width.value);
   });
   //-------------------------------------------------
   onMounted(() => {
@@ -69,20 +69,20 @@ import { useGridFields } from './use-grid-fields';
     :style="props.style">
     <!--===============: 表单头 :===================-->
     <slot name="head">
-      <GFText
+      <TextSnippet
         v-if="props.title"
-        class-name="part-title"
+        className="part-title"
         :style="props.titleStyle"
         :text="props.title || ''"
-        :text-type="props.titleType"
-        :com-type="props.comType"
-        :com-conf="props.comConf"
-        :auto-value="props.autoValue"
-        :readonly-com-type="props.readonlyComType"
-        :readonly-com-conf="props.readonlyComConf"
-        :activated-com-type="props.activatedComType"
-        :activated-com-conf="props.activatedComConf"
-        :change-event-name="props.changeEventName" />
+        :textType="props.titleType"
+        :comType="props.comType"
+        :comConf="props.comConf"
+        :autoValue="props.autoValue"
+        :readonlyComType="props.readonlyComType"
+        :readonlyComConf="props.readonlyComConf"
+        :activatedComType="props.activatedComType"
+        :activatedComConf="props.activatedComConf"
+        :changeEventName="props.changeEventName" />
     </slot>
     <!--===============: 表单体 :===================-->
     <div
@@ -113,20 +113,20 @@ import { useGridFields } from './use-grid-fields';
     </div>
     <!--===============: 表单尾 :===================-->
     <slot name="foot">
-      <GFText
+      <TextSnippet
         v-if="props.tip"
-        class-name="part-foot"
+        className="part-foot"
         :style="props.tipStyle"
         :text="props.tip || ''"
-        :text-type="props.tipType"
-        :com-type="props.fieldTipBy?.comType"
-        :com-conf="props.fieldTipBy?.comConf"
-        :auto-value="props.fieldTipBy?.autoValue"
-        :readonly-com-type="props.fieldTipBy?.readonlyComType"
-        :readonly-com-conf="props.fieldTipBy?.readonlyComConf"
-        :activated-com-type="props.fieldTipBy?.activatedComType"
-        :activated-com-conf="props.fieldTipBy?.activatedComConf"
-        :change-event-name="props.fieldTipBy?.changeEventName" />
+        :textType="props.tipType"
+        :comType="props.fieldTipBy?.comType"
+        :comConf="props.fieldTipBy?.comConf"
+        :autoValue="props.fieldTipBy?.autoValue"
+        :readonlyComType="props.fieldTipBy?.readonlyComType"
+        :readonlyComConf="props.fieldTipBy?.readonlyComConf"
+        :activatedComType="props.fieldTipBy?.activatedComType"
+        :activatedComConf="props.fieldTipBy?.activatedComConf"
+        :changeEventName="props.fieldTipBy?.changeEventName" />
     </slot>
   </div>
 </template>

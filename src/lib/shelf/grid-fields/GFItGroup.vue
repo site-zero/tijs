@@ -1,9 +1,9 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed, ref } from 'vue';
+  import { TextSnippet } from '../../';
   import GFItField from './GFItField.vue';
   import GFItLabel from './GFItLabel.vue';
-  import GFText from './GFText.vue';
   import { buildGridFieldsLayoutStyle } from './build-grid-field-layout';
   import {
     GridFieldsStrictField,
@@ -32,19 +32,19 @@
     :class="props.className"
     :style="TopStyle">
     <!--===============: 组头 :===================-->
-    <GFText
+    <TextSnippet
       v-if="props.title"
-      class-name="as-group-title"
+      className="as-group-title"
       :text="props.title || ''"
-      :text-type="props.titleType"
-      :com-type="props.comType"
-      :com-conf="props.comConf"
-      :auto-value="props.autoValue"
-      :readonly-com-type="props.readonlyComType"
-      :readonly-com-conf="props.readonlyComConf"
-      :activated-com-type="props.activatedComType"
-      :activated-com-conf="props.activatedComConf"
-      :change-event-name="props.changeEventName" />
+      :textType="props.titleType"
+      :comType="props.comType"
+      :comConf="props.comConf"
+      :autoValue="props.autoValue"
+      :readonlyComType="props.readonlyComType"
+      :readonlyComConf="props.readonlyComConf"
+      :activatedComType="props.activatedComType"
+      :activatedComConf="props.activatedComConf"
+      :changeEventName="props.changeEventName" />
     <!--===============: 组体 :===================-->
     <div class="as-group-body">
       <div

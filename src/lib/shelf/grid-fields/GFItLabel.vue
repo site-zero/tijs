@@ -5,6 +5,7 @@
   import GFText from './GFText.vue';
   import { GridFieldsStrictLabel } from './ti-grid-fields-types';
   import { useGridItemStyle } from './use-field-style';
+  import { TextSnippet } from '../../';
 
   defineOptions({
     inheritAttrs: false,
@@ -33,18 +34,18 @@
   <div
     :class="TopClass"
     :style="TopStyle">
-    <GFText
+    <TextSnippet
       v-if="props.title"
-      class-name="as-label-title"
+      className="as-label-title"
       :text="props.title || ''"
-      :text-type="props.titleType"
-      :com-type="props.comType"
-      :com-conf="props.comConf"
-      :auto-value="props.autoValue"
-      :readonly-com-type="props.readonlyComType"
-      :readonly-com-conf="props.readonlyComConf"
-      :activated-com-type="props.activatedComType"
-      :activated-com-conf="props.activatedComConf"
-      :change-event-name="props.changeEventName" />
+      :textType="props.titleType"
+      :comType="props.comType"
+      :comConf="props.comConf"
+      :autoValue="props.autoValue"
+      :readonlyComType="props.readonlyComType"
+      :readonlyComConf="props.readonlyComConf"
+      :activatedComType="props.activatedComType"
+      :activatedComConf="props.activatedComConf"
+      :changeEventName="props.changeEventName" />
   </div>
 </template>

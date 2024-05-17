@@ -1,5 +1,6 @@
 div.ti-label {
   @include colorized;
+  min-height: var(--ti-measure-box-height);
 
   &.nil-value {
     opacity: 0.62;

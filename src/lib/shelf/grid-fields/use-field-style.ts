@@ -1,8 +1,9 @@
 import _ from 'lodash';
-import { CssGridLayout } from 'src/core';
+import { CssGridLayout, Vars } from '../../../core';
 import {
   GridFieldLayoutMode,
   GridFieldsStrictAbstractItem,
+  GridFieldsStrictField,
 } from './ti-grid-fields-types';
 
 export function useFieldStyle(
@@ -18,7 +19,7 @@ export function useFieldStyle(
 
   let ss = layoutMode.split('-');
   let lk = [ss[0]];
-  if (!/^(name|value)$/.test(ss[1])) {
+  if (!/^(title|value)$/.test(ss[1])) {
     lk.push(ss[1]);
   }
   if (hasTitle) {
@@ -103,10 +104,26 @@ export function useFieldStyle(
         gridTemplateAreas: `"value"`,
       },
       // 上下布局，提示作为图标
-      'v-title-tip': {},
-      'v-title': {},
-      'v-tip': {},
-      'v': {},
+      'v-title-tip': {
+        gridTemplateColumns: '1fr',
+        gridTemplateRows: 'auto auto fr',
+        gridTemplateAreas: `"title" "value" "tip"`,
+      },
+      'v-title': {
+        gridTemplateColumns: '1fr',
+        gridTemplateRows: 'auto auto',
+        gridTemplateAreas: `"title" "value"`,
+      },
+      'v-tip': {
+        gridTemplateColumns: '1fr',
+        gridTemplateRows: 'auto 1fr',
+        gridTemplateAreas: `"value" "tip`,
+      },
+      'v': {
+        gridTemplateColumns: '1fr',
+        gridTemplateRows: '1fr',
+        gridTemplateAreas: `"value"`,
+      },
     }[lyKey]
   );
 
@@ -122,4 +139,18 @@ export function useGridItemStyle(item: GridFieldsStrictAbstractItem) {
     css.gridColumnEnd = `span ${item.colSpan}`;
   }
   return css;
+}
+
+export function getFieldTipIcon(
+  field: GridFieldsStrictField
+): Vars | undefined {
+  let m = /^[hv]-(title|value)-icon-(suffix|prefix)$/.exec(
+    field.fieldLayoutMode
+  );
+  if (m) {
+    return {
+      position: m[1],
+      type: m[2],
+    };
+  }
 }

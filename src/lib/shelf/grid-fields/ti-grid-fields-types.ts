@@ -2,21 +2,18 @@ import { FieldName, FieldValueType } from 'src/lib/_top';
 import {
   CommonProps,
   CssGridLayout,
+  ValueChanged,
   IconInput,
   InvokePartial,
+  TextContentType,
   Vars,
   VisibilityProps,
 } from '../../../core';
 import { FieldComProps, ReadonlyProps } from '../../../lib/_features';
 
-export type GridPartChange<T> = {
-  newVal: T;
-  oldVal: T;
-};
-
 export type GridFieldsEmitter = {
-  (evetName: 'name-change', payload: GridPartChange<string>): void;
-  (evetName: 'value-change', payload: GridPartChange<any>): void;
+  (evetName: 'name-change', payload: ValueChanged<string>): void;
+  (evetName: 'value-change', payload: ValueChanged<any>): void;
 };
 
 export type AspectSize = 't' | 's' | 'm' | 'b' | 'h';
@@ -77,13 +74,13 @@ export type GridFieldsInput = CommonProps &
     tipIcon?: IconInput;
 
     // 仅仅当 `race=field` 时有效
-    fieldNameBy?: FieldComProps;
+    fieldTitleBy?: FieldComProps;
     // 仅仅当 `race=field` 时有效
     fieldTipBy?: FieldComProps;
     // 普通字段的布局模式
     // 仅仅当 `race=field` 时有效
     fieldLayoutMode?: GridFieldLayoutMode;
-    fieldNameStyle?: Vars;
+    fieldTitleStyle?: Vars;
     fieldValueStyle?: Vars;
     fieldTipStyle?: Vars;
     //------------------------------------
@@ -140,12 +137,12 @@ export type GridFieldsInput = CommonProps &
  * h-wrap   : 左右布局，提示在底部，与值等宽
  * h-bottom : 左右布局，提示在底部单独一整行
  * v-wrap   : 上下布局，提示在底部
- * h-name-icon-prefix : 左右布局，提示作为图标，作为名称前缀
- * h-name-icon-suffix : 左右布局，提示作为图标，作为名称后缀
+ * h-title-icon-prefix : 左右布局，提示作为图标，作为名称前缀
+ * h-title-icon-suffix : 左右布局，提示作为图标，作为名称后缀
  * h-value-icon-prefix : 左右布局，提示作为图标，作为值前缀
  * h-value-icon-suffix : 左右布局，提示作为图标，作为值后缀
- * v-name-icon-prefix : 上下布局，提示作为图标，作为名称前缀
- * v-name-icon-suffix : 上下布局，提示作为图标，作为名称后缀
+ * v-title-icon-prefix : 上下布局，提示作为图标，作为名称前缀
+ * v-title-icon-suffix : 上下布局，提示作为图标，作为名称后缀
  * v-value-icon-prefix : 上下布局，提示作为图标，作为值前缀
  * v-value-icon-suffix : 上下布局，提示作为图标，作为值后缀
  * ```
@@ -154,12 +151,12 @@ export type GridFieldLayoutMode =
   | 'h-wrap'
   | 'h-bottom'
   | 'v-wrap'
-  | 'h-name-icon-prefix'
-  | 'h-name-icon-suffix'
+  | 'h-title-icon-prefix'
+  | 'h-title-icon-suffix'
   | 'h-value-icon-prefix'
   | 'h-value-icon-suffix'
-  | 'v-name-icon-prefix'
-  | 'v-name-icon-suffix'
+  | 'v-title-icon-prefix'
+  | 'v-title-icon-suffix'
   | 'v-value-icon-prefix'
   | 'v-value-icon-suffix';
 
@@ -209,8 +206,6 @@ export type GridFieldsItemLayoutProps = {
   // > 如果已经指定了 `layout.gridTemplateColumns` 则会无视
   layoutGridTracks?: string[] | ((trackIndex: number) => string);
 };
-
-export type TextContentType = 'html' | 'text';
 
 /**
  * 抽象字段
@@ -273,10 +268,10 @@ export type GridFieldsStrictField = GridFieldsStrictAbstractItem &
     required: (data: Vars) => any;
     checkEquals: boolean;
     maxFieldNameWidth?: number;
-    fieldNameBy?: FieldComProps;
+    fieldTitleBy?: FieldComProps;
     fieldTipBy?: FieldComProps;
     fieldLayoutMode: GridFieldLayoutMode;
-    fieldNameStyle?: Vars;
+    fieldTitleStyle?: Vars;
     fieldValueStyle?: Vars;
     fieldTipStyle?: Vars;
     tipIcon: IconInput;

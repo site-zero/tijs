@@ -66,7 +66,7 @@ export function buildOneGridField(
 
     fld.name = field.name;
     fld.type = field.type ?? 'String';
-    fld.fieldNameBy = field.fieldNameBy;
+    fld.fieldTitleBy = field.fieldTitleBy;
     fld.fieldTipBy = field.fieldTipBy;
 
     _.defaults(fld, {
@@ -97,8 +97,8 @@ export function buildOneGridField(
     fld.maxFieldNameWidth = field.maxFieldNameWidth ?? dft.maxFieldNameWidth;
     fld.tipIcon = field.tipIcon || 'zmdi-help-outline';
     fld.fieldLayoutMode =
-      field.fieldLayoutMode ?? dft.fieldLayoutMode ?? 'h-name-icon-suffix';
-    fld.fieldNameStyle = field.fieldNameStyle;
+      field.fieldLayoutMode ?? dft.fieldLayoutMode ?? 'h-title-icon-suffix';
+    fld.fieldTitleStyle = field.fieldTitleStyle;
     fld.fieldValueStyle = field.fieldValueStyle;
     fld.fieldTipStyle = field.fieldTipStyle;
   }

@@ -31,6 +31,12 @@ export default {
         tip: 'This is ID',
         fieldLayoutMode: 'h-wrap',
         className: 'is-warn',
+        fieldTitleBy: {
+          comType: 'TiHtmlSnippet',
+          comConf: {
+            content: '<b>Hello</b> <i class="zmdi zmdi-info"></i>',
+          },
+        },
         comType: 'TiLabel',
       },
       {
@@ -50,13 +56,17 @@ export default {
         title: 'Title',
         name: 'title',
         tip: 'This is Title',
-        fieldLayoutMode: 'h-name-icon-prefix',
+        tipIcon: 'zmdi-face',
+        fieldLayoutMode: 'h-title-icon-prefix',
       },
       {
         title: 'Brief',
         name: 'brief',
         tip: 'This is Brief',
-        fieldLayoutMode: 'h-name-icon-suffix',
+        fieldLayoutMode: 'h-title-icon-suffix',
+        fieldTitleBy: {
+          comType: 'TiInput',
+        },
       },
       {
         title: 'Client',
@@ -73,14 +83,14 @@ export default {
       {
         title: 'Email',
         name: 'email',
-        fieldLayoutMode: 'v-name-icon-prefix',
+        fieldLayoutMode: 'v-title-icon-prefix',
         type: 'Email',
       },
       {
         title: 'Phone',
         name: 'phone',
         tip: 'This is Phone',
-        fieldLayoutMode: 'v-name-icon-suffix',
+        fieldLayoutMode: 'v-title-icon-suffix',
         type: 'PhoneNumber',
       },
       {
@@ -110,13 +120,14 @@ export default {
         title: 'Company',
         name: 'company',
         tip: 'This is Company',
-        fieldLayoutMode: 'h-wrap',
+        fieldLayoutMode: 'v-wrap',
       },
       {
         title: 'Department',
         name: 'department',
         tip: 'This is Department',
-        fieldLayoutMode: 'h-wrap',
+        fieldLayoutMode: 'h-bottom',
+        maxFieldNameWidth: 100,
       },
     ],
   } as GridFieldsProps,
