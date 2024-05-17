@@ -5,6 +5,7 @@ export default {
   name: 'simple',
   text: 'i18n:simple',
   comConf: {
+    className: 'fit-parent',
     data: {
       id: 'Um5Cub2yX',
       name: 'Mahanta Lloyd',

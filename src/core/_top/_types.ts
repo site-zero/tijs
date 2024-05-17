@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { App, DefineComponent, InjectionKey } from 'vue';
 import { I18n, TiBus } from '../ti';
 import { Rect } from './ti-rect';
+export * from './_types_css';
 export { Rect } from './ti-rect';
 
 /*---------------------------------------------------`
@@ -227,87 +228,6 @@ export type ExplainI18n = {
   regexNot: string;
   keyDisplayBy?: KeyDisplay;
 };
-
-/*-------------------------------------------------------
-
-                     Css 相关
--------------------------------------------------------*/
-export type CssItemAlignment = 'start' | 'end' | 'center' | 'stretch';
-export type CssContentAlignment =
-  | 'start'
-  | 'end'
-  | 'center'
-  | 'stretch'
-  | 'space-around'
-  | 'space-between'
-  | 'space-evenly';
-export type CssGridAutoFlow =
-  | 'row'
-  | 'column'
-  | 'dense'
-  | 'row dense'
-  | 'column dense';
-export type CssGridLayout = Partial<{
-  // Track
-  gridTemplateColumns: string;
-  gridTemplateRows: string;
-  /*
-  [
-    "header header header header",
-    "main   main   .      sidebar",
-    "footer footer footer footer",
-  ]
-   */
-  gridTemplateAreas: string;
-  // Gap
-  gridColumnGap: string;
-  gridRowGap: string;
-  // <grid-row-gap> <grid-column-gap>
-  gap: string;
-  // Alignment
-  justifyItems: CssItemAlignment;
-  alignItems: CssItemAlignment;
-  justifyContent: CssContentAlignment;
-  alignContent: string;
-  // Extends
-  gridAutoColumns: string;
-  gridAutoRows: string;
-  gridAutoFlow: CssGridAutoFlow;
-}>;
-
-export type CssGridItem = Partial<{
-  // <grid-column-start> <grid-column-end>
-  gridColumn: string;
-  // <number> | <name> | span <number> | auto
-  gridColumnStart: string;
-  // <number> | <name> | span <number> | auto
-  gridColumnEnd: string;
-  // <grid-row-start> <grid-row-end>
-  gridRow: string;
-  // <number> | <name> | span <number> | auto
-  gridRowStart: string;
-  // <number> | <name> | span <number> | auto
-  gridRowEnd: string;
-  // <name> | <row-start> / <column-start> / <row-end> / <column-end>
-  gridArea: string;
-  justifySelf: CssItemAlignment;
-  alignSelf: CssItemAlignment;
-}>;
-
-/**
- * 弹出层的为位置类型，可以适用于 LayoutPaenel，模式对话框，全局弹出框
- */
-export type PopPosition =
-  | 'left'
-  | 'right'
-  | 'top'
-  | 'bottom'
-  | 'center'
-  | 'free'
-  | 'left-top'
-  | 'right-top'
-  | 'bottom-left'
-  | 'bottom-right';
 
 export type TextContentType = 'html' | 'text';
 
@@ -1005,6 +925,21 @@ export type PopItemProps = {
   bottom?: string;
   overflow?: string;
 };
+
+/**
+ * 弹出层的为位置类型，可以适用于 LayoutPaenel，模式对话框，全局弹出框
+ */
+export type PopPosition =
+  | 'left'
+  | 'right'
+  | 'top'
+  | 'bottom'
+  | 'center'
+  | 'free'
+  | 'left-top'
+  | 'right-top'
+  | 'bottom-left'
+  | 'bottom-right';
 
 /*---------------------------------------------------
 

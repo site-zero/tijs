@@ -8,6 +8,7 @@ import {
   TextContentType,
   Vars,
   VisibilityProps,
+  CssTextAlign,
 } from '../../../core';
 import { FieldComProps, ReadonlyProps } from '../../../lib/_features';
 
@@ -65,9 +66,11 @@ export type GridFieldsInput = CommonProps &
     title?: string;
     titleType?: TextContentType; // 默认 text
     titleStyle?: Vars;
+    titleAlign?: CssTextAlign;
     tip?: string;
     tipType?: TextContentType; // 默认 text
     tipStyle?: Vars;
+    tipAlign?: CssTextAlign;
 
     // 仅仅当 tipMode = 'xxx-prefix|suffix-icon' 时生效
     // 默认为 'zmdi-help-outline'
@@ -246,9 +249,11 @@ export type GridFieldsStrictAbstractItem = FieldComProps &
     title: null | string;
     titleType: TextContentType; // 默认 text
     titleStyle?: Vars;
+    titleAlign?: CssTextAlign;
     tip: null | string;
     tipType: TextContentType; // 默认 text
     tipStyle?: Vars;
+    tipAlign?: CssTextAlign;
     className?: Vars;
     style?: Vars;
     rowSpan?: number; // 指定格子的行跨度，比 style.gridRowEnd 优先

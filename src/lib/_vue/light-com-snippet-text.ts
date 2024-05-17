@@ -1,10 +1,12 @@
+import _, { kebabCase } from 'lodash';
 import { SetupContext, VNode, h } from 'vue';
 import { TiIcon } from '../';
 import {
-  ValueChanged,
+  CssUtils,
   I18n,
   IconInput,
   TextContentType,
+  ValueChanged,
   Vars,
 } from '../../core';
 import { FieldComProps, useFieldCom } from '../_features';
@@ -14,8 +16,11 @@ export type TextSnippetEmitter = {
 };
 
 export type TextSnippetProps = FieldComProps & {
-  className: string;
+  className?: any;
+  style?: Vars;
   tagName?: string;
+  attrs?: Vars;
+  props?: Vars;
   text: string;
   textType?: TextContentType;
   autoI18n?: boolean;
@@ -28,16 +33,39 @@ export function TextSnippet(
   _context: SetupContext<TextSnippetEmitter>
 ) {
   let tag = props.tagName ?? 'div';
-  let tagProps = { class: props.className } as Vars;
+  let tagProps = {
+    class: CssUtils.mergeClassName(props.className),
+    style: props.style,
+  } as Vars;
+  // 添加自定义属性
+  _.forEach(props.attrs, (v, k) => {
+    if (_.isNil(v)) return;
+    k = kebabCase(k);
+    if (!/^\^/.test(k)) {
+      k = '^' + k;
+    }
+    tagProps[k] = v;
+  });
+  // 添加自定义选项
+  _.forEach(props.props, (v, k) => {
+    if (_.isNil(v)) return;
+    k = kebabCase(k);
+    if (!/^\./.test(k)) {
+      k = '.' + k;
+    }
+    tagProps[k] = v;
+  });
+
   let text = props.autoI18n ? I18n.text(props.text) : props.text;
   //
   // 自定义控件
   //
   if (props.comType) {
-    console.log('TextSnippet', props);
+    //console.log('TextSnippet', props);
     let com = useFieldCom(props);
     let DynamicCom = com.autoGetCom({}, { value: text }, text);
     let vnode = h(DynamicCom.comType, DynamicCom.comConf);
+    tagProps.class['customized-com'] = true;
     return h(tag, tagProps, [vnode]);
   }
 
