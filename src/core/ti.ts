@@ -33,3 +33,4 @@ export function getAllEnv() {
 }
 
 export * from './ti-exports';
+export * as Lib from '../lib';

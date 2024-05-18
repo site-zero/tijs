@@ -33,6 +33,9 @@
   //-------------------------------------------------
   const TopClass = computed(() => {
     let names = [`aspect-${props.groupAspect ?? 'legend'}`];
+    if (props.bodyPartGap) {
+      names.push(`body-gap-${props.bodyPartGap}`);
+    }
     if (props.bodyPartFontSize) {
       names.push(`fsz-${props.bodyPartFontSize}`);
     }
@@ -108,9 +111,7 @@
       class="as-group-body"
       :style="BodyStyle"
       ref="$main">
-      <div
-        class="grid-group-cell"
-        v-for="fld in props.fields">
+      <template v-for="fld in props.fields">
         <!------[:Field:]---------->
         <GFItField
           v-if="'field' == fld.race"
@@ -137,7 +138,7 @@
           Invalid Field: -------------------------------------------
           {{ fld }}
         </blockquote>
-      </div>
+      </template>
       <!--.grid-group-cell-->
     </div>
   </div>

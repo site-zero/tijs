@@ -21,6 +21,7 @@
       top: -1em;
       padding: 0 0.5em;
       background-color: var(--ti-color-card);
+      font-weight: bold;
     }
   }
   //------------------------------------------
@@ -49,13 +50,44 @@
   //       |                             |
   &.aspect-bar {
     > .as-group-title {
-        font-size: 1.2em;
-        font-weight: bold;
-        padding: 0.5em 0.8em;
-        background-color: var(--ti-color-mask-weak);
-        border-left: 4px solid var(--ti-color-primary);
-        margin-bottom: 0.8em;
-      }
+      font-size: 1.2em;
+      font-weight: bold;
+      padding: 0.5em 0.8em;
+      background-color: var(--ti-color-mask-weak);
+      border-left: 4px solid var(--ti-color-primary);
+      margin-bottom: 0.8em;
+    }
   }
+  //-------------------------------------------------------------
+  @mixin __aspect_fontsz($sz) {
+    &.fsz-#{$sz} {
+      font-size: var(--ti-fontsz-#{$sz});
+    }
+  }
+  @include __aspect_fontsz("t");
+  @include __aspect_fontsz("s");
+  @include __aspect_fontsz("m");
+  @include __aspect_fontsz("b");
+  @include __aspect_fontsz("h");
+
+  //-------------------------------------------------------------
+  @mixin __aspect_body_gap($sz) {
+    &.body-gap-#{$sz} > .as-group-body {
+      gap: var(--ti-gap-#{$sz});
+      padding: var(--ti-gap-#{$sz});
+      > .ti-grid-fiels-item.part-field {
+        column-gap: var(--ti-gap-#{$sz});
+      }
+      > .ti-grid-fiels-item.part-group {
+        gap: var(--ti-gap-#{$sz});
+        padding: var(--ti-gap-#{$sz});
+      }
+    }
+  }
+  @include __aspect_body_gap("t");
+  @include __aspect_body_gap("s");
+  @include __aspect_body_gap("m");
+  @include __aspect_body_gap("b");
+  @include __aspect_body_gap("h");
   //------------------------------------------
 }

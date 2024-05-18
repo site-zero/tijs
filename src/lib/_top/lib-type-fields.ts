@@ -6,7 +6,6 @@ import {
   Convertor,
   DateInput,
   DateTime,
-  FuncA2,
   FuncA3,
   NameValue,
   Str,

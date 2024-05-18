@@ -1,4 +1,3 @@
-import { FieldName, FieldValueType } from 'src/lib/_top';
 import {
   CommonProps,
   CssGridLayout,
@@ -11,11 +10,35 @@ import {
   Vars,
   VisibilityProps,
 } from '../../../core';
-import { FieldComProps, ReadonlyProps, VisibilityFeature } from '../../../lib/_features';
+import {
+  FieldComProps,
+  ReadonlyProps,
+  VisibilityFeature,
+} from '../../../lib/_features';
+import { FieldName, FieldValueType, getFieldUniqKey } from '../../_top';
+
+export function makeFieldUniqKey(
+  indexes: number[],
+  field: GridFieldsInput
+): string {
+  if (field.uniqKey) {
+    return field.uniqKey;
+  }
+  if (field.name) {
+    return getFieldUniqKey(field.name);
+  }
+  return `_F${indexes.join('_')}`;
+}
+
+export type GridFieldsDomReadyInfo = {
+  el: HTMLElement;
+  main: HTMLElement;
+};
 
 export type GridFieldsEmitter = {
   (evetName: 'name-change', payload: ValueChanged<string>): void;
   (evetName: 'value-change', payload: FieldValueChanged): void;
+  (evetName: 'dom-ready', payload: GridFieldsDomReadyInfo): void;
 };
 
 export type AspectSize = 't' | 's' | 'm' | 'b' | 'h';
@@ -37,12 +60,6 @@ export type GridFieldsProps = Omit<
   vars?: Vars;
   // 输入的数据
   data?: Vars;
-
-  defaultComType?: string;
-  defaultComConf?: Vars;
-
-  // 默认为 'm'
-  bodyPartGap?: AspectSize;
 };
 /*
 栅格字段组，是一个支持无穷嵌套的字段组合，依靠 CSS Grid 布局。
@@ -66,6 +83,7 @@ export type GridFieldsInput = CommonProps &
     //------------------------------------
     title?: string;
     titleType?: TextContentType; // 默认 text
+    titleIcon?: IconInput;
     titleStyle?: Vars;
     titleAlign?: CssTextAlign;
     tip?: string;
@@ -133,9 +151,14 @@ export type GridFieldsInput = CommonProps &
     bodyPartStyle?: Vars;
     bodyPartDense?: boolean;
     bodyPartFontSize?: AspectSize;
+    // 默认为 'm'
+    bodyPartGap?: AspectSize;
 
     defaultFieldTitleBy?: FieldComProps;
     defaultFieldTipBy?: FieldComProps;
+
+    defaultComType?: string;
+    defaultComConf?: Vars;
   };
 
 /*
@@ -288,6 +311,7 @@ export type GridFieldsStrictAbstractItem = FieldComProps &
     index: number;
     race: GridFieldsItemRace;
     title: null | string;
+    titleIcon?: IconInput;
     titleType: TextContentType; // 默认 text
     titleStyle?: Vars;
     titleAlign?: CssTextAlign;
@@ -317,9 +341,13 @@ export type GridFieldsStrictGroup = GridFieldsStrictAbstractItem &
     bodyPartStyle?: Vars;
     bodyPartDense?: boolean;
     bodyPartFontSize?: AspectSize;
+    bodyPartGap?: AspectSize;
 
     defaultFieldTitleBy?: FieldComProps;
     defaultFieldTipBy?: FieldComProps;
+
+    defaultComType?: string;
+    defaultComConf?: Vars;
   };
 export type GridFieldsStrictField = GridFieldsStrictAbstractItem &
   AbstractField & {

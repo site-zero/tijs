@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { CssUtils, InvokePartial, Match, Util, Vars } from '../../../core';
-import { FieldName, getFieldUniqKey } from '../../../lib/_top';
+import { FieldName } from '../../../lib/_top';
+import { useVisibility } from '../../_features';
 import {
   GridFieldsInput,
   GridFieldsProps,
@@ -8,18 +9,8 @@ import {
   GridFieldsStrictField,
   GridFieldsStrictGroup,
   GridFieldsStrictItem,
+  makeFieldUniqKey,
 } from './ti-grid-fields-types';
-import { useVisibility } from '../../_features';
-
-function makeFieldUniqKey(indexes: number[], field: GridFieldsInput): string {
-  if (field.uniqKey) {
-    return field.uniqKey;
-  }
-  if (field.name) {
-    return getFieldUniqKey(field.name);
-  }
-  return `_F${indexes.join('_')}`;
-}
 
 export function buildOneGridField(
   indexes: number[],
@@ -48,6 +39,7 @@ export function buildOneGridField(
     // 标题 & 提示
     title: field.title ?? null,
     titleType: field.titleType ?? 'text',
+    titleIcon: field.titleIcon,
     titleStyle: field.titleStyle,
     titleAlign: field.titleAlign,
     tip: field.tip ?? null,
@@ -128,6 +120,9 @@ export function buildOneGridField(
     grp.bodyPartDense = field.bodyPartDense;
     grp.bodyPartFontSize = field.bodyPartFontSize;
     grp.bodyPartStyle = field.bodyPartStyle;
+    grp.bodyPartGap = field.bodyPartGap ?? dft.bodyPartGap;
+    grp.defaultComType = field.defaultComType ?? dft.defaultComType;
+    grp.defaultComConf = field.defaultComConf ?? dft.defaultComConf;
 
     // 递归构建嵌套子项目
     grp.fields = buildGridFields(indexes, field.fields, grp as GridFieldsInput);

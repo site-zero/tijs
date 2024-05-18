@@ -17,7 +17,7 @@ export const COM_TYPES = {
   Tags: 'TiTags',
   Thumb: 'TiThumb',
   Unknown: 'TiUnknown',
-  
+
   //------------------- INPUT
   Check: 'TiCheck',
   Droplist: 'TiDroplist',
@@ -38,6 +38,7 @@ export const COM_TYPES = {
   Cell: 'TiCell',
   Field: 'TiField',
   Form: 'TiForm',
+  FormTab: 'TiFormTab',
   GridFields: 'TiGridFields',
   LayoutGrid: 'TiLayoutGrid',
   LayoutTabs: 'TiLayoutTabs',

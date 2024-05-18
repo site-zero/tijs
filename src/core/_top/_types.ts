@@ -569,6 +569,7 @@ export class TiCom implements TiComInfo {
     if (!name) {
       name = this.defaultProps;
     }
+    //console.log('getProps',name)
     let it = _.find(this.exampleProps, (it) => it.name == name);
     if (_.isFunction(it?.comConf)) {
       return it?.comConf() as Vars;

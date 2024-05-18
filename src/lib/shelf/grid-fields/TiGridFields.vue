@@ -11,14 +11,15 @@
     parseGridLayout,
   } from './build-grid-field-layout';
   import {
+    GridFieldsDomReadyInfo,
     GridFieldsEmitter,
     GridFieldsProps,
     GridFieldsStrictField,
     GridFieldsStrictGroup,
     GridFieldsStrictLabel,
   } from './ti-grid-fields-types';
-  import { useGridFields } from './use-grid-fields';
   import { getBodyPartStyle } from './use-field-style';
+  import { useGridFields } from './use-grid-fields';
   //-------------------------------------------------
   defineOptions({
     inheritAttrs: false,
@@ -30,7 +31,7 @@
     bodyPartGap: 'm',
     bodyPartFontSize: 's',
     fieldLayoutMode: 'h-wrap',
-    maxFieldNameWidth: '36%',
+    maxFieldNameWidth: '6em',
     data: () => ({}),
   });
   const _viewport_width = ref(0);
@@ -56,6 +57,7 @@
     return _.assign(css_1, css_2);
   });
   //-------------------------------------------------
+  const $el = ref<HTMLElement>();
   const $main = ref<HTMLElement>();
   //-------------------------------------------------
   const obResize = new ResizeObserver((_entries) => {
@@ -69,6 +71,8 @@
   onMounted(() => {
     if ($main.value) {
       obResize.observe($main.value);
+      let info: GridFieldsDomReadyInfo = { el: $el.value!, main: $main.value! };
+      emit('dom-ready', info);
     }
   });
   onUnmounted(() => {
@@ -79,7 +83,8 @@
   <div
     class="ti-grid-fields"
     :class="TopClass"
-    :style="props.style">
+    :style="props.style"
+    ref="$el">
     <!--===============: 表单头 :===================-->
     <slot name="head">
       <TextSnippet

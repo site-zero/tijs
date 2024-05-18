@@ -33,6 +33,7 @@ export default {
         rowSpan: 4,
         layoutHint: '[[3,600],[2,400],1]',
         groupAspect: 'bar',
+        maxFieldNameWidth: 60,
         fields: [
           { title: 'Name', name: 'name' },
           { title: 'Age', name: 'age' },
@@ -53,6 +54,7 @@ export default {
         title: 'Contact Info',
         rowSpan: 4,
         layoutHint: '[[3,600],[2,400],1]',
+        maxFieldNameWidth: 60,
         fields: [
           { title: 'Email Address', name: 'email' },
           { title: 'Phone Number', name: 'phone' },

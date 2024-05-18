@@ -7,7 +7,7 @@ export default {
   comConf: {
     data: {
       id: 'Um5Cub2yX',
-      name: 'Mahanta Lloyd',
+      name: 'Mahanta Lloyd', 
       title: 'pamperedly schmitz enne',
       brief: 'Earthy numerably abulia globus rosinweed. ',
       client: '192.168.12.211',

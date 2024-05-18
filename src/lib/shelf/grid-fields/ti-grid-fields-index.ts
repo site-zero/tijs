@@ -3,6 +3,7 @@ import { TiComInfo, TiComRace } from '../../../core';
 import { COM_TYPES } from '../../lib-com-types';
 import TiGridFields from './TiGridFields.vue';
 import example from './example';
+//console.log(JSON.stringify(example.simple.comConf))
 
 const en_us = {
   'com-name': 'GridFields',
@@ -17,7 +18,6 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.GridFields;
 
 const TiGridFieldsInfo: TiComInfo = {
-  tags: ['ing'],
   icon: 'zmdi-view-list',
   race: TiComRace.SHELF,
   name: COM_TYPE,
