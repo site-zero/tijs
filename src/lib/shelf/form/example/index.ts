@@ -1,6 +1,5 @@
-import { ComPropExample } from '../../../../core';
-import exNested from './ex-nested';
-import exSimple from './ex-simple';
+import simple from './ex-form-simple';
 
-export const simple = exSimple as ComPropExample;
-export const nested = exNested as ComPropExample;
+export default {
+  simple,
+};

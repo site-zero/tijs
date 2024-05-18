@@ -9,6 +9,7 @@ import {
   GridFieldsStrictGroup,
   GridFieldsStrictItem,
 } from './ti-grid-fields-types';
+import { useVisibility } from '../../_features';
 
 function makeFieldUniqKey(indexes: number[], field: GridFieldsInput): string {
   if (field.uniqKey) {
@@ -25,19 +26,25 @@ export function buildOneGridField(
   field: GridFieldsInput,
   dft: GridFieldsProps
 ): GridFieldsStrictItem {
+  let uniqKey = makeFieldUniqKey(indexes, field);
   // 准备返回值
   let re: GridFieldsStrictAbstractItem = {
+    // 唯一键
+    uniqKey,
     // 下标
     index: _.nth(indexes, -1) ?? 0,
     race: 'field',
     // 数据
     data: dft.data!,
-    // 唯一键
-    uniqKey: makeFieldUniqKey(indexes, field),
+
     // 动态类选择器
     className: field.className
       ? CssUtils.mergeClassName(field.className)
       : undefined,
+
+    // 可见性
+    ...useVisibility(field, uniqKey),
+
     // 标题 & 提示
     title: field.title ?? null,
     titleType: field.titleType ?? 'text',
@@ -45,6 +52,7 @@ export function buildOneGridField(
     titleAlign: field.titleAlign,
     tip: field.tip ?? null,
     tipType: field.tipType ?? 'text',
+    tipBy: field.tipBy,
     tipStyle: field.tipStyle,
     tipAlign: field.tipAlign,
     colSpan: field.colSpan,
@@ -60,7 +68,7 @@ export function buildOneGridField(
     activatedComConf: field.activatedComConf,
   };
 
-  // 自动得到控件族类
+  // ---------------: 普通字段 :---------------
   if (field.name) {
     re.race = 'field';
     let fld = re as GridFieldsStrictField;
@@ -68,7 +76,7 @@ export function buildOneGridField(
     fld.name = field.name;
     fld.type = field.type ?? 'String';
     fld.fieldTitleBy = field.fieldTitleBy ?? dft.defaultFieldTitleBy;
-    fld.fieldTipBy = field.fieldTipBy ?? dft.defaultFieldTipBy;
+    fld.tipBy = field.tipBy ?? dft.defaultFieldTipBy;
 
     _.defaults(fld, {
       comType: dft.defaultComType,
@@ -104,7 +112,7 @@ export function buildOneGridField(
     fld.fieldValueStyle = field.fieldValueStyle;
     fld.fieldTipStyle = field.fieldTipStyle;
   }
-  // 分组
+  // ---------------: 分组 :---------------
   else if (field.fields) {
     re.race = 'group';
     let grp = re as GridFieldsStrictGroup;
@@ -112,13 +120,19 @@ export function buildOneGridField(
     grp.layout = field.layout;
     grp.layoutHint = field.layoutHint;
     grp.layoutGridTracks = field.layoutGridTracks;
-    grp.fields = buildGridFields(indexes, field.fields, grp as GridFieldsInput);
     grp.fieldLayoutMode = field.fieldLayoutMode ?? dft.fieldLayoutMode;
     grp.defaultFieldTitleBy =
       field.defaultFieldTitleBy ?? dft.defaultFieldTitleBy;
     grp.defaultFieldTipBy = field.defaultFieldTipBy ?? dft.defaultFieldTipBy;
+    grp.groupAspect = field.groupAspect ?? dft.groupAspect;
+    grp.bodyPartDense = field.bodyPartDense;
+    grp.bodyPartFontSize = field.bodyPartFontSize;
+    grp.bodyPartStyle = field.bodyPartStyle;
+
+    // 递归构建嵌套子项目
+    grp.fields = buildGridFields(indexes, field.fields, grp as GridFieldsInput);
   }
-  // 标签
+  // ---------------: 标签 :---------------
   else {
     re.race = 'label';
   }

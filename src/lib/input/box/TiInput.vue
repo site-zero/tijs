@@ -44,7 +44,7 @@
   const hasValue = computed(() => _.isNil(state.boxVal));
   const Placeholder = computed(() => Box.value.getPlaceholder());
   const TopClass = computed(() =>
-    CssUtils.mergeClassName(props.className, {
+    CssUtils.mergeClassName(props.className, Box.value.getClass(), {
       'has-value': hasValue.value,
       'nil-value': !hasValue.value,
       'is-focused': state.boxFocused,

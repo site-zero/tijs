@@ -8,21 +8,26 @@ import {
 } from '../../../core';
 import {
   GridFieldLayoutMode,
+  GridFieldsProps,
   GridFieldsStrictAbstractItem,
   GridFieldsStrictField,
+  GridFieldsStrictGroup,
 } from './ti-grid-fields-types';
+
+type FieldItemStyleOptions = {
+  hasTitle: boolean;
+  hasTip: boolean;
+};
 
 export function getFieldTopStyle(
   props: GridFieldsStrictField,
-  hasTitle: boolean,
-  hasTip: boolean
+  options: FieldItemStyleOptions
 ) {
   let css_1 = getGridItemStyle(props);
   let css_2 = getFieldLayoutStyle(
     props.fieldLayoutMode,
     props.maxFieldNameWidth ?? 100,
-    hasTitle,
-    hasTip
+    options
   );
   return _.assign({}, props.style, css_1, css_2) as Vars;
 }
@@ -30,8 +35,7 @@ export function getFieldTopStyle(
 function getFieldLayoutStyle(
   layoutMode: GridFieldLayoutMode,
   nameWidth: number | string,
-  hasTitle: boolean,
-  hasTip: boolean
+  options: FieldItemStyleOptions
 ) {
   let NW = _.isNumber(nameWidth) ? `${nameWidth}px` : nameWidth;
   let css = {
@@ -43,10 +47,10 @@ function getFieldLayoutStyle(
   if (!/^(title|value)$/.test(ss[1])) {
     lk.push(ss[1]);
   }
-  if (hasTitle) {
+  if (options.hasTitle) {
     lk.push('title');
   }
-  if (hasTip) {
+  if (options.hasTip) {
     lk.push('tip');
   }
   let lyKey = lk.join('-');
@@ -157,7 +161,8 @@ export function getGridItemStyle(item: GridFieldsStrictAbstractItem) {
     css.gridRowEnd = `span ${item.rowSpan}`;
   }
   if (item.colSpan) {
-    css.gridColumnEnd = `span ${item.colSpan}`;
+    let colSpan = _.clamp(item.colSpan, 1, item.maxTrackCount ?? 1);
+    css.gridColumnEnd = `span ${colSpan}`;
   }
   return css;
 }
@@ -251,4 +256,14 @@ export function getFieldTitle(
   }
 
   return { title, type: titleType };
+}
+
+export function getBodyPartStyle(
+  props: GridFieldsStrictGroup | GridFieldsProps
+): Vars {
+  let css = _.cloneDeep(props.bodyPartStyle) || {};
+  if (props.bodyPartDense) {
+    css['grid-auto-flow'] = 'dense';
+  }
+  return css;
 }

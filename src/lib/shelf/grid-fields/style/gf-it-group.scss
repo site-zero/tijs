@@ -1,0 +1,61 @@
+.ti-grid-fiels-item.part-group {
+  //------------------------------------------
+  > .as-group-body {
+    display: grid;
+    grid-auto-rows: auto;
+  }
+  //------------------------------------------
+  //   1. <legend> 默认
+  //
+  //       +--[ Group Title ]------------+
+  //       |                             |
+  //       |                             |
+  //
+  &.aspect-legend {
+    border: 1px solid var(--ti-color-border-weak);
+    border-radius: var(--ti-measure-r-s);
+    position: relative;
+    margin: 1em 0 0.5em 0;
+    > .as-group-title {
+      position: absolute;
+      top: -1em;
+      padding: 0 0.5em;
+      background-color: var(--ti-color-card);
+    }
+  }
+  //------------------------------------------
+  //   2. <bottom-line>
+  //
+  //        Group Title
+  //       ===============================
+  //       |                             |
+  //       |                             |
+  &.aspect-bottom-line {
+    > .as-group-title {
+      font-size: 1.2em;
+      font-weight: bold;
+      padding: 0.1em;
+      border-bottom: 4px solid var(--ti-color-border-shallow);
+      margin-bottom: 0.8em;
+    }
+  }
+  //------------------------------------------
+  //   3. <bar>
+  //
+  //       ++----------------------------+
+  //       || Group Title ]              |
+  //       ++----------------------------+
+  //       |                             |
+  //       |                             |
+  &.aspect-bar {
+    > .as-group-title {
+        font-size: 1.2em;
+        font-weight: bold;
+        padding: 0.5em 0.8em;
+        background-color: var(--ti-color-mask-weak);
+        border-left: 4px solid var(--ti-color-primary);
+        margin-bottom: 0.8em;
+      }
+  }
+  //------------------------------------------
+}

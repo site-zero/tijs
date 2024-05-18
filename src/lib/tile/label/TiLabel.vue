@@ -48,7 +48,7 @@
   });
 
   const TopClass = computed(() =>
-    CssUtils.mergeClassName(props.className, () => ({
+    CssUtils.mergeClassName(props.className, Box.value.getClass(), () => ({
       'has-value': hasValue.value,
       'nil-value': !hasValue.value,
     }))

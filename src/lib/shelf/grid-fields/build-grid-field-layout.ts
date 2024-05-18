@@ -46,7 +46,9 @@ export function autoCountGrid(width: number, hint: GridLayoutHintItem): number {
  * @param layout 用户配置信息
  * @returns  标准形式的布局选择线索
  */
-export function parseGridLayout(layout: GridLayoutHint): GridLayoutTrackGetter {
+export function parseGridLayout(
+  layout: GridLayoutHint = DFT_GRID_LAYOUT_HINT
+): GridLayoutTrackGetter {
   let input: GridLayoutHint = layout;
   //  如果是字符串，那么就假设它是对的
   if (_.isString(input)) {
@@ -82,15 +84,7 @@ export function buildGridFieldsLayoutStyle(
   // 这段代码主要用于生成 CSS 格式的网格布局。
   // 首先，它从 props 对象中解构出 layout，layoutHint 和 layoutGridTracks 三个属性。
   // 如果这些属性没有被提供，它们会被赋予默认值。
-  let {
-    layout,
-    layoutHint = DFT_GRID_LAYOUT_HINT,
-    layoutGridTracks = (_i: number) => '1fr',
-  } = props;
-
-  // 然后，它使用 parseGridLayout 函数处理 layoutHint，得到一个函数 getTrackCount，
-  // 这个函数接受一个数字参数，返回网格的轨道数。
-  let getTrackCount = parseGridLayout(layoutHint);
+  let { layout, layoutGridTracks = (_i: number) => '1fr' } = props;
 
   // 接下来，它检查 layoutGridTracks 是否为一个函数。
   // 如果是，就将其赋值给 getTrackSize。
@@ -105,7 +99,7 @@ export function buildGridFieldsLayoutStyle(
   }
   // pick from string arry
   else {
-    let tracks = layoutGridTracks as string[]
+    let tracks = layoutGridTracks as string[];
     getTrackSize = (i: number) => {
       return tracks[i] ?? '1fr';
     };
@@ -114,11 +108,10 @@ export function buildGridFieldsLayoutStyle(
   // 这个函数首先创建一个空的 CSS 对象，然后使用 getTrackCount 函数计算网格的列数 N。
   // 然后，它创建一个空的列数组 cols，并使用 getTrackSize 函数生成每一列的大小。
   // 最后，它将 layout 和 gridTemplateColumns 属性合并到 CSS 对象中，并返回。
-  return (w: number) => {
+  return (trackCount = 1) => {
     let css: Vars = {};
-    let N = getTrackCount(w) ?? 1;
     let cols = [] as string[];
-    for (let i = 0; i < N; i++) {
+    for (let i = 0; i < trackCount; i++) {
       let col = getTrackSize(i);
       cols.push(col);
     }

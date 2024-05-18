@@ -6,7 +6,10 @@
   import GFItField from './GFItField.vue';
   import GFItGroup from './GFItGroup.vue';
   import GFItLabel from './GFItLabel.vue';
-  import { buildGridFieldsLayoutStyle } from './build-grid-field-layout';
+  import {
+    buildGridFieldsLayoutStyle,
+    parseGridLayout,
+  } from './build-grid-field-layout';
   import {
     GridFieldsEmitter,
     GridFieldsProps,
@@ -15,6 +18,7 @@
     GridFieldsStrictLabel,
   } from './ti-grid-fields-types';
   import { useGridFields } from './use-grid-fields';
+  import { getBodyPartStyle } from './use-field-style';
   //-------------------------------------------------
   defineOptions({
     inheritAttrs: false,
@@ -32,6 +36,10 @@
   const _viewport_width = ref(0);
   //-------------------------------------------------
   const Grid = computed(() => useGridFields(props));
+  const TrackCount = computed(() => {
+    const getTrackCount = parseGridLayout(props.layoutHint);
+    return getTrackCount(_viewport_width.value);
+  });
   const getLayoutCss = computed(() => buildGridFieldsLayoutStyle(props));
   //-------------------------------------------------
   const TopClass = computed(() =>
@@ -43,15 +51,19 @@
   );
   //-------------------------------------------------
   const BodyStyle = computed(() => {
-    let css = getLayoutCss.value(_viewport_width.value);
-    return _.assign({}, props.bodyPartStyle, css);
+    let css_1 = getBodyPartStyle(props);
+    let css_2 = getLayoutCss.value(TrackCount.value);
+    return _.assign(css_1, css_2);
   });
   //-------------------------------------------------
   const $main = ref<HTMLElement>();
   //-------------------------------------------------
   const obResize = new ResizeObserver((_entries) => {
-    _viewport_width.value = $main.value?.clientWidth ?? 0;
-    //console.log('obResize', _viewport_width.value);
+    let w = $main.value?.getBoundingClientRect().width ?? 0;
+    if (w > 0 && w != _viewport_width.value) {
+      _viewport_width.value = $main.value?.clientWidth ?? 0;
+      //console.log('obResize', _viewport_width.value, $main.value);
+    }
   });
   //-------------------------------------------------
   onMounted(() => {
@@ -84,37 +96,46 @@
         :activatedComType="props.activatedComType"
         :activatedComConf="props.activatedComConf" />
     </slot>
+    <!--=============: 上部多用途插槽 :==============-->
+    <slot name="head_ext"></slot>
     <!--===============: 表单体 :===================-->
     <div
       ref="$main"
       class="part-body"
       :style="BodyStyle">
       <template v-for="fld in Grid.strictItems">
-        <!------[:Field:]---------->
-        <GFItField
-          v-if="'field' == fld.race"
-          v-bind="(fld as GridFieldsStrictField)"
-          @name-change="emit('name-change', $event)"
-          @value-change="emit('value-change', $event)" />
-        <!------[:Group:]---------->
-        <GFItGroup
-          v-else-if="'group' == fld.race"
-          v-bind="(fld as GridFieldsStrictGroup)"
-          @name-change="emit('name-change', $event)"
-          @value-change="emit('value-change', $event)" />
-        <!------[:Label:]---------->
-        <GFItLabel
-          v-else-if="'label' == fld.race"
-          v-bind="(fld as GridFieldsStrictLabel)" />
-        <!------[!Invalid!]---------->
-        <blockquote
-          v-else
-          style="white-space: pre; color: var(--ti-color-error)">
-          Invalid Field: -------------------------------------------
-          {{ fld }}
-        </blockquote>
+        <template v-if="!fld.isHidden(props.data)">
+          <!------[:Field:]---------->
+          <GFItField
+            v-if="'field' == fld.race"
+            v-bind="(fld as GridFieldsStrictField)"
+            :max-track-count="TrackCount"
+            @name-change="emit('name-change', $event)"
+            @value-change="emit('value-change', $event)" />
+          <!------[:Group:]---------->
+          <GFItGroup
+            v-else-if="'group' == fld.race"
+            v-bind="(fld as GridFieldsStrictGroup)"
+            :max-track-count="TrackCount"
+            @name-change="emit('name-change', $event)"
+            @value-change="emit('value-change', $event)" />
+          <!------[:Label:]---------->
+          <GFItLabel
+            v-else-if="'label' == fld.race"
+            v-bind="(fld as GridFieldsStrictLabel)"
+            :max-track-count="TrackCount" />
+          <!------[!Invalid!]---------->
+          <blockquote
+            v-else
+            style="white-space: pre; color: var(--ti-color-error)">
+            Invalid Field: -------------------------------------------
+            {{ fld }}
+          </blockquote>
+        </template>
       </template>
     </div>
+    <!--==========下==: 上部多用途插槽 :==============-->
+    <slot name="foot_ext"></slot>
     <!--===============: 表单尾 :===================-->
     <slot name="foot">
       <TextSnippet
@@ -123,14 +144,14 @@
         :style="props.tipStyle"
         :text="props.tip || ''"
         :textType="props.tipType"
-        :comType="props.fieldTipBy?.comType"
-        :comConf="props.fieldTipBy?.comConf"
-        :autoValue="props.fieldTipBy?.autoValue"
-        :readonlyComType="props.fieldTipBy?.readonlyComType"
-        :readonlyComConf="props.fieldTipBy?.readonlyComConf"
-        :activatedComType="props.fieldTipBy?.activatedComType"
-        :activatedComConf="props.fieldTipBy?.activatedComConf"
-        :changeEventName="props.fieldTipBy?.changeEventName" />
+        :comType="props.tipBy?.comType"
+        :comConf="props.tipBy?.comConf"
+        :autoValue="props.tipBy?.autoValue"
+        :readonlyComType="props.tipBy?.readonlyComType"
+        :readonlyComConf="props.tipBy?.readonlyComConf"
+        :activatedComType="props.tipBy?.activatedComType"
+        :activatedComConf="props.tipBy?.activatedComConf"
+        :changeEventName="props.tipBy?.changeEventName" />
     </slot>
   </div>
 </template>

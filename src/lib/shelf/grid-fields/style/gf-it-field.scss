@@ -1,9 +1,24 @@
 .ti-grid-fiels-item.part-field {
   @include colorized;
   display: grid;
+  row-gap: var(--ti-gap-t);
+  //-------------------------------------------------------------
+  &.is-disabled {
+    position: relative;
+    user-select: none;
+    filter: grayscale(100%) blur(0px);
+    opacity: 0.7;
+    &::after {
+      display: block;
+      content: '';
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+    }
+  }
   //-------------------------------------------------------------
   @mixin __data_align($align, $jc) {
-    &[data-align="#{$align}"] {
+    &[data-align='#{$align}'] {
       justify-content: $jc;
     }
   }
@@ -18,10 +33,10 @@
     @include __data_align(justify, space-between);
     @include __data_align(start, flex-start);
     @include __data_align(end, flex-end);
-    &[data-align="start"] {
+    &[data-align='start'] {
       text-align: start;
     }
-    &[data-align="end"] {
+    &[data-align='end'] {
       text-align: end;
     }
     //-----------------------------------------------------------
@@ -32,7 +47,7 @@
         @include font-fixed;
         color: var(--ti-color-error);
         font-weight: bolder;
-        margin:0 0.2em;
+        margin: 0 0.2em;
       }
       > .ti-icon {
         flex: 0 0 auto;
@@ -62,12 +77,16 @@
       font-size: 0.8em;
     }
     //-----------------------------------------------------------
+    &.as-value {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+    }
+    //-----------------------------------------------------------
     &.customized-com {
-      &.as-title {
-        > * {
-          flex: 1 1 auto;
-        }
-      }
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
     }
     //-----------------------------------------------------------
   }

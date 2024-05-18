@@ -2,7 +2,6 @@
   import _ from 'lodash';
   import { computed } from 'vue';
   import { TextSnippet } from '../../';
-  import { CssUtils } from '../../../core';
   import { GridFieldsStrictLabel } from './ti-grid-fields-types';
   import { getGridItemStyle } from './use-field-style';
 
@@ -10,20 +9,7 @@
     inheritAttrs: false,
   });
 
-  const props = withDefaults(
-    defineProps<
-      GridFieldsStrictLabel & {
-        labelType: 'label' | 'group';
-      }
-    >(),
-    {
-      labelType: 'label',
-    }
-  );
-
-  const TopClass = computed(() => {
-    return CssUtils.mergeClassName(props.className, `part-${props.labelType}`);
-  });
+  const props = defineProps<GridFieldsStrictLabel>();
   const TopStyle = computed(() => {
     let css_1 = getGridItemStyle(props);
     return _.assign({}, props.style, css_1);
@@ -31,11 +17,14 @@
 </script>
 <template>
   <div
-    :class="TopClass"
+    class="ti-grid-fiels-item part-label"
+    :class="props.className"
     :style="TopStyle">
+    <!--===: 标题 :===-->
     <TextSnippet
-      v-if="props.title"
+      v-if="props.title || props.comType"
       className="as-label-title"
+      :style="TopStyle"
       :text="props.title || ''"
       :textType="props.titleType"
       :comType="props.comType"
@@ -45,6 +34,22 @@
       :readonlyComConf="props.readonlyComConf"
       :activatedComType="props.activatedComType"
       :activatedComConf="props.activatedComConf"
-      :changeEventName="props.changeEventName" />
+      :changeEventName="props.changeEventName"
+      :vars="props.data" />
+    <!--===: 摘要 :===-->
+    <TextSnippet
+      v-if="props.tip || props.tipBy"
+      className="as-group-title"
+      :text="props.tip || ''"
+      :textType="props.tipType"
+      :comType="props.tipBy?.comType"
+      :comConf="props.tipBy?.comConf"
+      :autoValue="props.tipBy?.autoValue"
+      :readonlyComType="props.tipBy?.readonlyComType"
+      :readonlyComConf="props.tipBy?.readonlyComConf"
+      :activatedComType="props.tipBy?.activatedComType"
+      :activatedComConf="props.tipBy?.activatedComConf"
+      :changeEventName="props.tipBy?.changeEventName"
+      :vars="props.data" />
   </div>
 </template>

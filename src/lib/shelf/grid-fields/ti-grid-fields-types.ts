@@ -11,7 +11,7 @@ import {
   Vars,
   VisibilityProps,
 } from '../../../core';
-import { FieldComProps, ReadonlyProps } from '../../../lib/_features';
+import { FieldComProps, ReadonlyProps, VisibilityFeature } from '../../../lib/_features';
 
 export type GridFieldsEmitter = {
   (evetName: 'name-change', payload: ValueChanged<string>): void;
@@ -31,6 +31,7 @@ export type GridFieldsProps = Omit<
   | 'serialArgs'
   | 'serialPartial'
   | 'changeEventName'
+  | 'maxTrackCount'
 > & {
   // 动态 explain 时的变量
   vars?: Vars;
@@ -40,8 +41,6 @@ export type GridFieldsProps = Omit<
   defaultComType?: string;
   defaultComConf?: Vars;
 
-  bodyPartStyle?: Vars;
-  bodyPartFontSize?: AspectSize;
   // 默认为 'm'
   bodyPartGap?: AspectSize;
 };
@@ -71,6 +70,7 @@ export type GridFieldsInput = CommonProps &
     titleAlign?: CssTextAlign;
     tip?: string;
     tipType?: TextContentType; // 默认 text
+    tipBy?: FieldComProps;
     tipStyle?: Vars;
     tipAlign?: CssTextAlign;
 
@@ -81,8 +81,6 @@ export type GridFieldsInput = CommonProps &
     // 仅仅当 `race=field` 时有效
     fieldTitleBy?: FieldComProps;
 
-    // 仅仅当 `race=field` 时有效
-    fieldTipBy?: FieldComProps;
     // 普通字段的布局模式
     // 仅仅当 `race=field` 时有效
     fieldLayoutMode?: GridFieldLayoutMode;
@@ -121,6 +119,7 @@ export type GridFieldsInput = CommonProps &
     style?: Vars;
     // 限制一个字段名称最大宽度
     maxFieldNameWidth?: number | string;
+
     rowSpan?: number; // 指定格子的行跨度，比 style.gridRowEnd 优先
     colSpan?: number; // 指定格子的列跨度，比 style.gridColumnEnd 优先
     //------------------------------------
@@ -128,9 +127,44 @@ export type GridFieldsInput = CommonProps &
     //------------------------------------
     fields?: GridFieldsInput[];
 
+    // 这个属性从顶层一直可以继承下去
+    groupAspect?: GroupAspect;
+
+    bodyPartStyle?: Vars;
+    bodyPartDense?: boolean;
+    bodyPartFontSize?: AspectSize;
+
     defaultFieldTitleBy?: FieldComProps;
     defaultFieldTipBy?: FieldComProps;
   };
+
+/*
+  下面定义了几种组的显示模式：
+
+  1. <legend> 默认
+        
+      +--[ Group Title ]------------+
+      |                             |
+      |                             |
+  
+  2. <bottom-line>
+        
+       Group Title
+      ===============================
+      |                             |
+      |                             |
+  
+  3. <bar>
+    
+      ++----------------------------+
+      || Group Title ]              |
+      ++----------------------------+
+      |                             |
+      |                             |
+  
+  
+  */
+export type GroupAspect = 'legend' | 'bottom-line' | 'bar';
 
 /**
  * 一个普通字段的 DOM 有下面的结构:
@@ -247,7 +281,8 @@ export type AbstractField = {
 };
 
 export type GridFieldsStrictAbstractItem = FieldComProps &
-  ReadonlyProps & {
+  ReadonlyProps &
+  VisibilityFeature & {
     data: Vars;
     uniqKey: string;
     index: number;
@@ -258,10 +293,14 @@ export type GridFieldsStrictAbstractItem = FieldComProps &
     titleAlign?: CssTextAlign;
     tip: null | string;
     tipType: TextContentType; // 默认 text
+    tipBy?: FieldComProps;
     tipStyle?: Vars;
     tipAlign?: CssTextAlign;
     className?: Vars;
     style?: Vars;
+
+    // 父块传递下来的，本项目最大可以跨越的轨道数
+    maxTrackCount?: number;
     rowSpan?: number; // 指定格子的行跨度，比 style.gridRowEnd 优先
     colSpan?: number; // 指定格子的列跨度，比 style.gridColumnEnd 优先
   };
@@ -269,9 +308,15 @@ export type GridFieldsStrictGroup = GridFieldsStrictAbstractItem &
   GridFieldsItemLayoutProps & {
     race: 'group';
     fields: GridFieldsStrictItem[];
+    groupAspect?: GroupAspect;
+
     // 用来传递给下属字段
     maxFieldNameWidth?: number | string;
     fieldLayoutMode?: GridFieldLayoutMode;
+
+    bodyPartStyle?: Vars;
+    bodyPartDense?: boolean;
+    bodyPartFontSize?: AspectSize;
 
     defaultFieldTitleBy?: FieldComProps;
     defaultFieldTipBy?: FieldComProps;
@@ -288,7 +333,6 @@ export type GridFieldsStrictField = GridFieldsStrictAbstractItem &
     fieldTitleStyle?: Vars;
     fieldValueStyle?: Vars;
 
-    fieldTipBy?: FieldComProps;
     fieldTipStyle?: Vars;
     tipIcon: IconInput;
   };

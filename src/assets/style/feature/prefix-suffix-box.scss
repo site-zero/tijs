@@ -1,10 +1,23 @@
 .prefix-suffix-box {
-  @include flex-align-nowrap($ai: stretch);
+  display: grid;
+  grid-template-rows: auto;
   //background-color: var(--ti-color-box);
-
+  //----------------------------------------------
+  &.has-prefix.has-suffix {
+    grid-template-columns: auto 1fr auto;
+  }
+  &.no-prefix.has-suffix {
+    grid-template-columns: 1fr auto;
+  }
+  &.has-prefix.no-suffix {
+    grid-template-columns: auto 1fr;
+  }
+  &.no-prefix.no-suffix {
+    grid-template-columns: 1fr;
+  }
+  //----------------------------------------------
   > .part-value {
     padding: 0 var(--ti-measure-box-pad);
-    flex: 1 1 auto;
     font-size: var(--ti-fontsz-box);
     display: grid;
     align-items: center;

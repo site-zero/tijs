@@ -23,7 +23,7 @@ export default {
     bodyPartFontSize: 'm',
     layoutHint: '[[3,600],[2,400],1]',
     maxFieldNameWidth: 60,
-
+    bodyPartDense: true,
     fields: [
       {
         title: 'Id',
@@ -51,6 +51,7 @@ export default {
         name: 'name',
         tip: 'This is Name',
         required: true,
+        colSpan: 20,
         fieldLayoutMode: 'v-wrap',
       },
       {
@@ -59,15 +60,15 @@ export default {
         tip: 'This is Title',
         tipIcon: 'zmdi-face',
         fieldLayoutMode: 'h-title-icon-prefix',
+        disabled: {
+          age: '[40,80]'
+        }
       },
       {
         title: 'Brief',
         name: 'brief',
         tip: 'This is Brief',
         fieldLayoutMode: 'h-title-icon-suffix',
-        fieldTitleBy: {
-          comType: 'TiInput',
-        },
       },
       {
         title: 'Client',

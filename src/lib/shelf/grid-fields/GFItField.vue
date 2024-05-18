@@ -24,7 +24,7 @@
   const hasTitle = computed(() =>
     props.title || props.fieldTitleBy ? true : false
   );
-  const hasTip = computed(() => (props.tip || props.fieldTipBy ? true : false));
+  const hasTip = computed(() => (props.tip || props.tipBy ? true : false));
 
   const TopClass = computed(() => {
     return CssUtils.mergeClassName(props.className, props.fieldLayoutMode, {
@@ -32,11 +32,15 @@
       'with-tip': hasTip.value,
       'no-title': !hasTitle.value,
       'no-tip': !hasTip.value,
+      'is-disabled': props.isDisabled(props.data),
     });
   });
 
   const TopStyle = computed(() =>
-    getFieldTopStyle(props, hasTitle.value, hasTip.value)
+    getFieldTopStyle(props, {
+      hasTitle: hasTitle.value,
+      hasTip: hasTip.value,
+    })
   );
   const FieldTitleStyle = computed(() => getFieldTitleStyle(props));
   const TitleAlign = computed(() => getFieldTitleAlign(props));
@@ -141,14 +145,14 @@
       :attrs="{ dataAlign: props.tipAlign }"
       :text="props.tip || ''"
       :textType="props.tipType"
-      :comType="props.fieldTipBy?.comType"
-      :comConf="props.fieldTipBy?.comConf"
-      :autoValue="props.fieldTipBy?.autoValue"
-      :readonlyComType="props.fieldTipBy?.readonlyComType"
-      :readonlyComConf="props.fieldTipBy?.readonlyComConf"
-      :activatedComType="props.fieldTipBy?.activatedComType"
-      :activatedComConf="props.fieldTipBy?.activatedComConf"
-      :changeEventName="props.fieldTipBy?.changeEventName"
+      :comType="props.tipBy?.comType"
+      :comConf="props.tipBy?.comConf"
+      :autoValue="props.tipBy?.autoValue"
+      :readonlyComType="props.tipBy?.readonlyComType"
+      :readonlyComConf="props.tipBy?.readonlyComConf"
+      :activatedComType="props.tipBy?.activatedComType"
+      :activatedComConf="props.tipBy?.activatedComConf"
+      :changeEventName="props.tipBy?.changeEventName"
       :vars="FieldTitleVars" />
   </div>
 </template>
@@ -156,4 +160,3 @@
   @use '../../../assets/style/_all.scss' as *;
   @import './style/gf-it-field.scss';
 </style>
-./light-com-text ./light-com-snippet-text

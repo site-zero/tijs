@@ -181,7 +181,6 @@
   );
 
   onMounted(() => {
-    console.log('haha', PlayCom.value);
     if (PlayCom.value) {
       selectExample(PlayCom.value, _example, props.example);
     }
