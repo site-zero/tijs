@@ -1,13 +1,13 @@
 import _ from 'lodash';
-import { FieldChange, FieldValueChange, I18n, Vars } from '../../core';
-import { getLogger } from '../../core/log/ti-log';
-import { Alert } from '../_modal';
+import { FieldChange, FieldValueChange, I18n, Vars } from '../../../core';
+import { getLogger } from '../../../core/log/ti-log';
+import { Alert } from '../../_modal';
 import {
   AbstractField,
   ValidateResult,
   makeFieldUniqKey,
   setFieldValue,
-} from '../_top';
+} from '../../_top';
 
 const log = getLogger('ti.lib.use-record');
 
@@ -46,11 +46,9 @@ export type FieldChangeProps<T extends AbstractField> = {
  * 这是一个异步函数，返回如果是一个非空对象，则表示还需要修改的字段（不包括触发的字段）
  * 如果返回 `undefine` 则表示无需修改额外字段
  */
-export type LinkFieldLoader<T extends AbstractField> = (
-  value: any,
-  field: T,
-  data: Vars
-) => Promise<FieldValueChange[] | undefined>;
+export type LinkFieldLoader<T extends AbstractField> = {
+  (value: any, field: T, data: Vars): Promise<FieldValueChange[] | undefined>;
+};
 
 /**
  * 当记录修改后，怎么向外通知改动
@@ -77,6 +75,7 @@ export type HandleValueChangeOptions = {
 export function useFieldChange<T extends AbstractField>(
   props: FieldChangeProps<T>
 ) {
+  console.log('useFieldChange', props.fields);
   // 建立一个根据字段 uniqKey 对于字段的映射
   let fieldMapping = __build_fields_map(props.fields);
 
@@ -229,13 +228,24 @@ export function useFieldChange<T extends AbstractField>(
     change: FieldValueChange,
     options: HandleValueChangeOptions
   ) {
-    console.log(change);
     let { emit, data, checkEquals } = options;
+    let msg_vars: Vars = { key: change.uniqKey, val: change.value };
+    // 获取字段定义
+    let field = getField(change.uniqKey);
+    if (!field) {
+      let msg = I18n.textf('i18n:e-field-undefined', msg_vars);
+      await Alert(msg, { type: 'error' });
+      return;
+    }
+
+    // 转换字段值
+    if (field.serializer) {
+      change.value = field.serializer(change.value, data, field.name);
+    }
+
     // 检查一下改动
     let validation = await verifyFieldChange(change, data);
     if (validation.type != 'OK') {
-      let msg_vars: Vars = { key: change.uniqKey, val: change.value };
-      let field = getField(change.uniqKey);
       if (!field || validation.type == 'FIELD_UNDEFINED') {
         let msg =
           validation.message ?? I18n.textf('i18n:e-field-undefined', msg_vars);

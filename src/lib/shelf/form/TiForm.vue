@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { ref } from 'vue';
+  import { computed, ref } from 'vue';
   import {
     FieldChangeEmitter,
     FormProps,
@@ -15,11 +15,13 @@
   const props = withDefaults(defineProps<FormProps>(), {
     changeMode: 'all',
   });
-  const Change = useFieldChange<GridFieldsStrictField>({
-    changeMode: props.changeMode,
-    linkFields: props.linkFields,
-    fields: _fields.value,
-  });
+  const Change = computed(() =>
+    useFieldChange<GridFieldsStrictField>({
+      changeMode: props.changeMode,
+      linkFields: props.linkFields,
+      fields: _fields.value,
+    })
+  );
 
   /**
    * 处理值的修改
@@ -27,7 +29,7 @@
    * @param change 修改的值
    */
   async function onValueChange(change: FieldValueChange) {
-    Change.handleValueChange(change, {
+    Change.value.handleValueChange(change, {
       emit,
       data: props.data || {},
       checkEquals: props.checkEquals,

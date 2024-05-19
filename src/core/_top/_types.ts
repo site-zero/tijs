@@ -528,6 +528,7 @@ export type TiComExampleModelTarget =
   | {
       key: string;
       val: any;
+      mode?: 'set'|"merge"|'assign'
     };
 
 export class TiCom implements TiComInfo {

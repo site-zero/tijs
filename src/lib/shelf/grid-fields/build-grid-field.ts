@@ -1,6 +1,12 @@
 import _ from 'lodash';
 import { CssUtils, InvokePartial, Match, Util, Vars } from '../../../core';
-import { FieldName, makeFieldUniqKey } from '../../../lib/_top';
+import {
+  FieldConvertor,
+  FieldName,
+  FieldValueType,
+  getFieldConvertor,
+  makeFieldUniqKey,
+} from '../../../lib/_top';
 import { useVisibility } from '../../_features';
 import {
   GridFieldsInput,
@@ -83,12 +89,16 @@ export function buildOneGridField(
     fld.changeEventName = field.changeEventName ?? 'change';
 
     fld.transformer = parseFieldConverter(
+      field.type ?? 'String',
+      'transform',
       dft.vars || {},
       field.transformer,
       field.transArgs,
       field.transPartial
     );
     fld.serializer = parseFieldConverter(
+      field.type ?? 'String',
+      'serialize',
       dft.vars || {},
       field.serializer,
       field.serialArgs,
@@ -135,21 +145,25 @@ export function buildOneGridField(
 }
 
 function parseFieldConverter(
+  type: FieldValueType,
+  mode: keyof FieldConvertor,
   context: Vars,
   converter?: string | Function,
   args?: any[],
   partial?: InvokePartial
-): undefined | ((val: any, data: Vars, name: FieldName) => any) {
-  // Guard
-  if (!converter) {
-    return;
+): (val: any, data: Vars, name: FieldName) => any {
+  // 自定义转换器
+  if (converter) {
+    let conv = Util.genInvoking(converter, {
+      context,
+      args,
+      partial: partial || 'right',
+    });
+    return conv as (val: any, data: Vars, name: FieldName) => any;
   }
-  let conv = Util.genInvoking(converter, {
-    context,
-    args,
-    partial: partial || 'right',
-  });
-  return conv as (val: any, data: Vars, name: FieldName) => any;
+  // 默认类型转换器
+  let cov = getFieldConvertor(type);
+  return cov[mode];
 }
 
 export function buildGridFields(

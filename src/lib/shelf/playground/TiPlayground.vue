@@ -146,7 +146,14 @@
           if (val && val instanceof Map) {
             val = Util.mapToObj(val);
           }
-          _.set(comConf, key, val);
+
+          if ('assign' == target.mode) {
+            _.assign(comConf[key], val);
+          } else if ('merge' == target.mode) {
+            _.merge(comConf[key], val);
+          } else {
+            _.set(comConf, key, val);
+          }
         }
       }
       _example.comConf = comConf;

@@ -32,7 +32,11 @@ const TiFormInfo: TiComInfo = {
   defaultProps: 'simple',
   exampleProps: [example.simple],
   exampleModel: {
-    'change': 'data',
+    change: {
+      key: 'data',
+      val: '=..',
+      mode: 'assign',
+    },
   },
 };
 

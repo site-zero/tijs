@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { computed } from 'vue';
-  import { TextSnippet, useFieldCom, useFieldTransformer } from '../../';
+  import { TextSnippet, getFieldValue, useFieldCom } from '../../';
   import { CssUtils, ValueChange } from '../../../core';
   import {
     GridFieldsEmitter,
@@ -49,12 +49,11 @@
     getFieldIcon(props, hasTitle.value, hasTip.value)
   );
   const FieldValue = computed(() => {
-    let trans = useFieldTransformer({
-      name: props.name,
-      type: props.type,
-      transformer: props.transformer,
-    });
-    return trans.getFieldValue(props.data);
+    let val = getFieldValue(props.name, props.data);
+    if (props.transformer) {
+      return props.transformer(val, props.data, props.name);
+    }
+    return val;
   });
   const FieldTitleVars = computed(() => {
     let required = false;

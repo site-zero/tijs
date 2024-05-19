@@ -6,7 +6,6 @@ import {
   Convertor,
   DateInput,
   DateTime,
-  FuncA3,
   NameValue,
   Str,
   Vars,
@@ -14,11 +13,9 @@ import {
 
 export type Field = {
   /**
-   * 字段唯一键，如果未定义，则会根据 name 来生成
-   *
-   * @see getFieldUniqKey
+   * 字段的唯一编号，通常，根据 makeFieldUniqKey 函数生成
    */
-  uniqKey?: string;
+  uniqKey: string;
   /**
    * 字段名称， 如果是 `string[]` 则会从数据中提取子对象
    * `string` 时，支持 `.` 分割的属性路径
@@ -29,7 +26,7 @@ export type Field = {
    *
    * @default `String`
    */
-  type?: FieldValueType;
+  type: FieldValueType;
   /**
    * 字段默认值
    */
@@ -40,8 +37,8 @@ export type Field = {
    */
   emptyAs?: any;
 
-  transformer?: FuncA3<any, Vars, FieldName, any>;
-  serializer?: FuncA3<any, Vars, FieldName, any>;
+  transformer?: (val: any, data: Vars, name: FieldName) => any;
+  serializer?: (val: any, data: Vars, name: FieldName) => any;
 };
 
 export type CellEvents = 'value-change';
@@ -172,30 +169,7 @@ export type AsyncFieldValidator = (
  * 抽象字段
  * TODO 以后提到全局，给 Table Cell 也用上
  */
-export type AbstractField = {
-  // 字段的唯一编号，通常，根据 makeFieldUniqKey 函数生成
-  uniqKey: string;
-  /**
-   * 字段名称， 如果是 `string[]` 则会从数据中提取子对象
-   * `string` 时，支持 `.` 分割的属性路径
-   */
-  name: FieldName;
-  /**
-   * 字段类型
-   *
-   * @default `String`
-   */
-  type: FieldValueType;
-  /**
-   * 字段默认值
-   */
-  defaultAs: any;
-
-  /**
-   * 当字段为空时的默认值
-   */
-  emptyAs: any;
-
+export type AbstractField = Field & {
   /**
    * 判断当前字段是否是必须的
    *
@@ -213,9 +187,6 @@ export type AbstractField = {
    * 异步检查字段值的合法性
    */
   asyncValidate?: AsyncFieldValidator;
-
-  transformer?: (val: any, data: Vars, name: FieldName) => any;
-  serializer?: (val: any, data: Vars, name: FieldName) => any;
 };
 
 export type FieldValueType = keyof FieldConvertorSet;
@@ -258,6 +229,14 @@ export function setFieldValue(name: FieldName, value: any, data?: Vars): Vars {
   }
 
   return data;
+}
+
+export function getFieldValue(name: FieldName, data: Vars): any {
+  if (_.isString(name)) {
+    return _.get(data, name);
+  }
+  // 获取子对象
+  return _.pick(data, name);
 }
 
 export function getFieldConvertor(type: FieldValueType): FieldConvertor {

@@ -5,6 +5,7 @@ export default {
   name: 'simple',
   text: 'i18n:simple',
   comConf: {
+    changeMode: 'diff',
     data: {
       species: 'Tiger',
       age: 5,
