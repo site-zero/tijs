@@ -15,50 +15,6 @@ export type FieldChangeEmitter = {
   (eventName: 'change', payload: Vars | FieldChange[]): void;
 };
 
-export type HandleValueChangeOptions = {
-  emit: FieldChangeEmitter;
-  data: Vars;
-  checkEquals?: boolean;
-};
-
-function __build_fields_map<T extends AbstractField>(
-  fields?: T[]
-): Map<string, T> {
-  // 建立一个根据字段 uniqKey 对于字段的列表
-  let map = new Map<string, T>();
-
-  if (fields) {
-    for (let i = 0; i < fields.length; i++) {
-      let field = fields[i];
-      let uniqKey = makeFieldUniqKey([i], field.name, field.uniqKey);
-      map.set(uniqKey, field);
-    }
-  }
-
-  return map;
-}
-
-function __merge_changed(changes: FieldChange[], data?: Vars): Vars {
-  let meta = _.cloneDeep(data) || {};
-  for (let change of changes) {
-    let { name, value } = change;
-    setFieldValue(name, value, meta);
-  }
-  return meta;
-}
-
-function __gen_change(
-  change: FieldValueChange,
-  field: AbstractField
-): FieldChange {
-  return {
-    uniqKey: change.uniqKey,
-    name: field.name,
-    value: change.value,
-    oldVal: change.oldVal,
-  };
-}
-
 /**
  * 这里集合了对一条记录的所有的相关处理逻辑，
  * 以便再控件或者数据模型中使用。 这些处理逻辑包括：
@@ -106,6 +62,11 @@ export type LinkFieldLoader<T extends AbstractField> = (
  */
 export type DataChangeMode = 'diff' | 'all' | 'pair';
 
+export type HandleValueChangeOptions = {
+  emit: FieldChangeEmitter;
+  data: Vars;
+  checkEquals?: boolean;
+};
 /*
 --------------------------------------------------------------
 
@@ -324,5 +285,43 @@ export function useFieldChange<T extends AbstractField>(
     makeChangeData, // 根据传入的模式制作需要传递的值
     getDiffData, // 根据改动列表获取与原始数据的差异数据
     handleValueChange,
+  };
+}
+
+function __build_fields_map<T extends AbstractField>(
+  fields?: T[]
+): Map<string, T> {
+  // 建立一个根据字段 uniqKey 对于字段的列表
+  let map = new Map<string, T>();
+
+  if (fields) {
+    for (let i = 0; i < fields.length; i++) {
+      let field = fields[i];
+      let uniqKey = makeFieldUniqKey([i], field.name, field.uniqKey);
+      map.set(uniqKey, field);
+    }
+  }
+
+  return map;
+}
+
+function __merge_changed(changes: FieldChange[], data?: Vars): Vars {
+  let meta = _.cloneDeep(data) || {};
+  for (let change of changes) {
+    let { name, value } = change;
+    setFieldValue(name, value, meta);
+  }
+  return meta;
+}
+
+function __gen_change(
+  change: FieldValueChange,
+  field: AbstractField
+): FieldChange {
+  return {
+    uniqKey: change.uniqKey,
+    name: field.name,
+    value: change.value,
+    oldVal: change.oldVal,
   };
 }
