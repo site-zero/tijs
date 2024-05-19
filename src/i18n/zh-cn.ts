@@ -147,6 +147,8 @@ export default {
   'e-export_data-ConfirmBigLimit':
     '你要导出很多数据，这可能需要一些时间，要继续吗?',
   'e-export_data-UnknownMode': '未知的导出模式',
+  'e-field-undefined': '!字段$【${key}】未能找到定义!',
+  'e-field-val-invalid': '!字段$【${title?=key}】的值【${val}】错误: ${tip?}',
   'e-form-incomplete': '表单缺失必要字段: 【${title}:${name}】 ${tip?}',
   'e-io-forbidden': '禁止写入',
   'e-io-obj-BlankName': '对象名称不能为空',
@@ -159,6 +161,7 @@ export default {
   'e-obj-noexists': '对象[${val}]不存在',
   'e-ph-noexists': '路径[${val}]不存在',
   'e-pvg-fobidden': '操作被禁止',
+  'e-val-nil': '${key?}值不能为空',
   'edit': '编辑',
   'edit-com': '编辑控件',
   'edit-content': '编辑内容',

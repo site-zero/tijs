@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { computed } from 'vue';
   import { TextSnippet, useFieldCom, useFieldTransformer } from '../../';
-  import { CssUtils, ValueChanged } from '../../../core';
+  import { CssUtils, ValueChange } from '../../../core';
   import {
     GridFieldsEmitter,
     GridFieldsStrictField,
@@ -57,7 +57,10 @@
     return trans.getFieldValue(props.data);
   });
   const FieldTitleVars = computed(() => {
-    let required = props.required(props.data);
+    let required = false;
+    if (props.required) {
+      required = props.required(props.data);
+    }
     return {
       uniqKey: props.uniqKey,
       title: props.title,
@@ -84,7 +87,7 @@
     return {
       [key]: (val: any) => {
         emit('value-change', {
-          name: props.uniqKey,
+          uniqKey: props.uniqKey,
           value: val,
           oldVal: FieldValue.value,
         });
@@ -92,7 +95,7 @@
     };
   });
 
-  function onTitleChange(payload: ValueChanged<string>) {
+  function onTitleChange(payload: ValueChange<string>) {
     console.log('onTitleChange', payload);
     emit('name-change', {
       value: payload.value,

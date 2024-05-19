@@ -1,10 +1,7 @@
 import _ from 'lodash';
-import {
-  CustomizedEmitAdaptor,
-  EmitAdaptorProps,
-  Tmpl,
-  getLogger,
-} from '../../core';
+import { CustomizedEmitAdaptor, EmitAdaptorProps, Tmpl } from '../../core';
+
+import { getLogger } from '../../core/log/ti-log';
 
 const log = getLogger('ti.use-emit-adaptor');
 

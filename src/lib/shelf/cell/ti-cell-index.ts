@@ -1,6 +1,6 @@
 import { App } from 'vue';
 import { COM_TYPES } from '../../lib-com-types';
-import { TiComInfo, TiComRace } from '../../../core';
+import { TiComInfo, TiComRace } from '../../../core/_top/_types';
 import TiCell from './TiCell.vue';
 
 const COM_TYPE = COM_TYPES.Cell;

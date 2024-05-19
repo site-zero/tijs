@@ -1,6 +1,6 @@
 import { App } from 'vue';
 import { COM_TYPES } from '../../lib-com-types';
-import { TiComInfo, TiComRace } from '../../../core';
+import { TiComInfo, TiComRace } from '../../../core/_top/_types';
 import TiTable from './TiTable.vue';
 //const TiTable = defineAsyncComponent(() => import('./TiTable.vue'));
 import { d10k, d1k, d300, editable, simple } from './example';

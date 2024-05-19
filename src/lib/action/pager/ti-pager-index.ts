@@ -1,6 +1,6 @@
 import { App } from 'vue';
+import { TiComInfo, TiComRace, Vars } from '../../../core/_top/_types';
 import { COM_TYPES } from '../../lib-com-types';
-import { TiComInfo, TiComRace, Vars } from '../../../core';
 import TiPager from './TiPager.vue';
 import example from './example';
 
@@ -48,5 +48,5 @@ const TiPagerInfo: TiComInfo = {
   },
 };
 
-export { TiPager, TiPagerInfo };
 export * from './ti-pager-types';
+export { TiPager, TiPagerInfo };

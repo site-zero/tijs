@@ -1,12 +1,21 @@
 import { CssUtils } from '../../../core';
 import { buildGridFields } from './build-grid-field';
-import { GridFieldsProps } from './ti-grid-fields-types';
+import {
+  GridFieldsProps,
+  GridFieldsStrictField,
+  GridFieldsStrictGroup,
+  GridFieldsStrictItem,
+  GridFieldsStrictLabel,
+} from './ti-grid-fields-types';
 
 export function useGridFields(props: GridFieldsProps) {
   let strictItems = buildGridFields([], props.fields || [], props);
+  let fieldItems: GridFieldsStrictField[] = [];
+  __join_strict_field_items(strictItems, fieldItems);
 
   return {
     strictItems,
+    fieldItems,
     // 动态类选择器
     className: props.className
       ? CssUtils.mergeClassName(props.className)
@@ -19,4 +28,39 @@ export function useGridFields(props: GridFieldsProps) {
     tipIcon: props.tipIcon || 'zmdi-help-outline',
     style: props.style,
   };
+}
+
+function __join_strict_field_items(
+  items: GridFieldsStrictItem[],
+  list: GridFieldsStrictField[] = []
+): GridFieldsStrictField[] {
+  for (let it of items) {
+    // 标准字段
+    if (isGridFieldsStrictField(it)) {
+      list.push(it);
+    }
+    // 字段组
+    else if (isGridFieldStrictsGroup(it)) {
+      __join_strict_field_items(it.fields, list);
+    }
+  }
+  return list;
+}
+
+export function isGridFieldStrictsGroup(
+  item: GridFieldsStrictItem
+): item is GridFieldsStrictGroup {
+  return item && 'group' == item.race;
+}
+
+export function isGridFieldsStrictField(
+  item: GridFieldsStrictItem
+): item is GridFieldsStrictField {
+  return item && 'field' == item.race;
+}
+
+export function isGridFieldStrictsLabel(
+  item: GridFieldsStrictItem
+): item is GridFieldsStrictLabel {
+  return item && 'label' == item.race;
 }

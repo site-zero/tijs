@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { CssUtils, InvokePartial, Match, Util, Vars } from '../../../core';
-import { FieldName } from '../../../lib/_top';
+import { FieldName, makeFieldUniqKey } from '../../../lib/_top';
 import { useVisibility } from '../../_features';
 import {
   GridFieldsInput,
@@ -9,7 +9,6 @@ import {
   GridFieldsStrictField,
   GridFieldsStrictGroup,
   GridFieldsStrictItem,
-  makeFieldUniqKey,
 } from './ti-grid-fields-types';
 
 export function buildOneGridField(
@@ -17,7 +16,7 @@ export function buildOneGridField(
   field: GridFieldsInput,
   dft: GridFieldsProps
 ): GridFieldsStrictItem {
-  let uniqKey = makeFieldUniqKey(indexes, field);
+  let uniqKey = makeFieldUniqKey(indexes, field.name, field.uniqKey);
   // 准备返回值
   let re: GridFieldsStrictAbstractItem = {
     // 唯一键

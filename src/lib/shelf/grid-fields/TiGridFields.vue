@@ -71,7 +71,11 @@
   onMounted(() => {
     if ($main.value) {
       obResize.observe($main.value);
-      let info: GridFieldsDomReadyInfo = { el: $el.value!, main: $main.value! };
+      let info: GridFieldsDomReadyInfo = {
+        el: $el.value!,
+        main: $main.value!,
+        fields: Grid.value.fieldItems,
+      };
       emit('dom-ready', info);
     }
   });

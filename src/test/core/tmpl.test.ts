@@ -1,6 +1,5 @@
 import { expect, test } from 'vitest';
-import _ from 'lodash';
-import { Tmpl, DateTime, Vars } from '../../core/ti';
+import { DateTime, Tmpl, Vars } from '../../core/ti';
 
 test('list_index', () => {
   let vars = {
@@ -264,4 +263,8 @@ test('boolean', () => {
 
   expect(Tmpl.exec('${v<boolean:/yes>}', { v: true })).eq('yes');
   expect(Tmpl.exec('${v<boolean:/yes>}', { v: false })).eq('');
+});
+
+test('dynamic_default', () => {
+  expect(Tmpl.exec('${a?=b}', { b: 'B' })).eq('B');
 });

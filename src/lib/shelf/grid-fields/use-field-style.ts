@@ -1,11 +1,5 @@
 import _ from 'lodash';
-import {
-  CssGridLayout,
-  CssUtils,
-  IconInput,
-  TextContentType,
-  Vars,
-} from '../../../core';
+import { CssGridLayout, IconInput, TextContentType, Vars } from '../../../core';
 import {
   GridFieldLayoutMode,
   GridFieldsProps,
@@ -247,7 +241,7 @@ export function getFieldTitle(
 ): FieldTitleTextInfo {
   let { title, titleType, fieldTitleBy, required } = field;
   title = title || '';
-  if (required(field.data) && title && !fieldTitleBy) {
+  if (required && required(field.data) && title && !fieldTitleBy) {
     if ('text' == titleType) {
       title = _.escape(title);
     }

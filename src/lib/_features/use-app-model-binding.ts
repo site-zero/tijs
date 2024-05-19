@@ -4,9 +4,10 @@ import {
   AppModelBindingData,
   AppModelBindingEvent,
   Callback1,
-  getLogger,
   isArray,
 } from '../../core';
+
+import { getLogger } from '../../core/log/ti-log';
 
 const log = getLogger('ti.use-app-model-binding');
 

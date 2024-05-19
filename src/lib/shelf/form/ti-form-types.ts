@@ -1,5 +1,5 @@
-import { GridFieldsProps } from '../all-shelf';
+import { FieldChangeProps } from '../../_features';
+import { GridFieldsProps, GridFieldsStrictField } from '../all-shelf';
 
-export type FormProps = GridFieldsProps & {};
-
-
+export type FormProps = GridFieldsProps &
+  Omit<FieldChangeProps<GridFieldsStrictField>, 'fields'> & {};

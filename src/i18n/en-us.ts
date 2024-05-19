@@ -148,6 +148,8 @@ export default {
   'e-export_data-ConfirmBigLimit':
     'You want to export a lot of data, it may take a while, should we continue?',
   'e-export_data-UnknownMode': 'Unknown Export Mode',
+  'e-field-undefined': 'Field[${key}] is undefined!',
+  'e-field-val-invalid': 'Field[${title?=key}] value[${val}] INVALID: ${tip}',
   'e-form-incomplete': 'Form Incomplete : [${title}:${name}]  ${tip}',
   'e-io-forbidden': 'IO Forbidden',
   'e-io-obj-BlankName': 'The object name CANNOT be empty',
@@ -160,6 +162,7 @@ export default {
   'e-obj-noexists': 'Object [${val}] not exists',
   'e-ph-noexists': 'Path [${val}] not exists',
   'e-pvg-fobidden': 'Operation prohibited',
+  'e-val-nil': '${key?} Value should NOT be NULL',
   'edit': 'Edit',
   'edit-com': 'Edit control',
   'edit-content': 'Edit Content',

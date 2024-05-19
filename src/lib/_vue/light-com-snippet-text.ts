@@ -6,13 +6,13 @@ import {
   I18n,
   IconInput,
   TextContentType,
-  ValueChanged,
+  ValueChange,
   Vars,
 } from '../../core';
 import { FieldComProps, useFieldCom } from '../_features';
 
 export type TextSnippetEmitter = {
-  (evetName: 'change', payload: ValueChanged<string>): void;
+  (evetName: 'change', payload: ValueChange<string>): void;
 };
 
 export type TextSnippetProps = FieldComProps & {

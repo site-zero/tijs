@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { App, DefineComponent, InjectionKey } from 'vue';
+import { FieldName } from '../../lib';
 import { I18n, TiBus } from '../ti';
 import { Rect } from './ti-rect';
 export * from './_types_css';
@@ -232,13 +233,17 @@ export type ExplainI18n = {
 
 export type TextContentType = 'html' | 'text';
 
-export type ValueChanged<T> = {
+export type ValueChange<T> = {
   value: T;
   oldVal: T;
 };
 
-export type FieldValueChanged = ValueChanged<any> & {
-  name: string;
+export type FieldValueChange = ValueChange<any> & {
+  uniqKey: string;
+};
+
+export type FieldChange = FieldValueChange & {
+  name: FieldName;
 };
 
 /*---------------------------------------------------

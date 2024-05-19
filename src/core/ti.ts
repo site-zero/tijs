@@ -1,4 +1,4 @@
-import { get, assign, set, cloneDeep } from 'lodash';
+import { assign, cloneDeep, get, set } from 'lodash';
 import * as PKG from '../../package.json';
 import { Vars } from './_top/_types';
 import { TiBus } from './_top/ti-bus';
@@ -33,4 +33,3 @@ export function getAllEnv() {
 }
 
 export * from './ti-exports';
-export * as Lib from '../lib';

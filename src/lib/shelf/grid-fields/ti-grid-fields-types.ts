@@ -2,11 +2,11 @@ import {
   CommonProps,
   CssGridLayout,
   CssTextAlign,
-  FieldValueChanged,
+  FieldValueChange,
   IconInput,
   InvokePartial,
   TextContentType,
-  ValueChanged,
+  ValueChange,
   Vars,
   VisibilityProps,
 } from '../../../core';
@@ -15,29 +15,17 @@ import {
   ReadonlyProps,
   VisibilityFeature,
 } from '../../../lib/_features';
-import { FieldName, FieldValueType, getFieldUniqKey } from '../../_top';
-
-export function makeFieldUniqKey(
-  indexes: number[],
-  field: GridFieldsInput
-): string {
-  if (field.uniqKey) {
-    return field.uniqKey;
-  }
-  if (field.name) {
-    return getFieldUniqKey(field.name);
-  }
-  return `_F${indexes.join('_')}`;
-}
+import { AbstractField, getFieldUniqKey } from '../../_top';
 
 export type GridFieldsDomReadyInfo = {
   el: HTMLElement;
   main: HTMLElement;
+  fields: GridFieldsStrictField[];
 };
 
 export type GridFieldsEmitter = {
-  (evetName: 'name-change', payload: ValueChanged<string>): void;
-  (evetName: 'value-change', payload: FieldValueChanged): void;
+  (evetName: 'name-change', payload: ValueChange<string>): void;
+  (evetName: 'value-change', payload: FieldValueChange): void;
   (evetName: 'dom-ready', payload: GridFieldsDomReadyInfo): void;
 };
 
@@ -273,38 +261,6 @@ export type GridFieldsItemLayoutProps = {
   layoutGridTracks?: string[] | ((trackIndex: number) => string);
 };
 
-/**
- * 抽象字段
- * TODO 以后提到全局，给 Table Cell 也用上
- */
-export type AbstractField = {
-  /**
-   * 字段名称， 如果是 `string[]` 则会从数据中提取子对象
-   * `string` 时，支持 `.` 分割的属性路径
-   */
-  name: FieldName;
-  /**
-   * 字段类型
-   *
-   * @default `String`
-   */
-  type: FieldValueType;
-  /**
-   * 字段默认值
-   */
-  defaultAs: any;
-
-  /**
-   * 当字段为空时的默认值
-   */
-  emptyAs: any;
-
-  required: (data: Vars) => any;
-
-  transformer?: (val: any, data: Vars, name: FieldName) => any;
-  serializer?: (val: any, data: Vars, name: FieldName) => any;
-};
-
 export type GridFieldsStrictAbstractItem = FieldComProps &
   ReadonlyProps &
   VisibilityFeature & {
@@ -354,7 +310,7 @@ export type GridFieldsStrictGroup = GridFieldsStrictAbstractItem &
 export type GridFieldsStrictField = GridFieldsStrictAbstractItem &
   AbstractField & {
     race: 'field';
-    
+
     checkEquals: boolean;
     maxFieldNameWidth?: number | string;
     fieldLayoutMode: GridFieldLayoutMode;
@@ -374,21 +330,3 @@ export type GridFieldsStrictItem =
   | GridFieldsStrictGroup
   | GridFieldsStrictField
   | GridFieldsStrictLabel;
-
-export function isGridFieldStrictsGroup(
-  item: GridFieldsStrictItem
-): item is GridFieldsStrictGroup {
-  return item && 'group' == item.race;
-}
-
-export function isGridFieldsStrictField(
-  item: GridFieldsStrictItem
-): item is GridFieldsStrictField {
-  return item && 'field' == item.race;
-}
-
-export function isGridFieldStrictsLabel(
-  item: GridFieldsStrictItem
-): item is GridFieldsStrictLabel {
-  return item && 'label' == item.race;
-}

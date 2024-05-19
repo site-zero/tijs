@@ -126,6 +126,98 @@ export function isFieldType(type: string): type is FieldValueType {
   return cov ? true : false;
 }
 
+/**
+ * 检查结果类型
+ *
+ * - OK : 检查通过
+ * - VALUE_NIL : 必选值不能为空
+ * - VALUE_INVALID : 数据格式错误
+ * - FIELD_UNDEFINED : 字段未定义
+ */
+export type ValidateType =
+  | 'OK'
+  | 'VALUE_INVALID'
+  | 'VALUE_NIL'
+  | 'FIELD_UNDEFINED';
+
+export type ValidateResult = {
+  type: ValidateType;
+  message?: string;
+};
+
+/**
+ * 同步检查字段值的回调函数
+ *
+ * @param value  字段的值
+ * @param field  字段定义
+ * @param data  整体数据对象
+ * @returns 指定检查结果，如果 undefined 表示检查通过
+ */
+export type FieldValidator = (
+  value: any,
+  field: AbstractField,
+  data: Vars
+) => ValidateResult | undefined;
+
+/**
+ * 异步检查字段值的回调函数
+ */
+export type AsyncFieldValidator = (
+  value: any,
+  field: AbstractField,
+  data: Vars
+) => Promise<ValidateResult | undefined>;
+
+/**
+ * 抽象字段
+ * TODO 以后提到全局，给 Table Cell 也用上
+ */
+export type AbstractField = {
+  // 字段的唯一编号，通常，根据 makeFieldUniqKey 函数生成
+  uniqKey: string;
+  /**
+   * 字段名称， 如果是 `string[]` 则会从数据中提取子对象
+   * `string` 时，支持 `.` 分割的属性路径
+   */
+  name: FieldName;
+  /**
+   * 字段类型
+   *
+   * @default `String`
+   */
+  type: FieldValueType;
+  /**
+   * 字段默认值
+   */
+  defaultAs: any;
+
+  /**
+   * 当字段为空时的默认值
+   */
+  emptyAs: any;
+
+  /**
+   * 判断当前字段是否是必须的
+   *
+   * @param data 整体记录
+   * @returns  当前字段对这个记录是不是必须的
+   */
+  required?: (data: Vars) => any;
+
+  /**
+   * 同步检查字段值的合法性
+   */
+  validate?: FieldValidator;
+
+  /**
+   * 异步检查字段值的合法性
+   */
+  asyncValidate?: AsyncFieldValidator;
+
+  transformer?: (val: any, data: Vars, name: FieldName) => any;
+  serializer?: (val: any, data: Vars, name: FieldName) => any;
+};
+
 export type FieldValueType = keyof FieldConvertorSet;
 
 export type FieldName = string | string[];
@@ -135,6 +227,37 @@ export function getFieldUniqKey(name: FieldName): string {
     return name;
   }
   return name.join('-');
+}
+
+export function makeFieldUniqKey(
+  indexes: number[],
+  fieldName?: FieldName,
+  uniqKey?: string
+): string {
+  if (uniqKey) {
+    return uniqKey;
+  }
+  if (fieldName) {
+    return getFieldUniqKey(fieldName);
+  }
+  return `_F${indexes.join('_')}`;
+}
+
+export function setFieldValue(name: FieldName, value: any, data?: Vars): Vars {
+  data = data ?? {};
+  // 组合字段
+  if (_.isArray(name)) {
+    for (let k of name) {
+      let v = _.get(value, k);
+      _.set(data, k, v);
+    }
+  }
+  // 简单值
+  else {
+    _.set(data, name, value);
+  }
+
+  return data;
 }
 
 export function getFieldConvertor(type: FieldValueType): FieldConvertor {

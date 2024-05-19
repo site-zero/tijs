@@ -8,8 +8,8 @@ import {
   Point2D,
   Rect,
   Rects,
-  getLogger,
 } from '../../core';
+import { getLogger } from '../../core/log/ti-log';
 import { Dragging } from './drag/dragging';
 export { Dragging } from './drag/dragging';
 

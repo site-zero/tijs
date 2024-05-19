@@ -15,7 +15,7 @@ export abstract class DynEle implements TmplEle {
     this._key = input.key;
     this._dft = input.dft;
     this._get_value = genObjGetter(this._key);
-    if (/^@/.test(input.dft)) {
+    if (/^[=@]/.test(input.dft)) {
       let dft_key = input.dft.substring(1).trim();
       this._get_dft = (obj) => obj[dft_key];
     }
