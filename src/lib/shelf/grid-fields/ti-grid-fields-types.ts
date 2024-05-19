@@ -299,6 +299,8 @@ export type AbstractField = {
    */
   emptyAs: any;
 
+  required: (data: Vars) => any;
+
   transformer?: (val: any, data: Vars, name: FieldName) => any;
   serializer?: (val: any, data: Vars, name: FieldName) => any;
 };
@@ -352,7 +354,7 @@ export type GridFieldsStrictGroup = GridFieldsStrictAbstractItem &
 export type GridFieldsStrictField = GridFieldsStrictAbstractItem &
   AbstractField & {
     race: 'field';
-    required: (data: Vars) => any;
+    
     checkEquals: boolean;
     maxFieldNameWidth?: number | string;
     fieldLayoutMode: GridFieldLayoutMode;

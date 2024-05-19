@@ -6,10 +6,10 @@
  *    b. 检查数据格式是否符合要求
  * 2. 数据联动
  *    a. 如果某个字段的修改，自动按照设定逻辑修改关联字段
- * 3. 数据整合
- *    a. 只获得差异
- *    b. 拼合全量数据
- *    c. 明知对列表
+ * 3. 数据传递
+ *    a. 只传递差异
+ *    b. 传递合并后的数据
+ *    c. 传递原始明值对列表
  */
 export type RecordProps = {
 
@@ -23,8 +23,8 @@ export function useRecord() {
  * 当记录修改后，怎么向外通知改动
  *
  * > 譬如，如果你修改了一个字段 `{name:'age', value: 40, oldVal:38}`
- *  - `diff` 只通知差异 `{age: 40}`
- *  - `all` 全量结果 `{... age:40 ...}`
- *  - `pair` 通知原始的明值对信息: `[ {name:'age', value: 40, oldVal:38} ...]`
+ *  - `diff` 只传递差异 `{age: 40}`
+ *  - `all` 传递合并后的数据 `{... age:40 ...}`
+ *  - `pair` 传递原始明值对列表: `[ {name:'age', value: 40, oldVal:38} ...]`
  */
 export type RecordChangeMode = 'diff' | 'all' | 'pair';
