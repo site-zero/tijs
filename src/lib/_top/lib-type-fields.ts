@@ -314,15 +314,15 @@ const INT_CONVERTERS = {
 
 type IntConverterName = keyof typeof INT_CONVERTERS;
 
-function toInteger(
-  input: any,
-  { mode = 'int', dft = -1, range = [], border = [true, true] } = {} as {
-    mode: IntConverterName;
-    dft: number;
-    range?: [number, number];
-    border?: [boolean, boolean];
-  }
-) {
+type ToIntegerOptions = {
+  mode?: IntConverterName;
+  dft?: number;
+  range?: [number, number];
+  border?: [boolean, boolean];
+};
+
+function toInteger(input: any, options: ToIntegerOptions = {}) {
+  let { mode = 'round', dft = -1, range = [], border = [true, true] } = options;
   let n = INT_CONVERTERS[mode](input);
   // Apply the default
   if (isNaN(n)) {

@@ -32,6 +32,13 @@ const TiFormTabInfo: TiComInfo = {
   },
   defaultProps: 'simple',
   exampleProps: [example.simple],
+  exampleModel: {
+    change: {
+      key: 'data',
+      val: '=..',
+      mode: 'assign',
+    },
+  },
 };
 
 export * from './ti-form-tab-types';

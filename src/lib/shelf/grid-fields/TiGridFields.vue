@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import _ from 'lodash';
-  import { computed, onMounted, onUnmounted, ref } from 'vue';
+  import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
   import { TextSnippet } from '../../';
   import { CssUtils } from '../../../core';
   import GFItField from './GFItField.vue';
@@ -68,13 +68,24 @@
     }
   });
   //-------------------------------------------------
+  if (props.whenGrid) {
+    watch(
+      () => Grid.value,
+      () => {
+        if (props.whenGrid) {
+          props.whenGrid(Grid.value);
+        }
+      },
+      { immediate: true }
+    );
+  }
+  //-------------------------------------------------
   onMounted(() => {
     if ($main.value) {
       obResize.observe($main.value);
       let info: GridFieldsDomReadyInfo = {
         el: $el.value!,
         main: $main.value!,
-        fields: Grid.value.fieldItems,
       };
       emit('dom-ready', info);
     }

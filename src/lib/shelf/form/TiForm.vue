@@ -3,18 +3,22 @@
   import {
     FieldChangeEmitter,
     FormProps,
-    GridFieldsDomReadyInfo,
+    GridFieldsFeature,
     GridFieldsStrictField,
     TiGridFields,
     useFieldChange,
   } from '../..';
   import { FieldValueChange } from '../../../core';
-
+  //-------------------------------------------------
+  defineOptions({
+    inheritAttrs: false,
+  });
   const emit = defineEmits<FieldChangeEmitter>();
   const _fields = ref<GridFieldsStrictField[]>([]);
   const props = withDefaults(defineProps<FormProps>(), {
-    changeMode: 'all',
+    changeMode: 'diff',
   });
+  //-------------------------------------------------
   const Change = computed(() =>
     useFieldChange<GridFieldsStrictField>({
       changeMode: props.changeMode,
@@ -36,15 +40,15 @@
     });
   }
 
-  function onDomReady(info: GridFieldsDomReadyInfo) {
-    _fields.value = info.fields;
+  function whenGrid(grid: GridFieldsFeature) {
+    _fields.value = grid.fieldItems;
   }
 </script>
 <template>
   <TiGridFields
     v-bind="props"
-    @value-change="onValueChange"
-    @dom-ready="onDomReady" />
+    :when-grid="whenGrid"
+    @value-change="onValueChange" />
 </template>
 <style lang="scss" scoped>
   @use '../../../assets/style/_all.scss' as *;

@@ -1,4 +1,11 @@
-import { KeepProps } from '../..';
-import { GridFieldsProps, TabsAspect, TabsProps } from '../all-shelf';
+import { FieldChangeProps, KeepProps } from '../..';
+import {
+  GridFieldsProps,
+  GridFieldsStrictField,
+  TabsAspect,
+} from '../all-shelf';
 
-export type FormTabProps = GridFieldsProps & TabsAspect & KeepProps & {};
+export type FormTabProps = GridFieldsProps &
+  Omit<FieldChangeProps<GridFieldsStrictField>, 'fields'> &
+  TabsAspect &
+  KeepProps & {};

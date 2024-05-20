@@ -68,12 +68,14 @@ function _get_table_columns(props: TableProps) {
       continue;
     }
     // 列唯一键
-    let uniqKey = col.uniqKey || getFieldUniqKey(col.name);
-    let colItem = { uniqKey, ...col } as TableCell;
+    let colItem = _.cloneDeep(col) as TableCell;
+    if (!colItem.uniqKey) {
+      colItem.uniqKey = getFieldUniqKey(col.name);
+    }
 
     // 列标题
     if (!col.title) {
-      colItem.title = _.upperCase(uniqKey);
+      colItem.title = _.upperCase(colItem.uniqKey);
     } else {
       colItem.title = I18n.text(col.title);
     }

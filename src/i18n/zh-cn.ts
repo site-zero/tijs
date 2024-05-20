@@ -161,7 +161,7 @@ export default {
   'e-obj-noexists': '对象[${val}]不存在',
   'e-ph-noexists': '路径[${val}]不存在',
   'e-pvg-fobidden': '操作被禁止',
-  'e-val-nil': '${key?}值不能为空',
+  'e-val-nil': '${title?=key}值不能为空',
   'edit': '编辑',
   'edit-com': '编辑控件',
   'edit-content': '编辑内容',

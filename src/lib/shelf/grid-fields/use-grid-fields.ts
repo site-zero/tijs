@@ -1,6 +1,7 @@
 import { CssUtils } from '../../../core';
 import { buildGridFields } from './build-grid-field';
 import {
+  GridFieldsFeature,
   GridFieldsProps,
   GridFieldsStrictField,
   GridFieldsStrictGroup,
@@ -8,7 +9,7 @@ import {
   GridFieldsStrictLabel,
 } from './ti-grid-fields-types';
 
-export function useGridFields(props: GridFieldsProps) {
+export function useGridFields(props: GridFieldsProps): GridFieldsFeature {
   let strictItems = buildGridFields([], props.fields || [], props);
   let fieldItems: GridFieldsStrictField[] = [];
   __join_strict_field_items(strictItems, fieldItems);

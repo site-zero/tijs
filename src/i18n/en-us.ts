@@ -162,7 +162,7 @@ export default {
   'e-obj-noexists': 'Object [${val}] not exists',
   'e-ph-noexists': 'Path [${val}] not exists',
   'e-pvg-fobidden': 'Operation prohibited',
-  'e-val-nil': '${key?} Value should NOT be NULL',
+  'e-val-nil': '${title?=key} Value should NOT be NULL',
   'edit': 'Edit',
   'edit-com': 'Edit control',
   'edit-content': 'Edit Content',

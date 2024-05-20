@@ -20,7 +20,20 @@ import { AbstractField, getFieldUniqKey } from '../../_top';
 export type GridFieldsDomReadyInfo = {
   el: HTMLElement;
   main: HTMLElement;
-  fields: GridFieldsStrictField[];
+};
+
+export type GridFieldsFeature = {
+  strictItems: GridFieldsStrictItem[];
+  fieldItems: GridFieldsStrictField[];
+  // 动态类选择器
+  className?: Vars;
+  style?: Vars;
+  // 标题 & 提示
+  title: string | null;
+  titleType: TextContentType;
+  tip: string | null;
+  tipType: TextContentType;
+  tipIcon: IconInput;
 };
 
 export type GridFieldsEmitter = {
@@ -48,7 +61,15 @@ export type GridFieldsProps = Omit<
   vars?: Vars;
   // 输入的数据
   data?: Vars;
+
+  /**
+   *
+   * @param fieldItems
+   * @returns
+   */
+  whenGrid?: (grid: GridFieldsFeature) => void;
 };
+
 /*
 栅格字段组，是一个支持无穷嵌套的字段组合，依靠 CSS Grid 布局。
 每一层嵌套支持下面三种类型:

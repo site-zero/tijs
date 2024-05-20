@@ -2,39 +2,73 @@
   import _ from 'lodash';
   import { computed, onMounted, reactive, ref } from 'vue';
   import {
+    FieldChangeEmitter,
     GridFieldsDomReadyInfo,
+    GridFieldsFeature,
+    GridFieldsStrictField,
     TabDisplayItem,
     TiGridFields,
     TiTabs,
+    useFieldChange,
     useKeep,
-  } from '../..';
-  import { CssUtils, Dom, Vars } from '../../../core/';
+  } from '../../';
+  import { CssUtils, Dom, FieldValueChange, Vars } from '../../../core/';
   import { FormTabProps } from './ti-form-tab-types';
   import { getCurrentFormProps, getFormTabItems } from './use-form-tab';
   //-------------------------------------------------
   defineOptions({
     inheritAttrs: false,
   });
+  const emit = defineEmits<FieldChangeEmitter>();
+  const _fields = ref<GridFieldsStrictField[]>([]);
+  const _current_tab = ref<string>();
   //-------------------------------------------------
   const props = withDefaults(defineProps<FormTabProps>(), {
     tabsAt: 'top',
     tabsAlign: 'center',
     wrapTabs: false,
     tabItemSpace: 'm',
+    changeMode: 'diff',
   });
+  //-------------------------------------------------
+  const Change = computed(() =>
+    useFieldChange<GridFieldsStrictField>({
+      changeMode: props.changeMode,
+      linkFields: props.linkFields,
+      fields: _fields.value,
+    })
+  );
   //-------------------------------------------------
   const Keep = computed(() => useKeep(props));
   //-------------------------------------------------
   const TabItems = computed(() => getFormTabItems(props));
-  //-------------------------------------------------
-  const _current_tab = ref<string>();
   if (!_.isEmpty(TabItems.value)) {
     _current_tab.value = _.first(TabItems.value)?.value;
   }
   //-------------------------------------------------
+  /**
+   * 处理标签的切换
+   */
   function onTabChange(tab: TabDisplayItem) {
     _current_tab.value = tab.value;
     Keep.value.save(tab.value);
+  }
+  //-------------------------------------------------
+  /**
+   * 处理值的修改
+   *
+   * @param change 修改的值
+   */
+  async function onValueChange(change: FieldValueChange) {
+    Change.value.handleValueChange(change, {
+      emit,
+      data: props.data || {},
+      checkEquals: props.checkEquals,
+    });
+  }
+  //-------------------------------------------------
+  function whenGrid(grid: GridFieldsFeature) {
+    _fields.value = grid.fieldItems;
   }
   //-------------------------------------------------
   onMounted(() => {
@@ -74,8 +108,8 @@
   );
   //-------------------------------------------------
   function onDomReady(info: GridFieldsDomReadyInfo) {
-    let { el, main } = info;
-    // 获取标题的高度
+    let { el } = info;
+    // 获取标题的高度，以便设置 tabs 的 sticky 高度
     let $title = Dom.find(':scope > .part-title', el);
     let $foot = Dom.find(':scope > .part-foot', el);
     _mea.titleHeight = $title?.getBoundingClientRect().height ?? 0;
@@ -90,6 +124,8 @@
     :style="props.style"
     :vars="props.vars"
     :data="props.data"
+    :when-grid="whenGrid"
+    @value-change="onValueChange"
     @dom-ready="onDomReady">
     <!--=======: 头部标签 :=======-->
     <template

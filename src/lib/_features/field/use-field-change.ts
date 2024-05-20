@@ -105,7 +105,8 @@ export function useFieldChange<T extends AbstractField>(
     }
 
     // 必选字段
-    if (_.isNil(value) && field.required) {
+    let val_is_nil = _.isNil(value) || (_.isString(value) && !value);
+    if (val_is_nil && field.required) {
       if (field.required(data)) {
         return { type: 'VALUE_NIL' };
       }
