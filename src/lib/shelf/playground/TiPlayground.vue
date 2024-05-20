@@ -141,16 +141,23 @@
         // {"field-change": {key:"data.${name}", value:"=value"}}
         else {
           let key = Tmpl.exec(target.key, payload);
-          let val = Util.explainObj(payload, target.val);
+          let val = Util.explainObj(payload, target.val, {
+            jsValue: {
+              autoNum: false,
+              autoBool: false,
+              autoJson: false,
+              autoDate: false,
+            },
+          });
           // 确保是普通 Js 对象
           if (val && val instanceof Map) {
             val = Util.mapToObj(val);
           }
-
+          console.log(key, val, target.mode);
           if ('assign' == target.mode) {
-            _.assign(comConf[key], val);
+            _.assign(_.get(comConf, key), val);
           } else if ('merge' == target.mode) {
-            _.merge(comConf[key], val);
+            _.merge(_.get(comConf, key), val);
           } else {
             _.set(comConf, key, val);
           }

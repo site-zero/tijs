@@ -1,10 +1,10 @@
-import { TableCell } from '../../../';
+import { TableCellProps, TableProps } from '../ti-table-types';
 import { mockData } from './mock-table-row';
 
 export default {
   name: '10k',
   text: 'i18n:ti-table-example-10k',
-  comConf: () => {
+  comConf: (): TableProps => {
     return {
       className: 'fit-parent',
       columns: [
@@ -32,7 +32,7 @@ export default {
         {
           name: 'local_ip',
         },
-      ] as TableCell[],
+      ] as TableCellProps[],
       data: mockData(10000),
     };
   },

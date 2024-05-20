@@ -365,10 +365,25 @@ export function isInvoke(input: any): input is Invoke {
   return true;
 }
 
+export type ToJsValueOptions = {
+  autoJson?: boolean;
+  autoDate?: boolean;
+  autoNil?: boolean;
+  autoMap?: boolean;
+  autoList?: boolean;
+  autoNum?: boolean;
+  autoBool?: boolean;
+  autoVar?: boolean;
+  autoDefault?: boolean;
+  trimed?: boolean;
+  context?: Vars;
+};
+
 export interface ExplainOptions {
   funcSet?: any; // 如果不指定，则用 globalThis
   evalFunc?: boolean;
   iteratee?: { (it: any): any };
+  jsValue?: ToJsValueOptions;
 }
 
 export interface Explainer {
@@ -528,7 +543,7 @@ export type TiComExampleModelTarget =
   | {
       key: string;
       val: any;
-      mode?: 'set'|"merge"|'assign'
+      mode?: 'set' | 'merge' | 'assign';
     };
 
 export class TiCom implements TiComInfo {

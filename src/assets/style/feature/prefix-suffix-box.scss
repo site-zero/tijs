@@ -25,7 +25,6 @@
 
   &.is-nowrap > .part-value {
     white-space: nowrap;
-    width: 10px;
     overflow: hidden;
     text-overflow: ellipsis;
   }
@@ -76,7 +75,7 @@
   }
 
   &.show-border {
-    border: 1px solid var(--ti-color-border-dark);
+    border: 1px solid var(--ti-color-border-thin);
     border-radius: var(--ti-measure-r-s);
 
     > .as-icon-text {
@@ -90,7 +89,6 @@
           width: var(--ti-measure-box-height);
         }
       }
-
       > .as-text {
         border-radius: 0;
       }

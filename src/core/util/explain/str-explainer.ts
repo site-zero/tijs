@@ -2,10 +2,10 @@ import _ from 'lodash';
 import {
   ExplainOptions,
   Explainer,
+  InvokePartial,
   Str,
   Util,
   Vars,
-  InvokePartial,
 } from '../../ti';
 
 type ValueGetter = (context: Vars, options: ExplainOptions) => any;
@@ -38,7 +38,7 @@ function __get_val(
       return getDft(context, options);
     }
     if (autoJsValue) {
-      v = Str.toJsValue(v);
+      v = Str.toJsValue(v, options.jsValue);
     }
     return v;
   };

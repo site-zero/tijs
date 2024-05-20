@@ -1,17 +1,18 @@
 import {
   AbstractField,
+  FieldChangeProps,
   FieldComProps,
   FieldName,
   KeepInfo,
   SelectEmitInfo,
   SelectableProps,
   SelectableState,
-  TableCell,
 } from '../..';
 import {
   Callback2,
   CommonProps,
   CssTextAlign,
+  FieldChange,
   IconInput,
   InvokePartial,
   TextContentType,
@@ -38,12 +39,60 @@ export type TableSelection = SelectableState<TableRowID> & {
  * - `open`  : 点击行动态打开图标
  * - `cell`  : 点击行单元格
  */
-export type TableEventName = 'select' | 'check' | 'open' | 'cell' | 'cell-open';
+export type TableEventName =
+  | 'select'
+  | 'open'
+  | 'cell-select'
+  | 'cell-open'
+  | 'row-change';
+export type TableRowEventName =
+  | 'row-check'
+  | 'row-select'
+  | 'row-open'
+  | 'cell-select'
+  | 'cell-open'
+  | 'cell-change';
+export type TableCellEventName = 'cell-change';
+export type TableCellChanged = FieldChange &
+  Omit<TableCellEventPayload, 'event'>;
 
-export type TableEvent = {
-  colIndex?: number;
+export type TableEventPayload = {
+  colIndex: number;
+  rowIndex: number;
   event: Event;
   row: TableRowData;
+};
+
+export type TableCellEventPayload = {
+  colIndex: number;
+  rowIndex: number;
+  event: Event;
+};
+
+export type TableRowChanagePayload = {
+  colIndex: number;
+  rowIndex: number;
+  uniqKey: string;
+  name: FieldName;
+  changed: Vars | FieldChange[];
+  oldRowData?: Vars;
+};
+
+export type TableEmitter = {
+  (eventName: 'select', payload: TableSelectEmitInfo): void;
+  (eventName: 'open', payload: TableRowData): void;
+  (eventName: 'cell-open', payload: TableEventPayload): void;
+  (eventName: 'row-change', payload: TableRowChanagePayload): void;
+};
+
+export type TableRowEmitter = {
+  (event: TableRowEventName, payload: TableEventPayload): void;
+  (event: 'cell-change', payload: TableCellChanged): void;
+};
+
+export type TableCellEmitter = {
+  (event: TableCellEventName, payload: TableCellEventPayload): void;
+  (event: 'cell-change', payload: TableCellChanged): void;
 };
 
 export type TableKeepProps = {
@@ -52,11 +101,11 @@ export type TableKeepProps = {
 
 export type TableSelectEmitInfo = SelectEmitInfo<TableRowID> & {
   colIndex?: number;
-  column?: TableCell;
+  column?: TableStrictColumn;
 };
 
 export type TableBehaviorsProps = {
-  columns: TableColumn[];
+  columns: TableInputColumn[];
   /**
    * 传入的上下文变量字段
    */
@@ -79,6 +128,7 @@ export type TableBehaviorsProps = {
 export type TableProps = CommonProps &
   TableBehaviorsProps &
   TableKeepProps &
+  FieldChangeProps<TableStrictColumn> &
   Partial<SelectableProps<TableRowID>> & {
     /**
      * 传入的数据对象
@@ -175,7 +225,7 @@ type TableColumnAspect = {
   candidate: boolean;
 };
 
-export type TableColumn = CommonProps &
+export type TableInputColumn = CommonProps &
   FieldComProps &
   Partial<Omit<AbstractField, 'transformer' | 'serializer'>> &
   Partial<TableColumnAspect> & {
@@ -195,11 +245,20 @@ export type TableColumn = CommonProps &
 export type TableStrictColumn = CommonProps &
   FieldComProps &
   AbstractField &
-  TableColumnAspect;
+  TableColumnAspect & {
+    index: number;
+  };
 
 export type TableRowProps = CommonProps &
-  TableBehaviorsProps & {
+  Omit<TableBehaviorsProps, 'columns'> & {
+    /**
+     * 显示行首
+     */
     showRowMarker: boolean;
+    /**
+     * 严格模式的列定义
+     */
+    columns: TableStrictColumn[];
     /**
      * 传入的行数据对象
      */
@@ -216,3 +275,47 @@ export type TableRowProps = CommonProps &
      */
     updateRowHeight: Callback2<number, number>;
   };
+
+export type TableCellProps = Omit<
+  TableStrictColumn,
+  | 'title'
+  | 'titleType'
+  | 'titleIcon'
+  | 'titleStyle'
+  | 'titleAlign'
+  | 'tip'
+  | 'tipType'
+  | 'tipBy'
+  | 'tipStyle'
+  | 'tipAlign'
+  | 'tipIcon'
+  | 'candidate'
+> & {
+  disabled?: boolean;
+  activated?: boolean;
+
+  /**
+   * 行下标： 0 BASE
+   */
+  rowIndex?: number;
+  /**
+   * 列下标： 0 BASE
+   */
+  colIndex?: number;
+
+  /**
+   * 传入的数据对象
+   */
+  data: Vars;
+  /**
+   * 传入的上下文变量字段
+   */
+  vars?: Vars;
+
+  /**
+   * 在字段改动后，是否需要比对一下，不同才通知改动
+   *
+   * @default true
+   */
+  checkEquals?: boolean;
+};

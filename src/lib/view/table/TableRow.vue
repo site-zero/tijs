@@ -1,31 +1,21 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { Ref, computed, onMounted, ref } from 'vue';
-  import {
-    CellChanged,
-    CellEvents,
-    TableEvent,
-    TableEventName,
-    TiCell,
-  } from '../../';
   import { CssUtils } from '../../../core';
-  import { TableRowProps } from './ti-table-types';
-  /*-------------------------------------------------------
-
-                     Com Options
-
--------------------------------------------------------*/
+  import TableCell from './TableCell.vue';
+  import {
+    TableRowEmitter,
+    TableRowEventName,
+    TableRowProps,
+  } from './ti-table-types';
+  //-------------------------------------------------------
   defineOptions({
     name: 'TableRow',
     inheritAttrs: false,
   });
 
   const $cells = ref() as Ref<Array<HTMLElement> | HTMLElement>;
-  /*-------------------------------------------------------
-
-                      Props
-
--------------------------------------------------------*/
+  //-------------------------------------------------------
   const props = withDefaults(defineProps<TableRowProps>(), {
     showRowMarker: true,
     showCheckbox: true,
@@ -34,20 +24,9 @@
     canCheck: true,
     canSelect: true,
   });
-  /*-------------------------------------------------------
-
-                    Event Bus
-
--------------------------------------------------------*/
-  let emit = defineEmits<{
-    (event: TableEventName, payload: TableEvent): void;
-    (event: 'cell-change', payload: CellChanged): void;
-  }>();
-  /*-------------------------------------------------------
-
-                      Computed
-
--------------------------------------------------------*/
+  //-------------------------------------------------------
+  let emit = defineEmits<TableRowEmitter>();
+  //-------------------------------------------------------
   // 是否显示行前的空白标记单元格
   const ShowIndentor = computed(() => (props.indent ?? 0) > 0);
 
@@ -64,7 +43,7 @@
       };
     }
   });
-
+  //-------------------------------------------------------
   function getRowCellClass(colIndex: number) {
     let isActived = false;
     if (props.activated) {
@@ -79,7 +58,29 @@
       'can-hover': props.canHover,
     });
   }
-
+  //-------------------------------------------------------
+  function onRow(eventName: TableRowEventName, event: Event) {
+    emit(eventName, {
+      colIndex: -1,
+      rowIndex: props.row.index,
+      event,
+      row: props.row,
+    });
+  }
+  //-------------------------------------------------------
+  function onCell(
+    eventName: TableRowEventName,
+    colIndex: number,
+    event: Event
+  ) {
+    emit(eventName, {
+      colIndex,
+      rowIndex: props.row.index,
+      event,
+      row: props.row,
+    });
+  }
+  //-------------------------------------------------------
   onMounted(() => {
     let els = $cells.value;
     let $cell: HTMLElement;
@@ -95,6 +96,7 @@
     //console.log(`row ${props.rowIndex} mounted`, H, $cell)
     updateRowHeight(row.index, H);
   });
+  //-------------------------------------------------------
 </script>
 <template>
   <!--空白指示单元格-->
@@ -104,13 +106,13 @@
     :class="getRowCellClass(-1)"
     :row-id="props.row.id"
     :row-index="props.row.index"
-    @click="emit('select', { row: props.row, event: $event })"
-    @dblclick="emit('open', { row: props.row, event: $event })">
+    @click="onRow('row-select', $event)"
+    @dblclick="onRow('row-open', $event)">
     <!--选择框-->
     <template v-if="props.showCheckbox">
       <span
         class="as-checker"
-        @click.stop="emit('check', { row: props.row, event: $event })">
+        @click.stop="onRow('row-check', $event)">
         <i
           v-if="props.checked"
           class="zmdi zmdi-check-square"></i>
@@ -129,43 +131,43 @@
     <span
       v-if="props.activated"
       class="as-active-indicator"
-      @click.stop="emit('open', { row: props.row, event: $event })"
+      @click.stop="onRow('row-open', $event)"
       ><i class="zmdi zmdi-caret-right"></i><i class="zmdi zmdi-open-in-new"></i
     ></span>
   </div>
-  <!--正式列单元格-->
+  <!--正式列单元格: 这里面考虑 candidate -->
   <template
     v-for="(cell, i) in props.columns"
     :key="cell.uniqKey">
     <div
+      v-if="!cell.candidate"
       class="table-cell as-body"
       :row-id="props.row.id"
       :row-index="props.row.index"
       :col="i"
       :class="getRowCellClass(i)"
-      ref="$cells">
+      ref="$cells"
+      @click="onCell('cell-select', cell.index, $event)"
+      @dblclick="onCell('cell-open', cell.index, $event)">
       <!--首列，这里有可能插入缩进占位块-->
       <div
         v-if="0 === i && ShowIndentor"
         class="row-indent"
         :style="RowIndentStyle"></div>
       <!--插入单元格控件-->
-      <TiCell
+      <TableCell
         v-bind="cell"
         :rowIndex="props.row.index"
         :colIndex="i"
         :data="props.row.rawData"
         :vars="props.vars"
         :activated="props.activated && i == props.activedColIndex"
-        @click="emit('cell', { row: props.row, event: $event, colIndex: i })"
-        @dblclick="
-          emit('cell-open', { row: props.row, event: $event, colIndex: i })
-        "
-        @value-change="emit('cell-change', $event)" />
+        @cell-change="emit('cell-change', $event)" />
     </div>
   </template>
 </template>
 <style lang="scss">
-  @use '../../../../assets/style/_all.scss' as *;
+  @use '../../../assets/style/_all.scss' as *;
   @import './style/table-row.scss';
-</style>./ti-table-types
+</style>
+./ti-table-types

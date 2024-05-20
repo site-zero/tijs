@@ -9,37 +9,35 @@
     ref,
     watch,
   } from 'vue';
-  import { Alert, TiIcon, useLargeScrolling } from '../../';
+  import { Alert, TiIcon, useFieldChange, useLargeScrolling } from '../../';
   import { CssUtils, Size2D, Util, getLogger } from '../../../core';
   import { COM_TYPES } from '../../lib-com-types';
-  import TableRow from './row/TableRow.vue';
-  import { TableProps } from './ti-table-types';
-  import { ColResizingState, TableEmit, useTable } from './use-table';
+  import TableRow from './TableRow.vue';
+  import { buildTableColumns } from './build-table-column';
+  import { TableCellChanged, TableEmitter, TableProps } from './ti-table-types';
+  import {
+    ColResizingState,
+    getRowActivedColIndex,
+    useTable,
+  } from './use-table';
   import { TableScrolling, getTableDebugInfo } from './use-table-debug-info';
   import { loadColumnSizes, useKeepTable } from './use-table-keep';
   import { useViewMeasure } from './use-view-measure';
-
+  //-------------------------------------------------------
   const COM_TYPE = COM_TYPES.Table;
-
   const log = getLogger(COM_TYPE);
   //-------------------------------------------------------
   const showDebugScrolling = false;
   const showDebugResizing = false;
   const showDebug = showDebugScrolling || showDebugResizing;
-  /*-------------------------------------------------------
-
-                       Com Options
-
-  -------------------------------------------------------*/
+  //-------------------------------------------------------
   defineOptions({
     name: 'TiTable',
     inheritAttrs: true,
   });
-  /*-------------------------------------------------------
-
-                          Props
-
-  -------------------------------------------------------*/
+  //-------------------------------------------------------
+  let emit = defineEmits<TableEmitter>();
+  //-------------------------------------------------------
   let props = withDefaults(defineProps<TableProps>(), {
     getId: 'id',
     showHeader: true,
@@ -53,16 +51,14 @@
     canHover: true,
     canSelect: true,
     canCheck: true,
+    changeMode: 'diff',
   });
-  let emit = defineEmits<TableEmit>();
+  //-------------------------------------------------------
+  const Keep = computed(() => useKeepTable(props));
   let Table = computed(() => useTable(props, emit));
-  /*-------------------------------------------------------
-
-                        State
-
-  -------------------------------------------------------*/
+  //-------------------------------------------------------
   const $main: Ref<HTMLElement> = ref() as Ref<HTMLElement>;
-
+  //-------------------------------------------------------
   // 如果采用 IntersectionObserver 就没必要监控 scrolling 的变化了
   const scrolling: TableScrolling = reactive({
     viewport: { width: 0, height: 0 },
@@ -74,26 +70,20 @@
     lineMarkers: [] as number[],
   });
   const selection = reactive(Table.value.createSelection());
-
+  //-------------------------------------------------------
   /**
    * 定制每个列的宽高，0 表示这个行是自动 `1fr`
    */
   const columnSizes: Ref<number[]> = ref([]);
-
+  //-------------------------------------------------------
   const colResizing = reactive({
     activated: false,
     left: -1,
     colIndex: -1,
   } as ColResizingState);
-  /*-------------------------------------------------------
-
-                      Features
-
-  -------------------------------------------------------*/
-  const Keep = computed(() => useKeepTable(props));
-  //......................................................
-  //                   View Measure
-  //......................................................
+  //-------------------------------------------------------
+  //                     View Measure
+  //-------------------------------------------------------
   useViewMeasure({
     getMainElement: () => $main.value,
     setViewport: (viewport: Size2D) => {
@@ -106,14 +96,12 @@
     onUnmounted,
     debounce: 300,
   });
-  /*-------------------------------------------------------
-
-                      Computed
-
-  -------------------------------------------------------*/
+  //-------------------------------------------------------
+  //                  Computed
+  //-------------------------------------------------------
   const isInRenderZone = computed(() => useLargeScrolling(scrolling));
   const TopClass = computed(() => CssUtils.mergeClassName(props.className));
-  const TableColumns = computed(() => Table.value.getTableColumns());
+  const TableColumns = computed(() => buildTableColumns(props));
   const TableData = computed(() => {
     return Table.value.getTableData(selection);
   });
@@ -128,9 +116,15 @@
       none: 'zmdi-square-o',
     }[RowCheckStatus.value];
   });
-  //
-  // 计算格子的列
-  //
+
+  const Change = useFieldChange({
+    changeMode: props.changeMode,
+    linkFields: props.linkFields,
+    fields: TableColumns.value,
+  });
+  //-------------------------------------------------------
+  //                      计算格子的列
+  //-------------------------------------------------------
   const MainStyle = computed(() => {
     let N = TableColumns.value.length;
     let cols = [];
@@ -162,9 +156,9 @@
       'column-gap': `${props.colGap}px`,
     });
   });
-  //
-  // 虚拟占位行
-  //
+  //-------------------------------------------------------
+  //                 虚拟占位行
+  //-------------------------------------------------------
   const VirtualRowStyle = computed(() => {
     let N = TableColumns.value.length;
     // 显示行头标记列，需要凭空为列+1
@@ -175,21 +169,21 @@
       'grid-column': `1 / ${N + 1}`,
     };
   });
-  //
-  // 提示列 resizing-bar
-  //
+  //-------------------------------------------------------
+  //              提示列 resizing-bar
+  //-------------------------------------------------------
   const ResizingBarStyle = computed(() => {
     return {
       left: `${colResizing.left + 1}px`,
     };
   });
-  //
-  // 调试滚动信息
-  //
+  //-------------------------------------------------------
+  //                     调试滚动信息
+  //-------------------------------------------------------
   const DebugInfo = computed(() => getTableDebugInfo(scrolling, showDebug));
-  //
-  // Methods
-  //
+  //-------------------------------------------------------
+  //                     Methods
+  //-------------------------------------------------------
   // TODO 如果采用 IntersectionObserver ，那么这个就没必要了
   function updateRowHeight(rowIndex: number, height: number) {
     // 如果没有设置过真实行高，那么也更新一下默认
@@ -198,7 +192,7 @@
     }
     scrolling.lineHeights[rowIndex] = height + props.rowGap;
   }
-
+  //-------------------------------------------------------
   function onClickSettings() {
     Alert(
       `设置包括：
@@ -215,11 +209,35 @@
       }
     );
   }
-  /*-------------------------------------------------------
+  //-------------------------------------------------------
+  //                Event Cell Changed
+  //-------------------------------------------------------
+  function onCellChange(changed: TableCellChanged) {
+    let { colIndex, rowIndex, name, value, oldVal } = changed;
+    log.debug('OnCellChange', changed);
+    console.log(changed);
 
-                    Life Hooks
+    let oldRowData = _.nth(TableData.value, rowIndex)?.rawData;
 
-  -------------------------------------------------------*/
+    // 更新值，并通知改动
+    Change.tidyValueChange(
+      changed,
+      { checkEquals: true, data: oldRowData || {} },
+      (changedData, field) => {
+        emit('row-change', {
+          colIndex,
+          rowIndex,
+          uniqKey: field.uniqKey,
+          name: field.name,
+          changed: changedData,
+          oldRowData,
+        });
+      }
+    );
+  }
+  //-------------------------------------------------------
+  //                  Life Hooks
+  //-------------------------------------------------------
   watch(
     () => props.data,
     () => {
@@ -229,7 +247,7 @@
       selection.ids = Table.value.getRowIds();
     }
   );
-
+  //-------------------------------------------------------
   watch(
     () => [props.currentId, props.checkedIds],
     () => {
@@ -237,14 +255,13 @@
       selection.checkedIds = Util.objToMap(props.checkedIds);
     }
   );
-
   // watch(
   //   () => TableColumns.value,
   //   () => {
   //     //console.log('columns changed', TableColumns.value.length);
   //   }
   // );
-
+  //-------------------------------------------------------
   watch(
     () => props.keepColumns,
     () => {
@@ -252,7 +269,7 @@
       loadColumnSizes(columnSizes, Keep.value);
     }
   );
-
+  //-------------------------------------------------------
   onMounted(() => {
     Table.value.bindTableResizing(
       $main.value,
@@ -264,6 +281,7 @@
     );
     loadColumnSizes(columnSizes, Keep.value);
   });
+  //-------------------------------------------------------
 </script>
 <template>
   <div
@@ -332,16 +350,14 @@
           :activated="row.id == selection.currentId"
           :checked="Table.selectable.isIDChecked(selection, row.id)"
           :indent="row.indent"
-          :activedColIndex="
-            row.id == selection.currentId ? selection.columnIndex : -1
-          "
+          :activedColIndex="getRowActivedColIndex(selection, row)"
           :updateRowHeight="updateRowHeight"
-          @select="Table.OnRowSelect(selection, $event)"
-          @check="Table.OnRowCheck(selection, $event)"
-          @open="Table.OnRowOpen(selection, $event)"
-          @cell="Table.OnCellSelect(selection, $event, TableColumns)"
+          @row-select="Table.OnRowSelect(selection, $event)"
+          @row-check="Table.OnRowCheck(selection, $event)"
+          @row-open="Table.OnRowOpen(selection, $event)"
+          @cell-select="Table.OnCellSelect(selection, $event, TableColumns)"
           @cell-open="Table.OnCellOpen(selection, $event)"
-          @cell-change="emit('cell-change', $event)" />
+          @cell-change="onCellChange" />
       </template>
     </main>
     <!-- 显示拖拽的列分割条-->
@@ -379,8 +395,7 @@
 <style lang="scss">
   @use '../../../assets/style/_all.scss' as *;
   @import './style/ti-table.scss';
-  @import './style/table-head.scss';
+  @import './style/table-cell.scss';
   @import './style/table-resize.scss';
   @import './style/table-debug.scss';
 </style>
-./ti-table-types

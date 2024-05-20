@@ -227,7 +227,6 @@ export function useSelectable<ID extends string | number>(
     }
     // Single selection
     else {
-      console.log('haha');
       // use currentId
       if (!_.isNil(currentId)) {
         ids.set(currentId, true);

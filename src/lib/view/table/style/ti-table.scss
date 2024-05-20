@@ -13,24 +13,6 @@
     align-items: stretch;
     align-content: flex-start;
     background-color: var(--ti-color-border-shallow);
-    //background-color: red;
-    > .table-cell {
-      @include flex-align-nowrap($ai: stretch);
-      @include colorized;
-      background-color: var(--ti-color-card);
-      //background-color: blue;
-      &.is-checked {
-        color: var(--ti-color-selected-r);
-        background-color: var(--ti-color-selected);
-        &.is-actived.has-actived-com {
-          color: var(--ti-color-box-f);
-          background-color: var(--ti-color-box);
-        }
-      }
-      > .ti-cell {
-        flex: 1 1 auto;
-      }
-    } // >.table-cell
 
     > .virtual-row {
       background-color: var(--ti-color-card);

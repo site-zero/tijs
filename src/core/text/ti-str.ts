@@ -1,14 +1,15 @@
-import _ from 'lodash';
 import JSON5 from 'json5';
+import _ from 'lodash';
+import * as DateTime from '../_top/ti-datetime';
 import {
-  Vars,
-  StrConvertor,
-  Tmpl,
   StrCaseFunc,
   StrCaseMode,
+  StrConvertor,
+  Tmpl,
+  ToJsValueOptions,
   Util,
+  Vars,
 } from '../ti';
-import * as DateTime from '../_top/ti-datetime';
 
 /*---------------------------------------------------
 
@@ -167,16 +168,7 @@ export function splitQuote(str: string, options: SplitOptions = {}): string[] {
                 JS值的自动转换
 
 ---------------------------------------------------*/
-type toJsValueOptions = {
-  autoJson?: boolean;
-  autoDate?: boolean;
-  autoNil?: boolean;
-  autoMap?: boolean;
-  autoList?: boolean;
-  trimed?: boolean;
-  context?: Vars;
-};
-export function toJsValue(v: any = '', options = {} as toJsValueOptions): any {
+export function toJsValue(v: any = '', options = {} as ToJsValueOptions): any {
   //...............................................
   // Array
   if (_.isArray(v)) {
@@ -200,9 +192,13 @@ export function toJsValue(v: any = '', options = {} as toJsValueOptions): any {
 
   let {
     autoJson = true,
-    autoDate = true,
+    autoDate = false,
     autoNil = false,
     autoMap = true,
+    autoNum = true,
+    autoBool = true,
+    autoVar = true,
+    autoDefault = true,
     trimed = true,
     context = {},
   } = options || {};
@@ -226,9 +222,11 @@ export function toJsValue(v: any = '', options = {} as toJsValueOptions): any {
   // Must by string
   let str = trimed ? _.trim(v) : v;
   let dftAsNil = false;
-  if (str.endsWith('?')) {
-    dftAsNil = true;
-    str = str.substring(0, str.length - 1).trim();
+  if (autoDefault) {
+    if (str.endsWith('?')) {
+      dftAsNil = true;
+      str = str.substring(0, str.length - 1).trim();
+    }
   }
   //...............................................
   // autoNil
@@ -243,7 +241,7 @@ export function toJsValue(v: any = '', options = {} as toJsValueOptions): any {
   }
   //...............................................
   // Number
-  if (/^-?\d*\.?\d+$/.test(str)) {
+  if (autoNum && /^-?\d*\.?\d+$/.test(str)) {
     let n = str * 1;
     if (n == str) {
       return n;
@@ -252,13 +250,15 @@ export function toJsValue(v: any = '', options = {} as toJsValueOptions): any {
   }
   //...............................................
   // Try to get from context
-  let re = _.get(context, str);
-  if (!_.isUndefined(re) || dftAsNil) {
-    return re;
+  if (autoVar) {
+    let re = _.get(context, str);
+    if (!_.isUndefined(re) || dftAsNil) {
+      return re;
+    }
   }
   //...............................................
   // Boolean
-  if (/^(true|false|yes|no|on|off)$/.test(str)) {
+  if (autoBool && /^(true|false|yes|no|on|off)$/.test(str)) {
     return /^(true|yes|on)$/.test(str);
   }
   //...............................................

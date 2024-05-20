@@ -111,9 +111,15 @@ export function useFieldCom(
     return tiCheckComponent(props.readonlyComType || defaultComType).com;
   }
   function getReadonlyComConf(context: Vars, val?: any): Vars {
-    let comConf =
-      Util.explainObj(context, props.readonlyComConf) ||
-      _.cloneDeep(defaultComConf);
+    let comConf: Vars | undefined;
+    if (props.readonlyComType) {
+      comConf = props.readonlyComConf;
+    }
+    if (!comConf) {
+      comConf = props.comConf ?? _.cloneDeep(defaultComConf);
+    }
+    comConf = Util.explainObj(context, comConf);
+
     // TODO 自动分析 comConf ，构建一个自己对应的  comConf
 
     // 自动为控件添加值属性
@@ -133,8 +139,13 @@ export function useFieldCom(
     return tiCheckComponent(props.activatedComType || 'TiInput').com;
   }
   function getActivatedComConf(context: Vars, val?: any): Vars {
-    let comConf =
-      props.activatedComConf ?? props.comConf ?? _.cloneDeep(defaultComConf);
+    let comConf: Vars | undefined;
+    if (props.activatedComType) {
+      comConf = props.activatedComConf;
+    }
+    if (!comConf) {
+      comConf = props.comConf ?? _.cloneDeep(defaultComConf);
+    }
     comConf = Util.explainObj(context, comConf);
 
     // 自动为控件添加值属性

@@ -43,12 +43,6 @@ export type Field = {
   serializer?: (val: any, data: Vars, name: FieldName) => any;
 };
 
-export type CellEvents = 'value-change';
-export type CellChanged = FieldPair & {
-  rowIndex: number;
-  colIndex: number;
-};
-
 export type CellProps = CommonProps &
   Field &
   Omit<FieldComProps, 'readonlyComType' | 'readonlyComConf'> & {
@@ -84,7 +78,6 @@ export type CellProps = CommonProps &
 
 /**
  * 抽象字段
- * TODO 以后提到全局，给 Table Cell 也用上
  */
 export type AbstractField = Field & {
   /**
@@ -105,14 +98,6 @@ export type AbstractField = Field & {
    */
   asyncValidate?: AsyncFieldValidator;
 };
-
-/**
- * 单元格定义
- */
-export type TableCell = Omit<
-  CellProps,
-  'activated' | 'rowIndex' | 'colIndex' | 'data' | 'vars'
->;
 
 export type FieldConvertor = {
   transform: Convertor<any, any>;

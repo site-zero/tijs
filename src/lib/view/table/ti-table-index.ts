@@ -21,9 +21,10 @@ const TiTableInfo: TiComInfo = {
   defaultProps: 'simple',
   exampleProps: [simple, d300, d1k, d10k, editable],
   exampleModel: {
-    'cell-change': {
-      key: 'data.${rowIndex}.${name}',
-      val: '=value',
+    'row-change': {
+      key: 'data.${rowIndex}',
+      val: '=changed',
+      mode: 'assign',
     },
   },
 };

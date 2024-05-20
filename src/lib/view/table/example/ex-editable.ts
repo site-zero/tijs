@@ -1,4 +1,4 @@
-import { TableCell, TableProps } from '../../../';
+import { TableCellProps, TableProps } from '../ti-table-types';
 import { mockData } from './mock-table-row';
 
 export default {
@@ -16,13 +16,14 @@ export default {
         autoSelect: false,
         boxFocused: true,
       },
+      data: mockData(10),
       columns: [
         {
           name: 'id',
           activatedComType: null,
           comConf: {
-            className:"is-nowrap is-disable"
-          }
+            className: 'is-nowrap is-disable',
+          },
         },
         {
           name: 'name',
@@ -35,10 +36,14 @@ export default {
         },
         {
           name: 'age',
-          activatedComType: null,
+          type: 'Integer',
         },
         {
           name: 'birthday',
+          activatedComType: null,
+          comConf: {
+            className: 'is-nowrap is-disable',
+          },
         },
         {
           name: 'city',
@@ -52,8 +57,7 @@ export default {
         {
           name: 'local_ip',
         },
-      ] as TableCell[],
-      data: mockData(10),
+      ] as TableCellProps[],
     };
   },
 };

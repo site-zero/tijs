@@ -1,34 +1,29 @@
 import _ from 'lodash';
 import { ComputedRef, Ref } from 'vue';
+import { CheckStatus, SelectableFeature, useSelectable } from '../../';
 import {
-  CellChanged,
-  CheckStatus,
-  SelectableFeature,
-  TableColumn,
-  TableEvent,
+  Callback,
+  Callback1,
+  EventUtils,
+  Vars,
+  getLogger,
+} from '../../../core';
+import {
+  TableEmitter,
+  TableEventPayload,
   TableProps,
   TableRowData,
   TableRowID,
   TableSelectEmitInfo,
   TableSelection,
   TableStrictColumn,
-  makeFieldUniqKey,
-  parseFieldConverter,
-  useSelectable,
-} from '../../';
-import {
-  Callback,
-  Callback1,
-  EventUtils,
-  Util,
-  Vars,
-  getLogger,
-} from '../../../core';
+} from './ti-table-types';
 
 import { TableKeepFeature } from './use-table-keep';
 import { useTableResizing } from './use-table-resizing';
 
 const log = getLogger('TiTable.use-table');
+
 /**
  * 拖动时的状态
  */
@@ -48,91 +43,11 @@ export type ColResizingState = {
   colIndex: number;
 };
 
-export type TableEmit = {
-  (eventName: 'select', payload: TableSelectEmitInfo): void;
-  (eventName: 'open', payload: TableRowData): void;
-  (eventName: 'cell-open', payload: TableEvent): void;
-  (eventName: 'cell-change', payload: CellChanged): void;
-};
-
 /*-------------------------------------------------------
 
                      Help methods
 
 -------------------------------------------------------*/
-function _build_table_columns(props: TableProps) {
-  let reColumns = [] as TableStrictColumn[];
-  for (let i = 0; i < props.columns.length; i++) {
-    let col = props.columns[i];
-    if (col.candidate) {
-      continue;
-    }
-    // 列唯一键
-    let uniqKey = makeFieldUniqKey([i], col.name, col.uniqKey);
-
-    // 准备列
-    let reColumns = [] as TableStrictColumn[];
-    let re: TableStrictColumn = {
-      uniqKey,
-      name: col.name,
-      type: col.type ?? 'String',
-      className: col.className,
-      title: col.title ?? _.upperCase(uniqKey),
-      titleType: col.titleType ?? 'text',
-      titleIcon: col.titleIcon,
-      titleStyle: col.titleStyle,
-      titleAlign: col.titleAlign,
-      tip: col.tip,
-      tipType: col.tipType ?? 'text',
-      tipBy: col.tipBy,
-      tipStyle: col.tipStyle,
-      tipAlign: col.tipAlign,
-
-      candidate: col.candidate ?? false,
-
-      // 表格默认控件
-      comType: col.comType ?? props.defaultCellComType ?? 'TiLabel',
-      comConf: col.comConf ??
-        props.defaultCellComConf ?? {
-          className: 'is-nowrap',
-        },
-      autoValue: col.autoValue,
-      readonlyComType: col.readonlyComType,
-      readonlyComConf: col.readonlyComConf,
-      // 表格默认激活控件
-      activatedComType: Util.fallback(
-        col.activatedComType,
-        props.defaultCellActivatedComType
-      ),
-      activatedComConf: Util.fallback(
-        col.activatedComConf,
-        props.defaultCellActivatedComConf
-      ),
-
-      transformer: parseFieldConverter(
-        col.type ?? 'String',
-        'transform',
-        props.vars || {},
-        col.transformer,
-        col.transArgs,
-        col.transPartial
-      ),
-      serializer: parseFieldConverter(
-        col.type ?? 'String',
-        'serialize',
-        props.vars || {},
-        col.serializer,
-        col.serialArgs,
-        col.serialPartial
-      ),
-    };
-
-    // 记入列表
-    reColumns.push(re);
-  }
-  return reColumns;
-}
-
 /**
  * 获取表格数据
  * @param selectable 选择特性
@@ -143,11 +58,10 @@ function _build_table_columns(props: TableProps) {
  */
 function _get_table_data(
   selectable: SelectableFeature<TableRowID>,
-  _state: TableSelection,
   data: Vars[]
 ): TableRowData[] {
   // 启用特性
-  let { getDataId, isIDChecked } = selectable;
+  let { getDataId } = selectable;
 
   // 处理数据
   let list = [] as TableRowData[];
@@ -159,33 +73,18 @@ function _get_table_data(
       id: id ?? `row-${index}`,
       index,
       indent: 0,
-      // activated: id == state.currentId,
-      // checked: isIDChecked(state, id),
       rawData,
     });
   }
   return list;
 }
 
-/**
- * 表格的行头被点击，通常是需要选择行
- */
-function _on_row_select(
-  selectable: SelectableFeature<TableRowID>,
-  selection: TableSelection,
-  rowEvent: TableEvent
-) {
-  let { event, row } = rowEvent;
-  let se = EventUtils.getKeyboardStatus(event);
-
-  selectable.select(selection, row.id, se);
-}
 /*-----------------------------------------------------
 
                    Use Feature
                 
 -----------------------------------------------------*/
-export function useTable(props: TableProps, emit: TableEmit) {
+export function useTable(props: TableProps, emit: TableEmitter) {
   // 启用特性
   let selectable = useSelectable<TableRowID>(props);
 
@@ -221,11 +120,8 @@ export function useTable(props: TableProps, emit: TableEmit) {
         'is-actived-column': selection.columnIndex == colIndex,
       };
     },
-    getTableColumns: () => {
-      return _build_table_columns(props);
-    },
-    getTableData: (state: TableSelection) => {
-      return _get_table_data(selectable, state, props.data);
+    getTableData: (_state: TableSelection) => {
+      return _get_table_data(selectable, props.data);
     },
     bindTableResizing: (
       $main: HTMLElement,
@@ -279,7 +175,7 @@ export function useTable(props: TableProps, emit: TableEmit) {
       }
     },
 
-    OnRowSelect(selection: TableSelection, rowEvent: TableEvent) {
+    OnRowSelect(selection: TableSelection, rowEvent: TableEventPayload) {
       selection.columnIndex = -1;
       // Guard actived
       if (selection.currentId == rowEvent.row.id) {
@@ -288,7 +184,10 @@ export function useTable(props: TableProps, emit: TableEmit) {
       log.debug('OnRowSelect', rowEvent);
       let oldCurrentId = _.cloneDeep(selection.currentId);
       let oldCheckedIds = _.cloneDeep(selection.checkedIds);
-      _on_row_select(selectable, selection, rowEvent);
+
+      let { event, row } = rowEvent;
+      let se = EventUtils.getKeyboardStatus(event);
+      selectable.select(selection, row.id, se);
 
       //
       // Prepare the emit info
@@ -303,7 +202,7 @@ export function useTable(props: TableProps, emit: TableEmit) {
       emit('select', info);
     },
 
-    OnRowCheck(selection: TableSelection, rowEvent: TableEvent) {
+    OnRowCheck(selection: TableSelection, rowEvent: TableEventPayload) {
       log.debug('OnRowCheck', rowEvent);
       let oldCurrentId = _.cloneDeep(selection.currentId);
       let oldCheckedIds = _.cloneDeep(selection.checkedIds);
@@ -325,8 +224,8 @@ export function useTable(props: TableProps, emit: TableEmit) {
 
     OnCellSelect(
       selection: TableSelection,
-      rowEvent: TableEvent,
-      columns: TableColumn[]
+      rowEvent: TableEventPayload,
+      columns: TableStrictColumn[]
     ) {
       let { row, colIndex } = rowEvent;
       selection.columnIndex = colIndex ?? -1;
@@ -356,14 +255,24 @@ export function useTable(props: TableProps, emit: TableEmit) {
       }
     },
 
-    OnRowOpen(_selection: TableSelection, rowEvent: TableEvent) {
+    OnRowOpen(_selection: TableSelection, rowEvent: TableEventPayload) {
       log.debug('OnRowOpen', rowEvent);
       emit('open', rowEvent.row);
     },
 
-    OnCellOpen(_selection: TableSelection, rowEvent: TableEvent) {
+    OnCellOpen(_selection: TableSelection, rowEvent: TableEventPayload) {
       log.debug('OnCellOpen', rowEvent);
       emit('cell-open', rowEvent);
     },
   };
+}
+
+export function getRowActivedColIndex(
+  selection: TableSelection,
+  row: TableRowData
+): number {
+  if (row.id == selection.currentId) {
+    return selection.columnIndex;
+  }
+  return -1;
 }

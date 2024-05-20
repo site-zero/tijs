@@ -75,7 +75,7 @@ export type HandleValueChangeOptions = {
 export function useFieldChange<T extends AbstractField>(
   props: FieldChangeProps<T>
 ) {
-  console.log('useFieldChange', props.fields);
+  //console.log('useFieldChange', props.fields);
   // 建立一个根据字段 uniqKey 对于字段的映射
   let fieldMapping = __build_fields_map(props.fields);
 
@@ -220,17 +220,12 @@ export function useFieldChange<T extends AbstractField>(
   }
 
   //...................................................
-  /**
-   * 处理值的修改
-   *
-   * @param change 修改的值
-   */
-  async function handleValueChange(
+  async function tidyValueChange(
     change: FieldValueChange,
-    options: HandleValueChangeOptions
+    options: Omit<HandleValueChangeOptions, 'emit'>,
+    callback: (changeData: Vars | FieldChange[], field: T) => void
   ) {
-    console.log('handleValueChange');
-    let { emit, data, checkEquals } = options;
+    let { data, checkEquals } = options;
     let msg_vars: Vars = { key: change.uniqKey, val: change.value };
     // 获取字段定义
     let field = getField(change.uniqKey);
@@ -239,6 +234,7 @@ export function useFieldChange<T extends AbstractField>(
       await Alert(msg, { type: 'error' });
       return;
     }
+    console.log('tidyValueChange', field);
 
     // 转换字段值
     if (field.serializer) {
@@ -296,8 +292,26 @@ export function useFieldChange<T extends AbstractField>(
         return;
       }
     }
-    // 通知改动
-    emit('change', changedData);
+
+    // 搞定
+    callback(changedData, field);
+  }
+
+  //...................................................
+  /**
+   * 处理值的修改
+   *
+   * @param change 修改的值
+   */
+  async function handleValueChange(
+    change: FieldValueChange,
+    options: HandleValueChangeOptions
+  ) {
+    console.log('handleValueChange');
+    await tidyValueChange(change, options, (changedData, _field) => {
+      let { emit } = options;
+      emit('change', changedData);
+    });
   }
 
   //...................................................
@@ -309,6 +323,7 @@ export function useFieldChange<T extends AbstractField>(
     verifyFieldChange, // 检查字段的改动是否合法
     makeChangeData, // 根据传入的模式制作需要传递的值
     getDiffData, // 根据改动列表获取与原始数据的差异数据
+    tidyValueChange,
     handleValueChange,
   };
 }
