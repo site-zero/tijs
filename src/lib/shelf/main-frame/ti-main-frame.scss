@@ -110,7 +110,7 @@ App Main Frame layout, there is 3 modes below::after
           opacity: 0.4;
           height: 100%;
           width: 0px;
-          border-left: 2px dashed var(--ti-color-primary);
+          border-left: $BARLINE dashed var(--ti-color-secondary);
         }
       }
     }
