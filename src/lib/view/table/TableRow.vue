@@ -7,9 +7,9 @@
     TableEvent,
     TableEventName,
     TiCell,
-  } from '../../../';
-  import { CssUtils } from '../../../../core';
-  import { TableRowProps } from './use-table-row';
+  } from '../../';
+  import { CssUtils } from '../../../core';
+  import { TableRowProps } from './ti-table-types';
   /*-------------------------------------------------------
 
                      Com Options
@@ -167,5 +167,5 @@
 </template>
 <style lang="scss">
   @use '../../../../assets/style/_all.scss' as *;
-  @import './table-row.scss';
-</style>
+  @import './style/table-row.scss';
+</style>./ti-table-types

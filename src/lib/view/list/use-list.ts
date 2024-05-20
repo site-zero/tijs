@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { EventUtils, IconInput, Vars, getLogger } from '../../../core';
 import { SelectableState, useSelectable } from '../../_features';
 import { RoadblockProps } from '../../tile/roadblock/ti-roadblock-types';
-import { TableRowID } from '../table/ti-table-type';
+import { TableRowID } from '../table/ti-table-types';
 import {
   ListEmitter,
   ListEvent,

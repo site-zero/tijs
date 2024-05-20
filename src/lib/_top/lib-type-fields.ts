@@ -6,8 +6,10 @@ import {
   Convertor,
   DateInput,
   DateTime,
+  InvokePartial,
   NameValue,
   Str,
+  Util,
   Vars,
 } from '../../core';
 
@@ -79,6 +81,30 @@ export type CellProps = CommonProps &
      */
     checkEquals?: boolean;
   };
+
+/**
+ * 抽象字段
+ * TODO 以后提到全局，给 Table Cell 也用上
+ */
+export type AbstractField = Field & {
+  /**
+   * 判断当前字段是否是必须的
+   *
+   * @param data 整体记录
+   * @returns  当前字段对这个记录是不是必须的
+   */
+  required?: (data: Vars) => any;
+
+  /**
+   * 同步检查字段值的合法性
+   */
+  validate?: FieldValidator;
+
+  /**
+   * 异步检查字段值的合法性
+   */
+  asyncValidate?: AsyncFieldValidator;
+};
 
 /**
  * 单元格定义
@@ -165,30 +191,6 @@ export type AsyncFieldValidator = (
   data: Vars
 ) => Promise<ValidateResult | undefined>;
 
-/**
- * 抽象字段
- * TODO 以后提到全局，给 Table Cell 也用上
- */
-export type AbstractField = Field & {
-  /**
-   * 判断当前字段是否是必须的
-   *
-   * @param data 整体记录
-   * @returns  当前字段对这个记录是不是必须的
-   */
-  required?: (data: Vars) => any;
-
-  /**
-   * 同步检查字段值的合法性
-   */
-  validate?: FieldValidator;
-
-  /**
-   * 异步检查字段值的合法性
-   */
-  asyncValidate?: AsyncFieldValidator;
-};
-
 export type FieldValueType = keyof FieldConvertorSet;
 
 export type FieldName = string | string[];
@@ -241,6 +243,28 @@ export function getFieldValue(name: FieldName, data: Vars): any {
 
 export function getFieldConvertor(type: FieldValueType): FieldConvertor {
   return FIELD_CONVERTERS[type];
+}
+
+export function parseFieldConverter(
+  type: FieldValueType,
+  mode: keyof FieldConvertor,
+  context: Vars,
+  converter?: string | Function,
+  args?: any[],
+  partial?: InvokePartial
+): (val: any, data: Vars, name: FieldName) => any {
+  // 自定义转换器
+  if (converter) {
+    let conv = Util.genInvoking(converter, {
+      context,
+      args,
+      partial: partial || 'right',
+    });
+    return conv as (val: any, data: Vars, name: FieldName) => any;
+  }
+  // 默认类型转换器
+  let cov = getFieldConvertor(type);
+  return cov[mode];
 }
 
 function toStr(input: any) {

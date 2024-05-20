@@ -28,5 +28,5 @@ const TiTableInfo: TiComInfo = {
   },
 };
 
-export * from './ti-table-type';
+export * from './ti-table-types';
 export { TiTable, TiTableInfo };

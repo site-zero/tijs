@@ -1,11 +1,22 @@
-import { CommonProps, Vars } from '../../../core';
 import {
+  AbstractField,
+  FieldComProps,
+  FieldName,
   KeepInfo,
   SelectEmitInfo,
   SelectableProps,
   SelectableState,
   TableCell,
-} from '../../';
+} from '../..';
+import {
+  Callback2,
+  CommonProps,
+  CssTextAlign,
+  IconInput,
+  InvokePartial,
+  TextContentType,
+  Vars,
+} from '../../../core';
 
 export type TableRowID = number | string;
 export type TableRowData = {
@@ -37,10 +48,6 @@ export type TableEvent = {
 
 export type TableKeepProps = {
   keepColumns?: KeepInfo;
-};
-
-export type TableColumn = TableCell & {
-  candidate?: boolean;
 };
 
 export type TableSelectEmitInfo = SelectEmitInfo<TableRowID> & {
@@ -146,4 +153,66 @@ export type TableProps = CommonProps &
      * 单位为`px`
      */
     rowMinHeight?: number;
+  };
+
+type TableColumnAspect = {
+  //------------------------------------
+  // 显示
+  //------------------------------------
+  title: string;
+  titleType?: TextContentType; // 默认 text
+  titleIcon?: IconInput;
+  titleStyle?: Vars;
+  titleAlign?: CssTextAlign;
+  tip?: string;
+  tipType?: TextContentType; // 默认 text
+  tipBy?: FieldComProps;
+  tipStyle?: Vars;
+  tipAlign?: CssTextAlign;
+  tipIcon?: IconInput;
+
+  // 本字段，是否为候选字段
+  candidate: boolean;
+};
+
+export type TableColumn = CommonProps &
+  FieldComProps &
+  Partial<Omit<AbstractField, 'transformer' | 'serializer'>> &
+  Partial<TableColumnAspect> & {
+    name: FieldName;
+    // 读取字段值后，经过一个定制转换，再传递给字段
+    // data[name] ===(transformer) ==> FieldCom
+    transformer?: string | Function;
+    transArgs?: any[];
+    transPartial?: InvokePartial;
+    // 字段值修改后，经过一个定制转换，再向外抛出消息
+    // FieldCom.change ===(serializer) ==> emit('change')
+    serializer?: string | Function;
+    serialArgs?: any[];
+    serialPartial?: InvokePartial;
+  };
+
+export type TableStrictColumn = CommonProps &
+  FieldComProps &
+  AbstractField &
+  TableColumnAspect;
+
+export type TableRowProps = CommonProps &
+  TableBehaviorsProps & {
+    showRowMarker: boolean;
+    /**
+     * 传入的行数据对象
+     */
+    row: TableRowData;
+
+    activated?: boolean;
+    checked?: boolean;
+    indent?: number;
+
+    activedColIndex?: number;
+
+    /**
+     * 表格给的回调，用来更新每行的行高
+     */
+    updateRowHeight: Callback2<number, number>;
   };

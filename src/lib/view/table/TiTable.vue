@@ -13,7 +13,7 @@
   import { CssUtils, Size2D, Util, getLogger } from '../../../core';
   import { COM_TYPES } from '../../lib-com-types';
   import TableRow from './row/TableRow.vue';
-  import { TableProps } from './ti-table-type';
+  import { TableProps } from './ti-table-types';
   import { ColResizingState, TableEmit, useTable } from './use-table';
   import { TableScrolling, getTableDebugInfo } from './use-table-debug-info';
   import { loadColumnSizes, useKeepTable } from './use-table-keep';
@@ -383,3 +383,4 @@
   @import './style/table-resize.scss';
   @import './style/table-debug.scss';
 </style>
+./ti-table-types

@@ -4,7 +4,6 @@ import {
   CellChanged,
   CheckStatus,
   SelectableFeature,
-  TableCell,
   TableColumn,
   TableEvent,
   TableProps,
@@ -12,15 +11,15 @@ import {
   TableRowID,
   TableSelectEmitInfo,
   TableSelection,
-  getFieldUniqKey,
+  TableStrictColumn,
+  makeFieldUniqKey,
+  parseFieldConverter,
   useSelectable,
 } from '../../';
 import {
   Callback,
   Callback1,
   EventUtils,
-  I18n,
-  Str,
   Util,
   Vars,
   getLogger,
@@ -61,47 +60,77 @@ export type TableEmit = {
                      Help methods
 
 -------------------------------------------------------*/
-function _get_table_columns(props: TableProps) {
-  let list = [] as TableColumn[];
-  for (let col of props.columns) {
+function _build_table_columns(props: TableProps) {
+  let reColumns = [] as TableStrictColumn[];
+  for (let i = 0; i < props.columns.length; i++) {
+    let col = props.columns[i];
     if (col.candidate) {
       continue;
     }
     // 列唯一键
-    let colItem = _.cloneDeep(col) as TableCell;
-    if (!colItem.uniqKey) {
-      colItem.uniqKey = getFieldUniqKey(col.name);
-    }
+    let uniqKey = makeFieldUniqKey([i], col.name, col.uniqKey);
 
-    // 列标题
-    if (!col.title) {
-      colItem.title = _.upperCase(colItem.uniqKey);
-    } else {
-      colItem.title = I18n.text(col.title);
-    }
+    // 准备列
+    let reColumns = [] as TableStrictColumn[];
+    let re: TableStrictColumn = {
+      uniqKey,
+      name: col.name,
+      type: col.type ?? 'String',
+      className: col.className,
+      title: col.title ?? _.upperCase(uniqKey),
+      titleType: col.titleType ?? 'text',
+      titleIcon: col.titleIcon,
+      titleStyle: col.titleStyle,
+      titleAlign: col.titleAlign,
+      tip: col.tip,
+      tipType: col.tipType ?? 'text',
+      tipBy: col.tipBy,
+      tipStyle: col.tipStyle,
+      tipAlign: col.tipAlign,
 
-    // 表格默认控件
-    colItem.comType = col.comType ?? props.defaultCellComType ?? 'TiLabel';
-    colItem.comConf = col.comConf ??
-      props.defaultCellComConf ?? {
-        className: 'is-nowrap',
-      };
+      candidate: col.candidate ?? false,
 
-    // 表格默认激活控件
-    colItem.activatedComType = Util.fallback(
-      col.activatedComType,
-      props.defaultCellActivatedComType
-    );
+      // 表格默认控件
+      comType: col.comType ?? props.defaultCellComType ?? 'TiLabel',
+      comConf: col.comConf ??
+        props.defaultCellComConf ?? {
+          className: 'is-nowrap',
+        },
+      autoValue: col.autoValue,
+      readonlyComType: col.readonlyComType,
+      readonlyComConf: col.readonlyComConf,
+      // 表格默认激活控件
+      activatedComType: Util.fallback(
+        col.activatedComType,
+        props.defaultCellActivatedComType
+      ),
+      activatedComConf: Util.fallback(
+        col.activatedComConf,
+        props.defaultCellActivatedComConf
+      ),
 
-    colItem.activatedComConf = Util.fallback(
-      col.activatedComConf,
-      props.defaultCellActivatedComConf
-    );
+      transformer: parseFieldConverter(
+        col.type ?? 'String',
+        'transform',
+        props.vars || {},
+        col.transformer,
+        col.transArgs,
+        col.transPartial
+      ),
+      serializer: parseFieldConverter(
+        col.type ?? 'String',
+        'serialize',
+        props.vars || {},
+        col.serializer,
+        col.serialArgs,
+        col.serialPartial
+      ),
+    };
 
     // 记入列表
-    list.push(colItem);
+    reColumns.push(re);
   }
-  return list;
+  return reColumns;
 }
 
 /**
@@ -193,7 +222,7 @@ export function useTable(props: TableProps, emit: TableEmit) {
       };
     },
     getTableColumns: () => {
-      return _get_table_columns(props);
+      return _build_table_columns(props);
     },
     getTableData: (state: TableSelection) => {
       return _get_table_data(selectable, state, props.data);

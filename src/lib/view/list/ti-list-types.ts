@@ -10,7 +10,7 @@ import {
   SelectEmitInfo,
   SelectableProps,
 } from '../../../lib/_features/use-selectable';
-import { TableRowID } from '../table/ti-table-type';
+import { TableRowID } from '../table/ti-table-types';
 
 export type ListProps = CommonProps &
   SelectableProps<TableRowID> & {

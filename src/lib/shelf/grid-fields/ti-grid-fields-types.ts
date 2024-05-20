@@ -83,7 +83,7 @@ export type GridFieldsProps = Omit<
 */
 export type GridFieldsItemRace = 'field' | 'group' | 'label';
 export type GridFieldsInput = CommonProps &
-  Partial<AbstractField> &
+  Partial<Omit<AbstractField, 'required'>> &
   FieldComProps &
   VisibilityProps &
   GridFieldsItemLayoutProps &
@@ -118,12 +118,6 @@ export type GridFieldsInput = CommonProps &
     //------------------------------------
     // 约束
     //------------------------------------
-    /**
-     * 字段唯一键，如果未定义，则会根据 name 来生成
-     *
-     * @see getFieldUniqKey
-     */
-    uniqKey?: string;
     // 字段是否必选，是一个 `TiMatch` 匹配 `FormContext`
     required?: any;
 
