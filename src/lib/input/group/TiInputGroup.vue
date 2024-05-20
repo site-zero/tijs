@@ -1,6 +1,49 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+  import _ from 'lodash';
+  import { computed } from 'vue';
+  import { TiForm, setFieldValue } from '../../';
+  import { Vars } from '../../../core/_top/_types';
+  import { GridFieldsInput } from '../../shelf/grid-fields/ti-grid-fields-types';
+  import { InputGroupProps } from './ti-input-group-types';
+
+  const emit = defineEmits<{
+    (eventName: 'change', payload: Vars): void;
+  }>();
+
+  const props = withDefaults(defineProps<InputGroupProps>(), {
+    bodyPartGap: 's',
+    bodyPartFontSize: 'm',
+    maxFieldNameWidth: 'auto',
+    fieldLayoutMode: 'h-title-icon-suffix',
+    defaultComType: 'TiInput',
+    fields: () => [] as GridFieldsInput[],
+  });
+
+  const FormProps = computed(() => _.omit(props, 'data', 'value'));
+
+  const LayoutHint = computed(() => (props.fields ? props.fields.length : 0));
+
+  function onValueChange(change: Vars) {
+    let old = _.cloneDeep(props.value);
+    let val = _.assign(old, change);
+    if (props.ignoreNil) {
+      let v2 = {};
+      _.forEach(val, (v, k) => {
+        if (!_.isNil(v)) {
+          _.set(v2, k, v);
+        }
+      });
+      val = v2;
+    }
+    emit('change', val);
+  }
+</script>
 <template>
-  <div>Input Group</div>
+  <TiForm
+    v-bind="FormProps"
+    :data="props.value"
+    :layout-hint="LayoutHint"
+    @change="onValueChange" />
 </template>
 <style lang="scss" scoped>
   @use '../../../assets/style/_all.scss' as *;

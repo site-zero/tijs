@@ -2,6 +2,7 @@ import {
   CommonProps,
   CssGridLayout,
   CssTextAlign,
+  FieldChange,
   FieldValueChange,
   IconInput,
   InvokePartial,
@@ -38,7 +39,7 @@ export type GridFieldsFeature = {
 
 export type GridFieldsEmitter = {
   (evetName: 'name-change', payload: ValueChange<string>): void;
-  (evetName: 'value-change', payload: FieldValueChange): void;
+  (evetName: 'value-change', payload: FieldChange): void;
   (evetName: 'dom-ready', payload: GridFieldsDomReadyInfo): void;
 };
 

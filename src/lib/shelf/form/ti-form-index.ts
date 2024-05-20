@@ -14,7 +14,6 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.Form;
 
 const TiFormInfo: TiComInfo = {
-  tags: ['ing'],
   icon: 'fas-clipboard-list',
   race: TiComRace.SHELF,
   name: COM_TYPE,

@@ -14,7 +14,6 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.InputGroup;
 
 const TiInputGroupInfo: TiComInfo = {
-  tags: ['scaffold'],
   icon: 'zmdi-group',
   race: TiComRace.INPUT,
   name: COM_TYPE,
@@ -24,6 +23,11 @@ const TiInputGroupInfo: TiComInfo = {
     en_uk: en_us,
     zh_cn: zh_cn,
     zh_hk: zh_cn,
+  },
+  liveStyle: {
+    width:"96%",
+    minidth:'300px',
+    maxWidth:'600px'
   },
   com: TiInputGroup,
   install: (app: App) => {

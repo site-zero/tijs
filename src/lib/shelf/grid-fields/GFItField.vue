@@ -87,6 +87,7 @@
       [key]: (val: any) => {
         emit('value-change', {
           uniqKey: props.uniqKey,
+          name: props.name,
           value: val,
           oldVal: FieldValue.value,
         });

@@ -1,8 +1,8 @@
 @mixin use_color_theme_dark {
   /*区域*/
-  --ti-color-body: #3d3d3d;
+  --ti-color-body: #252525;
   --ti-color-body-f: #ddd;
-  --ti-color-card: #444;
+  --ti-color-card: #000;
   --ti-color-card-f: #eee;
   --ti-color-menu: #222;
   --ti-color-menu-f: #eee;
@@ -29,9 +29,9 @@
   --ti-color-light: #567;
   --ti-color-dark: #000;
   /* 内容颜色 */
-  --ti-color-primary: #2196f3;
-  --ti-color-primary-r: #d0e7fc;
-  --ti-color-secondary: #ff4081;
+  --ti-color-primary: #58a6e6;
+  --ti-color-primary-r: #ecf5fd;
+  --ti-color-secondary: #ff78a5;
   --ti-color-secondary-r: #fff;
   --ti-color-success: #4caf50;
   --ti-color-success-r: #cfc;

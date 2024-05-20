@@ -14,8 +14,6 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.FormTab;
 
 const TiFormTabInfo: TiComInfo = {
-  tags: ['ing'],
-  //icon: 'fas-clipboard',
   icon: 'fas-paste',
   race: TiComRace.SHELF,
   name: COM_TYPE,

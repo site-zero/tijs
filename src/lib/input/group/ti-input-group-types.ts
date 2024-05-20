@@ -1,3 +1,20 @@
-import { CommonProps } from '../../../core';
+import { CommonProps, Vars } from '../../../core';
+import { GridFieldsProps } from '../../shelf/all-shelf';
 
-export type InputGroupProps = CommonProps & {};
+export type InputGroupProps = CommonProps &
+  Pick<
+    GridFieldsProps,
+    | 'style'
+    | 'fields'
+    | 'bodyPartStyle'
+    | 'bodyPartFontSize'
+    | 'bodyPartGap'
+    | 'layoutGridTracks'
+    | 'defaultComType'
+    | 'defaultComConf'
+    | 'maxFieldNameWidth'
+    | 'fieldLayoutMode'
+  > & {
+    value?: Vars;
+    ignoreNil?: boolean;
+  };

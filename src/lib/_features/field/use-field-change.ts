@@ -229,6 +229,7 @@ export function useFieldChange<T extends AbstractField>(
     change: FieldValueChange,
     options: HandleValueChangeOptions
   ) {
+    console.log('handleValueChange');
     let { emit, data, checkEquals } = options;
     let msg_vars: Vars = { key: change.uniqKey, val: change.value };
     // 获取字段定义
@@ -241,7 +242,20 @@ export function useFieldChange<T extends AbstractField>(
 
     // 转换字段值
     if (field.serializer) {
-      change.value = field.serializer(change.value, data, field.name);
+      // 无值
+      if (!_.isUndefined(field.defaultAs) && _.isNil(change.value)) {
+        change.value =
+          '~~undefined~~' == field.defaultAs ? undefined : field.defaultAs;
+      }
+      // 空值
+      else if (!_.isUndefined(field.emptyAs) && _.isEmpty(change.value)) {
+        change.value =
+          '~~undefined~~' == field.emptyAs ? undefined : field.emptyAs;
+      }
+      // 正常值
+      else {
+        change.value = field.serializer(change.value, data, field.name);
+      }
     }
 
     // 检查一下改动
