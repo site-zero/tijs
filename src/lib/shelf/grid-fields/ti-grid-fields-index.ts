@@ -40,11 +40,11 @@ const TiGridFieldsInfo: TiComInfo = {
     example.editname,
   ],
   exampleModel: {
-    'value-change': {
-      key: 'data.${name}',
-      val: '=value',
+    change: {
+      key: 'data',
+      val: '=..',
+      mode: 'assign',
     },
-    'change': 'data',
   },
 };
 

@@ -35,9 +35,6 @@ export type FieldChangeProps<T extends AbstractField> = {
   // 数据联动
   // [uniqKey] : callback
   linkFields?: Record<string, LinkFieldLoader<T>>;
-
-  // 提供所有字段,每个字段都定义了是否必填，以及如何检测数据合法性
-  fields?: T[];
 };
 
 /**
@@ -73,11 +70,12 @@ export type HandleValueChangeOptions = {
 --------------------------------------------------------------
 */
 export function useFieldChange<T extends AbstractField>(
-  props: FieldChangeProps<T>
+  props: FieldChangeProps<T>,
+  fields?: T[]
 ) {
   //console.log('useFieldChange', props.fields);
   // 建立一个根据字段 uniqKey 对于字段的映射
-  let fieldMapping = __build_fields_map(props.fields);
+  let fieldMapping = __build_fields_map(fields);
 
   //...................................................
   /**

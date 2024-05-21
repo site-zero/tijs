@@ -2,25 +2,21 @@
   import _ from 'lodash';
   import { computed, onMounted, reactive, ref } from 'vue';
   import {
-    FieldChangeEmitter,
     GridFieldsDomReadyInfo,
-    GridFieldsFeature,
-    GridFieldsStrictField,
+    GridFieldsEmitter,
     TabDisplayItem,
     TiGridFields,
     TiTabs,
-    useFieldChange,
     useKeep,
   } from '../../';
-  import { CssUtils, Dom, FieldValueChange, Vars } from '../../../core/';
+  import { CssUtils, Dom, Vars } from '../../../core/';
   import { FormTabProps } from './ti-form-tab-types';
   import { getCurrentFormProps, getFormTabItems } from './use-form-tab';
   //-------------------------------------------------
   defineOptions({
     inheritAttrs: false,
   });
-  const emit = defineEmits<FieldChangeEmitter>();
-  const _fields = ref<GridFieldsStrictField[]>([]);
+  const emit = defineEmits<GridFieldsEmitter>();
   const _current_tab = ref<string>();
   //-------------------------------------------------
   const props = withDefaults(defineProps<FormTabProps>(), {
@@ -30,14 +26,6 @@
     tabItemSpace: 'm',
     changeMode: 'diff',
   });
-  //-------------------------------------------------
-  const Change = computed(() =>
-    useFieldChange<GridFieldsStrictField>({
-      changeMode: props.changeMode,
-      linkFields: props.linkFields,
-      fields: _fields.value,
-    })
-  );
   //-------------------------------------------------
   const Keep = computed(() => useKeep(props));
   //-------------------------------------------------
@@ -52,23 +40,6 @@
   function onTabChange(tab: TabDisplayItem) {
     _current_tab.value = tab.value;
     Keep.value.save(tab.value);
-  }
-  //-------------------------------------------------
-  /**
-   * 处理值的修改
-   *
-   * @param change 修改的值
-   */
-  async function onValueChange(change: FieldValueChange) {
-    Change.value.handleValueChange(change, {
-      emit,
-      data: props.data || {},
-      checkEquals: props.checkEquals,
-    });
-  }
-  //-------------------------------------------------
-  function whenGrid(grid: GridFieldsFeature) {
-    _fields.value = grid.fieldItems;
   }
   //-------------------------------------------------
   onMounted(() => {
@@ -124,8 +95,8 @@
     :style="props.style"
     :vars="props.vars"
     :data="props.data"
-    :when-grid="whenGrid"
-    @value-change="onValueChange"
+    @change="emit('change', $event)"
+    @name-change="emit('name-change', $event)"
     @dom-ready="onDomReady">
     <!--=======: 头部标签 :=======-->
     <template

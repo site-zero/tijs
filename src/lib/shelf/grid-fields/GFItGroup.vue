@@ -10,7 +10,7 @@
     parseGridLayout,
   } from './build-grid-field-layout';
   import {
-    GridFieldsEmitter,
+    GridItemEmitter,
     GridFieldsStrictField,
     GridFieldsStrictGroup,
     GridFieldsStrictLabel,
@@ -21,7 +21,7 @@
     inheritAttrs: false,
   });
   //-------------------------------------------------
-  const emit = defineEmits<GridFieldsEmitter>();
+  const emit = defineEmits<GridItemEmitter>();
   const props = defineProps<GridFieldsStrictGroup>();
   const _viewport_width = ref(0);
   //-------------------------------------------------

@@ -3,7 +3,6 @@ import {
   CssGridLayout,
   CssTextAlign,
   FieldChange,
-  FieldValueChange,
   IconInput,
   InvokePartial,
   TextContentType,
@@ -12,11 +11,13 @@ import {
   VisibilityProps,
 } from '../../../core';
 import {
+  FieldChangeEmitter,
+  FieldChangeProps,
   FieldComProps,
   ReadonlyProps,
   VisibilityFeature,
 } from '../../../lib/_features';
-import { AbstractField, getFieldUniqKey } from '../../_top';
+import { AbstractField } from '../../_top';
 
 export type GridFieldsDomReadyInfo = {
   el: HTMLElement;
@@ -37,10 +38,14 @@ export type GridFieldsFeature = {
   tipIcon: IconInput;
 };
 
-export type GridFieldsEmitter = {
-  (evetName: 'name-change', payload: ValueChange<string>): void;
-  (evetName: 'value-change', payload: FieldChange): void;
-  (evetName: 'dom-ready', payload: GridFieldsDomReadyInfo): void;
+export type GridFieldsEmitter = FieldChangeEmitter & {
+  (eventName: 'name-change', payload: ValueChange<string>): void;
+  (eventName: 'dom-ready', payload: GridFieldsDomReadyInfo): void;
+};
+
+export type GridItemEmitter = {
+  (eventName: 'name-change', payload: ValueChange<string>): void;
+  (eventName: 'value-change', payload: FieldChange): void;
 };
 
 export type AspectSize = 't' | 's' | 'm' | 'b' | 'h';
@@ -57,19 +62,20 @@ export type GridFieldsProps = Omit<
   | 'serialPartial'
   | 'changeEventName'
   | 'maxTrackCount'
-> & {
-  // 动态 explain 时的变量
-  vars?: Vars;
-  // 输入的数据
-  data?: Vars;
+> &
+  Omit<FieldChangeProps<GridFieldsStrictField>, 'fields'> & {
+    // 动态 explain 时的变量
+    vars?: Vars;
+    // 输入的数据
+    data?: Vars;
 
-  /**
-   *
-   * @param fieldItems
-   * @returns
-   */
-  whenGrid?: (grid: GridFieldsFeature) => void;
-};
+    /**
+     *
+     * @param fieldItems
+     * @returns
+     */
+    whenGrid?: (grid: GridFieldsFeature) => void;
+  };
 
 /*
 栅格字段组，是一个支持无穷嵌套的字段组合，依靠 CSS Grid 布局。

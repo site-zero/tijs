@@ -117,11 +117,13 @@
     }[RowCheckStatus.value];
   });
 
-  const Change = useFieldChange({
-    changeMode: props.changeMode,
-    linkFields: props.linkFields,
-    fields: TableColumns.value,
-  });
+  const Change = useFieldChange(
+    {
+      changeMode: props.changeMode,
+      linkFields: props.linkFields,
+    },
+    TableColumns.value
+  );
   //-------------------------------------------------------
   //                      计算格子的列
   //-------------------------------------------------------

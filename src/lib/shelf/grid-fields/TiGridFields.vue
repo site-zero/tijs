@@ -1,8 +1,8 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
-  import { TextSnippet } from '../../';
-  import { CssUtils } from '../../../core';
+  import { TextSnippet, useFieldChange } from '../../';
+  import { CssUtils, FieldChange, FieldValueChange } from '../../../core';
   import GFItField from './GFItField.vue';
   import GFItGroup from './GFItGroup.vue';
   import GFItLabel from './GFItLabel.vue';
@@ -12,11 +12,12 @@
   } from './build-grid-field-layout';
   import {
     GridFieldsDomReadyInfo,
-    GridFieldsEmitter,
+    GridItemEmitter,
     GridFieldsProps,
     GridFieldsStrictField,
     GridFieldsStrictGroup,
     GridFieldsStrictLabel,
+GridFieldsEmitter,
   } from './ti-grid-fields-types';
   import { getBodyPartStyle } from './use-field-style';
   import { useGridFields } from './use-grid-fields';
@@ -32,6 +33,7 @@
     bodyPartFontSize: 's',
     fieldLayoutMode: 'h-wrap',
     maxFieldNameWidth: '6em',
+    changeMode: 'diff',
     data: () => ({}),
   });
   const _viewport_width = ref(0);
@@ -42,6 +44,28 @@
     return getTrackCount(_viewport_width.value);
   });
   const getLayoutCss = computed(() => buildGridFieldsLayoutStyle(props));
+  //-------------------------------------------------
+  const Change = computed(() =>
+    useFieldChange<GridFieldsStrictField>(
+      {
+        changeMode: props.changeMode,
+        linkFields: props.linkFields,
+      },
+      Grid.value.fieldItems
+    )
+  );
+  /**
+   * 处理值的修改
+   *
+   * @param change 修改的值
+   */
+   async function onValueChange(change: FieldChange) {
+    Change.value.handleValueChange(change, {
+      emit,
+      data: props.data || {},
+      checkEquals: props.checkEquals,
+    });
+  }
   //-------------------------------------------------
   const TopClass = computed(() =>
     CssUtils.mergeClassName(
@@ -131,14 +155,14 @@
             v-bind="(fld as GridFieldsStrictField)"
             :max-track-count="TrackCount"
             @name-change="emit('name-change', $event)"
-            @value-change="emit('value-change', $event)" />
+            @value-change="onValueChange" />
           <!------[:Group:]---------->
           <GFItGroup
             v-else-if="'group' == fld.race"
             v-bind="(fld as GridFieldsStrictGroup)"
             :max-track-count="TrackCount"
             @name-change="emit('name-change', $event)"
-            @value-change="emit('value-change', $event)" />
+            @value-change="onValueChange" />
           <!------[:Label:]---------->
           <GFItLabel
             v-else-if="'label' == fld.race"

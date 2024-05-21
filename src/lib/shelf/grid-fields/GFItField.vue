@@ -3,7 +3,7 @@
   import { TextSnippet, getFieldValue, useFieldCom } from '../../';
   import { CssUtils, ValueChange } from '../../../core';
   import {
-    GridFieldsEmitter,
+    GridItemEmitter,
     GridFieldsStrictField,
   } from './ti-grid-fields-types';
   import {
@@ -18,7 +18,7 @@
     inheritAttrs: false,
   });
 
-  const emit = defineEmits<GridFieldsEmitter>();
+  const emit = defineEmits<GridItemEmitter>();
   const props = defineProps<GridFieldsStrictField>();
 
   const hasTitle = computed(() =>
