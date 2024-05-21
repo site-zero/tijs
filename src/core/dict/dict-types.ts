@@ -1,14 +1,5 @@
 import _ from 'lodash';
-import {
-  AsyncFuncA0,
-  AsyncFuncA1,
-  AsyncFuncA2,
-  FuncA1,
-  FuncA2,
-  AnyGetter,
-  Vars,
-  ValGetter,
-} from '../ti';
+import { AnyGetter, ValGetter, Vars } from '../ti';
 
 export type DictSetup = {
   value?: string | AnyGetter;
@@ -112,13 +103,13 @@ export interface IDict<T, V> {
           Async Part
   ...................................*/
   clearCache(): void;
-  getData(force?: boolean): Promise<T[]>;
+  getData(force?: boolean, signal?: AbortSignal): Promise<T[]>;
   getItem: LoadItem<T | undefined, V>;
   queryData: QueryItems<T, any>;
   getChildren: QueryItems<T, V>;
   checkItem: LoadItem<T, V>;
 
-  getStdData(force?: boolean): Promise<DictItem<V>[]>;
+  getStdData(force?: boolean, signal?: AbortSignal): Promise<DictItem<V>[]>;
   getStdItem: LoadItem<DictItem<V> | undefined, V>;
   queryStdData: QueryItems<DictItem<V>, any>;
   getStdChildren: QueryItems<DictItem<V>, V>;
@@ -141,23 +132,31 @@ export interface IDict<T, V> {
   getItemIcon: GetItemText<T>;
 }
 
-export type LoadData<T> = AsyncFuncA0<T[]>;
+export type LoadData<T> = (signal?: AbortSignal) => Promise<T[]>;
 
-export type LoadItem<T, V> = AsyncFuncA1<V, T>;
+export type LoadItem<T, V> = (input: V, signal?: AbortSignal) => Promise<T>;
 
-export type LoadDictItem<T, V> = AsyncFuncA2<IDict<T, V>, V, T | undefined>;
+export type LoadDictItem<T, V> = (
+  dict: IDict<T, V>,
+  input: V,
+  signal?: AbortSignal
+) => Promise<T | undefined>;
 
-export type QueryItems<T, A> = AsyncFuncA1<A, T[]>;
+export type QueryItems<T, A> = (input: A, signal?: AbortSignal) => Promise<T[]>;
 
-export type QueryDictItems<T, V, A> = AsyncFuncA2<IDict<T, V>, A, T[]>;
+export type QueryDictItems<T, V, A> = (
+  dict: IDict<T, V>,
+  input: A,
+  signal?: AbortSignal
+) => Promise<T[]>;
 
-export type LoadText<V> = AsyncFuncA1<V, string>;
+export type LoadText<V> = (input: V, signal?: AbortSignal) => Promise<string>;
 
-export type GetItemText<T> = FuncA1<T, string>;
+export type GetItemText<T> = (item: T) => string;
 
-export type GetItemValue<T, V> = FuncA1<T, V>;
+export type GetItemValue<T, V> = (item: T) => V;
 
-export type IsMatched<T, V> = FuncA2<T, V, boolean>;
+export type IsMatched<T, V> = (item: T, val: V) => boolean;
 
 export type DictOptions<T, V> = {
   /* Async function  */

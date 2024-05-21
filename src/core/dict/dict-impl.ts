@@ -51,9 +51,9 @@ export class DictImpl<T, V> extends AbstractDict<T, V> implements IDict<T, V> {
     this._is_matched = info.isMatched ?? dft_is_matched(this);
   }
 
-  async getData(force = false): Promise<T[]> {
+  async getData(force = false, signal?: AbortSignal): Promise<T[]> {
     if (_.isEmpty(this._cache_data) || force) {
-      this._cache_data = await this._data();
+      this._cache_data = await this._data(signal);
       for (let it of this._cache_data) {
         let v = this._get_value(it);
         this._cache_item.set(v, it);
@@ -65,10 +65,10 @@ export class DictImpl<T, V> extends AbstractDict<T, V> implements IDict<T, V> {
     });
   }
 
-  async getItem(val: V): Promise<T | undefined> {
+  async getItem(val: V, signal?: AbortSignal): Promise<T | undefined> {
     let it = this._cache_item.get(val);
     if (!it) {
-      it = await this._item(this, val);
+      it = await this._item(this, val, signal);
       if (it) {
         this._cache_item.set(val, it);
       }
@@ -78,21 +78,21 @@ export class DictImpl<T, V> extends AbstractDict<T, V> implements IDict<T, V> {
     });
   }
 
-  queryData(args: any[]): Promise<T[]> {
+  queryData(args: any[], signal?: AbortSignal): Promise<T[]> {
     if (_.isEmpty(args)) {
-      return this.getData(false);
+      return this.getData(false, signal);
     }
-    return this._query(this, args);
+    return this._query(this, args, signal);
   }
 
-  getChildren(v: V): Promise<T[]> {
-    return this._children(this, v);
+  getChildren(v: V, signal?: AbortSignal): Promise<T[]> {
+    return this._children(this, v, signal);
   }
 
-  async checkItem(val: V): Promise<T> {
+  async checkItem(val: V, signal?: AbortSignal): Promise<T> {
     let it = this._cache_item.get(val);
     if (!it) {
-      it = await this._item(this, val);
+      it = await this._item(this, val, signal);
       if (it) {
         this._cache_item.set(val, it);
       }

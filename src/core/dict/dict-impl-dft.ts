@@ -11,10 +11,10 @@ import {
 } from './dict-types';
 
 export function dft_get_item<T, V>(): LoadDictItem<T, V> {
-  return (dict: IDict<T, V>, val: V) => {
+  return (dict: IDict<T, V>, val: V, signal?: AbortSignal) => {
     return new Promise((resolve, reject) => {
       dict
-        .getData(false)
+        .getData(false, signal)
         .then((list) => {
           for (let li of list) {
             let v = dict.getItemValue(li);
@@ -33,10 +33,10 @@ export function dft_get_item<T, V>(): LoadDictItem<T, V> {
 }
 
 export function dft_query<T, V>(): QueryDictItems<T, V, any> {
-  return (dict: IDict<T, V>, val: any) => {
+  return (dict: IDict<T, V>, val: any, signal?: AbortSignal) => {
     return new Promise((resolve, reject) => {
       dict
-        .getData(false)
+        .getData(false, signal)
         .then((list) => {
           let re = [] as T[];
           for (let li of list) {
@@ -55,7 +55,7 @@ export function dft_query<T, V>(): QueryDictItems<T, V, any> {
 
 export function dft_children<T, V>(): QueryDictItems<T, V, V> {
   // 默认的 get_children 就是什么都不获取
-  return (_dict: IDict<T, V>, _v: V) => {
+  return (_dict: IDict<T, V>, _v: V, _signal?:AbortSignal) => {
     return new Promise((resolve) => {
       let re = [] as T[];
       resolve(re);

@@ -30,17 +30,17 @@ export function _gen_item_loader(input: any): LoadDictItem<any, any> {
 export function _gen_data_query(query: any): QueryDictItems<any, any, any> {
   // 如果是个函数
   if (_.isFunction(query)) {
-    return (_dict: IDict<any, any>, input: any) =>
+    return (_dict: IDict<any, any>, input: any, signal?: AbortSignal) =>
       new Promise<any[]>(async (resolve) => {
-        let list = await query(input);
+        let list = await query(input, signal);
         resolve(list);
       });
   }
   // 其他的变成匹配条件
-  return (dict: IDict<any, any>, input: any) =>
+  return (dict: IDict<any, any>, input: any, signal?: AbortSignal) =>
     new Promise<any[]>(async (resolve) => {
       let str = _.trim(input).toLowerCase();
-      let list = await dict.getData();
+      let list = await dict.getData(false, signal);
       let re = [] as any[];
       for (let li of list) {
         if (!li) {
@@ -61,9 +61,9 @@ export function _gen_data_loader(input: any): LoadData<any> {
   }
   // 如果是个函数
   if (_.isFunction(input)) {
-    return () =>
+    return (signal?: AbortSignal) =>
       new Promise<any[]>(async (resolve) => {
-        let data = await input();
+        let data = await input(signal);
         resolve(data);
       });
   }

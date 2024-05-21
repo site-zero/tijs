@@ -3,11 +3,11 @@ import { DictItem, IDict } from './dict-types';
 
 export abstract class AbstractDict<T, V> implements IDict<T, V> {
   abstract clearCache(): void;
-  abstract getData(force: boolean): Promise<T[]>;
-  abstract getItem(val: V): Promise<T | undefined>;
-  abstract queryData(args: any[]): Promise<T[]>;
-  abstract getChildren(v: V): Promise<T[]>;
-  abstract checkItem(val: V): Promise<T>;
+  abstract getData(force: boolean, signal?: AbortSignal): Promise<T[]>;
+  abstract getItem(val: V, signal?: AbortSignal): Promise<T | undefined>;
+  abstract queryData(args: any[], signal?: AbortSignal): Promise<T[]>;
+  abstract getChildren(v: V, signal?: AbortSignal): Promise<T[]>;
+  abstract checkItem(val: V, signal?: AbortSignal): Promise<T>;
 
   abstract getItemValue(it: T): V;
   abstract getItemText(it: T): string;
@@ -15,9 +15,12 @@ export abstract class AbstractDict<T, V> implements IDict<T, V> {
   abstract getItemIcon(it: T): string;
   abstract isMatched(item: T, val: V): boolean;
 
-  async getStdData(force: boolean): Promise<DictItem<V>[]> {
+  async getStdData(
+    force: boolean,
+    signal?: AbortSignal
+  ): Promise<DictItem<V>[]> {
     return new Promise<DictItem<V>[]>((resolve, reject) => {
-      this.getData(force)
+      this.getData(force, signal)
         .then((items) => {
           let list = _.map(items, (it) => this.toStdItem(it));
           resolve(list);
@@ -26,9 +29,12 @@ export abstract class AbstractDict<T, V> implements IDict<T, V> {
     });
   }
 
-  async queryStdData(args: any[]): Promise<DictItem<V>[]> {
+  async queryStdData(
+    args: any[],
+    signal?: AbortSignal
+  ): Promise<DictItem<V>[]> {
     return new Promise<DictItem<V>[]>((resolve, reject) => {
-      this.queryData(args)
+      this.queryData(args, signal)
         .then((items) => {
           let list = _.map(items, (it) => this.toStdItem(it));
           resolve(list);
@@ -37,9 +43,9 @@ export abstract class AbstractDict<T, V> implements IDict<T, V> {
     });
   }
 
-  async getStdChildren(v: V): Promise<DictItem<V>[]> {
+  async getStdChildren(v: V, signal?: AbortSignal): Promise<DictItem<V>[]> {
     return new Promise<DictItem<V>[]>((resolve, reject) => {
-      this.getChildren(v)
+      this.getChildren(v, signal)
         .then((items) => {
           let list = _.map(items, (it) => this.toStdItem(it));
           resolve(list);
@@ -48,9 +54,9 @@ export abstract class AbstractDict<T, V> implements IDict<T, V> {
     });
   }
 
-  async checkStdItem(val: V): Promise<DictItem<V>> {
+  async checkStdItem(val: V, signal?: AbortSignal): Promise<DictItem<V>> {
     return new Promise<DictItem<V>>((resolve, reject) => {
-      this.checkItem(val)
+      this.checkItem(val, signal)
         .then((it) => {
           let re = this.toStdItem(it);
           resolve(re);
@@ -59,9 +65,12 @@ export abstract class AbstractDict<T, V> implements IDict<T, V> {
     });
   }
 
-  async getStdItem(val: V): Promise<DictItem<V> | undefined> {
+  async getStdItem(
+    val: V,
+    signal?: AbortSignal
+  ): Promise<DictItem<V> | undefined> {
     return new Promise<DictItem<V> | undefined>((resolve, reject) => {
-      this.getItem(val)
+      this.getItem(val, signal)
         .then((it) => {
           let re = it ? this.toStdItem(it) : undefined;
           resolve(re);
@@ -70,9 +79,9 @@ export abstract class AbstractDict<T, V> implements IDict<T, V> {
     });
   }
 
-  async getText(val: V): Promise<string> {
+  async getText(val: V, signal?: AbortSignal): Promise<string> {
     return new Promise<string>((resolve, reject) => {
-      this.checkItem(val)
+      this.checkItem(val, signal)
         .then((it: T) => {
           let s = this.getItemText(it);
           resolve(s);
@@ -80,9 +89,9 @@ export abstract class AbstractDict<T, V> implements IDict<T, V> {
         .catch(reject);
     });
   }
-  async getTip(val: V): Promise<string> {
+  async getTip(val: V, signal?: AbortSignal): Promise<string> {
     return new Promise<string>((resolve, reject) => {
-      this.checkItem(val)
+      this.checkItem(val, signal)
         .then((it: T) => {
           let s = this.getItemTip(it);
           resolve(s);
@@ -90,9 +99,9 @@ export abstract class AbstractDict<T, V> implements IDict<T, V> {
         .catch(reject);
     });
   }
-  async getIcon(val: V): Promise<string> {
+  async getIcon(val: V, signal?: AbortSignal): Promise<string> {
     return new Promise<string>((resolve, reject) => {
-      this.checkItem(val)
+      this.checkItem(val, signal)
         .then((it: T) => {
           let s = this.getItemIcon(it);
           resolve(s);

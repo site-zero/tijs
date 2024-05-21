@@ -160,6 +160,7 @@ export function useValueBox<T extends any>(
   // 方法: 更新显示文本
   //
   async function doUpdateText() {
+    console.log("doUpdateText")
     let val = state.boxVal;
     // 如果聚焦，则仅仅显示原始值，否则，看看是否需要格式化
     if (state.boxFocused) {

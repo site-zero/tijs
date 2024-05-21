@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed } from 'vue';
-  import { TiForm, setFieldValue } from '../../';
+  import { TiGridFields } from '../../';
   import { Vars } from '../../../core/_top/_types';
   import { GridFieldsInput } from '../../shelf/grid-fields/ti-grid-fields-types';
   import { InputGroupProps } from './ti-input-group-types';
@@ -39,7 +39,7 @@
   }
 </script>
 <template>
-  <TiForm
+  <TiGridFields
     v-bind="FormProps"
     :data="props.value"
     :layout-hint="LayoutHint"

@@ -4,14 +4,16 @@
   import { TiIcon, ValueBoxEmits } from '../../';
   import { CssUtils } from '../../../core';
   import { COM_TYPES } from '../../lib-com-types';
-  import { InputBoxProps, InputBoxState, useInputBox } from './use-input-box';
+  import { InputBoxProps, TipBoxState } from './ti-input-types';
+  import { InputBoxState, useInputBox } from './use-input-box';
+
   //-----------------------------------------------------
   const COM_TYPE = COM_TYPES.Input;
   defineOptions({
     inheritAttrs: true,
   });
   //-----------------------------------------------------
-  const state = reactive({
+  const _box_state: InputBoxState = reactive({
     boxVal: null,
     boxText: '',
     boxFocused: false,
@@ -20,35 +22,39 @@
     prefixTextHovered: false,
     suffixIconHovered: false,
     suffixTextHovered: false,
-  } as InputBoxState);
+  });
+
+  const _tip_state: TipBoxState = reactive({
+    keyboard: undefined,
+    input: undefined,
+    focused: false,
+  });
   //-----------------------------------------------------
   let props = withDefaults(defineProps<InputBoxProps>(), {
     autoI18n: true,
+    tipShowTime: 'focus',
+    tipHideTime: 'blur',
   });
   //-----------------------------------------------------
   let emit = defineEmits<ValueBoxEmits>();
-  // let emit = defineEmits<{
-  //   (event: PrefixSuffixEvents): void;
-  //   (event: 'change', payload: string): void;
-  // }>();
   //-----------------------------------------------------
   const $el = ref<any>(null);
   const Box = computed(() =>
-    useInputBox(state, props, {
+    useInputBox(_box_state, props, {
       emit,
       getBoxElement: () => $el.value,
       COM_TYPE,
     })
   );
   //-----------------------------------------------------
-  const hasValue = computed(() => _.isNil(state.boxVal));
+  const hasValue = computed(() => _.isNil(_box_state.boxVal));
   const Placeholder = computed(() => Box.value.getPlaceholder());
   const TopClass = computed(() =>
     CssUtils.mergeClassName(props.className, Box.value.getClass(), {
       'has-value': hasValue.value,
       'nil-value': !hasValue.value,
-      'is-focused': state.boxFocused,
-      'no-focused': !state.boxFocused,
+      'is-focused': _box_state.boxFocused,
+      'no-focused': !_box_state.boxFocused,
       'show-border': !props.hideBorder,
     })
   );
@@ -56,7 +62,8 @@
   const $input = ref<any>(null);
   //-----------------------------------------------------
   function OnInputFocused() {
-    state.boxFocused = true;
+    _box_state.boxFocused = true;
+    _tip_state.focused = true;
     Box.value.doUpdateText();
     if (props.autoSelect) {
       $input.value.select();
@@ -66,9 +73,18 @@
     }
   }
   //-----------------------------------------------------
+  function OnInputBlur() {
+    _box_state.boxFocused = false;
+    _tip_state.focused = false;
+  }
+  //-----------------------------------------------------
   function OnInputChanged() {
     let val = $input.value.value;
     Box.value.doChangeValue(val);
+  }
+  //-----------------------------------------------------
+  function OnInputKeydown(event: KeyboardEvent) {
+    _tip_state.keyboard = event.key;
   }
   //-----------------------------------------------------
   onMounted(() => {
@@ -111,12 +127,13 @@
     <div class="part-value">
       <input
         ref="$input"
-        :value="state.boxText"
+        v-model="_box_state.boxText"
         spellcheck="false"
         :placeholder="Placeholder"
+        @keydown="OnInputKeydown"
         @focus.stop="OnInputFocused"
         @change.stop="OnInputChanged"
-        @blur.stop="state.boxFocused = false" />
+        @blur.stop="OnInputBlur" />
     </div>
     <div
       class="part-suffix as-icon-text"
@@ -139,6 +156,9 @@
         @click="Box.OnClickSuffixIcon" />
     </div>
   </div>
+  <!--=========: Tip Message ============-->
+  <aside>{{ _tip_state }}</aside>
+  <div class="ti-input-tip">I am Input Tip</div>
 </template>
 <style lang="scss" scoped>
   @use '../../../assets/style/_all.scss' as *;
