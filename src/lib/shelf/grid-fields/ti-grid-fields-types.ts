@@ -1,4 +1,5 @@
 import {
+  AspectSize,
   CommonProps,
   CssGridLayout,
   CssTextAlign,
@@ -47,8 +48,6 @@ export type GridItemEmitter = {
   (eventName: 'name-change', payload: ValueChange<string>): void;
   (eventName: 'value-change', payload: FieldChange): void;
 };
-
-export type AspectSize = 't' | 's' | 'm' | 'b' | 'h';
 
 export type GridFieldsProps = Omit<
   GridFieldsInput,

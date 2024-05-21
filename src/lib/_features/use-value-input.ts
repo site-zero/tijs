@@ -15,6 +15,17 @@ import {
 import { wrapPromiseFunc } from '../../core/util/util-lang.ts';
 /*-------------------------------------------------------
 
+                        Types
+
+-------------------------------------------------------*/
+type ValueProcessorSet = {
+  head: ((val: any) => Promise<any>)[];
+  main: ((val: any) => Promise<any>)[];
+  dict: ((val: any) => Promise<any>)[];
+  tail: ((val: any) => Promise<any>)[];
+};
+/*-------------------------------------------------------
+
                         Props
 
 -------------------------------------------------------*/
@@ -60,9 +71,11 @@ export type ValueInputProps = {
                      Feature
 
 -------------------------------------------------------*/
+export type ValueInputTidyMode = keyof ValueProcessorSet;
 export type ValueInputFeature = {
-  tidyValue: AsyncFuncA1<any, any>;
-  translateValue: AsyncFuncA1<any, string>;
+  dict?: Dicts.TiDict;
+  tidyValue: (val: any, mode?: ValueInputTidyMode[]) => Promise<any>;
+  translateValue: (val: any) => Promise<string>;
 };
 /*-------------------------------------------------------
 
@@ -116,30 +129,32 @@ function __build_dict(props: ValueInputProps): TiDict | undefined {
 /**
  * 收集值处理器
  */
-function __build_process_pips(
-  props: ValueInputProps,
-  dict?: TiDict
-): FuncA1<any, any>[] {
-  let processors = [] as AsyncFuncA1<any, string>[];
+function __build_process_pips(props: ValueInputProps, dict?: TiDict) {
+  let processors: ValueProcessorSet = {
+    head: [],
+    main: [],
+    dict: [],
+    tail: [],
+  };
   //........................................
   // 自定义：前置
   let list = wrapPromiseFunc<FuncA1<any, string>, AsyncFuncA1<any, string>>(
     props.beforeValueProcessors
   );
-  processors.push(...list);
+  processors.head.push(...list);
   //........................................
   // 内部处理器：前置
   if (props.trimed) {
-    processors.push(async (v) => _.trim(v));
+    processors.main.push(async (v) => _.trim(v));
   }
   if (props.valueCase) {
     let toCase = Str.getCaseFunc(props.valueCase);
-    processors.push(async (v) => toCase(v));
+    processors.main.push(async (v) => toCase(v));
   }
   //........................................
   // 字典值处理器
   if (props.mustInOptions && dict) {
-    processors.push(async (v) => {
+    processors.dict.push(async (v) => {
       let it = await dict.getStdItem(v);
       return it?.value;
     });
@@ -149,7 +164,7 @@ function __build_process_pips(
   list = wrapPromiseFunc<FuncA1<any, string>, AsyncFuncA1<any, string>>(
     props.afterValueProcessors
   );
-  processors.push(...list);
+  processors.tail.push(...list);
 
   //
   // 搞定返回
@@ -173,15 +188,52 @@ export function useValueInput(props: ValueInputProps): ValueInputFeature {
   //
   // 导出
   return {
+    dict,
     /**
      * 【异步】对输入的值进行处理
      */
-    tidyValue: async function (val: any): Promise<any> {
+    tidyValue: async function (
+      val: any,
+      mode?: ValueInputTidyMode[]
+    ): Promise<any> {
+      let mark = {
+        head: false,
+        main: false,
+        dict: false,
+        tail: false,
+      } as Record<ValueInputTidyMode, boolean>;
+
+      // 全都需要
+      if (!mode || _.isEmpty(mode)) {
+        _.forEach(mark, (_v, k) => (mark[k as ValueInputTidyMode] = true));
+      }
+      // 逐个解开
+      else {
+        _.forEach(mode, (k) => (mark[k] = true));
+      }
+
       return new Promise<any>(async (resolve, reject) => {
         let is_error = false;
         try {
-          for (let processor of processors) {
-            val = await processor(val);
+          if (mark.head) {
+            for (let processor of processors.head) {
+              val = await processor(val);
+            }
+          }
+          if (mark.main) {
+            for (let processor of processors.main) {
+              val = await processor(val);
+            }
+          }
+          if (mark.dict) {
+            for (let processor of processors.dict) {
+              val = await processor(val);
+            }
+          }
+          if (mark.tail) {
+            for (let processor of processors.tail) {
+              val = await processor(val);
+            }
           }
         } catch (err) {
           is_error = true;
@@ -205,10 +257,10 @@ export function useValueInput(props: ValueInputProps): ValueInputFeature {
             if (props.mustInOptions) {
               resolve(undefined);
             } else {
-              resolve(it.text);
+              resolve(val);
             }
           } else {
-            resolve(val);
+            resolve(it.text);
           }
         }
         // 直接返回

@@ -1,8 +1,10 @@
 import { RoadblockProps } from '../../';
 import {
   AnyOptionItem,
+  AspectSize,
   CommonProps,
   Convertor,
+  CssBorderStyle,
   IconInput,
   Vars,
 } from '../../../core';
@@ -40,7 +42,10 @@ export type ListProps = CommonProps &
     tipWidth?: string;
 
     // 列表文字大小
-    size?: 'b' | 'm' | 's';
+    size?: AspectSize;
+
+    // 列表项边线样式
+    borderStyle?: CssBorderStyle;
 
     // 列表是否可以选择
     selectable?: boolean;

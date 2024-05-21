@@ -1,65 +1,68 @@
 <script setup lang="ts">
   import _ from 'lodash';
   import { computed, onMounted, reactive, ref, watch } from 'vue';
-  import { TiIcon, ValueBoxEmits } from '../../';
-  import { CssUtils } from '../../../core';
+  import { TiIcon, TiList, ValueBoxEmits, useValueBox } from '../../';
+  import { CssUtils, Vars } from '../../../core';
   import { COM_TYPES } from '../../lib-com-types';
-  import { InputBoxProps, TipBoxState } from './ti-input-types';
-  import { InputBoxState, useInputBox } from './use-input-box';
-
+  import { InputBoxProps, InputBoxState } from './ti-input-types';
+  import { dumpBoxState, updateTipList } from './use-input-box';
+  import { getTipListConf } from './use-tip-box';
   //-----------------------------------------------------
-  const COM_TYPE = COM_TYPES.Input;
   defineOptions({
     inheritAttrs: true,
   });
   //-----------------------------------------------------
+  const COM_TYPE = COM_TYPES.Input;
+  let emit = defineEmits<ValueBoxEmits>();
+  //-----------------------------------------------------
   const _box_state: InputBoxState = reactive({
-    boxVal: null,
-    boxText: '',
-    //boxFocused: false,
+    boxValue: null,
+    boxInputing: '',
+    boxFocused: false,
+    keyboard: undefined,
+    altKey: false,
+    ctrlKey: false,
+    shiftKey: false,
+    metaKey: false,
     boxErrMsg: '',
     prefixIconHovered: false,
     prefixTextHovered: false,
     suffixIconHovered: false,
     suffixTextHovered: false,
-  });
 
-  const _tip_state: TipBoxState = reactive({
-    keyboard: undefined,
-    input: undefined,
-    focused: false,
+    lastUpdateAMS: 0,
   });
+  //-----------------------------------------------------
+  const _tips = ref<Vars[]>();
   //-----------------------------------------------------
   let props = withDefaults(defineProps<InputBoxProps>(), {
     autoI18n: true,
     tipShowTime: 'focus',
     tipHideTime: 'blur',
+    tipUseHint: false,
+    tipTidyBy: () => ['main'],
   });
   //-----------------------------------------------------
-  let emit = defineEmits<ValueBoxEmits>();
+  const TipListConfig = computed(() => getTipListConf(props.tipList));
   //-----------------------------------------------------
   const $el = ref<any>(null);
   //-----------------------------------------------------
   const Box = computed(() =>
-    useInputBox(_box_state, props, {
+    useValueBox(_box_state, props, {
       emit,
       getBoxElement: () => $el.value,
       COM_TYPE,
     })
   );
   //-----------------------------------------------------
-  function updateBoxText() {
-    Box.value.doUpdateText(_tip_state.focused);
-  }
-  //-----------------------------------------------------
-  const hasValue = computed(() => _.isNil(_box_state.boxVal));
+  const hasValue = computed(() => _.isNil(_box_state.boxValue));
   const Placeholder = computed(() => Box.value.getPlaceholder());
   const TopClass = computed(() =>
     CssUtils.mergeClassName(props.className, Box.value.getClass(), {
       'has-value': hasValue.value,
       'nil-value': !hasValue.value,
-      'is-focused': _tip_state.focused,
-      'no-focused': !_tip_state.focused,
+      'is-focused': _box_state.boxFocused,
+      'no-focused': !_box_state.boxFocused,
       'show-border': !props.hideBorder,
     })
   );
@@ -67,44 +70,79 @@
   const $input = ref<any>(null);
   //-----------------------------------------------------
   function OnInputFocused() {
-    _tip_state.focused = true;
+    _box_state.boxFocused = true;
     if (props.autoSelect) {
       $input.value.select();
-      // nextTick(() => {
-      //   $input.value.select();
-      // });
     }
   }
   //-----------------------------------------------------
   function OnInputBlur() {
-    _tip_state.focused = false;
+    if (!_tips.value) {
+      _box_state.boxFocused = false;
+      _box_state.keyboard = undefined;
+      _box_state.altKey = false;
+      _box_state.ctrlKey = false;
+      _box_state.shiftKey = false;
+      _box_state.metaKey = false;
+    }
   }
   //-----------------------------------------------------
   function OnInputChanged() {
-    let val = $input.value.value;
-    Box.value.doChangeValue(val);
+    if (!_tips.value) {
+      let val = $input.value.value;
+      Box.value.doChangeValue(val);
+    }
   }
   //-----------------------------------------------------
-  function OnInputKeydown(event: KeyboardEvent) {
-    _tip_state.keyboard = event.key;
+  function OnInputKeydown(_event: KeyboardEvent) {
+    _box_state.keyboard = _event.key;
+    _box_state.altKey = _event.altKey;
+    _box_state.metaKey = _event.metaKey;
+    _box_state.ctrlKey = _event.ctrlKey;
+    _box_state.shiftKey = _event.shiftKey;
+  }
+  //-----------------------------------------------------
+  function doUpdateTipList() {
+    updateTipList(_box_state.boxInputing, _tips, {
+      box: _box_state,
+      tipShowTime: props.tipShowTime,
+      tipHideTime: props.tipHideTime,
+      dict: Box.value.dict,
+      tipUseHint: props.tipUseHint ?? false,
+      tipTidyBy: props.tipTidyBy ?? ['main'],
+      tidyValue: Box.value.tidyValue,
+    });
+  }
+  //-----------------------------------------------------
+  function OnListSelect({ currentId }) {
+    console.log(currentId);
   }
   //-----------------------------------------------------
   watch(
-    () => [_box_state.boxVal, _tip_state.focused],
+    () => [_box_state.boxValue, _box_state.boxFocused],
+    //() => [_box_state.boxValue],
     () => {
-      updateBoxText();
+      Box.value.doUpdateText();
+      doUpdateTipList();
+    }
+  );
+  //-----------------------------------------------------
+  watch(
+    () => _box_state.boxInputing,
+    () => {
+      doUpdateTipList();
     }
   );
   //-----------------------------------------------------
   onMounted(() => {
     //console.log("TiInput mounted")
-    _tip_state.focused = false;
+    _box_state.boxFocused = false;
     if (props.boxFocused) {
-      _tip_state.focused = true;
+      _box_state.boxFocused = true;
       $input.value.select();
       //console.log($input)
     }
-    Box.value.doUpdateText(_tip_state.focused);
+    Box.value.doUpdateText();
   });
   //-----------------------------------------------------
 </script>
@@ -139,7 +177,7 @@
     <div class="part-value">
       <input
         ref="$input"
-        v-model="_box_state.boxText"
+        v-model="_box_state.boxInputing"
         spellcheck="false"
         :placeholder="Placeholder"
         @keydown="OnInputKeydown"
@@ -170,10 +208,20 @@
   </div>
   <!--=========: Tip Message ============-->
   <aside>
-    _tip:{{ _tip_state }} <br />boxText:{{ _box_state.boxText }}
-    <br />boxValu:{{ _box_state.boxVal }}
+    <pre
+      style="font-size: 11px; font-family: 'Courier New', Courier, monospace">
+  {{ dumpBoxState(_box_state) }}
+  </pre
+    >
   </aside>
-  <div class="ti-input-tip">I am Input Tip</div>
+  <div
+    class="ti-input-tip-wrapper"
+    v-if="_tips">
+    <TiList
+      v-bind="TipListConfig"
+      :data="_tips"
+      @select="OnListSelect" />
+  </div>
 </template>
 <style lang="scss" scoped>
   @use '../../../assets/style/_all.scss' as *;

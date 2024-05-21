@@ -7,6 +7,7 @@ import {
   PrefixSuffixFeature,
   PrefixSuffixFeatureProps,
   PrefixSuffixState,
+  ValueInputFeature,
   ValueInputProps,
   tiGetDefaultComPropValue,
   useFormatValue,
@@ -14,7 +15,7 @@ import {
   usePrefixSuffix,
   useValueInput,
 } from '..';
-import { Be, Callback, Callback1, CommonProps, FuncA0, Str } from '../../core';
+import { Be, CommonProps, FuncA0, Str } from '../../core';
 /*-------------------------------------------------------
 
                      Emit 
@@ -30,10 +31,23 @@ export type ValueBoxEmits = {
 
 -------------------------------------------------------*/
 export type ValueBoxState<T extends any> = PrefixSuffixState & {
-  boxVal?: T;
-  boxText: string;
-  //boxFocused: boolean;
+  // 逻辑值（隐值）
+  boxValue?: T;
+  // 输入框的错误消息
   boxErrMsg: string;
+
+  // 双向绑定输入框的真实值
+  boxInputing: string;
+
+  // 输入框状态: true 聚焦， false 表示失焦状态
+  boxFocused: boolean;
+
+  // 当前用户按下的键
+  keyboard?: string;
+  altKey: boolean;
+  ctrlKey: boolean;
+  shiftKey: boolean;
+  metaKey: boolean;
 };
 /*-------------------------------------------------------
 
@@ -56,7 +70,8 @@ export type ValueBoxProps<T extends any> = CommonProps &
 
 -------------------------------------------------------*/
 export type ValueBoxFeature = PlaceholderFeature &
-  PrefixSuffixFeature & {
+  PrefixSuffixFeature &
+  ValueInputFeature & {
     //
     // 数值处理函数
     //
@@ -78,7 +93,7 @@ export type ValueBoxFeature = PlaceholderFeature &
      * 本函数会根据 `state.boxVal` 修改 `state.boxText`。
      * `doUpdateValue` 也会在内部调用这个函数
      */
-    doUpdateText: (focused?: boolean) => void;
+    doUpdateText: () => void;
 
     //
     // 界面绑定函数
@@ -133,7 +148,7 @@ export function useValueBox<T extends any>(
   }
   //
   // 准备处理值的方法
-  let { tidyValue, translateValue } = useValueInput(boxProps);
+  let { dict, tidyValue, translateValue } = useValueInput(boxProps);
 
   // 启用 format 特性
   let formatValue = useFormatValue(boxProps);
@@ -152,24 +167,25 @@ export function useValueBox<T extends any>(
   //
   // 方法: 更新内部值
   //
-  async function doUpdateValue(input: any, focused?: boolean) {
-    state.boxVal = input;
-    await doUpdateText(focused);
+  async function doUpdateValue(input: any) {
+    state.boxValue = input;
+    await doUpdateText();
   }
   //
   // 方法: 更新显示文本
   //
-  async function doUpdateText(focused?: boolean) {
+  async function doUpdateText() {
     console.log('doUpdateText');
-    let val = state.boxVal;
+    let focused = state.boxFocused;
+    let val = state.boxValue;
     // // 如果聚焦，则仅仅显示原始值，否则，看看是否需要格式化
     if (focused) {
-      state.boxText = Str.anyToStr(val);
+      state.boxInputing = Str.anyToStr(val);
     }
     // // 看看是否需要格式化
     else {
       let text = await translateValue(val);
-      state.boxText = formatValue(text);
+      state.boxInputing = formatValue(text);
     }
   }
   //
@@ -199,7 +215,7 @@ export function useValueBox<T extends any>(
   function OnClickSuffixIcon() {
     //console.log('OnClickSuffixIcon');
     if (props.suffixIconForCopy) {
-      Be.Clipboard.write(state.boxVal);
+      Be.Clipboard.write(state.boxValue);
       Be.BlinkIt(getBoxElement());
     }
     // 默认行为
@@ -211,11 +227,14 @@ export function useValueBox<T extends any>(
   //
   // 初始化值
   //
-  state.boxVal = props.value;
+  state.boxValue = props.value;
 
   //
   // 输出特性
   return {
+    dict,
+    tidyValue,
+    translateValue,
     ..._box,
     ...usePlaceholder(props),
     doUpdateValue,

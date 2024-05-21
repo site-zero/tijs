@@ -1,5 +1,7 @@
-import { Rect } from "../../../core";
-import {TipBoxProps} from './ti-input-types'
+import _ from 'lodash';
+import { Rect } from '../../../core';
+import { ListProps } from '../../../lib';
+import { TipBoxProps } from './ti-input-types';
 
 export type TipBoxOptions = {
   /**
@@ -10,14 +12,27 @@ export type TipBoxOptions = {
   /**
    * @returns 提示框的宿主矩形（窗口坐标系）
    */
-  getHostElement?: ()=>Rect
+  getHostElement?: () => Rect;
 
   /**
    * 获取提示的方法
    */
-  getOptions?: (signal?: AbortSignal)=>Promise<void>
-}
+  getOptions?: (signal?: AbortSignal) => Promise<void>;
+};
 
-export function useTipBox(_props:TipBoxProps){
-  
+export function useTipBox(_props: TipBoxProps) {}
+
+export function getTipListConf(props?: ListProps) {
+  let re = _.assign(
+    {
+      size: 's',
+      selectable: true,
+      hoverable: true,
+      allowUserSelect: false,
+      borderStyle: 'dotted',
+    } as ListProps,
+    props
+  );
+
+  return re;
 }

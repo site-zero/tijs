@@ -71,3 +71,5 @@ export type CssTextAlign =
   | 'start'
   | 'end'
   | 'justify';
+
+export type CssBorderStyle = 'solid' | 'dashed' | 'dotted';

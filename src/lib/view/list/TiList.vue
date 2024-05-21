@@ -22,17 +22,21 @@
   const NotItems = computed(() => _.isEmpty(Items.value));
   const isItemsHasIcon = computed(() => List.value.itemsHasIcon(Items.value));
   const isItemsHasTip = computed(() => List.value.itemsHasTip(Items.value));
-  const TopClass = computed(() =>
-    CssUtils.mergeClassName(
+  const TopClass = computed(() => {
+    let names = [`size-${props.size ?? 'm'}`] as string[];
+    if (props.borderStyle) {
+      names.push(`border-${props.borderStyle}`);
+    }
+    return CssUtils.mergeClassName(
       props.className,
       {
         'is-hoverable': props.hoverable,
         'is-selectable': props.selectable,
         'none-user-select': !props.allowUserSelect,
       },
-      `size-${props.size ?? 'm'}`
-    )
-  );
+      names
+    );
+  });
   const ListItemStyle = computed(() => {
     let cols = [];
     if (props.multi) {

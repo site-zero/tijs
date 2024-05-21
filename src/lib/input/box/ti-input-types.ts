@@ -1,5 +1,21 @@
-import { ValueBoxProps } from '../../../lib/_features';
+import { ListProps } from '../../../lib';
+import {
+  ValueBoxProps,
+  ValueBoxState,
+  ValueInputTidyMode,
+} from '../../../lib/_features';
 
+//--------------------------------------------------
+export type InputBoxState = ValueBoxState<any> & {
+  // 为了保证 updateTipList 不被重入，如果10ms 内的重入将被无视
+  // 每次有效调用 updateTimeList 都会更新这个值
+  lastUpdateAMS: number;
+
+  // 上次请求的退出控制器
+  lastAbort?: AbortController;
+};
+
+//--------------------------------------------------
 export type InputBoxProps = ValueBoxProps<any> &
   TipBoxProps & {
     hideBorder?: boolean;
@@ -17,6 +33,19 @@ export type TipBoxProps = {
 
   // 提示框显示时机
   tipHideTime?: TipBoxHideTime;
+
+  // 查询提示信息的时候，采用输入的值
+  // 默认 false
+  tipUseHint?: boolean;
+
+  // 如果查询提示信息，输入提示值，是否需要先经过值的整理器
+  // 默认 ['main']
+  tipTidyBy?: ValueInputTidyMode[];
+
+  /**
+   * 提示列表的配置
+   */
+  tipList?: Omit<ListProps, 'data'>;
 };
 
 /**
@@ -36,14 +65,3 @@ export type TipBoxShowTime = 'focus' | 'keyin' | 'input';
  * - emit : 通知改动时才隐藏
  */
 export type TipBoxHideTime = 'blur' | 'changed' | 'emit';
-
-export type TipBoxState = {
-  // 当前用户按下的键
-  keyboard?: string;
-
-  // 检测到用户输入的值
-  input?: string;
-
-  // 聚焦状态， false 表示失焦状态
-  focused: boolean;
-};

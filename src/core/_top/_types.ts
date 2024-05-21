@@ -994,3 +994,4 @@ export type ActionBarProps = CommonProps & {
        不知道如何分类，但是控件里还有用的类型
 
 ---------------------------------------------------*/
+export type AspectSize = 't' | 's' | 'm' | 'b' | 'h';

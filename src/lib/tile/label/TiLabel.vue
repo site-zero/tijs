@@ -13,8 +13,8 @@
   });
 
   const state = reactive({
-    boxVal: null,
-    boxText: '',
+    boxValue: null,
+    boxInputing: '',
     boxFocused: false,
     boxErrMsg: '',
     prefixIconHovered: false,
@@ -44,7 +44,7 @@
 
 -------------------------------------------------------*/
   const hasValue = computed(() => {
-    return !_.isNil(state.boxVal);
+    return !_.isNil(state.boxValue);
   });
 
   const TopClass = computed(() =>
@@ -55,7 +55,7 @@
   );
   const LabelText = computed(() => {
     if (hasValue.value) {
-      return state.boxText;
+      return state.boxInputing;
     }
     return Box.value.getPlaceholder();
   });
