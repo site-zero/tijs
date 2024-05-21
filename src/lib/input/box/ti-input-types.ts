@@ -1,4 +1,4 @@
-import { ValueBoxProps } from 'src/lib/_features';
+import { ValueBoxProps } from '../../../lib/_features';
 
 export type InputBoxProps = ValueBoxProps<any> &
   TipBoxProps & {
@@ -46,4 +46,4 @@ export type TipBoxState = {
 
   // 聚焦状态， false 表示失焦状态
   focused: boolean;
-}
+};

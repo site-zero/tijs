@@ -32,7 +32,7 @@ export type ValueBoxEmits = {
 export type ValueBoxState<T extends any> = PrefixSuffixState & {
   boxVal?: T;
   boxText: string;
-  boxFocused: boolean;
+  //boxFocused: boolean;
   boxErrMsg: string;
 };
 /*-------------------------------------------------------
@@ -64,7 +64,7 @@ export type ValueBoxFeature = PlaceholderFeature &
      * 当输入框初值改变时，需要主动调用这个函数,
      * 本函数会更新 `state.boxVal`
      */
-    doUpdateValue: Callback1<any>;
+    doUpdateValue: (val: any) => void;
     /**
      * 当用户通过界面输入了内容，需要通过这个函数更新输入框
      * 通常，本函数是做两件事:
@@ -72,21 +72,21 @@ export type ValueBoxFeature = PlaceholderFeature &
      * 2. 通知外部改动
      * 你可以通过 `ValueBoxOptions.valueChangeMode` 改变这个默认行为
      */
-    doChangeValue: Callback1<string>;
+    doChangeValue: (val: string) => void;
 
     /**
      * 本函数会根据 `state.boxVal` 修改 `state.boxText`。
      * `doUpdateValue` 也会在内部调用这个函数
      */
-    doUpdateText: Callback;
+    doUpdateText: (focused?: boolean) => void;
 
     //
     // 界面绑定函数
     //
-    OnClickPrefixIcon: Callback;
-    OnClickSuffixIcon: Callback;
-    OnHoverPrefixIcon: Callback1<boolean>;
-    OnHoverSuffixIcon: Callback1<boolean>;
+    OnClickPrefixIcon: () => void;
+    OnClickSuffixIcon: () => void;
+    OnHoverPrefixIcon: (hovered: boolean) => void;
+    OnHoverSuffixIcon: (hovered: boolean) => void;
   };
 /*-------------------------------------------------------
 
@@ -152,21 +152,21 @@ export function useValueBox<T extends any>(
   //
   // 方法: 更新内部值
   //
-  async function doUpdateValue(input: any) {
+  async function doUpdateValue(input: any, focused?: boolean) {
     state.boxVal = input;
-    await doUpdateText();
+    await doUpdateText(focused);
   }
   //
   // 方法: 更新显示文本
   //
-  async function doUpdateText() {
-    console.log("doUpdateText")
+  async function doUpdateText(focused?: boolean) {
+    console.log('doUpdateText');
     let val = state.boxVal;
-    // 如果聚焦，则仅仅显示原始值，否则，看看是否需要格式化
-    if (state.boxFocused) {
+    // // 如果聚焦，则仅仅显示原始值，否则，看看是否需要格式化
+    if (focused) {
       state.boxText = Str.anyToStr(val);
     }
-    // 看看是否需要格式化
+    // // 看看是否需要格式化
     else {
       let text = await translateValue(val);
       state.boxText = formatValue(text);
@@ -212,7 +212,7 @@ export function useValueBox<T extends any>(
   // 初始化值
   //
   state.boxVal = props.value;
-  doUpdateText();
+
   //
   // 输出特性
   return {

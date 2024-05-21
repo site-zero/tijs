@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import _ from 'lodash';
-  import { computed, onMounted, reactive, ref } from 'vue';
+  import { computed, onMounted, reactive, ref, watch } from 'vue';
   import { TiIcon, ValueBoxEmits } from '../../';
   import { CssUtils } from '../../../core';
   import { COM_TYPES } from '../../lib-com-types';
@@ -16,7 +16,7 @@
   const _box_state: InputBoxState = reactive({
     boxVal: null,
     boxText: '',
-    boxFocused: false,
+    //boxFocused: false,
     boxErrMsg: '',
     prefixIconHovered: false,
     prefixTextHovered: false,
@@ -39,6 +39,7 @@
   let emit = defineEmits<ValueBoxEmits>();
   //-----------------------------------------------------
   const $el = ref<any>(null);
+  //-----------------------------------------------------
   const Box = computed(() =>
     useInputBox(_box_state, props, {
       emit,
@@ -47,14 +48,18 @@
     })
   );
   //-----------------------------------------------------
+  function updateBoxText() {
+    Box.value.doUpdateText(_tip_state.focused);
+  }
+  //-----------------------------------------------------
   const hasValue = computed(() => _.isNil(_box_state.boxVal));
   const Placeholder = computed(() => Box.value.getPlaceholder());
   const TopClass = computed(() =>
     CssUtils.mergeClassName(props.className, Box.value.getClass(), {
       'has-value': hasValue.value,
       'nil-value': !hasValue.value,
-      'is-focused': _box_state.boxFocused,
-      'no-focused': !_box_state.boxFocused,
+      'is-focused': _tip_state.focused,
+      'no-focused': !_tip_state.focused,
       'show-border': !props.hideBorder,
     })
   );
@@ -62,9 +67,7 @@
   const $input = ref<any>(null);
   //-----------------------------------------------------
   function OnInputFocused() {
-    _box_state.boxFocused = true;
     _tip_state.focused = true;
-    Box.value.doUpdateText();
     if (props.autoSelect) {
       $input.value.select();
       // nextTick(() => {
@@ -74,7 +77,6 @@
   }
   //-----------------------------------------------------
   function OnInputBlur() {
-    _box_state.boxFocused = false;
     _tip_state.focused = false;
   }
   //-----------------------------------------------------
@@ -87,12 +89,22 @@
     _tip_state.keyboard = event.key;
   }
   //-----------------------------------------------------
+  watch(
+    () => [_box_state.boxVal, _tip_state.focused],
+    () => {
+      updateBoxText();
+    }
+  );
+  //-----------------------------------------------------
   onMounted(() => {
     //console.log("TiInput mounted")
+    _tip_state.focused = false;
     if (props.boxFocused) {
+      _tip_state.focused = true;
       $input.value.select();
       //console.log($input)
     }
+    Box.value.doUpdateText(_tip_state.focused);
   });
   //-----------------------------------------------------
 </script>
@@ -157,7 +169,10 @@
     </div>
   </div>
   <!--=========: Tip Message ============-->
-  <aside>{{ _tip_state }}</aside>
+  <aside>
+    _tip:{{ _tip_state }} <br />boxText:{{ _box_state.boxText }}
+    <br />boxValu:{{ _box_state.boxVal }}
+  </aside>
   <div class="ti-input-tip">I am Input Tip</div>
 </template>
 <style lang="scss" scoped>
