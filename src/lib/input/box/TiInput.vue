@@ -1,11 +1,17 @@
 <script setup lang="ts">
   import _ from 'lodash';
-  import { computed, onMounted, reactive, ref, watch } from 'vue';
-  import { TiIcon, TiList, ValueBoxEmits, useValueBox } from '../../';
-  import { CssUtils, Vars } from '../../../core';
+  import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
+  import {
+    ListSelectEmitInfo,
+    TiIcon,
+    TiList,
+    ValueBoxEmits,
+    useValueBox,
+  } from '../../';
+  import { CssUtils, Rect, Rects, Vars } from '../../../core';
   import { COM_TYPES } from '../../lib-com-types';
   import { InputBoxProps, InputBoxState } from './ti-input-types';
-  import { dumpBoxState, updateTipList } from './use-input-box';
+  import { dumpBoxState, resetTipList, updateTipList } from './use-input-box';
   import { getTipListConf } from './use-tip-box';
   //-----------------------------------------------------
   defineOptions({
@@ -56,6 +62,7 @@
   );
   //-----------------------------------------------------
   const hasValue = computed(() => _.isNil(_box_state.boxValue));
+  const showTipList = computed(() => (_tips.value ? true : false));
   const Placeholder = computed(() => Box.value.getPlaceholder());
   const TopClass = computed(() =>
     CssUtils.mergeClassName(props.className, Box.value.getClass(), {
@@ -64,8 +71,18 @@
       'is-focused': _box_state.boxFocused,
       'no-focused': !_box_state.boxFocused,
       'show-border': !props.hideBorder,
+      'show-tip-list': showTipList.value,
     })
   );
+  const TopStyle = computed(() => {
+    if (showTipList.value) {
+      return {
+        position: 'fixed',
+        ..._box_rect.value?.toCss(),
+      };
+    }
+    return {};
+  });
   //-----------------------------------------------------
   const $input = ref<any>(null);
   //-----------------------------------------------------
@@ -85,6 +102,11 @@
       _box_state.shiftKey = false;
       _box_state.metaKey = false;
     }
+  }
+  //-----------------------------------------------------
+  function OnClickTipMask() {
+    resetTipList(_box_state, _tips);
+    OnInputBlur();
   }
   //-----------------------------------------------------
   function OnInputChanged() {
@@ -114,9 +136,18 @@
     });
   }
   //-----------------------------------------------------
-  function OnListSelect({ currentId }) {
+  function OnListSelect(payload: ListSelectEmitInfo) {
+    let { currentId } = payload;
     console.log(currentId);
   }
+  //-----------------------------------------------------
+  watch(
+    () => Box.value,
+    () => {
+      resetTipList(_box_state, _tips);
+      _box_state.boxFocused = false;
+    }
+  );
   //-----------------------------------------------------
   watch(
     () => [_box_state.boxValue, _box_state.boxFocused],
@@ -133,9 +164,24 @@
       doUpdateTipList();
     }
   );
+  //-------------------------------------------------
+  const _box_rect = ref<Rect>();
+  const obResize = new ResizeObserver((_entries) => {
+    if ($el.value) {
+      let rect = Rects.createBy($el.value);
+      if (!_.isEqual(rect, _box_rect.value)) {
+        console.log('resize to: ', rect.raw());
+        _box_rect.value = rect;
+      }
+    } else {
+      _box_rect.value = undefined;
+    }
+  });
   //-----------------------------------------------------
   onMounted(() => {
+    obResize.observe($el.value);
     //console.log("TiInput mounted")
+    OnInputBlur();
     _box_state.boxFocused = false;
     if (props.boxFocused) {
       _box_state.boxFocused = true;
@@ -144,6 +190,9 @@
     }
     Box.value.doUpdateText();
   });
+  onUnmounted(() => {
+    obResize.disconnect();
+  });
   //-----------------------------------------------------
 </script>
 
@@ -151,6 +200,7 @@
   <div
     class="ti-input-box prefix-suffix-box"
     :class="TopClass"
+    :style="TopStyle"
     @mousedown="OnInputFocused"
     ref="$el">
     <div
@@ -207,7 +257,10 @@
     </div>
   </div>
   <!--=========: Tip Message ============-->
-  <aside>
+  <aside
+    class="ti-input-tip-mask"
+    v-if="showTipList"
+    @click="OnClickTipMask">
     <pre
       style="font-size: 11px; font-family: 'Courier New', Courier, monospace">
   {{ dumpBoxState(_box_state) }}
@@ -216,7 +269,7 @@
   </aside>
   <div
     class="ti-input-tip-wrapper"
-    v-if="_tips">
+    v-if="showTipList">
     <TiList
       v-bind="TipListConfig"
       :data="_tips"

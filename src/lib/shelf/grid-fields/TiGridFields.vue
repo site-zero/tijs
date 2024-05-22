@@ -2,7 +2,7 @@
   import _ from 'lodash';
   import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
   import { TextSnippet, useFieldChange } from '../../';
-  import { CssUtils, FieldChange, FieldValueChange } from '../../../core';
+  import { CssUtils, FieldChange } from '../../../core';
   import GFItField from './GFItField.vue';
   import GFItGroup from './GFItGroup.vue';
   import GFItLabel from './GFItLabel.vue';
@@ -12,12 +12,11 @@
   } from './build-grid-field-layout';
   import {
     GridFieldsDomReadyInfo,
-    GridItemEmitter,
+    GridFieldsEmitter,
     GridFieldsProps,
     GridFieldsStrictField,
     GridFieldsStrictGroup,
     GridFieldsStrictLabel,
-GridFieldsEmitter,
   } from './ti-grid-fields-types';
   import { getBodyPartStyle } from './use-field-style';
   import { useGridFields } from './use-grid-fields';
@@ -59,7 +58,7 @@ GridFieldsEmitter,
    *
    * @param change 修改的值
    */
-   async function onValueChange(change: FieldChange) {
+  async function onValueChange(change: FieldChange) {
     Change.value.handleValueChange(change, {
       emit,
       data: props.data || {},

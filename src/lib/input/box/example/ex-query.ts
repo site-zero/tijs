@@ -5,10 +5,10 @@ export default {
   name: 'query',
   text: 'i18n:ti-input-example-query',
   comConf: {
-    value: 'A',
+    value: undefined,
     valueCase: 'upper',
     trimed: true,
-    placeholder: 'Choose one options',
+    placeholder: 'Keyin for tips',
     prefixIconForClean: true,
     suffixIconForCopy: true,
     mustInOptions: true,

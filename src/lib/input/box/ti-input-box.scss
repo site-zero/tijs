@@ -21,4 +21,23 @@ div.ti-input-box {
     background-color: var(--ti-color-hightlight);
     color: var(--ti-color-hightlight-f);
   }
+  &.show-tip-list {
+    position: relative;
+    z-index: $z-mask + 1;
+  }
+}
+
+.ti-input-tip-mask {
+  position: fixed;
+  z-index: $z-mask;
+  inset: 0;
+  //background-color: rgba(0, 0, 0, 0.2);
+  @include flex-align-nowrap($jc: flex-end, $ai: flex-end);
+  padding: 4em;
+}
+
+.ti-input-tip-wrapper {
+  position: fixed;
+  z-index: $z-mask;
+  
 }
