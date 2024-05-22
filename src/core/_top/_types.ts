@@ -107,6 +107,12 @@ export type Point2D = {
   y: number;
 };
 
+export type QuadrantName =
+  | 'top-left'
+  | 'top-right'
+  | 'bottom-left'
+  | 'bottom-right';
+
 export type KeyDisplay =
   | string
   | MessageMap

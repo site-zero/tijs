@@ -23,7 +23,9 @@ export function resetTipList(
 ) {
   box.lastUpdateAMS = 0;
   if (box.lastAbort) {
-    box.lastAbort.abort();
+    try {
+      box.lastAbort.abort('Reset TipList');
+    } catch (_err) {}
     box.lastAbort = undefined;
   }
   tips.value = undefined;
@@ -47,7 +49,7 @@ export async function updateTipList(
   if (du < 10) {
     return;
   }
-
+  console.log('  // 是否满足显示时机:', tipShowTime);
   // 是否满足显示时机
   if (!boxFocused) {
     resetTipList(box, tips);
@@ -60,7 +62,7 @@ export async function updateTipList(
     }
   }
   if (tipShowTime == 'input') {
-    if (boxValue == boxInputing) {
+    if (!boxInputing || boxValue == boxInputing) {
       resetTipList(box, tips);
       return;
     }
@@ -69,7 +71,9 @@ export async function updateTipList(
 
   // 取消上一次的请求
   if (box.lastAbort) {
-    box.lastAbort.abort();
+    try {
+      box.lastAbort.abort('Cancel Last Query');
+    } catch (_err) {}
     box.lastAbort = undefined;
   }
 

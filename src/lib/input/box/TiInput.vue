@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import _ from 'lodash';
-  import { computed, onMounted, reactive, ref, watch } from 'vue';
+  import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
   import {
     ListSelectEmitInfo,
     TiIcon,
@@ -12,7 +12,7 @@
   import { COM_TYPES } from '../../lib-com-types';
   import { InputBoxProps, InputBoxState } from './ti-input-types';
   import { dumpBoxState, resetTipList, updateTipList } from './use-input-box';
-  import { getTipListConf } from './use-tip-box';
+  import { getTipListConf, getTipWrapperStyle } from './use-tip-box';
   //-----------------------------------------------------
   defineOptions({
     inheritAttrs: true,
@@ -51,7 +51,20 @@
   //-----------------------------------------------------
   const TipListConfig = computed(() => getTipListConf(props.tipList));
   //-----------------------------------------------------
-  const $el = ref<any>(null);
+  const $el = ref<HTMLElement>();
+  //-------------------------------------------------
+  let el_parent_area_hint = 0;
+  const obResize = new ResizeObserver((_entries) => {
+    if (showTipList.value) {
+      let $pel = _entries[0].target;
+      let rect = Rects.createBy($pel);
+      let area = Math.round(rect.area());
+      console.log(el_parent_area_hint, area, $pel);
+      if (Math.abs(el_parent_area_hint - area) > 10) {
+        OnClickTipMask();
+      }
+    }
+  });
   //-----------------------------------------------------
   const Box = computed(() =>
     useValueBox(_box_state, props, {
@@ -89,20 +102,15 @@
   const BracingStyle = computed((): Vars => {
     if (_box_rect.value) {
       return {
-        width: `${_box_rect.value.width}px`,
+        //width: `${_box_rect.value.width}px`,
         height: `${_box_rect.value.height}px`,
       };
     }
     return {};
   });
-  const TipWrapperStyle = computed((): Vars => {
-    if (_box_rect.value) {
-      return {
-        minWidth: `${_box_rect.value.width}px`,
-      };
-    }
-    return {};
-  });
+  const TipWrapperStyle = computed(() =>
+    getTipWrapperStyle($el.value, _box_rect.value)
+  );
   //-----------------------------------------------------
   const $input = ref<any>(null);
   //-----------------------------------------------------
@@ -194,15 +202,21 @@
       console.log(`showTipList changed:  new=${newVal}  old=${oldVal}`);
       // 从隐藏变成显示
       if (true === newVal && false === oldVal) {
+        let $pel = $el.value?.parentElement?.parentElement;
+        if ($pel) {
+          let rect = Rects.createBy($pel);
+          el_parent_area_hint = Math.round(rect.area());
+          obResize.observe($pel);
+        }
         updateBoxRect();
       }
       // 从显示变成隐藏
       else if (true === oldVal && false === newVal) {
         _box_rect.value = undefined;
+        obResize.disconnect();
       }
     }
   );
-
   //-------------------------------------------------
   const _box_rect = ref<Rect>();
   function updateBoxRect() {
@@ -228,6 +242,9 @@
       //console.log($input)
     }
     Box.value.doUpdateText();
+  });
+  onUnmounted(() => {
+    obResize.disconnect();
   });
   //-----------------------------------------------------
 </script>
@@ -309,10 +326,12 @@
     class="ti-input-tip-wrapper"
     v-if="showTipList"
     :style="TipWrapperStyle">
-    <TiList
-      v-bind="TipListConfig"
-      :data="_tips"
-      @select="OnListSelect" />
+    <div class="tip-con">
+      <TiList
+        v-bind="TipListConfig"
+        :data="_tips"
+        @select="OnListSelect" />
+    </div>
   </div>
 </template>
 <style lang="scss" scoped>

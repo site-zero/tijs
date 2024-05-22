@@ -126,7 +126,7 @@ export type ValueBoxOptions = {
    *
    * 如果绘制提示框，也会用这个元素的盒子模型作为弹出提示框的参考位置
    */
-  getBoxElement: FuncA0<HTMLElement>;
+  getBoxElement: () => HTMLElement | undefined;
 
   COM_TYPE: string;
 };
@@ -175,7 +175,7 @@ export function useValueBox<T extends any>(
   // 方法: 更新显示文本
   //
   async function doUpdateText() {
-    console.log('doUpdateText');
+   // console.log('doUpdateText');
     let focused = state.boxFocused;
     let val = state.boxValue;
     // // 如果聚焦，则仅仅显示原始值，否则，看看是否需要格式化

@@ -19,7 +19,13 @@ export type BlinkOptions = {
   speed?: number;
 };
 
-export function BlinkIt(it: DomSelector, options = {} as BlinkOptions): void {
+export function BlinkIt(
+  it: DomSelector | undefined,
+  options = {} as BlinkOptions
+): void {
+  if (!it) {
+    return;
+  }
   let { update, after, speed = 800 } = options;
 
   let el = Dom.find(it);

@@ -1,5 +1,14 @@
 import _ from 'lodash';
-import { DockOptions, Num, Point2D, RectInfo, Size2D, Util, Vars } from '../';
+import {
+  DockOptions,
+  Num,
+  Point2D,
+  QuadrantName,
+  RectInfo,
+  Size2D,
+  Util,
+  Vars,
+} from '../';
 
 const RECTINFO_NAMES = {
   w: 'width',
@@ -43,7 +52,7 @@ export function explainToArray(mode: string, sorted: boolean = true): string[] {
 export function pickKeys(
   rect: RectInfo,
   keys: string,
-  dft: number = NaN,
+  dft: number = NaN
 ): { [k: string]: number } {
   let re = {} as { [k: string]: number };
   let ks = explainToArray(keys, false);
@@ -68,7 +77,7 @@ export class Rect implements RectInfo {
 
   constructor(
     rect = { top: 0, left: 0, height: 0, width: 0 } as RectInfo,
-    mode?: string,
+    mode?: string
   ) {
     let key: keyof RectInfo;
 
@@ -241,7 +250,7 @@ export class Rect implements RectInfo {
     viewport: Size2D = {
       width: window.innerWidth,
       height: window.innerHeight,
-    },
+    }
   ): Vars {
     // 计算
     var css = {
@@ -287,6 +296,26 @@ export class Rect implements RectInfo {
       x: p2d.x - this.left,
       y: p2d.y - this.top,
     };
+  }
+
+  /**
+   * 判断给定点落在哪个象限里
+   *
+   * ```
+   *             |
+   *    top-left | top-right
+   * ------------+-----------
+   *  bottom-left| bottom-right
+   *             |
+   * ```
+   */
+  getQuadrant(p2d: Point2D): QuadrantName {
+    // top
+    if (p2d.y < this.y) {
+      return p2d.x < this.x ? 'top-left' : 'top-right';
+    }
+    // bottom
+    return p2d.x < this.x ? 'bottom-left' : 'bottom-right';
   }
 
   /**
@@ -406,7 +435,7 @@ export class Rect implements RectInfo {
       top?: number;
       left?: number;
     },
-    { xAxis = true, yAxis = true } = {},
+    { xAxis = true, yAxis = true } = {}
   ) {
     // Translate xAxis
     if (xAxis) {
@@ -456,7 +485,7 @@ export class Rect implements RectInfo {
   moveTo(
     pos: Point2D = { x: 0, y: 0 },
     offset: Point2D = { x: 0, y: 0 },
-    mode = 'tl',
+    mode = 'tl'
   ) {
     // _.defaults(pos, { x: 0, y: 0 });
     // _.defaults(offset, { x: 0, y: 0 });
@@ -532,7 +561,7 @@ export class Rect implements RectInfo {
       viewport,
       viewportBorder = 4,
       wrapCut = false,
-    } = {} as DockOptions,
+    } = {} as DockOptions
   ): string {
     let _space: Point2D;
     if (_.isNumber(space)) {
@@ -645,7 +674,7 @@ export class Rect implements RectInfo {
       x?: 'left' | 'right' | 'center' | 'auto';
       y?: 'top' | 'bottom' | 'center' | 'auto';
     },
-    space = { x: 0, y: 0 } as Point2D,
+    space = { x: 0, y: 0 } as Point2D
   ): Rect {
     _.defaults(axis, { x: 'center', y: 'center' });
     _.defaults(space, { x: 0, y: 0 });
@@ -849,7 +878,7 @@ export class Rect implements RectInfo {
         top: this.top + border,
         bottom: this.bottom - border,
       },
-      'tlbr',
+      'tlbr'
     );
   }
 }
