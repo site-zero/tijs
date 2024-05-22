@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import _ from 'lodash';
-  import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
+  import { computed, onMounted, reactive, ref, watch } from 'vue';
   import {
     ListSelectEmitInfo,
     TiIcon,
@@ -74,11 +74,31 @@
       'show-tip-list': showTipList.value,
     })
   );
-  const TopStyle = computed(() => {
-    if (showTipList.value) {
+  const TopStyle = computed((): Vars => {
+    if (_box_rect.value) {
       return {
         position: 'fixed',
-        ..._box_rect.value?.toCss(),
+        width: `${_box_rect.value.width}px`,
+        height: `${_box_rect.value.height}px`,
+        top: `${_box_rect.value.top}px`,
+        left: `${_box_rect.value.left}px`,
+      };
+    }
+    return {};
+  });
+  const BracingStyle = computed((): Vars => {
+    if (_box_rect.value) {
+      return {
+        width: `${_box_rect.value.width}px`,
+        height: `${_box_rect.value.height}px`,
+      };
+    }
+    return {};
+  });
+  const TipWrapperStyle = computed((): Vars => {
+    if (_box_rect.value) {
+      return {
+        minWidth: `${_box_rect.value.width}px`,
       };
     }
     return {};
@@ -149,6 +169,7 @@
     }
   );
   //-----------------------------------------------------
+  // 看看是否满足选项列表的打开条件
   watch(
     () => [_box_state.boxValue, _box_state.boxFocused],
     //() => [_box_state.boxValue],
@@ -158,15 +179,33 @@
     }
   );
   //-----------------------------------------------------
+  // 输入触发选项列表刷新
   watch(
     () => _box_state.boxInputing,
     () => {
       doUpdateTipList();
     }
   );
+  //-----------------------------------------------------
+  // 当选项列表转为显示，则计算展位盒子的矩形
+  watch(
+    () => showTipList.value,
+    (newVal, oldVal) => {
+      console.log(`showTipList changed:  new=${newVal}  old=${oldVal}`);
+      // 从隐藏变成显示
+      if (true === newVal && false === oldVal) {
+        updateBoxRect();
+      }
+      // 从显示变成隐藏
+      else if (true === oldVal && false === newVal) {
+        _box_rect.value = undefined;
+      }
+    }
+  );
+
   //-------------------------------------------------
   const _box_rect = ref<Rect>();
-  const obResize = new ResizeObserver((_entries) => {
+  function updateBoxRect() {
     if ($el.value) {
       let rect = Rects.createBy($el.value);
       if (!_.isEqual(rect, _box_rect.value)) {
@@ -176,10 +215,10 @@
     } else {
       _box_rect.value = undefined;
     }
-  });
+  }
+
   //-----------------------------------------------------
   onMounted(() => {
-    obResize.observe($el.value);
     //console.log("TiInput mounted")
     OnInputBlur();
     _box_state.boxFocused = false;
@@ -190,12 +229,8 @@
     }
     Box.value.doUpdateText();
   });
-  onUnmounted(() => {
-    obResize.disconnect();
-  });
   //-----------------------------------------------------
 </script>
-
 <template>
   <div
     class="ti-input-box prefix-suffix-box"
@@ -257,6 +292,9 @@
     </div>
   </div>
   <!--=========: Tip Message ============-->
+  <div
+    class="ti-input-bracing"
+    :style="BracingStyle"></div>
   <aside
     class="ti-input-tip-mask"
     v-if="showTipList"
@@ -269,7 +307,8 @@
   </aside>
   <div
     class="ti-input-tip-wrapper"
-    v-if="showTipList">
+    v-if="showTipList"
+    :style="TipWrapperStyle">
     <TiList
       v-bind="TipListConfig"
       :data="_tips"
