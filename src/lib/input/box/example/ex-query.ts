@@ -11,9 +11,9 @@ export default {
     placeholder: 'Keyin for tips',
     prefixIconForClean: true,
     suffixIconForCopy: true,
-    mustInOptions: true,
+    mustInOptions: false,
     tipShowTime: 'input',
     tipUseHint: true,
-    options: "#hello",
+    options: "#hello100",
   } as InputBoxProps,
 } as ComPropExample;

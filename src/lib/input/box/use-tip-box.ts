@@ -1,26 +1,6 @@
 import _ from 'lodash';
-import { QuadrantName, Rect, Rects, Vars } from '../../../core';
+import { CssUtils, QuadrantName, Rect, Rects, Vars } from '../../../core';
 import { ListProps } from '../../../lib';
-import { TipBoxProps } from './ti-input-types';
-
-export type TipBoxOptions = {
-  /**
-   * 是否启用提示框，如果未定义，则看是否提供了提示框的宿主位置以及选项表
-   */
-  enabled?: boolean;
-
-  /**
-   * @returns 提示框的宿主矩形（窗口坐标系）
-   */
-  getHostElement?: () => Rect;
-
-  /**
-   * 获取提示的方法
-   */
-  getOptions?: (signal?: AbortSignal) => Promise<void>;
-};
-
-export function useTipBox(_props: TipBoxProps) {}
 
 export function getTipListConf(props?: ListProps) {
   let re = _.assign(
@@ -33,7 +13,12 @@ export function getTipListConf(props?: ListProps) {
     } as ListProps,
     props
   );
-
+  re.className = CssUtils.mergeClassName(
+    {
+      'tip-block': true,
+    },
+    props?.className
+  );
   return re;
 }
 
@@ -43,38 +28,39 @@ export function getTipWrapperStyle($el?: HTMLElement, box?: Rect): Vars {
   }
   let win = Rects.createBy($el.ownerDocument);
   let quard = win.getQuadrant(box);
-  console.log('quard', quard);
+  //console.log('quard', quard);
   let css: Vars = {
     minWidth: `${box.width}px`,
   };
+  let boxBorder = 4;
   let _algs: Record<QuadrantName, () => void> = {
     // Tip should down and align=left
     'top-left': () => {
       css.top = `${box.bottom}px`;
       css.left = `${box.left}px`;
       css.maxWidth = `${win.width - box.left}px`;
-      css.maxHeight = `${win.bottom - box.bottom}px`;
+      css.maxHeight = `${win.bottom - box.bottom - boxBorder}px`;
     },
     // Tip should down and align=right
     'top-right': () => {
       css.top = `${box.bottom}px`;
       css.right = `${win.width - box.right}px`;
       css.maxWidth = `${box.right}px`;
-      css.maxHeight = `${win.bottom - box.bottom}px`;
+      css.maxHeight = `${win.bottom - box.bottom - boxBorder}px`;
     },
     // Tip should up and align=left
     'bottom-left': () => {
       css.bottom = `${win.height - box.top}px`;
       css.left = `${box.left}px`;
       css.maxWidth = `${win.right - box.left}px`;
-      css.maxHeight = `${box.top}px`;
+      css.maxHeight = `${box.top - boxBorder}px`;
     },
     // Tip should up and align=right
     'bottom-right': () => {
       css.bottom = `${win.height - box.top}px`;
       css.right = `${win.width - box.right}px`;
       css.maxWidth = `${box.right}px`;
-      css.maxHeight = `${box.top}px`;
+      css.maxHeight = `${box.top - boxBorder}px`;
     },
   };
   _algs[quard]();

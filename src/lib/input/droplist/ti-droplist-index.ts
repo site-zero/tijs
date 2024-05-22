@@ -19,7 +19,6 @@ const COM_TYPE = COM_TYPES.Droplist;
 
 const TiDroplistInfo: TiComInfo = {
   icon: 'fas-square-caret-down',
-  tags: ['scaffold'],
   race: TiComRace.INPUT,
   name: COM_TYPE,
   text: 'i18n:ti-droplist-com-name',
@@ -30,6 +29,12 @@ const TiDroplistInfo: TiComInfo = {
     zh_hk: zh_cn,
   },
   com: TiDroplist,
+  liveStyle: {
+    width: '80%',
+    minWidth: '120px',
+    maxWidth: '300px',
+    paddingBottom: '30%',
+  },
   install: (app: App) => {
     app.component(COM_TYPE, TiDroplist);
   },
@@ -38,8 +43,8 @@ const TiDroplistInfo: TiComInfo = {
     example.simple,
     example.withIcon,
     example.withTip,
-    example.multiWithIcon,
-    example.multiWithTip,
+    // example.multiWithIcon,
+    // example.multiWithTip,
   ],
 };
 

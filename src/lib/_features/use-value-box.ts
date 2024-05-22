@@ -7,6 +7,7 @@ import {
   PrefixSuffixFeature,
   PrefixSuffixFeatureProps,
   PrefixSuffixState,
+  ReadonlyProps,
   ValueInputFeature,
   ValueInputProps,
   tiGetDefaultComPropValue,
@@ -15,7 +16,7 @@ import {
   usePrefixSuffix,
   useValueInput,
 } from '..';
-import { Be, CommonProps, FuncA0, Str } from '../../core';
+import { Be, CommonProps, Dicts, IconInput, Str } from '../../core';
 /*-------------------------------------------------------
 
                      Emit 
@@ -35,6 +36,11 @@ export type ValueBoxState<T extends any> = PrefixSuffixState & {
   boxValue?: T;
   // 输入框的错误消息
   boxErrMsg: string;
+
+  // 如果有字典，那么对应标准项目的 icon/tip 可以设置到这里
+  // - 要求，设置了字典，且 mustInOptions
+  boxIcon?: IconInput;
+  boxTip?: string;
 
   // 双向绑定输入框的真实值
   boxInputing: string;
@@ -57,12 +63,21 @@ export type ValueBoxState<T extends any> = PrefixSuffixState & {
 export type ValueBoxProps<T extends any> = CommonProps &
   ValueInputProps &
   FormatValueProps &
+  ReadonlyProps &
   PlaceholderFeatureProps &
   PrefixSuffixFeatureProps & {
     value?: T;
     autoSelect?: boolean;
     prefixIconForClean?: boolean;
     suffixIconForCopy?: boolean;
+    /**
+     * 如果开启这个开关, 只要定义了字典，且 mustInOptions
+     * 那么将自动根据选项设置前缀图标
+     */
+    autoPrefixIcon?: boolean;
+
+    // 输入框，是否允许用户输入
+    canInput?: boolean;
   };
 /*-------------------------------------------------------
 
@@ -72,6 +87,10 @@ export type ValueBoxProps<T extends any> = CommonProps &
 export type ValueBoxFeature = PlaceholderFeature &
   PrefixSuffixFeature &
   ValueInputFeature & {
+    //
+    // 计算自动前缀图标
+    //
+    getBoxAutoPrefixIcon: () => IconInput | undefined;
     //
     // 数值处理函数
     //
@@ -175,20 +194,41 @@ export function useValueBox<T extends any>(
   // 方法: 更新显示文本
   //
   async function doUpdateText() {
-   // console.log('doUpdateText');
+    // console.log('doUpdateText');
     let focused = state.boxFocused;
     let val = state.boxValue;
     // // 如果聚焦，则仅仅显示原始值，否则，看看是否需要格式化
-    if (focused) {
+    if (focused && !props.readonly && props.canInput) {
       state.boxInputing = Str.anyToStr(val);
     }
     // // 看看是否需要格式化
     else {
-      let text = await translateValue(val);
+      let textOrItem = await translateValue(val);
+      let text: string;
+      if (textOrItem instanceof Dicts.DictItem) {
+        text = textOrItem.text || textOrItem.value;
+        state.boxIcon = textOrItem.icon;
+        state.boxTip = textOrItem.icon;
+      } else {
+        text = textOrItem;
+        state.boxIcon = undefined;
+        state.boxTip = undefined;
+      }
       state.boxInputing = formatValue(text);
     }
   }
   //
+  // 方法: 计算自动前缀图标
+  //
+  function getBoxAutoPrefixIcon(): IconInput | undefined {
+    // 如果是 hovered，那么就用原始的
+    // 自动得到的前缀图标
+    if (!state.prefixIconHovered && props.autoPrefixIcon) {
+      return state.boxIcon ?? _box.Prefix.icon;
+    }
+    return _box.Prefix.icon;
+  }
+
   // 方法: 值发生了改变
   //
   async function doChangeValue(val: string) {
@@ -237,6 +277,7 @@ export function useValueBox<T extends any>(
     translateValue,
     ..._box,
     ...usePlaceholder(props),
+    getBoxAutoPrefixIcon,
     doUpdateValue,
     doChangeValue,
     doUpdateText,

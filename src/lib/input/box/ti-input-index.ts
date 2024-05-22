@@ -12,6 +12,7 @@ const zh_cn = {
   'example-options': '带选项',
   'example-formated': '格式显示值',
   'example-query': '动态查询',
+  'example-droplist': '只读下拉',
 };
 
 const COM_TYPE = COM_TYPES.Input;
@@ -43,6 +44,7 @@ const TiInputInfo: TiComInfo = {
     example.formated,
     example.options,
     example.query,
+    example.droplist,
   ],
 };
 

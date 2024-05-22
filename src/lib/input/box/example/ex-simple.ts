@@ -6,7 +6,6 @@ export default {
   comConf: {
     //className: "",
     value: 'Some Text',
-    prefixIconForClean: true,
     // prefixIcon :"zmdi-close",
     // prefixText : "前置文本",
     // suffixText : "后置文本",

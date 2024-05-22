@@ -30,11 +30,12 @@ export function _gen_item_loader(input: any): LoadDictItem<any, any> {
 export function _gen_data_query(query: any): QueryDictItems<any, any, any> {
   // 如果是个函数
   if (_.isFunction(query)) {
-    return (_dict: IDict<any, any>, input: any, signal?: AbortSignal) =>
-      new Promise<any[]>(async (resolve) => {
+    return (_dict: IDict<any, any>, input: any, signal?: AbortSignal) => {
+      return new Promise<any[]>(async (resolve) => {
         let list = await query(input, signal);
         resolve(list);
       });
+    };
   }
   // 其他的变成匹配条件
   return (dict: IDict<any, any>, input: any, signal?: AbortSignal) =>

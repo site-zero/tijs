@@ -13,6 +13,14 @@ div.ti-input-box {
       border: 0;
       padding: var(--ti-measure-box-pad);
       background-color: transparent;
+      &[readonly] {
+        font-style: italic;
+        cursor: default;
+      }
+    }
+    > span {
+      align-self: center;
+      padding: 0 0.4em;
     }
   }
 
@@ -32,21 +40,28 @@ div.ti-input-box {
   z-index: $z-mask;
   inset: 0;
   //background-color: rgba(0, 0, 0, 0.2);
-  @include flex-align-nowrap($jc: flex-end, $ai: flex-end);
-  padding: 4em;
+  @include flex-align-nowrap($jc: flex-end, $ai: flex-start);
+  > pre {
+    margin:0;
+    padding: 1em;
+    background-color: var(--ti-color-body);
+  }
 }
 
 .ti-input-tip-wrapper {
+  @include flex-align-v-nowrap;
   position: fixed;
   z-index: $z-mask + 2;
-  display: grid;
   padding: SZ(2) 0;
   > .tip-con {
+    flex: 1 1 auto;
     background-color: var(--ti-color-card);
     border: 1px solid var(--ti-color-primary);
     border-radius: var(--ti-measure-r-s);
-    box-shadow: -1px -1px var(--ti-color-light), 1px 1px var(--ti-color-dark),
+    box-shadow:
+      -1px -1px var(--ti-color-light),
+      1px 1px var(--ti-color-dark),
       4px 4px 12px var(--ti-color-mask-thin);
-    overflow: hidden;
+    overflow: auto;
   }
 }

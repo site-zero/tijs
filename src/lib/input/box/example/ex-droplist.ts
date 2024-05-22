@@ -1,13 +1,20 @@
 import { ComPropExample } from '../../../../core';
-import { DropListProps } from '../ti-droplist-types';
+import { InputBoxProps } from '../ti-input-types';
 
 export default {
-  name: 'with_icon',
-  text: 'i18n:ti-droplist-example-with-icon',
+  name: 'droplist',
+  text: 'i18n:ti-input-example-droplist',
   comConf: {
     value: 'otter',
+    trimed: false,
     placeholder: 'Choose one Animal',
     prefixIconForClean: true,
+    prefixHoverIcon: 'zmdi-close',
+    suffixIcon: 'zmdi-caret-down',
+    suffixIconClickable: true,
+    mustInOptions: true,
+    autoPrefixIcon: true,
+    canInput: false,
     options: {
       data: [
         { value: 'hippo', text: 'Hippo', icon: 'fas-hippo' },
@@ -30,5 +37,5 @@ export default {
         { value: 'cat', text: 'Cat', icon: 'fas-cat' },
       ],
     },
-  } as DropListProps,
+  } as InputBoxProps,
 } as ComPropExample;

@@ -1,3 +1,4 @@
+import droplist from './ex-droplist';
 import formated from './ex-formated';
 import options from './ex-options';
 import query from './ex-query';
@@ -8,4 +9,5 @@ export default {
   options,
   formated,
   query,
+  droplist,
 };

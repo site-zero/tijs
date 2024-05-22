@@ -120,7 +120,6 @@
     let model = PlayCom.value.exampleModel ?? { change: 'value' };
     let target = model[eventName];
     if (target) {
-      console.log(target);
       let targets: TiComExampleModelTarget[];
       if (_.isArray(target)) {
         targets = target;

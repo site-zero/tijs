@@ -8,7 +8,7 @@ export default {
       valueCase: 'upper',
       trimed: true,
       placeholder: 'Choose one options',
-      prefixIconForClean: true,
+      //prefixIconForClean: true,
       suffixIconForCopy: true,
       mustInOptions: true,
       options: {

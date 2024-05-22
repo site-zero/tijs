@@ -75,7 +75,7 @@ export type ValueInputTidyMode = keyof ValueProcessorSet;
 export type ValueInputFeature = {
   dict?: Dicts.TiDict;
   tidyValue: (val: any, mode?: ValueInputTidyMode[]) => Promise<any>;
-  translateValue: (val: any) => Promise<string>;
+  translateValue: (val: any) => Promise<string|Dicts.DictItem<any>>;
 };
 /*-------------------------------------------------------
 
@@ -249,10 +249,10 @@ export function useValueInput(props: ValueInputProps): ValueInputFeature {
         }
       });
     },
-    translateValue: async function (val: any): Promise<string> {
+    translateValue: async function (val: any): Promise<string|Dicts.DictItem<any>> {
       return new Promise<any>(async (resolve, _reject) => {
         if (dict) {
-          let it = await dict.getItem(val);
+          let it = await dict.getStdItem(val);
           if (!it) {
             if (props.mustInOptions) {
               resolve(undefined);
@@ -260,7 +260,7 @@ export function useValueInput(props: ValueInputProps): ValueInputFeature {
               resolve(val);
             }
           } else {
-            resolve(it.text);
+            resolve(it);
           }
         }
         // 直接返回

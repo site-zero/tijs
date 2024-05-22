@@ -31,9 +31,6 @@ export type TipBoxProps = {
   // 提示框显示时机
   tipShowTime?: TipBoxShowTime;
 
-  // 提示框显示时机
-  tipHideTime?: TipBoxHideTime;
-
   // 查询提示信息的时候，采用输入的值
   // 默认 false
   tipUseHint?: boolean;
@@ -57,11 +54,11 @@ export type TipBoxProps = {
  */
 export type TipBoxShowTime = 'focus' | 'keyin' | 'input';
 
-/**
- * 提示框的隐藏时机
- *
- * - blur : 失焦才隐藏
- * - changed : 属性的值改变了才隐藏
- * - emit : 通知改动时才隐藏
- */
-export type TipBoxHideTime = 'blur' | 'changed' | 'emit';
+// /**
+//  * 提示框的隐藏时机
+//  *
+//  * - blur : 失焦才隐藏
+//  * - changed : 属性的值改变了才隐藏
+//  * - emit : 通知改动时才隐藏
+//  */
+// export type TipBoxHideTime = 'blur' | 'changed' | 'emit';

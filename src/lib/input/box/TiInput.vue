@@ -20,6 +20,7 @@
   //-----------------------------------------------------
   const COM_TYPE = COM_TYPES.Input;
   let emit = defineEmits<ValueBoxEmits>();
+
   //-----------------------------------------------------
   const _box_state: InputBoxState = reactive({
     boxValue: null,
@@ -31,6 +32,8 @@
     shiftKey: false,
     metaKey: false,
     boxErrMsg: '',
+    boxIcon: undefined,
+    boxTip: undefined,
     prefixIconHovered: false,
     prefixTextHovered: false,
     suffixIconHovered: false,
@@ -44,9 +47,9 @@
   let props = withDefaults(defineProps<InputBoxProps>(), {
     autoI18n: true,
     tipShowTime: 'focus',
-    tipHideTime: 'blur',
     tipUseHint: false,
     tipTidyBy: () => ['main'],
+    canInput: true,
   });
   //-----------------------------------------------------
   const TipListConfig = computed(() => getTipListConf(props.tipList));
@@ -59,7 +62,7 @@
       let $pel = _entries[0].target;
       let rect = Rects.createBy($pel);
       let area = Math.round(rect.area());
-      console.log(el_parent_area_hint, area, $pel);
+      //console.log(el_parent_area_hint, area, $pel);
       if (Math.abs(el_parent_area_hint - area) > 10) {
         OnClickTipMask();
       }
@@ -73,8 +76,9 @@
       COM_TYPE,
     })
   );
+  const BoxAutoPrefixIcon = computed(() => Box.value.getBoxAutoPrefixIcon());
   //-----------------------------------------------------
-  const hasValue = computed(() => _.isNil(_box_state.boxValue));
+  const hasValue = computed(() => !_.isNil(_box_state.boxValue));
   const showTipList = computed(() => (_tips.value ? true : false));
   const Placeholder = computed(() => Box.value.getPlaceholder());
   const TopClass = computed(() =>
@@ -134,29 +138,52 @@
   //-----------------------------------------------------
   function OnClickTipMask() {
     resetTipList(_box_state, _tips);
+    if (props.mustInOptions) {
+      // 是不是清空了？
+      let val = _box_state.boxInputing;
+      if (!val) {
+        Box.value.doChangeValue('');
+      }
+    }
+    // 自由输入模式
+    else {
+      let val = _box_state.boxInputing;
+      Box.value.doChangeValue(val);
+    }
     OnInputBlur();
   }
   //-----------------------------------------------------
   function OnInputChanged() {
     if (!_tips.value) {
-      let val = $input.value.value;
+      let val = _box_state.boxInputing;
       Box.value.doChangeValue(val);
     }
   }
   //-----------------------------------------------------
-  function OnInputKeydown(_event: KeyboardEvent) {
-    _box_state.keyboard = _event.key;
-    _box_state.altKey = _event.altKey;
-    _box_state.metaKey = _event.metaKey;
-    _box_state.ctrlKey = _event.ctrlKey;
-    _box_state.shiftKey = _event.shiftKey;
+  function OnInputKeydown(event: KeyboardEvent) {
+    _box_state.keyboard = event.key;
+    _box_state.altKey = event.altKey;
+    _box_state.metaKey = event.metaKey;
+    _box_state.ctrlKey = event.ctrlKey;
+    _box_state.shiftKey = event.shiftKey;
+
+    // 选择高亮项目
+    if (/^Arrow(Up|Down)$/.test(event.key)) {
+      // 这个需要让 TiList 提供一个回调函数
+      // 可以回来注册一个 API 提供 上下移动的能力
+    }
+    // 取消
+    else if ('Escape' == event.key) {
+    }
+    // 确认
+    else if ('Enter' == event.key) {
+    }
   }
   //-----------------------------------------------------
   function doUpdateTipList() {
     updateTipList(_box_state.boxInputing, _tips, {
       box: _box_state,
       tipShowTime: props.tipShowTime,
-      tipHideTime: props.tipHideTime,
       dict: Box.value.dict,
       tipUseHint: props.tipUseHint ?? false,
       tipTidyBy: props.tipTidyBy ?? ['main'],
@@ -166,7 +193,9 @@
   //-----------------------------------------------------
   function OnListSelect(payload: ListSelectEmitInfo) {
     let { currentId } = payload;
-    console.log(currentId);
+    let val = _.isNumber(currentId) ? `${currentId}` : currentId;
+    Box.value.doChangeValue(val || '');
+    // TODO if multi 可能需要特别处理一下
   }
   //-----------------------------------------------------
   watch(
@@ -199,7 +228,7 @@
   watch(
     () => showTipList.value,
     (newVal, oldVal) => {
-      console.log(`showTipList changed:  new=${newVal}  old=${oldVal}`);
+      // console.log(`showTipList changed:  new=${newVal}  old=${oldVal}`);
       // 从隐藏变成显示
       if (true === newVal && false === oldVal) {
         let $pel = $el.value?.parentElement?.parentElement;
@@ -223,7 +252,7 @@
     if ($el.value) {
       let rect = Rects.createBy($el.value);
       if (!_.isEqual(rect, _box_rect.value)) {
-        console.log('resize to: ', rect.raw());
+        //console.log('resize to: ', rect.raw());
         _box_rect.value = rect;
       }
     } else {
@@ -255,7 +284,9 @@
     :style="TopStyle"
     @mousedown="OnInputFocused"
     ref="$el">
+    <!--====: part prefix :=======-->
     <div
+      v-if="Box.Prefix.showText || Box.Prefix.showIcon"
       class="part-prefix as-icon-text"
       :class="Box.Prefix.className"
       :style="Box.Prefix.style">
@@ -264,9 +295,11 @@
         class="as-icon at-prefix"
         :class="Box.Prefix.iconClass"
         :style="Box.Prefix.iconStyle"
-        :value="Box.Prefix.icon"
+        :value="BoxAutoPrefixIcon"
+        @mousedown.stop
         @click="Box.OnClickPrefixIcon"
-        @mouseenter="Box.OnHoverPrefixIcon(true)" />
+        @mouseenter="Box.OnHoverPrefixIcon(true)"
+        @mouseleave="Box.OnHoverPrefixIcon(false)" />
       <span
         v-if="Box.Prefix.showText"
         class="as-text at-prefix"
@@ -276,18 +309,29 @@
         >{{ Box.Prefix.text }}</span
       >
     </div>
+    <!--====: part value :=======-->
+    <!--div
+      v-if="props.readonly"
+      class="part-value">
+      <span>{{
+        hasValue ? _box_state.boxInputing : Box.getPlaceholder()
+      }}</span>
+    </div-->
     <div class="part-value">
       <input
         ref="$input"
         v-model="_box_state.boxInputing"
         spellcheck="false"
+        :readonly="!props.canInput || props.readonly"
         :placeholder="Placeholder"
         @keydown="OnInputKeydown"
         @focus.stop="OnInputFocused"
         @change.stop="OnInputChanged"
         @blur.stop="OnInputBlur" />
     </div>
+    <!--====: part suffix :=======-->
     <div
+      v-if="Box.Suffix.showText || Box.Suffix.showIcon"
       class="part-suffix as-icon-text"
       :class="Box.Suffix.className"
       :style="Box.Suffix.style">
@@ -329,6 +373,7 @@
     <div class="tip-con">
       <TiList
         v-bind="TipListConfig"
+        :currentId="_box_state.boxValue"
         :data="_tips"
         @select="OnListSelect" />
     </div>

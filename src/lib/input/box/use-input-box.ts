@@ -3,14 +3,12 @@ import { Dicts, Vars } from '../../../core';
 import { ValueInputTidyMode } from '../../_features';
 import {
   InputBoxState,
-  TipBoxHideTime,
-  TipBoxShowTime,
+  TipBoxShowTime
 } from './ti-input-types';
 
 export type LoadTipListOptions = {
   box: InputBoxState;
   tipShowTime: TipBoxShowTime;
-  tipHideTime: TipBoxHideTime;
   dict?: Dicts.TiDict;
   tipUseHint: boolean;
   tipTidyBy: ValueInputTidyMode[];
@@ -49,7 +47,7 @@ export async function updateTipList(
   if (du < 10) {
     return;
   }
-  console.log('  // 是否满足显示时机:', tipShowTime);
+  //console.log('  // 是否满足显示时机:', tipShowTime);
   // 是否满足显示时机
   if (!boxFocused) {
     resetTipList(box, tips);
@@ -81,14 +79,14 @@ export async function updateTipList(
   box.lastUpdateAMS = Date.now();
   box.lastAbort = new AbortController();
 
-  console.log(dumpBoxState(box));
+  //console.log(dumpBoxState(box));
   // 经过检查满足时机了，需要加载
   if (tipUseHint) {
     let hintVal = hint;
     if (tipTidyBy) {
       hintVal = await tidyValue(hint, tipTidyBy);
     }
-    console.log(`dict.queryStdData('${hintVal}')`);
+    // console.log(`dict.queryStdData('${hintVal}')`);
     dict.queryStdData(hintVal, box.lastAbort.signal).then((list) => {
       __set_tip_list(tips, list);
     });
@@ -99,7 +97,7 @@ export async function updateTipList(
     if (tipTidyBy) {
       hintVal = await tidyValue(hint, tipTidyBy);
     }
-    console.log(`dict.queryStdData('${hintVal}')`);
+    //console.log(`dict.queryStdData('${hintVal}')`);
     dict.queryData(box.lastAbort.signal).then((list) => {
       __set_tip_list(tips, list);
     });
@@ -123,17 +121,17 @@ function __set_tip_list(
 }
 
 export function dumpBoxState(box: InputBoxState): string {
-  return `
-boxValue   : ${box.boxValue}
+  return ` boxValue: ${box.boxValue}
+    boxIcon: ${box.boxIcon}
+     boxTip: ${box.boxTip}
 boxInputing: ${box.boxInputing},
-boxFocused : ${box.boxFocused},
-keyboard   : ${box.keyboard},
+ boxFocused: ${box.boxFocused},
+   keyboard: ${box.keyboard},
 ---------<${box.altKey ? 'ALT' : ''}-${box.ctrlKey ? 'CTL' : ''}-${
     box.shiftKey ? 'SHIFT' : ''
   }-${box.metaKey ? 'META' : ''}>---------
    last_ams: ${
      box.lastUpdateAMS > 0 ? new Date(box.lastUpdateAMS).toISOString() : '---'
    }
-last_abort :${box.lastAbort ? '[ABORT]' : '---'}
-  `;
+ last_abort:${box.lastAbort ? '[ABORT]' : '---'}`;
 }

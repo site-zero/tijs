@@ -91,9 +91,7 @@
         >{{ Box.Prefix.text }}</span
       >
     </div>
-    <div
-      class="part-value"
-      ref="abc">
+    <div class="part-value">
       {{ LabelText }}
     </div>
     <div
