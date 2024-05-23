@@ -1,4 +1,15 @@
-<script lang="ts" setup></script>
+<script lang="ts" setup>
+  import { computed } from 'vue';
+  import { TiInput } from '../../';
+  //-----------------------------------------------------
+  defineOptions({
+    inheritAttrs: false,
+  });
+  //-----------------------------------------------------
+  let emit = defineEmits<{
+    (event: 'change', payload: string): void;
+  }>();
+</script>
 <template>
   <div>Unknown Components</div>
 </template>

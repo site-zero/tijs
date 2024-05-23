@@ -43,6 +43,11 @@ export type TipBoxProps = {
    * 提示列表的配置
    */
   tipList?: Omit<ListProps, 'data'>;
+
+  /**
+   * 展出提示框宽度，如果不声明，则采用与 box 相同的宽度
+   */
+  tipListWidth?: string;
 };
 
 /**

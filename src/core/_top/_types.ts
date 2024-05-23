@@ -85,6 +85,18 @@ export function isIconObj(input: any): input is IconObj {
   return false;
 }
 
+export type TiCurrency = {
+  value?: number;
+  cent?: number;
+  yuan?: number;
+  currency: string;
+};
+
+export type MoneyCurrency = {
+  unit?: number,
+
+}
+
 export type TimeInfo = {
   hours?: number;
   minutes?: number;

@@ -11,7 +11,7 @@ export default {
     prefixIconForClean: true,
     prefixHoverIcon: 'zmdi-close',
     suffixIcon: 'zmdi-caret-down',
-    suffixIconClickable: true,
+    suffixIconClickable: false,
     mustInOptions: true,
     autoPrefixIcon: true,
     canInput: false,

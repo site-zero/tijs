@@ -42,9 +42,11 @@ div.ti-input-box {
   //background-color: rgba(0, 0, 0, 0.2);
   @include flex-align-nowrap($jc: flex-end, $ai: flex-start);
   > pre {
-    margin:0;
+    @include font-fixed;
+    margin: 0;
     padding: 1em;
     background-color: var(--ti-color-body);
+    font-size: 11px;
   }
 }
 

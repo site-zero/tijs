@@ -68,7 +68,9 @@ export type ValueBoxProps<T extends any> = CommonProps &
   PrefixSuffixFeatureProps & {
     value?: T;
     autoSelect?: boolean;
+    // 前缀按钮用来删除
     prefixIconForClean?: boolean;
+    // 后缀按钮用来复制
     suffixIconForCopy?: boolean;
     /**
      * 如果开启这个开关, 只要定义了字典，且 mustInOptions
@@ -78,6 +80,11 @@ export type ValueBoxProps<T extends any> = CommonProps &
 
     // 输入框，是否允许用户输入
     canInput?: boolean;
+
+    /**
+     * 是否要在选项的首部，增加一个【清除】 的选项
+     */
+    showCleanOption?: boolean;
   };
 /*-------------------------------------------------------
 
@@ -245,7 +252,7 @@ export function useValueBox<T extends any>(
     }
     // 默认行为
     else {
-      _box.Prefix.OnClickIcon();
+      emit('click-prefix-icon');
     }
   }
 

@@ -1,17 +1,22 @@
 <script setup lang="ts">
   import _ from 'lodash';
-  import { computed, reactive, ref } from 'vue';
-  import { TiIcon, ValueBoxEmits } from '../../';
+  import { computed, onMounted, reactive, ref, watch } from 'vue';
+  import { PrefixSuffixEvents, TiIcon } from '../../';
   import { CssUtils } from '../../../core';
   import { COM_TYPES } from '../../lib-com-types';
   import { LabelProps, LabelState, useLabel } from './use-label';
-
-  const COM_TYPE = COM_TYPES.Label;
-
+  //-----------------------------------------------------
   defineOptions({
     inheritAttrs: true,
   });
-
+  //-----------------------------------------------------
+  const COM_TYPE = COM_TYPES.Label;
+  //-----------------------------------------------------
+  let emit = defineEmits<{
+    (event: PrefixSuffixEvents): void;
+    (event: 'change', payload: string): void;
+  }>();
+  //-----------------------------------------------------
   const state = reactive({
     boxValue: null,
     boxInputing: '',
@@ -26,9 +31,6 @@
   let props = withDefaults(defineProps<LabelProps>(), {
     autoI18n: true,
   });
-
-  //-----------------------------------------------------
-  let emit = defineEmits<ValueBoxEmits>();
   //-----------------------------------------------------
   const $el = ref<any>(null);
   const Box = computed(() =>
@@ -55,9 +57,22 @@
   );
   const LabelText = computed(() => {
     if (hasValue.value) {
-      return state.boxInputing;
+      return state.boxInputing || state.boxValue;
     }
     return Box.value.getPlaceholder();
+  });
+  //-----------------------------------------------------
+  // 看看是否满足选项列表的打开条件
+  watch(
+    () => [props.value],
+    () => {
+      state.boxValue = props.value;
+      Box.value.doUpdateText();
+    }
+  );
+  //-----------------------------------------------------
+  onMounted(() => {
+    Box.value.doUpdateText();
   });
 </script>
 

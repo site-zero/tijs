@@ -1,12 +1,16 @@
 <script lang="ts" setup>
-  import { TiInput, ValueBoxEmits } from '../../';
+  import { computed } from 'vue';
+  import { TiInput } from '../../';
   import { DropListProps } from './ti-droplist-types';
   //-----------------------------------------------------
   defineOptions({
     inheritAttrs: false,
   });
   //-----------------------------------------------------
-  let emit = defineEmits<ValueBoxEmits>();
+  let emit = defineEmits<{
+    (event: 'click-prefix-text' | 'click-suffix-text'): void;
+    (event: 'change', payload: string): void;
+  }>();
   //-----------------------------------------------------
   let props = withDefaults(defineProps<DropListProps>(), {
     autoI18n: true,
@@ -16,10 +20,28 @@
     prefixIconForClean: false,
     prefixHoverIcon: 'zmdi-close',
     suffixIcon: 'zmdi-caret-down',
-    suffixIconClickable: true,
+    suffixIconClickable: false,
     mustInOptions: true,
     autoPrefixIcon: true,
   });
+  //-----------------------------------------------------
+  type CleansSetup = {
+    prefixIconForClean: boolean;
+    showCleanOption: boolean;
+  };
+  const Cleans = computed((): CleansSetup => {
+    if (props.prefixIconForClean && props.showCleanOption) {
+      return { prefixIconForClean: true, showCleanOption: true };
+    }
+    if (!props.prefixIconForClean && props.showCleanOption) {
+      return { prefixIconForClean: false, showCleanOption: true };
+    }
+    if (props.prefixIconForClean && !props.showCleanOption) {
+      return { prefixIconForClean: true, showCleanOption: false };
+    }
+    return { prefixIconForClean: false, showCleanOption: true };
+  });
+  //-----------------------------------------------------
 </script>
 <template>
   <TiInput
@@ -27,10 +49,10 @@
     :canInput="false"
     :trimed="false"
     :mustInOptions="true"
+    :prefixIconForClean="Cleans.prefixIconForClean"
+    :showCleanOption="Cleans.showCleanOption"
     @change="emit('change', $event)"
-    @click-prefix-icon="emit('click-prefix-icon')"
     @click-prefix-text="emit('click-prefix-text')"
-    @click-suffix-icon="emit('click-suffix-icon')"
     @click-suffix-text="emit('click-suffix-text')" />
 </template>
 <style lang="scss" scoped>

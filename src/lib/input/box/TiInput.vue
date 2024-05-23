@@ -3,9 +3,9 @@
   import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
   import {
     ListSelectEmitInfo,
+    PrefixSuffixEvents,
     TiIcon,
     TiList,
-    ValueBoxEmits,
     useValueBox,
   } from '../../';
   import { CssUtils, Rect, Rects, Vars } from '../../../core';
@@ -19,8 +19,11 @@
   });
   //-----------------------------------------------------
   const COM_TYPE = COM_TYPES.Input;
-  let emit = defineEmits<ValueBoxEmits>();
-
+  //-----------------------------------------------------
+  let emit = defineEmits<{
+    (event: PrefixSuffixEvents): void;
+    (event: 'change', payload: string): void;
+  }>();
   //-----------------------------------------------------
   const _box_state: InputBoxState = reactive({
     boxValue: null,
@@ -113,8 +116,24 @@
     return {};
   });
   const TipWrapperStyle = computed(() =>
-    getTipWrapperStyle($el.value, _box_rect.value)
+    getTipWrapperStyle(props, $el.value, _box_rect.value)
   );
+  //-----------------------------------------------------
+  const TipListData = computed(() => {
+    if (props.showCleanOption) {
+      let re = [
+        {
+          text: 'i18n:clear',
+          value: null,
+        },
+      ] as Vars[];
+      if (_tips.value) {
+        re.push(..._tips.value);
+      }
+      return re;
+    }
+    return _tips.value;
+  });
   //-----------------------------------------------------
   const $input = ref<any>(null);
   //-----------------------------------------------------
@@ -285,30 +304,32 @@
     @mousedown="OnInputFocused"
     ref="$el">
     <!--====: part prefix :=======-->
-    <div
-      v-if="Box.Prefix.showText || Box.Prefix.showIcon"
-      class="part-prefix as-icon-text"
-      :class="Box.Prefix.className"
-      :style="Box.Prefix.style">
-      <TiIcon
-        v-if="Box.Prefix.showIcon"
-        class="as-icon at-prefix"
-        :class="Box.Prefix.iconClass"
-        :style="Box.Prefix.iconStyle"
-        :value="BoxAutoPrefixIcon"
-        @mousedown.stop
-        @click="Box.OnClickPrefixIcon"
-        @mouseenter="Box.OnHoverPrefixIcon(true)"
-        @mouseleave="Box.OnHoverPrefixIcon(false)" />
-      <span
-        v-if="Box.Prefix.showText"
-        class="as-text at-prefix"
-        :class="Box.Prefix.textClass"
-        :style="Box.Prefix.textStyle"
-        @click="Box.Prefix.OnClickText"
-        >{{ Box.Prefix.text }}</span
-      >
-    </div>
+    <slot name="prefix">
+      <div
+        v-if="Box.Prefix.showText || Box.Prefix.showIcon"
+        class="part-prefix as-icon-text"
+        :class="Box.Prefix.className"
+        :style="Box.Prefix.style">
+        <TiIcon
+          v-if="Box.Prefix.showIcon"
+          class="as-icon at-prefix"
+          :class="Box.Prefix.iconClass"
+          :style="Box.Prefix.iconStyle"
+          :value="BoxAutoPrefixIcon"
+          @mousedown.stop
+          @click="Box.OnClickPrefixIcon"
+          @mouseenter="Box.OnHoverPrefixIcon(true)"
+          @mouseleave="Box.OnHoverPrefixIcon(false)" />
+        <span
+          v-if="Box.Prefix.showText"
+          class="as-text at-prefix"
+          :class="Box.Prefix.textClass"
+          :style="Box.Prefix.textStyle"
+          @click="Box.Prefix.OnClickText"
+          >{{ Box.Prefix.text }}</span
+        >
+      </div>
+    </slot>
     <!--====: part value :=======-->
     <!--div
       v-if="props.readonly"
@@ -330,27 +351,29 @@
         @blur.stop="OnInputBlur" />
     </div>
     <!--====: part suffix :=======-->
-    <div
-      v-if="Box.Suffix.showText || Box.Suffix.showIcon"
-      class="part-suffix as-icon-text"
-      :class="Box.Suffix.className"
-      :style="Box.Suffix.style">
-      <span
-        v-if="Box.Suffix.showText"
-        class="as-text at-suffix"
-        :class="Box.Suffix.textClass"
-        :style="Box.Suffix.textStyle"
-        @click="Box.Suffix.OnClickText"
-        >{{ Box.Suffix.text }}</span
-      >
-      <TiIcon
-        v-if="Box.Suffix.showIcon"
-        :value="Box.Suffix.icon"
-        class="as-icon at-suffix"
-        :class="Box.Suffix.iconClass"
-        :style="Box.Suffix.iconStyle"
-        @click="Box.OnClickSuffixIcon" />
-    </div>
+    <slot name="suffix">
+      <div
+        v-if="Box.Suffix.showText || Box.Suffix.showIcon"
+        class="part-suffix as-icon-text"
+        :class="Box.Suffix.className"
+        :style="Box.Suffix.style">
+        <span
+          v-if="Box.Suffix.showText"
+          class="as-text at-suffix"
+          :class="Box.Suffix.textClass"
+          :style="Box.Suffix.textStyle"
+          @click="Box.Suffix.OnClickText"
+          >{{ Box.Suffix.text }}</span
+        >
+        <TiIcon
+          v-if="Box.Suffix.showIcon"
+          :value="Box.Suffix.icon"
+          class="as-icon at-suffix"
+          :class="Box.Suffix.iconClass"
+          :style="Box.Suffix.iconStyle"
+          @click="Box.OnClickSuffixIcon" />
+      </div>
+    </slot>
   </div>
   <!--=========: Tip Message ============-->
   <div
@@ -360,11 +383,7 @@
     class="ti-input-tip-mask"
     v-if="showTipList"
     @click="OnClickTipMask">
-    <pre
-      style="font-size: 11px; font-family: 'Courier New', Courier, monospace">
-  {{ dumpBoxState(_box_state) }}
-  </pre
-    >
+    <pre>{{ dumpBoxState(_box_state) }}</pre>
   </aside>
   <div
     class="ti-input-tip-wrapper"
@@ -374,7 +393,7 @@
       <TiList
         v-bind="TipListConfig"
         :currentId="_box_state.boxValue"
-        :data="_tips"
+        :data="TipListData"
         @select="OnListSelect" />
     </div>
   </div>

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { I18n, Str } from '../ti';
+import { I18n, Str, TiCurrency } from '../ti';
 
 ///////////////////////////////////////
 const CURRENCIES = {
@@ -145,12 +145,7 @@ export function getCurrencyList(): any[] {
   return list;
 }
 
-export type TiCurrency = {
-  value?: number;
-  cent?: number;
-  yuan?: number;
-  currency: string;
-};
+
 
 //-----------------------------------
 /**

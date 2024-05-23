@@ -55,6 +55,8 @@ export type ListProps = CommonProps &
 
     // 可以鼠标选择文字，默认是 false
     allowUserSelect?: boolean;
+
+    autoI18n?: boolean;
   };
 
 export type ListItem = AnyOptionItem & {

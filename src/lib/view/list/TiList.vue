@@ -12,6 +12,7 @@
     selectable: true,
     hoverable: true,
     allowUserSelect: false,
+    autoI18n: true,
   });
 
   const emit = defineEmits<ListEmitter>();

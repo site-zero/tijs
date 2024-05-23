@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { CssUtils, QuadrantName, Rect, Rects, Vars } from '../../../core';
 import { ListProps } from '../../../lib';
+import { TipBoxProps } from './ti-input-types';
 
 export function getTipListConf(props?: ListProps) {
   let re = _.assign(
@@ -22,7 +23,11 @@ export function getTipListConf(props?: ListProps) {
   return re;
 }
 
-export function getTipWrapperStyle($el?: HTMLElement, box?: Rect): Vars {
+export function getTipWrapperStyle(
+  props: TipBoxProps,
+  $el?: HTMLElement,
+  box?: Rect
+): Vars {
   if (!box || !$el) {
     return {};
   }
@@ -31,6 +36,7 @@ export function getTipWrapperStyle($el?: HTMLElement, box?: Rect): Vars {
   //console.log('quard', quard);
   let css: Vars = {
     minWidth: `${box.width}px`,
+    width: props.tipListWidth,
   };
   let boxBorder = 4;
   let _algs: Record<QuadrantName, () => void> = {

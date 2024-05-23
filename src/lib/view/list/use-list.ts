@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { EventUtils, IconInput, Vars, getLogger } from '../../../core';
+import { EventUtils, I18n, IconInput, Vars, getLogger } from '../../../core';
 import { SelectableState, useSelectable } from '../../_features';
 import { RoadblockProps } from '../../tile/roadblock/ti-roadblock-types';
 import { TableRowID } from '../table/ti-table-types';
@@ -90,6 +90,14 @@ export function useList(props: ListProps, emit: ListEmitter) {
         it.icon = getItemIcon(li);
         it.text = getItemText(li);
         it.tip = getItemTip(li);
+        if (props.autoI18n) {
+          if (it.text) {
+            it.text = I18n.text(it.text);
+          }
+          if (it.tip) {
+            it.tip = I18n.text(it.tip);
+          }
+        }
         items.push(it);
         index++;
       }
