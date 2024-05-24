@@ -1,4 +1,5 @@
 import {
+  AspectSize,
   BlockInfoProps,
   ComRef,
   CommonProps,
@@ -77,7 +78,7 @@ export type TabsAspect = {
    */
   wrapTabs?: boolean;
 
-  tabItemSpace?: 's' | 'm' | 'b';
+  tabItemSpace?: AspectSize;
 };
 
 export type TabsProps = OptionValueProps & TabsAspect;

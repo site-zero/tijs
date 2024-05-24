@@ -4,5 +4,9 @@ import { InputDatetimeProps } from '../ti-input-datetime-types';
 export default {
   name: 'simple',
   text: 'i18n:simple',
-  comConf: {} as InputDatetimeProps,
+  comConf: {
+    value: '2024-05-25 18:30:12',
+    valueFormat: '2024-05-25 18:30',
+    format: 'd-Mmm-yyyy HH:mm'
+  } as InputDatetimeProps,
 } as ComPropExample;

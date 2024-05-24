@@ -44,10 +44,11 @@
     :type="props.type"
     :item-depth="props.depth"
     :item-index="props.index"
-    :item-ukey="props.uniqKey"
-    :class="props.className">
+    :item-ukey="props.uniqKey">
     <div
       class="bar-item-head"
+      :class="props.className"
+      :style="props.style"
       @click.left="emit('click')"
       @mouseenter="OnEnter">
       <div class="item-icon" v-if="!hideIconPart">

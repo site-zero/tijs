@@ -69,6 +69,10 @@ export function parse(d: any): Date | undefined {
   // String
   if (_.isString(d)) {
     let str = _.trim(d);
+
+    if ('2024-05-14 19:24:29.000' == str) {
+      console.log('!!!DateTime.parse', str);
+    }
     // MS
     if (/\d{13,}/.test(str)) {
       return new Date((str as any) * 1);
@@ -111,7 +115,6 @@ export function parse(d: any): Date | undefined {
         '.',
         _.padStart(ms as unknown as string, 3, '0'),
       ];
-      if (m[18]) list.push(m[18]);
       let dateStr = list.join('');
       let date = new Date(dateStr);
 
@@ -153,17 +156,18 @@ export function genFormatContext(date: any) {
   MMMM:September
   */
   // Format by pattern
+  let m_i = date.getMonth();
   let yyyy = date.getFullYear();
-  let M = date.getMonth() + 1;
+  let M = m_i + 1;
   let d = date.getDate();
   let H = date.getHours();
   let m = date.getMinutes();
   let s = date.getSeconds();
   let S = date.getMilliseconds();
 
-  let mkey = MONTH_ABBR[date.getMonth()];
-  let MMM = I18n.get(`cal.abbr.${mkey}`);
-  let MMMM = I18n.get(mkey);
+  let Mmm = MONTH_ABBR[m_i];
+  let MMM = Mmm.toUpperCase();
+  let MMMM = I18n.get(`month-${Mmm}`);
 
   let day = date.getDay();
   let dayK0 = _.upperFirst(I_DAYS[day]);
@@ -192,6 +196,7 @@ export function genFormatContext(date: any) {
     EEE: E,
     EEEE,
     MMM,
+    Mmm,
     MMMM,
   };
 }
@@ -249,7 +254,7 @@ export function format(
   }
 
   let _c = genFormatContext(date);
-  let regex = /(y{2,4}|M{1,4}|dd?|HH?|mm?|ss?|S{1,3}|E{1,4}|'([^']+)')/g;
+  let regex = /(y{2,4}|Mmm|M{1,4}|dd?|HH?|mm?|ss?|S{1,3}|E{1,4}|'([^']+)')/g;
   let list = [];
   let last = 0;
   while (true) {
@@ -546,4 +551,5 @@ const MONTH_ABBR = [
   'Nov',
   'Dec',
 ];
+
 ///////////////////////////////////////////

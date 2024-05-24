@@ -3,8 +3,8 @@
   import { TextSnippet, getFieldValue, useFieldCom } from '../../';
   import { CssUtils, ValueChange } from '../../../core';
   import {
-    GridItemEmitter,
     GridFieldsStrictField,
+    GridItemEmitter,
   } from './ti-grid-fields-types';
   import {
     getFieldIcon,
@@ -50,6 +50,7 @@
   );
   const FieldValue = computed(() => {
     let val = getFieldValue(props.name, props.data);
+    //console.log(props.name, val);
     if (props.transformer) {
       return props.transformer(val, props.data, props.name);
     }
@@ -113,6 +114,7 @@
       v-if="hasTitle"
       class="field-part as-title"
       :style="FieldTitleStyle"
+      :textStyle="props.titleTextStyle"
       :attrs="{ dataAlign: TitleAlign }"
       :text="FieldTitle.title"
       :textType="FieldTitle.type"
@@ -144,7 +146,8 @@
       v-if="hasTip && !FieldIcon.tipAsIcon"
       class="field-part as-tip"
       style="grid-area: tip"
-      :style="props.fieldTipStyle"
+      :style="props.tipStyle"
+      :textStyle="props.tipTextStyle"
       :attrs="{ dataAlign: props.tipAlign }"
       :text="props.tip || ''"
       :textType="props.tipType"

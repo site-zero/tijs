@@ -22,7 +22,7 @@
   import { useGridFields } from './use-grid-fields';
   //-------------------------------------------------
   defineOptions({
-    inheritAttrs: false,
+    inheritAttrs: true,
   });
   //-------------------------------------------------
   const emit = defineEmits<GridFieldsEmitter>();
@@ -128,6 +128,7 @@
       <TextSnippet
         v-if="props.title"
         className="part-title"
+        :class="props.titleClass"
         :style="props.titleStyle"
         :text="props.title || ''"
         :textType="props.titleType"
@@ -184,6 +185,7 @@
       <TextSnippet
         v-if="props.tip"
         className="part-foot"
+        :class="props.tipClass"
         :style="props.tipStyle"
         :text="props.tip || ''"
         :textType="props.tipType"

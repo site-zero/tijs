@@ -5,6 +5,7 @@ import {
   BarItemAction,
   BarItemType,
   Callback,
+  CssUtils,
   I18n,
   Match,
   TiMatch,
@@ -156,7 +157,8 @@ function createItem(
     tip: I18n.textOr(it.tip),
     opened: state.opened.get(uniqKey),
     depth: depth.length,
-    className: _.cloneDeep(it.className) || {},
+    className: CssUtils.mergeClassName(it.className) || {},
+    style: it.style,
   };
 
   // 判断显示

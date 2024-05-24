@@ -18,6 +18,7 @@ export type TextSnippetEmitter = {
 export type TextSnippetProps = FieldComProps & {
   className?: any;
   style?: Vars;
+  textStyle?: Vars;
   tagName?: string;
   attrs?: Vars;
   props?: Vars;
@@ -90,7 +91,10 @@ export function TextSnippet(
   }
 
   // 文字内容
-  let textProps = { class: 'as-snippet-text' } as Vars;
+  let textProps = {
+    class: 'as-snippet-text',
+    style: props.textStyle,
+  } as Vars;
   if ('html' == props.textType) {
     textProps.innerHTML = text;
   } else {

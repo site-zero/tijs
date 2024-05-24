@@ -14,7 +14,6 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.InputDate;
 
 const TiInputDateInfo: TiComInfo = {
-  tags: ['scaffold'],
   icon: 'fas-calendar-days',
   race: TiComRace.INPUT,
   name: COM_TYPE,
@@ -26,6 +25,12 @@ const TiInputDateInfo: TiComInfo = {
     zh_hk: zh_cn,
   },
   com: TiInputDate,
+  liveStyle: {
+    width: '80%',
+    minWidth: '150px',
+    maxWidth: '260px',
+    paddingBottom: '30%',
+  },
   install: (app: App) => {
     app.component(COM_TYPE, TiInputDate);
   },
@@ -33,5 +38,4 @@ const TiInputDateInfo: TiComInfo = {
   exampleProps: [example.simple],
 };
 
-export * from './ti-input-date-types';
 export { TiInputDate, TiInputDateInfo };

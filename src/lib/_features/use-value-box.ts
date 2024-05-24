@@ -201,9 +201,12 @@ export function useValueBox<T extends any>(
   // 方法: 更新显示文本
   //
   async function doUpdateText() {
-    // console.log('doUpdateText');
     let focused = state.boxFocused;
     let val = state.boxValue;
+    //console.log('state.boxValue', val);
+    if ('2024-05-14 19:24:29.000' == val) {
+      console.log('doUpdateText', val);
+    }
     // // 如果聚焦，则仅仅显示原始值，否则，看看是否需要格式化
     if (focused && !props.readonly && props.canInput) {
       state.boxInputing = Str.anyToStr(val);

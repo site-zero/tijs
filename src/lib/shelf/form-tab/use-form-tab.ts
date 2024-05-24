@@ -74,12 +74,14 @@ export function getCurrentFormProps(
       'titleIcon',
       'titleStyle',
       'titleAlign',
+      'titleClass',
       'tip',
       'tipType',
       'tipBy',
       'tipStyle',
       'tipAlign',
       'tipIcon',
+      'tipClass',
       ...GKEYS
     )
   );

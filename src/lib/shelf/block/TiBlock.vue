@@ -74,7 +74,9 @@
       <!--------ActionBar--------->
       <TiActionBar
         v-if="!_.isEmpty(Block.HeadActions)"
-        :items="Block.HeadActions" />
+        :items="Block.HeadActions"
+        :className="props.actionClass"
+        :style="props.actionStyle" />
     </header>
     <!--Block:Main-->
     <main :style="Block.MainStyle">

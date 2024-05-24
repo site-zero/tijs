@@ -93,9 +93,8 @@ export type TiCurrency = {
 };
 
 export type MoneyCurrency = {
-  unit?: number,
-
-}
+  unit?: number;
+};
 
 export type TimeInfo = {
   hours?: number;
@@ -829,7 +828,8 @@ export type VisibilityProps = {
 export type BarItemDisplay = {
   icon?: IconInput;
   text?: string;
-  className?: Vars;
+  className?: any;
+  style?: Vars;
   tip?: string;
 };
 
@@ -878,12 +878,14 @@ export type BlockInfoProps = {
   // 右上角菜单
   //
   actions?: ActionBarItem[];
+  actionClass?: any;
 
   //
   // 外观样式
   //
   headStyle?: Vars;
   mainStyle?: Vars;
+  actionStyle?: Vars;
 };
 /**
  * 对应到主控件的哪个 Key, 有下面几种绑定方法：

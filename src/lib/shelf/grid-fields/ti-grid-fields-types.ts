@@ -101,11 +101,13 @@ export type GridFieldsInput = CommonProps &
     titleIcon?: IconInput;
     titleStyle?: Vars;
     titleAlign?: CssTextAlign;
+    titleClass?: any;
     tip?: string;
     tipType?: TextContentType; // 默认 text
     tipBy?: FieldComProps;
     tipStyle?: Vars;
     tipAlign?: CssTextAlign;
+    tipClass?: any;
 
     // 仅仅当 tipMode = 'xxx-prefix|suffix-icon' 时生效
     // 默认为 'zmdi-help-outline'
@@ -117,9 +119,9 @@ export type GridFieldsInput = CommonProps &
     // 普通字段的布局模式
     // 仅仅当 `race=field` 时有效
     fieldLayoutMode?: GridFieldLayoutMode;
-    fieldTitleStyle?: Vars;
+    titleTextStyle?: Vars;
     fieldValueStyle?: Vars;
-    fieldTipStyle?: Vars;
+    tipTextStyle?: Vars;
     //------------------------------------
     // 约束
     //------------------------------------
@@ -294,11 +296,13 @@ export type GridFieldsStrictAbstractItem = FieldComProps &
     titleType: TextContentType; // 默认 text
     titleStyle?: Vars;
     titleAlign?: CssTextAlign;
+    titleClass?: any;
     tip: null | string;
     tipType: TextContentType; // 默认 text
     tipBy?: FieldComProps;
     tipStyle?: Vars;
     tipAlign?: CssTextAlign;
+    tipClass?: any;
     className?: Vars;
     style?: Vars;
 
@@ -337,10 +341,10 @@ export type GridFieldsStrictField = GridFieldsStrictAbstractItem &
     fieldLayoutMode: GridFieldLayoutMode;
 
     fieldTitleBy?: FieldComProps;
-    fieldTitleStyle?: Vars;
+    titleTextStyle?: Vars;
     fieldValueStyle?: Vars;
 
-    fieldTipStyle?: Vars;
+    tipTextStyle?: Vars;
     tipIcon: IconInput;
   };
 export type GridFieldsStrictLabel = GridFieldsStrictAbstractItem & {

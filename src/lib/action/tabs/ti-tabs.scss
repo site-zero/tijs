@@ -29,6 +29,10 @@
   }
   //....................................
   // Label space
+  &.tab-item-space-h > ul > li {
+    padding: 0.3em 1em 0.3em 1em;
+    font-size: 1.5em;
+  }
   &.tab-item-space-b > ul > li {
     padding: 0.3em 1em 0.3em 1em;
     font-size: 1.2em;
@@ -39,6 +43,11 @@
   }
   &.tab-item-space-s > ul > li {
     padding: 0.1em 0.5em 0.1em 0.5em;
+    font-size: 1em;
+  }
+  &.tab-item-space-t > ul > li {
+    padding: 0.1em 0.5em 0.1em 0.5em;
+    font-size: 0.8em;
   }
   //....................................
   // Horizontal alighment

@@ -242,7 +242,14 @@ export function useFieldChange<T extends AbstractField>(
           '~~undefined~~' == field.defaultAs ? undefined : field.defaultAs;
       }
       // 空值
-      else if (!_.isUndefined(field.emptyAs) && _.isEmpty(change.value)) {
+      else if (
+        !_.isUndefined(field.emptyAs) &&
+        !_.isBoolean(change.value) &&
+        !_.isNumber(change.value) &&
+        !_.isDate(change.value) &&
+        !_.isRegExp(change.value) &&
+        _.isEmpty(change.value)
+      ) {
         change.value =
           '~~undefined~~' == field.emptyAs ? undefined : field.emptyAs;
       }

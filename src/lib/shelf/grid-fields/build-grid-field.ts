@@ -41,11 +41,13 @@ export function buildOneGridField(
     titleIcon: field.titleIcon,
     titleStyle: field.titleStyle,
     titleAlign: field.titleAlign,
+    titleClass: field.titleClass,
     tip: field.tip ?? null,
     tipType: field.tipType ?? 'text',
     tipBy: field.tipBy,
     tipStyle: field.tipStyle,
     tipAlign: field.tipAlign,
+    tipClass: field.tipClass,
     colSpan: field.colSpan,
     rowSpan: field.rowSpan,
     style: field.style,
@@ -103,9 +105,9 @@ export function buildOneGridField(
     fld.tipIcon = field.tipIcon || 'zmdi-help-outline';
     fld.fieldLayoutMode =
       field.fieldLayoutMode ?? dft.fieldLayoutMode ?? 'h-title-icon-suffix';
-    fld.fieldTitleStyle = field.fieldTitleStyle;
+    fld.titleTextStyle = field.titleTextStyle;
     fld.fieldValueStyle = field.fieldValueStyle;
-    fld.fieldTipStyle = field.fieldTipStyle;
+    fld.tipTextStyle = field.tipTextStyle;
   }
   // ---------------: 分组 :---------------
   else if (field.fields) {

@@ -128,7 +128,12 @@
   //                      计算格子的列
   //-------------------------------------------------------
   const MainStyle = computed(() => {
-    let N = TableColumns.value.length;
+    let N = 0;
+    for(let col of TableColumns.value){
+      if(!col.candidate){
+        N += 1
+      }
+    }
     let cols = [];
     // 未定制列的宽度
     if (_.isEmpty(columnSizes.value)) {
@@ -310,24 +315,27 @@
           </div>
         </div>
         <!-- 表头: 列 -->
-        <div
+        <template
           v-for="(col, i) in TableColumns"
-          class="table-cell as-head"
-          :class="Table.getTableHeadClass(selection, i)"
-          :col-index="i"
-          :key="col.uniqKey"
-          :col-key="col.uniqKey">
-          <div class="head-cell-con">
-            <!-- 调整列宽的控制柄 -->
-            <div class="column-resize-hdl for-prev"></div>
-            <!-- 列标题 -->
-            <span class="head-text">{{ col.title || col.name }}</span>
-            <!-- 调整列宽的控制柄: 最后一列 -->
-            <div
-              v-if="i == TableColumns.length - 1"
-              class="column-resize-hdl for-self"></div>
+          :key="col.uniqKey">
+          <div
+            v-if="!col.candidate"
+            class="table-cell as-head"
+            :class="Table.getTableHeadClass(selection, i)"
+            :col-index="i"
+            :col-key="col.uniqKey">
+            <div class="head-cell-con">
+              <!-- 调整列宽的控制柄 -->
+              <div class="column-resize-hdl for-prev"></div>
+              <!-- 列标题 -->
+              <span class="head-text">{{ col.title || col.name }}</span>
+              <!-- 调整列宽的控制柄: 最后一列 -->
+              <div
+                v-if="i == TableColumns.length - 1"
+                class="column-resize-hdl for-self"></div>
+            </div>
           </div>
-        </div>
+        </template>
       </template>
       <!-- 表格体 -->
       <template

@@ -52,6 +52,7 @@
       {},
       props.className,
       'ti-form-tab',
+      'title-sticky',
       `tabs-at-${props.tabsAt}`
     )
   );

@@ -14,7 +14,7 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.InputDatetime;
 
 const TiInputDatetimeInfo: TiComInfo = {
-  tags: ['scaffold'],
+  tags: ['ing'],
   icon: 'fas-calendar-day',
   race: TiComRace.INPUT,
   name: COM_TYPE,
@@ -26,6 +26,12 @@ const TiInputDatetimeInfo: TiComInfo = {
     zh_hk: zh_cn,
   },
   com: TiInputDatetime,
+  liveStyle: {
+    width: '80%',
+    minWidth: '150px',
+    maxWidth: '260px',
+    paddingBottom: '30%',
+  },
   install: (app: App) => {
     app.component(COM_TYPE, TiInputDatetime);
   },

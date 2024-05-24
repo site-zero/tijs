@@ -6,22 +6,26 @@
     display: grid;
     // 顶级条目，没必要加边距
     &[item-depth="0"] > .bar-item-head {
-      padding: 0;
+      padding: 0.2em 0.4em;
+      > .item-icon {
+        margin-right: 0.1em;
+      }
     }
     // 显示条目
     > .bar-item-head {
       @include flex-align-nowrap($ai: stretch);
       font-size: var(--ti-measure-menu-fontsz);
       line-height: var(--ti-measure-menu-lineheight);
-      padding: 0.2em 0.5em;
+      padding: 0.3em 0.5em;
       cursor: pointer;
       .item-icon {
         @include flex-center;
         font-size: var(--ti-measure-menu-iconsz);
-        width: 2em;
+        width: var(--ti-measure-menu-iconsz);
+        margin-right: 0.2em;
       }
       .item-text {
-        padding: 0 0.4em 0 0;
+        padding: 0 0.5em 0 0.2em;
         flex: 1 1 auto;
       }
       .item-suffix {

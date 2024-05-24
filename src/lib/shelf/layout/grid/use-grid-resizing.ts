@@ -212,7 +212,7 @@ const MoveEnd = {
   column: function (resizing: GridResizingState, mea: ResizeMeasure) {
     return () => {
       let ns = _.map(resizing.columns, (s) => CssUtils.toPixel(s));
-      console.log('column ns', ns);
+      //console.log('column ns', ns);
       resizing.columns = toPercent(ns, mea);
     };
   },
@@ -292,7 +292,7 @@ export function useGridResizing(
       }
     },
     onEnd: (ing: Dragging) => {
-      console.log('onEnd', ing);
+      //console.log('onEnd', ing);
       let fn = ing.getVar('move_end');
       if (_.isFunction(fn)) {
         fn();

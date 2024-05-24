@@ -62,6 +62,7 @@ export type BuiltedBarItem = BarItem & {
   opened?: BarItemOpenStatus;
   altDisplay?: AltBarItemisplay<TiMatch>[];
   className: Vars;
+  style?: Vars;
   items?: BuiltedBarItem[];
   action?: Callback;
 };

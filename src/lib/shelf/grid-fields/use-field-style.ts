@@ -162,7 +162,7 @@ export function getGridItemStyle(item: GridFieldsStrictAbstractItem) {
 }
 
 export function getFieldTitleStyle(field: GridFieldsStrictField) {
-  return _.assign({}, field.fieldTitleStyle, {
+  return _.assign({}, field.titleStyle, {
     'grid-area': 'title',
   });
 }

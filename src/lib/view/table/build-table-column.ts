@@ -8,14 +8,14 @@ import {
 import { Util } from '../../../core';
 
 export function buildTableColumns(props: TableProps) {
-  console.log('buildTableColumns', props.columns.length);
+  //console.log('buildTableColumns', props.columns.length);
   let reColumns = [] as TableStrictColumn[];
   if (props.columns) {
     for (let i = 0; i < props.columns.length; i++) {
       let col = props.columns[i];
-      if (col.candidate) {
-        continue;
-      }
+      // if (col.candidate) {
+      //   continue;
+      // }
       // 列唯一键
       let uniqKey = makeFieldUniqKey([i], col.name, col.uniqKey);
 

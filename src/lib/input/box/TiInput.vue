@@ -383,7 +383,7 @@
     class="ti-input-tip-mask"
     v-if="showTipList"
     @click="OnClickTipMask">
-    <pre>{{ dumpBoxState(_box_state) }}</pre>
+    <!--pre>{{ dumpBoxState(_box_state) }}</pre-->
   </aside>
   <div
     class="ti-input-tip-wrapper"

@@ -228,6 +228,13 @@ export function useTable(props: TableProps, emit: TableEmitter) {
       columns: TableStrictColumn[]
     ) {
       let { row, colIndex } = rowEvent;
+      // console.log(
+      //   'OnCellSelect',
+      //   rowEvent.rowIndex,
+      //   colIndex,
+      //   'cols：',
+      //   columns.length
+      // );
       selection.columnIndex = colIndex ?? -1;
       if (!selection.checkedIds.get(row.id)) {
         let oldCurrentId = _.cloneDeep(selection.currentId);

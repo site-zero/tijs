@@ -41,11 +41,23 @@
 <template>
   <TiGridFields
     v-bind="FormProps"
+    class="ti-input-group"
     :data="props.value"
     :layout-hint="LayoutHint"
     @change="onValueChange" />
 </template>
-<style lang="scss" scoped>
+<style lang="scss">
   @use '../../../assets/style/_all.scss' as *;
-  @import './ti-input-group.scss';
+  .ti-input-group.ti-grid-fields {
+    padding: 0;
+    &.body-gap-t,
+    &.body-gap-s,
+    &.body-gap-m,
+    &.body-gap-b,
+    &.body-gap-h {
+      > .part-body {
+        padding: 0;
+      }
+    }
+  }
 </style>

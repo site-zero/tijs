@@ -83,6 +83,7 @@ export type TableEmitter = {
   (eventName: 'open', payload: TableRowData): void;
   (eventName: 'cell-open', payload: TableEventPayload): void;
   (eventName: 'row-change', payload: TableRowChanagePayload): void;
+  (event: 'cell-change', payload: TableCellChanged): void;
 };
 
 export type TableRowEmitter = {
