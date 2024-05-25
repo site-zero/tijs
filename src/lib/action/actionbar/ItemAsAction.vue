@@ -1,17 +1,24 @@
 <script lang="ts" setup>
   import _ from 'lodash';
+  import { inject } from 'vue';
   import BarItemTmpl from './BarItemTmpl.vue';
-  import { BarItemProp } from './action-bar-type';
+  import { ABAR_STATE, ABarUsedItem } from './ti-action-bar-types';
+  //-------------------------------------------------------
   defineOptions({
     inheritAttrs: false,
   });
-  let props = withDefaults(defineProps<BarItemProp>(), {});
-
+  //-------------------------------------------------------
+  const state = inject(ABAR_STATE);
+  //-------------------------------------------------------
+  let props = withDefaults(defineProps<ABarUsedItem>(), {});
+  //-------------------------------------------------------
   function OnFireAction() {
+    console.log("OnFireAction", props)
     if (_.isFunction(props.action)) {
-      props.action();
+      props.action(state?.vars || {});
     }
   }
+  //-------------------------------------------------------
 </script>
 <template>
   <BarItemTmpl

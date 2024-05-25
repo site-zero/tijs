@@ -2,18 +2,20 @@ export default {
   name: 'simple',
   text: 'i18n:simple',
   comConf: {
+    vars: {
+      saving: false,
+    },
     items: [
       {
-        name: 'saving',
-        type: 'action',
         icon: 'zmdi-floppy',
         text: 'i18n:save-change',
         altDisplay: {
+          test: { saving: true },
           icon: 'fas-spinner fa-pulse',
           text: 'i18n:saving',
         },
-        enabled: 'changed',
-        action: 'dispatch:main/saveContent',
+        enabled: { changed: true },
+        action: 'save',
         shortcut: 'CTRL+S',
       },
       {},
@@ -22,15 +24,15 @@ export default {
         icon: 'fas-bars',
         items: [
           {
-            name: 'reloading',
             type: 'action',
             icon: 'zmdi-refresh',
             text: 'i18n:refresh',
             altDisplay: {
+              test: { reloading: true },
               icon: 'zmdi-refresh zmdi-hc-spin',
               text: 'i18n:loading',
             },
-            action: 'dispatch:main/reloadData',
+            action: 'reload',
             shortcut: 'CTRL+SHIFT+R',
           },
           {},
@@ -64,7 +66,7 @@ export default {
             type: 'action',
             icon: 'zmdi-keyboard',
             text: 'i18n:view-resource',
-            action: 'dispatch:main/openContentEditor',
+            action: 'bus:> view-code',
             shortcut: 'ALT+SHIFT+V',
           },
           {},
@@ -72,17 +74,14 @@ export default {
             type: 'action',
             icon: 'zmdi-keyboard',
             text: 'i18n:console',
-            action: "=>Ti.Be.Open('/a/open/wn.console')",
+            action: 'bus:> open-console',
             shortcut: 'ALT+SHIFT+T',
-            visible: {
-              ENABLE_CONSOLE: 'yes',
-            },
           },
           {
             type: 'action',
             icon: 'zmdi-info-outline',
             text: 'i18n:properties',
-            action: 'dispatch:main/openCurrentMetaEditor',
+            action: 'bus:> open-properties',
             shortcut: 'ALT+SHIFT+P',
           },
         ],

@@ -1,6 +1,5 @@
 import { expect, test } from 'vitest';
 import { Match, TiMap, TiMatch } from '../../core/ti';
-import _ from 'lodash';
 
 test('match_num', () => {
   expect(Match.test('[2,5)', 5)).eq(false);
@@ -162,6 +161,18 @@ test('match_exists', function () {
 
   map2 = new Map([['abc', true]]);
   expect(vli.test(map2)).eq(false);
+});
+
+test('match_record', function () {
+  let vli: TiMatch;
+  vli = Match.parse({ name: 'xiaobai' });
+  expect(vli.test({ name: 'xiaobai' })).eq(true);
+  expect(vli.test({ x: 100, y: 99 })).eq(false);
+
+  vli = Match.parse({ saving: true });
+  expect(vli.test({ changed:true,saving:true })).eq(true);
+  expect(vli.test({ changed:true})).eq(false);
+  expect(vli.test({ changed:true,saving:false })).eq(false);
 });
 
 test('test_match_exists2', function () {

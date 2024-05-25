@@ -108,8 +108,9 @@ test('genFormatContext', function () {
   expect(reObj.EE).eq('Mon');
   expect(reObj.EEEE).eq('Monday');
 
-  expect(reObj.MMM).eq('cal.abbr.Jul');
-  expect(reObj.MMMM).eq('Jul');
+  expect(reObj.MMM).eq('JUL');
+  expect(reObj.Mmm).eq('Jul');
+  expect(reObj.MMMM).eq('month-Jul');
 });
 
 test('format', function () {

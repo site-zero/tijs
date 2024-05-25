@@ -1,0 +1,25 @@
+.ti-actionbar {
+  @include flex-align-nowrap($ai: stretch);
+  user-select: none;
+  // 菜单项
+  .bar-item {
+    display: grid;
+    // 顶级条目，没必要加边距
+    &[item-depth="0"] > .bar-item-head {
+      padding: 0.2em 0.4em;
+      > .item-icon {
+        margin-right: 0.1em;
+      }
+    }
+  } // .bar-item {
+} // .ti-actionbar {
+
+.ti-actionbar.show-click-mask {
+  > .bar-mask {
+    position: fixed;
+    inset: 0;
+    background-color: #000;
+    opacity: 0;
+    z-index: $z-menu;
+  }
+}

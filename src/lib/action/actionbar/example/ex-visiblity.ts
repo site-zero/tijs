@@ -2,16 +2,24 @@ export default {
   name: 'visibility',
   text: 'i18n:ti-action-bar-example-visibility',
   comConf: {
+    vars: {
+      saving: true,
+    },
     items: [
       {
         name: 'saving',
         type: 'action',
         icon: 'zmdi-floppy',
         text: 'i18n:save-change',
-        altDisplay: {
-          icon: 'fas-spinner fa-pulse',
-          text: 'i18n:saving',
-        },
+        altDisplay: [
+          {
+            test: {
+              saving: true,
+            },
+            icon: 'fas-spinner fa-pulse',
+            text: 'i18n:saving',
+          },
+        ],
         enabled: 'changed',
         action: 'dispatch:main/saveContent',
         shortcut: 'CTRL+S',
@@ -27,32 +35,6 @@ export default {
         },
         action: 'dispatch:main/reloadData',
         shortcut: 'CTRL+SHIFT+R',
-      },
-      {},
-      {
-        type: 'group',
-        text: 'More 1111',
-        items: [
-          {
-            text: 'Action A',
-          },
-          {
-            text: 'Action B',
-          },
-        ],
-      },
-      {},
-      {
-        type: 'group',
-        text: 'More 222',
-        items: [
-          {
-            text: 'Action C',
-          },
-          {
-            text: 'Action D',
-          },
-        ],
       },
       {},
       {

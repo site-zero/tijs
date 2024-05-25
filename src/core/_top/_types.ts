@@ -824,41 +824,31 @@ export type VisibilityProps = {
    */
   enabled?: any;
 };
+/*-------------------------------------------
 
-export type BarItemDisplay = {
+              动作条
+
+--------------------------------------------*/
+export type ActionBarAction = (() => void) | EventInfo<any> | Invoke | string;
+export type ActionBarItemInfo = {
   icon?: IconInput;
   text?: string;
   className?: any;
   style?: Vars;
   tip?: string;
 };
-
-export type BarItemType =
-  | 'action'
-  | 'group'
-  | 'inline-group'
-  | 'status'
-  | 'sep';
-
-export type BarItem = BarItemDisplay & {
-  type: BarItemType;
-  name?: string;
-  shortcut?: string;
+export type ActionBarItemAltDisplay = ActionBarItemInfo & {
+  test?: any;
 };
-
-export type AltBarItemisplay<T> = BarItemDisplay & {
-  test?: T;
-};
-
-export type BarItemAction = Callback | EventInfo<any> | Invoke | string;
-
-export type ActionBarItem = Optional<BarItem, 'type'> &
-  VisibilityProps & {
-    altDisplay?: AltBarItemisplay<any> | AltBarItemisplay<any>[];
+export type ActionBarItem = VisibilityProps &
+  ActionBarItemInfo & {
+    uniqKey?: string;
+    shortcut?: string;
+    //.....................................
+    altDisplay?: ActionBarItemAltDisplay | ActionBarItemAltDisplay[];
     items?: ActionBarItem[];
-    action?: BarItemAction;
+    action?: ActionBarAction;
   };
-
 /*-------------------------------------------
 
               模式框
@@ -1004,12 +994,6 @@ export type HtmlSnippetListenner = {
   setup?: (el: HTMLElement) => void;
 };
 
-export type ActionBarProps = CommonProps & {
-  // 指明一个名称，可以方便调试的时候区分各个菜单
-  name?: string;
-  items: ActionBarItem[];
-  vars?: Vars;
-};
 /*---------------------------------------------------
 
        不知道如何分类，但是控件里还有用的类型

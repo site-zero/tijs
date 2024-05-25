@@ -1,0 +1,25 @@
+.bar-item-con {
+  position: fixed;
+  left: 10px;
+  top: 10px;
+  height: 0;
+  overflow: hidden;
+  opacity: 0.6;
+  //transition: opacity 0.3s;
+  background-color: var(--ti-color-menu);
+  color: var(--ti-color-menu-f);
+  min-width: 10em;
+  box-shadow:
+    -1px -1px var(--ti-color-light),
+    1px 1px var(--ti-color-dark),
+    6px 6px 15px var(--ti-color-mask-thin);
+  border-radius: var(--ti-measure-r-s);
+  z-index: $z-menu + 2;
+  &.is-opened {
+    height: unset;
+  }
+  &.is-ready {
+    height: unset;
+    opacity: 1;
+  }
+}

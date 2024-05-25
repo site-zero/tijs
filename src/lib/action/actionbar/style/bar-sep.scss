@@ -1,0 +1,14 @@
+.bar-sep {
+  box-sizing: content-box;
+  &[aspect="top"] {
+    height: initial;
+    width: 0px;
+    border-left: 1px solid var(--ti-color-border-shallow);
+    margin: 0 0.2em;
+  }
+  &[aspect="sub"] {
+    height: 0px;
+    border-bottom: 1px solid var(--ti-color-border-shallow);
+    margin: 0.2em 0;
+  }
+}

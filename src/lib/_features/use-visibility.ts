@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { FuncA1, Match, Vars, VisibilityProps } from '../../core';
+import { Match, Vars, VisibilityProps } from '../../core';
 
 /*-------------------------------------------------------
 
@@ -7,8 +7,8 @@ import { FuncA1, Match, Vars, VisibilityProps } from '../../core';
 
 -------------------------------------------------------*/
 export type VisibilityFeature = {
-  isDisabled: FuncA1<Vars, boolean>;
-  isHidden: FuncA1<Vars, boolean>;
+  isDisabled: (vars: Vars) => boolean;
+  isHidden: (vars: Vars) => boolean;
 };
 /*-------------------------------------------------------
 

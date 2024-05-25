@@ -1,178 +1,67 @@
 <script lang="ts" setup>
-  import _ from 'lodash';
+  import { computed, onMounted, provide, reactive, ref, watch } from 'vue';
+  import { CssUtils, Vars } from '../../../core';
+  import ItemAsAction from './ItemAsAction.vue';
+  import ItemAsFolderGroup from './ItemAsFolderGroup.vue';
+  import { buildActionBarItems } from './build-action-bar-items';
   import {
-    computed,
-    inject,
-    onMounted,
-    provide,
-    reactive,
-    ref,
-    watch,
-  } from 'vue';
-  import { COM_TYPES, useBusEmit } from '../../';
-  import {
+    ABAR_STATE,
+    ABarState,
+    ActionBarEmitter,
     ActionBarProps,
-    BUS_KEY,
-    Callback,
-    CssUtils,
-    TiEvent,
-    Util,
-    Vars,
-  } from '../../../core';
-  import BarItemChildren from './BarItemChildren.vue';
-  import { BAR_SUPPORT, BarItemOpenStatus, BarState } from './action-bar-type';
-  import { TiActionBarInfo } from './ti-action-bar-index';
-  import { useActionBar } from './use-action-bar';
-
+  } from './ti-action-bar-types';
+  import { hasOpenedGroup, useActionBar } from './use-action-bar';
+  //-------------------------------------------------------
   defineOptions({
     inheritAttrs: true,
   });
-  /*-------------------------------------------------------
-
-                    State
-
--------------------------------------------------------*/
+  //-------------------------------------------------------
+  let emit = defineEmits<ActionBarEmitter>();
+  //-------------------------------------------------------
   const state = reactive({
     opened: new Map(),
     vars: {},
-  } as BarState);
+  } as ABarState);
+  provide(ABAR_STATE, state);
   const $root = ref<HTMLElement>();
-  /*-------------------------------------------------------
-
-                      Props
-
--------------------------------------------------------*/
-  const props = withDefaults(defineProps<ActionBarProps>(), {
-    emitMode: 'auto',
-  });
+  //-------------------------------------------------------
+  const props = withDefaults(defineProps<ActionBarProps>(), {});
+  //-------------------------------------------------------
   watch(
     () => props.vars,
     (newVal: Vars) => {
-      _.assign(state.vars, newVal);
+      state.vars = newVal || {};
     },
-    {
-      immediate: true,
-    }
+    { immediate: true }
   );
-  /*-------------------------------------------------------
-
-                  Events
-
--------------------------------------------------------*/
-  let emit = defineEmits<(event: string, payload: TiEvent<any>) => void>();
-  let bus = inject(BUS_KEY);
-  let notify = useBusEmit(TiActionBarInfo, props, emit, bus);
-
-  let Bar = computed(() =>
-    useActionBar(state, props, {
-      getRootElement: function () {
-        return $root.value;
-      },
-      notify,
-      parseAction: (action, state): Callback => {
-        return Util.genInvoking(action, {
-          context: state.vars,
-          dft: () => {
-            throw new Error('fail to parse: ' + action);
-          },
-        }) as Callback;
-      },
-    })
-  );
-
-  // 注册一个总线，给所有的子元素用来控制显示隐藏
-  // let busName = COM_TYPE;
-  // if (props.name) {
-  //   busName += `[${props.name}]`;
-  // }
-  // let barBus: TiBus<BuiltedBarItem> = createBus<BuiltedBarItem>(busName);
-  // provide(BAR_BUS_KEY, barBus);
-  // barBus.on("click", (msg) => {
-  //   Bar.value.OnClickBarItem(msg.data);
-  // });
-  /*-------------------------------------------------------
-
-                  Features
-
- -------------------------------------------------------*/
-
-  /*-------------------------------------------------------
-
-                  Computed
-
--------------------------------------------------------*/
+  //-------------------------------------------------------
+  const ParsedBarItems = computed(() => {
+    return buildActionBarItems([], props.items ?? [], emit);
+  });
+  //-------------------------------------------------------
+  const UsedBarItems = computed(() => {
+    return useActionBar(ParsedBarItems.value, state);
+  });
+  //-------------------------------------------------------
+  const HasOpenedGroup = computed(() => hasOpenedGroup(state.opened));
+  //-------------------------------------------------------
   const TopClass = computed(() =>
     CssUtils.mergeClassName(props.className, {
-      'show-click-mask': Bar.value.hasOpenedGroup,
+      'show-click-mask': HasOpenedGroup.value,
     })
   );
-  /*-------------------------------------------------------
-
-                  Methods
-
--------------------------------------------------------*/
+  //-------------------------------------------------------
+  // Methods
+  //-------------------------------------------------------
   function OnClickMask() {
+    console.log('OnClickMask');
     state.opened.clear();
   }
-
-  provide(BAR_SUPPORT, {
-    MENU_SPACE: 10,
-    makeSureOpen(uniqKey: string | string[]) {
-      let uniqKeys = _.concat(uniqKey);
-      //console.log("makeSureOpen", uniqKey, state.opened);
-      for (let uk of uniqKeys) {
-        if (!state.opened.get(uk)) {
-          state.opened.set(uk, 'open');
-        }
-      }
-    },
-    setBarOpenState(
-      uniqKey: string | string[],
-      status: BarItemOpenStatus | null
-    ) {
-      let uniqKeys = _.concat(uniqKey);
-      if (!status) {
-        for (let uk of uniqKeys) {
-          state.opened.delete(uk);
-        }
-      } else {
-        for (let uk of uniqKeys) {
-          state.opened.set(uk, status);
-        }
-      }
-    },
-    clearBarOpenState(...uniqKeys: string[]) {
-      if (_.isEmpty(uniqKeys)) {
-        state.opened.clear();
-      } else {
-        for (let uniqKey of uniqKeys) {
-          state.opened.delete(uniqKey);
-        }
-      }
-    },
-    clearBarOpenStateExcept(...uniqKeys: string[]) {
-      if (_.isEmpty(uniqKeys)) {
-        state.opened.clear();
-      } else {
-        let ignore_keys = new Map<string, boolean>();
-        for (let uniqKey of uniqKeys) {
-          ignore_keys.set(uniqKey, true);
-        }
-        for (let en of state.opened.entries()) {
-          let [k] = en;
-          if (!ignore_keys.get(k)) {
-            state.opened.delete(k);
-          }
-        }
-      }
-    },
-  });
-  /*-------------------------------------------------------
-
-                Life Hooks
-
--------------------------------------------------------*/
+  //-------------------------------------------------------
+  // Life Hooks
+  //-------------------------------------------------------
   onMounted(() => {
+    console.log('onMounted');
     state.opened.clear();
   });
 </script>
@@ -181,23 +70,48 @@
     class="ti-actionbar"
     :class="TopClass"
     ref="$root">
+    <!--===: Bar Mask :===-->
     <div
       class="bar-mask"
-      v-if="Bar.hasOpenedGroup"
+      v-if="HasOpenedGroup"
       @click.left="OnClickMask"></div>
-    <BarItemChildren
-      uniqKey="_ROOT_"
-      type="inline-group"
-      :index="0"
-      :depth="0"
-      :className="Bar.className"
-      :items="Bar.items"
-      :ancestors="Bar.ancestors" />
+    <!--===: Show Bar Items :===-->
+    <template
+      v-for="it in UsedBarItems"
+      :key="it.uniqKey">
+      <!--......|< Action >|......-->
+      <ItemAsAction
+        v-if="'action' == it.type"
+        v-bind="it" />
+      <!--......|< Group >|......-->
+      <ItemAsFolderGroup
+        v-else-if="'group' == it.type"
+        v-bind="it" />
+      <!--......|< Sep >|......-->
+      <div
+        v-else-if="'sep' == it.type"
+        class="bar-sep"
+        :aspect="it.aspect"
+        :item-depth="it.depth"
+        :item-index="it.index"></div>
+      <!--......|< Unknown >|......-->
+      <div
+        v-else
+        class="bar-unknwon"
+        :aspect="it.aspect"
+        :item-depth="it.depth"
+        :item-index="it.index">
+        {{ it.uniqKey }}
+      </div>
+    </template>
   </div>
 </template>
 <style lang="scss">
   @use '../../../assets/style/_all.scss' as *;
-  @import './bar.scss';
-  @import './bar-effect.scss';
-  @import './bar-as-button-group.scss';
+  @import './style/bar.scss';
+  @import './style/bar-sep.scss';
+  @import './style/bar-item-info.scss';
+  @import './style/bar-item-con.scss';
+  @import './style/bar-effect.scss';
+  @import './style/bar-as-button-group.scss';
 </style>

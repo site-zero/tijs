@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import { I18n, TiMatch, ExplainI18n, TiMap } from '../ti';
-import { MakeTiMatch, parse } from './ti-match';
+import { ExplainI18n, I18n, TiMap, TiMatch } from '../ti';
 import { gen_by_map_exitst } from './by_map_exists';
 import { gen_by_not } from './by_not';
 import { explainKeyDisplay } from './key_display';
+import { MakeTiMatch, parse_strictly } from './ti-match';
 
 export const gen_by_map: MakeTiMatch<TiMap> = function (map: TiMap): TiMatch {
   // Pre-build
@@ -30,7 +30,7 @@ export const gen_by_map: MakeTiMatch<TiMap> = function (map: TiMap): TiMatch {
     }
     // Other match
     else {
-      m = parse(val);
+      m = parse_strictly(val);
     }
 
     // 取反

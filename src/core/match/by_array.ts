@@ -1,11 +1,11 @@
 import _ from 'lodash';
-import { I18n, TiMatch, ExplainI18n } from '../ti';
-import { MakeTiMatch, parse } from './ti-match';
+import { ExplainI18n, I18n, TiMatch } from '../ti';
+import { MakeTiMatch, parse_strictly } from './ti-match';
 
 export const gen_by_array: MakeTiMatch<any[]> = function (src: any[]): TiMatch {
   let ms = [] as TiMatch[];
   for (let it of src) {
-    ms.push(parse(it));
+    ms.push(parse_strictly(it));
   }
 
   return {

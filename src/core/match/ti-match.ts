@@ -10,10 +10,11 @@ import { gen_by_map_nil } from './by_map_nil';
 import { gen_by_map_null } from './by_map_null';
 import { gen_by_map_type } from './by_map_type';
 import { gen_by_map_undefined } from './by_map_undefined';
+import { gen_by_nil } from './by_nil';
 import { gen_by_not } from './by_not';
-import { gen_by_number } from './by_number';
 import { gen_by_regex } from './by_regex';
 import { gen_by_str } from './by_str';
+import { gen_by_stict_eq } from './by_strict_eq';
 
 export type MakeTiMatch<T> = {
   (src: T): TiMatch;
@@ -61,17 +62,27 @@ export function notMatch(m: TiMatch): TiMatch {
 }
 
 export function parse(src: any, dft: boolean = false): TiMatch {
-  if (_.isFunction(src)) {
-    return gen_by_func(src);
-  }
   if (_.isNil(src)) {
     return gen_by_bool(dft);
   }
   if (_.isBoolean(src)) {
     return gen_by_bool(src);
   }
+  return parse_strictly(src);
+}
+
+export function parse_strictly(src: any): TiMatch {
+  if (_.isFunction(src)) {
+    return gen_by_func(src);
+  }
+  if (_.isNil(src)) {
+    return gen_by_nil();
+  }
+  if (_.isBoolean(src)) {
+    return gen_by_stict_eq(src);
+  }
   if (_.isNumber(src)) {
-    return gen_by_number(src);
+    return gen_by_stict_eq(src);
   }
   if (_.isString(src)) {
     return gen_by_str(src);
@@ -87,7 +98,6 @@ export function parse(src: any, dft: boolean = false): TiMatch {
   if (_.isRegExp(src)) {
     return gen_by_regex(src);
   }
-
   throw new Error('e.match.unsupport : ' + src);
 }
 
