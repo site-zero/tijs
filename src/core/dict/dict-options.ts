@@ -1,15 +1,16 @@
 import _ from 'lodash';
-import { Match, AnyGetter, Util } from '../ti';
+import { AnyGetter, Match, Util } from '../ti';
 import { IDict, LoadData, LoadDictItem, QueryDictItems } from './dict-types';
 
 export function _gen_item_loader(input: any): LoadDictItem<any, any> {
   // 如果是个函数
   if (_.isFunction(input)) {
-    return (_dict: IDict<any, any>, val: any) =>
-      new Promise<any[]>(async (resolve) => {
-        let item = await input(val);
-        resolve(item);
-      });
+    return input as LoadDictItem<any, any>;
+    // return (_dict: IDict<any, any>, val: any) =>
+    //   new Promise<any[]>(async (resolve) => {
+    //     let item = await input(val);
+    //     resolve(item);
+    //   });
   }
   // 其他的变成匹配条件
   let am = Match.parse(input);
@@ -30,12 +31,13 @@ export function _gen_item_loader(input: any): LoadDictItem<any, any> {
 export function _gen_data_query(query: any): QueryDictItems<any, any, any> {
   // 如果是个函数
   if (_.isFunction(query)) {
-    return (_dict: IDict<any, any>, input: any, signal?: AbortSignal) => {
-      return new Promise<any[]>(async (resolve) => {
-        let list = await query(input, signal);
-        resolve(list);
-      });
-    };
+    return query as QueryDictItems<any, any, any>;
+    // return (_dict: IDict<any, any>, input: any, signal?: AbortSignal) => {
+    //   return new Promise<any[]>(async (resolve) => {
+    //     let list = await query(input, signal);
+    //     resolve(list);
+    //   });
+    // };
   }
   // 其他的变成匹配条件
   return (dict: IDict<any, any>, input: any, signal?: AbortSignal) =>
@@ -62,11 +64,12 @@ export function _gen_data_loader(input: any): LoadData<any> {
   }
   // 如果是个函数
   if (_.isFunction(input)) {
-    return (signal?: AbortSignal) =>
-      new Promise<any[]>(async (resolve) => {
-        let data = await input(signal);
-        resolve(data);
-      });
+    return input as LoadData<any>;
+    // return (signal?: AbortSignal) =>
+    //   new Promise<any[]>(async (resolve) => {
+    //     let data = await input(signal);
+    //     resolve(data);
+    //   });
   }
   // 其他的不支持
   throw new Error('Fail to _gen_data_loader by ' + input);

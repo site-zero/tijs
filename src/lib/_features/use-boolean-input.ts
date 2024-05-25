@@ -30,8 +30,7 @@ export function useBooleanInput(
     if (_.isFunction(props.isTrue)) {
       return props.isTrue(val);
     }
-    let trueValue: any = getTrueValue();
-    return trueValue === val;
+    return val ? true : false;
   }
 
   function emitToggle() {

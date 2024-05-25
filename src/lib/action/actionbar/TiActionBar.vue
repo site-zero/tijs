@@ -1,6 +1,14 @@
 <script lang="ts" setup>
   import _ from 'lodash';
-  import { computed, inject, onMounted, provide, reactive, ref } from 'vue';
+  import {
+    computed,
+    inject,
+    onMounted,
+    provide,
+    reactive,
+    ref,
+    watch,
+  } from 'vue';
   import { COM_TYPES, useBusEmit } from '../../';
   import {
     ActionBarProps,
@@ -9,6 +17,7 @@
     CssUtils,
     TiEvent,
     Util,
+    Vars,
   } from '../../../core';
   import BarItemChildren from './BarItemChildren.vue';
   import { BAR_SUPPORT, BarItemOpenStatus, BarState } from './action-bar-type';
@@ -33,9 +42,18 @@
                       Props
 
 -------------------------------------------------------*/
-  let props = withDefaults(defineProps<ActionBarProps>(), {
+  const props = withDefaults(defineProps<ActionBarProps>(), {
     emitMode: 'auto',
   });
+  watch(
+    () => props.vars,
+    (newVal: Vars) => {
+      _.assign(state.vars, newVal);
+    },
+    {
+      immediate: true,
+    }
+  );
   /*-------------------------------------------------------
 
                   Events

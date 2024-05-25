@@ -1008,6 +1008,7 @@ export type ActionBarProps = CommonProps & {
   // 指明一个名称，可以方便调试的时候区分各个菜单
   name?: string;
   items: ActionBarItem[];
+  vars?: Vars;
 };
 /*---------------------------------------------------
 

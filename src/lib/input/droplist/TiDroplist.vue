@@ -2,6 +2,7 @@
   import { computed } from 'vue';
   import { TiInput } from '../../';
   import { DropListProps } from './ti-droplist-types';
+  import _ from 'lodash';
   //-----------------------------------------------------
   defineOptions({
     inheritAttrs: false,
@@ -30,16 +31,20 @@
     showCleanOption: boolean;
   };
   const Cleans = computed((): CleansSetup => {
-    if (props.prefixIconForClean && props.showCleanOption) {
-      return { prefixIconForClean: true, showCleanOption: true };
+    let re = {
+      prefixIconForClean: false,
+      showCleanOption: false,
+    } as CleansSetup;
+    if (_.isBoolean(props.prefixIconForClean)) {
+      re.prefixIconForClean = props.prefixIconForClean;
     }
-    if (!props.prefixIconForClean && props.showCleanOption) {
-      return { prefixIconForClean: false, showCleanOption: true };
+    if (_.isBoolean(props.showCleanOption)) {
+      re.showCleanOption = props.showCleanOption;
     }
-    if (props.prefixIconForClean && !props.showCleanOption) {
-      return { prefixIconForClean: true, showCleanOption: false };
+    if (_.isNil(props.prefixIconForClean) && _.isNil(props.showCleanOption)) {
+      re.showCleanOption = true;
     }
-    return { prefixIconForClean: false, showCleanOption: true };
+    return re;
   });
   //-----------------------------------------------------
 </script>

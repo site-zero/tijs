@@ -81,7 +81,7 @@
   );
   const BoxAutoPrefixIcon = computed(() => Box.value.getBoxAutoPrefixIcon());
   //-----------------------------------------------------
-  const hasValue = computed(() => !_.isNil(_box_state.boxValue));
+  const hasValue = computed(() => !_.isNil(_box_state.boxValue) && _box_state.boxValue);
   const showTipList = computed(() => (_tips.value ? true : false));
   const Placeholder = computed(() => Box.value.getPlaceholder());
   const TopClass = computed(() =>
@@ -120,7 +120,7 @@
   );
   //-----------------------------------------------------
   const TipListData = computed(() => {
-    if (props.showCleanOption) {
+    if (props.showCleanOption && hasValue.value) {
       let re = [
         {
           text: 'i18n:clear',

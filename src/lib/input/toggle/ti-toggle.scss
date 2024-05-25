@@ -2,7 +2,7 @@
   @include flex-align-nowrap;
   padding: 1px;
   user-select: none;
-  aside {
+  > aside {
     position: relative;
     width: SZ(40);
     padding: 1px;
@@ -16,6 +16,9 @@
       height: SZ(18);
       transition: margin-left 0.2s;
     }
+  }
+  > span {
+    margin-left: 0.8em;
   }
   //-----------------------------------------
   &.is-off aside {
