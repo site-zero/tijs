@@ -2,8 +2,16 @@ import { App } from 'vue';
 import { TiComInfo, TiComRace } from '../../../core/_top/_types';
 import { COM_TYPES } from '../../lib-com-types';
 import TiActionBar from './TiActionBar.vue';
-import { simple } from './example';
-import i18n from './i18n';
+import * as example from './example';
+
+const en_us = {
+  'com-name': 'Action Bar',
+  'example-visibility': 'Visibility',
+};
+const zh_cn = {
+  'com-name': '动作条',
+  'example-visibility': '可见性',
+};
 
 const COM_TYPE = COM_TYPES.ActionBar;
 
@@ -12,13 +20,18 @@ const TiActionBarInfo: TiComInfo = {
   race: TiComRace.ACTION,
   name: COM_TYPE,
   text: 'i18n:ti-action-bar-com-name',
-  i18n,
+  i18n: {
+    en_us: en_us,
+    en_uk: en_us,
+    zh_cn: zh_cn,
+    zh_hk: zh_cn,
+  },
   com: TiActionBar,
   install: (app: App) => {
     app.component(COM_TYPE, TiActionBar);
   },
   defaultProps: 'simple',
-  exampleProps: [simple],
+  exampleProps: [example.simple, example.visiblity],
 };
 
 export { TiActionBar, TiActionBarInfo };
