@@ -13,15 +13,13 @@ export default {
         text: 'i18n:save-change',
         altDisplay: [
           {
-            test: {
-              saving: true,
-            },
+            test: { saving: true },
             icon: 'fas-spinner fa-pulse',
             text: 'i18n:saving',
           },
         ],
         enabled: 'changed',
-        action: 'dispatch:main/saveContent',
+        action: 'save',
         shortcut: 'CTRL+S',
       },
       {
@@ -30,10 +28,11 @@ export default {
         icon: 'zmdi-refresh',
         text: 'i18n:refresh',
         altDisplay: {
+          test: { reloading: true },
           icon: 'zmdi-refresh zmdi-hc-spin',
           text: 'i18n:loading',
         },
-        action: 'dispatch:main/reloadData',
+        action: 'reload',
         shortcut: 'CTRL+SHIFT+R',
       },
       {},
@@ -41,7 +40,7 @@ export default {
         type: 'action',
         icon: 'zmdi-keyboard',
         text: 'i18n:view-resource',
-        action: 'dispatch:main/openContentEditor',
+        action: 'bus:> view-code',
         shortcut: 'ALT+SHIFT+V',
       },
       {},
@@ -49,7 +48,7 @@ export default {
         type: 'action',
         icon: 'zmdi-keyboard',
         text: 'i18n:console',
-        action: "=>Ti.Be.Open('/a/open/wn.console')",
+        action: 'bus:> open-console',
         shortcut: 'ALT+SHIFT+T',
         visible: {
           ENABLE_CONSOLE: 'yes',
@@ -59,7 +58,7 @@ export default {
         type: 'action',
         icon: 'zmdi-info-outline',
         text: 'i18n:properties',
-        action: 'dispatch:main/openCurrentMetaEditor',
+        action: 'bus:> open-properties',
         shortcut: 'ALT+SHIFT+P',
       },
     ],
