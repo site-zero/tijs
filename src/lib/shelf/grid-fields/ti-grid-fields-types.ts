@@ -51,8 +51,10 @@ export type GridItemEmitter = {
 
 export type GridFieldsProps = Omit<
   GridFieldsInput,
+  | 'rowStart'
   | 'rowSpan'
   | 'colSpan'
+  | 'colStart'
   | 'transformer'
   | 'transArgs'
   | 'transPartial'
@@ -149,7 +151,9 @@ export type GridFieldsInput = CommonProps &
     // 限制一个字段名称最大宽度
     maxFieldNameWidth?: number | string;
 
+    rowStart?: number; // 指定格子的行起始轨道，比 style.gridRowStart 优先
     rowSpan?: number; // 指定格子的行跨度，比 style.gridRowEnd 优先
+    colStart?: number; // 指定格子的列起始轨道，比 style.gridColumnStart 优先
     colSpan?: number; // 指定格子的列跨度，比 style.gridColumnEnd 优先
     //------------------------------------
     // 字段组专有属性
@@ -308,7 +312,10 @@ export type GridFieldsStrictAbstractItem = FieldComProps &
 
     // 父块传递下来的，本项目最大可以跨越的轨道数
     maxTrackCount?: number;
+
+    rowStart?: number; // 指定格子的行起始轨道，比 style.gridRowStart 优先
     rowSpan?: number; // 指定格子的行跨度，比 style.gridRowEnd 优先
+    colStart?: number; // 指定格子的列起始轨道，比 style.gridColumnStart 优先
     colSpan?: number; // 指定格子的列跨度，比 style.gridColumnEnd 优先
   };
 export type GridFieldsStrictGroup = GridFieldsStrictAbstractItem &

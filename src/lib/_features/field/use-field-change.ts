@@ -6,7 +6,7 @@ import {
   AbstractField,
   ValidateResult,
   makeFieldUniqKey,
-  setFieldValue,
+  mergeFieldChanges,
 } from '../../_top';
 
 const log = getLogger('ti.lib.use-record');
@@ -176,11 +176,11 @@ export function useFieldChange<T extends AbstractField>(
   ): Vars | FieldChange[] {
     // 差异
     if ('diff' == props.changeMode) {
-      return __merge_changed(changes, {});
+      return mergeFieldChanges(changes, {});
     }
     // 合并数据
     else if ('all' == props.changeMode) {
-      return __merge_changed(changes, data);
+      return mergeFieldChanges(changes, data);
     }
     // 原始明值对列表
     return changes;
@@ -232,7 +232,7 @@ export function useFieldChange<T extends AbstractField>(
       await Alert(msg, { type: 'error' });
       return;
     }
-    console.log('tidyValueChange', field);
+    log.debug('field=', field);
 
     // 转换字段值
     if (field.serializer) {
@@ -286,20 +286,27 @@ export function useFieldChange<T extends AbstractField>(
 
     // 应用连接字段
     let changes = await applyFieldChange(change, data);
+    log.debug('changes=', changes);
 
     // 生成数据
     let changedData = makeChangeData(changes, data);
+    log.debug('changedData=', changedData);
 
     // 通知改动: 防守检查相同
     if (checkEquals && !_.isEmpty(data)) {
       let diff = getDiffData(data, changedData);
       if (_.isEmpty(diff)) {
+        log.debug('Empty Diff then return');
         return;
       }
+      log.debug('notify diff=', diff);
+      callback(diff, field);
     }
-
-    // 搞定
-    callback(changedData, field);
+    // 通知改动
+    else {
+      log.debug('notify change', changedData);
+      callback(changedData, field);
+    }
   }
 
   //...................................................
@@ -312,7 +319,7 @@ export function useFieldChange<T extends AbstractField>(
     change: FieldValueChange,
     options: HandleValueChangeOptions
   ) {
-    console.log('handleValueChange');
+    //console.log('handleValueChange');
     await tidyValueChange(change, options, (changedData, _field) => {
       let { emit } = options;
       emit('change', changedData);
@@ -348,15 +355,6 @@ function __build_fields_map<T extends AbstractField>(
   }
 
   return map;
-}
-
-function __merge_changed(changes: FieldChange[], data?: Vars): Vars {
-  let meta = _.cloneDeep(data) || {};
-  for (let change of changes) {
-    let { name, value } = change;
-    setFieldValue(name, value, meta);
-  }
-  return meta;
 }
 
 function __gen_change(

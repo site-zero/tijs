@@ -35,3 +35,4 @@ const TiActionBarInfo: TiComInfo = {
 };
 
 export { TiActionBar, TiActionBarInfo };
+export * from './ti-action-bar-types';

@@ -12,7 +12,6 @@
 
   const props = withDefaults(defineProps<InputGroupProps>(), {
     bodyPartGap: 's',
-    bodyPartFontSize: 'm',
     maxFieldNameWidth: 'auto',
     fieldLayoutMode: 'h-title-icon-suffix',
     defaultComType: 'TiInput',

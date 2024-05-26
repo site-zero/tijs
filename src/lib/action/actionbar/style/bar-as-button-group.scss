@@ -1,50 +1,20 @@
-@mixin __bar_item_color_by_name($name) {
-  &.is-#{$name} {
-    color: var(--ti-color-#{$name});
-    background-color: var(--ti-color-#{$name}-r);
-    &:hover {
-      color: var(--ti-color-#{$name}-r);
-      background-color: var(--ti-color-#{$name});
-    }
-  }
-
-  &.is-#{$name}-r {
-    color: var(--ti-color-#{$name}-r);
-    background-color: var(--ti-color-#{$name});
-    &:hover {
-      color: var(--ti-color-#{$name});
-      background-color: var(--ti-color-#{$name}-r);
-    }
-  }
-}
-
-.ti-actionbar.as-button-group > .bar-top-group {
-  padding: 0.2em;
-  > .bar-item[item-depth="0"] {
-    margin: 0 0.2em;
-    > .bar-item-head {
+.ti-actionbar.as-button-group {
+  padding: 6px;
+  .bar-item[aspect="top"] {
+    > .bar-item-info {
       @include flex-center($wp: nowrap);
-      padding: 0.3em 0.6em;
-      min-width: 4em;
+      padding: 0.3em 0.7em;
+      min-width: 6em;
       //------------------------------------
       .item-icon {
+        @include flex-center;
         width: auto;
-        margin-right: 0.37em;
       }
       //------------------------------------
       .item-text {
         padding: 0;
         flex: 0 0 auto;
       }
-      //------------------------------------
-      @include __bar_item_color_by_name(success);
-      @include __bar_item_color_by_name(warn);
-      @include __bar_item_color_by_name(info);
-      @include __bar_item_color_by_name(error);
-      @include __bar_item_color_by_name(track);
-      @include __bar_item_color_by_name(disable);
-      @include __bar_item_color_by_name(text);
-      @include __bar_item_color_by_name(number);
       //------------------------------------
     } // > .bar-item-head {
   } // > .bar-item[item-depth="0"] {

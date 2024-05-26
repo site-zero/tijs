@@ -63,10 +63,6 @@
     )
   );
 
-  const BodyConfig = computed(() => {
-    return props.comConf;
-  });
-
   const BlockConfig = computed(() => {
     let conf: BlockProps = _.pick(
       props,
@@ -88,15 +84,19 @@
         action: _do_close_modal,
       },
     ];
+    return conf;
+  });
+
+  const BlockComConf = computed(() => {
+    let comConf = _.cloneDeep(props.comConf);
     // 绑定输入数据
     if (model.data) {
       _.assign(
-        conf,
+        comConf,
         makeAppModelDataProps(model.data, () => _result.value)
       );
     }
-
-    return conf;
+    return comConf;
   });
 
   // 监控控件的事件以便更新 result
@@ -115,10 +115,15 @@
 
   const ModalRightActions = computed(() => {
     let list = [] as ActionBarItem[];
+    let className: string | undefined = undefined;
+    if (props.type) {
+      className = `is-${props.type}`;
+    }
     if (props.textOk) {
       list.push({
         icon: props.iconOk,
         text: props.textOk,
+        className,
         action: async () => {
           if (props.ok) {
             let continue_to_close = await props.ok(_result.value);
@@ -134,6 +139,7 @@
       list.push({
         icon: props.iconCancel,
         text: props.textCancel,
+        className,
         action: async () => {
           if (props.cancel) {
             let continue_to_close = await props.cancel(_result.value);
@@ -220,7 +226,7 @@
         <!------------------------------>
         <TiBlock
           v-bind="BlockConfig"
-          :com-conf="BodyConfig"
+          :com-conf="BlockComConf"
           :emit-adaptors="BlockEmitAdaptors"
           v-on="OnAllEvents" />
         <!------------------------------>

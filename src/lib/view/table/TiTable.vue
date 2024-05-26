@@ -127,13 +127,17 @@
   //-------------------------------------------------------
   //                      计算格子的列
   //-------------------------------------------------------
-  const MainStyle = computed(() => {
+  const RealN = computed(()=>{
     let N = 0;
     for(let col of TableColumns.value){
       if(!col.candidate){
         N += 1
       }
     }
+    return N
+  })
+  const MainStyle = computed(() => {
+    let N = RealN.value
     let cols = [];
     // 未定制列的宽度
     if (_.isEmpty(columnSizes.value)) {
@@ -167,7 +171,7 @@
   //                 虚拟占位行
   //-------------------------------------------------------
   const VirtualRowStyle = computed(() => {
-    let N = TableColumns.value.length;
+    let N = RealN.value
     // 显示行头标记列，需要凭空为列+1
     if (ShowRowMarker.value) {
       N++;
@@ -222,7 +226,6 @@
   function onCellChange(changed: TableCellChanged) {
     let { colIndex, rowIndex, name, value, oldVal } = changed;
     log.debug('OnCellChange', changed);
-    console.log(changed);
 
     let oldRowData = _.nth(TableData.value, rowIndex)?.rawData;
 
@@ -323,6 +326,7 @@
             class="table-cell as-head"
             :class="Table.getTableHeadClass(selection, i)"
             :col-index="i"
+            :drag-index="col.dragIndex"
             :col-key="col.uniqKey">
             <div class="head-cell-con">
               <!-- 调整列宽的控制柄 -->

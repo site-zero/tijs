@@ -21,29 +21,35 @@ export function makeAppModelDataProps(
   bindingData: AppModelBindingData,
   getResult: () => any
 ): Record<string, any> {
+  log.debug('bindingData=', bindingData);
   let props = {} as Record<string, any>;
   // 1. `null` 不传递
   if (!bindingData) {
+    log.debug('null => {}');
     return props;
   }
   let result = getResult();
   // 2. `"value"` 【默认】将 result 传递给 value 属性
   if (_.isString(bindingData)) {
-    props[bindingData] = result;
+    log.debug('string => props[bindingData] = result;');
+    props[bindingData] = _.cloneDeep(result);
   }
   // 3. `["a","b"] 将 result.a 传递给 a 属性，result.b 传递给 b 属性
   else if (_.isArray(bindingData)) {
+    log.debug('array => ...');
     for (let key of bindingData) {
       props[key] = _.get(result, key);
     }
   }
   // 4. `{a:"x",b:"y"}` 将 result.a 传递给 x 属性，result.b 传递给 y 属性
   else {
+    log.debug('mapping => ...');
     for (let fromKey of _.keys(bindingData)) {
       let toKey = bindingData[fromKey];
       props[toKey] = _.get(result, fromKey);
     }
   }
+  log.debug('props=', props);
   return props;
 }
 

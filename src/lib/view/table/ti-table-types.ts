@@ -248,6 +248,7 @@ export type TableStrictColumn = CommonProps &
   AbstractField &
   TableColumnAspect & {
     index: number;
+    dragIndex: number;
   };
 
 export type TableRowProps = CommonProps &

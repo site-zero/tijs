@@ -18,17 +18,7 @@
       text-overflow: ellipsis;
     }
     > .ti-actionbar {
-      display: grid;
-      grid-template-columns: 1fr;
-      grid-template-rows: 1fr;
       padding: SZ(4);
-      // > .bar-top-group {
-      //   > .bar-item[item-depth="0"] {
-      //     > .bar-item-head {
-      //       border-radius: 0;
-      //     }
-      //   }
-      // }
     }
   } // > header
 

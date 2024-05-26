@@ -4,11 +4,11 @@
   // 菜单项
   .bar-item {
     display: grid;
+    margin: 0 1px;
     // 无效条目
     &.is-disabled {
       opacity: 0.4;
     }
-
   } // .bar-item {
 } // .ti-actionbar {
 

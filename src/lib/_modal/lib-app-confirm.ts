@@ -17,7 +17,7 @@ export type ConfirmOptions = PopItemProps & {
 
 export async function Confirm(
   msg: string,
-  options: ConfirmOptions
+  options: ConfirmOptions = {}
 ): Promise<boolean> {
   // Build html
   let html = __get_msg_box_html(
@@ -28,7 +28,7 @@ export async function Confirm(
   );
   // Prepare dialog
   let dialog = {
-    icon: 'zmdi-help-o',
+    icon: 'zmdi-help',
     title: 'i18n:confirm',
     type: 'info',
     textOk: 'i18n:yes',

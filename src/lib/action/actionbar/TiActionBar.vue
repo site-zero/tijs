@@ -1,6 +1,15 @@
 <script lang="ts" setup>
-  import { computed, onMounted, provide, reactive, ref, watch } from 'vue';
-  import { CssUtils, Vars } from '../../../core';
+  import {
+    computed,
+    inject,
+    onMounted,
+    onUnmounted,
+    provide,
+    reactive,
+    ref,
+    watch,
+  } from 'vue';
+  import { AppEvents, BUS_KEY, BusMsg, CssUtils, Vars } from '../../../core';
   import ItemAsAction from './ItemAsAction.vue';
   import ItemAsFolderGroup from './ItemAsFolderGroup.vue';
   import { buildActionBarItems } from './build-action-bar-items';
@@ -17,6 +26,17 @@
   });
   //-------------------------------------------------------
   let emit = defineEmits<ActionBarEmitter>();
+  //-------------------------------------------------------
+  function whenAppResize(_msg: BusMsg<any>) {
+    OnClickMask();
+  }
+  const bus = inject(BUS_KEY);
+  if (bus) {
+    bus.onName(AppEvents.APP_RESIZE, whenAppResize);
+    onUnmounted(() => {
+      bus.offName(AppEvents.APP_RESIZE, whenAppResize);
+    });
+  }
   //-------------------------------------------------------
   const state = reactive({
     opened: new Map(),

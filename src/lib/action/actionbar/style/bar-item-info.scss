@@ -42,11 +42,11 @@
     }
   }
   //-----------------------------------------------------
-  &[aspect='top'] {
+  &[aspect="top"] {
     border-radius: var(--ti-measure-r-s);
   }
   //-----------------------------------------------------
-  &[aspect='sub'] {
+  &[aspect="sub"] {
     grid-template-columns: auto 1fr;
   }
   //-----------------------------------------------------
@@ -57,5 +57,35 @@
       color: inherit;
     }
   }
+  //-----------------------------------------------------
+  @mixin __bar_item_color_by_name($name) {
+    &.is-enabled.is-#{$name} {
+      color: var(--ti-color-#{$name}-r);
+      background-color: var(--ti-color-#{$name});
+      &:hover {
+        background-color: var(--ti-color-#{$name}-b);
+      }
+    }
+
+    &.is-enabled.is-#{$name}-r {
+      color: var(--ti-color-#{$name}-r);
+      background-color: var(--ti-color-#{$name});
+      &:hover {
+        color: var(--ti-color-#{$name});
+        background-color: var(--ti-color-#{$name}-r);
+      }
+    }
+  }
+  //-----------------------------------------------------
+  @include __bar_item_color_by_name(success);
+  @include __bar_item_color_by_name(warn);
+  @include __bar_item_color_by_name(info);
+  @include __bar_item_color_by_name(error);
+  @include __bar_item_color_by_name(track);
+  @include __bar_item_color_by_name(disable);
+  @include __bar_item_color_by_name(text);
+  @include __bar_item_color_by_name(number);
+  @include __bar_item_color_by_name(primary);
+  @include __bar_item_color_by_name(secondary);
   //-----------------------------------------------------
 }

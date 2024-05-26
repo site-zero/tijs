@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Match, TiMatch, getEnv } from '../ti';
+import { Callback, Match, TiMatch, getEnv } from '../ti';
 
 export type BusMsg<T> = {
   /**
@@ -22,6 +22,13 @@ export type BusMsg<T> = {
 
 export type BusListenerHanlder<T> = {
   (msg: BusMsg<T>): void;
+};
+
+/**
+ * 一个注册函数，注册监听器的注销行为。通常是组件的 onUnmounted
+ */
+export type BusDeposer = {
+  (callback: Callback): void;
 };
 
 class BusListener<T> {
@@ -225,38 +232,54 @@ export class TiBus<T> {
    * - 否则就是精确监听
    *
    * @param handler 监听回调函数
+   * @param deposer 注册注销行为
    */
-  on(name: string, handler: BusListenerHanlder<T>) {
+  on(name: string, handler: BusListenerHanlder<T>, deposer?: BusDeposer) {
     // 任意监听
     if ('*' === name) {
-      this.onAny(handler);
+      this.onAny(handler, deposer);
     }
     // 条件监听
     else if (name_is_conditional(name)) {
-      this.onMatch(name, handler);
+      this.onMatch(name, handler, deposer);
     }
     // 精确监听
     else {
-      this.onName(name, handler);
+      this.onName(name, handler, deposer);
     }
   }
 
-  onAny(handler: BusListenerHanlder<T>) {
+  onAny(handler: BusListenerHanlder<T>, deposer?: BusDeposer) {
     this._lis_any.push(new BusListener('*', handler));
+    if (deposer) {
+      deposer(() => {
+        this.offAny(handler);
+      });
+    }
   }
 
-  onMatch(name: string, handler: BusListenerHanlder<T>) {
+  onMatch(name: string, handler: BusListenerHanlder<T>, deposer?: BusDeposer) {
     let ma = Match.parse({ name });
     this._lis_match.push(new BusListener(name, handler, ma));
+    if (deposer) {
+      deposer(() => {
+        this.offMatch(handler, name);
+      });
+    }
   }
 
-  onName(name: string, handler: BusListenerHanlder<T>) {
+  onName(name: string, handler: BusListenerHanlder<T>, deposer?: BusDeposer) {
     let listeners = this._lis_name.get(name);
     if (!listeners) {
       listeners = [];
       this._lis_name.set(name, listeners);
     }
     listeners.push(new BusListener(name, handler));
+    if (deposer) {
+      deposer(() => {
+        this.offName(name, handler);
+      });
+    }
   }
 
   off(handler: BusListenerHanlder<T>, name?: string) {

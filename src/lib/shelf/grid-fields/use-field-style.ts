@@ -151,8 +151,14 @@ function getFieldLayoutStyle(
 
 export function getGridItemStyle(item: GridFieldsStrictAbstractItem) {
   let css = _.cloneDeep(item.style || {});
+  if (item.rowStart) {
+    css.gridRowStart = item.rowStart;
+  }
   if (item.rowSpan) {
     css.gridRowEnd = `span ${item.rowSpan}`;
+  }
+  if (item.colStart) {
+    css.gridColumnStart = item.colStart;
   }
   if (item.colSpan) {
     let colSpan = _.clamp(item.colSpan, 1, item.maxTrackCount ?? 1);

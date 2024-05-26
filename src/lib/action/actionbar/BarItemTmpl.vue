@@ -36,10 +36,10 @@
   const isReady = computed(() => 'ready' == OpenStatus.value);
   //-------------------------------------------------------
   const TopClass = computed(() => {
-    return {
+    return CssUtils.mergeClassName(props.className, {
       'is-disabled': props.disabled,
       'is-enabled': !props.disabled,
-    };
+    });
   });
   //-------------------------------------------------------
   const InfoClass = computed(() => {

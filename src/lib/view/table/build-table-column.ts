@@ -11,6 +11,7 @@ export function buildTableColumns(props: TableProps) {
   //console.log('buildTableColumns', props.columns.length);
   let reColumns = [] as TableStrictColumn[];
   if (props.columns) {
+    let dragIndex = 0;
     for (let i = 0; i < props.columns.length; i++) {
       let col = props.columns[i];
       // if (col.candidate) {
@@ -18,6 +19,8 @@ export function buildTableColumns(props: TableProps) {
       // }
       // 列唯一键
       let uniqKey = makeFieldUniqKey([i], col.name, col.uniqKey);
+
+      let candidate = col.candidate ?? false;
 
       // 准备列
       let re: TableStrictColumn = {
@@ -37,7 +40,8 @@ export function buildTableColumns(props: TableProps) {
         tipStyle: col.tipStyle,
         tipAlign: col.tipAlign,
 
-        candidate: col.candidate ?? false,
+        candidate,
+        dragIndex: candidate ? -1 : dragIndex++,
 
         // 表格默认控件
         comType: col.comType ?? props.defaultCellComType ?? 'TiLabel',

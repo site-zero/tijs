@@ -48,8 +48,12 @@ export function buildOneGridField(
     tipStyle: field.tipStyle,
     tipAlign: field.tipAlign,
     tipClass: field.tipClass,
-    colSpan: field.colSpan,
+
+    rowStart: field.rowStart,
     rowSpan: field.rowSpan,
+    colStart: field.colStart,
+    colSpan: field.colSpan,
+
     style: field.style,
     readonly: field.readonly ?? dft.readonly,
     autoValue: field.autoValue,

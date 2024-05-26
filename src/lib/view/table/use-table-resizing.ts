@@ -66,7 +66,7 @@ export function useTableResizing(
       let $head_cells = Dom.findAll('.table-cell.as-head', $view);
 
       // 记录初始的拖动位置
-      let colIndex = parseInt($target_cell!.getAttribute('col-index')!);
+      let colIndex = parseInt($target_cell!.getAttribute('drag-index')!);
       colResizing.colIndex = isForPrev ? colIndex - 1 : colIndex;
       colResizing.activated = true;
       colResizing.left = ing.inview.x;
@@ -76,7 +76,7 @@ export function useTableResizing(
       // 获取标题初始列宽
       for (let $cell of $head_cells) {
         let w = $cell.getBoundingClientRect().width;
-        let colIndex = parseInt(Dom.attr($cell, 'col-index', -1));
+        let colIndex = parseInt(Dom.attr($cell, 'drag-index', -1));
         w = Num.round(w, 100);
         let i = showRowMarker ? colIndex + 1 : colIndex;
         columnSizes.value[i] = w;

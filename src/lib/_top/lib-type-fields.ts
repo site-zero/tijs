@@ -6,6 +6,7 @@ import {
   Convertor,
   DateInput,
   DateTime,
+  FieldChange,
   InvokePartial,
   NameValue,
   Str,
@@ -199,6 +200,15 @@ export function makeFieldUniqKey(
     return getFieldUniqKey(fieldName);
   }
   return `_F${indexes.join('_')}`;
+}
+
+export function mergeFieldChanges(changes: FieldChange[], data?: Vars): Vars {
+  let meta = _.cloneDeep(data) || {};
+  for (let change of changes) {
+    let { name, value } = change;
+    setFieldValue(name, value, meta);
+  }
+  return meta;
 }
 
 export function setFieldValue(name: FieldName, value: any, data?: Vars): Vars {

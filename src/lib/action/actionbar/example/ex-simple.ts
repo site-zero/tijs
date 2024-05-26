@@ -42,9 +42,11 @@ export default {
             items: [
               {
                 text: 'Action A',
+                action: 'bus:> action-A',
               },
               {
                 text: 'Action B',
+                action: 'bus:> action-B',
               },
             ],
           },
@@ -55,9 +57,11 @@ export default {
             items: [
               {
                 text: 'Action C',
+                action: 'bus:> action-C',
               },
               {
                 text: 'Action D',
+                action: 'bus:> action-D',
               },
             ],
           },

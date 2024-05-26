@@ -34,15 +34,19 @@
     user-select: none;
     > .as-icon {
       width: var(--ti-box-icon);
-      height: var(--ti-box-icon);
-      border-radius: var(--ti-measure-r-s);
+      height: unset;
+      &.is-type-font {
+        width: var(--ti-measure-box-icon);
+      }
+      &.is-type-image {
+        width: var(--ti-measure-box-height);
+      }
     }
 
     > .as-text {
       @include flex-center;
       padding: 0 SZ(4);
       opacity: 0.7;
-      border-radius: var(--ti-measure-r-s);
       white-space: nowrap;
       font-size: 0.8em;
     }
@@ -77,21 +81,5 @@
   &.show-border {
     border: 1px solid var(--ti-color-border-thin);
     border-radius: var(--ti-measure-r-s);
-
-    > .as-icon-text {
-      > .as-icon {
-        border-radius: 0;
-        height: unset;
-        &.is-type-font {
-          width: var(--ti-measure-box-icon);
-        }
-        &.is-type-image {
-          width: var(--ti-measure-box-height);
-        }
-      }
-      > .as-text {
-        border-radius: 0;
-      }
-    }
   }
 }
