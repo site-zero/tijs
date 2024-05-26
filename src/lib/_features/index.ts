@@ -18,7 +18,6 @@ export * from './use-readonly';
 export * from './use-app-model-binding.ts';
 
 // 可能要移除的特性，因为发现它们范围过大不好复用
-export * from './use-bus-emit';
 export * from './use-class-style';
 export * from './use-emit-adaptor';
 export * from './use-icon-text';

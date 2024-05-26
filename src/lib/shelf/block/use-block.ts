@@ -7,7 +7,6 @@ import {
   CssUtils,
   I18n,
   TiAppBus,
-  TiAppEvent,
 } from '../../../core';
 
 /*-------------------------------------------------------
@@ -21,23 +20,23 @@ export type BlockOptions = {};
                      Methods
 
 -------------------------------------------------------*/
-export function useBusAdaptor(
-  onUnmouned: Callback1<Callback>,
-  parentBus: TiAppBus,
-  blockBus: TiAppBus,
-  blockName?: string
-) {
-  blockBus.onAny((msg: BusMsg<TiAppEvent>) => {
-    if (blockName) {
-      msg.name = [blockName, msg.name].join('::');
-    }
-    parentBus.send(msg);
-  });
+// export function useBusAdaptor(
+//   onUnmouned: Callback1<Callback>,
+//   parentBus: TiAppBus,
+//   blockBus: TiAppBus,
+//   blockName?: string
+// ) {
+//   blockBus.onAny((msg: BusMsg<TiAppEvent>) => {
+//     if (blockName) {
+//       msg.name = [blockName, msg.name].join('::');
+//     }
+//     parentBus.send(msg);
+//   });
 
-  onUnmouned(() => {
-    blockBus.depose();
-  });
-}
+//   onUnmouned(() => {
+//     blockBus.depose();
+//   });
+// }
 /*-------------------------------------------------------
 
                    Use Feature

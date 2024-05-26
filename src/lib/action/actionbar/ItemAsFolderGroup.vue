@@ -40,7 +40,7 @@
   }
   //-------------------------------------------------------
   const $con = ref<HTMLElement>();
-  const MENU_SPACE = 10;
+  const MENU_SPACE = 8;
   //-------------------------------------------------------
   watch(
     () => $con.value,
@@ -90,30 +90,32 @@
       <template
         v-for="it in props.items"
         :key="it.uniqKey">
-        <!--......|< Action >|......-->
-        <ItemAsAction
-          v-if="'action' == it.type"
-          v-bind="it" />
-        <!--......|< Group >|......-->
-        <ItemAsFolderGroup
-          v-else-if="'group' == it.type"
-          v-bind="it" />
-        <!--......|< Sep >|......-->
-        <div
-          v-else-if="'sep' == it.type"
-          class="bar-sep"
-          :aspect="it.aspect"
-          :item-depth="it.depth"
-          :item-index="it.index"></div>
-        <!--......|< Unknown >|......-->
-        <div
-          v-else
-          class="bar-unknwon"
-          :aspect="it.aspect"
-          :item-depth="it.depth"
-          :item-index="it.index">
-          {{ it }}
-        </div>
+        <template v-if="!it.hidden">
+          <!--......|< Action >|......-->
+          <ItemAsAction
+            v-if="'action' == it.type"
+            v-bind="it" />
+          <!--......|< Group >|......-->
+          <ItemAsFolderGroup
+            v-else-if="'group' == it.type"
+            v-bind="it" />
+          <!--......|< Sep >|......-->
+          <div
+            v-else-if="'sep' == it.type"
+            class="bar-sep"
+            :aspect="it.aspect"
+            :item-depth="it.depth"
+            :item-index="it.index"></div>
+          <!--......|< Unknown >|......-->
+          <div
+            v-else
+            class="bar-unknwon"
+            :aspect="it.aspect"
+            :item-depth="it.depth"
+            :item-index="it.index">
+            {{ it }}
+          </div>
+        </template>
       </template>
     </div>
   </BarItemTmpl>

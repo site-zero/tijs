@@ -6,7 +6,6 @@
   font-size: var(--ti-measure-menu-fontsz);
   line-height: var(--ti-measure-menu-lineheight);
   padding: 0.3em 0.6em;
-  cursor: pointer;
   //-----------------------------------------------------
   .item-icon {
     @include flex-center;
@@ -31,20 +30,23 @@
   }
   //-----------------------------------------------------
   // 鼠标响应
-  &:hover,
-  &.is-highlight {
-    color: var(--ti-color-secondary-r);
-    background-color: var(--ti-color-secondary);
-    .item-suffix {
-      color: inherit;
+  &.is-enabled {
+    cursor: pointer;
+    &:hover,
+    &.is-highlight {
+      color: var(--ti-color-secondary-r);
+      background-color: var(--ti-color-secondary);
+      .item-suffix {
+        color: inherit;
+      }
     }
   }
   //-----------------------------------------------------
-  &[aspect="top"] {
+  &[aspect='top'] {
     border-radius: var(--ti-measure-r-s);
   }
   //-----------------------------------------------------
-  &[aspect="sub"] {
+  &[aspect='sub'] {
     grid-template-columns: auto 1fr;
   }
   //-----------------------------------------------------

@@ -1,5 +1,4 @@
 import {
-  BusEmitProps,
   ClassStyleFeature,
   IconTextFeature,
   useIconText,
@@ -35,7 +34,7 @@ export type PrefixSuffixState = {
                      Props
 
 -------------------------------------------------------*/
-export type PrefixSuffixFeatureProps = BusEmitProps & {
+export type PrefixSuffixFeatureProps = {
   //
   // Prefix.style
   //

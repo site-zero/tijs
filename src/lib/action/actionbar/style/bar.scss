@@ -4,13 +4,11 @@
   // 菜单项
   .bar-item {
     display: grid;
-    // 顶级条目，没必要加边距
-    &[item-depth="0"] > .bar-item-head {
-      padding: 0.2em 0.4em;
-      > .item-icon {
-        margin-right: 0.1em;
-      }
+    // 无效条目
+    &.is-disabled {
+      opacity: 0.4;
     }
+
   } // .bar-item {
 } // .ti-actionbar {
 

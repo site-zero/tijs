@@ -5,6 +5,7 @@ import {
   ActionBarItem,
   ActionBarItemAltDisplay,
   Match,
+  TiAppBus,
   Util,
   Vars,
   isEventInfo,
@@ -64,6 +65,19 @@ function makeItemAction(
         },
       });
       return fn();
+    };
+  }
+
+  // String 作为 BUS
+  let m = /^\s*bus:>(.+)$/.exec(action);
+  if (m) {
+    let busNotifyName = _.trim(m[1]);
+    return (vars: Vars, bus?: TiAppBus) => {
+      if (!bus) {
+        console.warn(`need bug to notify [${action}]`);
+        return;
+      }
+      bus.emit(busNotifyName, vars);
     };
   }
 

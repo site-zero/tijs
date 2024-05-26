@@ -734,40 +734,39 @@ export function isEventInfo<T>(
   return true;
 }
 
-export type TiEvent<T> = EventInfo<T> & {
-  /**
-   * 创建时的毫秒时间戳
-   */
-  created: Date;
+// export type TiEvent<T> = EventInfo<T> & {
+//   /**
+//    * 创建时的毫秒时间戳
+//    */
+//   created: Date;
 
-  /**
-   * 发生控件的控件定义信息
-   */
-  sourceCom: Pick<
-    TiComInfo,
-    'name' | 'race' | 'text' | 'i18n' | 'exampleModel'
-  >;
-};
+//   /**
+//    * 发生控件的控件定义信息
+//    */
+//   sourceCom: Pick<
+//     TiComInfo,
+//     'name' | 'race' | 'text' | 'i18n' | 'exampleModel'
+//   >;
+// };
 
 export enum AppEvents {
   APP_RESIZE = 'app-resize',
   APP_SCROLL = 'app-scroll',
 }
 
-export type APP_EVENT = keyof typeof AppEvents;
+// export type APP_EVENT = keyof typeof AppEvents;
 
-export type TiEventTrigger<K extends string, T> = (name: K, payload: T) => void;
+// export type TiEventTrigger<K extends string, T> = (name: K, payload: T) => void;
 
-export type TiEventLightTrigger<K extends string> = TiEventTrigger<
-  K,
-  undefined
->;
+// export type TiEventLightTrigger<K extends string> = TiEventTrigger<
+//   K,
+//   undefined
+// >;
 
-export type TiEmit<K extends string, T> = Callback2<K, TiEvent<T>>;
+// export type TiEmit<K extends string, T> = Callback2<K, TiEvent<T>>;
 
-export type TiAppEvent = TiEvent<any>;
-export type TiAppBus = TiBus<TiAppEvent>;
-export type TiAppEventTrigger<K extends string> = TiEventTrigger<K, any>;
+export type TiAppBus = TiBus<any>;
+// export type TiAppEventTrigger<K extends string> = TiEventTrigger<K, any>;
 
 export const BUS_KEY: InjectionKey<TiAppBus> = Symbol('EVENT_BUS');
 

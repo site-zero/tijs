@@ -4,6 +4,7 @@ import {
   ActionBarItem,
   ActionBarItemInfo,
   CommonProps,
+  TiAppBus,
   TiMatch,
   Vars,
 } from '../../../core';
@@ -57,7 +58,7 @@ export type AbstractBarItem = ActionBarItemInfo & {
   axis: string[];
   type: ActionBarType;
   aspect: ActionBarAspect;
-  action?: (vars: Vars) => void;
+  action?: (vars: Vars, bus?: TiAppBus) => void;
 };
 
 export type ABarParsedItem = AbstractBarItem &

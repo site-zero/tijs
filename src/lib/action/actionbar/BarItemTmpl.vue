@@ -35,28 +35,43 @@
   const isOpened = computed(() => 'opened' == OpenStatus.value);
   const isReady = computed(() => 'ready' == OpenStatus.value);
   //-------------------------------------------------------
+  const TopClass = computed(() => {
+    return {
+      'is-disabled': props.disabled,
+      'is-enabled': !props.disabled,
+    };
+  });
+  //-------------------------------------------------------
   const InfoClass = computed(() => {
     return CssUtils.mergeClassName(props.className, {
       'is-highlight': isOpened.value || isReady.value,
+      'is-disabled': props.disabled,
+      'is-enabled': !props.disabled,
     });
   });
   //-------------------------------------------------------
-  //
-  // Methods
-  //
   function OnEnter() {
     // Guard
-    if (!state || props.depth == 0) {
+    if (!state || props.depth == 0 || props.disabled || props.hidden) {
       return;
     }
     //console.log('OnEnter', props.uniqKey);
     openBarItem(state, props);
   }
+  //-------------------------------------------------------
+  function onClikeItem() {
+    if (props.hidden || props.disabled) {
+      return;
+    }
+    emit('click', props);
+  }
+  //-------------------------------------------------------
 </script>
 <template>
   <div
     ref="$item"
     class="bar-item"
+    :class="TopClass"
     :type="props.type"
     :aspect="props.aspect"
     :item-depth="props.depth"
@@ -67,7 +82,7 @@
       :class="InfoClass"
       :style="props.style"
       :aspect="props.aspect"
-      @click.left="emit('click', props)"
+      @click.left="onClikeItem"
       @mouseenter="OnEnter">
       <div
         class="item-icon"

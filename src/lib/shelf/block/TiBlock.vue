@@ -2,15 +2,9 @@
   import _ from 'lodash';
   import { computed, inject, onUnmounted, provide } from 'vue';
   import { BlockProps, TiActionBar, TiIcon, useEmitAdaptor } from '../../';
-  import {
-    BUS_KEY,
-    Callback2,
-    TiAppBus,
-    TiAppEvent,
-    createBus,
-  } from '../../../core';
+  import { BUS_KEY, Callback2, TiAppBus, createBus } from '../../../core';
   import { COM_TYPES } from '../../lib-com-types';
-  import { useBlock, useBusAdaptor } from './use-block';
+  import { useBlock } from './use-block';
 
   const COM_TYPE = COM_TYPES.Block;
 
@@ -19,22 +13,6 @@
     nameWidth: 0,
   });
   let props = withDefaults(defineProps<BlockProps>(), {});
-  //
-  //  Bus & Notify & Emit
-  //
-  let parentBus = inject(BUS_KEY);
-  //
-  // 适配消息总线
-  //
-  if (parentBus) {
-    let busName = COM_TYPE;
-    if (props.name) {
-      busName += `[${props.name}]`;
-    }
-    let blockBus: TiAppBus = createBus<TiAppEvent>(busName);
-    useBusAdaptor(onUnmounted, parentBus, blockBus, props.name);
-    provide(BUS_KEY, blockBus);
-  }
   //
   //  Features
   //

@@ -3,7 +3,9 @@ export default {
   text: 'i18n:ti-action-bar-example-visibility',
   comConf: {
     vars: {
-      saving: true,
+      saving: false,
+      ENABLE_CONSOLE: 'no',
+      changed: false,
     },
     items: [
       {
@@ -18,7 +20,9 @@ export default {
             text: 'i18n:saving',
           },
         ],
-        enabled: 'changed',
+        enabled: {
+          changed: true,
+        },
         action: 'save',
         shortcut: 'CTRL+S',
       },

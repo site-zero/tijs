@@ -54,14 +54,14 @@
   // Methods
   //-------------------------------------------------------
   function OnClickMask() {
-    console.log('OnClickMask');
+    //console.log('OnClickMask');
     state.opened.clear();
   }
   //-------------------------------------------------------
   // Life Hooks
   //-------------------------------------------------------
   onMounted(() => {
-    console.log('onMounted');
+    //console.log('onMounted');
     state.opened.clear();
   });
 </script>
@@ -79,30 +79,32 @@
     <template
       v-for="it in UsedBarItems"
       :key="it.uniqKey">
-      <!--......|< Action >|......-->
-      <ItemAsAction
-        v-if="'action' == it.type"
-        v-bind="it" />
-      <!--......|< Group >|......-->
-      <ItemAsFolderGroup
-        v-else-if="'group' == it.type"
-        v-bind="it" />
-      <!--......|< Sep >|......-->
-      <div
-        v-else-if="'sep' == it.type"
-        class="bar-sep"
-        :aspect="it.aspect"
-        :item-depth="it.depth"
-        :item-index="it.index"></div>
-      <!--......|< Unknown >|......-->
-      <div
-        v-else
-        class="bar-unknwon"
-        :aspect="it.aspect"
-        :item-depth="it.depth"
-        :item-index="it.index">
-        {{ it.uniqKey }}
-      </div>
+      <template v-if="!it.hidden">
+        <!--......|< Action >|......-->
+        <ItemAsAction
+          v-if="'action' == it.type"
+          v-bind="it" />
+        <!--......|< Group >|......-->
+        <ItemAsFolderGroup
+          v-else-if="'group' == it.type"
+          v-bind="it" />
+        <!--......|< Sep >|......-->
+        <div
+          v-else-if="'sep' == it.type"
+          class="bar-sep"
+          :aspect="it.aspect"
+          :item-depth="it.depth"
+          :item-index="it.index"></div>
+        <!--......|< Unknown >|......-->
+        <div
+          v-else
+          class="bar-unknwon"
+          :aspect="it.aspect"
+          :item-depth="it.depth"
+          :item-index="it.index">
+          {{ it.uniqKey }}
+        </div>
+      </template>
     </template>
   </div>
 </template>
