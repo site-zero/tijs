@@ -9,13 +9,13 @@ import {
   Vars,
 } from '../../../core';
 
-export type ActionBarPayload = {
-  eventName: string;
+export type ActionBarEvent = {
+  name: string;
   payload?: any;
 };
 
 export type ActionBarEmitter = {
-  (eventName: 'fire', payload?: ActionBarPayload): void;
+  (eventName: 'fire', payload?: ActionBarEvent): void;
 };
 
 export type ABarState = {

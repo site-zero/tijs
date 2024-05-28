@@ -55,6 +55,7 @@ export type NameValue<N, V> = {
 };
 
 export type NameStrValue = NameValue<string, string>;
+export type NameAnyValue = NameValue<string, any>;
 
 /**
  * 可以被转换为 Icon 对象的类型
@@ -774,7 +775,7 @@ export const BUS_KEY: InjectionKey<TiAppBus> = Symbol('EVENT_BUS');
 export type CustomizedEmitAdaptor = (
   eventName: string,
   payload: any,
-  emit: Callback2<string, any>
+  emit: (name: string, payload?: any) => void
 ) => void;
 
 export function isCustomizedEmitAdaptor(

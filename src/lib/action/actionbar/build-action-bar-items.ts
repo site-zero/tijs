@@ -51,7 +51,7 @@ function makeItemAction(
       let payload = Util.explainObj(vars, ei.payload, {
         evalFunc: false,
       });
-      emit('fire', { eventName, payload });
+      emit('fire', { name: eventName, payload });
     };
   }
 
@@ -84,7 +84,7 @@ function makeItemAction(
   // String 作为事件名称
   let eventName = action;
   return (vars: Vars) => {
-    emit('fire', { eventName, payload: vars });
+    emit('fire', { name: eventName, payload: vars });
   };
 }
 

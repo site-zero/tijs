@@ -1,8 +1,8 @@
 <script lang="ts" setup>
   import _ from 'lodash';
-  import { computed, inject, onUnmounted, provide } from 'vue';
+  import { computed, onUnmounted } from 'vue';
   import { BlockProps, TiActionBar, TiIcon, useEmitAdaptor } from '../../';
-  import { BUS_KEY, Callback2, TiAppBus, createBus } from '../../../core';
+  import { Callback2 } from '../../../core';
   import { COM_TYPES } from '../../lib-com-types';
   import { useBlock } from './use-block';
 
@@ -17,7 +17,9 @@
   //  Features
   //
   const Block = computed(() => useBlock(props, {}));
-  let emit = defineEmits<Callback2<string, any>>();
+  let emit = defineEmits<{
+    (name: string, payload?: any): void;
+  }>();
   const OnAllEvents = useEmitAdaptor(COM_TYPE, props, emit);
 
   //
