@@ -91,6 +91,7 @@
       'is-focused': _box_state.boxFocused,
       'no-focused': !_box_state.boxFocused,
       'show-border': !props.hideBorder,
+      'hide-border': props.hideBorder,
       'show-tip-list': showTipList.value,
     })
   );

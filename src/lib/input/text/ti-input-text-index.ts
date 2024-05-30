@@ -14,7 +14,7 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.InputText;
 
 const TiInputTextInfo: TiComInfo = {
-  tags: ['scaffold'],
+  tags: ['ing '],
   icon: 'fas-message',
   race: TiComRace.INPUT,
   name: COM_TYPE,
@@ -26,6 +26,11 @@ const TiInputTextInfo: TiComInfo = {
     zh_hk: zh_cn,
   },
   com: TiInputText,
+  liveStyle: {
+    width: '80%',
+    minWidth: '120px',
+    maxWidth: '800px',
+  },
   install: (app: App) => {
     app.component(COM_TYPE, TiInputText);
   },
@@ -35,3 +40,4 @@ const TiInputTextInfo: TiComInfo = {
 
 export * from './ti-input-text-types';
 export { TiInputText, TiInputTextInfo };
+
