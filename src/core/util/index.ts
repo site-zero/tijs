@@ -5,3 +5,4 @@ export * from './util-explain';
 export * from './util-getter';
 export * from './util-path';
 export * from './util-select-value';
+export * from './util-diff';

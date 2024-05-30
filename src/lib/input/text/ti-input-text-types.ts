@@ -1,4 +1,4 @@
-import { PlaceholderFeatureProps, ReadonlyProps } from 'src/lib/_features';
+import { PlaceholderFeatureProps, ReadonlyProps } from '../../';
 import { CommonProps, Vars } from '../../../core';
 
 export type InputTextProps = CommonProps &

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, reactive } from 'vue';
   import { IconTextState, TiIcon } from '../../';
+  import { I18n } from '../../../core';
   import { RoadblockProps } from './ti-roadblock-types';
   import { RoadblockEvents, useRoadblock } from './use-roadblock';
   //--------------------------------------------
@@ -13,6 +14,7 @@
   let props = withDefaults(defineProps<RoadblockProps>(), {
     className: '',
     icon: 'fas-exclamation-triangle',
+    autoI18n: true,
   });
   //--------------------------------------------
   let emit = defineEmits<{
@@ -95,7 +97,7 @@
             <span
               v-if="li.text"
               class="link-text"
-              >{{ li.text }}</span
+              >{{ I18n.text(li.text) }}</span
             >
           </a>
         </li>

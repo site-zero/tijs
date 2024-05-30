@@ -9,7 +9,13 @@
     ref,
     watch,
   } from 'vue';
-  import { Alert, TiIcon, useFieldChange, useLargeScrolling } from '../../';
+  import {
+    Alert,
+    TiIcon,
+    TiRoadblock,
+    useFieldChange,
+    useLargeScrolling,
+  } from '../../';
   import { CssUtils, Size2D, Util, getLogger } from '../../../core';
   import { COM_TYPES } from '../../lib-com-types';
   import TableRow from './TableRow.vue';
@@ -84,7 +90,7 @@
   //-------------------------------------------------------
   //                     View Measure
   //-------------------------------------------------------
-  useViewMeasure({
+  const _mea = useViewMeasure({
     getMainElement: () => $main.value,
     setViewport: (viewport: Size2D) => {
       scrolling.viewport = viewport;
@@ -92,8 +98,6 @@
     setScrollTop: (scrollTop: number) => {
       scrolling.scrollTop = scrollTop;
     },
-    onMounted,
-    onUnmounted,
     debounce: 300,
   });
   //-------------------------------------------------------
@@ -105,6 +109,7 @@
   const TableData = computed(() => {
     return Table.value.getTableData(selection);
   });
+  const hasData = computed(() => TableData.value.length > 0);
   const ShowRowMarker = computed(
     () => props.showCheckbox || props.showRowIndex
   );
@@ -127,17 +132,18 @@
   //-------------------------------------------------------
   //                      计算格子的列
   //-------------------------------------------------------
-  const RealN = computed(()=>{
+  const RealN = computed(() => {
     let N = 0;
-    for(let col of TableColumns.value){
-      if(!col.candidate){
-        N += 1
+    for (let col of TableColumns.value) {
+      if (!col.candidate) {
+        N += 1;
       }
     }
-    return N
-  })
+    return N;
+  });
+  //-------------------------------------------------------
   const MainStyle = computed(() => {
-    let N = RealN.value
+    let N = RealN.value;
     let cols = [];
     // 未定制列的宽度
     if (_.isEmpty(columnSizes.value)) {
@@ -171,7 +177,7 @@
   //                 虚拟占位行
   //-------------------------------------------------------
   const VirtualRowStyle = computed(() => {
-    let N = RealN.value
+    let N = RealN.value;
     // 显示行头标记列，需要凭空为列+1
     if (ShowRowMarker.value) {
       N++;
@@ -224,7 +230,7 @@
   //                Event Cell Changed
   //-------------------------------------------------------
   function onCellChange(changed: TableCellChanged) {
-    let { colIndex, rowIndex, name, value, oldVal } = changed;
+    let { colIndex, rowIndex } = changed;
     log.debug('OnCellChange', changed);
 
     let oldRowData = _.nth(TableData.value, rowIndex)?.rawData;
@@ -255,7 +261,12 @@
       scrolling.lineHeights = [];
       scrolling.lineMarkers = [];
       selection.ids = Table.value.getRowIds();
-    }
+      if (!_mea.isMainWatched()) {
+        _mea.watchMain();
+      }
+      _mea.updateMeasure();
+    },
+    { deep: true }
   );
   //-------------------------------------------------------
   watch(
@@ -277,6 +288,7 @@
     () => {
       log.debug('keepColumns changed', props.keepColumns);
       loadColumnSizes(columnSizes, Keep.value);
+      _mea.updateMeasure();
     }
   );
   //-------------------------------------------------------
@@ -290,6 +302,11 @@
       Keep
     );
     loadColumnSizes(columnSizes, Keep.value);
+    _mea.watchMain();
+  });
+  //-------------------------------------------------------
+  onUnmounted(() => {
+    _mea.unWatchMain();
   });
   //-------------------------------------------------------
 </script>
@@ -342,6 +359,7 @@
         </template>
       </template>
       <!-- 表格体 -->
+
       <template
         v-for="row in TableData"
         :key="row.id">
@@ -373,6 +391,19 @@
           @cell-open="Table.OnCellOpen(selection, $event)"
           @cell-change="onCellChange" />
       </template>
+      <!-- 显示空数据提示 -->
+      <div
+        v-if="!hasData"
+        class="empty-tip"
+        :style="VirtualRowStyle">
+        <TiRoadblock
+          text="Please add shipments here"
+          mode="auto"
+          layout="A"
+          size="normal"
+          opacity="shadowy"
+          icon="zmdi-apps" />
+      </div>
     </main>
     <!-- 显示拖拽的列分割条-->
     <div

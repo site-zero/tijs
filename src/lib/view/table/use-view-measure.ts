@@ -15,8 +15,6 @@ export type ViewMeasureProps = {
   getMainElement: FuncA0<HTMLElement | undefined>;
   setViewport: Callback1<Size2D>;
   setScrollTop?: Callback1<number>;
-  onMounted?: Callback1<Callback>;
-  onUnmounted?: Callback1<Callback>;
   debounce?: number;
 };
 
@@ -27,14 +25,7 @@ export type ViewMeasureProps = {
  * @returns
  */
 export function useViewMeasure(props: ViewMeasureProps) {
-  let {
-    getMainElement,
-    setViewport,
-    setScrollTop,
-    onMounted,
-    onUnmounted,
-    debounce = 500,
-  } = props;
+  let { getMainElement, setViewport, setScrollTop, debounce = 500 } = props;
   let updateViewport = function ($main: HTMLElement) {
     log.debug('updateViewport =>', $main);
     nextTick(() => {
@@ -55,7 +46,10 @@ export function useViewMeasure(props: ViewMeasureProps) {
     }
   };
 
-  function updateMeasure($main: HTMLElement) {
+  function updateMeasure($main?: HTMLElement) {
+    if(!$main) {
+      $main = getMainElement() 
+    }
     if ($main) {
       updateViewport($main);
       updateScrollTop($main);
@@ -79,31 +73,42 @@ export function useViewMeasure(props: ViewMeasureProps) {
     }
   });
 
-  if (onMounted) {
-    onMounted(() => {
-      let $main = getMainElement();
-      if ($main) {
-        updateMeasure($main);
-        $main.addEventListener('scroll', onTopScroll);
-        resizeObserver.observe($main);
-      }
-    });
+  let main_watched = false;
+
+  function isMainWatched() {
+    return main_watched;
   }
 
-  if (onUnmounted) {
-    onUnmounted(() => {
-      let $main = getMainElement();
-      if ($main) {
-        $main.removeEventListener('scroll', onTopScroll);
-        resizeObserver.disconnect();
-      }
-    });
+  function watchMain() {
+    if (main_watched) {
+      log.warn('$main elemnent has been watched already!');
+      return;
+    }
+    let $main = getMainElement();
+    if ($main) {
+      updateMeasure($main);
+      $main.addEventListener('scroll', onTopScroll);
+      resizeObserver.observe($main);
+      main_watched = true;
+    }
+  }
+
+  function unWatchMain() {
+    let $main = getMainElement();
+    if ($main) {
+      $main.removeEventListener('scroll', onTopScroll);
+      resizeObserver.disconnect();
+    }
+    main_watched = false;
   }
 
   // 貌似啥也不用返回
-  // return {
-  //   updateViewport,
-  //   updateScrollTop,
-  //   updateMeasure,
-  // };
+  return {
+    updateViewport,
+    updateScrollTop,
+    updateMeasure,
+    isMainWatched,
+    watchMain,
+    unWatchMain
+  };
 }

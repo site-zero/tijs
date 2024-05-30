@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { FieldChange, FieldValueChange, I18n, Vars } from '../../../core';
+import { FieldChange, FieldValueChange, I18n, Util, Vars } from '../../../core';
 import { getLogger } from '../../../core/log/ti-log';
 import { Alert } from '../../_modal';
 import {
@@ -195,7 +195,6 @@ export function useFieldChange<T extends AbstractField>(
    * @returns 差异数据
    */
   function getDiffData(data: Vars, change: Vars | FieldChange[]): Vars {
-    let diff: Vars = {};
     let meta: Vars;
 
     // 原始修改数组
@@ -207,14 +206,7 @@ export function useFieldChange<T extends AbstractField>(
       meta = change;
     }
 
-    _.forEach(meta, (v0, k) => {
-      let vOld = _.get(data, k);
-      if (!_.isEqual(vOld, v0)) {
-        _.set(diff, k, v0);
-      }
-    });
-
-    return diff;
+    return Util.getDiff(data, meta);
   }
 
   //...................................................
