@@ -85,6 +85,7 @@
     :class="TopClass"
     :style="TopStyle"
     spellcheck="false"
+    :readonly="props.readonly"
     @change="onTextChange"
     @focus="_focused = true"
     @blur="_focused = false"
@@ -109,6 +110,14 @@
       &.is-focused {
         border-color: var(--ti-color-primary);
       }
+    }
+    &[readonly] {
+      border-color: var(--ti-color-border-dark);
+      &.is-focused {
+        border-color: var(--ti-color-border-dark);
+      }
+      background-color: var(--ti-color-disable-r);
+      color: var(--ti-color-disable);
     }
   }
 </style>

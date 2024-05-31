@@ -33,6 +33,11 @@ div.ti-input-box {
     position: relative;
     z-index: $z-mask + 1;
   }
+
+  &.is-readonly {
+    background-color: var(--ti-color-disable-r);
+    color: var(--ti-color-disable);
+  }
 }
 
 .ti-input-tip-mask {
@@ -60,9 +65,7 @@ div.ti-input-box {
     background-color: var(--ti-color-card);
     border: 1px solid var(--ti-color-primary);
     border-radius: var(--ti-measure-r-s);
-    box-shadow:
-      -1px -1px var(--ti-color-light),
-      1px 1px var(--ti-color-dark),
+    box-shadow: -1px -1px var(--ti-color-light), 1px 1px var(--ti-color-dark),
       4px 4px 12px var(--ti-color-mask-thin);
     overflow: auto;
   }

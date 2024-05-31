@@ -81,7 +81,9 @@
   );
   const BoxAutoPrefixIcon = computed(() => Box.value.getBoxAutoPrefixIcon());
   //-----------------------------------------------------
-  const hasValue = computed(() => !_.isNil(_box_state.boxValue) && _box_state.boxValue);
+  const hasValue = computed(
+    () => !_.isNil(_box_state.boxValue) && _box_state.boxValue
+  );
   const showTipList = computed(() => (_tips.value ? true : false));
   const Placeholder = computed(() => Box.value.getPlaceholder());
   const TopClass = computed(() =>
@@ -93,6 +95,7 @@
       'show-border': !props.hideBorder,
       'hide-border': props.hideBorder,
       'show-tip-list': showTipList.value,
+      'is-readonly': props.readonly,
     })
   );
   const TopStyle = computed((): Vars => {
@@ -139,6 +142,9 @@
   const $input = ref<any>(null);
   //-----------------------------------------------------
   function OnInputFocused() {
+    if (props.readonly) {
+      return;
+    }
     _box_state.boxFocused = true;
     if (props.autoSelect) {
       $input.value.select();
