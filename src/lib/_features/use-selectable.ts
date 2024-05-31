@@ -9,7 +9,9 @@ export type SelectableState<ID> = {
   checkedIds: Map<ID, boolean>;
   ids: ID[];
 };
-export type SelectEmitInfo<ID> = Omit<SelectableState<ID>, 'ids'> & {
+export type SelectEmitInfo<ID> = {
+  currentId?: ID | null;
+  checkedIds: Map<ID, boolean>;
   current?: Vars;
   checked: Vars[];
   oldCurrentId?: ID | null;
