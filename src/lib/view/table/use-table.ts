@@ -167,12 +167,26 @@ export function useTable(props: TableProps, emit: TableEmitter) {
 
     OnTableHeadCheckerClick(selection: TableSelection, status: CheckStatus) {
       let { ids, checkedIds } = selection;
+      let oldCurrentId = _.cloneDeep(selection.currentId);
+      let oldCheckedIds = _.cloneDeep(selection.checkedIds);
       checkedIds.clear();
       if ('all' != status) {
         for (let id of ids) {
           checkedIds.set(id, true);
         }
       }
+
+      //
+      // Prepare the emit info
+      //
+      let info = selectable.getSelectionEmitInfo(
+        selection,
+        props.data,
+        oldCheckedIds,
+        oldCurrentId
+      ) as TableSelectEmitInfo;
+
+      emit('select', info);
     },
 
     OnRowSelect(selection: TableSelection, rowEvent: TableEventPayload) {
@@ -236,7 +250,8 @@ export function useTable(props: TableProps, emit: TableEmitter) {
       //   columns.length
       // );
       selection.columnIndex = colIndex ?? -1;
-      if (!selection.checkedIds.get(row.id)) {
+      //if (!selection.checkedIds.get(row.id)) {
+      if (selection.currentId != row.id) {
         let oldCurrentId = _.cloneDeep(selection.currentId);
         let oldCheckedIds = _.cloneDeep(selection.checkedIds);
         log.debug('OnCellSelect', rowEvent);
