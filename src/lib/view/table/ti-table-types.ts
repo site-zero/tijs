@@ -4,6 +4,7 @@ import {
   FieldComProps,
   FieldName,
   KeepInfo,
+  RoadblockProps,
   SelectEmitInfo,
   SelectableProps,
   SelectableState,
@@ -204,6 +205,8 @@ export type TableProps = CommonProps &
      * 单位为`px`
      */
     rowMinHeight?: number;
+
+    emptyRoadBlock?: RoadblockProps;
   };
 
 type TableColumnAspect = {

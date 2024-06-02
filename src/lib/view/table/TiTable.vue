@@ -58,6 +58,14 @@
     canSelect: true,
     canCheck: true,
     changeMode: 'diff',
+    emptyRoadBlock: () => ({
+      text: 'i18n:empty-data',
+      mode: 'auto',
+      layout: 'A',
+      size: 'normal',
+      opacity: 'shadowy',
+      icon: 'zmdi-apps',
+    }),
   });
   //-------------------------------------------------------
   const Keep = computed(() => useKeepTable(props));
@@ -396,13 +404,7 @@
         v-if="!hasData"
         class="empty-tip"
         :style="VirtualRowStyle">
-        <TiRoadblock
-          text="Please add shipments here"
-          mode="auto"
-          layout="A"
-          size="normal"
-          opacity="shadowy"
-          icon="zmdi-apps" />
+        <TiRoadblock v-bind="props.emptyRoadBlock" />
       </div>
     </main>
     <!-- 显示拖拽的列分割条-->
