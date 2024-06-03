@@ -29,6 +29,7 @@ export const COM_TYPES = {
   InputColor: 'TiInputColor',
   InputIcon: 'TiInputIcon',
   InputGroup: 'TiInputGroup',
+  InputNum: 'TiInputNum',
   InputText: 'TiInputText',
   Toggle: 'TiToggle',
   Transfer: 'TiTransfer',

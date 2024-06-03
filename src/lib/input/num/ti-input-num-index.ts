@@ -1,41 +1,43 @@
 import { App } from 'vue';
 import { TiComInfo, TiComRace } from '../../../core/_top/_types';
 import { COM_TYPES } from '../../lib-com-types';
-import TiInputText from './TiInputText.vue';
+import TiInputNum from './TiInputNum.vue';
 import example from './example';
 
 const en_us = {
-  'com-name': 'Text Box',
+  'com-name': 'InputNum',
 };
 const zh_cn = {
-  'com-name': '文本框',
+  'com-name': '数字输入',
 };
 
-const COM_TYPE = COM_TYPES.InputText;
+const COM_TYPE = COM_TYPES.InputNum;
 
-const TiInputTextInfo: TiComInfo = {
-  icon: 'fas-message',
+const TiInputNumInfo: TiComInfo = {
+  tags: ['ing'],
+  icon: 'zmdi-n-6-square',
   race: TiComRace.INPUT,
   name: COM_TYPE,
-  text: 'i18n:ti-input-text-com-name',
+  text: 'i18n:ti-input-num-com-name',
   i18n: {
     en_us: en_us,
     en_uk: en_us,
     zh_cn: zh_cn,
     zh_hk: zh_cn,
   },
-  com: TiInputText,
+  com: TiInputNum,
   liveStyle: {
     width: '80%',
     minWidth: '120px',
-    maxWidth: '800px',
+    maxWidth: '300px',
+    paddingBottom: '30%',
   },
   install: (app: App) => {
-    app.component(COM_TYPE, TiInputText);
+    app.component(COM_TYPE, TiInputNum);
   },
   defaultProps: 'simple',
   exampleProps: [example.simple],
 };
 
-export * from './ti-input-text-types';
-export { TiInputText, TiInputTextInfo };
+export * from './ti-input-num-types';
+export { TiInputNum, TiInputNumInfo };

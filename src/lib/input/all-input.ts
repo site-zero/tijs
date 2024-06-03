@@ -3,6 +3,7 @@ import { TiInputInfo } from './box/ti-input-index';
 import { TiCheckInfo } from './check/ti-check-index';
 import { TiInputColorInfo } from './color/ti-input-color-index';
 import { TiInputCurrencyInfo } from './currency/ti-input-currency-index';
+import { TiInputNumInfo } from './num/ti-input-num-index';
 import { TiInputDateInfo } from './date/ti-input-date-index';
 import { TiInputDatetimeInfo } from './datetime/ti-input-datetime-index';
 import { TiDroplistInfo } from './droplist/ti-droplist-index';
@@ -21,6 +22,7 @@ export default {
   TiToggle: TiToggleInfo,
   TiInputColor: TiInputColorInfo,
   TiInputCurrency: TiInputCurrencyInfo,
+  TiInputNum: TiInputNumInfo,
   TiInputDate: TiInputDateInfo,
   TiInputDatetime: TiInputDatetimeInfo,
   TiInputTime: TiInputTimeInfo,
@@ -42,3 +44,4 @@ export * from './text/ti-input-text-index';
 export * from './time/ti-input-time-index';
 export * from './toggle/ti-toggle-index';
 export * from './transfer/ti-transfer-index';
+export * from './num/ti-input-num-index';
