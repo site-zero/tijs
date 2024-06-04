@@ -8,10 +8,10 @@
     TiList,
     useValueBox,
   } from '../../';
-  import { CssUtils, Rect, Rects, Vars } from '../../../core';
+  import { CssUtils, Match, Rect, Rects, Vars } from '../../../core';
   import { COM_TYPES } from '../../lib-com-types';
   import { InputBoxProps, InputBoxState } from './ti-input-types';
-  import { dumpBoxState, resetTipList, updateTipList } from './use-input-box';
+  import { resetTipList, updateTipList } from './use-input-box';
   import { getTipListConf, getTipWrapperStyle } from './use-tip-box';
   //-----------------------------------------------------
   defineOptions({
@@ -167,9 +167,8 @@
     if (props.mustInOptions) {
       // 是不是清空了？
       let val = _box_state.boxInputing;
-      if (!val) {
-        Box.value.doChangeValue('');
-      }
+      console.log('OnClickTipMask', val);
+      Box.value.doChangeValue(val ?? '');
     }
     // 自由输入模式
     else {
@@ -200,11 +199,20 @@
     }
     // 取消
     else if ('Escape' == event.key) {
+      resetTipList(_box_state, _tips);
+      OnInputBlur();
     }
     // 确认
     else if ('Enter' == event.key) {
+      resetTipList(_box_state, _tips);
     }
   }
+  //-----------------------------------------------------
+  const BoxOptionFilter = computed(() => {
+    if (props.optionFilter) {
+      return Match.parse(props.optionFilter, false);
+    }
+  });
   //-----------------------------------------------------
   function doUpdateTipList() {
     updateTipList(_box_state.boxInputing, _tips, {
@@ -214,14 +222,18 @@
       tipUseHint: props.tipUseHint ?? false,
       tipTidyBy: props.tipTidyBy ?? ['main'],
       tidyValue: Box.value.tidyValue,
+      optionFiler: BoxOptionFilter.value,
     });
   }
   //-----------------------------------------------------
   function OnListSelect(payload: ListSelectEmitInfo) {
     let { currentId } = payload;
+    console.log('OnListSelect', currentId);
     let val = _.isNumber(currentId) ? `${currentId}` : currentId;
-    Box.value.doChangeValue(val || '');
+    Box.value.doChangeValue(val ?? '');
     // TODO if multi 可能需要特别处理一下
+    resetTipList(_box_state, _tips);
+    OnInputBlur()
   }
   //-----------------------------------------------------
   watch(

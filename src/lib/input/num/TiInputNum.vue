@@ -15,7 +15,7 @@
   //-----------------------------------------------------
   const props = withDefaults(defineProps<InputNumProps>(), {
     value: null,
-    precise: 1,
+    precise: 0,
   });
   //-----------------------------------------------------
   const InputValue = computed(() => {
@@ -39,8 +39,10 @@
   <TiInput
     :readonly="props.readonly"
     :placeholder="props.placeholder"
-    :auto-i18n="props.autoI18n"
+    :autoI18n="props.autoI18n"
     :value="InputValue"
+    :hideBorder="props.hideBorder"
+    :boxFocused="props.boxFocused"
     @change="onChange" />
 </template>
 <style lang="scss" scoped>

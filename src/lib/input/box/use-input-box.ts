@@ -1,10 +1,7 @@
 import { Ref } from 'vue';
-import { Dicts, Vars } from '../../../core';
+import { DictItem, Dicts, TiMatch, Vars } from '../../../core';
 import { ValueInputTidyMode } from '../../_features';
-import {
-  InputBoxState,
-  TipBoxShowTime
-} from './ti-input-types';
+import { InputBoxState, TipBoxShowTime } from './ti-input-types';
 
 export type LoadTipListOptions = {
   box: InputBoxState;
@@ -13,6 +10,7 @@ export type LoadTipListOptions = {
   tipUseHint: boolean;
   tipTidyBy: ValueInputTidyMode[];
   tidyValue: (val: any, mode?: ValueInputTidyMode[]) => Promise<any>;
+  optionFiler?: TiMatch;
 };
 
 export function resetTipList(
@@ -34,7 +32,15 @@ export async function updateTipList(
   tips: Ref<Vars[] | undefined>,
   options: LoadTipListOptions
 ) {
-  let { dict, box, tipShowTime, tipUseHint, tipTidyBy, tidyValue } = options;
+  let {
+    dict,
+    box,
+    tipShowTime,
+    tipUseHint,
+    tipTidyBy,
+    tidyValue,
+    optionFiler,
+  } = options;
   // 未指定字典
   if (!dict) {
     return;
@@ -87,8 +93,20 @@ export async function updateTipList(
       hintVal = await tidyValue(hint, tipTidyBy);
     }
     // console.log(`dict.queryStdData('${hintVal}')`);
-    dict.queryStdData(hintVal, box.lastAbort.signal).then((list) => {
-      __set_tip_list(tips, list);
+    dict.queryData(hintVal, box.lastAbort.signal).then((list) => {
+      let list2 = [] as DictItem<any>[];
+      if (optionFiler) {
+        for (let li of list) {
+          if (optionFiler.test(li)) {
+            list2.push(dict.toStdItem(li));
+          }
+        }
+      } else {
+        for (let li of list) {
+          list2.push(dict.toStdItem(li));
+        }
+      }
+      __set_tip_list(tips, list2);
     });
   }
   // 全量查询
@@ -99,7 +117,19 @@ export async function updateTipList(
     }
     //console.log(`dict.queryStdData('${hintVal}')`);
     dict.queryData(box.lastAbort.signal).then((list) => {
-      __set_tip_list(tips, list);
+      let list2 = [] as DictItem<any>[];
+      if (optionFiler) {
+        for (let li of list) {
+          if (optionFiler.test(li)) {
+            list2.push(dict.toStdItem(li));
+          }
+        }
+      } else {
+        for (let li of list) {
+          list2.push(dict.toStdItem(li));
+        }
+      }
+      __set_tip_list(tips, list2);
     });
   }
 }

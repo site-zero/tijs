@@ -246,6 +246,7 @@ export function useValueBox<T extends any>(
       return
     }
     let v = await tidyValue(val);
+    console.log("doChangeValue", val, v)
     emit('change', v);
   }
   //

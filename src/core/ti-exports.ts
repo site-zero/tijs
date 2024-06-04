@@ -6,7 +6,7 @@ export * as Bank from './_top/ti-bank';
 export * from './_top/ti-bus';
 export * as DateTime from './_top/ti-datetime';
 export * as Icons from './_top/ti-icons';
-export * as Random from './_top/ti-random';
+export * from './_top/ti-random';
 export * as Rects from './_top/ti-rect';
 export * from './_top/time';
 export * as Alg from './alg/ti-alg';
@@ -24,4 +24,3 @@ export * as Tmpl from './tmpl/ti-tmpl';
 export * as Util from './util';
 export * from './web';
 export * as Be from './web/behaviors';
-

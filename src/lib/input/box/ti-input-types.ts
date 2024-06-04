@@ -17,10 +17,12 @@ export type InputBoxState = ValueBoxState<any> & {
 
 //--------------------------------------------------
 export type InputBoxProps = ValueBoxProps<any> &
-  TipBoxProps & {
-    hideBorder?: boolean;
-    boxFocused?: boolean;
-  };
+  TipBoxProps & InputBoxAspect;
+//--------------------------------------------------
+export type InputBoxAspect = {
+  hideBorder?: boolean;
+  boxFocused?: boolean;
+};
 
 //--------------------------------------------------
 //
@@ -28,6 +30,9 @@ export type InputBoxProps = ValueBoxProps<any> &
 //
 //--------------------------------------------------
 export type TipBoxProps = {
+  // 一个过滤器 AutoMatch，用来预先过滤字典项
+  optionFilter?: any;
+
   // 提示框显示时机
   tipShowTime?: TipBoxShowTime;
 

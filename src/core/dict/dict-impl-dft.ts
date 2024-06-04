@@ -55,7 +55,7 @@ export function dft_query<T, V>(): QueryDictItems<T, V, any> {
 
 export function dft_children<T, V>(): QueryDictItems<T, V, V> {
   // 默认的 get_children 就是什么都不获取
-  return (_dict: IDict<T, V>, _v: V, _signal?:AbortSignal) => {
+  return (_dict: IDict<T, V>, _v: V, _signal?: AbortSignal) => {
     return new Promise((resolve) => {
       let re = [] as T[];
       resolve(re);
@@ -82,13 +82,8 @@ export function dft_is_matched<T, V>(dict: DictImpl<T, V>): IsMatched<T, V> {
     let std = dict.toStdItem(it);
     let text = std.text.toLowerCase();
     let vals = (std.value + '').toLowerCase();
-    let am = Match.parse(val);
-    if (
-      am.test(std.text) ||
-      am.test(std.value) ||
-      am.test(text) ||
-      am.test(vals)
-    ) {
+    let mts = `${val}`.toLowerCase();
+    if (text.indexOf(mts) >= 0 || vals.indexOf(mts) >= 0) {
       return true;
     }
     return false;
