@@ -1,4 +1,3 @@
-import { KeepInfo } from '../../../_features/use-keep';
 import {
   LayoutItem,
   LayoutPanelProps,
@@ -9,12 +8,7 @@ import {
 //
 // Tab Layout
 //
-export type LayoutTabsProps = LayoutProps &
-  LayoutPanelProps &
-  TabsAspect & {
-    defaultTab?: string | number;
-    keepTab?: KeepInfo;
-  };
+export type LayoutTabsProps = LayoutProps & LayoutPanelProps & TabsAspect;
 
 export type LayoutTabItem = LayoutItem & {
   current?: boolean;

@@ -15,6 +15,7 @@ import {
   TranSpeed,
   Vars,
 } from '../../../core';
+import { KeepInfo } from '../../_features';
 
 export type LayoutSchema = Record<string, ComRef>;
 
@@ -79,6 +80,9 @@ export type TabsAspect = {
   wrapTabs?: boolean;
 
   tabItemSpace?: AspectSize;
+
+  defaultTab?: string | number;
+  keepTab?: KeepInfo;
 };
 
 export type TabsProps = OptionValueProps & TabsAspect;
