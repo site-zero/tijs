@@ -3,6 +3,7 @@
   import { computed } from 'vue';
   import { TiInput } from '../../';
   import { InputNumProps } from './ti-input-num-types';
+  import { Num } from '../../../core';
   //-----------------------------------------------------
   defineOptions({
     inheritAttrs: false,
@@ -14,6 +15,7 @@
   //-----------------------------------------------------
   const props = withDefaults(defineProps<InputNumProps>(), {
     value: null,
+    precise: 1,
   });
   //-----------------------------------------------------
   const InputValue = computed(() => {
@@ -28,7 +30,8 @@
   //-----------------------------------------------------
   function onChange(str: string) {
     let v = (str as any) * 1;
-    emit('change', v);
+    let v2 = Num.round(v, props.precise ?? 1);
+    emit('change', v2);
   }
   //-----------------------------------------------------
 </script>
