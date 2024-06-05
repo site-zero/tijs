@@ -93,7 +93,6 @@ export function precise(n: number, p = 2) {
 }
 
 export function round(n: number, precision = 100) {
-  console.log('Num.round', n, precision)
   if (precision === 0) {
     return n;
   }
