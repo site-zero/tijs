@@ -1,6 +1,11 @@
 import _ from 'lodash';
 import { ComputedRef, Ref } from 'vue';
-import { CheckStatus, SelectableFeature, useSelectable } from '../../';
+import {
+  TableRowID,
+  CheckStatus,
+  SelectableFeature,
+  useSelectable,
+} from '../../';
 import {
   Callback,
   Callback1,
@@ -13,7 +18,6 @@ import {
   TableEventPayload,
   TableProps,
   TableRowData,
-  TableRowID,
   TableSelectEmitInfo,
   TableSelection,
   TableStrictColumn,

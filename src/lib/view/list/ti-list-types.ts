@@ -1,4 +1,4 @@
-import { RoadblockProps } from '../../';
+import { RoadblockProps, StdListItemProps, TableRowID } from '../../';
 import {
   AnyOptionItem,
   AspectSize,
@@ -12,27 +12,10 @@ import {
   SelectEmitInfo,
   SelectableProps,
 } from '../../../lib/_features/use-selectable';
-import { TableRowID } from '../table/ti-table-types';
 
 export type ListProps = CommonProps &
-  SelectableProps<TableRowID> & {
-    /**
-     * 从指定的对象获取显示图标
-     * 默认，相当于 `icon`
-     */
-    getIcon?: string | Convertor<Vars, IconInput | undefined>;
-    /**
-     * 从指定的对象获取显示文本
-     * 默认，相当于 `text`
-     */
-    getText?: string | Convertor<Vars, string | undefined>;
-
-    /**
-     * 从指定的对象获取显示提示信息
-     * 默认，相当于 `tip`
-     */
-    getTip?: string | Convertor<Vars, string | undefined>;
-
+  SelectableProps<TableRowID> &
+  StdListItemProps & {
     /**
      * 当列表内容为空的时候，显示的内容
      */

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { AnyGetter, ValGetter, Vars } from '../ti';
+import { AnyGetter, OptionItem, StdOptionItem, ValGetter, Vars } from '../ti';
 
 export type DictSetup = {
   value?: string | AnyGetter;
@@ -183,6 +183,15 @@ export class DictItem<V> {
     this._text = text;
     this._value = value;
     this._tip = tip;
+  }
+
+  toOptionItem(): OptionItem<V> {
+    return {
+      icon: this._icon,
+      text: this._text,
+      tip: this._tip,
+      value: this._value!,
+    };
   }
 
   get icon(): string | undefined {

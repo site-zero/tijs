@@ -8,6 +8,8 @@ export * from './use-placeholder';
 export * from './use-prefix-suffix';
 export * from './use-selectable';
 export * from './use-visibility';
+export * from './use-std-list-item';
+export * from './use-options';
 
 // 设计的不好，应该重构
 export * from './use-boolean-input';

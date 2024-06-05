@@ -1,0 +1,43 @@
+.ti-transfer {
+  @include flex-align-v-nowrap;
+  width: 100%;
+  height: 100%;
+  > main {
+    flex: 1 1 auto;
+    display: grid;
+    grid-template-columns: 1fr 100px 1fr;
+    grid-template-rows: auto 1fr auto;
+    gap: var(--ti-gap-s);
+    background-color: var(--ti-color-body);
+    grid-template-areas:
+      'filter    actions   menu'
+      'can-list  actions   sel-list'
+      'pager     actions   sel-list';
+    > div {
+      &.part-filter {
+        grid-area: filter;
+      }
+
+      &.part-list {
+        background-color: var(--ti-color-card);
+        border-radius: var(--ti-measure-r-s);
+        overflow: hidden;
+        &.as-can {
+          grid-area: can-list;
+        }
+        &.as-sel {
+          grid-area: sel-list;
+        }
+      }
+      &.part-pager {
+        grid-area: pager;
+      }
+      &.part-actions {
+        grid-area: actions;
+      }
+      &.part-menu {
+        grid-area: menu;
+      }
+    }
+  }
+}

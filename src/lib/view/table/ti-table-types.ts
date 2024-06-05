@@ -8,6 +8,7 @@ import {
   SelectEmitInfo,
   SelectableProps,
   SelectableState,
+  TableRowID,
 } from '../..';
 import {
   Callback2,
@@ -20,7 +21,6 @@ import {
   Vars,
 } from '../../../core';
 
-export type TableRowID = number | string;
 export type TableRowData = {
   index: number;
   id: TableRowID;

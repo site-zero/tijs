@@ -28,6 +28,12 @@ const TiTransferInfo: TiComInfo = {
     zh_hk: zh_cn,
   },
   com: TiTransfer,
+  liveStyle: {
+    width: '100%',
+    height: '100%',
+    maxWidth: '800px',
+    maxHeight: '600px',
+  },
   install: (app: App) => {
     app.component(COM_TYPE, TiTransfer);
   },
@@ -36,3 +42,4 @@ const TiTransferInfo: TiComInfo = {
 };
 
 export { TiTransfer, TiTransferInfo };
+export * from './ti-transfer-types';

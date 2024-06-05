@@ -1,8 +1,13 @@
 import _ from 'lodash';
 import { EventUtils, I18n, IconInput, Vars, getLogger } from '../../../core';
-import { SelectableState, useSelectable } from '../../_features';
+import {
+  SelectableState,
+  useSelectable,
+  useStdListItem,
+} from '../../_features';
 import { RoadblockProps } from '../../tile/roadblock/ti-roadblock-types';
-import { TableRowID } from '../table/ti-table-types';
+
+import { TableRowID } from '../../../lib';
 import {
   ListEmitter,
   ListEvent,
@@ -16,43 +21,12 @@ const log = getLogger('TiList.use-list');
 export function useList(props: ListProps, emit: ListEmitter) {
   // 启用特性
   let selectable = useSelectable<TableRowID>(props);
-
-  let {
-    getIcon = (item: Vars) => item.icon,
-    getText = (item: Vars) => item.text ?? item.title ?? item.nickname,
-    getTip = (item: Vars) => item.tip,
-  } = props;
-
-  function getItemValue(it: Vars): TableRowID | undefined {
-    return selectable.getDataId(it);
-  }
-
-  function getItemIcon(it: Vars): IconInput | undefined {
-    if (getIcon) {
-      if (_.isString(getIcon)) {
-        return _.get(it, getIcon);
-      }
-      return getIcon(it);
-    }
-  }
-
-  function getItemText(it: Vars): string | undefined {
-    if (getText) {
-      if (_.isString(getText)) {
-        return _.get(it, getText);
-      }
-      return getText(it);
-    }
-  }
-
-  function getItemTip(it: Vars): string | undefined {
-    if (getTip) {
-      if (_.isString(getTip)) {
-        return _.get(it, getTip);
-      }
-      return getTip(it);
-    }
-  }
+  let { getItemValue, getItemIcon, getItemText, getItemTip } = useStdListItem({
+    ...props,
+    getValue: (it: Vars): TableRowID | undefined => {
+      return selectable.getDataId(it);
+    },
+  });
 
   function getRoadblock() {
     let re = {

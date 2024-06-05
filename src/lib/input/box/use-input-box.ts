@@ -41,10 +41,6 @@ export async function updateTipList(
     tidyValue,
     optionFiler,
   } = options;
-  // 未指定字典
-  if (!dict) {
-    return;
-  }
 
   let { boxValue, boxInputing, boxFocused, keyboard, lastUpdateAMS } = box;
 
@@ -87,7 +83,7 @@ export async function updateTipList(
 
   //console.log(dumpBoxState(box));
   // 经过检查满足时机了，需要加载
-  if (tipUseHint) {
+  if (tipUseHint && dict) {
     let hintVal = hint;
     if (tipTidyBy) {
       hintVal = await tidyValue(hint, tipTidyBy);
@@ -110,7 +106,7 @@ export async function updateTipList(
     });
   }
   // 全量查询
-  else {
+  else if (dict) {
     let hintVal = hint;
     if (tipTidyBy) {
       hintVal = await tidyValue(hint, tipTidyBy);
@@ -121,12 +117,12 @@ export async function updateTipList(
       if (optionFiler) {
         for (let li of list) {
           if (optionFiler.test(li)) {
-            list2.push(dict.toStdItem(li));
+            list2.push(dict!.toStdItem(li));
           }
         }
       } else {
         for (let li of list) {
-          list2.push(dict.toStdItem(li));
+          list2.push(dict!.toStdItem(li));
         }
       }
       __set_tip_list(tips, list2);

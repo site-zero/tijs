@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { App, DefineComponent, InjectionKey } from 'vue';
-import { FieldName } from '../../lib';
+import { FieldName, TableRowID } from '../../lib';
 import { I18n, TiBus } from '../ti';
 import { Rect } from './ti-rect';
 export * from './_types_css';
@@ -35,6 +35,7 @@ export type OptionItem<V> = {
 export type StrOptionItem = OptionItem<string>;
 export type NumOptionItem = OptionItem<number>;
 export type AnyOptionItem = OptionItem<any>;
+export type StdOptionItem = OptionItem<TableRowID>;
 
 export type OptionValueProps = {
   value: any;
