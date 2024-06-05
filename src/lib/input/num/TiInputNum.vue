@@ -15,7 +15,7 @@
   //-----------------------------------------------------
   const props = withDefaults(defineProps<InputNumProps>(), {
     value: null,
-    precise: 0,
+    precision: 0,
     partSep: '  ',
     //partSize: 3,
   });
@@ -42,7 +42,7 @@
   //-----------------------------------------------------
   function onChange(str: string) {
     let v = (str as any) * 1;
-    let v2 = Num.round(v, props.precise ?? 1);
+    let v2 = Num.round(v, props.precision ?? 1);
     if (!_.isNil(props.maxValue) && v2 > props.maxValue) {
       v2 = props.maxValue;
     }

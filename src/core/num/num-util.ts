@@ -92,11 +92,12 @@ export function precise(n: number, p = 2) {
   return n;
 }
 
-export function round(n: number, precise = 100) {
-  if (precise === 0) {
+export function round(n: number, precision = 100) {
+  console.log('Num.round', n, precision)
+  if (precision === 0) {
     return n;
   }
-  return Math.round(n * precise) / precise;
+  return Math.round(n * precision) / precision;
 }
 
 /***

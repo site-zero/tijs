@@ -15,7 +15,7 @@ export type InputNumProps = CommonProps &
      * - 0.1 : 精确到十位
      * - 0.01 : 精确到百位
      */
-    precise?: number;
+    precision?: number;
 
     /**
      * 显示数字分段，一段有多长
