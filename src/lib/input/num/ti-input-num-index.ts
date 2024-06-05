@@ -6,15 +6,16 @@ import example from './example';
 
 const en_us = {
   'com-name': 'InputNum',
+  'example-partly': 'Partly',
 };
 const zh_cn = {
   'com-name': '数字输入',
+  'example-partly': '分段显示',
 };
 
 const COM_TYPE = COM_TYPES.InputNum;
 
 const TiInputNumInfo: TiComInfo = {
-  tags: ['ing'],
   icon: 'zmdi-n-6-square',
   race: TiComRace.INPUT,
   name: COM_TYPE,
@@ -36,7 +37,7 @@ const TiInputNumInfo: TiComInfo = {
     app.component(COM_TYPE, TiInputNum);
   },
   defaultProps: 'simple',
-  exampleProps: [example.simple],
+  exampleProps: [example.simple, example.partly],
 };
 
 export * from './ti-input-num-types';

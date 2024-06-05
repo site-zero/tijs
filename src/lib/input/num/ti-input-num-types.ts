@@ -16,4 +16,24 @@ export type InputNumProps = CommonProps &
      * - 0.01 : 精确到百位
      */
     precise?: number;
+
+    /**
+     * 显示数字分段，一段有多长
+     */
+    partSize?: number;
+
+    /**
+     * 显示数字分段，段与段之间的分隔符
+     */
+    partSep?: string;
+
+    /**
+     * 最小值（包含）
+     */
+    minValue?: number;
+
+    /**
+     * 最大值（包含）
+     */
+    maxValue?: number;
   };

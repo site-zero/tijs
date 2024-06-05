@@ -6,9 +6,13 @@ import example from './example';
 
 const en_us = {
   'com-name': 'Text Box',
+  'example-list': 'As List',
+  'example-readonly': 'Readonly',
 };
 const zh_cn = {
   'com-name': '文本框',
+  'example-list': '列表值',
+  'example-readonly': '只读',
 };
 
 const COM_TYPE = COM_TYPES.InputText;
@@ -34,7 +38,7 @@ const TiInputTextInfo: TiComInfo = {
     app.component(COM_TYPE, TiInputText);
   },
   defaultProps: 'simple',
-  exampleProps: [example.simple],
+  exampleProps: [example.simple, example.list, example.readonly],
 };
 
 export * from './ti-input-text-types';

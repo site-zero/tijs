@@ -94,13 +94,13 @@
 </template>
 <style lang="scss" scoped>
   @use '../../../assets/style/_all.scss' as *;
-  @import './ti-input-text.scss';
 
   textarea {
     padding: 0.5em;
     display: block;
     width: 100%;
-    height: 3em;
+    height: 5.7em;
+    line-height: 1.5em;
     outline: none;
     resize: none;
     font-family: inherit;

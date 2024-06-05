@@ -2,9 +2,11 @@ import { ComPropExample } from '../../../../core';
 import { InputTextProps } from '../ti-input-text-types';
 
 export default {
-  name: 'simple',
-  text: 'i18n:simple',
+  name: 'readonly',
+  text: 'i18n:ti-input-text-example-readonly',
   comConf: {
-    value: 'hello world',
+    value: 'hello',
+    readonly: true,
+    height: '18em',
   } as InputTextProps,
 } as ComPropExample;
