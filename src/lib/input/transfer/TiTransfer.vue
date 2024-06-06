@@ -36,17 +36,14 @@
     <slot name="head"></slot>
     <main>
       <!--========: Can List :====== -->
-      <div class="part-filter">
+      <div class="part-list as-can"></div>
+      <!--========: Operation :====== -->
+      <div class="part-actions">
         <TiInput :value="_stat.filterValue" :trimed="true"
         :prefix-icon-for-clean="true"
-        prefix-icon="fas-search" />
+        prefix-icon="zmdi-search" />
       </div>
-      <div class="part-list as-can"></div>
-      <div class="part-pager"></div>
-      <!--========: Operation :====== -->
-      <div class="part-actions"></div>
       <!--========: Sel List :====== -->
-      <div class="part-menu"></div>
       <div class="part-list as-sel"></div>
     </main>
     <slot name="tail"></slot>
