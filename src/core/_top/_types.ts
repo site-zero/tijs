@@ -869,6 +869,7 @@ export type BlockInfoProps = {
   // 右上角菜单
   //
   actions?: ActionBarItem[];
+  actionVars?: Vars;
   actionClass?: any;
 
   //

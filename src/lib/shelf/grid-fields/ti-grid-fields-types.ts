@@ -11,6 +11,7 @@ import {
   Vars,
   VisibilityProps,
 } from '../../../core';
+import { RoadblockProps } from '../../../lib';
 import {
   FieldChangeEmitter,
   FieldChangeProps,
@@ -69,6 +70,11 @@ export type GridFieldsProps = Omit<
     vars?: Vars;
     // 输入的数据
     data?: Vars;
+
+    /**
+     * 空白数据，显示的样式
+     */
+    emptyRoadblock?: RoadblockProps;
 
     /**
      *

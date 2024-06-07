@@ -206,7 +206,10 @@ export type TableProps = CommonProps &
      */
     rowMinHeight?: number;
 
-    emptyRoadBlock?: RoadblockProps;
+    /**
+     * 空白数据，显示的样式
+     */
+    emptyRoadblock?: RoadblockProps;
   };
 
 type TableColumnAspect = {

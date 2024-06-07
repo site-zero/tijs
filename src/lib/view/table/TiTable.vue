@@ -58,7 +58,7 @@
     canSelect: true,
     canCheck: true,
     changeMode: 'diff',
-    emptyRoadBlock: () => ({
+    emptyRoadblock: () => ({
       text: 'i18n:empty-data',
       mode: 'auto',
       layout: 'A',
@@ -235,6 +235,10 @@
     );
   }
   //-------------------------------------------------------
+  function onClickTop() {
+    Table.value.OnTableHeadCheckerClick(selection, 'all');
+  }
+  //-------------------------------------------------------
   //                Event Cell Changed
   //-------------------------------------------------------
   function onCellChange(changed: TableCellChanged) {
@@ -321,7 +325,8 @@
 <template>
   <div
     class="ti-table"
-    :class="TopClass">
+    :class="TopClass"
+    @click="onClickTop">
     <main
       ref="$main"
       :style="MainStyle">
@@ -333,12 +338,14 @@
           class="table-cell as-head as-marker">
           <div
             class="as-checker"
-            @click="Table.OnTableHeadCheckerClick(selection, RowCheckStatus)">
+            @click.stop="
+              Table.OnTableHeadCheckerClick(selection, RowCheckStatus)
+            ">
             <TiIcon :value="RowCheckStatusIcon" />
           </div>
           <div
             class="as-settings"
-            @click="onClickSettings">
+            @click.stop="onClickSettings">
             <TiIcon :value="'fas-bars'" />
           </div>
         </div>
@@ -404,7 +411,7 @@
         v-if="!hasData"
         class="empty-tip"
         :style="VirtualRowStyle">
-        <TiRoadblock v-bind="props.emptyRoadBlock" />
+        <TiRoadblock v-bind="props.emptyRoadblock" />
       </div>
     </main>
     <!-- 显示拖拽的列分割条-->

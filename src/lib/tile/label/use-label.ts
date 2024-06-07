@@ -1,24 +1,6 @@
-import {
-  ValueBoxEmits,
-  ValueBoxOptions,
-  ValueBoxProps,
-  ValueBoxState,
-  useValueBox,
-} from '../../';
-/*-----------------------------------------------------
+import { useValueBox } from '../../';
+import { LabelOptions, LabelProps, LabelState } from './ti-label-types';
 
-                Type Defination
-
------------------------------------------------------*/
-export type LabelState = ValueBoxState<any>;
-export type LabelProps = ValueBoxProps<any>;
-export type LabelOptions = ValueBoxOptions;
-
-/*-----------------------------------------------------
-
-                Use Feature
-                
------------------------------------------------------*/
 export function useLabel(
   state: LabelState,
   props: LabelProps,

@@ -55,6 +55,7 @@
       <TiActionBar
         v-if="!_.isEmpty(Block.HeadActions)"
         :items="Block.HeadActions"
+        :vars="props.actionVars"
         :className="props.actionClass"
         :style="props.actionStyle" />
     </header>

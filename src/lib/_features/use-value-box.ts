@@ -242,19 +242,19 @@ export function useValueBox<T extends any>(
   // 方法: 值发生了改变
   //
   async function doChangeValue(val: string) {
-    if(props.readonly){
-      return
+    if (props.readonly) {
+      return;
     }
     let v = await tidyValue(val);
-    console.log("doChangeValue", val, v)
+    // console.log("doChangeValue", val, v)
     emit('change', v);
   }
   //
   // 方法： 点击前缀按钮
   //
   async function OnClickPrefixIcon() {
-    if(props.readonly){
-      return
+    if (props.readonly) {
+      return;
     }
     //console.log('OnClickPrefixIcon');
     if (props.prefixIconForClean) {
@@ -270,8 +270,8 @@ export function useValueBox<T extends any>(
   // 方法： 点击后缀按钮
   //
   function OnClickSuffixIcon() {
-    if(props.readonly){
-      return
+    if (props.readonly) {
+      return;
     }
     //console.log('OnClickSuffixIcon');
     if (props.suffixIconForCopy) {
@@ -304,14 +304,14 @@ export function useValueBox<T extends any>(
     OnClickPrefixIcon,
     OnClickSuffixIcon,
     OnHoverPrefixIcon(hovered: boolean) {
-      if(props.readonly){
-        return
+      if (props.readonly) {
+        return;
       }
       state.prefixIconHovered = hovered;
     },
     OnHoverSuffixIcon(hovered: boolean) {
-      if(props.readonly){
-        return
+      if (props.readonly) {
+        return;
       }
       state.suffixIconHovered = hovered;
     },

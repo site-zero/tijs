@@ -1,7 +1,12 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
-  import { TextSnippet, useFieldChange } from '../../';
+  import {
+    RoadblockProps,
+    TextSnippet,
+    TiRoadblock,
+    useFieldChange,
+  } from '../../';
   import { CssUtils, FieldChange } from '../../../core';
   import GFItField from './GFItField.vue';
   import GFItGroup from './GFItGroup.vue';
@@ -38,10 +43,27 @@
   const _viewport_width = ref(0);
   //-------------------------------------------------
   const Grid = computed(() => useGridFields(props));
+  //-------------------------------------------------
+  const isEmptyData = computed(() => _.isEmpty(props.data));
+  const FormEmptyRoadblock = computed(() => {
+    return _.assign(
+      {
+        text: 'i18n:empty-data',
+        icon: 'fas-clipboard-list',
+        mode: 'cover',
+        size: 'normal',
+        layout: 'A',
+        opacity: 'shadowy',
+      } as RoadblockProps,
+      props.emptyRoadblock
+    ) as RoadblockProps;
+  });
+  //-------------------------------------------------
   const TrackCount = computed(() => {
     const getTrackCount = parseGridLayout(props.layoutHint);
     return getTrackCount(_viewport_width.value);
   });
+  //-------------------------------------------------
   const getLayoutCss = computed(() => buildGridFieldsLayoutStyle(props));
   //-------------------------------------------------
   const Change = computed(() =>
@@ -53,6 +75,7 @@
       Grid.value.fieldItems
     )
   );
+  //-------------------------------------------------
   /**
    * 处理值的修改
    *
@@ -83,12 +106,16 @@
   const $el = ref<HTMLElement>();
   const $main = ref<HTMLElement>();
   //-------------------------------------------------
-  const obResize = new ResizeObserver((_entries) => {
+  function updateViewportWidth() {
     let w = $main.value?.getBoundingClientRect().width ?? 0;
     if (w > 0 && w != _viewport_width.value) {
       _viewport_width.value = $main.value?.clientWidth ?? 0;
-      //console.log('obResize', _viewport_width.value, $main.value);
+      console.log('obResize', _viewport_width.value, $main.value);
     }
+  }
+  //-------------------------------------------------
+  const obResize = new ResizeObserver((_entries) => {
+    updateViewportWidth();
   });
   //-------------------------------------------------
   if (props.whenGrid) {
@@ -103,19 +130,32 @@
     );
   }
   //-------------------------------------------------
+  watch(
+    () => isEmptyData.value,
+    () => {
+      if (!isEmptyData.value) {
+        updateViewportWidth();
+      }
+    }
+  );
+  //-------------------------------------------------
   onMounted(() => {
-    if ($main.value) {
-      obResize.observe($main.value);
-      let info: GridFieldsDomReadyInfo = {
-        el: $el.value!,
-        main: $main.value!,
-      };
-      emit('dom-ready', info);
+    if ($el.value) {
+      obResize.observe($el.value);
+      if ($main.value) {
+        let info: GridFieldsDomReadyInfo = {
+          el: $el.value!,
+          main: $main.value!,
+        };
+        emit('dom-ready', info);
+      }
     }
   });
+  //-------------------------------------------------
   onUnmounted(() => {
     obResize.disconnect();
   });
+  //-------------------------------------------------
 </script>
 <template>
   <div
@@ -140,46 +180,59 @@
         :activatedComType="props.activatedComType"
         :activatedComConf="props.activatedComConf" />
     </slot>
-    <!--=============: 上部多用途插槽 :==============-->
-    <slot name="head_ext"></slot>
-    <!--===============: 表单体 :===================-->
+    <!-- 
+      显示空数据提示
+     -->
     <div
-      ref="$main"
-      class="part-body"
-      :style="BodyStyle">
-      <template v-for="fld in Grid.strictItems">
-        <template v-if="!fld.isHidden(props.data)">
-          <!------[:Field:]---------->
-          <GFItField
-            v-if="'field' == fld.race"
-            v-bind="(fld as GridFieldsStrictField)"
-            :max-track-count="TrackCount"
-            @name-change="emit('name-change', $event)"
-            @value-change="onValueChange" />
-          <!------[:Group:]---------->
-          <GFItGroup
-            v-else-if="'group' == fld.race"
-            v-bind="(fld as GridFieldsStrictGroup)"
-            :max-track-count="TrackCount"
-            @name-change="emit('name-change', $event)"
-            @value-change="onValueChange" />
-          <!------[:Label:]---------->
-          <GFItLabel
-            v-else-if="'label' == fld.race"
-            v-bind="(fld as GridFieldsStrictLabel)"
-            :max-track-count="TrackCount" />
-          <!------[!Invalid!]---------->
-          <blockquote
-            v-else
-            style="white-space: pre; color: var(--ti-color-error)">
-            Invalid Field: -------------------------------------------
-            {{ fld }}
-          </blockquote>
-        </template>
-      </template>
+      v-if="isEmptyData && props.emptyRoadblock"
+      class="part-empty-tip">
+      <TiRoadblock v-bind="FormEmptyRoadblock" />
     </div>
-    <!--==========下==: 上部多用途插槽 :==============-->
-    <slot name="foot_ext"></slot>
+    <!-- 
+      显示表单
+     -->
+    <template v-else>
+      <!--=============: 上部多用途插槽 :==============-->
+      <slot name="head_ext"></slot>
+      <!--===============: 表单体 :===================-->
+      <div
+        ref="$main"
+        class="part-body"
+        :style="BodyStyle">
+        <template v-for="fld in Grid.strictItems">
+          <template v-if="!fld.isHidden(props.data)">
+            <!------[:Field:]---------->
+            <GFItField
+              v-if="'field' == fld.race"
+              v-bind="(fld as GridFieldsStrictField)"
+              :max-track-count="TrackCount"
+              @name-change="emit('name-change', $event)"
+              @value-change="onValueChange" />
+            <!------[:Group:]---------->
+            <GFItGroup
+              v-else-if="'group' == fld.race"
+              v-bind="(fld as GridFieldsStrictGroup)"
+              :max-track-count="TrackCount"
+              @name-change="emit('name-change', $event)"
+              @value-change="onValueChange" />
+            <!------[:Label:]---------->
+            <GFItLabel
+              v-else-if="'label' == fld.race"
+              v-bind="(fld as GridFieldsStrictLabel)"
+              :max-track-count="TrackCount" />
+            <!------[!Invalid!]---------->
+            <blockquote
+              v-else
+              style="white-space: pre; color: var(--ti-color-error)">
+              Invalid Field: -------------------------------------------
+              {{ fld }}
+            </blockquote>
+          </template>
+        </template>
+      </div>
+      <!--==========下==: 上部多用途插槽 :==============-->
+      <slot name="foot_ext"></slot>
+    </template>
     <!--===============: 表单尾 :===================-->
     <slot name="foot">
       <TextSnippet

@@ -106,7 +106,7 @@
     :class="getRowCellClass(-1)"
     :row-id="props.row.id"
     :row-index="props.row.index"
-    @click="onRow('row-select', $event)"
+    @click.stop="onRow('row-select', $event)"
     @dblclick="onRow('row-open', $event)">
     <!--选择框-->
     <template v-if="props.showCheckbox">
@@ -147,8 +147,8 @@
       :col="i"
       :class="getRowCellClass(i)"
       ref="$cells"
-      @click="onCell('cell-select', cell.index, $event)"
-      @dblclick="onCell('cell-open', cell.index, $event)">
+      @click.stop="onCell('cell-select', cell.index, $event)"
+      @dblclick.stop="onCell('cell-open', cell.index, $event)">
       <!--首列，这里有可能插入缩进占位块-->
       <div
         v-if="0 === i && ShowIndentor"

@@ -79,15 +79,14 @@
    [   Text   ]
   /---------------------------------------*/
   &.layout-A {
-    @include flex-align-v-nowrap;
+    @include flex-align-v-nowrap($jc: center);
     > .part-icon {
       @include flex($jc: center, $ai: flex-end);
-      margin-bottom: 0.5em;
-      height: 37.2%;
+      margin-bottom: 0.7em;
     }
     > .part-text {
       @include flex($jc: center, $ai: flex-start);
-      flex: 1 1 auto;
+      flex: 0 0 auto;
       text-align: center;
     }
     &.has-links {

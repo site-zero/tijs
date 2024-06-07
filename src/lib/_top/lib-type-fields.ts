@@ -6,12 +6,14 @@ import {
   Convertor,
   DateInput,
   DateTime,
+  ENV_KEYS,
   FieldChange,
   InvokePartial,
   NameValue,
   Str,
   Util,
   Vars,
+  getEnv,
 } from '../../core';
 
 export type Field = {
@@ -126,8 +128,8 @@ const FIELD_CONVERTERS: FieldConvertorSet = {
   Integer: { transform: toInteger, serialize: toInteger },
   Float: { transform: toFloat, serialize: toFloat },
   Boolean: { transform: toBoolean, serialize: toBoolean },
-  Timestamp: { transform: toDate, serialize: toAMS },
-  AMS: { transform: toDate, serialize: toAMS },
+  Timestamp: { transform: toDatetimeText, serialize: toAMS },
+  AMS: { transform: toDatetimeText, serialize: toAMS },
 };
 
 export function isFieldType(type: string): type is FieldValueType {
@@ -419,4 +421,18 @@ function toAMS(input: any) {
 
 function toDate(input: any) {
   return DateTime.parse(input);
+}
+
+export const TI_DFT_DATETIME_FORMAT = '';
+
+function toDatetimeText(input: any) {
+  if (_.isNil(input)) {
+    return '';
+  }
+  let fmt = getEnv(ENV_KEYS.DFT_DATETIME_FORMAT, 'yyyy-MM-dd HH:mm:ss');
+  let d = DateTime.parse(input);
+  if (_.isDate(d)) {
+    return DateTime.format(d, { fmt });
+  }
+  return input;
 }

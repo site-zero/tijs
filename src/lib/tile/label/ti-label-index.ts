@@ -137,3 +137,4 @@ const TiLabelInfo: TiComInfo = {
 };
 
 export { TiLabel, TiLabelInfo };
+export * from './ti-label-types';

@@ -1,5 +1,5 @@
-import _ from 'lodash';
 import JSON5 from 'json5';
+import _ from 'lodash';
 import {
   DictName,
   DictSetup,
@@ -9,11 +9,13 @@ import {
   isDictSetup,
 } from '../../core';
 
+export type OptionsInput = string | DictName | DictSetup;
+
 export type OptionsProps = {
   /**
    * 可以获取一个`IDict`实例
    */
-  options?: string | DictName | DictSetup;
+  options?: OptionsInput;
 
   /**
    * 动态字典需要这个属性作为变量上下文

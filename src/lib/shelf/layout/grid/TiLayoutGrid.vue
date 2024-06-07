@@ -1,8 +1,16 @@
 <script lang="ts" setup>
   import _ from 'lodash';
-  import { Ref, computed, onMounted, reactive, ref, watch } from 'vue';
+  import {
+    Ref,
+    computed,
+    onMounted,
+    onUnmounted,
+    reactive,
+    ref,
+    watch,
+  } from 'vue';
   import { COM_TYPES, TiBlock, TiLayoutTabs } from '../../../';
-  import { CssUtils, Vars } from '../../../../core';
+  import { CssUtils, Rect, Rects, Vars } from '../../../../core';
   import {
     loadAllState,
     resetSizeState,
@@ -14,11 +22,12 @@
   import { LayoutGridProps, LayoutGridState } from './ti-layout-grid-types';
   import { getLayoutGridItems, isLayoutAdjustable } from './use-grid-items';
   import { getTopStyle } from './use-grid-util.ts';
+  //-------------------------------------------------
   defineOptions({
     name: COM_TYPES.LayoutGrid,
     inheritAttrs: true,
   });
-
+  //-------------------------------------------------
   const props = defineProps<LayoutGridProps>();
   const $main = ref() as Ref<HTMLElement>;
   const state = reactive({
@@ -28,6 +37,7 @@
   }) as LayoutGridState;
   let emit = defineEmits<{
     (event: 'show' | 'hide', name: string): void;
+    (event: 'resize', payload: Rect): void;
   }>();
   //
   // Computed
@@ -42,20 +52,28 @@
     })
   );
   let GridPanels = computed(() => getLayoutPanelItems(state, props));
-
+  //-------------------------------------------------
   let isAdjustable = computed(() => isLayoutAdjustable(GridItems.value));
   let Keep = computed(() => useKeepLayoutGrid(props));
   let release_resizing = ref<() => void>();
-
+  //-------------------------------------------------
   function OnClickPanelMask(pan: LayoutPanelItem): void {
     if (pan.clickMaskToClose) {
       emit('hide', pan.uniqKey);
     }
   }
+  //-------------------------------------------------
   function onDblClickAdjustBar(_bar: LayoutBar) {
     resetSizeState(state, Keep.value);
   }
-
+  //-------------------------------------------------
+  const obResize = new ResizeObserver((_entries) => {
+    if ($main.value) {
+      let rect = Rects.createBy($main.value);
+      emit('resize', rect);
+    }
+  });
+  //-------------------------------------------------
   //
   // Life Hooks
   //
@@ -85,13 +103,22 @@
       }
     }
   );
+  //-------------------------------------------------
   onMounted(() => {
     //console.log('TiLayoutGrid onMounted');
+    if ($main.value) {
+      obResize.observe($main.value);
+    }
     if (isAdjustable.value) {
       release_resizing.value = useGridResizing($main.value, state, Keep);
     }
     loadAllState(props, state, Keep.value);
   });
+  //-------------------------------------------------
+  onUnmounted(() => {
+    obResize.disconnect();
+  });
+  //-------------------------------------------------
 </script>
 <template>
   <div

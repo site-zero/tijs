@@ -14,7 +14,7 @@ div.ti-input-box {
       padding: var(--ti-measure-box-pad);
       background-color: transparent;
       &[readonly] {
-        font-style: italic;
+        //font-style: italic;
         cursor: default;
       }
     }

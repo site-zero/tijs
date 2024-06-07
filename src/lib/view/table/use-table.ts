@@ -170,7 +170,7 @@ export function useTable(props: TableProps, emit: TableEmitter) {
     getCheckedRows,
 
     OnTableHeadCheckerClick(selection: TableSelection, status: CheckStatus) {
-      let { ids, checkedIds } = selection;
+      let { ids, currentId, checkedIds } = selection;
       let oldCurrentId = _.cloneDeep(selection.currentId);
       let oldCheckedIds = _.cloneDeep(selection.checkedIds);
       checkedIds.clear();
@@ -178,6 +178,9 @@ export function useTable(props: TableProps, emit: TableEmitter) {
         for (let id of ids) {
           checkedIds.set(id, true);
         }
+      }
+      if (currentId && !checkedIds.get(currentId)) {
+        selection.currentId = undefined;
       }
 
       //

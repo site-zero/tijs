@@ -4,7 +4,8 @@
   import { PrefixSuffixEvents, TiIcon } from '../../';
   import { CssUtils } from '../../../core';
   import { COM_TYPES } from '../../lib-com-types';
-  import { LabelProps, LabelState, useLabel } from './use-label';
+  import { LabelProps, LabelState } from './ti-label-types';
+  import { useLabel } from './use-label';
   //-----------------------------------------------------
   defineOptions({
     inheritAttrs: true,
