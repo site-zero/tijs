@@ -385,7 +385,7 @@
               <span class="head-text">{{ col.title || col.name }}</span>
               <!-- 调整列宽的控制柄: 最后一列 -->
               <div
-                v-if="i == TableColumns.length - 1"
+                v-if="col.dragIndex == TableColumns.length - 1"
                 class="column-resize-hdl for-self"></div>
             </div>
           </div>
