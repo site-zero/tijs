@@ -34,7 +34,7 @@ function __get_val(
 ): ValueGetter {
   return (context, options) => {
     let v = _.get(context, path);
-    if (_.isNil(v)) {
+    if (_.isUndefined(v)) {
       return getDft(context, options);
     }
     if (autoJsValue) {

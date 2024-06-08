@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Match } from '../ti';
+import { Match, NumRange } from '../ti';
 import { DictImpl } from './dict-impl';
 import {
   GetItemText,
@@ -80,12 +80,32 @@ export function dft_get_str<T>(key: string): GetItemText<T> {
 export function dft_is_matched<T, V>(dict: DictImpl<T, V>): IsMatched<T, V> {
   return (it: T, val: V): boolean => {
     let std = dict.toStdItem(it);
-    let text = std.text.toLowerCase();
-    let vals = (std.value + '').toLowerCase();
-    let mts = `${val}`.toLowerCase();
-    if (text.indexOf(mts) >= 0 || vals.indexOf(mts) >= 0) {
-      return true;
+    // 字符串
+    if (_.isString(val)) {
+      let text = std.text.toLowerCase();
+      let vals = (std.value + '').toLowerCase();
+      // 支持正则
+      if (val.startsWith('^')) {
+        let reg = new RegExp(val, 'ig');
+        return reg.test(text) || reg.test(vals);
+      }
+      // 支持范围
+      if (/^[[(]/.test(val) && /[)\]]$/.test(val)) {
+        let rg = new NumRange(val);
+        let n = parseFloat(vals);
+        return rg.contains(n);
+      }
+      // 普通字符串
+      else {
+        let mts = `${val}`.toLowerCase();
+        if (text.indexOf(mts) >= 0 || vals.indexOf(mts) >= 0) {
+          return true;
+        }
+      }
+      return false;
     }
-    return false;
+    // 采用匹配
+    let m = Match.parse(val);
+    return m.test(std.value) || m.test(std.text);
   };
 }

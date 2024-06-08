@@ -182,8 +182,9 @@ export function useSelectable<ID extends string | number>(
     oldCheckedIds: Map<ID, boolean>,
     oldCurrentId?: ID | null
   ): SelectEmitInfo<ID> {
-    let currentId = state.currentId;
-    let checkedIds = state.checkedIds;
+    let currentId = state.currentId ?? null;
+    let ckIds = Util.mapTruthyKeys(state.checkedIds);
+    let checkedIds = Util.arrayToMap(ckIds);
     let current = getCurrentData(list, state);
     let checked = getCheckedData(list, state);
     return {
@@ -203,7 +204,7 @@ export function useSelectable<ID extends string | number>(
   ) {
     selection.ids = getRowIds();
     let ids = new Map<ID, boolean>();
-    console.log(selection.ids)
+    console.log(selection.ids);
 
     // allow multi
     if (props.multi) {

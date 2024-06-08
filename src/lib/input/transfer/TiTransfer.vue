@@ -63,7 +63,7 @@
       let selMap = Util.arrayToMap(_stat.sel_checked_ids);
       _stat.sel_checked_ids = [];
       let vals = _.filter(props.value, (v) => {
-        return selMap.get(v);
+        return !selMap.get(v);
       }) as TableRowID[];
       emit('change', vals);
     }
