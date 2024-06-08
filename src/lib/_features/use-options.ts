@@ -9,7 +9,7 @@ import {
   isDictSetup,
 } from '../../core';
 
-export type OptionsInput = string | DictName | DictSetup;
+export type OptionsInput = string | DictName | DictSetup | Vars[];
 
 export type OptionsProps = {
   /**
@@ -38,6 +38,12 @@ export type OptionsFeature = {
 function __build_dict(props: OptionsProps): TiDict | undefined {
   let { options, dictVars = {} } = props;
   if (options) {
+    // 选项数据
+    if (_.isArray(options)) {
+      let dictOptions = Dicts.makeDictOptions({ data: options });
+      return Dicts.createDict(dictOptions);
+    }
+
     // 直接就是选项
     if (isDictSetup(options)) {
       let dictOptions = Dicts.makeDictOptions(options);

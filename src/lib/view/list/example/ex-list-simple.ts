@@ -10,7 +10,7 @@ export default {
   name: 'simple',
   text: 'i18n:simple',
   comConf: {
-    className: 'border-solid',
+    className: 'border-solid fit-parent',
     size: 'b',
     currentId: 3,
     checkedIds: {

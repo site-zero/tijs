@@ -1,9 +1,11 @@
-import { StdOptionItem, Vars } from '../../../core';
+import { StdOptionItem, Vars, getLogger } from '../../../core';
 import { Ref, computed } from 'vue';
 import { ListProps, TableRowID } from '../../../lib';
 import { useOptions, useStdListItem } from '../../../lib/_features';
 import { TransferProps, TransferState } from './ti-transfer-types';
 import _ from 'lodash';
+
+const log = getLogger('ti-use-transfer');
 
 export function useTransfer(state: TransferState, props: TransferProps) {
   let { dict } = useOptions(props);
@@ -20,6 +22,7 @@ export function useTransfer(state: TransferState, props: TransferProps) {
 
   async function reloadOptions(force?: boolean): Promise<void> {
     if (!dict) {
+      log.warn('NOT dict, unable to relodOptons!');
       state.options = [];
     } else {
       let list = await dict.getData(force);
@@ -46,7 +49,7 @@ export function useTransfer(state: TransferState, props: TransferProps) {
   function getCandidateList(): StdOptionItem[] {
     let list = [] as StdOptionItem[];
     for (let li of state.options) {
-      if (valueSet.has(li.value)) {
+      if (!valueSet.has(li.value)) {
         list.push(_.cloneDeep(li));
       }
     }

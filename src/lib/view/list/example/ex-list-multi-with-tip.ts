@@ -6,7 +6,7 @@ export default {
   name: 'multi_with_tip',
   text: 'i18n:ti-list-example-multi-with-tip',
   comConf: {
-    className: 'tip-block border-dotted',
+    className: 'tip-block border-dotted fit-parent',
     size: 'm',
     multi: true,
     currentId: null,

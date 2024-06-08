@@ -73,7 +73,7 @@
       v-if="NotItems"
       v-bind="roadblock" />
     <!---------------Show List------------------->
-    <template v-else>
+    <main v-else>
       <div
         v-for="it in Items"
         class="list-item"
@@ -115,7 +115,7 @@
         </div>
         <!--=Endl-->
       </div>
-    </template>
+    </main>
   </div>
 </template>
 <style lang="scss" scoped>

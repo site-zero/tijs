@@ -4,15 +4,14 @@
   height: 100%;
   > main {
     flex: 1 1 auto;
+    width: 100%;
+    height: 100%;
     display: grid;
     grid-template-columns: 1fr 100px 1fr;
-    grid-template-rows: auto 1fr auto;
+    grid-template-rows: 1fr;
     gap: var(--ti-gap-s);
     background-color: var(--ti-color-body);
-    grid-template-areas:
-      'filter    actions   menu'
-      'can-list  actions   sel-list'
-      'pager     actions   sel-list';
+    grid-template-areas: 'can-list  actions   sel-list';
     > div {
       &.part-filter {
         grid-area: filter;

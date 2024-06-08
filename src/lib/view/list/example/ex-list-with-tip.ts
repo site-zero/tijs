@@ -10,7 +10,7 @@ export default {
   name: 'with_tip',
   text: 'i18n:ti-list-example-with-tip',
   comConf: {
-    className: 'tip-block',
+    className: 'tip-block fit-parent',
     size: 'm',
     currentId: null,
     checkedIds: {},

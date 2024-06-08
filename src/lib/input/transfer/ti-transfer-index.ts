@@ -17,7 +17,7 @@ const COM_TYPE = COM_TYPES.Transfer;
 
 const TiTransferInfo: TiComInfo = {
   icon: 'fas-right-left',
-  tags: ['scaffold'],
+  tags: ['ing'],
   race: TiComRace.INPUT,
   name: COM_TYPE,
   text: 'i18n:ti-transfer-com-name',
@@ -33,6 +33,7 @@ const TiTransferInfo: TiComInfo = {
     height: '100%',
     maxWidth: '800px',
     maxHeight: '600px',
+    border: '2px solid var(--ti-color-primary)',
   },
   install: (app: App) => {
     app.component(COM_TYPE, TiTransfer);

@@ -1,61 +1,75 @@
 .ti-list {
+  //--------------------------------
   &.none-user-select {
     user-select: none;
   }
   //--------------------------------
-  > .list-item {
-    display: grid;
-    grid-template-columns: 1fr;
-    grid-template-rows: auto;
-    gap: 1px;
-    //------------------------------
-    > .list-part {
-      height: 2.4em;
-      //----------------------------
-      &.as-check {
-        @include flex-center;
-        &:hover {
-          color: var(--ti-color-secondary);
+  &.fit-parent,
+  &.cover-parent {
+    @include flex-align-v-nowrap;
+    > main {
+      flex: 1 1 auto;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+    }
+  }
+  //--------------------------------
+  > main {
+    > .list-item {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+      gap: 1px;
+      //------------------------------
+      > .list-part {
+        height: 2.4em;
+        //----------------------------
+        &.as-check {
+          @include flex-center;
+          &:hover {
+            color: var(--ti-color-secondary);
+          }
         }
-      }
-      //----------------------------
-      &.as-icon {
-        @include flex-center;
-      }
-      //----------------------------
-      &.as-text {
-        @include flex-align-nowrap;
-        width: 100%;
-        > div {
-          @include flex-center($jc: flex-start);
-          width: 10px;
-          flex: 1 1 auto;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          padding: 0.2em 0.5em;
+        //----------------------------
+        &.as-icon {
+          @include flex-center;
         }
-      }
-      //----------------------------
-      &.as-tip {
-        @include flex-align-nowrap;
-        width: 100%;
-        color: var(--ti-color-track);
-        > div {
-          @include flex-center($jc: flex-start);
-          width: 10px;
-          flex: 1 1 auto;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          font-size: 0.8em;
-          padding: 0 0.62em;
+        //----------------------------
+        &.as-text {
+          @include flex-align-nowrap;
+          width: 100%;
+          > div {
+            @include flex-center($jc: flex-start);
+            width: 10px;
+            flex: 1 1 auto;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            padding: 0.2em 0.5em;
+          }
         }
-      }
-      //----------------------------
-    } // > .list-part
-    //------------------------------
-  } // > .list-item
+        //----------------------------
+        &.as-tip {
+          @include flex-align-nowrap;
+          width: 100%;
+          color: var(--ti-color-track);
+          > div {
+            @include flex-center($jc: flex-start);
+            width: 10px;
+            flex: 1 1 auto;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-size: 0.8em;
+            padding: 0 0.62em;
+          }
+        }
+        //----------------------------
+      } // > .list-part
+      //------------------------------
+    } // > .list-item
+  }
   //--------------------------------
   &.size-s {
     font-size: var(--ti-fontsz-s);
@@ -69,7 +83,7 @@
     font-size: var(--ti-fontsz-b);
   }
   //--------------------------------
-  &.tip-block {
+  &.tip-block > main {
     > .list-item > .list-part.as-tip {
       color: var(--ti-color-bar-f);
       background-color: var(--ti-color-bar);
@@ -92,7 +106,7 @@
   }
   //--------------------------------
   &.is-hoverable {
-    &.tip-block > .list-item {
+    &.tip-block > main > .list-item {
       &:hover {
         color: var(--ti-color-hightlight-f);
         background-color: var(--ti-color-hightlight);
@@ -104,7 +118,7 @@
     }
   }
   //--------------------------------
-  &.is-selectable {
+  &.is-selectable > main {
     cursor: pointer;
     > .list-item {
       border-left: 3px solid transparent;
@@ -123,21 +137,21 @@
   }
 
   //--------------------------------
-  &.border-solid > .list-item {
+  &.border-solid > main > .list-item {
     border-top: 1px solid var(--ti-color-border-shallow);
     &:first-child {
       border-top: 0;
     }
   }
   //--------------------------------
-  &.border-dashed > .list-item {
+  &.border-dashed > main > .list-item {
     border-top: 1px dashed var(--ti-color-border-shallow);
     &:first-child {
       border-top: 0;
     }
   }
   //--------------------------------
-  &.border-dotted > .list-item {
+  &.border-dotted > main > .list-item {
     border-top: 1px dotted var(--ti-color-border-shallow);
     &:first-child {
       border-top: 0;

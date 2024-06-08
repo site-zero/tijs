@@ -94,12 +94,12 @@ export async function updateTipList(
       if (optionFiler) {
         for (let li of list) {
           if (optionFiler.test(li)) {
-            list2.push(dict.toStdItem(li));
+            list2.push(dict!.toStdItem(li));
           }
         }
       } else {
         for (let li of list) {
-          list2.push(dict.toStdItem(li));
+          list2.push(dict!.toStdItem(li));
         }
       }
       __set_tip_list(tips, list2);

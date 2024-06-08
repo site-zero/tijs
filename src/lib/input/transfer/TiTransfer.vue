@@ -21,6 +21,13 @@
   const ListConfig = computed(() => _tran.value.getListConfig());
   //-----------------------------------------------------
   watch(
+    () => props.options,
+    () => {
+      _tran.value.reloadOptions();
+    }
+  );
+  //-----------------------------------------------------
+  watch(
     () => [props.value, _tran.value],
     () => {
       _tran.value.loadSelectedList(_sel_list);
@@ -36,15 +43,27 @@
     <slot name="head"></slot>
     <main>
       <!--========: Can List :====== -->
-      <div class="part-list as-can"></div>
+      <div class="part-list as-can">
+        <TiList
+          v-bind="ListConfig"
+          class="fit-parent"
+          :data="CanList" />
+      </div>
       <!--========: Operation :====== -->
       <div class="part-actions">
-        <TiInput :value="_stat.filterValue" :trimed="true"
-        :prefix-icon-for-clean="true"
-        prefix-icon="zmdi-search" />
+        <TiInput
+          :value="_stat.filterValue"
+          :trimed="true"
+          :prefix-icon-for-clean="true"
+          prefix-icon="zmdi-search" />
       </div>
       <!--========: Sel List :====== -->
-      <div class="part-list as-sel"></div>
+      <div class="part-list as-sel">
+        <TiList
+          v-bind="ListConfig"
+          class="fit-parent"
+          :data="_sel_list" />
+      </div>
     </main>
     <slot name="tail"></slot>
   </div>

@@ -12,12 +12,10 @@ export default {
     //prefixIconForClean: true,
     suffixIconForCopy: true,
     mustInOptions: true,
-    options: {
-      data: [
-        { value: 'A', text: '甲' },
-        { value: 'B', text: '乙' },
-        { value: 'C', text: '丙' },
-      ],
-    },
+    options: [
+      { value: 'A', text: '甲' },
+      { value: 'B', text: '乙' },
+      { value: 'C', text: '丙' },
+    ],
   } as InputBoxProps,
 } as ComPropExample;
