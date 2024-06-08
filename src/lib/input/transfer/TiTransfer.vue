@@ -2,8 +2,13 @@
   import { computed, reactive, ref, watch } from 'vue';
   import { TransferProps, TransferState } from './ti-transfer-types';
   import { useTransfer } from './use-transfer';
-  import { StdOptionItem } from '../../../core';
-  import { TiList, TiInput } from '../../';
+  import { StdOptionItem, Util } from '../../../core';
+  import { TiList, TiInput, ListSelectEmitInfo, TableRowID } from '../../';
+  import _ from 'lodash';
+  //-----------------------------------------------------
+  const emit = defineEmits<{
+    (event: 'change', payload: TableRowID[]): void;
+  }>();
   //-----------------------------------------------------
   const props = defineProps<TransferProps>();
   const _stat = reactive({
@@ -17,14 +22,59 @@
   const _tran = computed(() => useTransfer(_stat, props));
   //-----------------------------------------------------
   const CanList = computed(() => _tran.value.getCandidateList());
+  const CanCheckedIds = computed(() => Util.arrayToMap(_stat.can_checked_ids));
+  const SelCheckedIds = computed(() => Util.arrayToMap(_stat.sel_checked_ids));
   //-----------------------------------------------------
   const ListConfig = computed(() => _tran.value.getListConfig());
+  //-----------------------------------------------------
+  const ActionStatus = computed(() => ({
+    hasCanChecked: !_.isEmpty(_stat.can_checked_ids),
+    hasSelChecked: !_.isEmpty(_stat.sel_checked_ids),
+  }));
+  //-----------------------------------------------------
+  const AssignButtonClass = computed(() => ({
+    'is-enabled': ActionStatus.value.hasCanChecked,
+    'is-disabled': !ActionStatus.value.hasCanChecked,
+  }));
+  //-----------------------------------------------------
+  const RemoveButtonClass = computed(() => ({
+    'is-enabled': ActionStatus.value.hasSelChecked,
+    'is-disabled': !ActionStatus.value.hasSelChecked,
+  }));
+  //-----------------------------------------------------
+  function onCanSelect(payload: ListSelectEmitInfo) {
+    _stat.can_checked_ids = Util.mapTruthyKeys(payload.checkedIds);
+  }
+  //-----------------------------------------------------
+  function onSelSelect(payload: ListSelectEmitInfo) {
+    _stat.sel_checked_ids = Util.mapTruthyKeys(payload.checkedIds);
+  }
+  //-----------------------------------------------------
+  function doAssign() {
+    if (ActionStatus.value.hasCanChecked) {
+      let vals = _.concat(props.value || [], _stat.can_checked_ids);
+      _stat.can_checked_ids = [];
+      emit('change', vals);
+    }
+  }
+  //-----------------------------------------------------
+  function doRemove() {
+    if (ActionStatus.value.hasSelChecked) {
+      let selMap = Util.arrayToMap(_stat.sel_checked_ids);
+      _stat.sel_checked_ids = [];
+      let vals = _.filter(props.value, (v) => {
+        return selMap.get(v);
+      }) as TableRowID[];
+      emit('change', vals);
+    }
+  }
   //-----------------------------------------------------
   watch(
     () => props.options,
     () => {
       _tran.value.reloadOptions();
-    }
+    },
+    { immediate: true }
   );
   //-----------------------------------------------------
   watch(
@@ -45,24 +95,51 @@
       <!--========: Can List :====== -->
       <div class="part-list as-can">
         <TiList
-          v-bind="ListConfig"
           class="fit-parent"
-          :data="CanList" />
+          v-bind="ListConfig"
+          :checked-ids="CanCheckedIds"
+          :multi="true"
+          :empty-roadblock="
+            _tran.getListEmptyRoadblock('i18n:nil-content', 'fas-list')
+          "
+          :data="CanList"
+          @select="onCanSelect">
+          <template v-slot:head>
+            <div class="transfer-filter">
+              <TiInput
+                :value="_stat.filterValue"
+                :trimed="true"
+                :prefix-icon-for-clean="true"
+                prefix-icon="zmdi-search" />
+            </div>
+          </template>
+        </TiList>
       </div>
-      <!--========: Operation :====== -->
+      <!--========: Actions :====== -->
       <div class="part-actions">
-        <TiInput
-          :value="_stat.filterValue"
-          :trimed="true"
-          :prefix-icon-for-clean="true"
-          prefix-icon="zmdi-search" />
+        <a
+          :class="AssignButtonClass"
+          @click="doAssign"
+          ><i class="zmdi zmdi-arrow-right"></i
+        ></a>
+        <a
+          :class="RemoveButtonClass"
+          @click="doRemove"
+          ><i class="zmdi zmdi-arrow-left"></i
+        ></a>
       </div>
       <!--========: Sel List :====== -->
       <div class="part-list as-sel">
         <TiList
-          v-bind="ListConfig"
           class="fit-parent"
-          :data="_sel_list" />
+          v-bind="ListConfig"
+          :checked-ids="SelCheckedIds"
+          :multi="true"
+          :empty-roadblock="
+            _tran.getListEmptyRoadblock('i18n:nil-item', 'fas-arrow-left')
+          "
+          :data="_sel_list"
+          @select="onSelSelect" />
       </div>
     </main>
     <slot name="tail"></slot>

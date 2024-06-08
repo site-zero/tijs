@@ -1,6 +1,6 @@
-import { StdOptionItem, Vars, getLogger } from '../../../core';
+import { IconInput, StdOptionItem, Vars, getLogger } from '../../../core';
 import { Ref, computed } from 'vue';
-import { ListProps, TableRowID } from '../../../lib';
+import { ListProps, RoadblockProps, TableRowID } from '../../../lib';
 import { useOptions, useStdListItem } from '../../../lib/_features';
 import { TransferProps, TransferState } from './ti-transfer-types';
 import _ from 'lodash';
@@ -13,11 +13,22 @@ export function useTransfer(state: TransferState, props: TransferProps) {
 
   function getListConfig(): ListProps {
     return {
+      borderStyle: 'solid',
       getIcon: props.getIcon,
       getText: props.getText,
       getTip: props.getTip,
       getId: props.getValue,
     };
+  }
+
+  function getListEmptyRoadblock(text: string, icon: IconInput) {
+    return {
+      text,
+      icon,
+      mode: 'cover',
+      size: 'normal',
+      layout: 'A',
+    } as RoadblockProps;
   }
 
   async function reloadOptions(force?: boolean): Promise<void> {
@@ -82,6 +93,7 @@ export function useTransfer(state: TransferState, props: TransferProps) {
 
   return {
     getListConfig,
+    getListEmptyRoadblock,
     valueSet,
     reloadOptions,
     queryOptions,

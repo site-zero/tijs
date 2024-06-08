@@ -19,7 +19,7 @@ export type ListProps = CommonProps &
     /**
      * 当列表内容为空的时候，显示的内容
      */
-    blankAs?: RoadblockProps;
+    emptyRoadblock?: RoadblockProps;
 
     // 指明如果带上 tip ， tip 栏的宽度，默认为 1fr
     tipWidth?: string;

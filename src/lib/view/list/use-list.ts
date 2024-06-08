@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { EventUtils, I18n, IconInput, Vars, getLogger } from '../../../core';
+import { EventUtils, I18n, Vars, getLogger } from '../../../core';
 import {
   SelectableState,
   useSelectable,
@@ -18,9 +18,17 @@ import {
 
 const log = getLogger('TiList.use-list');
 
-export function useList(props: ListProps, emit: ListEmitter) {
+export function useList(
+  selection: SelectableState<TableRowID>,
+  props: ListProps,
+  emit: ListEmitter
+) {
   // 启用特性
+  console.log('reuse selectable', props.data)
   let selectable = useSelectable<TableRowID>(props);
+  selectable.updateSelection(selection, props.currentId, props.checkedIds);
+
+  // 标准列表
   let { getItemValue, getItemIcon, getItemText, getItemTip } = useStdListItem({
     ...props,
     getValue: (it: Vars): TableRowID | undefined => {
@@ -38,7 +46,7 @@ export function useList(props: ListProps, emit: ListEmitter) {
       size: 'small',
       opacity: 'faint',
     };
-    _.assign(re, props.blankAs);
+    _.assign(re, props.emptyRoadblock);
     return re as RoadblockProps;
   }
 

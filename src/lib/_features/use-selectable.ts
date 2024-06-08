@@ -47,7 +47,7 @@ export type SelectableProps<ID extends string | number> = {
 
 // -----------------------------------------------------
 export type SelectableFeature<ID extends string | number> = {
-  createSelection: () => SelectableState<ID>;
+  //createSelection: () => SelectableState<ID>;
 
   getRowIds: () => ID[];
 
@@ -201,7 +201,9 @@ export function useSelectable<ID extends string | number>(
     currentId?: ID | null,
     checkedIds?: CheckedIds<ID>
   ) {
+    selection.ids = getRowIds();
     let ids = new Map<ID, boolean>();
+    console.log(selection.ids)
 
     // allow multi
     if (props.multi) {
@@ -284,13 +286,13 @@ export function useSelectable<ID extends string | number>(
     return ids;
   }
 
-  function createSelection(): SelectableState<ID> {
-    let state = {
-      ids: getRowIds(),
-    } as SelectableState<ID>;
-    updateSelection(state, props.currentId, props.checkedIds);
-    return state;
-  }
+  // function createSelection(): SelectableState<ID> {
+  //   let state = {
+  //     ids: getRowIds(),
+  //   } as SelectableState<ID>;
+  //   updateSelection(state, props.currentId, props.checkedIds);
+  //   return state;
+  // }
 
   /*-----------------------------------------------------
 
@@ -425,7 +427,7 @@ export function useSelectable<ID extends string | number>(
 
   return {
     getRowIds,
-    createSelection,
+    ////createSelection,
 
     getDataId,
     isIDChecked,
