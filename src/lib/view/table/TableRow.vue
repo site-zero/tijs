@@ -20,9 +20,9 @@
     showRowMarker: true,
     showCheckbox: true,
     showRowIndex: true,
-    canHover: true,
-    canCheck: true,
-    canSelect: true,
+    // canHover: true,
+    // canCheck: true,
+    // canSelect: true,
   });
   //-------------------------------------------------------
   let emit = defineEmits<TableRowEmitter>();

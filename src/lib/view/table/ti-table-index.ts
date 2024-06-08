@@ -26,6 +26,16 @@ const TiTableInfo: TiComInfo = {
       val: '=changed',
       mode: 'assign',
     },
+    'select': [
+      {
+        key: 'currentId',
+        val: '=currentId',
+      },
+      {
+        key: 'checkedIds',
+        val: '=checkedIds',
+      },
+    ],
   },
 };
 

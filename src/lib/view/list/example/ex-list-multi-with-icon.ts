@@ -11,6 +11,8 @@ export default {
     size: 'b',
     currentId: null,
     checkedIds: {},
+    canSelect: false,
+    canCheck: true,
     data: getListData({ icon: true, tip: false }),
   } as ListProps,
 } as ComPropExample;

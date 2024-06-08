@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import { App, DefineComponent, InjectionKey } from 'vue';
-import { FieldName, TableRowID } from '../../lib';
 import { I18n, TiBus } from '../ti';
 import { Rect } from './ti-rect';
 export * from './_types_css';
@@ -109,6 +108,10 @@ export type Limitation = {
   limit: number;
   skip: number;
 };
+
+export type TableRowID = number | string;
+
+export type FieldName = string | string[];
 
 export type Size2D = {
   width: number;

@@ -32,8 +32,6 @@ export type WnObjStatus = {
   uploaded: boolean; // 显示已经上传成功的标记
 };
 
-export type TableRowID = number | string;
-
 /*---------------------------------------------------
 
                       Sidebar

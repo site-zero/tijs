@@ -8,6 +8,7 @@ export type SelectableState<ID> = {
   currentId?: ID | null;
   checkedIds: Map<ID, boolean>;
   ids: ID[];
+  lastSelectId?: ID;
 };
 export type SelectEmitInfo<ID> = {
   currentId?: ID | null;
@@ -43,6 +44,11 @@ export type SelectableProps<ID extends string | number> = {
 
   currentId?: ID | null;
   checkedIds?: CheckedIds<ID>;
+
+  // 列表是否可以选择
+  canSelect?: boolean;
+
+  canCheck?: boolean;
 };
 
 // -----------------------------------------------------
@@ -185,7 +191,7 @@ export function useSelectable<ID extends string | number>(
     let currentId = state.currentId ?? null;
     let ckIds = Util.mapTruthyKeys(state.checkedIds);
     let checkedIds = Util.arrayToMap(ckIds);
-    let current = getCurrentData(list, state);
+    let current = _.isNil(currentId) ? undefined : getCurrentData(list, state);
     let checked = getCheckedData(list, state);
     return {
       currentId,
@@ -204,7 +210,7 @@ export function useSelectable<ID extends string | number>(
   ) {
     selection.ids = getRowIds();
     let ids = new Map<ID, boolean>();
-    console.log(selection.ids);
+    //console.log(selection.ids);
 
     // allow multi
     if (props.multi) {
@@ -232,10 +238,12 @@ export function useSelectable<ID extends string | number>(
     }
     // Single selection
     else {
+      //..........................................
       // use currentId
       if (!_.isNil(currentId)) {
         ids.set(currentId, true);
       }
+      //..........................................
       // use checkedIds
       else {
         // Use Map
@@ -264,6 +272,7 @@ export function useSelectable<ID extends string | number>(
           }
         }
       }
+      //..........................................
     }
 
     selection.checkedIds = ids;
@@ -321,50 +330,65 @@ export function useSelectable<ID extends string | number>(
                    Action Handler
                 
   -----------------------------------------------------*/
-
   function select(
     selection: SelectableState<ID>,
     rowId: ID,
     se: KeyboardStatus
   ) {
+    if (!props.canSelect && props.canCheck && !se.shiftKey) {
+      toggleId(selection, rowId);
+    }
     // Toggle Mode
-    if (se.ctrlKey || se.metaKey) {
+    else if (se.ctrlKey || se.metaKey) {
       toggleId(selection, rowId);
     }
     // shiftKey
     else if (se.shiftKey) {
       let ids = selection.ids;
-      selectRange(selection, ids, [rowId, selection.currentId]);
+      selectRange(selection, ids, [
+        rowId,
+        selection.currentId ?? selection.lastSelectId,
+      ]);
     }
     // Default Simple Mode
     else {
       selectId(selection, rowId);
     }
+    selection.lastSelectId = rowId;
   }
 
-  function selectId(state: SelectableState<ID>, id: ID) {
-    state.checkedIds.clear();
-    state.currentId = id;
-    state.checkedIds.clear();
-    state.checkedIds.set(id, true);
+  function selectId(selection: SelectableState<ID>, id: ID) {
+    selection.checkedIds.clear();
+    selection.currentId = id;
+    selection.checkedIds.clear();
+    selection.checkedIds.set(id, true);
+    selection.lastSelectId = id;
   }
 
-  function toggleId(state: SelectableState<ID>, id: ID) {
-    let checked: boolean = state.checkedIds.get(id) ?? false;
+  function toggleId(selection: SelectableState<ID>, id: ID) {
+    let checked: boolean = selection.checkedIds.get(id) ?? false;
     checked = checked ? false : true;
-    state.checkedIds.set(id, checked);
-    if (!checked && state.currentId === id) {
-      state.currentId = undefined;
+    selection.checkedIds.set(id, checked);
+    if (!checked && selection.currentId === id) {
+      selection.currentId = undefined;
     }
+    selection.lastSelectId = id;
   }
 
   function selectRange(
-    state: SelectableState<ID>,
+    selection: SelectableState<ID>,
     ids: ID[],
     range: [ID, ID | undefined | null]
   ) {
     // 没有内容
     if (_.isEmpty(ids)) {
+      return;
+    }
+
+    // 仅仅是单选
+    if (!props.multi) {
+      let id = range[1] ?? range[0];
+      selectId(selection, id);
       return;
     }
 
@@ -374,8 +398,8 @@ export function useSelectable<ID extends string | number>(
     if (_.isUndefined(toId)) {
       toId = fromId;
       // 从 currentId 出发
-      if (state.currentId) {
-        fromId = state.currentId;
+      if (selection.currentId) {
+        fromId = selection.currentId;
       }
       // 从第一个 ID 出发
       else if (ids.length > 0) {
@@ -413,16 +437,23 @@ export function useSelectable<ID extends string | number>(
     fromIndex = idx[0];
     toIndex = idx[1];
 
+    // 这种特殊模式，需要与起始条目设置相同
+    let yes = true;
+    if (!props.canSelect && props.canCheck && toId) {
+      console.log('toId=', toId);
+      yes = selection.checkedIds.get(toId) ? true : false;
+    }
+
     // 准备要选择的 ids
     let idMap = new Map<ID, boolean>();
     for (let i = fromIndex; i <= toIndex; i++) {
       let id = ids[i];
-      idMap.set(id, true);
+      idMap.set(id, yes);
     }
 
     // 更新
     if (idMap.size > 0) {
-      Util.assignMap(state.checkedIds, idMap);
+      Util.assignMap(selection.checkedIds, idMap);
     }
   }
 

@@ -1,14 +1,12 @@
 <script lang="ts" setup>
-  import { computed, reactive, ref, watch } from 'vue';
-  import { TransferProps, TransferState } from './ti-transfer-types';
-  import { useTransfer } from './use-transfer';
-  import { StdOptionItem, Util } from '../../../core';
-  import { TiList, TiInput, ListSelectEmitInfo, TableRowID } from '../../';
   import _ from 'lodash';
+  import { computed, reactive, ref, watch } from 'vue';
+  import { ListSelectEmitInfo, TiActionBar, TiInput, TiList } from '../../';
+  import { I18n, StdOptionItem, TableRowID, Util } from '../../../core';
+  import { TransferProps, TransferState } from './ti-transfer-types';
+  import { TransferEmitter, useTransfer } from './use-transfer';
   //-----------------------------------------------------
-  const emit = defineEmits<{
-    (event: 'change', payload: TableRowID[]): void;
-  }>();
+  const emit = defineEmits<TransferEmitter>();
   //-----------------------------------------------------
   const props = defineProps<TransferProps>();
   const _stat = reactive({
@@ -19,7 +17,7 @@
   } as TransferState);
   const _sel_list = ref<StdOptionItem[]>([]);
   //-----------------------------------------------------
-  const _tran = computed(() => useTransfer(_stat, props));
+  const _tran = computed(() => useTransfer(_stat, props, emit));
   //-----------------------------------------------------
   const CanList = computed(() => _tran.value.getCandidateList());
   const CanCheckedIds = computed(() => Util.arrayToMap(_stat.can_checked_ids));
@@ -30,7 +28,10 @@
   const ActionStatus = computed(() => ({
     hasCanChecked: !_.isEmpty(_stat.can_checked_ids),
     hasSelChecked: !_.isEmpty(_stat.sel_checked_ids),
+    hasValues: !_.isEmpty(props.value),
   }));
+  //-----------------------------------------------------
+  const SelMenuActionItems = computed(() => _tran.value.getSelMenuItems());
   //-----------------------------------------------------
   const AssignButtonClass = computed(() => ({
     'is-enabled': ActionStatus.value.hasCanChecked,
@@ -100,17 +101,20 @@
           :checked-ids="CanCheckedIds"
           :multi="true"
           :empty-roadblock="
-            _tran.getListEmptyRoadblock('i18n:nil-content', 'fas-list')
+            _tran.getListEmptyRoadblock('i18n:ti-transfer-can-none', 'fas-list')
           "
           :data="CanList"
           @select="onCanSelect">
           <template v-slot:head>
-            <div class="transfer-filter">
+            <div class="list-head transfer-filter">
               <TiInput
+                placeholder="i18n:ti-transfer-filter-tip"
                 :value="_stat.filterValue"
                 :trimed="true"
                 :prefix-icon-for-clean="true"
-                prefix-icon="zmdi-search" />
+                prefix-icon="zmdi-search"
+                prefix-hover-icon="fas-xmark"
+                @change="_stat.filterValue = $event" />
             </div>
           </template>
         </TiList>
@@ -120,12 +124,12 @@
         <a
           :class="AssignButtonClass"
           @click="doAssign"
-          ><i class="zmdi zmdi-arrow-right"></i
-        ></a>
+          ><i class="fa-solid fa-angles-right"></i>
+        </a>
         <a
           :class="RemoveButtonClass"
           @click="doRemove"
-          ><i class="zmdi zmdi-arrow-left"></i
+          ><i class="fa-solid fa-angles-left"></i
         ></a>
       </div>
       <!--========: Sel List :====== -->
@@ -139,7 +143,16 @@
             _tran.getListEmptyRoadblock('i18n:nil-item', 'fas-arrow-left')
           "
           :data="_sel_list"
-          @select="onSelSelect" />
+          @select="onSelSelect">
+          <template v-slot:head>
+            <div class="list-head transfer-menu">
+              <span>{{ I18n.get('ti-transfer-sel-list') }}:</span>
+              <TiActionBar
+                :items="SelMenuActionItems"
+                :vars="ActionStatus" />
+            </div>
+          </template>
+        </TiList>
       </div>
     </main>
     <slot name="tail"></slot>

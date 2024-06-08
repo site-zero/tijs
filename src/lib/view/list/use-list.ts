@@ -1,13 +1,11 @@
 import _ from 'lodash';
-import { EventUtils, I18n, Vars, getLogger } from '../../../core';
+import { EventUtils, I18n, TableRowID, Vars, getLogger } from '../../../core';
 import {
   SelectableState,
   useSelectable,
   useStdListItem,
 } from '../../_features';
 import { RoadblockProps } from '../../tile/roadblock/ti-roadblock-types';
-
-import { TableRowID } from '../../../lib';
 import {
   ListEmitter,
   ListEvent,
@@ -18,15 +16,9 @@ import {
 
 const log = getLogger('TiList.use-list');
 
-export function useList(
-  selection: SelectableState<TableRowID>,
-  props: ListProps,
-  emit: ListEmitter
-) {
+export function useList(props: ListProps, emit: ListEmitter) {
   // 启用特性
-  console.log('reuse selectable', props.data)
   let selectable = useSelectable<TableRowID>(props);
-  selectable.updateSelection(selection, props.currentId, props.checkedIds);
 
   // 标准列表
   let { getItemValue, getItemIcon, getItemText, getItemTip } = useStdListItem({
@@ -101,10 +93,6 @@ export function useList(
     selection: SelectableState<TableRowID>,
     itemEvent: ListEvent
   ) {
-    // Guard
-    if (!props.selectable) {
-      return;
-    }
     log.debug('OnItemSelect', itemEvent);
     let oldCurrentId = _.cloneDeep(selection.currentId);
     let oldCheckedIds = _.cloneDeep(selection.checkedIds);
@@ -128,10 +116,6 @@ export function useList(
     selection: SelectableState<TableRowID>,
     itemEvent: ListEvent
   ) {
-    // Guard
-    if (!props.selectable) {
-      return;
-    }
     log.debug('OnItemCheck', itemEvent);
     let oldCurrentId = _.cloneDeep(selection.currentId);
     let oldCheckedIds = _.cloneDeep(selection.checkedIds);
@@ -151,7 +135,6 @@ export function useList(
   }
 
   return {
-    selectable,
     getItemValue,
     getItemIcon,
     getItemText,
@@ -160,6 +143,8 @@ export function useList(
     buildOptionItems,
     itemsHasIcon,
     itemsHasTip,
+
+    updateSelection: selectable.updateSelection,
 
     OnItemSelect,
     OnItemCheck,

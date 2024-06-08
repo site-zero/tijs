@@ -1,7 +1,6 @@
+import { StdOptionItem, TableRowID } from '../../../core';
 import { ReadonlyProps, StdListItemProps } from '../../_features';
 import { OptionsProps } from '../../_features/use-options';
-import { TableRowID } from '../../_top';
-import { StdOptionItem } from '../../../core';
 
 export type TransferProps = ReadonlyProps &
   OptionsProps &

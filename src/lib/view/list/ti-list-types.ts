@@ -1,11 +1,10 @@
-import { RoadblockProps, StdListItemProps, TableRowID } from '../../';
+import { RoadblockProps, StdListItemProps } from '../../';
 import {
   AnyOptionItem,
   AspectSize,
   CommonProps,
-  Convertor,
   CssBorderStyle,
-  IconInput,
+  TableRowID,
   Vars,
 } from '../../../core';
 import {
@@ -30,11 +29,8 @@ export type ListProps = CommonProps &
     // 列表项边线样式
     borderStyle?: CssBorderStyle;
 
-    // 列表是否可以选择
-    selectable?: boolean;
-
     // 是否显示列表鼠标 hover 高亮
-    hoverable?: boolean;
+    canHover?: boolean;
 
     // 可以鼠标选择文字，默认是 false
     allowUserSelect?: boolean;

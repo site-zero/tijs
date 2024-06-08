@@ -7,8 +7,8 @@ export function getTipListConf(props?: ListProps) {
   let re = _.assign(
     {
       size: 's',
-      selectable: true,
-      hoverable: true,
+      canSelect: true,
+      canHover: true,
       allowUserSelect: false,
       borderStyle: 'solid',
     } as ListProps,

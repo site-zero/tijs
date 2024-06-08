@@ -114,12 +114,16 @@
   &.is-hoverable {
     &.tip-block > main > .list-item {
       &:hover {
-        color: var(--ti-color-hightlight-f);
-        background-color: var(--ti-color-hightlight);
         > .list-part.as-tip {
           color: var(--ti-color-hightlight-f);
           background-color: var(--ti-color-hightlight);
         }
+      }
+    }
+    > main > .list-item {
+      &:hover {
+        color: var(--ti-color-hightlight-f);
+        background-color: var(--ti-color-hightlight);
       }
     }
   }

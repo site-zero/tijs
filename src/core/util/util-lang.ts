@@ -216,6 +216,21 @@ export function anyToBool(v: any, trueReg = /^(true|yes|on)$/i): boolean {
  *
  * @param ids ID 列表
  */
+export function arrayToSet<T>(ids?: T[]): Set<T> {
+  let set = new Set<T>();
+  if (ids) {
+    for (let id of ids) {
+      set.add(id);
+    }
+  }
+  return set;
+}
+
+/**
+ * 一个帮助函数而已，方便通过  `ID[]` 生成 `Map<ID,boolean>`
+ *
+ * @param ids ID 列表
+ */
 export function arrayToMap<T>(ids?: T[]): Map<T, boolean> {
   let map = new Map<T, boolean>();
   if (ids) {

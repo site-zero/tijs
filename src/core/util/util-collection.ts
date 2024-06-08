@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { TextStrValue } from '../ti';
+import { TableRowID, TextStrValue, Util } from '../ti';
 
 /***
  * 将一组值推到一个对象的某个指定键下,
@@ -67,7 +67,7 @@ type GroupingReturn = {
 export function grouping(
   list: any[] = [],
   groupKey: string,
-  options: GroupingOptions | undefined,
+  options: GroupingOptions | undefined
 ):
   | {
       [k: string]: GroupingReturn;
@@ -128,4 +128,97 @@ export function grouping(
     return _.values(reMap);
   }
   return reMap;
+}
+
+/**
+ *
+ * @param list
+ * @param ids
+ * @param dir
+ * @param getId
+ * @returns
+ */
+export function moveCheckedById<T>(
+  list: T[],
+  ids: TableRowID[],
+  dir: MoveDirection,
+  getId?: (it: T) => TableRowID
+) {
+  if (!getId) {
+    getId = (it: T) => {
+      if (_.isString(it) || _.isNumber(it)) {
+        return it as TableRowID;
+      }
+      return (_.get(it, 'id') ?? _.get(it, 'value')) as TableRowID;
+    };
+  }
+  const idSet = Util.arrayToSet(ids);
+  const isChecked = (it: T) => {
+    let id = getId(it);
+    return idSet.has(id);
+  };
+  return moveChecked(list, isChecked, dir);
+}
+
+export type MoveDirection = 'prev' | 'next' | 'head' | 'tail';
+
+/**
+ *
+ * @param list
+ * @param isChecked
+ * @param dir
+ * @returns
+ */
+export function moveChecked<T>(
+  list: T[],
+  isChecked: (it: T) => boolean,
+  dir: MoveDirection
+) {
+  // 寻找开始以及结束下标
+  let I_start = -1;
+  let I_end = -1;
+  let checks = [] as T[];
+  let re = [] as any[];
+  for (let i = 0; i < list.length; i++) {
+    let li = list[i];
+    if (isChecked(li)) {
+      I_end = i;
+      if (I_start < 0) {
+        I_start = i;
+      }
+      checks.push(_.cloneDeep(li));
+      re.push(undefined);
+    }
+    // 记录
+    else {
+      re.push(_.cloneDeep(li));
+    }
+  }
+
+  // 木有找到
+  if (I_start < 0) {
+    return;
+  }
+
+  // 开始移动
+  let prevI = Math.max(0, I_start - 1);
+  let fns = {
+    prev: () => {
+      re.splice(prevI, 0, ...checks);
+    },
+    next: () => {
+      re.splice(I_end + 2, 0, ...checks);
+    },
+    head: () => {
+      re.splice(0, 0, ...checks);
+    },
+    tail: () => {
+      re.push(...checks);
+    },
+  } as Record<MoveDirection, () => void>;
+
+  // 执行算法
+  fns[dir]();
+
+  return _.without(re, undefined);
 }

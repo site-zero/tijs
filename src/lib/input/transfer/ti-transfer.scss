@@ -12,7 +12,7 @@
     gap: var(--ti-gap-s);
     padding: var(--ti-gap-s);
     background-color: var(--ti-color-body);
-    grid-template-areas: 'can-list  actions   sel-list';
+    grid-template-areas: "can-list  actions   sel-list";
     > div.part-list {
       background-color: var(--ti-color-card);
       border-radius: var(--ti-measure-r-s);
@@ -23,9 +23,18 @@
       &.as-sel {
         grid-area: sel-list;
       }
-      .transfer-filter {
+      .list-head {
         padding: var(--ti-gap-m);
         border-bottom: 1px solid var(--ti-color-border-shallow);
+        &.transfer-menu {
+          @include flex-align-nowrap($jc: flex-end);
+          > span {
+            display: block;
+            flex: 1 1 auto;
+            padding: 0 0.8em;
+            font-weight: bold;
+          }
+        }
       }
     }
     > div.part-actions {

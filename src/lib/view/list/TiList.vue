@@ -1,16 +1,16 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed, reactive, watch } from 'vue';
-  import { SelectableState, TableRowID, TiIcon, TiRoadblock } from '../../';
-  import { CssUtils } from '../../../core';
+  import { SelectableState, TiIcon, TiRoadblock } from '../../';
+  import { CssUtils, TableRowID } from '../../../core';
   import { ListEmitter, ListProps } from './ti-list-types';
   import { useList } from './use-list';
 
   const props = withDefaults(defineProps<ListProps>(), {
     data: () => [],
     size: 'm',
-    selectable: true,
-    hoverable: true,
+    canSelect: true,
+    canHover: true,
     allowUserSelect: false,
     autoI18n: true,
   });
@@ -21,7 +21,7 @@
     checkedIds: new Map<TableRowID, boolean>(),
     ids: [],
   } as SelectableState<TableRowID>);
-  const List = computed(() => useList(selection, props, emit));
+  const List = computed(() => useList(props, emit));
 
   const roadblock = computed(() => List.value.getRoadblock());
   const Items = computed(() => List.value.buildOptionItems(selection));
@@ -36,8 +36,8 @@
     return CssUtils.mergeClassName(
       props.className,
       {
-        'is-hoverable': props.hoverable,
-        'is-selectable': props.selectable,
+        'is-hoverable': props.canHover,
+        'is-selectable': props.canSelect || props.canCheck,
         'none-user-select': !props.allowUserSelect,
       },
       names
@@ -60,20 +60,21 @@
     };
   });
 
-  // watch(
-  //   () => {
-  //     return { currentId: props.currentId, checkedIds: props.checkedIds };
-  //   },
-  //   ({ currentId, checkedIds }) => {
-  //     console.log('updateSelection', currentId, checkedIds);
-  //     List.value.selectable.updateSelection(selection, currentId, checkedIds);
-  //   }
-  // );
+  watch(
+    () => [props.currentId, props.checkedIds],
+    () => {
+      List.value.updateSelection(selection, props.currentId, props.checkedIds);
+    },
+    {
+      immediate: true,
+    }
+  );
 </script>
 <template>
   <div
     class="ti-list"
     :class="TopClass">
+    <slot name="head"></slot>
     <!--------------Empty Items------------------>
     <div
       class="empty-tip"
@@ -81,53 +82,50 @@
       <TiRoadblock v-bind="roadblock" />
     </div>
     <!---------------Show List------------------->
-    <template v-else>
-      <slot name="head"></slot>
-      <main>
+    <main v-else>
+      <div
+        v-for="it in Items"
+        class="list-item"
+        :class="it.className"
+        :style="ListItemStyle"
+        @click="List.OnItemSelect(selection, { event: $event, item: it })">
+        <!--***********************************-->
+        <!--=Check=-->
         <div
-          v-for="it in Items"
-          class="list-item"
-          :class="it.className"
-          :style="ListItemStyle"
-          @click="List.OnItemSelect(selection, { event: $event, item: it })">
-          <!--***********************************-->
-          <!--=Check=-->
-          <div
-            v-if="props.multi"
-            class="list-part as-check"
-            @click.stop="
-              List.OnItemCheck(selection, { event: $event, item: it })
-            ">
-            <i
-              v-if="it.checked"
-              class="zmdi zmdi-check-square"></i>
-            <i
-              v-else
-              class="zmdi zmdi-square-o"></i>
-          </div>
-          <!--=Icon=-->
-          <div
-            v-if="isItemsHasIcon"
-            class="list-part as-icon">
-            <TiIcon
-              v-if="it.icon"
-              :value="it.icon" />
-          </div>
-          <!--=Text=-->
-          <div class="list-part as-text">
-            <div>{{ it.text }}</div>
-          </div>
-          <!--=Tip=-->
-          <div
-            v-if="isItemsHasTip"
-            class="list-part as-tip">
-            <div v-if="it.tip">{{ it.tip }}</div>
-          </div>
-          <!--=Endl-->
+          v-if="props.multi"
+          class="list-part as-check"
+          @click.stop="
+            List.OnItemCheck(selection, { event: $event, item: it })
+          ">
+          <i
+            v-if="it.checked"
+            class="zmdi zmdi-check-square"></i>
+          <i
+            v-else
+            class="zmdi zmdi-square-o"></i>
         </div>
-      </main>
-      <slot name="tail"></slot>
-    </template>
+        <!--=Icon=-->
+        <div
+          v-if="isItemsHasIcon"
+          class="list-part as-icon">
+          <TiIcon
+            v-if="it.icon"
+            :value="it.icon" />
+        </div>
+        <!--=Text=-->
+        <div class="list-part as-text">
+          <div>{{ it.text }}</div>
+        </div>
+        <!--=Tip=-->
+        <div
+          v-if="isItemsHasTip"
+          class="list-part as-tip">
+          <div v-if="it.tip">{{ it.tip }}</div>
+        </div>
+        <!--=Endl-->
+      </div>
+    </main>
+    <slot name="tail"></slot>
   </div>
 </template>
 <style lang="scss" scoped>

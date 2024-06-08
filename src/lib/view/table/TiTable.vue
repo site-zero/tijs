@@ -16,11 +16,16 @@
     useFieldChange,
     useLargeScrolling,
   } from '../../';
-  import { CssUtils, Size2D, Util, getLogger } from '../../../core';
+  import { CssUtils, Size2D, TableRowID, getLogger } from '../../../core';
   import { COM_TYPES } from '../../lib-com-types';
   import TableRow from './TableRow.vue';
   import { buildTableColumns } from './build-table-column';
-  import { TableCellChanged, TableEmitter, TableProps } from './ti-table-types';
+  import {
+    TableCellChanged,
+    TableEmitter,
+    TableProps,
+    TableSelection,
+  } from './ti-table-types';
   import {
     ColResizingState,
     getRowActivedColIndex,
@@ -83,7 +88,12 @@
     cacheZoneHeight: 600,
     lineMarkers: [] as number[],
   });
-  const selection = reactive(Table.value.createSelection());
+  const selection = reactive({
+    currentId: undefined,
+    checkedIds: new Map<TableRowID, boolean>(),
+    ids: [],
+    columnIndex: -1,
+  } as TableSelection);
   //-------------------------------------------------------
   /**
    * 定制每个列的宽高，0 表示这个行是自动 `1fr`
@@ -284,8 +294,16 @@
   watch(
     () => [props.currentId, props.checkedIds],
     () => {
-      selection.currentId = props.currentId;
-      selection.checkedIds = Util.objToMap(props.checkedIds);
+      console.log('updateSelection before:', props.currentId, props.checkedIds);
+      Table.value.updateSelection(selection, props.currentId, props.checkedIds);
+      console.log(
+        'updateSelection after',
+        selection.currentId,
+        selection.checkedIds
+      );
+    },
+    {
+      immediate: true,
     }
   );
   // watch(
@@ -389,9 +407,6 @@
           :showRowMarker="ShowRowMarker"
           :showCheckbox="showCheckbox"
           :showRowIndex="showRowIndex"
-          :canHover="canHover"
-          :canCheck="canCheck"
-          :canSelect="canSelect"
           :row="row"
           :vars="vars"
           :activated="row.id == selection.currentId"

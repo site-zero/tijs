@@ -6,7 +6,7 @@ export default {
   text: 'i18n:simple',
   comConf: {
     options: [
-      { value: 'hippo', text: 'Hippo', icon: 'fas-hippo' },
+      { value: 'hippo', text: 'Hippo', icon: 'fas-hippo'},
       { value: 'cow', text: 'Cow', icon: 'fas-cow' },
       { value: 'spider', text: 'Spider', icon: 'fas-spider' },
       { value: 'frog', text: 'Frog', icon: 'fas-frog' },

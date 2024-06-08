@@ -2,21 +2,21 @@ import {
   AbstractField,
   FieldChangeProps,
   FieldComProps,
-  FieldName,
   KeepInfo,
   RoadblockProps,
   SelectEmitInfo,
   SelectableProps,
   SelectableState,
-  TableRowID,
 } from '../..';
 import {
   Callback2,
   CommonProps,
   CssTextAlign,
   FieldChange,
+  FieldName,
   IconInput,
   InvokePartial,
+  TableRowID,
   TextContentType,
   Vars,
 } from '../../../core';
@@ -123,8 +123,6 @@ export type TableBehaviorsProps = {
   showRowIndex?: boolean;
 
   canHover?: boolean;
-  canCheck?: boolean;
-  canSelect?: boolean;
 };
 
 export type TableProps = CommonProps &

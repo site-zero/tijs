@@ -6,11 +6,21 @@ import example from './example';
 
 const en_us = {
   'com-name': 'Transfer',
+  'filter-tip': 'Filter Option Items',
+  'move-up': 'Move Up',
+  'move-down': 'Move Down',
+  'sel-list': 'Selected Items',
+  'can-none': 'No Option Items',
+  'example-icon-tip': 'with Icon',
 };
 const zh_cn = {
   'com-name': '穿梭框',
+  'filter-tip': '过滤备选项目',
+  'move-up': '上移',
+  'move-down': '下移',
+  'sel-list': '已选值',
+  'can-none': '已经没有备选值',
   'example-icon-tip': '带图标穿梭框',
-  'example-table': '表格穿梭框',
 };
 
 const COM_TYPE = COM_TYPES.Transfer;
@@ -39,7 +49,7 @@ const TiTransferInfo: TiComInfo = {
     app.component(COM_TYPE, TiTransfer);
   },
   defaultProps: 'simple',
-  exampleProps: [example.simple, example.icon_tip, example.table],
+  exampleProps: [example.simple, example.icon_tip],
 };
 
 export { TiTransfer, TiTransferInfo };

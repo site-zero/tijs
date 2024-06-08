@@ -8,6 +8,7 @@ import {
   DateTime,
   ENV_KEYS,
   FieldChange,
+  FieldName,
   InvokePartial,
   NameValue,
   Str,
@@ -180,8 +181,6 @@ export type AsyncFieldValidator = (
 ) => Promise<ValidateResult | undefined>;
 
 export type FieldValueType = keyof FieldConvertorSet;
-
-export type FieldName = string | string[];
 
 export function getFieldUniqKey(name: FieldName): string {
   if (_.isString(name)) {

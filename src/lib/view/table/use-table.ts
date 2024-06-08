@@ -1,15 +1,11 @@
 import _ from 'lodash';
 import { ComputedRef, Ref } from 'vue';
-import {
-  TableRowID,
-  CheckStatus,
-  SelectableFeature,
-  useSelectable,
-} from '../../';
+import { CheckStatus, SelectableFeature, useSelectable } from '../../';
 import {
   Callback,
   Callback1,
   EventUtils,
+  TableRowID,
   Vars,
   getLogger,
 } from '../../../core';
@@ -154,12 +150,6 @@ export function useTable(props: TableProps, emit: TableEmitter) {
       }
     },
 
-    createSelection: (): TableSelection => {
-      let re = selectable.createSelection() as TableSelection;
-      re.columnIndex = -1;
-      return re;
-    },
-
     getRowIds: selectable.getRowIds,
 
     getCheckStatus(selection: TableSelection) {
@@ -206,9 +196,13 @@ export function useTable(props: TableProps, emit: TableEmitter) {
       let oldCurrentId = _.cloneDeep(selection.currentId);
       let oldCheckedIds = _.cloneDeep(selection.checkedIds);
 
-      let { event, row } = rowEvent;
-      let se = EventUtils.getKeyboardStatus(event);
-      selectable.select(selection, row.id, se);
+      if (props.multi) {
+        let { event, row } = rowEvent;
+        let se = EventUtils.getKeyboardStatus(event);
+        selectable.select(selection, row.id, se);
+      } else {
+        selectable.selectId(selection, rowEvent.row.id);
+      }
 
       //
       // Prepare the emit info
@@ -227,7 +221,11 @@ export function useTable(props: TableProps, emit: TableEmitter) {
       log.debug('OnRowCheck', rowEvent);
       let oldCurrentId = _.cloneDeep(selection.currentId);
       let oldCheckedIds = _.cloneDeep(selection.checkedIds);
-      selectable.toggleId(selection, rowEvent.row.id);
+      if (props.multi) {
+        selectable.toggleId(selection, rowEvent.row.id);
+      } else {
+        selectable.selectId(selection, rowEvent.row.id);
+      }
       selection.columnIndex = -1;
 
       //
@@ -283,6 +281,8 @@ export function useTable(props: TableProps, emit: TableEmitter) {
         emit('select', info);
       }
     },
+
+    updateSelection: selectable.updateSelection,
 
     OnRowOpen(_selection: TableSelection, rowEvent: TableEventPayload) {
       log.debug('OnRowOpen', rowEvent);

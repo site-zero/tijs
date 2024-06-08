@@ -1,6 +1,11 @@
 import _ from 'lodash';
-import { Convertor, IconInput, StdOptionItem, Vars } from '../../core';
-import { TableRowID } from '../_top';
+import {
+  Convertor,
+  IconInput,
+  StdOptionItem,
+  TableRowID,
+  Vars,
+} from '../../core';
 
 export type StdListItemProps = {
   /**

@@ -1,15 +1,73 @@
-import { IconInput, StdOptionItem, Vars, getLogger } from '../../../core';
-import { Ref, computed } from 'vue';
-import { ListProps, RoadblockProps, TableRowID } from '../../../lib';
+import _ from 'lodash';
+import { Ref } from 'vue';
+import {
+  ActionBarItem,
+  IconInput,
+  StdOptionItem,
+  TableRowID,
+  Util,
+  getLogger,
+} from '../../../core';
+import { ListProps, RoadblockProps } from '../../../lib';
 import { useOptions, useStdListItem } from '../../../lib/_features';
 import { TransferProps, TransferState } from './ti-transfer-types';
-import _ from 'lodash';
 
 const log = getLogger('ti-use-transfer');
 
-export function useTransfer(state: TransferState, props: TransferProps) {
+export type TransferEmitter = {
+  (event: 'change', payload: TableRowID[]): void;
+};
+
+export function useTransfer(
+  state: TransferState,
+  props: TransferProps,
+  emit: TransferEmitter
+) {
   let { dict } = useOptions(props);
   let { toStdItems } = useStdListItem(props);
+
+  function getSelMenuItems() {
+    return [
+      {
+        icon: 'fas-arrow-up-long',
+        text: 'i18n:ti-transfer-move-up',
+        enabled: { hasSelChecked: true },
+        action: () => {
+          let val = Util.moveCheckedById(
+            props.value ?? [],
+            state.sel_checked_ids,
+            'prev'
+          );
+          if (!_.isNil(val)) {
+            emit('change', val);
+          }
+        },
+      },
+      {
+        icon: 'fas-arrow-down-long',
+        text: 'i18n:ti-transfer-move-down',
+        enabled: { hasSelChecked: true },
+        action: () => {
+          let val = Util.moveCheckedById(
+            props.value ?? [],
+            state.sel_checked_ids,
+            'next'
+          );
+          if (!_.isNil(val)) {
+            emit('change', val);
+          }
+        },
+      },
+      {
+        icon: 'fas-trash-can',
+        text: 'i18n:clear',
+        enabled: { hasValues: true },
+        action: () => {
+          emit('change', []);
+        },
+      },
+    ] as ActionBarItem[];
+  }
 
   function getListConfig(): ListProps {
     return {
@@ -59,9 +117,25 @@ export function useTransfer(state: TransferState, props: TransferProps) {
 
   function getCandidateList(): StdOptionItem[] {
     let list = [] as StdOptionItem[];
+    let fv = state.filterValue?.toUpperCase();
     for (let li of state.options) {
       if (!valueSet.has(li.value)) {
-        list.push(_.cloneDeep(li));
+        // 过滤备选项目
+        if (fv) {
+          let text = li.text?.toUpperCase();
+          let vals = `${li.value}`.toUpperCase();
+          console.log(fv, text, vals);
+          if (
+            (text && text.indexOf(fv) >= 0) ||
+            (vals && vals.indexOf(fv) >= 0)
+          ) {
+            list.push(_.cloneDeep(li));
+          }
+        }
+        // 没有过滤
+        else {
+          list.push(_.cloneDeep(li));
+        }
       }
     }
     return list;
@@ -93,6 +167,7 @@ export function useTransfer(state: TransferState, props: TransferProps) {
 
   return {
     getListConfig,
+    getSelMenuItems,
     getListEmptyRoadblock,
     valueSet,
     reloadOptions,
