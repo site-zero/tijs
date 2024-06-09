@@ -2,8 +2,8 @@
   import _ from 'lodash';
   import { computed } from 'vue';
   import { TiInput } from '../../';
-  import { InputNumProps } from './ti-input-num-types';
   import { Bank, Num } from '../../../core';
+  import { InputNumProps } from './ti-input-num-types';
   //-----------------------------------------------------
   defineOptions({
     inheritAttrs: false,
@@ -55,6 +55,7 @@
 </script>
 <template>
   <TiInput
+    :style="props.style"
     :readonly="props.readonly"
     :placeholder="props.placeholder"
     :autoI18n="props.autoI18n"
@@ -62,6 +63,7 @@
     :format="formatInputText"
     :hideBorder="props.hideBorder"
     :boxFocused="props.boxFocused"
+    :width="props.width"
     @change="onChange" />
 </template>
 <style lang="scss" scoped>

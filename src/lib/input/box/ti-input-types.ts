@@ -1,3 +1,4 @@
+import { Vars } from 'src/core';
 import { ListProps } from '../../../lib';
 import {
   ValueBoxProps,
@@ -16,12 +17,13 @@ export type InputBoxState = ValueBoxState<any> & {
 };
 
 //--------------------------------------------------
-export type InputBoxProps = ValueBoxProps<any> &
-  TipBoxProps & InputBoxAspect;
+export type InputBoxProps = ValueBoxProps<any> & TipBoxProps & InputBoxAspect;
 //--------------------------------------------------
 export type InputBoxAspect = {
   hideBorder?: boolean;
   boxFocused?: boolean;
+  width?: string;
+  style?: Vars;
 };
 
 //--------------------------------------------------

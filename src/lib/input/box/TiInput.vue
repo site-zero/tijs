@@ -15,7 +15,7 @@
   import { getTipListConf, getTipWrapperStyle } from './use-tip-box';
   //-----------------------------------------------------
   defineOptions({
-    inheritAttrs: true,
+    inheritAttrs: false,
   });
   //-----------------------------------------------------
   const COM_TYPE = COM_TYPES.Input;
@@ -99,21 +99,25 @@
     })
   );
   const TopStyle = computed((): Vars => {
+    let css = CssUtils.toStyle(props.style);
     if (_box_rect.value) {
-      return {
+      return _.assign(css, {
         position: 'fixed',
         width: `${_box_rect.value.width}px`,
         height: `${_box_rect.value.height}px`,
         top: `${_box_rect.value.top}px`,
         left: `${_box_rect.value.left}px`,
-      };
+      });
     }
-    return {};
+    return _.assign(css, {
+      width: CssUtils.toSize(props.width),
+    });
   });
   const BracingStyle = computed((): Vars => {
     if (_box_rect.value) {
       return {
         //width: `${_box_rect.value.width}px`,
+        display: 'block',
         height: `${_box_rect.value.height}px`,
       };
     }
@@ -233,7 +237,7 @@
     Box.value.doChangeValue(val ?? '');
     // TODO if multi 可能需要特别处理一下
     resetTipList(_box_state, _tips);
-    OnInputBlur()
+    OnInputBlur();
   }
   //-----------------------------------------------------
   watch(

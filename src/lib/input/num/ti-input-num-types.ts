@@ -1,11 +1,12 @@
 import { InputBoxAspect, PlaceholderFeatureProps, ReadonlyProps } from '../../';
-import { CommonProps } from '../../../core';
+import { CommonProps, Vars } from '../../../core';
 
 export type InputNumProps = CommonProps &
   PlaceholderFeatureProps &
   ReadonlyProps &
   InputBoxAspect & {
     value?: number | string | boolean | null;
+    style?: Vars;
     /**
      * 整数，精确度：
      * - 100 : 精确到小数点后两位
