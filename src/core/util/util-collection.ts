@@ -154,6 +154,9 @@ export function moveCheckedById<T>(
   }
   const idSet = Util.arrayToSet(ids);
   const isChecked = (it: T) => {
+    if (_.isNil(it) || !getId) {
+      return false;
+    }
     let id = getId(it);
     return idSet.has(id);
   };

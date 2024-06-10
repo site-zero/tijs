@@ -1,10 +1,10 @@
-import { Vars } from 'src/core';
-import { ListProps } from '../../../lib';
 import {
+  ListProps,
   ValueBoxProps,
   ValueBoxState,
   ValueInputTidyMode,
-} from '../../../lib/_features';
+} from '../../';
+import { Vars } from '../../../core';
 
 //--------------------------------------------------
 export type InputBoxState = ValueBoxState<any> & {
