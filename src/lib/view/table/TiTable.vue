@@ -294,13 +294,13 @@
   watch(
     () => [props.currentId, props.checkedIds],
     () => {
-      console.log('updateSelection before:', props.currentId, props.checkedIds);
+      //console.log('updateSelection before:', props.currentId, props.checkedIds);
       Table.value.updateSelection(selection, props.currentId, props.checkedIds);
-      console.log(
-        'updateSelection after',
-        selection.currentId,
-        selection.checkedIds
-      );
+      // console.log(
+      //   'updateSelection after',
+      //   selection.currentId,
+      //   selection.checkedIds
+      // );
     },
     {
       immediate: true,

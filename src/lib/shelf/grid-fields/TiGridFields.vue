@@ -110,7 +110,7 @@
     let w = $main.value?.getBoundingClientRect().width ?? 0;
     if (w > 0 && w != _viewport_width.value) {
       _viewport_width.value = $main.value?.clientWidth ?? 0;
-      console.log('obResize', _viewport_width.value, $main.value);
+      //console.log('obResize', _viewport_width.value, $main.value);
     }
   }
   //-------------------------------------------------

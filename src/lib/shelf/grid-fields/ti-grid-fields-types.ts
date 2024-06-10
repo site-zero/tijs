@@ -19,7 +19,7 @@ import {
   ReadonlyProps,
   VisibilityFeature,
 } from '../../../lib/_features';
-import { AbstractField } from '../../_top';
+import { AbstractField, FieldValueType } from '../../_top';
 
 export type GridFieldsDomReadyInfo = {
   el: HTMLElement;
@@ -123,6 +123,7 @@ export type GridFieldsInput = CommonProps &
 
     // 仅仅当 `race=field` 时有效
     fieldTitleBy?: FieldComProps;
+    fieldTitleAlign?: CssTextAlign;
 
     // 普通字段的布局模式
     // 仅仅当 `race=field` 时有效
@@ -177,6 +178,7 @@ export type GridFieldsInput = CommonProps &
 
     defaultFieldTitleBy?: FieldComProps;
     defaultFieldTipBy?: FieldComProps;
+    defaultFieldType?: FieldValueType;
 
     defaultComType?: string;
     defaultComConf?: Vars;
@@ -330,6 +332,8 @@ export type GridFieldsStrictGroup = GridFieldsStrictAbstractItem &
     fields: GridFieldsStrictItem[];
     groupAspect?: GroupAspect;
 
+    fieldTitleAlign?: CssTextAlign;
+
     // 用来传递给下属字段
     maxFieldNameWidth?: number | string;
     fieldLayoutMode?: GridFieldLayoutMode;
@@ -341,6 +345,7 @@ export type GridFieldsStrictGroup = GridFieldsStrictAbstractItem &
 
     defaultFieldTitleBy?: FieldComProps;
     defaultFieldTipBy?: FieldComProps;
+    defaultFieldType?: FieldValueType;
 
     defaultComType?: string;
     defaultComConf?: Vars;

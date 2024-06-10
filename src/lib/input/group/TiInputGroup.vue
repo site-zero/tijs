@@ -23,6 +23,7 @@
   const LayoutHint = computed(() => (props.fields ? props.fields.length : 0));
 
   function onValueChange(change: Vars) {
+    console.log("change", change)
     let old = _.cloneDeep(props.value);
     let val = _.assign(old, change);
     if (props.ignoreNil) {

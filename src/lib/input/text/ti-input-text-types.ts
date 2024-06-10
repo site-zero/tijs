@@ -1,9 +1,9 @@
-import { PlaceholderFeatureProps, ReadonlyProps } from '../../';
+import { PlaceholderProps, ReadonlyProps } from '../../';
 import { CommonProps, Vars } from '../../../core';
 
 export type InputTextProps = CommonProps &
   ReadonlyProps &
-  PlaceholderFeatureProps & {
+  PlaceholderProps & {
     hideBorder?: boolean;
     trimed?: boolean;
     value?: any;

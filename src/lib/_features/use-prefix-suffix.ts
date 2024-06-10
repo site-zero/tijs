@@ -34,7 +34,7 @@ export type PrefixSuffixState = {
                      Props
 
 -------------------------------------------------------*/
-export type PrefixSuffixFeatureProps = {
+export type PrefixSuffixProps = {
   //
   // Prefix.style
   //
@@ -93,7 +93,7 @@ export type PrefixSuffixFeature = {
 -----------------------------------------------------*/
 export function usePrefixSuffix(
   state: PrefixSuffixState,
-  props: PrefixSuffixFeatureProps,
+  props: PrefixSuffixProps,
   emit: PrefixSuffixEmits
 ): PrefixSuffixFeature {
   let Prefix = useIconText<'click-prefix-icon', 'click-prefix-text'>(

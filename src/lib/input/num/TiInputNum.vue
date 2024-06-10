@@ -41,6 +41,7 @@
   }
   //-----------------------------------------------------
   function onChange(str: string) {
+    //console.log('num:change', str)
     let v = (str as any) * 1;
     let v2 = Num.round(v, props.precision ?? 1);
     if (!_.isNil(props.maxValue) && v2 > props.maxValue) {
@@ -64,6 +65,8 @@
     :hideBorder="props.hideBorder"
     :boxFocused="props.boxFocused"
     :width="props.width"
+    :prefixText="props.prefixText"
+    :suffixText="props.suffixText"
     @change="onChange" />
 </template>
 <style lang="scss" scoped>

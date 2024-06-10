@@ -1,10 +1,16 @@
-import { InputBoxAspect, PlaceholderFeatureProps, ReadonlyProps } from '../../';
+import {
+  InputBoxAspect,
+  PlaceholderProps,
+  ReadonlyProps,
+  PrefixSuffixProps,
+} from '../../';
 import { CommonProps, Vars } from '../../../core';
 
 export type InputNumProps = CommonProps &
-  PlaceholderFeatureProps &
+  PlaceholderProps &
   ReadonlyProps &
-  InputBoxAspect & {
+  InputBoxAspect &
+  Pick<PrefixSuffixProps, 'prefixText' | 'suffixText'> & {
     value?: number | string | boolean | null;
     style?: Vars;
     /**

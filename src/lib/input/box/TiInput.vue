@@ -371,7 +371,8 @@
         @keydown="OnInputKeydown"
         @focus.stop="OnInputFocused"
         @change.stop="OnInputChanged"
-        @blur.stop="OnInputBlur" />
+        @blur.stop="OnInputBlur"
+        @dblclick.stop />
     </div>
     <!--====: part suffix :=======-->
     <slot name="suffix">

@@ -2,10 +2,10 @@ import _ from 'lodash';
 import {
   FormatValueProps,
   PlaceholderFeature,
-  PlaceholderFeatureProps,
+  PlaceholderProps,
   PrefixSuffixEvents,
   PrefixSuffixFeature,
-  PrefixSuffixFeatureProps,
+  PrefixSuffixProps,
   PrefixSuffixState,
   ReadonlyProps,
   ValueInputFeature,
@@ -64,8 +64,8 @@ export type ValueBoxProps<T extends any> = CommonProps &
   ValueInputProps &
   FormatValueProps &
   ReadonlyProps &
-  PlaceholderFeatureProps &
-  PrefixSuffixFeatureProps & {
+  PlaceholderProps &
+  PrefixSuffixProps & {
     value?: T;
     autoSelect?: boolean;
     // 前缀按钮用来删除

@@ -2,7 +2,7 @@ import { I18n } from '../../core';
 import _ from 'lodash';
 import { TextShowProps } from '.';
 
-export type PlaceholderFeatureProps = Pick<TextShowProps, 'autoI18n'> & {
+export type PlaceholderProps = Pick<TextShowProps, 'autoI18n'> & {
   placeholder?: string;
 };
 
@@ -33,7 +33,7 @@ export type PlaceholderFeature = {
  *
  */
 export function usePlaceholder(
-  props: PlaceholderFeatureProps,
+  props: PlaceholderProps,
 ): PlaceholderFeature {
   return {
     getPlaceholder: (dft?) => {

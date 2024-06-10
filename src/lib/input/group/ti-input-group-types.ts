@@ -10,6 +10,7 @@ export type InputGroupProps = CommonProps &
     | 'bodyPartFontSize'
     | 'bodyPartGap'
     | 'layoutGridTracks'
+    | 'defaultFieldType'
     | 'defaultComType'
     | 'defaultComConf'
     | 'maxFieldNameWidth'

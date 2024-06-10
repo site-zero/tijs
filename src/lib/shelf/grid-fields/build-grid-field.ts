@@ -40,7 +40,7 @@ export function buildOneGridField(
     titleType: field.titleType ?? 'text',
     titleIcon: field.titleIcon,
     titleStyle: field.titleStyle,
-    titleAlign: field.titleAlign,
+    titleAlign: field.titleAlign ?? dft.fieldTitleAlign,
     titleClass: field.titleClass,
     tip: field.tip ?? null,
     tipType: field.tipType ?? 'text',
@@ -71,7 +71,7 @@ export function buildOneGridField(
     let fld = re as GridFieldsStrictField;
 
     fld.name = field.name;
-    fld.type = field.type ?? 'String';
+    fld.type = field.type ?? dft.defaultFieldType ?? 'String';
     fld.fieldTitleBy = field.fieldTitleBy ?? dft.defaultFieldTitleBy;
     fld.tipBy = field.tipBy ?? dft.defaultFieldTipBy;
 
@@ -89,7 +89,7 @@ export function buildOneGridField(
     fld.changeEventName = field.changeEventName ?? 'change';
 
     fld.transformer = parseFieldConverter(
-      field.type ?? 'String',
+      fld.type,
       'transform',
       dft.vars || {},
       field.transformer,
@@ -97,7 +97,7 @@ export function buildOneGridField(
       field.transPartial
     );
     fld.serializer = parseFieldConverter(
-      field.type ?? 'String',
+      fld.type,
       'serialize',
       dft.vars || {},
       field.serializer,
@@ -119,6 +119,7 @@ export function buildOneGridField(
     let grp = re as GridFieldsStrictGroup;
     grp.maxFieldNameWidth = field.maxFieldNameWidth ?? dft.maxFieldNameWidth;
     grp.layout = field.layout;
+    grp.fieldTitleAlign = field.fieldTitleAlign ?? dft.fieldTitleAlign;
     grp.layoutHint = field.layoutHint;
     grp.layoutGridTracks = field.layoutGridTracks;
     grp.fieldLayoutMode = field.fieldLayoutMode ?? dft.fieldLayoutMode;
@@ -130,6 +131,7 @@ export function buildOneGridField(
     grp.bodyPartFontSize = field.bodyPartFontSize;
     grp.bodyPartStyle = field.bodyPartStyle;
     grp.bodyPartGap = field.bodyPartGap ?? dft.bodyPartGap;
+    grp.defaultFieldType = field.defaultFieldType ?? dft.defaultFieldType;
     grp.defaultComType = field.defaultComType ?? dft.defaultComType;
     grp.defaultComConf = field.defaultComConf ?? dft.defaultComConf;
 

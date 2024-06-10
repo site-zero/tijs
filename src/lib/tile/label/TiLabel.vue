@@ -56,6 +56,11 @@
       'nil-value': !hasValue.value,
     }))
   );
+  const TextStyle = computed(() => {
+    return {
+      textAlign: props.textAlign,
+    };
+  });
   const LabelText = computed(() => {
     if (hasValue.value) {
       return state.boxInputing || state.boxValue;
@@ -107,7 +112,9 @@
         >{{ Box.Prefix.text }}</span
       >
     </div>
-    <div class="part-value">
+    <div
+      class="part-value"
+      :style="TextStyle">
       {{ LabelText }}
     </div>
     <div

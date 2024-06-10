@@ -21,15 +21,9 @@ function buildMatcher(
   whenNo: any,
   dft: boolean
 ) {
-  if (/^id.isDisabled/.test(traceName)) {
-    console.log('buildMatcher', traceName);
-  }
   let testYes = !_.isNil(whenYes) ? Match.parse(whenYes) : undefined;
   let testNo = !_.isNil(whenNo) ? Match.parse(whenNo) : undefined;
   return (data: Vars) => {
-    if (/^id.isDisabled/.test(traceName) && !_.isEmpty(data)) {
-      console.log(traceName, data);
-    }
     // 全都声明了
     if (testYes && testNo) {
       if (testYes.test(data)) {

@@ -112,32 +112,34 @@
       :style="BodyStyle"
       ref="$main">
       <template v-for="fld in props.fields">
-        <!------[:Field:]---------->
-        <GFItField
-          v-if="'field' == fld.race"
-          v-bind="(fld as GridFieldsStrictField)"
-          :max-track-count="TrackCount"
-          @name-change="emit('name-change', $event)"
-          @value-change="emit('value-change', $event)" />
-        <!------[:Group:]---------->
-        <GFItGroup
-          v-else-if="'group' == fld.race"
-          v-bind="(fld as GridFieldsStrictGroup)"
-          :max-track-count="TrackCount"
-          @name-change="emit('name-change', $event)"
-          @value-change="emit('value-change', $event)" />
-        <!------[:Label:]---------->
-        <GFItLabel
-          v-else-if="'label' == fld.race"
-          v-bind="(fld as GridFieldsStrictLabel)"
-          :max-track-count="TrackCount" />
-        <!------[!Invalid!]---------->
-        <blockquote
-          v-else
-          style="white-space: pre; color: var(--ti-color-error)">
-          Invalid Field: -------------------------------------------
-          {{ fld }}
-        </blockquote>
+        <template v-if="!fld.isHidden(props.data)">
+          <!------[:Field:]---------->
+          <GFItField
+            v-if="'field' == fld.race"
+            v-bind="(fld as GridFieldsStrictField)"
+            :max-track-count="TrackCount"
+            @name-change="emit('name-change', $event)"
+            @value-change="emit('value-change', $event)" />
+          <!------[:Group:]---------->
+          <GFItGroup
+            v-else-if="'group' == fld.race"
+            v-bind="(fld as GridFieldsStrictGroup)"
+            :max-track-count="TrackCount"
+            @name-change="emit('name-change', $event)"
+            @value-change="emit('value-change', $event)" />
+          <!------[:Label:]---------->
+          <GFItLabel
+            v-else-if="'label' == fld.race"
+            v-bind="(fld as GridFieldsStrictLabel)"
+            :max-track-count="TrackCount" />
+          <!------[!Invalid!]---------->
+          <blockquote
+            v-else
+            style="white-space: pre; color: var(--ti-color-error)">
+            Invalid Field: -------------------------------------------
+            {{ fld }}
+          </blockquote>
+        </template>
       </template>
       <!--.grid-group-cell-->
     </div>

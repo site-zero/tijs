@@ -1,14 +1,14 @@
 import {
-  PlaceholderFeatureProps,
-  PrefixSuffixFeatureProps,
+  PlaceholderProps,
+  PrefixSuffixProps,
   ReadonlyProps,
 } from '../../';
 import { CommonProps } from '../../../core';
 
 export type InputDatetimeProps = CommonProps &
   ReadonlyProps &
-  PlaceholderFeatureProps &
-  PrefixSuffixFeatureProps & {
+  PlaceholderProps &
+  PrefixSuffixProps & {
     value?: number | Date | string;
     /**
      * - string 用字符串格式
