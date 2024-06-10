@@ -5,7 +5,7 @@ export type RecordDiffOptions = {
   checkRemoveFromOrgin?: boolean;
 };
 
-export function getDiff(
+export function getRecordDiff(
   org: Vars,
   data: Vars,
   options: RecordDiffOptions = {}

@@ -28,7 +28,9 @@
     inheritAttrs: true,
   });
   //-------------------------------------------------
-  const props = defineProps<LayoutGridProps>();
+  const props = withDefaults(defineProps<LayoutGridProps>(), {
+    shown: () => ({}),
+  });
   const $main = ref() as Ref<HTMLElement>;
   const state = reactive({
     shown: _.cloneDeep(props.shown),
@@ -207,6 +209,8 @@
               <!-- 布局块-->
               <TiBlock
                 v-if="'block' == pan.type"
+                :title="pan.title"
+                :icon="pan.icon"
                 v-bind="pan.itemConfig" />
               <!-- 格子布局-->
               <TiLayoutGrid

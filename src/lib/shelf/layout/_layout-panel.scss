@@ -13,6 +13,7 @@
       6px 6px 15px var(--ti-color-mask-thin);
     border-radius: $R;
     overflow: hidden;
+    display: grid;
   }
   //-----------------------------------
   &.show-mask {

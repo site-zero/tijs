@@ -212,6 +212,17 @@ export function mergeFieldChanges(changes: FieldChange[], data?: Vars): Vars {
   return meta;
 }
 
+export function useFieldChangeDiff(
+  changes: FieldChange[] | Vars,
+  data: Vars = {}
+) {
+  if (_.isArray<FieldChange>(changes)) {
+    return mergeFieldChanges(changes, data);
+  }
+  // 已经合并过了
+  return _.assign(data, changes);
+}
+
 export function setFieldValue(name: FieldName, value: any, data?: Vars): Vars {
   data = data ?? {};
   // 组合字段

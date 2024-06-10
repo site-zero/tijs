@@ -206,7 +206,7 @@ export function useFieldChange<T extends AbstractField>(
       meta = change;
     }
 
-    return Util.getDiff(data, meta);
+    return Util.getRecordDiff(data, meta);
   }
 
   //...................................................
