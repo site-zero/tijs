@@ -16,7 +16,7 @@ export type VisibilityFeature = {
 
 -------------------------------------------------------*/
 function buildMatcher(
-  traceName: string,
+  _traceName: string,
   whenYes: any,
   whenNo: any,
   dft: boolean
