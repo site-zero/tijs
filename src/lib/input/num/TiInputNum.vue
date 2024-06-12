@@ -30,15 +30,17 @@
     return `${props.value}`;
   });
   //-----------------------------------------------------
-  function formatInputText(val: string) {
-    if (_.isNumber(props.partSize) && props.partSize > 0) {
-      return Bank.toBankText(val, {
-        part: props.partSize,
-        sep: props.partSep ?? ' ',
-      });
+  const formatInputText = computed(() => {
+    let { partSize, partSep = ' ' } = props;
+    if (_.isNumber(partSize) && partSize > 0 && partSep) {
+      return (val: string) => {
+        return Bank.toBankText(val, {
+          part: partSize,
+          sep: partSep ?? ' ',
+        });
+      };
     }
-    return val;
-  }
+  });
   //-----------------------------------------------------
   function onChange(str: string) {
     //console.log('num:change', str)

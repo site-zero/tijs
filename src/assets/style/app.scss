@@ -26,8 +26,8 @@ body {
 
 * {
   box-sizing: border-box;
-  scrollbar-width: thin;
-  scrollbar-color: var(--ti-color-mask-weak) var(--ti-color-body);
+  scrollbar-width: none;
+  scrollbar-color: var(--ti-color-mask-weak) var(--ti-color-border-shallow);
 }
 
 input::placeholder {

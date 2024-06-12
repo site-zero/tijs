@@ -2,6 +2,7 @@ export const COM_TYPES = {
   //------------------- ACTION
   ActionBar: 'TiActionBar',
   Button: 'TiButton',
+  DropTag: 'TiDropTag',
   Pager: 'TiPager',
   Sidebar: 'TiSidebar',
   Tabs: 'TiTabs',
@@ -17,10 +18,11 @@ export const COM_TYPES = {
   Tags: 'TiTags',
   Thumb: 'TiThumb',
   Unknown: 'TiUnknown',
-
   //------------------- INPUT
   Check: 'TiCheck',
+  ComboFilter: 'TiComboFilter',
   Droplist: 'TiDroplist',
+  Filter: 'TiFilter',
   Input: 'TiInput',
   InputCurrency: 'TiInputCurrency',
   InputDate: 'TiInputDate',
@@ -31,9 +33,11 @@ export const COM_TYPES = {
   InputGroup: 'TiInputGroup',
   InputNum: 'TiInputNum',
   InputText: 'TiInputText',
+  Score: 'TiScore',
+  Sorter: 'TiSorter',
+  Switcher: 'TiSwitcher',
   Toggle: 'TiToggle',
   Transfer: 'TiTransfer',
-
   //------------------- SHELF
   Block: 'TiBlock',
   Cell: 'TiCell',

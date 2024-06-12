@@ -166,6 +166,7 @@ export function useValueBox<T extends any>(
   props: ValueBoxProps<T>,
   options: ValueBoxOptions
 ): ValueBoxFeature {
+  console.log('useValueBox');
   let { emit, getBoxElement, COM_TYPE } = options;
 
   let boxProps = _.cloneDeep(props);
