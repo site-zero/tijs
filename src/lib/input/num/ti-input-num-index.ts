@@ -30,8 +30,7 @@ const TiInputNumInfo: TiComInfo = {
   liveStyle: {
     width: '80%',
     minWidth: '120px',
-    maxWidth: '300px',
-    paddingBottom: '30%',
+    maxWidth: '300px'
   },
   install: (app: App) => {
     app.component(COM_TYPE, TiInputNum);

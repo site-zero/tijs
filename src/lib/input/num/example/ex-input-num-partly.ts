@@ -6,7 +6,7 @@ export default {
   text: 'i18n:ti-input-num-example-partly',
   comConf: {
     value: 945789123,
-    precise: 1,
+    precision: 1,
     partSep: ' - ',
     partSize: 3
   } as InputNumProps,

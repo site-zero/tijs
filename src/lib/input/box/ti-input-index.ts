@@ -33,7 +33,6 @@ const TiInputInfo: TiComInfo = {
     width: '80%',
     minWidth: '120px',
     maxWidth: '300px',
-    paddingBottom: '30%',
   },
   install: (app: App) => {
     app.component(COM_TYPE, TiInput);
