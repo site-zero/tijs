@@ -1,7 +1,27 @@
+@mixin __color_label($name) {
+  &.is-#{$name} {
+    color: var(--ti-color-#{$name}-r);
+    background-color: var(--ti-color-#{$name});
+    &.is-clickable {
+      cursor: pointer;
+      &:hover {
+        background-color: var(--ti-color-#{$name}-b);
+      }
+    }
+  }
+}
+
 div.ti-label {
-  @include colorized;
   min-height: var(--ti-measure-box-height);
-  
+  @include __color_label(success);
+  @include __color_label(warn);
+  @include __color_label(info);
+  @include __color_label(error);
+  @include __color_label(track);
+  @include __color_label(disable);
+  @include __color_label(text);
+  @include __color_label(number);
+
   &.nil-value {
     opacity: 0.62;
     font-style: italic;

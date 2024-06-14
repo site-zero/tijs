@@ -43,7 +43,7 @@ const TiLabelInfo: TiComInfo = {
       name: 'warn',
       text: 'i18n:warn',
       comConf: {
-        className: 'is-warn-r',
+        className: 'is-warn',
         value: 'New Label',
       },
     },

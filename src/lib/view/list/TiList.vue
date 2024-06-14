@@ -88,7 +88,8 @@
         class="list-item"
         :class="it.className"
         :style="ListItemStyle"
-        @click="List.OnItemSelect(selection, { event: $event, item: it })">
+        @click="List.OnItemSelect(selection, { event: $event, item: it })"
+        @dblclick="emit('open', it)">
         <!--***********************************-->
         <!--=Check=-->
         <div

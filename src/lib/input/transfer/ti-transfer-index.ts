@@ -40,9 +40,6 @@ const TiTransferInfo: TiComInfo = {
   liveStyle: {
     width: '100%',
     height: '100%',
-    maxWidth: '800px',
-    maxHeight: '600px',
-    border: '2px solid var(--ti-color-primary)',
   },
   install: (app: App) => {
     app.component(COM_TYPE, TiTransfer);

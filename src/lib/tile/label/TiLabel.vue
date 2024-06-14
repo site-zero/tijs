@@ -16,6 +16,7 @@
   let emit = defineEmits<{
     (event: PrefixSuffixEvents): void;
     (event: 'change', payload: string): void;
+    (event: 'click'): void;
   }>();
   //-----------------------------------------------------
   const state = reactive({
@@ -54,6 +55,7 @@
     CssUtils.mergeClassName(props.className, Box.value.getClass(), () => ({
       'has-value': hasValue.value,
       'nil-value': !hasValue.value,
+      'is-clickable': props.clickable,
     }))
   );
   const TextStyle = computed(() => {
@@ -67,6 +69,12 @@
     }
     return Box.value.getPlaceholder();
   });
+  //-----------------------------------------------------
+  function onClickValue() {
+    if (props.clickable) {
+      emit('click');
+    }
+  }
   //-----------------------------------------------------
   // 看看是否满足选项列表的打开条件
   watch(
@@ -114,7 +122,8 @@
     </div>
     <div
       class="part-value"
-      :style="TextStyle">
+      :style="TextStyle"
+      @click="onClickValue">
       {{ LabelText }}
     </div>
     <div

@@ -28,11 +28,14 @@
         border-bottom: 1px solid var(--ti-color-border-shallow);
         &.transfer-menu {
           @include flex-align-nowrap($jc: flex-end);
-          > span {
+          > .sel-text {
             display: block;
             flex: 1 1 auto;
             padding: 0 0.8em;
             font-weight: bold;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
         }
       }

@@ -1,2 +1,32 @@
 .ti-sorter {
+  @include flex-align-nowrap($ai: flex-start);
+  > .part-items {
+    @include flex-align($ai: center, $ac: center);
+    > .ti-label {
+      margin: 0 SZ(1);
+    }
+    > .as-empty {
+      color: var(--ti-color-track);
+      line-height: SZ(32);
+      padding: 0 SZ(6);
+    }
+  }
+  > .part-setup {
+    @include flex-center;
+    margin-left: SZ(4);
+    min-width: SZ(32);
+    min-height: SZ(32);
+    border-radius: var(--ti-measure-r-s);
+    > a {
+      text-decoration: none;
+      font-size: SZ(16);
+      color: var(--ti-color-menu-f);
+    }
+    &:hover {
+      background-color: var(--ti-color-mask-weak);
+      > a {
+        color: var(--ti-color-primary);
+      }
+    }
+  }
 }

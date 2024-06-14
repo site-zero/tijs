@@ -1,3 +1,7 @@
-import { CommonProps } from '../../../core';
+import { CommonProps, Vars } from '../../../core';
 
-export type FilterProps = CommonProps & {};
+export type FilterValue = Vars;
+
+export type FilterProps = CommonProps & {
+  value?: FilterValue;
+};

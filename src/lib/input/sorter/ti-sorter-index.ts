@@ -6,15 +6,18 @@ import example from './example';
 
 const en_us = {
   'com-name': 'Sorter',
+  'empty': 'No sort condition',
+  'choose': 'Choose Sorter Fields',
 };
 const zh_cn = {
   'com-name': '排序器',
+  'empty': '无排序条件',
+  'choose': '选择排序字段',
 };
 
 const COM_TYPE = COM_TYPES.Sorter;
 
 const TiSorterInfo: TiComInfo = {
-  tags: ['ing'],
   icon: 'zmdi-sort-asc',
   race: TiComRace.INPUT,
   name: COM_TYPE,

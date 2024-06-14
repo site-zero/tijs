@@ -53,4 +53,5 @@ export type ListEvent = {
 export type ListSelectEmitInfo = SelectEmitInfo<TableRowID>;
 export type ListEmitter = {
   (event: 'select', payload: ListSelectEmitInfo): void;
+  (event: 'open', payload: ListItem): void;
 };

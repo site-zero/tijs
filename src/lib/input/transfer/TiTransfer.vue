@@ -1,7 +1,13 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed, reactive, ref, watch } from 'vue';
-  import { ListSelectEmitInfo, TiActionBar, TiInput, TiList } from '../../';
+  import {
+    ListItem,
+    ListSelectEmitInfo,
+    TiActionBar,
+    TiInput,
+    TiList,
+  } from '../../';
   import { I18n, StdOptionItem, TableRowID, Util } from '../../../core';
   import { TransferProps, TransferState } from './ti-transfer-types';
   import { TransferEmitter, useTransfer } from './use-transfer';
@@ -47,8 +53,22 @@
     _stat.can_checked_ids = Util.mapTruthyKeys(payload.checkedIds);
   }
   //-----------------------------------------------------
+  function onCanOpen(it: ListItem) {
+    let ids = _.clone(_stat.can_checked_ids || []);
+    ids.push(it.value);
+    _stat.can_checked_ids = _.uniq(ids);
+    doAssign();
+  }
+  //-----------------------------------------------------
   function onSelSelect(payload: ListSelectEmitInfo) {
     _stat.sel_checked_ids = Util.mapTruthyKeys(payload.checkedIds);
+  }
+  //-----------------------------------------------------
+  function onSelOpen(it: ListItem) {
+    let ids = _.clone(_stat.sel_checked_ids || []);
+    ids.push(it.value);
+    _stat.sel_checked_ids = _.uniq(ids);
+    doRemove();
   }
   //-----------------------------------------------------
   function doAssign() {
@@ -104,7 +124,8 @@
             _tran.getListEmptyRoadblock('i18n:ti-transfer-can-none', 'fas-list')
           "
           :data="CanList"
-          @select="onCanSelect">
+          @select="onCanSelect"
+          @open="onCanOpen">
           <template v-slot:head>
             <div class="list-head transfer-filter">
               <TiInput
@@ -143,10 +164,11 @@
             _tran.getListEmptyRoadblock('i18n:nil-item', 'fas-arrow-left')
           "
           :data="_sel_list"
-          @select="onSelSelect">
+          @select="onSelSelect"
+          @open="onSelOpen">
           <template v-slot:head>
             <div class="list-head transfer-menu">
-              <span>{{ I18n.get('ti-transfer-sel-list') }}:</span>
+              <div class="sel-text">{{ I18n.get('ti-transfer-sel-list') }}:</div>
               <TiActionBar
                 :items="SelMenuActionItems"
                 :vars="ActionStatus" />

@@ -1,8 +1,4 @@
-import {
-  ClassStyleFeature,
-  IconTextFeature,
-  useIconText,
-} from '.';
+import { ClassStyleFeature, IconTextFeature, useIconText } from '.';
 import { Callback1, IconInput, Vars } from '../../core';
 /*-------------------------------------------------------
 
