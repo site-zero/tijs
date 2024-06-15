@@ -80,6 +80,7 @@
     <div
       class="bar-item-info"
       :class="InfoClass"
+      :bar-layout-mode="props.layoutMode"
       :style="props.style"
       :aspect="props.aspect"
       @click.left="onClikeItem"

@@ -15,6 +15,7 @@ import {
   ABarAltDisplay,
   ABarParsedItem,
   ActionBarEmitter,
+  ActionBarLayoutMode,
   ActionBarType,
 } from './ti-action-bar-types';
 
@@ -91,6 +92,7 @@ function makeItemAction(
 export function buildActionBarItems(
   indexes: number[],
   items: ActionBarItem[],
+  layoutMode: ActionBarLayoutMode,
   emit: ActionBarEmitter,
   pItem?: ABarParsedItem
 ): ABarParsedItem[] {
@@ -133,6 +135,7 @@ export function buildActionBarItems(
       depth,
       type,
       aspect: 0 == depth ? 'top' : 'sub',
+      layoutMode,
       axis: [],
       //.....................................
       icon: it.icon,
@@ -155,7 +158,13 @@ export function buildActionBarItems(
 
     // 尝试构建子项目
     if (it.items) {
-      parsed.items = buildActionBarItems(selfIndexes, it.items, emit, parsed);
+      parsed.items = buildActionBarItems(
+        selfIndexes,
+        it.items,
+        layoutMode,
+        emit,
+        parsed
+      );
     }
 
     // 记入返回列表

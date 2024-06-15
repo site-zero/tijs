@@ -1,15 +1,30 @@
 .ti-actionbar {
-  @include flex-align-nowrap($ai: stretch);
   user-select: none;
+  $BR: var(--ti-measure-r-s);
   // 菜单项
   .bar-item {
     display: grid;
     margin: 0 1px;
+    overflow: hidden;
     // 无效条目
     &.is-disabled {
       opacity: 0.4;
     }
-  } // .bar-item {
+    &[aspect='sub'] {
+      &:first-child {
+        border-radius: $BR $BR 0 0;
+      }
+      &:last-child {
+        border-radius: 0 0 $BR $BR;
+      }
+    }
+  } // .bar-item
+  &.layout-mode-H {
+    @include flex-align-nowrap($ai: stretch);
+  }
+  &.layout-mode-V {
+    @include flex-align-v-nowrap($ai: stretch);
+  }
 } // .ti-actionbar {
 
 .ti-actionbar.show-click-mask {

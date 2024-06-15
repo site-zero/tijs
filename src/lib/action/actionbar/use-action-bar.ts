@@ -45,7 +45,7 @@ export function hasOpenedGroup(
   opened: Map<string, ABarItemOpenStatus>
 ): boolean {
   for (let [_k, openStatus] of opened.entries()) {
-    if ('opened' == openStatus) {
+    if (/^(opened|ready)$/.test(openStatus)) {
       return true;
     }
   }
@@ -58,7 +58,6 @@ export function openBarItem(state: ABarState, it: ABarUsedItem) {
   setBarOpenState(state, it.axis, 'ready');
   state.opened.set(it.uniqKey, 'opened');
 }
-
 
 function setBarOpenState(
   state: ABarState,

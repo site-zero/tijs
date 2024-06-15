@@ -36,6 +36,8 @@ export type ABarState = {
 
 export type ABarItemOpenStatus = 'opened' | 'ready';
 export type ActionBarType = 'action' | 'group' | 'sep';
+export type ActionBarLayoutMode = 'H' | 'V';
+export type BarTopItemAspectMode = 'normal' | 'button';
 
 export type ABarAltDisplay = {
   info: ActionBarItemInfo;
@@ -47,6 +49,8 @@ export type ActionBarProps = CommonProps & {
   name?: string;
   items: ActionBarItem[];
   vars?: Vars;
+  layoutMode?: ActionBarLayoutMode;
+  topItemAspectMode?: BarTopItemAspectMode;
 };
 
 export type ActionBarAspect = 'top' | 'sub';
@@ -58,6 +62,7 @@ export type AbstractBarItem = ActionBarItemInfo & {
   axis: string[];
   type: ActionBarType;
   aspect: ActionBarAspect;
+  layoutMode: ActionBarLayoutMode;
   action?: (vars: Vars, bus?: TiAppBus) => void;
 };
 

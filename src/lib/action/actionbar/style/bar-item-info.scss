@@ -42,11 +42,12 @@
     }
   }
   //-----------------------------------------------------
-  &[aspect="top"] {
+  &[aspect='top'][bar-layout-mode='H'] {
     border-radius: var(--ti-measure-r-s);
   }
   //-----------------------------------------------------
-  &[aspect="sub"] {
+  &[aspect='sub'],
+  &[bar-layout-mode='V'] {
     grid-template-columns: auto 1fr;
   }
   //-----------------------------------------------------

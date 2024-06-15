@@ -27,7 +27,7 @@
     // 其他的稍微靠上一点
     else {
       return {
-        paddingBottom: '30%',
+        padding: '20px',
       };
     }
   });

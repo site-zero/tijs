@@ -1,3 +1,5 @@
+import { ActionBarProps } from '../ti-action-bar-types';
+
 export default {
   name: 'visibility',
   text: 'i18n:ti-action-bar-example-visibility',
@@ -66,5 +68,5 @@ export default {
         shortcut: 'ALT+SHIFT+P',
       },
     ],
-  },
+  } as ActionBarProps,
 };

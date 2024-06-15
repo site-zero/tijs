@@ -49,7 +49,8 @@
         return;
       }
       console.log('Show!!!', $con.value);
-      let mode: DockMode = props.depth > 0 ? 'V' : 'H';
+      let mode: DockMode =
+        props.depth > 0 || 'V' == props.layoutMode ? 'V' : 'H';
       let space: Point2D =
         'H' == mode ? { x: 0, y: MENU_SPACE } : { x: MENU_SPACE, y: 0 };
       let $menu = $con.value;
@@ -76,7 +77,7 @@
     @click="OnClickHead">
     <template v-slot:suffix>
       <div
-        v-if="props.depth > 0"
+        v-if="props.depth > 0 || 'V' == props.layoutMode"
         class="item-suffix as-icon">
         <i class="zmdi zmdi-chevron-right"></i>
       </div>

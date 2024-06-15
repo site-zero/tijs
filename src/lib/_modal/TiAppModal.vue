@@ -234,7 +234,7 @@
           <div class="at-right">
             <TiActionBar
               :items="ModalRightActions"
-              class="as-button-group" />
+              top-item-aspect-mode="button" />
           </div>
         </footer>
         <!------------------------------>

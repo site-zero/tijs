@@ -45,7 +45,10 @@
   provide(ABAR_STATE, state);
   const $root = ref<HTMLElement>();
   //-------------------------------------------------------
-  const props = withDefaults(defineProps<ActionBarProps>(), {});
+  const props = withDefaults(defineProps<ActionBarProps>(), {
+    layoutMode: 'H',
+    topItemAspectMode: 'normal',
+  });
   //-------------------------------------------------------
   watch(
     () => props.vars,
@@ -56,7 +59,12 @@
   );
   //-------------------------------------------------------
   const ParsedBarItems = computed(() => {
-    return buildActionBarItems([], props.items ?? [], emit);
+    return buildActionBarItems(
+      [],
+      props.items ?? [],
+      props.layoutMode ?? 'H',
+      emit
+    );
   });
   //-------------------------------------------------------
   const UsedBarItems = computed(() => {
@@ -66,9 +74,14 @@
   const HasOpenedGroup = computed(() => hasOpenedGroup(state.opened));
   //-------------------------------------------------------
   const TopClass = computed(() =>
-    CssUtils.mergeClassName(props.className, {
-      'show-click-mask': HasOpenedGroup.value,
-    })
+    CssUtils.mergeClassName(
+      props.className,
+      {
+        'show-click-mask': HasOpenedGroup.value,
+      },
+      `layout-mode-${props.layoutMode ?? 'H'}`,
+      `top-as-${props.topItemAspectMode ?? 'normal'}`
+    )
   );
   //-------------------------------------------------------
   // Methods
@@ -135,5 +148,5 @@
   @import './style/bar-item-info.scss';
   @import './style/bar-item-con.scss';
   @import './style/bar-effect.scss';
-  @import './style/bar-as-button-group.scss';
+  @import './style/top-as-button.scss';
 </style>

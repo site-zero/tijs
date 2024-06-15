@@ -1,3 +1,5 @@
+import { ActionBarProps } from '../ti-action-bar-types';
+
 export default {
   name: 'simple',
   text: 'i18n:simple',
@@ -5,6 +7,7 @@ export default {
     vars: {
       saving: false,
     },
+    topItemAspectMode: 'normal',
     items: [
       {
         icon: 'zmdi-floppy',
@@ -91,5 +94,5 @@ export default {
         ],
       },
     ],
-  },
+  } as ActionBarProps,
 };

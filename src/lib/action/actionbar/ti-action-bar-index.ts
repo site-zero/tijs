@@ -7,10 +7,12 @@ import * as example from './example';
 const en_us = {
   'com-name': 'Action Bar',
   'example-visibility': 'Visibility',
+  'exmple-mode-v': 'Vertical Mode'
 };
 const zh_cn = {
   'com-name': '动作条',
   'example-visibility': '可见性',
+  'exmple-mode-v': '垂直模式'
 };
 
 const COM_TYPE = COM_TYPES.ActionBar;
@@ -31,7 +33,7 @@ const TiActionBarInfo: TiComInfo = {
     app.component(COM_TYPE, TiActionBar);
   },
   defaultProps: 'simple',
-  exampleProps: [example.simple, example.visiblity],
+  exampleProps: [example.simple, example.visiblity, example.modeV],
 };
 
 export { TiActionBar, TiActionBarInfo };
