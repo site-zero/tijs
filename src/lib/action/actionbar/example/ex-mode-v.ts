@@ -12,13 +12,13 @@ export default {
     items: [
       {
         icon: 'zmdi-search',
-        text: 'Search',
+        text: 'i18n:search',
         action: 'search',
       },
       {},
       {
         icon: 'zmdi-time-restore',
-        text: 'Reset',
+        text: 'i18n:reset',
         action: 'reset',
       },
       {},

@@ -1,4 +1,6 @@
+import match_i18n from './match/en-us';
 export default {
+  ...match_i18n,
   'general': 'General',
   'none': 'None',
   'simple': 'Simple',

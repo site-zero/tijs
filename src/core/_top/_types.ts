@@ -223,8 +223,8 @@ export type ExplainI18n = {
   or: string;
   not: string;
   func: string;
-  boolFalse: string;
-  boolTrue: string;
+  mustBoolFalse: string;
+  mustBoolTrue: string;
   undefined: string;
   undefinedOf: string;
   equalsType: string;

@@ -15,7 +15,7 @@ export type ActionBarEvent = {
 };
 
 export type ActionBarEmitter = {
-  (eventName: 'fire', payload?: ActionBarEvent): void;
+  (eventName: 'fire', barEvent: ActionBarEvent): void;
 };
 
 export type ABarState = {
@@ -53,7 +53,7 @@ export type ActionBarProps = CommonProps & {
   topItemAspectMode?: BarTopItemAspectMode;
 };
 
-export type ActionBarAspect = 'top' | 'sub';
+type ActionBarAspect = 'top' | 'sub';
 
 export type AbstractBarItem = ActionBarItemInfo & {
   uniqKey: string;

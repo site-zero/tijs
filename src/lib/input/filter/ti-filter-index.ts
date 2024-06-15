@@ -6,9 +6,13 @@ import example from './example';
 
 const en_us = {
   'com-name': 'Filter',
+  'customize': 'Customize',
+  'advance': 'Advance',
 };
 const zh_cn = {
   'com-name': '过滤器',
+  'customize': '定制条件',
+  'advance': '高级搜索',
 };
 
 const COM_TYPE = COM_TYPES.Filter;
@@ -26,11 +30,24 @@ const TiFilterInfo: TiComInfo = {
     zh_hk: zh_cn,
   },
   com: TiFilter,
+  liveStyle: {
+    width: '80%',
+    maxWidth: '1000px',
+  },
   install: (app: App) => {
     app.component(COM_TYPE, TiFilter);
   },
   defaultProps: 'simple',
   exampleProps: [example.simple],
+  exampleModel: {
+    'change': 'value',
+    'reset': {
+      key: 'value',
+      val: {},
+      mode: 'set',
+    },
+    'change-major': 'majorFields',
+  },
 };
 
 export * from './ti-filter-types';

@@ -42,16 +42,26 @@
     }
   }
   //-----------------------------------------------------
-  &[aspect='top'][bar-layout-mode='H'] {
+  &[aspect="top"][bar-layout-mode="H"] {
     border-radius: var(--ti-measure-r-s);
   }
   //-----------------------------------------------------
-  &[aspect='sub'],
-  &[bar-layout-mode='V'] {
+  &[aspect="sub"],
+  &[bar-layout-mode="V"] {
     grid-template-columns: auto 1fr;
   }
   //-----------------------------------------------------
-  &.is-opened {
+  &.is-enabled {
+    color: var(--ti-color-menu-r);
+    background-color: var(--ti-color-menu);
+  }
+  //-----------------------------------------------------
+  &.is-disabled {
+    color: var(--ti-color-disable);
+    background-color: var(--ti-color-disable-r);
+  }
+  //-----------------------------------------------------
+  &.is-enabled.is-opened {
     color: var(--ti-color-secondary-r);
     background-color: var(--ti-color-secondary);
     .item-suffix {

@@ -8,5 +8,11 @@
         transform: scale(1.4) rotate(360deg);
       }
     }
+    &.bg-transparent {
+      background-color: transparent;
+      &:hover {
+        background-color: var(--ti-color-mask-weak);
+      }
+    }
   }
 }

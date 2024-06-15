@@ -1,6 +1,6 @@
 .ti-actionbar.top-as-button {
-  padding: 6px;
-  .bar-item[aspect='top'] {
+  padding: var(--ti-measure-box-pad);
+  .bar-item[aspect="top"] {
     > .bar-item-info {
       @include flex-center($wp: nowrap);
       padding: 0.3em 0.7em;
@@ -16,7 +16,7 @@
         flex: 0 0 auto;
       }
       //------------------------------------
-      &[bar-layout-mode='V'] {
+      &[bar-layout-mode="V"] {
         justify-content: flex-start;
         border-radius: var(--ti-measure-r-s);
         margin: SZ(2) 0;

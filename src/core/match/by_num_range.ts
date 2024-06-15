@@ -16,7 +16,7 @@ export const gen_by_num_range: MakeTiMatch<string> = function (
     explainText: (i18n: ExplainI18n): string => {
       let { left, right } = rg;
       if (!left && !right) {
-        return I18n.text(i18n.boolFalse);
+        return I18n.text(i18n.mustBoolFalse);
       }
 
       if (left && right) {

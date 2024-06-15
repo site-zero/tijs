@@ -1,4 +1,6 @@
+import match_i18n from './match/zh-cn';
 export default {
+  ...match_i18n,
   'general': '常规',
   'none': '无',
   'simple': '简单',

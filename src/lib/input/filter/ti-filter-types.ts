@@ -1,7 +1,15 @@
-import { GridFieldsInput, OptionsInput } from '../../';
-import { ActionBarItem, CommonProps, StrCaseMode, Vars } from '../../../core';
+import { GridFieldsInput, OptionsInput, PlaceholderProps } from '../../';
+import { ActionBarItem, AppModalProps, CommonProps, StrCaseMode, Vars } from '../../../core';
+import { ValueTranslatorProps } from './use-value-translator';
 
 export type FilterValue = Vars;
+
+export type FilterMoreItem = {
+  uniqKey: string;
+  name: string | string[];
+  title: string;
+  value: string;
+};
 
 export type FilterKeywordMode =
   | 'equal'
@@ -69,25 +77,39 @@ type MajorFormProps = Omit<
  * +-------------------------------+-------------+
  * ```
  */
-export type FilterProps = CommonProps & {
-  value?: FilterValue;
+export type FilterProps = CommonProps &
+  PlaceholderProps &
+  ValueTranslatorProps & {
+    value?: FilterValue;
 
-  fields?: GridFieldsInput[];
-  majorFields?: string[];
-  keywords?: FilterKeyword[];
+    //-----------------------------------------
+    // Fields Setup
+    //-----------------------------------------
+    fields?: GridFieldsInput[];
+    majorFields?: string[];
+    keywords?: FilterKeyword[];
 
-  canOpenAdvanceForm?: 'auto' | 'yes' | 'no';
+    //-----------------------------------------
+    // Behaviors
+    //-----------------------------------------
+    canCustomizedMajor?: boolean;
+    canOpenAdvanceForm?: 'auto' | 'yes' | 'no';
+    moreActions?: ActionBarItem[];
 
-  /**
-   * 通常不需要这个字段，有时候不能通过 fields 分析出
-   * 一个字段的显示名称，则需要这个属性辅助一下
-   */
-  fieldTitles?: Record<string, string>;
+    //-----------------------------------------
+    // Major / More
+    //-----------------------------------------
+    majorForm?: MajorFormProps;
 
-  translateValue?: Record<string, OptionsInput>;
+    /**
+     * 通常不需要这个字段，有时候不能通过 fields 分析出
+     * 一个字段的显示名称，则需要这个属性辅助一下
+     */
+    fieldTitles?: Record<string, string>;
 
-  majorForm?: MajorFormProps;
-  advanceForm?: FilterFormProps;
-
-  moreActions?: ActionBarItem[];
-};
+    //-----------------------------------------
+    // Advance
+    //-----------------------------------------
+    advanceForm?: FilterFormProps;
+    advanceModal?: AppModalProps;
+  };

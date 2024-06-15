@@ -9,7 +9,7 @@ export const gen_by_bool: MakeTiMatch<boolean> = function (
       return src;
     },
     explainText: (i18n: ExplainI18n): string => {
-      return src ? i18n.boolTrue : i18n.boolFalse;
+      return src ? i18n.mustBoolTrue : i18n.mustBoolFalse;
     },
   };
 };
