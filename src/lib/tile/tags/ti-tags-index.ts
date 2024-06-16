@@ -6,18 +6,24 @@ import example from './example';
 
 const en_us = {
   'com-name': 'Tags',
+  'example-with-icon': 'With Icon',
+  'example-editable': 'Editable',
+  'example-data-raw': 'Raw Data',
+  'example-data-matcher': 'Filter Data',
 };
 const zh_cn = {
   'com-name': '标签组',
   'example-with-icon': '带图标',
-  'example-can-edit': '可编辑',
+  'example-editable': '可编辑',
+  'example-data-raw': '普通对象',
+  'example-data-matcher': '过滤条件',
 };
 
 const COM_TYPE = COM_TYPES.Tags;
 
 const TiTagsInfo: TiComInfo = {
   icon: 'zmdi-labels',
-  tags: ['scaffold'],
+  tags: ['ing'],
   race: TiComRace.TILE,
   name: COM_TYPE,
   text: 'i18n:ti-tags-com-name',
@@ -32,7 +38,13 @@ const TiTagsInfo: TiComInfo = {
     app.component(COM_TYPE, TiTags);
   },
   defaultProps: 'simple',
-  exampleProps: [example.simple, example.withIcon, example.canEdit],
+  exampleProps: [
+    example.simple,
+    example.withIcon,
+    example.editable,
+    example.dataRaw,
+    example.dataMatcher,
+  ],
 };
 
 export * from './ti-tags-types';

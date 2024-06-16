@@ -32,9 +32,7 @@ function getFieldLayoutStyle(
   options: FieldItemStyleOptions
 ) {
   let NW = _.isNumber(nameWidth) ? `${nameWidth}px` : nameWidth;
-  let css = {
-    gridTemplateColumns: `${NW} 1fr`,
-  } as CssGridLayout;
+  let css = {} as CssGridLayout;
 
   let ss = layoutMode.split('-');
   let lk = [ss[0]];
@@ -54,61 +52,91 @@ function getFieldLayoutStyle(
     {
       // 左右布局，提示在底部，与值等宽
       'h-wrap-title-tip': {
+        gridTemplateColumns: `${NW} 1fr`,
         gridTemplateRows: 'auto 1fr',
-        gridTemplateAreas: `"title value" "title tip"`,
+        gridTemplateAreas: `
+          "title value"
+          "title tip"`,
       },
       'h-wrap-title': {
+        gridTemplateColumns: `${NW} 1fr`,
         gridTemplateRows: 'auto',
         gridTemplateAreas: `"title value"`,
       },
       'h-wrap-tip': {
+        gridTemplateColumns: `1fr`,
         gridTemplateRows: 'auto 1fr',
-        gridTemplateAreas: `"title value" "title tip"`,
+        gridTemplateAreas: `
+          "value"
+          "tip"`,
       },
-      'h-wrap': {},
+      'h-wrap': {
+        gridTemplateColumns: `1fr`,
+        gridTemplateRows: 'auto',
+        gridTemplateAreas: `"value"`,
+      },
       // 左右布局，提示在底部单独一整行
       'h-bottom-title-tip': {
+        gridTemplateColumns: `${NW} 1fr`,
         gridTemplateRows: 'auto 1fr',
-        gridTemplateAreas: `"title value" "tip tip"`,
+        gridTemplateAreas: `
+          "title value"
+          "tip   tip"`,
       },
       'h-bottom-title': {
-        gridTemplateRows: 'auto 1fr',
+        gridTemplateColumns: `${NW} 1fr`,
+        gridTemplateRows: 'auto',
         gridTemplateAreas: `"title value"`,
       },
       'h-bottom-tip': {
-        gridTemplateRows: 'auto 1fr',
-        gridTemplateAreas: `"value value" "tip tip"`,
+        gridTemplateColumns: `1fr`,
+        gridTemplateRows: 'auto',
+        gridTemplateAreas: `
+          "value"
+          "tip"`,
       },
       'h-bottom': {
+        gridTemplateColumns: `1fr`,
         gridTemplateRows: 'auto',
-        gridTemplateAreas: `"value value"`,
+        gridTemplateAreas: `"value"`,
       },
       // 上下布局，提示在底部
       'v-wrap-title-tip': {
         gridTemplateColumns: '1fr',
         gridTemplateRows: 'auto auto 1fr',
-        gridTemplateAreas: `"title" "value" "tip"`,
+        gridTemplateAreas: `
+          "title"
+          "value"
+          "tip"`,
       },
       'v-wrap-title': {
         gridTemplateColumns: '1fr',
         gridTemplateRows: 'auto auto',
-        gridTemplateAreas: `"title" "value" `,
+        gridTemplateAreas: `
+          "title"
+          "value"`,
       },
       'v-wrap-tip': {
         gridTemplateColumns: '1fr',
         gridTemplateRows: 'auto 1fr',
-        gridTemplateAreas: `"value" "tip"`,
+        gridTemplateAreas: `
+          "value"
+          "tip"`,
       },
       'v-wrap': {
+        gridTemplateColumns: `1fr`,
         gridTemplateRows: 'auto',
-        gridTemplateAreas: `"value value"`,
+        gridTemplateAreas: `"value"`,
       },
       // 左右布局，提示作为图标
       'h-title-tip': {
+        gridTemplateColumns: `${NW} 1fr`,
         gridTemplateRows: 'auto',
-        gridTemplateAreas: `"title value"`,
+        gridTemplateAreas: `
+          "title value"`,
       },
       'h-title': {
+        gridTemplateColumns: `${NW} 1fr`,
         gridTemplateRows: 'auto',
         gridTemplateAreas: `"title value"`,
       },
@@ -126,17 +154,24 @@ function getFieldLayoutStyle(
       'v-title-tip': {
         gridTemplateColumns: '1fr',
         gridTemplateRows: 'auto auto fr',
-        gridTemplateAreas: `"title" "value" "tip"`,
+        gridTemplateAreas: `
+          "title"
+          "value"
+          "tip"`,
       },
       'v-title': {
         gridTemplateColumns: '1fr',
         gridTemplateRows: 'auto auto',
-        gridTemplateAreas: `"title" "value"`,
+        gridTemplateAreas: `
+          "title"
+          "value"`,
       },
       'v-tip': {
         gridTemplateColumns: '1fr',
         gridTemplateRows: 'auto 1fr',
-        gridTemplateAreas: `"value" "tip`,
+        gridTemplateAreas: `
+          "value"
+          "tip`,
       },
       'v': {
         gridTemplateColumns: '1fr',
@@ -168,9 +203,7 @@ export function getGridItemStyle(item: GridFieldsStrictAbstractItem) {
 }
 
 export function getFieldTitleStyle(field: GridFieldsStrictField) {
-  return _.assign({}, field.titleStyle, {
-    'grid-area': 'title',
-  });
+  return _.assign({}, field.titleStyle);
 }
 
 type FieldTipIconInfo = {

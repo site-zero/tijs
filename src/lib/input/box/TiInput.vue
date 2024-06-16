@@ -6,6 +6,7 @@
     PrefixSuffixEvents,
     TiIcon,
     TiList,
+    usePlaceholder,
     useValueBox,
   } from '../../';
   import { CssUtils, Match, Rect, Rects, Vars } from '../../../core';
@@ -85,7 +86,7 @@
     () => !_.isNil(_box_state.boxValue) && _box_state.boxValue
   );
   const showTipList = computed(() => (_tips.value ? true : false));
-  const Placeholder = computed(() => Box.value.getPlaceholder());
+  const Placeholder = computed(() => usePlaceholder(props));
   const TopClass = computed(() =>
     CssUtils.mergeClassName(props.className, Box.value.getClass(), {
       'has-value': hasValue.value,

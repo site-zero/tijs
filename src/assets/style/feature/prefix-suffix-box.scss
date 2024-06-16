@@ -53,16 +53,16 @@
 
     &.hover-icon > .as-icon {
       cursor: pointer;
+      opacity: 0.7;
       &:hover {
-        background-color: var(--ti-color-primary);
-        color: var(--ti-color-primary-r);
+        background-color: var(--ti-color-mask-thin);
+        opacity: 1;
       }
     }
     &.hover-text > .as-text {
       cursor: pointer;
       &:hover {
-        background-color: var(--ti-color-primary-r);
-        color: var(--ti-color-primary);
+        background-color: var(--ti-color-mask-thin);
       }
     }
 
@@ -82,4 +82,30 @@
     border: 1px solid var(--ti-color-border-thin);
     border-radius: var(--ti-measure-r-s);
   }
+}
+
+@mixin __color_box($name) {
+  &.is-#{$name} {
+    color: var(--ti-color-#{$name}-r);
+    background-color: var(--ti-color-#{$name});
+    &.show-border {
+      border-color: var(--ti-color-#{$name});
+    }
+    &.is-clickable {
+      cursor: pointer;
+      &:hover {
+        background-color: var(--ti-color-#{$name}-b);
+      }
+    }
+  }
+}
+.prefix-suffix-box {
+  @include __color_box(success);
+  @include __color_box(warn);
+  @include __color_box(info);
+  @include __color_box(danger);
+  @include __color_box(track);
+  @include __color_box(disable);
+  @include __color_box(text);
+  @include __color_box(number);
 }

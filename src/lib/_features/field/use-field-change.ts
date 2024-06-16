@@ -142,7 +142,7 @@ export function useFieldChange<T extends AbstractField>(
 
     // 防守: 字段未定义
     if (!field) {
-      Alert(`Field '${uniqKey}' is undefined`, { type: 'error' });
+      Alert(`Field '${uniqKey}' is undefined`, { type: 'danger' });
       return [];
     }
 
@@ -221,7 +221,7 @@ export function useFieldChange<T extends AbstractField>(
     let field = getField(change.uniqKey);
     if (!field) {
       let msg = I18n.textf('i18n:e-field-undefined', msg_vars);
-      await Alert(msg, { type: 'error' });
+      await Alert(msg, { type: 'danger' });
       return;
     }
     log.debug('field=', field);
@@ -257,21 +257,21 @@ export function useFieldChange<T extends AbstractField>(
       if (!field || validation.type == 'FIELD_UNDEFINED') {
         let msg =
           validation.message ?? I18n.textf('i18n:e-field-undefined', msg_vars);
-        await Alert(msg, { type: 'error' });
+        await Alert(msg, { type: 'danger' });
         return;
       }
       msg_vars.title = _.get(field, 'title');
       msg_vars.tip = _.get(field, 'tip');
       if (validation.type == 'VALUE_NIL') {
         let msg = validation.message ?? I18n.textf('i18n:e-val-nil', msg_vars);
-        await Alert(msg, { type: 'error' });
+        await Alert(msg, { type: 'danger' });
         return;
       }
       if (validation.type == 'VALUE_INVALID') {
         let msg =
           validation.message ??
           I18n.textf('i18n:e-field-val-invalid', msg_vars);
-        await Alert(msg, { type: 'error' });
+        await Alert(msg, { type: 'danger' });
         return;
       }
     }

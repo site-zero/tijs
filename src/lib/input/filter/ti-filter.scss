@@ -3,26 +3,11 @@
   //---------------------------------------
   > .part-left {
     flex: 1 1 auto;
-    > .part-keyword {
-      padding: var(--ti-gap-m);
-    }
-    > .part-major {
-      border: 1px dashed var(--ti-color-border-thin);
-      border-left: 0;
-      border-right: 0;
-    }
-    > .part-more {
-      @include flex-align-nowrap;
-      padding: var(--ti-gap-m);
-      border-bottom: 1px dashed var(--ti-color-border-thin);
-      > .ti-label {
-        margin: 0 SZ(1);
-      }
-    }
   }
   //---------------------------------------
   > .part-right {
-    border-left: 3px solid var(--ti-color-border-shallow);
+    flex: 0 0 auto;
+    border-left: 1px solid var(--ti-color-border-shallow);
   }
   //---------------------------------------
 }

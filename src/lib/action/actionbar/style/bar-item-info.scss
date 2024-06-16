@@ -91,7 +91,7 @@
   @include __bar_item_color_by_name(success);
   @include __bar_item_color_by_name(warn);
   @include __bar_item_color_by_name(info);
-  @include __bar_item_color_by_name(error);
+  @include __bar_item_color_by_name(danger);
   @include __bar_item_color_by_name(track);
   @include __bar_item_color_by_name(disable);
   @include __bar_item_color_by_name(text);

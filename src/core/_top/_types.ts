@@ -192,9 +192,11 @@ export type LogicType =
   | 'info'
   | 'success'
   | 'warn'
-  | 'error'
+  | 'danger'
   | 'track'
-  | 'disable';
+  | 'disable'
+  | 'text'
+  | 'number';
 /*---------------------------------------------------
 
                      容器

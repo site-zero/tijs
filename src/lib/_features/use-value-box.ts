@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import {
   FormatValueProps,
-  PlaceholderFeature,
   PlaceholderProps,
   PrefixSuffixEvents,
   PrefixSuffixFeature,
@@ -12,7 +11,6 @@ import {
   ValueInputProps,
   tiGetDefaultComPropValue,
   useFormatValue,
-  usePlaceholder,
   usePrefixSuffix,
   useValueInput,
 } from '..';
@@ -91,8 +89,7 @@ export type ValueBoxProps<T extends any> = CommonProps &
                      Feature
 
 -------------------------------------------------------*/
-export type ValueBoxFeature = PlaceholderFeature &
-  PrefixSuffixFeature &
+export type ValueBoxFeature = PrefixSuffixFeature &
   ValueInputFeature & {
     //
     // 计算自动前缀图标
@@ -297,7 +294,6 @@ export function useValueBox<T extends any>(
     tidyValue,
     translateValue,
     ..._box,
-    ...usePlaceholder(props),
     getBoxAutoPrefixIcon,
     doUpdateValue,
     doChangeValue,

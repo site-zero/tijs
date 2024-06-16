@@ -41,6 +41,7 @@
     }
     //-----------------------------------------------------------
     &.as-title {
+      grid-area: title;
       line-height: var(--ti-measure-box-height);
       flex-wrap: nowrap;
       > .as-snippet-text .required-mark {
@@ -74,11 +75,13 @@
     } // .as-title
     //-----------------------------------------------------------
     &.as-tip {
+      grid-area: tip;
       color: var(--ti-color-track);
       font-size: var(--ti-fontsz-s);
     }
     //-----------------------------------------------------------
     &.as-value {
+      grid-area: value;
       display: grid;
       grid-template-columns: 1fr;
       grid-template-rows: auto;

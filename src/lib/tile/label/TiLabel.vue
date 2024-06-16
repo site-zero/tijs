@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import _ from 'lodash';
   import { computed, onMounted, reactive, ref, watch } from 'vue';
-  import { PrefixSuffixEvents, TiIcon } from '../../';
+  import { PrefixSuffixEvents, TiIcon, usePlaceholder } from '../../';
   import { CssUtils } from '../../../core';
   import { COM_TYPES } from '../../lib-com-types';
   import { LabelProps, LabelState } from './ti-label-types';
@@ -52,11 +52,20 @@
   });
 
   const TopClass = computed(() =>
-    CssUtils.mergeClassName(props.className, Box.value.getClass(), () => ({
-      'has-value': hasValue.value,
-      'nil-value': !hasValue.value,
-      'is-clickable': props.clickable,
-    }))
+    CssUtils.mergeClassName(
+      props.className,
+      Box.value.getClass(),
+      {
+        'has-value': hasValue.value,
+        'nil-value': !hasValue.value,
+        'is-clickable': props.clickable,
+      },
+      () => {
+        if (props.type) {
+          return `is-${props.type}`;
+        }
+      }
+    )
   );
   const TextStyle = computed(() => {
     return {
@@ -67,7 +76,7 @@
     if (hasValue.value) {
       return state.boxInputing || state.boxValue;
     }
-    return Box.value.getPlaceholder();
+    return usePlaceholder(props);
   });
   //-----------------------------------------------------
   function onClickValue() {

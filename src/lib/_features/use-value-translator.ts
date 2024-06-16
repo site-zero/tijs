@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Dicts, Match } from '../../../core';
+import { Dicts, I18n, Match } from '../../core';
 
 const _BUILTIN_TRANS = new Map<string, ValTrans>();
 const _AM_I18N = Match.createExplainI18n();
@@ -8,7 +8,8 @@ export type ValueTranslator = (name: string, val: any) => Promise<string>;
 type ValTrans = (val: any) => Promise<string>;
 
 export type ValueTranslatorProps = {
-  translators?: Record<string, string | ValTrans>;
+  valueTranslators?: Record<string, string | ValTrans>;
+  valueIsMatcher?: boolean;
 };
 
 async function defaultTranslator(val: any): Promise<string> {
@@ -17,10 +18,24 @@ async function defaultTranslator(val: any): Promise<string> {
   return am.explainText(_AM_I18N);
 }
 
-function getTranslator(trans?: string | ValTrans): ValTrans {
+function getTranslator(
+  trans?: string | ValTrans,
+  valueIsMatcher?: boolean
+): ValTrans {
   // 默认
   if (!trans) {
-    return defaultTranslator;
+    // 默认需要将值变成匹配条件的展示
+    if (valueIsMatcher) {
+      return async (val: any): Promise<string> => {
+        // 建立匹配器
+        let am = Match.parse(val);
+        return am.explainText(_AM_I18N);
+      };
+    }
+    // 默认直接显示值
+    return async (val: any): Promise<string> => {
+      return `${val ?? I18n.get('nil')}`;
+    };
   }
   // 自定义
   if (_.isFunction(trans)) {
@@ -52,8 +67,8 @@ export function useValueTranslator(
   props: ValueTranslatorProps
 ): ValueTranslator {
   return async (name: string, val: any): Promise<string> => {
-    let trans = _.get(props.translators, name);
-    let _trnv = getTranslator(trans);
+    let trans = _.get(props.valueTranslators, name);
+    let _trnv = getTranslator(trans, props.valueIsMatcher);
     return await _trnv(val);
   };
 }

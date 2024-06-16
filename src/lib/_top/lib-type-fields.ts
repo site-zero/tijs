@@ -279,6 +279,9 @@ function toStr(input: any) {
 }
 
 function toObject(input: any): Vars {
+  if (_.isNil(input)) {
+    return {};
+  }
   // Parse Array
   if (_.isArray(input)) {
     return _.fromPairs(input);

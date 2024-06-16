@@ -8,17 +8,26 @@ export default {
   comConf: {
     value: {
       name: 'fox',
+      age: '[3,89)',
     },
-    placeholder: 'Search by keywords',
     keywords: [
       {
         valueCase: 'upper',
         mode: 'contains',
       },
     ],
-    majorFields: ['type', 'dob'],
+    majorFields: ['type', '__keywords', 'dob'],
     canCustomizedMajor: true,
+    majorForm: {
+      layoutGridTracks: ['100px','1fr','200px','1fr']
+    },
     fields: [
+      {
+        name: '__keywords',
+        comConf: {
+          placeholder: 'Filter by keywords',
+        },
+      },
       {
         title: 'Name',
         name: 'name',
@@ -26,7 +35,6 @@ export default {
       {
         title: 'Age',
         name: 'age',
-        type: 'Integer',
       },
       {
         title: 'Type',

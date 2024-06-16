@@ -80,7 +80,7 @@
     conf.actions = [
       {
         icon: 'zmdi-close',
-        className: { 'spining-scale': true, 'bg-transparent': true },
+        className: { 'hover-rotate': true, 'bg-transparent': true },
         action: _do_close_modal,
       },
     ];

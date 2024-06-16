@@ -35,10 +35,10 @@
     @include color-box(info);
   }
 }
-.box-as-error {
-  @include color-box-r(error);
+.box-as-danger {
+  @include color-box-r(danger);
   &.active-reverse:active {
-    @include color-box(error);
+    @include color-box(danger);
   }
 }
 .box-as-track {

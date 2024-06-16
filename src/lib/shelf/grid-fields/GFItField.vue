@@ -13,6 +13,7 @@
     getFieldTitleStyle,
     getFieldTopStyle,
   } from './use-field-style';
+import _ from 'lodash';
 
   defineOptions({
     inheritAttrs: false,
@@ -134,7 +135,6 @@
     <!--===============: 字段值 :===================-->
     <div
       class="field-part as-value"
-      style="grid-area: value"
       :style="props.fieldValueStyle">
       <component
         :is="FieldCom.comType"
@@ -145,7 +145,6 @@
     <TextSnippet
       v-if="hasTip && !FieldIcon.tipAsIcon"
       class="field-part as-tip"
-      style="grid-area: tip"
       :style="props.tipStyle"
       :textStyle="props.tipTextStyle"
       :attrs="{ dataAlign: props.tipAlign }"

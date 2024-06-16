@@ -1,8 +1,5 @@
-import {
-  GridFieldsInput,
-  PlaceholderProps,
-  ValueTranslatorProps,
-} from '../../';
+import { ComputedRef, Ref } from 'vue';
+import { GridFieldsInput, ValueTranslatorProps } from '../../';
 import {
   ActionBarItem,
   AppModalProps,
@@ -87,14 +84,23 @@ type MajorFormProps = Omit<
  * ```
  */
 export type FilterProps = CommonProps &
-  PlaceholderProps &
   ValueTranslatorProps & {
     value?: FilterValue;
 
     //-----------------------------------------
     // Fields Setup
     //-----------------------------------------
+    /**
+     * 定制了本过滤器全部的字段，这里面有一个特殊规定，
+     * 即，名称为 `__keywords` 的字段是关键字搜索字段
+     * 名称为 `__more` 的字段表示不包括主数据里面的子对象数据
+     * 如果你不定义它，它会被自动添加在所有字段末尾
+     * 默认的，它会用 TiTags 来表达这个字段的值
+     */
     fields?: GridFieldsInput[];
+    /**
+     * 指定要显示的字段的键
+     */
     majorFields?: string[];
     keywords?: FilterKeyword[];
 
@@ -122,3 +128,20 @@ export type FilterProps = CommonProps &
     advanceForm?: FilterFormProps;
     advanceModal?: AppModalProps;
   };
+
+export type FilterFeature = {
+  showKeywords: ComputedRef<boolean>;
+  AllFields: ComputedRef<GridFieldsInput[]>;
+
+  MajorFields: ComputedRef<GridFieldsInput[]>;
+  moreItems: Ref<FilterMoreItem[] | undefined>;
+
+  hasMajorFields: ComputedRef<boolean>;
+  hasMoreData: ComputedRef<boolean>;
+  isNeedAdvanceForm: ComputedRef<boolean>;
+
+  MajorData: ComputedRef<Vars>;
+  MoreData: ComputedRef<Vars>;
+
+  loadMoreItems: () => Promise<void>;
+};

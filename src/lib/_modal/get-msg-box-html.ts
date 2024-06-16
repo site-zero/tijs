@@ -22,9 +22,11 @@ export function __get_msg_box_html(
       info: 'zmdi-info',
       success: 'zmdi-check-circle',
       warn: 'zmdi-alert-triangle',
-      error: 'zmdi-alert-polygon',
+      danger: 'zmdi-alert-polygon',
       track: 'zmdi-help',
       disable: 'zmdi-alert-octagon',
+      text: 'zmdi-info-outline',
+      number: 'zmdi-n-1-square',
     }[type];
     msgIcon = Icons.parseIcon(icon_str);
   }

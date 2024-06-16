@@ -8,16 +8,23 @@
     TiInput,
     TiLabel,
   } from '../../';
+  import { Vars } from '../../../core';
   import { FilterMoreItem, FilterProps } from './ti-filter-types';
   import { FilterEmitter, useFilter } from './use-filter';
-  import { Vars } from '../../../core';
+  import { useFilterActions } from './use-filter-actions';
+  import { getFilterFormConfig, getFilterFormData } from './use-filter-form';
 
   //-------------------------------------------------
   const emit = defineEmits<FilterEmitter>();
   //-------------------------------------------------
   const props = defineProps<FilterProps>();
   //-------------------------------------------------
-  const Flt = computed(() => useFilter(props, emit));
+  const Flt = computed(() => useFilter(props));
+  //-------------------------------------------------
+  const MajorFormConf = computed(() => getFilterFormConfig(props, Flt.value));
+  const MajorFormData = computed(() => getFilterFormData(Flt.value));
+  //-------------------------------------------------
+  const ActionItems = computed(() => useFilterActions(props, Flt.value, emit));
   //-------------------------------------------------
   function onMajorChange(diff: Vars) {
     let val = _.cloneDeep(props.value);
@@ -44,7 +51,12 @@
   }
   //-------------------------------------------------
   watch(
-    () => [props.value, props.fields, props.majorFields, props.translators],
+    () => [
+      props.value,
+      props.fields,
+      props.majorFields,
+      props.valueTranslators,
+    ],
     () => {
       Flt.value.loadMoreItems();
     },
@@ -58,40 +70,20 @@
   <div class="ti-filter">
     <div class="part-left">
       <slot name="head"></slot>
-      <div
-        class="part-keyword"
-        v-if="Flt.showKeywords.value">
-        <TiInput :placeholder="props.placeholder" />
-      </div>
       <!--================: Major Fields :===============-->
       <div
         class="part-major"
         v-if="Flt.hasMajorFields.value">
         <TiGridFields
-          defaultComType="TiInput"
-          :layoutHint="[[4, 800], [3, 600], [2, 400], 1]"
-          v-bind="props.majorForm"
-          :fields="Flt.MajorFields.value"
-          :data="Flt.MajorData.value"
+          v-bind="MajorFormConf"
+          :data="MajorFormData"
           @change="onMajorChange" />
-      </div>
-      <!--================: More Fields :===============-->
-      <div
-        class="part-more"
-        v-if="Flt.hasMoreData.value">
-        <TiLabel
-          v-for="it in Flt.moreItems.value"
-          class="show-border"
-          :value="it.value"
-          :prefixText="it.title"
-          :prefixIconForClean="true"
-          @change="onClearField(it)" />
       </div>
       <slot name="tail"></slot>
     </div>
     <div class="part-right">
       <TiActionBar
-        :items="Flt.ActionItems.value"
+        :items="ActionItems"
         layoutMode="V"
         topItemAspectMode="button"
         @fire="onActionFire" />

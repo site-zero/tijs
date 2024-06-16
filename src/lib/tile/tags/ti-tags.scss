@@ -1,2 +1,10 @@
 .ti-tags {
+  @include flex-align;
+  &[nowrap] {
+    flex-wrap: nowrap;
+  }
+  > .ti-label {
+    margin: SZ(1);
+    flex: 0 0 auto;
+  }
 }

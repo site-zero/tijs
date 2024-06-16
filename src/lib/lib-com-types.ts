@@ -27,6 +27,7 @@ export const COM_TYPES = {
   InputCurrency: 'TiInputCurrency',
   InputDate: 'TiInputDate',
   InputDatetime: 'TiInputDatetime',
+  InputDateRange: 'TiInputDateRange',
   InputTime: 'TiInputTime',
   InputColor: 'TiInputColor',
   InputIcon: 'TiInputIcon',

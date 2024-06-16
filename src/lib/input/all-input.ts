@@ -5,6 +5,7 @@ import { TiInputColorInfo } from './color/ti-input-color-index';
 import { TiComboFilterInfo } from './combo-filter/ti-combo-filter-index';
 import { TiInputCurrencyInfo } from './currency/ti-input-currency-index';
 import { TiInputDateInfo } from './date/ti-input-date-index';
+import { TiInputDateRangeInfo } from './daterange/ti-daterange-index';
 import { TiInputDatetimeInfo } from './datetime/ti-input-datetime-index';
 import { TiDroplistInfo } from './droplist/ti-droplist-index';
 import { TiFilterInfo } from './filter/ti-filter-index';
@@ -32,6 +33,7 @@ export default {
   TiInputNum: TiInputNumInfo,
   TiInputDate: TiInputDateInfo,
   TiInputDatetime: TiInputDatetimeInfo,
+  TiInputDateRange: TiInputDateRangeInfo,
   TiInputTime: TiInputTimeInfo,
   TiInputText: TiInputTextInfo,
   TiScore: TiScoreInfo,
@@ -47,6 +49,7 @@ export * from './color/ti-input-color-index';
 export * from './combo-filter/ti-combo-filter-index';
 export * from './currency/ti-input-currency-index';
 export * from './date/ti-input-date-index';
+export * from './daterange/ti-daterange-index';
 export * from './datetime/ti-input-datetime-index';
 export * from './droplist/ti-droplist-index';
 export * from './filter/ti-filter-index';

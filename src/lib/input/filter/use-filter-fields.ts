@@ -1,6 +1,5 @@
 import _ from 'lodash';
-import { FilterProps, GridFieldsInput, makeFieldUniqKey } from '../../';
-import { Util } from '../../../core';
+import { GridFieldsInput } from '../../';
 
 export function makeFieldsMap(flds?: GridFieldsInput[]) {
   let map = new Map<string, GridFieldsInput>();
@@ -24,13 +23,30 @@ export function makeFieldsMap(flds?: GridFieldsInput[]) {
   return map;
 }
 
-export function genIsMajor(props: FilterProps) {
-  if (_.isNil(props.majorFields) || _.isEmpty(props.majorFields)) {
-    return (_index: number, _fld: GridFieldsInput) => false;
+export function joinFieldsList(
+  flds: GridFieldsInput[],
+  list: GridFieldsInput[] = []
+): GridFieldsInput[] {
+  if (flds) {
+    for (let fld of flds) {
+      if (fld.name) {
+        list.push(fld);
+      }
+      if (fld.fields) {
+        joinFieldsList(fld.fields, list);
+      }
+    }
   }
-  let _major_map = Util.arrayToMap(props.majorFields);
-  return (index: number, fld: GridFieldsInput) => {
-    let uniqKey = makeFieldUniqKey([index], fld.name, fld.uniqKey);
-    return _major_map.get(uniqKey) ?? false;
-  };
+  return list;
 }
+
+// export function genIsMajor(props: FilterProps) {
+//   if (_.isNil(props.majorFields) || _.isEmpty(props.majorFields)) {
+//     return (_index: number, _fld: GridFieldsInput) => false;
+//   }
+//   let _major_map = Util.arrayToMap(props.majorFields);
+//   return (index: number, fld: GridFieldsInput) => {
+//     let uniqKey = makeFieldUniqKey([index], fld.name, fld.uniqKey);
+//     return _major_map.get(uniqKey) ?? false;
+//   };
+// }

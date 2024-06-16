@@ -1,19 +1,18 @@
-import { I18n } from '../../core';
-import _ from 'lodash';
 import { TextShowProps } from '.';
+import { I18n } from '../../core';
 
 export type PlaceholderProps = Pick<TextShowProps, 'autoI18n'> & {
   placeholder?: string;
 };
 
-export type PlaceholderFeature = {
-  /**
-   * 返回占位符内容
-   */
-  getPlaceholder: {
-    (dft?: string): string | undefined;
-  };
-};
+// export type PlaceholderFeature = {
+//   /**
+//    * 返回占位符内容
+//    */
+//   getPlaceholder: {
+//     (dft?: string): string | undefined;
+//   };
+// };
 
 /**
  * ### 特性概述
@@ -32,17 +31,11 @@ export type PlaceholderFeature = {
  * - `default: ToStrMaybe<any>` : 可以用来格式化数据
  *
  */
-export function usePlaceholder(
-  props: PlaceholderProps,
-): PlaceholderFeature {
-  return {
-    getPlaceholder: (dft?) => {
-      let placeholder = props.placeholder ?? dft;
-      let autoI18n = props.autoI18n ?? true;
-      if (autoI18n && placeholder) {
-        placeholder = I18n.text(placeholder);
-      }
-      return placeholder;
-    },
-  };
+export function usePlaceholder(props: PlaceholderProps): string {
+  let placeholder = props.placeholder ?? '';
+  let autoI18n = props.autoI18n ?? true;
+  if (autoI18n && placeholder) {
+    placeholder = I18n.text(placeholder);
+  }
+  return placeholder;
 }

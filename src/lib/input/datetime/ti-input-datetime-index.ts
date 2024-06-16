@@ -27,9 +27,8 @@ const TiInputDatetimeInfo: TiComInfo = {
   com: TiInputDatetime,
   liveStyle: {
     width: '80%',
-    minWidth: '150px',
-    maxWidth: '260px',
-    paddingBottom: '30%',
+    minWidth: '120px',
+    maxWidth: '300px',
   },
   install: (app: App) => {
     app.component(COM_TYPE, TiInputDatetime);
