@@ -109,6 +109,9 @@ export type FilterProps = CommonProps &
     //-----------------------------------------
     canCustomizedMajor?: boolean;
     canOpenAdvanceForm?: 'auto' | 'yes' | 'no';
+    /**
+     * 更多定制命令
+     */
     moreActions?: ActionBarItem[];
 
     //-----------------------------------------
@@ -137,6 +140,8 @@ export type FilterProps = CommonProps &
      * 如果为 true，那么除了 search 按钮，都会缩进一个菜单里
      */
     actionCollapse?: boolean;
+
+    layout?: 'oneline' | 'comfy';
   };
 
 export type FilterFeature = {

@@ -1,5 +1,4 @@
 import { ComPropExample } from '../../../../core';
-import { DropListProps } from '../../all-input';
 import { FilterProps } from '../ti-filter-types';
 import { getFilterExampleFields } from './ex-fields';
 
@@ -22,7 +21,11 @@ export default {
     actionCollapse: true,
     actionAt: 'right',
     majorForm: {
-      layoutGridTracks: ['100px', '1fr', '200px', '1fr'],
+      layoutGridTracks: [
+        '#4:100px,1fr,200px,1fr',
+        '#3:100px,1fr,200px',
+        '#2:1fr,200px',
+      ],
     },
     fields: [...getFilterExampleFields()],
   } as FilterProps,

@@ -1,8 +1,8 @@
-import { ColorizedName, OptionsInput } from '../../';
-import { CommonProps, IconInput } from '../../../core';
+import { OptionsInput } from '../../';
+import { CommonProps, IconInput, LogicType } from '../../../core';
 
 export type SorterExportApi = {
-  onSetup: () => Promise<SorterValue | undefined>;
+  onSetup: () => Promise<void>;
 };
 
 /**
@@ -15,12 +15,17 @@ export type SorterProps = CommonProps & {
   value?: SorterValue;
   options?: OptionsInput;
 
-  colorType?: ColorizedName;
+  colorType?: LogicType;
 
   sorterIcons?: {
     ASC: IconInput;
     DESC: IconInput;
   };
+
+  /**
+   * 前缀标题
+   */
+  title?: string;
 
   /**
    * 显示配置按钮

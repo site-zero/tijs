@@ -6,15 +6,24 @@ import example from './example';
 
 const en_us = {
   'com-name': 'ComboFilter',
+  'sort-title': 'SORT',
+  'sort-setup': 'Setup Sorter',
+  'example-comfy': 'Comfy',
+  'example-tight': 'Tight',
+  'example-oneline': 'One Line',
 };
 const zh_cn = {
   'com-name': '组合过滤器',
+  'sort-title': '排序',
+  'sort-setup': '设置排序',
+  'example-comfy': '舒适布局',
+  'example-tight': '紧凑布局',
+  'example-oneline': '单行布局',
 };
 
 const COM_TYPE = COM_TYPES.ComboFilter;
 
 const TiComboFilterInfo: TiComInfo = {
-  tags: ['ing'],
   icon: 'fas-filter',
   race: TiComRace.INPUT,
   name: COM_TYPE,
@@ -26,11 +35,15 @@ const TiComboFilterInfo: TiComInfo = {
     zh_hk: zh_cn,
   },
   com: TiComboFilter,
+  liveStyle: {
+    width: '80%',
+    maxWidth: '1000px',
+  },
   install: (app: App) => {
     app.component(COM_TYPE, TiComboFilter);
   },
-  defaultProps: 'simple',
-  exampleProps: [example.simple],
+  defaultProps: 'comfy',
+  exampleProps: [example.comfy, example.tight, example.oneline],
 };
 
 export * from './ti-combo-filter-types';

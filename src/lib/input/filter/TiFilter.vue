@@ -1,32 +1,32 @@
 <script lang="ts" setup>
-  import _ from 'lodash';
   import { computed, watch } from 'vue';
-  import {
-    ActionBarEvent,
-    TiActionBar,
-    TiGridFields,
-    TiInput,
-    TiLabel,
-  } from '../../';
-  import { Vars } from '../../../core';
-  import { FilterMoreItem, FilterProps } from './ti-filter-types';
+  import { ActionBarEvent, TiActionBar, TiGridFields } from '../../';
+  import { CssUtils, Vars } from '../../../core';
+  import { FilterProps } from './ti-filter-types';
   import { FilterEmitter, useFilter } from './use-filter';
   import { useFilterActions } from './use-filter-actions';
   import { getFilterFormConfig, getFilterFormData } from './use-filter-form';
-
   //-------------------------------------------------
   const emit = defineEmits<FilterEmitter>();
   //-------------------------------------------------
   const props = withDefaults(defineProps<FilterProps>(), {
     actionAt: 'bottom',
+    layout: 'comfy',
   });
   //-------------------------------------------------
   const Flt = computed(() => useFilter(props));
+  //-----------------------------------------------------
+  const TopClass = computed(() =>
+    CssUtils.mergeClassName(props.className, `layout-${props.layout}`)
+  );
   //-------------------------------------------------
   const MajorFormConf = computed(() => getFilterFormConfig(props, Flt.value));
   const MajorFormData = computed(() => getFilterFormData(Flt.value));
   //-------------------------------------------------
   const ActionItems = computed(() => useFilterActions(props, Flt.value, emit));
+  const ActionLayoutMode = computed(() =>
+    props.layout == 'oneline' ? 'H' : 'V'
+  );
   //-------------------------------------------------
   function onMajorChange(diff: Vars) {
     let val = Flt.value.useDiffData(diff);
@@ -62,7 +62,9 @@
   //-------------------------------------------------
 </script>
 <template>
-  <div class="ti-filter">
+  <div
+    class="ti-filter"
+    :class="TopClass">
     <div class="part-left">
       <slot name="head"></slot>
       <!--================: Major Fields :===============-->
@@ -90,7 +92,7 @@
       v-if="'right' == props.actionAt">
       <TiActionBar
         :items="ActionItems"
-        layoutMode="V"
+        :layoutMode="ActionLayoutMode"
         topItemAspectMode="button"
         @fire="onActionFire" />
     </div>

@@ -10,4 +10,16 @@
     border-left: 1px solid var(--ti-color-border-shallow);
   }
   //---------------------------------------
+  &.layout-oneline {
+    > .part-left {
+      @include flex-align-nowrap($ai: stretch);
+      > * {
+        flex: 0 0 auto;
+      }
+      > .part-major {
+        flex: 1 1 auto;
+      }
+    }
+  }
+  //---------------------------------------
 }

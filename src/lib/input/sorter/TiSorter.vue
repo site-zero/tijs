@@ -1,7 +1,7 @@
 <script lang="ts" setup>
-  import { computed, watch } from 'vue';
-  import { TiLabel } from '../../';
-  import { I18n } from '../../../core';
+  import { computed, onMounted, watch } from 'vue';
+  import { TagItem, TiTags } from '../../';
+  import { CssUtils } from '../../../core';
   import { SorterProps, SorterValue } from './ti-sorter-types';
   import { SorterItem, useSorter } from './use-sorter';
   //-----------------------------------------------------
@@ -16,18 +16,20 @@
   //-----------------------------------------------------
   const Sorter = computed(() => useSorter(props));
   //-----------------------------------------------------
-  function onRemoveItem(it: SorterItem) {
-    let sv = Sorter.value.removeValue(it);
+  const TopClass = computed(() => CssUtils.mergeClassName(props.className));
+  //-----------------------------------------------------
+  function onRemoveItem(it: TagItem) {
+    let sv = Sorter.value.removeValue(it as SorterItem);
     emit('change', sv);
   }
   //-----------------------------------------------------
-  function onToggleItem(it: SorterItem) {
-    let sv = Sorter.value.toggleValue(it);
+  function onToggleItem(it: TagItem) {
+    let sv = Sorter.value.toggleValue(it as SorterItem);
     emit('change', sv);
   }
   //-----------------------------------------------------
   async function onSetupSortFields() {
-    let re = await Sorter.value.onSetup();
+    let re = await Sorter.value.onSetupSorterValue();
     // 用户取消
     if (!re) {
       return;
@@ -46,29 +48,28 @@
     }
   );
   //-----------------------------------------------------
+  onMounted(() => {
+    if (props.exportApi) {
+      props.exportApi({
+        onSetup: onSetupSortFields,
+      });
+    }
+  });
+  //-----------------------------------------------------
 </script>
 <template>
-  <div class="ti-sorter">
+  <div
+    class="ti-sorter"
+    :class="TopClass">
     <div class="part-items">
-      <template v-if="!Sorter.isEmpty.value">
-        <TiLabel
-          v-for="it in Sorter.SorterItems.value"
-          class="show-border"
-          :class="it.className"
-          :value="it.text"
-          :clickable="true"
-          prefix-icon="zmdi-close"
-          :prefix-icon-clickable="true"
-          :suffix-icon="it.sortIcon"
-          @click-prefix-icon="onRemoveItem(it)"
-          @click="onToggleItem(it)" />
-      </template>
-      <div
-        v-else
-        class="as-empty">
-        <i class="zmdi zmdi-sort-asc"></i>
-        {{ I18n.get('ti-sorter-empty') }}
-      </div>
+      <TiTags
+        :title="props.title"
+        :value="Sorter.SorterItems.value"
+        :editable="true"
+        :tag-clickable="true"
+        :default-tag-type="props.colorType"
+        @remove="onRemoveItem"
+        @click-tag="onToggleItem" />
     </div>
     <div
       v-if="props.canSetup"

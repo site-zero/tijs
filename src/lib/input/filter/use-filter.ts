@@ -85,9 +85,9 @@ export function useFilter(props: FilterProps): FilterFeature {
 
   function useDiffData(diff: Vars) {
     let val = _.cloneDeep(props.value ?? {});
-    console.log(diff, val);
+    //console.log(diff, val);
     // 处理 more 字段
-    if (diff.__more) {
+    if (!_.isUndefined(diff.__more)) {
       let moreKeys = _.keys(MoreData.value);
       let diffKeys = _.keys(diff.__more);
       let removeKeys = _.without(moreKeys, ...diffKeys);

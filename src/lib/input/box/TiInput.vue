@@ -233,7 +233,7 @@
   //-----------------------------------------------------
   function OnListSelect(payload: ListSelectEmitInfo) {
     let { currentId } = payload;
-    console.log('OnListSelect', currentId);
+    //console.log('OnListSelect', currentId);
     let val = _.isNumber(currentId) ? `${currentId}` : currentId;
     Box.value.doChangeValue(val ?? '');
     // TODO if multi 可能需要特别处理一下

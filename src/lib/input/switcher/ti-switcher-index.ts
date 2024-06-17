@@ -14,7 +14,7 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.Switcher;
 
 const TiSwitcherInfo: TiComInfo = {
-  tags: ['scaffold'],
+  tags: ['ing'],
   icon: 'zmdi-input-composite',
   race: TiComRace.INPUT,
   name: COM_TYPE,

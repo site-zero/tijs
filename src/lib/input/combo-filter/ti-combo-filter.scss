@@ -1,2 +1,11 @@
 .ti-combo-filter {
+  //---------------------------------------
+  .part-sorter.ti-sorter {
+    padding: var(--ti-gap-m);
+  }
+  //---------------------------------------
+  &.layout-comfy .part-sorter.ti-sorter {
+    background-color: var(--ti-color-tab);
+  }
+  //---------------------------------------
 }

@@ -5,7 +5,6 @@ import { TagItem, TagsProps } from './ti-tags-types';
 import { useTagsTitleTranslator } from './use-tag-title-translator';
 
 export function useTags(props: TagsProps, tagItems: Ref<TagItem[]>) {
-  console.log('useTags');
   // 自动判断一下值是否是一个匹配条件
   let ValueIsMatcher = computed(() => {
     //console.log('computed valueIsMatcher', props.valueIsMatcher);

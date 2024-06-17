@@ -82,6 +82,11 @@
     border: 1px solid var(--ti-color-border-thin);
     border-radius: var(--ti-measure-r-s);
   }
+
+  &.is-clickable {
+    cursor: pointer;
+    user-select: none;
+  }
 }
 
 @mixin __color_box($name) {
@@ -92,7 +97,6 @@
       border-color: var(--ti-color-#{$name});
     }
     &.is-clickable {
-      cursor: pointer;
       &:hover {
         background-color: var(--ti-color-#{$name}-b);
       }

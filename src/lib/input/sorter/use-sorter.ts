@@ -1,17 +1,21 @@
 import _ from 'lodash';
 import { computed, ref } from 'vue';
-import { Dicts, IconInput } from '../../../core';
-import { openAppModal, useOptions } from '../../../lib';
+import { Dicts, PickRequired } from '../../../core';
+import { TagItem, openAppModal, useOptions } from '../../../lib';
 import { SorterProps, SorterValue } from './ti-sorter-types';
 
-export type SorterItem = {
-  name: string;
-  text: string;
-  // 1:ASC; -1:DESC
-  value: number;
-  sortIcon: IconInput;
-  className?: any;
-};
+// export type SorterItem = {
+//   name: string;
+//   text: string;
+//   // 1:ASC; -1:DESC
+//   value: number;
+//   sortIcon: IconInput;
+//   className?: any;
+// };
+/**
+ * TagItem.value : 1:ASC; -1:DESC
+ */
+export type SorterItem = PickRequired<TagItem, 'name' | 'text' | 'icon'>;
 
 export function useSorter(props: SorterProps) {
   let { dict } = useOptions({ options: props.options });
@@ -42,11 +46,10 @@ export function useSorter(props: SorterProps) {
         let text = OptionsMap.value.get(key) || key;
         let value = props.value[key];
         items.push({
+          icon: value > 0 ? sorterIcons.ASC : sorterIcons.DESC,
           name: key,
           text,
           value,
-          sortIcon: value > 0 ? sorterIcons.ASC : sorterIcons.DESC,
-          className: `is-${props.colorType ?? 'track'}`,
         });
       }
     }
@@ -68,10 +71,7 @@ export function useSorter(props: SorterProps) {
     return re;
   }
 
-  async function onSetup(): Promise<SorterValue | undefined> {
-    if (!props.canSetup) {
-      return;
-    }
+  async function onSetupSorterValue(): Promise<SorterValue | undefined> {
     let vals = _.keys(props.value ?? {});
     let re = await openAppModal({
       title: 'i18n:ti-sorter-choose',
@@ -99,10 +99,6 @@ export function useSorter(props: SorterProps) {
     return rev;
   }
 
-  if (props.exportApi) {
-    props.exportApi({ onSetup });
-  }
-
   return {
     loadOptions,
     OptionsMap,
@@ -110,6 +106,6 @@ export function useSorter(props: SorterProps) {
     isEmpty,
     removeValue,
     toggleValue,
-    onSetup,
+    onSetupSorterValue,
   };
 }

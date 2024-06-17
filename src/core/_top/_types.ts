@@ -13,6 +13,8 @@ export { Rect } from './ti-rect';
 export function isArray<T>(input: any): input is T[] {
   return Array.isArray(input);
 }
+
+export type PickRequired<T, K extends keyof T> = T & Required<Pick<T, K>>;
 /*---------------------------------------------------`
 
                       结构/联合类型

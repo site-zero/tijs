@@ -1,7 +1,14 @@
 .ti-tags {
-  @include flex-align;
+  @include flex-align($ai: center, $ac: center);
   &[nowrap] {
     flex-wrap: nowrap;
+  }
+  > .as-title {
+    font-weight: bold;
+    font-size: var(--ti-fontsz-s);
+    white-space: nowrap;
+    padding: 0 var(--ti-gap-s);
+    margin-right: var(--ti-gap-s);
   }
   > .ti-label {
     margin: SZ(1);

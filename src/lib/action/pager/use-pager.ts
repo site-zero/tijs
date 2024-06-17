@@ -26,7 +26,7 @@ export function usePager(props: PagerProps, options: UsePagerOptions) {
   } = props;
 
   let displayMode: PagerMode = mode ?? 'jumper';
-  console.log('usePager', displayMode);
+  //console.log('usePager', displayMode);
   // 判断当前翻页条是否可用
   let avaliable = pageCount > 0 && pageNumber > 0 && totalCount > 0;
 

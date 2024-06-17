@@ -32,6 +32,11 @@ export type TagsProps = CommonProps &
     defaultTagClass?: any;
 
     /**
+     * 前缀标题
+     */
+    title?:string;
+
+    /**
      * 强制不换行
      */
     nowrap?: boolean;
@@ -40,6 +45,11 @@ export type TagsProps = CommonProps &
      * 可以支持移除操作
      */
     editable?: boolean;
+
+    /**
+     * 每个标签支持点击
+     */
+    tagClickable?: boolean;
 
     /**
      * 根据对象字段，可以获取一个转换逻辑，以便知道:

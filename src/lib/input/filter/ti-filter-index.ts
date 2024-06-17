@@ -22,7 +22,6 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.Filter;
 
 const TiFilterInfo: TiComInfo = {
-  tags: ['ing'],
   icon: 'zmdi-filter-list',
   race: TiComRace.INPUT,
   name: COM_TYPE,
