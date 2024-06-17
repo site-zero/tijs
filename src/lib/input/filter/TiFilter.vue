@@ -17,7 +17,9 @@
   //-------------------------------------------------
   const emit = defineEmits<FilterEmitter>();
   //-------------------------------------------------
-  const props = defineProps<FilterProps>();
+  const props = withDefaults(defineProps<FilterProps>(), {
+    actionAt: 'bottom',
+  });
   //-------------------------------------------------
   const Flt = computed(() => useFilter(props));
   //-------------------------------------------------
@@ -27,15 +29,8 @@
   const ActionItems = computed(() => useFilterActions(props, Flt.value, emit));
   //-------------------------------------------------
   function onMajorChange(diff: Vars) {
-    let val = _.cloneDeep(props.value);
-    _.assign(val, diff);
-    emit('change', val ?? {});
-  }
-  //-------------------------------------------------
-  function onClearField(it: FilterMoreItem) {
-    let fv = _.cloneDeep(props.value);
-    let v2 = _.omit(fv, it.name);
-    emit('change', v2);
+    let val = Flt.value.useDiffData(diff);
+    emit('change', val);
   }
   //-------------------------------------------------
   function onActionFire(event: ActionBarEvent) {
@@ -77,11 +72,22 @@
         <TiGridFields
           v-bind="MajorFormConf"
           :data="MajorFormData"
-          @change="onMajorChange" />
+          @change="onMajorChange">
+          <template v-slot:foot>
+            <TiActionBar
+              v-if="'bottom' == props.actionAt"
+              :items="ActionItems"
+              layoutMode="H"
+              topItemAspectMode="button"
+              @fire="onActionFire" />
+          </template>
+        </TiGridFields>
       </div>
-      <slot name="tail"></slot>
+      <slot name="foot"></slot>
     </div>
-    <div class="part-right">
+    <div
+      class="part-right"
+      v-if="'right' == props.actionAt">
       <TiActionBar
         :items="ActionItems"
         layoutMode="V"

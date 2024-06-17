@@ -1,5 +1,6 @@
-import simple from './ex-filter-simple';
+import atBottom from './ex-filter-at-bottom';
+import atRight from './ex-filter-at-right';
 
 export default {
-  simple,
+  atRight, atBottom
 };

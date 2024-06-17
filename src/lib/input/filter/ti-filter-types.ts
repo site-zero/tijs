@@ -127,6 +127,16 @@ export type FilterProps = CommonProps &
     //-----------------------------------------
     advanceForm?: FilterFormProps;
     advanceModal?: AppModalProps;
+
+    /**
+     * 动作菜单位置
+     */
+    actionAt?: 'right' | 'bottom';
+    /**
+     * 是否尽量缩起动作按钮，
+     * 如果为 true，那么除了 search 按钮，都会缩进一个菜单里
+     */
+    actionCollapse?: boolean;
   };
 
 export type FilterFeature = {
@@ -143,5 +153,6 @@ export type FilterFeature = {
   MajorData: ComputedRef<Vars>;
   MoreData: ComputedRef<Vars>;
 
+  useDiffData: (diff: Vars) => Vars;
   loadMoreItems: () => Promise<void>;
 };

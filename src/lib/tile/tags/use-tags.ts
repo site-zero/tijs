@@ -8,7 +8,7 @@ export function useTags(props: TagsProps, tagItems: Ref<TagItem[]>) {
   console.log('useTags');
   // 自动判断一下值是否是一个匹配条件
   let ValueIsMatcher = computed(() => {
-    console.log('computed valueIsMatcher', props.valueIsMatcher);
+    //console.log('computed valueIsMatcher', props.valueIsMatcher);
     // 如果没有指定，就需要采用默认逻辑
     if (_.isNil(props.valueIsMatcher)) {
       // 数组型值，那么值就是值

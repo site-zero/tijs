@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import { Vars } from 'src/core';
 import {
   GridFieldsInput,
   GridFieldsProps,
@@ -7,6 +6,7 @@ import {
   TagsProps,
   getFieldUniqKey,
 } from '../../';
+import { Vars } from '../../../core';
 import { FilterFeature, FilterProps } from './ti-filter-types';
 
 export function getFilterFormConfig(

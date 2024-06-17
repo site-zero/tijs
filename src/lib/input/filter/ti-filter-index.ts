@@ -8,11 +8,15 @@ const en_us = {
   'com-name': 'Filter',
   'customize': 'Customize',
   'advance': 'Advance',
+  'example-at-bottom': 'Buttons At Bottom',
+  'example-at-right': 'Buttons At Right',
 };
 const zh_cn = {
   'com-name': '过滤器',
   'customize': '定制条件',
   'advance': '高级搜索',
+  'example-at-bottom': '按钮在底部',
+  'example-at-right': '按钮在右侧',
 };
 
 const COM_TYPE = COM_TYPES.Filter;
@@ -37,8 +41,8 @@ const TiFilterInfo: TiComInfo = {
   install: (app: App) => {
     app.component(COM_TYPE, TiFilter);
   },
-  defaultProps: 'simple',
-  exampleProps: [example.simple],
+  defaultProps: 'at_right',
+  exampleProps: [example.atRight, example.atBottom],
   exampleModel: {
     'change': 'value',
     'reset': {

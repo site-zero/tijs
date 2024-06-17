@@ -293,7 +293,18 @@ export type GridFieldsItemLayoutProps = {
   // 这里可以允许你根据轨道下标(0 base)指定每个轨道具体的宽度
   // > 仅当 `group` 有效
   // > 如果已经指定了 `layout.gridTemplateColumns` 则会无视
-  layoutGridTracks?: string[] | ((trackIndex: number) => string);
+  // 对于 `sting[]` 类型支持下面的格式:
+  // - `['1fr']` : 所有的轨道都是 `1fr`
+  // - `['20%,1fr']` : 第一个轨道是 20%，之后都是 1fr
+  // - `['#3:100px,1fr,200px', '#2:1fr,200px']`
+  //    > 如果3个轨道，那么宽度依次是 100px, 1fr, 200px
+  //    > 如果2个轨道，那么宽度依次是 1fr, 200px
+  //    > 其他情况，每个轨道都是 1fr
+  // 如果类型是 string 就相当于  [string]
+  layoutGridTracks?:
+    | string
+    | string[]
+    | ((trackIndex: number, trackCount: number) => string);
 };
 
 export type GridFieldsStrictAbstractItem = FieldComProps &

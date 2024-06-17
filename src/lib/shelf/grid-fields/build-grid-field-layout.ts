@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Util, Vars } from '../../../core';
+import { Str, Util, Vars } from '../../../core';
 import {
   GridFieldsItemLayoutProps,
   GridLayoutHint,
@@ -91,7 +91,7 @@ export function buildGridFieldsLayoutStyle(
   // 否则，getTrackSize 会被赋值为一个新的函数，
   // 这个函数接受一个数字参数 i，返回 layoutGridTracks 中的第 i 个元素，
   // 如果该元素不存在，则返回 '1fr'。
-  let getTrackSize: (_i: number) => string;
+  let getTrackSize: (_i: number, _track_count: number) => string;
 
   // customized function call
   if (_.isFunction(layoutGridTracks)) {
@@ -99,9 +99,28 @@ export function buildGridFieldsLayoutStyle(
   }
   // pick from string arry
   else {
-    let tracks = layoutGridTracks as string[];
-    getTrackSize = (i: number) => {
-      return tracks[i] ?? '1fr';
+    let gridTracks = _.concat(layoutGridTracks);
+    // 逐个轨道分析
+    let _map_tracks = new Map<number, string[]>();
+    let _dft_tracks = [] as string[];
+    for (let tr of gridTracks) {
+      let m = /^#([0-9]+):(.+)$/.exec(tr);
+      if (m) {
+        let k = parseInt(m[1]);
+        let v = Str.splitIgnoreBlank(m[2]);
+        _map_tracks.set(k, v);
+      } else {
+        _dft_tracks = Str.splitIgnoreBlank(tr);
+      }
+    }
+
+    getTrackSize = (i: number, track_count: number) => {
+      let tracks = _map_tracks.get(track_count) ?? _dft_tracks;
+      if (_.isEmpty(tracks)) {
+        return '1fr';
+      }
+      let realI = _.clamp(i, 0, tracks.length - 1);
+      return tracks[realI]!;
     };
   }
   // 最后，它返回一个函数，这个函数接受一个数字参数 w，生成一个 CSS 格式的网格布局。
@@ -112,7 +131,7 @@ export function buildGridFieldsLayoutStyle(
     let css: Vars = {};
     let cols = [] as string[];
     for (let i = 0; i < trackCount; i++) {
-      let col = getTrackSize(i);
+      let col = getTrackSize(i, trackCount);
       cols.push(col);
     }
     _.assign(css, layout, {

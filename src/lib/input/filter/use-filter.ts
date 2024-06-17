@@ -83,6 +83,24 @@ export function useFilter(props: FilterProps): FilterFeature {
     return _.omit(props.value, keys) as Vars;
   });
 
+  function useDiffData(diff: Vars) {
+    let val = _.cloneDeep(props.value ?? {});
+    console.log(diff, val);
+    // 处理 more 字段
+    if (diff.__more) {
+      let moreKeys = _.keys(MoreData.value);
+      let diffKeys = _.keys(diff.__more);
+      let removeKeys = _.without(moreKeys, ...diffKeys);
+      val = _.omit(val, removeKeys);
+
+      diff = _.omit(diff, '__more');
+    }
+    // 获取一下需要删除哪些字段
+    _.assign(val, diff);
+
+    return val;
+  }
+
   async function loadMoreItems() {
     let morItems = [] as FilterMoreItem[];
     let morVal = _.cloneDeep(MoreData.value);
@@ -152,6 +170,7 @@ export function useFilter(props: FilterProps): FilterFeature {
     MajorData,
     MoreData,
 
+    useDiffData,
     loadMoreItems,
   };
 }

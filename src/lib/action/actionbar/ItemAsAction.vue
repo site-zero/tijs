@@ -19,6 +19,7 @@
     if (_.isFunction(props.action)) {
       props.action(state?.vars || {}, bus);
     }
+    state?.opened.clear();
   }
   //-------------------------------------------------------
 </script>

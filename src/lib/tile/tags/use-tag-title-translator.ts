@@ -12,8 +12,9 @@ export function useTagsTitleTranslator(
       let trans: TagNameTranslator;
       // 字符串的话，直接来
       if (_.isString(tval)) {
+        let title = tval as string;
         trans = (_name: string): [string, string[]] => {
-          return [tval, [_name]];
+          return [title, [_name]];
         };
       }
       // 本身就是转换器
@@ -23,8 +24,9 @@ export function useTagsTitleTranslator(
       // 一个配置对象
       else {
         trans = (_name: string): [string, string[]] => {
-          let title = tval.title;
-          let names = _.concat(tval.name ?? _name);
+          let info = tval as TagNameInfo;
+          let title = info.title;
+          let names = _.concat(info.name ?? _name);
           return [title, names];
         };
       }

@@ -49,11 +49,16 @@ export function useFilterActions(
     moreItems.push({}, ...props.moreActions);
   }
 
-  items.push({
-    //icon: 'fas-ellipsis',
-    icon: 'zmdi-dialpad',
-    text: 'i18n:more',
-    items: moreItems,
-  });
+  if (props.actionCollapse) {
+    items.push({
+      //icon: 'fas-ellipsis',
+      icon: 'zmdi-dialpad',
+      text: 'i18n:more',
+      items: moreItems,
+    });
+  } else {
+    items.push(...moreItems);
+  }
+
   return items;
 }
