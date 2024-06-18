@@ -54,6 +54,7 @@
     tipUseHint: false,
     tipTidyBy: () => ['main'],
     canInput: true,
+    trimed: true,
   });
   //-----------------------------------------------------
   const TipListConfig = computed(() => getTipListConf(props.tipList));

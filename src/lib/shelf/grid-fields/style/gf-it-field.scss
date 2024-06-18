@@ -46,7 +46,7 @@
       flex-wrap: nowrap;
       > .as-snippet-text .required-mark {
         @include font-fixed;
-        color: var(--ti-color-error);
+        color: var(--ti-color-danger);
         font-weight: bolder;
         margin: 0 0.2em;
       }

@@ -170,6 +170,7 @@
         className="part-title"
         :class="props.titleClass"
         :style="props.titleStyle"
+        :prefixIcon="props.titleIcon"
         :text="props.title || ''"
         :textType="props.titleType"
         :comType="props.comType"

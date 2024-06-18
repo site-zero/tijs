@@ -1,8 +1,9 @@
 .ti-pager {
   @include flex-align($jc: center);
+  user-select: none;
   font-size: var(--ti-fontsz-s);
   padding: 0.5em;
-  user-select: none;
+  margin: auto;
   //-------------------------------------------
   > .part {
     @include flex-align-nowrap;

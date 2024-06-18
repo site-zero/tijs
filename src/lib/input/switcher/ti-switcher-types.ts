@@ -1,4 +1,4 @@
-import { OptionsProps } from 'src/lib/_features';
+import { OptionsProps } from '../../';
 import { CommonProps, TableRowID } from '../../../core';
 
 export type SwitcherProps = CommonProps &

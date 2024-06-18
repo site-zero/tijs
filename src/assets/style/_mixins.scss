@@ -242,7 +242,7 @@ $BARLINE: 1px;
   @include __color_by_name(success);
   @include __color_by_name(warn);
   @include __color_by_name(info);
-  @include __color_by_name(error);
+  @include __color_by_name(danger);
   @include __color_by_name(track);
   @include __color_by_name(disable);
   @include __color_by_name(text);

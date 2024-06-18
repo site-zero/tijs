@@ -89,6 +89,7 @@
         suffixIconClass="hover-rotate"
         :value="it.text"
         @click-suffix-icon="onRemoveItem(it)"
+        @click-prefix-icon="onClickItem(it)"
         @click="onClickItem(it)" />
     </template>
     <span

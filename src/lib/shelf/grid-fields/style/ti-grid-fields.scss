@@ -11,11 +11,13 @@
   }
   //-------------------------------------------------------------
   > .part-title {
-    display: block;
-    text-align: center;
+    @include flex-center;
     font-size: 1.4em;
     padding: 0.6em 0;
     border-bottom: 1px solid var(--ti-color-border-shallow);
+    > .as-snippet-text {
+      margin: 0 .5em;
+    }
   }
   //-------------------------------------------------------------
   > .part-body {
