@@ -1,2 +1,11 @@
 .ti-switcher {
+  @include flex-align;
+  .sw-item {
+    @include flex-align-nowrap;
+    cursor: pointer;
+    padding: var(--ti-gap-s) var(--ti-gap-b);
+    border-radius: var(--ti-measure-r-s);
+    background-color: #ccc;
+    margin:  var(--ti-gap-t);
+  }
 }
