@@ -9,6 +9,7 @@
     // 无效条目
     &.is-disabled {
       opacity: 0.4;
+      filter: grayscale(100%);
     }
     &[aspect='sub'] {
       &:first-child {

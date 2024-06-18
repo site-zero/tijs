@@ -56,11 +56,6 @@
     background-color: var(--ti-color-menu);
   }
   //-----------------------------------------------------
-  &.is-disabled {
-    color: var(--ti-color-disable);
-    background-color: var(--ti-color-disable-r);
-  }
-  //-----------------------------------------------------
   &.is-enabled.is-opened {
     color: var(--ti-color-secondary-r);
     background-color: var(--ti-color-secondary);

@@ -102,6 +102,7 @@
   <div
     class="ti-actionbar"
     :class="TopClass"
+    :style="props.style"
     ref="$root">
     <!--===: Bar Mask :===-->
     <div

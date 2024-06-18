@@ -49,6 +49,7 @@ export type ActionBarProps = CommonProps & {
   name?: string;
   items: ActionBarItem[];
   vars?: Vars;
+  style?: Vars;
   layoutMode?: ActionBarLayoutMode;
   topItemAspectMode?: BarTopItemAspectMode;
 };
