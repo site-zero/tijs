@@ -261,6 +261,16 @@ export function joinClassNames(...args: any[]) {
   return names.join(' ');
 }
 //----------------------------------------------------
+export function toCssStyle(input?: null | Vars | string): Vars {
+  if (_.isNil(input)) {
+    return {};
+  }
+  if (_.isString(input)) {
+    return parseCssRule(input);
+  }
+  return toStyle(input);
+}
+//----------------------------------------------------
 export function parseCssRule(
   rule: undefined | null | string,
   flt: AttrFilter = true

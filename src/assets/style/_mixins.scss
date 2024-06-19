@@ -1,9 +1,7 @@
 //-------------------------- font
-$f_fixed:
-  Monaco,
-  Consolas,
-  Courier New;
-$f_nice: "Microsoft YaHei", "PingHei", "Helvetica Neue", "Helvetica", "Arial", "Verdana", "sans-serif";
+$f_fixed: Monaco, Consolas, Courier New;
+$f_nice: 'Microsoft YaHei', 'PingHei', 'Helvetica Neue', 'Helvetica', 'Arial',
+  'Verdana', 'sans-serif';
 //-------------------------- zIndex
 $z-above: 1;
 $z-cover: 10;
@@ -94,7 +92,13 @@ $BARLINE: 1px;
 @mixin flex-center($jc: center, $ai: center, $wp: wrap, $ac: center) {
   @include flex($jc, $ai, $wp, $ac);
 }
-@mixin flex-full($fx: 1 1 auto, $jc: center, $ai: stretch, $wp: nowrap, $ac: stretch) {
+@mixin flex-full(
+  $fx: 1 1 auto,
+  $jc: center,
+  $ai: stretch,
+  $wp: nowrap,
+  $ac: stretch
+) {
   @include flex($jc, $ai, $wp, $ac);
   flex: $fx;
 }
@@ -108,14 +112,24 @@ $BARLINE: 1px;
 @mixin flex-align-center($jc: flex-start, $ai: center, $wp: wrap, $ac: center) {
   @include flex($jc, $ai, $wp, $ac);
 }
-@mixin flex-align-nowrap($jc: flex-start, $ai: center, $wp: nowrap, $ac: center) {
+@mixin flex-align-nowrap(
+  $jc: flex-start,
+  $ai: center,
+  $wp: nowrap,
+  $ac: center
+) {
   @include flex($jc, $ai, $wp, $ac);
 }
 @mixin flex-align-v($jc: flex-start, $ai: stretch, $wp: wrap, $ac: stretch) {
   @include flex($jc, $ai, $wp, $ac);
   flex-direction: column;
 }
-@mixin flex-align-v-nowrap($jc: flex-start, $ai: stretch, $wp: nowrap, $ac: stretch) {
+@mixin flex-align-v-nowrap(
+  $jc: flex-start,
+  $ai: stretch,
+  $wp: nowrap,
+  $ac: stretch
+) {
   @include flex($jc, $ai, $wp, $ac);
   flex-direction: column;
 }
@@ -209,14 +223,30 @@ $BARLINE: 1px;
 //          其他帮助方法
 //
 //-------------------------------------------------------------
-@mixin bg-chessboard($sz: SZ(20), $color: var(--ti-color-border-shallow), $bg: var(--ti-color-card)) {
+@mixin bg-chessboard(
+  $sz: SZ(20),
+  $color: var(--ti-color-border-shallow),
+  $bg: var(--ti-color-card)
+) {
   background-color: $bg;
-  background-image: linear-gradient(45deg, $color 25%, transparent 25%, transparent 75%, $color 75%, $color),
-    linear-gradient(45deg, $color 26%, transparent 26%, transparent 74%, $color 74%, $color);
+  background-image: linear-gradient(
+      45deg,
+      $color 25%,
+      transparent 25%,
+      transparent 75%,
+      $color 75%,
+      $color
+    ),
+    linear-gradient(
+      45deg,
+      $color 26%,
+      transparent 26%,
+      transparent 74%,
+      $color 74%,
+      $color
+    );
   background-size: $sz $sz;
-  background-position:
-    0 0,
-    calc($sz/2) calc($sz/2);
+  background-position: 0 0, calc($sz/2) calc($sz/2);
 }
 //-------------------------------------------------------------
 @mixin __color_by_name($name) {
@@ -248,3 +278,90 @@ $BARLINE: 1px;
   @include __color_by_name(text);
   @include __color_by_name(number);
 }
+
+//-------------------------------------------------------------
+@mixin __fontsz($prefix, $sz) {
+  #{$prefix}-#{$sz} {
+    font-size: var(--ti-fontsz-#{$sz});
+  }
+}
+//-------------------------------------------------------------
+@mixin aspect_fontsize($prefix) {
+  @include __fontsz($prefix, t);
+  @include __fontsz($prefix, s);
+  @include __fontsz($prefix, m);
+  @include __fontsz($prefix, b);
+  @include __fontsz($prefix, h);
+}
+
+//-------------------------------------------------------------
+@mixin __gap($prefix, $sz) {
+  #{$prefix}-#{$sz} {
+    gap: var(--ti-gap-#{$sz});
+  }
+}
+//-------------------------------------------------------------
+@mixin aspect_gap($prefix) {
+  @include __gap($prefix, t);
+  @include __gap($prefix, s);
+  @include __gap($prefix, m);
+  @include __gap($prefix, b);
+  @include __gap($prefix, h);
+}
+
+//-------------------------------------------------------------
+@mixin __radius($prefix, $sz) {
+  #{$prefix}-#{$sz} {
+    border-radius: var(--ti-measure-r-#{$sz});
+  }
+}
+//-------------------------------------------------------------
+@mixin aspect_radius($prefix) {
+  @include __radius($prefix, t);
+  @include __radius($prefix, s);
+  @include __radius($prefix, m);
+  @include __radius($prefix, b);
+  @include __radius($prefix, h);
+}
+
+//-------------------------------------------------------------
+@mixin __color($name, $prefix) {
+  #{$prefix}-#{$name} {
+    color: var(--ti-color-#{$name}-r);
+    background-color: var(--ti-color-#{$name});
+    &:hover {
+      background-color: var(--ti-color-#{$name}-b);
+    }
+  }
+}
+//-------------------------------------------------------------
+@mixin aspect_color($prefix: '&.is') {
+  @include __color(success, $prefix);
+  @include __color(warn, $prefix);
+  @include __color(info, $prefix);
+  @include __color(danger, $prefix);
+  @include __color(track, $prefix);
+  @include __color(disable, $prefix);
+  @include __color(text, $prefix);
+  @include __color(number, $prefix);
+}
+
+//-------------------------------------------------------------
+@mixin __color_fborder($name, $prefix) {
+  #{$prefix}-#{$name} {
+    color: var(--ti-color-#{$name});
+    border-color: var(--ti-color-#{$name});
+  }
+}
+//-------------------------------------------------------------
+@mixin aspect_color_fborder($prefix: '&.is') {
+  @include __color_fborder(success, $prefix);
+  @include __color_fborder(warn, $prefix);
+  @include __color_fborder(info, $prefix);
+  @include __color_fborder(danger, $prefix);
+  @include __color_fborder(track, $prefix);
+  @include __color_fborder(disable, $prefix);
+  @include __color_fborder(text, $prefix);
+  @include __color_fborder(number, $prefix);
+}
+//-------------------------------------------------------------
