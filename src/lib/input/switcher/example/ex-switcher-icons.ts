@@ -11,6 +11,12 @@ export default {
     itemSize: 'b',
     itemGap: 't',
     itemRadius: 'none',
+    itemStyle: {
+      borderRadius: '50%',
+      justifyContent:'center',
+      width: '50px',
+      height: '50px',
+    },
     defaultItemType: 'text',
     options: [
       { value: 'hippo', icon: 'fas-hippo' },
