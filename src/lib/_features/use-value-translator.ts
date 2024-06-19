@@ -2,7 +2,6 @@ import _ from 'lodash';
 import { Dicts, I18n, Match } from '../../core';
 
 const _BUILTIN_TRANS = new Map<string, ValTrans>();
-const _AM_I18N = Match.createExplainI18n();
 
 export type ValueTranslator = (name: string, val: any) => Promise<string>;
 type ValTrans = (val: any) => Promise<string>;
@@ -15,7 +14,7 @@ export type ValueTranslatorProps = {
 async function defaultTranslator(val: any): Promise<string> {
   // 建立匹配器
   let am = Match.parse(val);
-  return am.explainText(_AM_I18N);
+  return am.explainText(Match.createExplainI18n());
 }
 
 function getTranslator(
@@ -29,7 +28,7 @@ function getTranslator(
       return async (val: any): Promise<string> => {
         // 建立匹配器
         let am = Match.parse(val);
-        return am.explainText(_AM_I18N);
+        return am.explainText(Match.createExplainI18n());
       };
     }
     // 默认直接显示值

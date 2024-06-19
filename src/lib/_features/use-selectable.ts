@@ -27,7 +27,7 @@ export type SelectableProps<ID extends string | number> = {
   /**
    * 传入的数据对象
    */
-  data?: Vars[];
+  //data?: Vars[];
   /**
    * 从指定的对象获取 ID
    *
@@ -42,6 +42,16 @@ export type SelectableProps<ID extends string | number> = {
    */
   multi?: boolean;
 
+  /**
+   * 最少选定多少选项，如果不是 multi ，最大值就是1
+   */
+  minChecked?: number;
+
+  /**
+   * 最多选定多少
+   */
+  maxChecked?: number;
+
   currentId?: ID | null;
   checkedIds?: CheckedIds<ID>;
 
@@ -55,7 +65,7 @@ export type SelectableProps<ID extends string | number> = {
 export type SelectableFeature<ID extends string | number> = {
   //createSelection: () => SelectableState<ID>;
 
-  getRowIds: () => ID[];
+  getRowIds: (data: Vars[]) => ID[];
 
   getDataId: Convertor<Vars, ID | undefined>;
   isIDChecked: (state: SelectableState<ID>, id?: ID) => boolean;
@@ -78,6 +88,7 @@ export type SelectableFeature<ID extends string | number> = {
 
   updateSelection: (
     selection: SelectableState<ID>,
+    data: Vars[],
     currentId?: ID | null,
     checkedIds?: CheckedIds<ID>
   ) => void;
@@ -205,10 +216,11 @@ export function useSelectable<ID extends string | number>(
 
   function updateSelection(
     selection: SelectableState<ID>,
+    data: Vars[],
     currentId?: ID | null,
     checkedIds?: CheckedIds<ID>
   ) {
-    selection.ids = getRowIds();
+    selection.ids = getRowIds(data);
     let ids = new Map<ID, boolean>();
     //console.log(selection.ids);
 
@@ -284,13 +296,14 @@ export function useSelectable<ID extends string | number>(
                        State
                 
   -----------------------------------------------------*/
-  function getRowIds(): ID[] {
+  function getRowIds(data: Vars[]): ID[] {
     let ids = [] as ID[];
-    let data = props.data || [];
-    for (let it of data) {
-      let id = getDataId(it);
-      if (!_.isUndefined(id)) {
-        ids.push(id);
+    if (data) {
+      for (let it of data) {
+        let id = getDataId(it);
+        if (!_.isUndefined(id)) {
+          ids.push(id);
+        }
       }
     }
     return ids;
@@ -330,31 +343,103 @@ export function useSelectable<ID extends string | number>(
                    Action Handler
                 
   -----------------------------------------------------*/
+  /**
+   * 处理一下 minChecked/maxChecked
+   * @param selection 选区
+   */
+  function clampSelect(selection: SelectableState<ID>) {
+    let lastId = selection.lastSelectId;
+    // 防守
+    if (_.isNil(lastId)) {
+      return;
+    }
+    // 对于多选
+    if (props.multi) {
+      let ckIds = Util.mapTruthyKeys(selection.checkedIds);
+      // 选少了
+      if (_.isNumber(props.minChecked) && ckIds.length < props.minChecked) {
+        let n = props.minChecked - ckIds.length;
+        // 最后一个选中的，恢复上
+        if (!selection.checkedIds.get(lastId)) {
+          selection.checkedIds.set(lastId, true);
+          n--;
+        }
+        // 从头开始高满
+        for (let id of selection.ids) {
+          if (n <= 0) {
+            break;
+          }
+          if (!selection.checkedIds.get(id)) {
+            selection.checkedIds.set(id, true);
+            n--;
+          }
+        }
+      }
+      // 选多了
+      if (_.isNumber(props.maxChecked) && ckIds.length > props.maxChecked) {
+        let n = ckIds.length - props.maxChecked;
+        let removeIds = [] as ID[];
+        for (let [id, _v] of selection.checkedIds) {
+          if (n <= 0) {
+            break;
+          }
+          if (id != lastId) {
+            removeIds.push(id);
+            n--;
+          }
+        }
+        for (let id of removeIds) {
+          selection.checkedIds.delete(id);
+        }
+      }
+    }
+    // 对于单选，仅仅考虑 minChecked
+    else if (_.isNumber(props.minChecked)) {
+      // 至少要保证一个选中
+      if (props.minChecked > 0) {
+        let ckIds = Util.mapTruthyKeys(selection.checkedIds);
+        if (ckIds.length == 0) {
+          selection.checkedIds.set(lastId, true);
+          selection.currentId = lastId;
+        }
+      }
+    }
+  }
+
   function select(
     selection: SelectableState<ID>,
     rowId: ID,
     se: KeyboardStatus
   ) {
-    if (!props.canSelect && props.canCheck && !se.shiftKey) {
+    let need_clamp = false;
+    if (!props.canCheck && !props.canSelect) {
+      return;
+    }
+    // shiftKey
+    if (se.shiftKey) {
+      let ids = selection.ids;
+      selectRange(selection, ids, [
+        rowId,
+        selection.currentId ?? selection.lastSelectId,
+      ]);
+      need_clamp = true;
+    }
+    // 只能选择的话，优先用 toggle
+    else if (!props.canSelect && props.canCheck) {
       toggleId(selection, rowId);
     }
     // Toggle Mode
     else if (se.ctrlKey || se.metaKey) {
       toggleId(selection, rowId);
     }
-    // shiftKey
-    else if (se.shiftKey) {
-      let ids = selection.ids;
-      selectRange(selection, ids, [
-        rowId,
-        selection.currentId ?? selection.lastSelectId,
-      ]);
-    }
     // Default Simple Mode
     else {
       selectId(selection, rowId);
     }
     selection.lastSelectId = rowId;
+    if (need_clamp) {
+      clampSelect(selection);
+    }
   }
 
   function selectId(selection: SelectableState<ID>, id: ID) {
@@ -363,6 +448,7 @@ export function useSelectable<ID extends string | number>(
     selection.checkedIds.clear();
     selection.checkedIds.set(id, true);
     selection.lastSelectId = id;
+    clampSelect(selection);
   }
 
   function toggleId(selection: SelectableState<ID>, id: ID) {
@@ -373,6 +459,7 @@ export function useSelectable<ID extends string | number>(
       selection.currentId = undefined;
     }
     selection.lastSelectId = id;
+    clampSelect(selection);
   }
 
   function selectRange(

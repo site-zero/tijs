@@ -1,4 +1,4 @@
-import { OptionsProps } from '../../';
+import { OptionsProps, SelectableProps } from '../../';
 import {
   AspectSize,
   CommonProps,
@@ -8,6 +8,7 @@ import {
 } from '../../../core';
 
 export type SwitcherProps = CommonProps &
+  Pick<SelectableProps<TableRowID>, 'minChecked' | 'maxChecked'> &
   Omit<OptionsProps, 'mustInOptions'> & {
     multi?: boolean;
 

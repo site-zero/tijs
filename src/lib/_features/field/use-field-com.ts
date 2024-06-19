@@ -1,6 +1,5 @@
 import _ from 'lodash';
-import { tiCheckComponent } from '../../';
-import { ComRef, TiRawCom, Util, Vars } from '../../../core';
+import { ComRef, TiRawCom, Util, Vars, tiCheckComponent } from '../../../core';
 
 export type FieldMode = {
   readonly?: boolean;

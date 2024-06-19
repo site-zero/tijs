@@ -3,11 +3,13 @@
   import { SelectableState, TiIcon } from '../../';
   import { CssUtils, TableRowID } from '../../../core';
   import { SwitcherProps } from './ti-switcher-types';
-  import { useSwitcher } from './use-switcher';
+  import { SwitcherEmitter, useSwitcher } from './use-switcher';
   //-----------------------------------------------------
   defineOptions({
     inheritAttrs: false,
   });
+  //-----------------------------------------------------
+  const emit = defineEmits<SwitcherEmitter>();
   //-----------------------------------------------------
   const selection = reactive({
     currentId: null,
@@ -22,7 +24,7 @@
     nowrap: false,
   });
   //-----------------------------------------------------
-  const Swt = computed(() => useSwitcher(selection, props));
+  const Swt = computed(() => useSwitcher(selection, props, emit));
   //-----------------------------------------------------
   const DisplayItems = computed(() => Swt.value.getDisplayItems());
   //-----------------------------------------------------
@@ -30,6 +32,8 @@
     CssUtils.mergeClassName(
       {
         'is-nowrap': props.nowrap,
+        'is-readonly': props.readonly,
+        'is-editable': !props.readonly,
       },
       `item-size-${props.itemSize ?? 'm'}`,
       `item-gap-${props.itemGap ?? 't'}`
@@ -49,6 +53,16 @@
     }
   );
   //-----------------------------------------------------
+  watch(
+    () => [props.value],
+    () => {
+      Swt.value.updateSelection(props.value);
+    },
+    {
+      immediate: true,
+    }
+  );
+  //-----------------------------------------------------
 </script>
 <template>
   <div
@@ -61,7 +75,7 @@
       :class="it.className"
       :style="it.style"
       :data-type="it.type"
-      @click.left="Swt.onSelect(it, $event)">
+      @click.left="Swt.onSelect(it.value, $event)">
       <div
         class="it-icon"
         v-if="it.icon">

@@ -282,7 +282,7 @@
       scrolling.lineCount = props.data.length;
       scrolling.lineHeights = [];
       scrolling.lineMarkers = [];
-      selection.ids = Table.value.getRowIds();
+      selection.ids = Table.value.getRowIds(props.data ?? []);
       if (!_mea.isMainWatched()) {
         _mea.watchMain();
       }
@@ -295,7 +295,12 @@
     () => [props.currentId, props.checkedIds],
     () => {
       //console.log('updateSelection before:', props.currentId, props.checkedIds);
-      Table.value.updateSelection(selection, props.currentId, props.checkedIds);
+      Table.value.updateSelection(
+        selection,
+        props.data ?? [],
+        props.currentId,
+        props.checkedIds
+      );
       // console.log(
       //   'updateSelection after',
       //   selection.currentId,

@@ -16,6 +16,10 @@ export type ListProps = CommonProps &
   SelectableProps<TableRowID> &
   StdListItemProps & {
     /**
+     * 传入的数据对象
+     */
+    data?: Vars[];
+    /**
      * 当列表内容为空的时候，显示的内容
      */
     emptyRoadblock?: RoadblockProps;

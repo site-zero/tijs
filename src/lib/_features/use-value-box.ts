@@ -9,12 +9,18 @@ import {
   ReadonlyProps,
   ValueInputFeature,
   ValueInputProps,
-  tiGetDefaultComPropValue,
   useFormatValue,
   usePrefixSuffix,
   useValueInput,
 } from '..';
-import { Be, CommonProps, Dicts, IconInput, Str } from '../../core';
+import {
+  Be,
+  CommonProps,
+  Dicts,
+  IconInput,
+  Str,
+  tiGetDefaultComPropValue,
+} from '../../core';
 /*-------------------------------------------------------
 
                      Emit 

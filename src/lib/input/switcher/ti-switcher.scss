@@ -1,22 +1,38 @@
 .ti-switcher {
   @include flex-align;
-  @include aspect_fontsize('&.item-size');
-  @include aspect_gap('&.item-gap');
+  @include aspect_fontsize("&.item-size");
+  @include aspect_gap("&.item-gap");
+  user-select: none;
   //---------------------------------------
   .sw-item {
     @include flex-align-nowrap;
-    @include aspect_radius('&.item-r');
-    @include aspect_color('&.is-checked.is');
-    @include aspect_color_fborder('&.is');
-    cursor: pointer;
+    @include aspect_radius("&.item-r");
+    @include aspect_color("&.is-checked.is");
+    @include aspect_color_fborder("&.is");
+
     padding: 0.3em 0.6em;
     border-width: 1px;
     border-style: solid;
     gap: 0.5em;
   }
   //---------------------------------------
+  &.is-editable {
+    .sw-item {
+      cursor: pointer;
+    }
+  }
+  //---------------------------------------
   &.is-nowrap {
     flex-wrap: nowrap;
+  }
+  //---------------------------------------
+  &.item-gap-none.is-nowrap {
+    .sw-item {
+      border-right-width: 0;
+      &:last-child {
+        border-right-width: 1px;
+      }
+    }
   }
   //---------------------------------------
 }

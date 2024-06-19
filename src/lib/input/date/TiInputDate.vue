@@ -1,14 +1,8 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed } from 'vue';
-  import {
-    Alert,
-    COM_TYPES,
-    InputDatetimeProps,
-    TiInput,
-    tiGetDefaultComPropValue,
-  } from '../..';
-  import { DateInput, DateTime } from '../../../core';
+  import { Alert, COM_TYPES, InputDatetimeProps, TiInput } from '../..';
+  import { DateInput, DateTime, tiGetDefaultComPropValue } from '../../../core';
   //-----------------------------------------------------
   let emit = defineEmits<{
     (event: 'change', payload: string | number | null): void;

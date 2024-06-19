@@ -7,8 +7,8 @@
     Tmpl,
     Util,
     Vars,
+    tiCheckComponent,
   } from '../../../core';
-  import { tiCheckComponent } from '../../../lib';
   import TiLayoutGrid from '../layout/grid/TiLayoutGrid.vue';
   import PlayConf from './PlayConf.vue';
   import PlayLive from './PlayLive.vue';

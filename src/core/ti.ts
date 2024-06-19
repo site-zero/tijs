@@ -36,4 +36,5 @@ export function getAllEnv() {
   return cloneDeep(_ENV);
 }
 
+export * from './ti-coms';
 export * from './ti-exports';

@@ -8,9 +8,9 @@ export default {
     value: 'cow',
     multi: false,
     nowrap: false,
-    itemSize: 'm',
-    itemGap: 's',
-    itemRadius: 's',
+    itemSize: 'b',
+    itemGap: 't',
+    itemRadius: 't',
     defaultItemType: 'info',
     options: [
       { value: 'cow', text: 'Cow', icon: 'fas-cow' },

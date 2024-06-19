@@ -63,7 +63,12 @@
   watch(
     () => [props.currentId, props.checkedIds],
     () => {
-      List.value.updateSelection(selection, props.currentId, props.checkedIds);
+      List.value.updateSelection(
+        selection,
+        props.data ?? [],
+        props.currentId,
+        props.checkedIds
+      );
     },
     {
       immediate: true,

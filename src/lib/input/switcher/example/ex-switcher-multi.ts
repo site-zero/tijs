@@ -10,7 +10,7 @@ export default {
     nowrap: false,
     itemSize: 'm',
     itemGap: 's',
-    itemRadius: 's',
+    itemRadius: 'm',
     defaultItemType: 'info',
     options: [
       { value: 'hippo', text: 'Hippo', icon: 'fas-hippo' },

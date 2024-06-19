@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { ExplainI18n, MessageMap, TiMatch, Vars } from '../ti';
+import { ExplainI18n, TiMatch, Vars } from '../ti';
 import { gen_by_func } from './by-func';
 import { gen_by_array } from './by_array';
 import { gen_by_bool } from './by_bool';
@@ -20,8 +20,8 @@ export type MakeTiMatch<T> = {
   (src: T): TiMatch;
 };
 
-export function createExplainI18n(msg: MessageMap = {}): ExplainI18n {
-  return _.defaults(msg, {
+export function createExplainI18n(): ExplainI18n {
+  return {
     and: 'i18n:am-and',
     blank: 'i18n:am-blank',
     empty: 'i18n:am-empty',
@@ -59,7 +59,7 @@ export function createExplainI18n(msg: MessageMap = {}): ExplainI18n {
     regexNot: 'i18n:am-regex-not',
     undefined: 'i18n:am-undefined',
     undefinedOf: 'i18n:am-undefinedOf',
-  });
+  };
 }
 
 export function notMatch(m: TiMatch): TiMatch {
