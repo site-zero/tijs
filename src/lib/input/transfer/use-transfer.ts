@@ -6,6 +6,7 @@ import {
   StdOptionItem,
   TableRowID,
   Util,
+  Vars,
   getLogger,
 } from '../../../core';
 import { ListProps, RoadblockProps } from '../../../lib';
@@ -75,7 +76,15 @@ export function useTransfer(
       getIcon: props.getIcon,
       getText: props.getText,
       getTip: props.getTip,
-      getId: props.getValue,
+      getId: (it: Vars, index: number) => {
+        if (props.getValue) {
+          if (_.isFunction(props.getValue)) {
+            return props.getValue(it, index);
+          }
+          return props.getValue;
+        }
+        return `row-${index}`;
+      },
     };
   }
 

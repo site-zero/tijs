@@ -29,15 +29,15 @@ export type StdListItemProps = {
    * 从指定的对象获取显示提示信息
    * 默认，相当于 `tip`
    */
-  getValue?: string | Convertor<Vars, TableRowID | undefined>;
+  getValue?: string | ((item: Vars, index: number) => TableRowID);
 };
 
 export type StdListItemFeature = {
-  getItemValue: (it: Vars) => TableRowID | undefined;
+  getItemValue: (it: Vars, index: number) => TableRowID | undefined;
   getItemIcon: (it: Vars) => IconInput | undefined;
   getItemText: (it: Vars) => string | undefined;
   getItemTip: (it: Vars) => string | undefined;
-  toStdItem: (it: Vars) => StdOptionItem;
+  toStdItem: (it: Vars, index: number) => StdOptionItem;
   toStdItems: (list: Vars[]) => StdOptionItem[];
 };
 
@@ -46,16 +46,17 @@ export function useStdListItem(props: StdListItemProps): StdListItemFeature {
     getIcon = (item: Vars) => item.icon,
     getText = (item: Vars) => item.text ?? item.title ?? item.nickname,
     getTip = (item: Vars) => item.tip,
-    getValue = (item: Vars) => item.value ?? item.id,
+    getValue = (item: Vars, index: number) => item.value ?? item.id ?? index,
   } = props;
 
-  function getItemValue(it: Vars): TableRowID | undefined {
+  function getItemValue(it: Vars, index: number): TableRowID {
     if (getValue) {
       if (_.isString(getValue)) {
-        return _.get(it, getValue);
+        return _.get(it, getValue) ?? index;
       }
-      return getValue(it);
+      return getValue(it, index) ?? index;
     }
+    return index;
   }
 
   function getItemIcon(it: Vars): IconInput | undefined {
@@ -85,19 +86,20 @@ export function useStdListItem(props: StdListItemProps): StdListItemFeature {
     }
   }
 
-  function toStdItem(it: Vars): StdOptionItem {
+  function toStdItem(it: Vars, index: number): StdOptionItem {
     return {
       icon: getItemIcon(it),
       text: getItemText(it),
       tip: getItemTip(it),
-      value: getItemValue(it)!,
+      value: getItemValue(it, index),
     };
   }
 
   function toStdItems(list: Vars[]): StdOptionItem[] {
     let re = [] as StdOptionItem[];
-    for (let li of list) {
-      re.push(toStdItem(li));
+    for (let i = 0; i < list.length; i++) {
+      let li = list[i];
+      re.push(toStdItem(li, i));
     }
     return re;
   }

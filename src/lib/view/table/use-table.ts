@@ -61,14 +61,14 @@ function _get_table_data(
   data: Vars[]
 ): TableRowData[] {
   // 启用特性
-  let { getDataId } = selectable;
+  let { getRowId: getDataId } = selectable;
 
   // 处理数据
   let list = [] as TableRowData[];
   let N = data.length;
   for (let index = 0; index < N; index++) {
     let rawData = data[index];
-    let id = getDataId(rawData);
+    let id = getDataId(rawData, index);
     list.push({
       id: id ?? `row-${index}`,
       index,

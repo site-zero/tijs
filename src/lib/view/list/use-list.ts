@@ -23,8 +23,8 @@ export function useList(props: ListProps, emit: ListEmitter) {
   // 标准列表
   let { getItemValue, getItemIcon, getItemText, getItemTip } = useStdListItem({
     ...props,
-    getValue: (it: Vars): TableRowID | undefined => {
-      return selectable.getDataId(it);
+    getValue: (it: Vars, index: number) => {
+      return selectable.getRowId(it, index);
     },
   });
 
@@ -49,8 +49,8 @@ export function useList(props: ListProps, emit: ListEmitter) {
     if (props.data) {
       let index = 0;
       for (let li of props.data) {
-        let is_current = selectable.isDataActived(selection, li);
-        let is_checked = selectable.isDataChecked(selection, li);
+        let is_current = selectable.isDataActived(selection, index, li);
+        let is_checked = selectable.isDataChecked(selection, index, li);
         let it = {
           index,
           current: is_current,
@@ -60,7 +60,7 @@ export function useList(props: ListProps, emit: ListEmitter) {
             'is-checked': is_checked,
           } as Vars,
         } as ListItem;
-        it.value = getItemValue(li);
+        it.value = getItemValue(li, index);
         it.icon = getItemIcon(li);
         it.text = getItemText(li);
         it.tip = getItemTip(li);
