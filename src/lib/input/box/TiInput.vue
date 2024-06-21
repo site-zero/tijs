@@ -45,6 +45,7 @@
 
     lastUpdateAMS: 0,
   });
+  const _box_rect = ref<Rect>();
   //-----------------------------------------------------
   const _tips = ref<Vars[]>();
   //-----------------------------------------------------
@@ -299,7 +300,7 @@
     }
   );
   //-------------------------------------------------
-  const _box_rect = ref<Rect>();
+  
   function updateBoxRect() {
     if ($el.value) {
       let rect = Rects.createBy($el.value);

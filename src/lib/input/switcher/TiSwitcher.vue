@@ -12,9 +12,10 @@
   const emit = defineEmits<SwitcherEmitter>();
   //-----------------------------------------------------
   const selection = reactive({
-    currentId: null,
+    currentId: undefined,
     checkedIds: new Map<TableRowID, boolean>(),
     ids: [],
+    lastSelectIndex: -1,
   } as SelectableState<TableRowID>);
   //-----------------------------------------------------
   const props = withDefaults(defineProps<SwitcherProps>(), {

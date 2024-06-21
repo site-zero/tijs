@@ -20,6 +20,7 @@
     currentId: undefined,
     checkedIds: new Map<TableRowID, boolean>(),
     ids: [],
+    lastSelectIndex: -1,
   } as SelectableState<TableRowID>);
   const List = computed(() => useList(props, emit));
 

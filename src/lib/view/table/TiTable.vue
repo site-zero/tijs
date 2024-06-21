@@ -93,6 +93,7 @@
     checkedIds: new Map<TableRowID, boolean>(),
     ids: [],
     columnIndex: -1,
+    lastSelectIndex: -1,
   } as TableSelection);
   //-------------------------------------------------------
   /**

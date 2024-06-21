@@ -12,6 +12,7 @@ export * from './use-std-list-item';
 export * from './use-value-input';
 export * from './use-value-translator.ts';
 export * from './use-visibility';
+export * from './use-docking';
 
 // 设计的不好，应该重构
 export * from './use-boolean-input';
