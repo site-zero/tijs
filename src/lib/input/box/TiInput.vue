@@ -1,6 +1,14 @@
 <script setup lang="ts">
   import _ from 'lodash';
-  import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
+  import {
+    computed,
+    inject,
+    onMounted,
+    onUnmounted,
+    reactive,
+    ref,
+    watch,
+  } from 'vue';
   import {
     ListSelectEmitInfo,
     PrefixSuffixEvents,
@@ -9,7 +17,7 @@
     usePlaceholder,
     useValueBox,
   } from '../../';
-  import { CssUtils, Match, Rect, Rects, Vars } from '../../../core';
+  import { BUS_KEY, CssUtils, Match, Rect, Rects, Vars } from '../../../core';
   import { COM_TYPES } from '../../lib-com-types';
   import { InputBoxProps, InputBoxState } from './ti-input-types';
   import { resetTipList, updateTipList } from './use-input-box';
@@ -20,6 +28,7 @@
   });
   //-----------------------------------------------------
   const COM_TYPE = COM_TYPES.Input;
+  const BUS_EVENT_FOCUS = 'INPUT_FOCUS';
   //-----------------------------------------------------
   let emit = defineEmits<{
     (event: PrefixSuffixEvents): void;
@@ -49,6 +58,8 @@
   //-----------------------------------------------------
   const _tips = ref<Vars[]>();
   //-----------------------------------------------------
+  const bus = inject(BUS_KEY);
+  //-----------------------------------------------------
   let props = withDefaults(defineProps<InputBoxProps>(), {
     autoI18n: true,
     tipShowTime: 'focus',
@@ -56,6 +67,7 @@
     tipTidyBy: () => ['main'],
     canInput: true,
     trimed: true,
+    checkValueWhenClose: true,
   });
   //-----------------------------------------------------
   const TipListConfig = computed(() => getTipListConf(props.tipList));
@@ -148,15 +160,30 @@
   //-----------------------------------------------------
   const $input = ref<any>(null);
   //-----------------------------------------------------
+  function OnInputMousedown() {
+    if (props.readonly) {
+      return;
+    }
+    _box_state.boxFocused = true;
+  }
+  //-----------------------------------------------------
   function OnInputFocused() {
     if (props.readonly) {
       return;
     }
+    console.log('OnInputFocused');
+    bus?.emit(BUS_EVENT_FOCUS);
     _box_state.boxFocused = true;
     if (props.autoSelect) {
       $input.value.select();
     }
   }
+  //-----------------------------------------------------
+  function when_bus_input_focus() {
+    resetTipList(_box_state, _tips);
+    OnInputBlur();
+  }
+  bus?.onName(BUS_EVENT_FOCUS, when_bus_input_focus);
   //-----------------------------------------------------
   function OnInputBlur() {
     if (!_tips.value) {
@@ -171,16 +198,19 @@
   //-----------------------------------------------------
   function OnClickTipMask() {
     resetTipList(_box_state, _tips);
-    if (props.mustInOptions) {
-      // 是不是清空了？
-      let val = _box_state.boxInputing;
-      console.log('OnClickTipMask', val);
-      Box.value.doChangeValue(val ?? '');
-    }
-    // 自由输入模式
-    else {
-      let val = _box_state.boxInputing;
-      Box.value.doChangeValue(val);
+    if (props.checkValueWhenClose) {
+      if (props.mustInOptions) {
+        // 是不是清空了？
+        console.log(_box_state.boxInputing);
+        let val = _box_state.boxInputing;
+        console.log('OnClickTipMask', val);
+        Box.value.doChangeValue(val ?? '');
+      }
+      // 自由输入模式
+      else {
+        let val = _box_state.boxInputing;
+        Box.value.doChangeValue(val);
+      }
     }
     OnInputBlur();
   }
@@ -300,7 +330,7 @@
     }
   );
   //-------------------------------------------------
-  
+
   function updateBoxRect() {
     if ($el.value) {
       let rect = Rects.createBy($el.value);
@@ -327,6 +357,7 @@
   });
   onUnmounted(() => {
     obResize.disconnect();
+    bus?.offName(BUS_EVENT_FOCUS, when_bus_input_focus);
   });
   //-----------------------------------------------------
 </script>
@@ -335,7 +366,7 @@
     class="ti-input-box prefix-suffix-box"
     :class="TopClass"
     :style="TopStyle"
-    @mousedown="OnInputFocused"
+    @mousedown="OnInputMousedown"
     ref="$el">
     <!--====: part prefix :=======-->
     <slot name="prefix">

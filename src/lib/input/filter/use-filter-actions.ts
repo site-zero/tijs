@@ -9,13 +9,15 @@ export function useFilterActions(
   Flt: FilterFeature,
   emit: FilterEmitter
 ) {
-  let items = [
-    {
-      icon: 'zmdi-search',
-      text: 'i18n:search',
+  let items = [] as ActionBarItem[];
+
+  if (props.searchIcon || props.searchText) {
+    items.push({
+      icon: props.searchIcon ?? undefined,
+      text: props.searchText ?? undefined,
       action: 'search',
-    },
-  ] as ActionBarItem[];
+    });
+  }
 
   let moreItems = [
     {

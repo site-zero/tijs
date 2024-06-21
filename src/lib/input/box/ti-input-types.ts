@@ -35,6 +35,11 @@ export type TipBoxProps = {
   // 一个过滤器 AutoMatch，用来预先过滤字典项
   optionFilter?: any;
 
+  /**
+   * 对于 droplist 设置为 false，则关闭的时候不检查之，默认为 true
+   */
+  checkValueWhenClose?: boolean;
+
   // 提示框显示时机
   tipShowTime?: TipBoxShowTime;
 

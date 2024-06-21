@@ -39,14 +39,3 @@ export function joinFieldsList(
   }
   return list;
 }
-
-// export function genIsMajor(props: FilterProps) {
-//   if (_.isNil(props.majorFields) || _.isEmpty(props.majorFields)) {
-//     return (_index: number, _fld: GridFieldsInput) => false;
-//   }
-//   let _major_map = Util.arrayToMap(props.majorFields);
-//   return (index: number, fld: GridFieldsInput) => {
-//     let uniqKey = makeFieldUniqKey([index], fld.name, fld.uniqKey);
-//     return _major_map.get(uniqKey) ?? false;
-//   };
-// }

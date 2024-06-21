@@ -182,6 +182,7 @@ export type StrCaseFunc = {
   snake: StrConvertor;
   kebab: StrConvertor;
   start: StrConvertor;
+  raw: StrConvertor;
 };
 
 export type StrCaseMode = keyof StrCaseFunc;

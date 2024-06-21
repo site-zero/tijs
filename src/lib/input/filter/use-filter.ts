@@ -111,7 +111,7 @@ export function useFilter(props: FilterProps): FilterFeature {
       // 虽然不知道为什么，但是还是有微小的可能找不到字段定义
       // 那么就虚拟一个字段出来
       if (!fld) {
-        fld = fld = {
+        fld = {
           name: key,
           title: key,
         } as GridFieldsInput;

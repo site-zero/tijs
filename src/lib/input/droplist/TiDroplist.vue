@@ -54,6 +54,7 @@
     :canInput="false"
     :trimed="false"
     :mustInOptions="true"
+    :checkValueWhenClose="false"
     :prefixIconForClean="Cleans.prefixIconForClean"
     :showCleanOption="Cleans.showCleanOption"
     @change="emit('change', $event)"

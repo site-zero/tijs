@@ -5,14 +5,19 @@
   import { FilterProps } from './ti-filter-types';
   import { FilterEmitter, useFilter } from './use-filter';
   import { useFilterActions } from './use-filter-actions';
+  import { useFilterEmit } from './use-filter-emit';
   import { getFilterFormConfig, getFilterFormData } from './use-filter-form';
-  //-------------------------------------------------
-  const emit = defineEmits<FilterEmitter>();
   //-------------------------------------------------
   const props = withDefaults(defineProps<FilterProps>(), {
     actionAt: 'bottom',
     layout: 'comfy',
+    searchIcon: 'zmdi-search',
+    searchText: 'i18n:search',
   });
+  //-------------------------------------------------
+  const _emit = defineEmits<FilterEmitter>();
+  const emit: FilterEmitter = useFilterEmit(props, _emit);
+
   //-------------------------------------------------
   const Flt = computed(() => useFilter(props));
   //-----------------------------------------------------

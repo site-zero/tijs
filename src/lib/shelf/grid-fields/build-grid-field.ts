@@ -17,6 +17,15 @@ export function buildOneGridField(
   dft: GridFieldsProps
 ): GridFieldsStrictItem {
   let uniqKey = makeFieldUniqKey(indexes, field.name, field.uniqKey);
+  // 可见性
+  let visiblity = useVisibility(field, uniqKey);
+  if (dft.readonly) {
+    visiblity.isDisabled = () => true;
+  }
+  if ('type' == field.name) {
+    console.log(field.name,field.visible, visiblity.isHidden({race:'QU'}));
+  }
+
   // 准备返回值
   let re: GridFieldsStrictAbstractItem = {
     // 唯一键
@@ -33,7 +42,7 @@ export function buildOneGridField(
       : undefined,
 
     // 可见性
-    ...useVisibility(field, uniqKey),
+    ...visiblity,
 
     // 标题 & 提示
     title: field.title ?? null,

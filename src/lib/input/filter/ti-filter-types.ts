@@ -4,6 +4,7 @@ import {
   ActionBarItem,
   AppModalProps,
   CommonProps,
+  IconInput,
   StrCaseMode,
   Vars,
 } from '../../../core';
@@ -107,8 +108,14 @@ export type FilterProps = CommonProps &
     //-----------------------------------------
     // Behaviors
     //-----------------------------------------
+    keepNilValue?: boolean;
     canCustomizedMajor?: boolean;
     canOpenAdvanceForm?: 'auto' | 'yes' | 'no';
+    /**
+     * 搜索按钮，如果都为空则不显示
+     */
+    searchIcon?: IconInput | null;
+    searchText?: string | null;
     /**
      * 更多定制命令
      */

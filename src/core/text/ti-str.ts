@@ -539,6 +539,7 @@ const STR_CASE_FUNC = {
   snake: (s: string) => _.snakeCase(s),
   kebab: (s: string) => _.kebabCase(s),
   start: (s: string) => _.startCase(s),
+  raw: (s: string) => s,
 } as StrCaseFunc;
 
 export function toStdComType(comType: string) {
