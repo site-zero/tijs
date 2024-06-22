@@ -184,7 +184,7 @@ export function useValueBox<T extends any>(
   let formatValue = useFormatValue(boxProps);
 
   // 准备前后缀框
-  if (boxProps.prefixIconForClean) {
+  if (boxProps.prefixIconForClean && !props.readonly) {
     boxProps.prefixIcon = boxProps.prefixIcon || 'zmdi-close';
     boxProps.prefixIconClickable = true;
   }

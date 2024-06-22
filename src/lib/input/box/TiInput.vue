@@ -67,7 +67,9 @@
     tipTidyBy: () => ['main'],
     canInput: true,
     trimed: true,
-    checkValueWhenClose: true,
+    // 自动，如果可编辑，就是 true ，否则就是 false
+    checkValueWhenClose: undefined,
+    autoSelect: true,
   });
   //-----------------------------------------------------
   const TipListConfig = computed(() => getTipListConf(props.tipList));
@@ -197,8 +199,10 @@
   }
   //-----------------------------------------------------
   function OnClickTipMask() {
+    let checkValueWhenClose =
+      props.checkValueWhenClose ?? props.canInput ?? false;
     resetTipList(_box_state, _tips);
-    if (props.checkValueWhenClose) {
+    if (checkValueWhenClose) {
       if (props.mustInOptions) {
         // 是不是清空了？
         console.log(_box_state.boxInputing);

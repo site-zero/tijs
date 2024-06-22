@@ -109,7 +109,7 @@ export async function updateTipList(
   else if (dict) {
     let hintVal = hint;
     if (tipTidyBy) {
-      hintVal = await tidyValue(hint, tipTidyBy);
+      hintVal = await tidyValue(hintVal, tipTidyBy);
     }
     //console.log(`dict.queryStdData('${hintVal}')`);
     dict.queryData(box.lastAbort.signal).then((list) => {

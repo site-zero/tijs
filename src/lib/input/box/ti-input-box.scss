@@ -35,8 +35,11 @@ div.ti-input-box {
   }
 
   &.is-readonly {
-    background-color: var(--ti-color-disable-r);
-    color: var(--ti-color-disable);
+    background-color: var(--ti-color-disable);
+    color: var(--ti-color-disable-r);
+    input {
+      color:inherit;
+    }
   }
 }
 
