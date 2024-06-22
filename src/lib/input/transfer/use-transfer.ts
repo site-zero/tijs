@@ -76,15 +76,7 @@ export function useTransfer(
       getIcon: props.getIcon,
       getText: props.getText,
       getTip: props.getTip,
-      getId: (it: Vars, index: number) => {
-        if (props.getValue) {
-          if (_.isFunction(props.getValue)) {
-            return props.getValue(it, index);
-          }
-          return props.getValue;
-        }
-        return `row-${index}`;
-      },
+      getId: props.getValue,
     };
   }
 

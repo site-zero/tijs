@@ -11,11 +11,11 @@ export type ValueTranslatorProps = {
   valueIsMatcher?: boolean;
 };
 
-async function defaultTranslator(val: any): Promise<string> {
-  // 建立匹配器
-  let am = Match.parse(val);
-  return am.explainText(Match.createExplainI18n());
-}
+// async function defaultTranslator(val: any): Promise<string> {
+//   // 建立匹配器
+//   let am = Match.parse(val);
+//   return am.explainText(Match.createExplainI18n());
+// }
 
 function getTranslator(
   trans?: string | ValTrans,

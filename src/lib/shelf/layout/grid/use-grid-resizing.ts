@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { ComputedRef } from 'vue';
-import { Dragging, LayoutBar, useDraggable } from '../../../';
+import { Dragging, LayoutBar, useDragging } from '../../../';
 import { CssUtils, Dom, NameStrValue, Num, Str } from '../../../../core';
 import {
   GridResizingState,
@@ -230,7 +230,7 @@ export function useGridResizing(
   Keep: ComputedRef<LayoutGridKeepFeature>
 ): () => void {
   //console.log('useGridResizing', $main);
-  return useDraggable({
+  return useDragging({
     getWatchTarget: () => $main,
     getDragTarget: (target: HTMLElement): HTMLElement | undefined => {
       return Dom.closest(target, '.adjust-bar', { includeSelf: true });

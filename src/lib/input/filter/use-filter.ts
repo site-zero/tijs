@@ -1,6 +1,12 @@
 import _ from 'lodash';
 import { computed, ref } from 'vue';
-import { GridFieldsInput, makeFieldUniqKey, useValueTranslator } from '../../';
+import {
+  GridFieldsInput,
+  getFieldUniqKey,
+  makeFieldUniqKey,
+  useValueTranslator,
+  useVisibility,
+} from '../../';
 import { I18n, Vars } from '../../../core';
 import {
   FilterFeature,
@@ -8,7 +14,12 @@ import {
   FilterProps,
   FilterValue,
 } from './ti-filter-types';
-import { joinFieldsList, makeFieldsMap } from './use-filter-fields';
+import {
+  getFieldsNames,
+  joinFieldsList,
+  joinFieldsTitle,
+  makeFieldsMap,
+} from './use-filter-fields';
 
 export type FilterEmitter = {
   (event: 'change', payload: FilterValue): void;
@@ -42,9 +53,9 @@ export function useFilter(props: FilterProps): FilterFeature {
     let list = [] as GridFieldsInput[];
     if (props.majorFields) {
       for (let uniqKey of props.majorFields) {
-        let fld = AllFieldMap.value.get(uniqKey);
-        if (fld) {
-          list.push(fld);
+        let flds = AllFieldMap.value.get(uniqKey);
+        if (flds && flds.length > 0) {
+          list.push(...flds);
         }
       }
     }
@@ -59,9 +70,8 @@ export function useFilter(props: FilterProps): FilterFeature {
    * 主字段包括哪些值
    */
   const MajorData = computed(() => {
-    let map = makeFieldsMap(MajorFields.value);
-    let keys = [...map.keys()];
-    return _.pick(props.value, keys) as Vars;
+    let names = getFieldsNames(MajorFields.value);
+    return _.pick(props.value, names) as Vars;
   });
   //-----------------------------------------------------
   const isNeedAdvanceForm = computed(() => {
@@ -78,9 +88,8 @@ export function useFilter(props: FilterProps): FilterFeature {
    * 去掉主字段，还剩下哪些值
    */
   const MoreData = computed(() => {
-    let map = makeFieldsMap(MajorFields.value);
-    let keys = [...map.keys()];
-    return _.omit(props.value, keys) as Vars;
+    let names = getFieldsNames(MajorFields.value);
+    return _.omit(props.value, names) as Vars;
   });
 
   function useDiffData(diff: Vars) {
@@ -104,22 +113,54 @@ export function useFilter(props: FilterProps): FilterFeature {
   async function loadMoreItems() {
     let morItems = [] as FilterMoreItem[];
     let morVal = _.cloneDeep(MoreData.value);
+
+    /**
+     * 这里的逻辑是这样的，
+     * 循环 morVal 对象，假设它有很多键 {A,B,C,D,E}
+     * 第一次循环，通过 A 找到了一个字段，这个字段是 [A,B,C] 的名称组合
+     * 那么，本次循环将会通过 _.omit 吃掉 [A,B,C], 这样下次循环就只面对 {D,E}
+     * 我认为这个方法唯一的问题就是，效率可能不是那么高
+     * 不过所幸，这个函数似乎也不需要那么高的效率
+     */
     while (!_.isEmpty(morVal)) {
       let key = _.first(_.keys(morVal))!;
-      let fld = AllFieldMap.value.get(key!);
+      let flds = AllFieldMap.value.get(key!);
 
       // 虽然不知道为什么，但是还是有微小的可能找不到字段定义
       // 那么就虚拟一个字段出来
-      if (!fld) {
-        fld = {
-          name: key,
-          title: key,
-        } as GridFieldsInput;
+      if (!flds || _.isEmpty(flds)) {
+        flds = [
+          {
+            name: key,
+            title: key,
+          } as GridFieldsInput,
+        ];
       }
 
-      // 找到了定义
-      let ks = _.concat([], fld.name) as string[];
-      let uniqKey = makeFieldUniqKey([], fld.name, fld.uniqKey);
+      // 循环处理一下所有的字段
+      // 选择第一个可以显示的字段，应为如果是多个字段，那么一定是多个同名字段
+      let field: GridFieldsInput | undefined;
+      for (let fld of flds) {
+        // 使用可见性
+        let visibility = useVisibility(fld, 'use-filter.loadMoreItems');
+        if (!visibility.isHidden(props.value ?? {})) {
+          field = fld;
+          break;
+        }
+      }
+
+      // 虽然不太可能，但是防守一下
+      if (!field) {
+        console.warn('虽然不太可能，但是防守一下');
+        continue;
+      }
+
+      // 获取字段的唯一键，加入映射，以便去重复
+      let uniqKey = makeFieldUniqKey([], field.name, field.uniqKey);
+
+      // 获取扩展字段的值：因为要传递给 MajorForm 里的 __more
+      // 而且通常是作为 TiTags 来显示的，因此需要名称和值（翻译后的）
+      let ks = getFieldsNames(flds);
       let v: any;
       if (ks.length == 1) {
         v = morVal[ks[0]!];
@@ -127,24 +168,21 @@ export function useFilter(props: FilterProps): FilterFeature {
         v = _.pick(morVal, ks);
       }
 
-      // Build item
-      let itText;
-      if (fld.title) {
-        itText = I18n.text(fld.title);
-      } else {
-        itText = makeFieldUniqKey([], fld.name, fld.uniqKey);
-      }
+      // 准备显示的标题
+      let itText = joinFieldsTitle(flds);
+
+      // 建立标签项目
       let itValue = await tranlator(uniqKey, v);
       morItems.push({
         uniqKey,
-        name: fld.name ?? uniqKey,
+        name: field.name ?? uniqKey,
         title: itText,
         value: itValue,
       });
 
       // Update for next loop
       morVal = _.omit(morVal, ks);
-    }
+    } // ~ end while
 
     // 记录一下改动
     moreItems.value = morItems;

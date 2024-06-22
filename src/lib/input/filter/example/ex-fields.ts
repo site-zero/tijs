@@ -9,14 +9,6 @@ export function getFilterExampleFields(): GridFieldsInput[] {
       },
     },
     {
-      title: 'Name',
-      name: 'name',
-    },
-    {
-      title: 'Age',
-      name: 'age',
-    },
-    {
       title: 'Type',
       name: 'type',
       comType: 'TiDroplist',
@@ -32,6 +24,24 @@ export function getFilterExampleFields(): GridFieldsInput[] {
           { value: 'fish', text: 'Fish', icon: 'fas-fish' },
         ],
       } as DropListProps,
+    },
+    {
+      title: 'Hippo Name',
+      name: 'name',
+      visible: {
+        type: 'hippo',
+      },
+    },
+    {
+      title: 'Animal Name',
+      name: 'name',
+      hidden: {
+        type: 'hippo',
+      },
+    },
+    {
+      title: 'Age',
+      name: 'age',
     },
     {
       title: 'Birthday',

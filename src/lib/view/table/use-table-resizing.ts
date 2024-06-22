@@ -1,5 +1,5 @@
 import { ComputedRef, Ref } from 'vue';
-import { Dragging, useDraggable } from '../../';
+import { Dragging, useDragging } from '../../';
 import {
   Callback,
   Callback1,
@@ -42,7 +42,7 @@ export function useTableResizing(
     }
   };
 
-  useDraggable({
+  useDragging({
     onDestroy,
     getWatchTarget: () => $main,
     getDragTarget: (target: HTMLElement): HTMLElement | undefined => {

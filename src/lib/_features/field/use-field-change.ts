@@ -1,10 +1,18 @@
 import _ from 'lodash';
-import { FieldChange, FieldValueChange, I18n, Util, Vars } from '../../../core';
+import {
+  FieldChange,
+  FieldValueChange,
+  I18n,
+  LinkFieldChange,
+  Util,
+  Vars,
+} from '../../../core';
 import { getLogger } from '../../../core/log/ti-log';
 import { Alert } from '../../_modal';
 import {
   AbstractField,
   ValidateResult,
+  getFieldUniqKey,
   makeFieldUniqKey,
   mergeFieldChanges,
 } from '../../_top';
@@ -44,7 +52,7 @@ export type FieldChangeProps<T extends AbstractField> = {
  * 如果返回 `undefine` 则表示无需修改额外字段
  */
 export type LinkFieldLoader<T extends AbstractField> = {
-  (value: any, field: T, data: Vars): Promise<FieldValueChange[] | undefined>;
+  (value: any, data: Vars, field: T): Promise<LinkFieldChange[] | undefined>;
 };
 
 /**
@@ -136,6 +144,7 @@ export function useFieldChange<T extends AbstractField>(
     data: Vars
   ): Promise<FieldChange[]> {
     let { uniqKey, value, oldVal } = change;
+    console.log(uniqKey, value, oldVal);
 
     // 得到字段
     let field = getField(uniqKey);
@@ -153,15 +162,20 @@ export function useFieldChange<T extends AbstractField>(
     let loader = (props.linkFields ?? {})[uniqKey];
     if (loader) {
       let load = loader as LinkFieldLoader<T>;
-      let moreChanges = await load(value, field, data);
+      let moreChanges = await load(value, data, field);
       if (moreChanges) {
         for (let more of moreChanges) {
-          let moreField = fieldMapping.get(more.uniqKey);
+          let morUniqKey = more.uniqKey ?? getFieldUniqKey(more.name);
+          let morFld = {
+            ...more,
+            uniqKey: morUniqKey,
+          } as FieldChange;
+          let moreField = fieldMapping.get(morUniqKey);
           if (!moreField) {
-            log.warn(`Fail to found field defination [${more.uniqKey}]`, more);
+            log.warn(`Fail to found field defination [${morUniqKey}]`, more);
             continue;
           }
-          reChanges.push(__gen_change(more, moreField));
+          reChanges.push(__gen_change(morFld, moreField));
         }
       }
     }

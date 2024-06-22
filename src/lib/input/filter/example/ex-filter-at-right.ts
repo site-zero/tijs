@@ -7,7 +7,7 @@ export default {
   text: 'i18n:ti-filter-example-at-right',
   comConf: {
     value: {
-      name: 'fox',
+      type: 'hippo',
       age: '[3,89)',
     },
     keywords: [
@@ -16,7 +16,7 @@ export default {
         mode: 'contains',
       },
     ],
-    majorFields: ['type', '__keywords', 'dob'],
+    majorFields: ['type', 'name', '__keywords', 'dob'],
     canCustomizedMajor: true,
     actionCollapse: true,
     actionAt: 'right',

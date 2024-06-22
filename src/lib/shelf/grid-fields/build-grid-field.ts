@@ -22,9 +22,6 @@ export function buildOneGridField(
   if (dft.readonly) {
     visiblity.isDisabled = () => true;
   }
-  if ('type' == field.name) {
-    console.log(field.name,field.visible, visiblity.isHidden({race:'QU'}));
-  }
 
   // 准备返回值
   let re: GridFieldsStrictAbstractItem = {

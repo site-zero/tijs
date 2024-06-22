@@ -1,4 +1,4 @@
-import { ComPropExample } from '../../../../core';
+import { ComPropExample, Vars } from '../../../../core';
 import { FilterProps } from '../ti-filter-types';
 import { getFilterExampleFields } from './ex-fields';
 
@@ -7,7 +7,7 @@ export default {
   text: 'i18n:ti-filter-example-at-bottom',
   comConf: {
     value: {
-      name: 'fox',
+      type: 'hippo',
       age: '[3,89)',
     },
     keywords: [
@@ -16,7 +16,7 @@ export default {
         mode: 'contains',
       },
     ],
-    majorFields: ['type', '__keywords', 'dob'],
+    majorFields: ['type', 'name', '__keywords', 'dob'],
     canCustomizedMajor: true,
     actionAt: 'bottom',
     actionCollapse: false,
@@ -26,6 +26,14 @@ export default {
         '#3:100px,1fr,200px',
         '#2:1fr,200px',
       ],
+      linkFields: {
+        type: (_val: any, _data: Vars) => {
+          return [
+            { name: 'name', value: null },
+            { name: 'type', value: 'frog' },
+          ];
+        },
+      },
     },
     fields: [...getFilterExampleFields()],
   } as FilterProps,

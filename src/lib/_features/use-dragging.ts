@@ -19,7 +19,7 @@ const log = getLogger('ti.lib.draggalbe');
                       Types
                 
 -----------------------------------------------------*/
-export type DraggalbeOptions = {
+export type DraggingOptions = {
   /**
    * 获取监控的根元素，会在这个元素上绑定 POINTER_DOWN 事件，来监控推拽
    */
@@ -150,7 +150,7 @@ function deposeDragging(ing: Dragging, onEnd?: Callback1<Dragging>) {
 function whenMoving(
   ing: Dragging,
   p2d: Point2D,
-  options: Pick<DraggalbeOptions, 'onMoving' | 'onEnd'>
+  options: Pick<DraggingOptions, 'onMoving' | 'onEnd'>
 ) {
   if (ing.update(p2d)) {
     // 处理推拽
@@ -166,7 +166,7 @@ function whenMoving(
                     Use Feature
                 [Use it in onMounted]               
 -----------------------------------------------------*/
-export function useDraggable(options: DraggalbeOptions) {
+export function useDragging(options: DraggingOptions) {
   let { getWatchTarget, getViewport, getWatchZone, getDragTarget, onDestroy } =
     options;
   let $watchTarget = getWatchTarget();

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { ComputedRef, Ref } from 'vue';
-import { Dragging, KeepFeature, KeepInfo, useDraggable, useKeep } from '../../';
+import { Dragging, KeepFeature, KeepInfo, useDragging, useKeep } from '../../';
 import { Dom, Vars } from '../../../core';
 import { saveChuteWidthToLocal } from './use-main-frame';
 
@@ -35,7 +35,7 @@ export function useMainFrameResizing(
   }
 
   //console.log('useGridResizing', $main);
-  return useDraggable({
+  return useDragging({
     getWatchTarget: () => $chute,
     getDragTarget: (target: HTMLElement): HTMLElement | undefined => {
       return Dom.closest(target, '.adjust-bar', { includeSelf: true });

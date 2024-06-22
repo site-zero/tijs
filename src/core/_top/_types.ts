@@ -15,6 +15,7 @@ export function isArray<T>(input: any): input is T[] {
 }
 
 export type PickRequired<T, K extends keyof T> = T & Required<Pick<T, K>>;
+export type PickPartial<T, K extends keyof T> = T & Partial<Pick<T, K>>;
 /*---------------------------------------------------`
 
                       结构/联合类型
@@ -262,7 +263,7 @@ export type TextContentType = 'html' | 'text';
 
 export type ValueChange<T> = {
   value: T;
-  oldVal: T;
+  oldVal?: T;
 };
 
 export type FieldValueChange = ValueChange<any> & {
@@ -270,6 +271,11 @@ export type FieldValueChange = ValueChange<any> & {
 };
 
 export type FieldChange = FieldValueChange & {
+  name: FieldName;
+};
+
+export type LinkFieldChange = ValueChange<any> & {
+  uniqKey?: string;
   name: FieldName;
 };
 

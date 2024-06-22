@@ -134,6 +134,7 @@ export function useSelectable<ID extends string | number>(
       if (_.isString(getId)) {
         return _.get(it, getId) ?? (`row-${index}` as ID);
       }
+      //console.log('getRowId',  getId(it, index))
       return getId(it, index);
     }
     return `row-${index}` as ID;

@@ -12,7 +12,7 @@
     gap: var(--ti-gap-s);
     padding: var(--ti-gap-s);
     background-color: var(--ti-color-body);
-    grid-template-areas: "can-list  actions   sel-list";
+    grid-template-areas: 'can-list  actions   sel-list';
     > div.part-list {
       background-color: var(--ti-color-card);
       border-radius: var(--ti-measure-r-s);
@@ -66,8 +66,8 @@
         //...................................................
         &.is-disabled {
           cursor: default;
-          background-color: var(--ti-color-disable-r);
-          color: var(--ti-color-disable);
+          background-color: var(--ti-color-disable);
+          color: var(--ti-color-disable-r);
         }
         //...................................................
       }
