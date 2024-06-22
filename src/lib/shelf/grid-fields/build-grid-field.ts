@@ -32,6 +32,8 @@ export function buildOneGridField(
     race: 'field',
     // 数据
     data: dft.data!,
+    dynamic: field.dynamic ?? dft.dynamic,
+    vars: field.vars ?? dft.vars,
 
     // 动态类选择器
     className: field.className

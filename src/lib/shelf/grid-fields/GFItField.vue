@@ -13,7 +13,7 @@
     getFieldTitleStyle,
     getFieldTopStyle,
   } from './use-field-style';
-import _ from 'lodash';
+  import _ from 'lodash';
 
   defineOptions({
     inheritAttrs: false,
@@ -78,7 +78,7 @@ import _ from 'lodash';
     let com = useFieldCom(props);
     return com.autoGetCom(
       { readonly: props.readonly },
-      { value: FieldValue.value },
+      { value: FieldValue.value, data: props.data, vars: props.vars ?? {} },
       FieldValue.value
     );
   });

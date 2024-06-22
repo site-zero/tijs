@@ -96,7 +96,6 @@
       COM_TYPE,
     })
   );
-  const BoxAutoPrefixIcon = computed(() => Box.value.getBoxAutoPrefixIcon());
   //-----------------------------------------------------
   const hasValue = computed(
     () => !_.isNil(_box_state.boxValue) && _box_state.boxValue
@@ -378,13 +377,14 @@
         v-if="Box.Prefix.showText || Box.Prefix.showIcon"
         class="part-prefix as-icon-text"
         :class="Box.Prefix.className"
+        hello="aaa"
         :style="Box.Prefix.style">
         <TiIcon
           v-if="Box.Prefix.showIcon"
           class="as-icon at-prefix"
           :class="Box.Prefix.iconClass"
           :style="Box.Prefix.iconStyle"
-          :value="BoxAutoPrefixIcon"
+          :value="Box.Prefix.icon"
           @mousedown.stop
           @click="Box.OnClickPrefixIcon"
           @mouseenter="Box.OnHoverPrefixIcon(true)"
@@ -400,13 +400,6 @@
       </div>
     </slot>
     <!--====: part value :=======-->
-    <!--div
-      v-if="props.readonly"
-      class="part-value">
-      <span>{{
-        hasValue ? _box_state.boxInputing : Box.getPlaceholder()
-      }}</span>
-    </div-->
     <div class="part-value">
       <input
         ref="$input"

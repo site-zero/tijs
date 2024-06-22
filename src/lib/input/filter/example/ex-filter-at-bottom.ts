@@ -8,6 +8,7 @@ export default {
   comConf: {
     value: {
       type: 'hippo',
+      name: 'hello',
       age: '[3,89)',
     },
     keywords: [

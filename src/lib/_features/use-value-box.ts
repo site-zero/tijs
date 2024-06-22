@@ -98,10 +98,6 @@ export type ValueBoxProps<T extends any> = CommonProps &
 export type ValueBoxFeature = PrefixSuffixFeature &
   ValueInputFeature & {
     //
-    // 计算自动前缀图标
-    //
-    getBoxAutoPrefixIcon: () => IconInput | undefined;
-    //
     // 数值处理函数
     //
     /**
@@ -184,6 +180,9 @@ export function useValueBox<T extends any>(
   let formatValue = useFormatValue(boxProps);
 
   // 准备前后缀框
+  if (boxProps.autoPrefixIcon && state.boxIcon) {
+    boxProps.prefixIcon = state.boxIcon ?? props.prefixIcon;
+  }
   if (boxProps.prefixIconForClean && !props.readonly) {
     boxProps.prefixIcon = boxProps.prefixIcon || 'zmdi-close';
     boxProps.prefixIconClickable = true;
@@ -230,17 +229,6 @@ export function useValueBox<T extends any>(
       }
       state.boxInputing = formatValue(text);
     }
-  }
-  //
-  // 方法: 计算自动前缀图标
-  //
-  function getBoxAutoPrefixIcon(): IconInput | undefined {
-    // 如果是 hovered，那么就用原始的
-    // 自动得到的前缀图标
-    if (!state.prefixIconHovered && props.autoPrefixIcon) {
-      return state.boxIcon ?? _box.Prefix.icon;
-    }
-    return _box.Prefix.icon;
   }
 
   // 方法: 值发生了改变
@@ -300,23 +288,20 @@ export function useValueBox<T extends any>(
     tidyValue,
     translateValue,
     ..._box,
-    getBoxAutoPrefixIcon,
     doUpdateValue,
     doChangeValue,
     doUpdateText,
     OnClickPrefixIcon,
     OnClickSuffixIcon,
     OnHoverPrefixIcon(hovered: boolean) {
-      if (props.readonly) {
-        return;
+      if (!props.readonly && _box.Prefix.canHoverIcon) {
+        state.prefixIconHovered = hovered;
       }
-      state.prefixIconHovered = hovered;
     },
     OnHoverSuffixIcon(hovered: boolean) {
-      if (props.readonly) {
-        return;
+      if (!props.readonly && _box.Suffix.canHoverIcon) {
+        state.suffixIconHovered = hovered;
       }
-      state.suffixIconHovered = hovered;
     },
   };
 }

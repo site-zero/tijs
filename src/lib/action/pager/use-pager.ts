@@ -92,7 +92,9 @@ export function usePager(props: PagerProps, options: UsePagerOptions) {
 
   function gotoPage(pn: number) {
     pn = _.clamp(pn, 1, pageCount);
-    emit('change-page-number', pn);
+    if (pn != props.pageNumber) {
+      emit('change-page-number', pn);
+    }
   }
 
   async function askPageNumber() {
@@ -131,6 +133,7 @@ export function usePager(props: PagerProps, options: UsePagerOptions) {
       type: 'info',
       bodyIcon: 'fas-pager',
       value: pageSize,
+      clickMaskToClose: true,
     });
     // 用户取消
     if (_.isNil(re)) {
@@ -147,7 +150,9 @@ export function usePager(props: PagerProps, options: UsePagerOptions) {
       return;
     }
     // 通知改动
-    emit('change-page-size', pgsz);
+    if (pgsz != props.pageSize) {
+      emit('change-page-size', pgsz);
+    }
   }
 
   return {

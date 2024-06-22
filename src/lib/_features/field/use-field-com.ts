@@ -27,6 +27,25 @@ export type FieldComProps = ComRef & {
   autoValue?: string | null;
 
   /**
+   * 动态解释字段
+   */
+  dynamic?: boolean;
+
+  /**
+   * 动态解释字段时，默认上下文就是 data
+   * 这里可以额外补充一个 vars
+   *
+   * ```
+   * {
+   *   value : any   // 字段值
+   *   data  : {..}  // 对象
+   *   vars  : {..}  // 额外补充变量
+   * }
+   * ```
+   */
+  vars?: Vars;
+
+  /**
    * 只读模式时的显示控件。如果未指定，则采用 `TiLabel`
    * 不过会自动为 `comConf` 附加 `readonly` 属性
    *
@@ -96,8 +115,11 @@ export function useFieldCom(
     return tiCheckComponent(props.comType || defaultComType).com;
   }
   function getComConf(context: Vars, val?: any): Vars {
-    let comConf =
-      Util.explainObj(context, props.comConf) ?? _.cloneDeep(defaultComConf);
+    let comConf = _.cloneDeep(props.comConf ?? defaultComConf);
+    if (props.dynamic) {
+      console.log('explain', comConf);
+      comConf = Util.explainObj(context, comConf);
+    }
     // 自动为控件添加值属性
     let valueKey = props.autoValue ?? 'value';
     if (!_.isNull(props.autoValue) && _.isUndefined(comConf[valueKey])) {
@@ -110,14 +132,12 @@ export function useFieldCom(
     return tiCheckComponent(props.readonlyComType || defaultComType).com;
   }
   function getReadonlyComConf(context: Vars, val?: any): Vars {
-    let comConf: Vars | undefined;
-    if (props.readonlyComType) {
-      comConf = props.readonlyComConf;
+    let comConf = _.cloneDeep(
+      props.readonlyComConf ?? props.comConf ?? defaultComConf
+    );
+    if (props.dynamic) {
+      comConf = Util.explainObj(context, comConf);
     }
-    if (!comConf) {
-      comConf = props.comConf ?? _.cloneDeep(defaultComConf);
-    }
-    comConf = Util.explainObj(context, comConf);
 
     // TODO 自动分析 comConf ，构建一个自己对应的  comConf
 
@@ -138,14 +158,12 @@ export function useFieldCom(
     return tiCheckComponent(props.activatedComType || 'TiInput').com;
   }
   function getActivatedComConf(context: Vars, val?: any): Vars {
-    let comConf: Vars | undefined;
-    if (props.activatedComType) {
-      comConf = props.activatedComConf;
+    let comConf = _.cloneDeep(
+      props.activatedComConf ?? props.comConf ?? defaultComConf
+    );
+    if (props.dynamic) {
+      comConf = Util.explainObj(context, comConf);
     }
-    if (!comConf) {
-      comConf = props.comConf ?? _.cloneDeep(defaultComConf);
-    }
-    comConf = Util.explainObj(context, comConf);
 
     // 自动为控件添加值属性
     if (!_.isNull(props.autoValue) && _.isUndefined(comConf.value)) {

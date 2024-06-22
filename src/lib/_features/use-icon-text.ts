@@ -171,10 +171,15 @@ export function useIconText<I extends string, T extends string>(
       }
     },
     setIconHover: function (hovred: boolean) {
-      state.iconHovered = hovred;
+      console.log('setIconHover', hovred)
+      if (canHoverIcon) {
+        state.iconHovered = hovred;
+      }
     },
     setTextHover: function (hovred: boolean) {
-      state.textHovered = hovred;
+      if (canHoverText) {
+        state.textHovered = hovred;
+      }
     },
   };
 }

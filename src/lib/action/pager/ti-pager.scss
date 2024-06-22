@@ -68,10 +68,9 @@
     //-----------------------------------------
     &.is-disabled {
       > a.b {
-        color: var(--ti-color-disable);
-        //background-color: var(--ti-color-disable-r);
+        filter: grayscale(100%);
         text-decoration: none;
-        opacity: 0.6;
+        opacity: 0.5;
         cursor: default;
       }
     }
