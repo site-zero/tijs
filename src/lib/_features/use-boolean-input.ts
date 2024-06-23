@@ -31,7 +31,7 @@ export function useBooleanInput(
       return props.isTrue(val);
     }
     if (props.values && props.values.length > 1) {
-      return props.values[1] == val;
+      return _.isEqual(props.values[1], val);
     }
     return val ? true : false;
   }

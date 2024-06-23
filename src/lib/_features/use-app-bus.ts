@@ -1,6 +1,6 @@
 import { AppEvents, TiAppBus, createBus, setEnv } from '../../core';
 
-type BusDeposeCallback = (hook: () => any) => false | Function | undefined;
+type BusDeposeCallback = (hook: () => void) => void;
 
 export function createAppBus(deposer: BusDeposeCallback) {
   let bus = createBus<any>();

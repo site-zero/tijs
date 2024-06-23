@@ -172,7 +172,7 @@
     if (props.readonly) {
       return;
     }
-    console.log('OnInputFocused');
+    // console.log('OnInputFocused');
     bus?.emit(BUS_EVENT_FOCUS);
     _box_state.boxFocused = true;
     if (props.autoSelect) {

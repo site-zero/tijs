@@ -7,11 +7,13 @@ const en_us = {
   'com-name': 'CheckBox',
   'example-customized-values': 'Customized Values',
   'example-cus-number': 'Customized Number',
+  'example-cus-any': 'Customized Any',
 };
 const zh_cn = {
   'com-name': '勾选框',
   'example-customized-values': '指定值',
   'example-cus-number': '指定数字',
+  'example-cus-any': '指定任意值',
 };
 
 const COM_TYPE = COM_TYPES.Check;
@@ -57,6 +59,15 @@ const TiCheckInfo: TiComInfo = {
         value: 1,
         text: 'Actived',
         values: [1, 0],
+      },
+    },
+    {
+      name: 'cus_any',
+      text: 'i18n:ti-check-example-cus-any',
+      comConf: {
+        value: { color: 'red' },
+        text: 'Actived',
+        values: [{ color: 'red' }, { color: 'blue' }],
       },
     },
   ],

@@ -144,7 +144,7 @@ export function useFieldChange<T extends AbstractField>(
     data: Vars
   ): Promise<FieldChange[]> {
     let { uniqKey, value, oldVal } = change;
-    console.log(uniqKey, value, oldVal);
+    //console.log(uniqKey, value, oldVal);
 
     // 得到字段
     let field = getField(uniqKey);
