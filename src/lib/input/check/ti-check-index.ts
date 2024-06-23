@@ -1,15 +1,17 @@
 import { App } from 'vue';
-import { COM_TYPES } from '../../lib-com-types';
 import { TiComInfo, TiComRace } from '../../../core/_top/_types';
+import { COM_TYPES } from '../../lib-com-types';
 import TiCheck from './TiCheck.vue';
 
 const en_us = {
   'com-name': 'CheckBox',
   'example-customized-values': 'Customized Values',
+  'example-cus-number': 'Customized Number',
 };
 const zh_cn = {
   'com-name': '勾选框',
   'example-customized-values': '指定值',
+  'example-cus-number': '指定数字',
 };
 
 const COM_TYPE = COM_TYPES.Check;
@@ -46,6 +48,15 @@ const TiCheckInfo: TiComInfo = {
         value: 'No',
         text: 'I like coding',
         values: ['No', 'Yes'],
+      },
+    },
+    {
+      name: 'cus_number',
+      text: 'i18n:ti-check-example-cus-number',
+      comConf: {
+        value: 1,
+        text: 'Actived',
+        values: [1, 0],
       },
     },
   ],

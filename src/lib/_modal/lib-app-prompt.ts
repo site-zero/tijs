@@ -60,12 +60,23 @@ export async function Prompt(
             if (!_.isNil(options.placeholder)) {
               $input.placeholder = options.placeholder;
             }
+            $input.select();
           },
           handler: (evt, emit) => {
             let $input = evt.target;
             if (_.isElement($input) && $input instanceof HTMLInputElement) {
               let val = _.trim($input.value);
               emit('change', val);
+            }
+          },
+        },
+        {
+          selector: '.part-input > input',
+          eventName: 'focus',
+          handler: (evt) => {
+            let $input = evt.target;
+            if (_.isElement($input) && $input instanceof HTMLInputElement) {
+              $input.select();
             }
           },
         },

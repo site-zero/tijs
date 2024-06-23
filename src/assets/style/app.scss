@@ -26,7 +26,7 @@ body {
 
 * {
   box-sizing: border-box;
-  scrollbar-width: none;
+  scrollbar-width: thin;
   scrollbar-color: var(--ti-color-mask-weak) var(--ti-color-border-shallow);
 }
 

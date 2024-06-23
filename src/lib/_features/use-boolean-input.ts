@@ -3,7 +3,7 @@ import { ReadonlyProps, useReadonly } from './use-readonly';
 
 export type BooleanProps = {
   value?: any;
-  // [falseText, trueText]
+  // [falseValue, trueValue]
   values?: [any, any];
   isTrue?: (val: any) => boolean;
 };
@@ -29,6 +29,9 @@ export function useBooleanInput(
   function isTrue(val: any) {
     if (_.isFunction(props.isTrue)) {
       return props.isTrue(val);
+    }
+    if (props.values && props.values.length > 1) {
+      return props.values[1] == val;
     }
     return val ? true : false;
   }

@@ -383,6 +383,7 @@
             :class="Table.getTableHeadClass(selection, i)"
             :col-index="i"
             :drag-index="col.dragIndex"
+            :cols-count="TableColumns.length"
             :col-key="col.uniqKey">
             <div class="head-cell-con">
               <!-- 调整列宽的控制柄 -->
@@ -391,7 +392,7 @@
               <span class="head-text">{{ col.title || col.name }}</span>
               <!-- 调整列宽的控制柄: 最后一列 -->
               <div
-                v-if="col.dragIndex == TableColumns.length - 1"
+                v-if="col.dragIndex == RealN - 1"
                 class="column-resize-hdl for-self"></div>
             </div>
           </div>
