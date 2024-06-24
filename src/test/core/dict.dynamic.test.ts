@@ -1,6 +1,7 @@
-import { Dicts, IDict, Vars } from '../../core/ti.ts';
 import _ from 'lodash';
 import { expect, test } from 'vitest';
+import { Vars } from '../../_type';
+import { Dicts, IDict } from '../../core/';
 
 const data = [
   { value: 1, race: 'dog', text: 'wangcai' },

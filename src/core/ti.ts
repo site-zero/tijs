@@ -1,7 +1,6 @@
 import { assign, cloneDeep, get, set } from 'lodash';
 import * as PKG from '../../package.json';
-import { Vars } from './_top/_types';
-import { TiBus } from './_top/ti-bus';
+import { TiBus, Vars } from '../_type';
 
 export const version = PKG.version;
 
@@ -35,6 +34,3 @@ export function getEnv<T>(key: string, dft?: T): T {
 export function getAllEnv() {
   return cloneDeep(_ENV);
 }
-
-export * from './ti-coms';
-export * from './ti-exports';

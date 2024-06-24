@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { KeyboardStatus, Util, Vars } from '../../core';
+import { KeyboardStatus, Vars } from '../../_type';
+import { Util } from '../../core';
 // -----------------------------------------------------
 //  Types
 export type CheckStatus = 'all' | 'none' | 'part';

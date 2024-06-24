@@ -1,5 +1,4 @@
-import _ from 'lodash';
-import { Vars, ExplainOptions, Explainer } from '../../ti';
+import { ExplainOptions, Explainer, Vars } from '../../../_type';
 
 export class FuncExplainer implements Explainer {
   // 解析后的处理函数

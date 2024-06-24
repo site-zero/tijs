@@ -1,4 +1,4 @@
-import { CommonProps, Link } from '../../../core';
+import { CommonProps, Link } from '../../../_type';
 import { IconTextProps } from '../../_features';
 
 export type RoadblockMode = 'cover' | 'fit' | 'auto';

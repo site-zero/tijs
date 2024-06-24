@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { ExplainI18n, TiMatch, Vars } from '../ti';
+import { ExplainI18n, TiMatch, Vars } from '../../_type';
 import { gen_by_func } from './by-func';
 import { gen_by_array } from './by_array';
 import { gen_by_bool } from './by_bool';

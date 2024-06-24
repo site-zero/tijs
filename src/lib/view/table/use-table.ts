@@ -1,14 +1,9 @@
 import _ from 'lodash';
 import { ComputedRef, Ref } from 'vue';
 import { CheckStatus, SelectableFeature, useSelectable } from '../../';
-import {
-  Callback,
-  Callback1,
-  EventUtils,
-  TableRowID,
-  Vars,
-  getLogger,
-} from '../../../core';
+import { Callback, Callback1, TableRowID, Vars } from '../../../_type';
+import { EventUtils } from '../../../core';
+import { getLogger } from '../../../core/log/ti-log';
 import {
   TableEmitter,
   TableEventPayload,

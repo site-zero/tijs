@@ -1,6 +1,7 @@
 import _ from 'lodash';
+import { Str } from '../../';
+import { Vars } from '../../../_type';
 import { AbstractTmplSegment } from './abstract_segment';
-import { Vars, Str } from '../../ti';
 
 export class LoopTmplSegment extends AbstractTmplSegment {
   /**

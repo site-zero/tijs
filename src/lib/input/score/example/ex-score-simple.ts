@@ -1,4 +1,4 @@
-import { ComPropExample } from '../../../../core';
+import { ComPropExample } from '../../../../_type';
 import { ScoreProps } from '../ti-score-types';
 
 export default {

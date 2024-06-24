@@ -1,4 +1,4 @@
-import { TiComSet } from '../../core';
+import { TiComSet } from '../../_type';
 import { TiInputInfo } from './box/ti-input-index';
 import { TiCheckInfo } from './check/ti-check-index';
 import { TiInputColorInfo } from './color/ti-input-color-index';

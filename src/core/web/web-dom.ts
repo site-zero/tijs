@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { CssUtils, Match, Rects, Str, Util } from '../';
 import {
   DockOptions,
   DomQueryContext,
@@ -9,22 +10,15 @@ import {
   ElePredicate,
   FontSizeCallback,
   FontSizeOptions,
-  Rect,
-  SeekUtilOptions,
-  StrCaseMode,
-} from '../';
-import {
-  CssUtils,
-  Match,
   NameStrValue,
   Point2D,
   Predicate,
-  Rects,
+  Rect,
+  SeekUtilOptions,
   Size2D,
-  Str,
-  Util,
+  StrCaseMode,
   Vars,
-} from '../ti';
+} from '../../_type';
 
 /*-------------------------------------------
 
@@ -1451,4 +1445,3 @@ export function scrollIntoView(
 }
 
 export * from './web-dom-html';
-

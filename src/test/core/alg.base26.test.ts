@@ -1,6 +1,6 @@
-import { expect, test } from 'vitest';
-import { Alg } from '../../core/ti';
 import _ from 'lodash';
+import { expect, test } from 'vitest';
+import { Alg } from '../../core/';
 
 test('Base26', () => {
   const AA = {

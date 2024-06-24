@@ -1,5 +1,5 @@
 import { App } from 'vue';
-import { TiComInfo, TiComRace } from '../../../core/_top/_types';
+import { TiComInfo, TiComRace } from '../../../_type';
 import { COM_TYPES } from '../../lib-com-types';
 import TiForm from './TiForm.vue';
 import example from './example';
@@ -25,6 +25,10 @@ const TiFormInfo: TiComInfo = {
     zh_hk: zh_cn,
   },
   com: TiForm,
+  liveStyle: {
+    width: '100%',
+    height: '100%',
+  },
   install: (app: App) => {
     app.component(COM_TYPE, TiForm);
   },

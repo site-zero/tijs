@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { AnyGetter, Match, Util } from '../ti';
+import { Match, Util } from '../';
+import { AnyGetter } from '../../_type';
 import { IDict, LoadData, LoadDictItem, QueryDictItems } from './dict-types';
 
 export function _gen_item_loader(input: any): LoadDictItem<any, any> {

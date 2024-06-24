@@ -1,6 +1,7 @@
 import JSON5 from 'json5';
 import _ from 'lodash';
-import { FuncA2, Match, Util, Vars } from '../ti';
+import { Match, Util } from '../';
+import { FuncA2, Vars } from '../../_type';
 
 export type SelectValueOptions<T, CTX> = {
   explain?: boolean;
@@ -40,7 +41,7 @@ export type SelectValueArm<T, M> = T | Array<SelectValueArmItem<T, M>>;
 export function selectValue<C, T, M>(
   context: C,
   arms: string | SelectValueArm<T, M> = [],
-  options: SelectValueOptions<T, C> = {},
+  options: SelectValueOptions<T, C> = {}
 ): T {
   // Auto Parse
   if (_.isString(arms)) {

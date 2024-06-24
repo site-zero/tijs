@@ -16,7 +16,9 @@
     useFieldChange,
     useLargeScrolling,
   } from '../../';
-  import { CssUtils, Size2D, TableRowID, getLogger } from '../../../core';
+  import { Size2D, TableRowID } from '../../../_type';
+  import { CssUtils } from '../../../core';
+  import { getLogger } from '../../../core/log/ti-log';
   import { COM_TYPES } from '../../lib-com-types';
   import TableRow from './TableRow.vue';
   import { buildTableColumns } from './build-table-column';

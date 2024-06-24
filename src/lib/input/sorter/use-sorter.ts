@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { computed, ref } from 'vue';
-import { Dicts, PickRequired } from '../../../core';
+import { Dicts } from '../../../core';
+import { PickRequired } from '../../../_type';
 import { TagItem, openAppModal, useOptions } from '../../../lib';
 import { SorterProps, SorterValue } from './ti-sorter-types';
 

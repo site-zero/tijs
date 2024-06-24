@@ -1,4 +1,4 @@
-import { TiComSet } from '../../core';
+import { TiComSet } from '../../_type';
 import { TiEditCodeInfo } from './code/ti-edit-code-index';
 import { TiEditPairInfo } from './pair/ti-edit-pair-index';
 

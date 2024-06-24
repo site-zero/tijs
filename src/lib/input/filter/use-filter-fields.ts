@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { GridFieldsInput, getFieldUniqKey } from '../../';
+import { GridFieldsInput } from '../../';
+import { getFieldUniqKey } from '../../../_type';
 import { I18n } from '../../../core';
 
 export function getFieldsNames(fields: GridFieldsInput[] = []) {

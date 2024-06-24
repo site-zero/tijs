@@ -1,12 +1,6 @@
-import {
-  BusMsg,
-  Callback1,
-  Callback2,
-  TiBus,
-  Vars,
-  createBus,
-} from '../../core';
 import { expect, test } from 'vitest';
+import { BusMsg, Callback1, TiBus, Vars } from '../../_type';
+import { createBus } from '../../core';
 
 function bus(): TiBus<number> {
   return createBus<number>();

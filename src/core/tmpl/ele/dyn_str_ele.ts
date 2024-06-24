@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { StrCaseMode } from '../../';
-import { Str, StrConvertor, Vars } from '../../ti';
+import { Str } from '../../';
+import { StrCaseMode, StrConvertor, Vars } from '../../../_type';
 import { DynElInfo } from '../ti-tmpl';
 import { DynEle } from './abstract_dyn_ele';
 import { str_format } from './str/str_format';

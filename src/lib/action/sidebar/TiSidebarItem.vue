@@ -1,7 +1,8 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed } from 'vue';
-  import { SideBarItem, TiIcon } from '../..';
+  import { TiIcon } from '../../';
+  import { SideBarItem } from '../../../_type';
   import { I18n } from '../../../core';
 
   let emit = defineEmits<(event: 'click-item', payload: SideBarItem) => void>();

@@ -1,13 +1,8 @@
-import { nextTick } from 'vue';
-import {
-  Callback,
-  Callback1,
-  FuncA0,
-  Rects,
-  Size2D,
-  getLogger,
-} from '../../../core';
 import _ from 'lodash';
+import { nextTick } from 'vue';
+import { Callback1, FuncA0, Size2D } from '../../../_type';
+import { Rects } from '../../../core';
+import { getLogger } from '../../../core/log/ti-log';
 
 const log = getLogger('ti.use-view-measure');
 
@@ -47,8 +42,8 @@ export function useViewMeasure(props: ViewMeasureProps) {
   };
 
   function updateMeasure($main?: HTMLElement) {
-    if(!$main) {
-      $main = getMainElement() 
+    if (!$main) {
+      $main = getMainElement();
     }
     if ($main) {
       updateViewport($main);
@@ -109,6 +104,6 @@ export function useViewMeasure(props: ViewMeasureProps) {
     updateMeasure,
     isMainWatched,
     watchMain,
-    unWatchMain
+    unWatchMain,
   };
 }

@@ -1,5 +1,4 @@
 import {
-  AbstractField,
   FieldChangeProps,
   FieldComProps,
   KeepInfo,
@@ -9,6 +8,7 @@ import {
   SelectableState,
 } from '../..';
 import {
+  AbstractField,
   Callback2,
   CommonProps,
   CssTextAlign,
@@ -19,7 +19,7 @@ import {
   TableRowID,
   TextContentType,
   Vars,
-} from '../../../core';
+} from '../../../_type';
 
 export type TableRowData = {
   index: number;

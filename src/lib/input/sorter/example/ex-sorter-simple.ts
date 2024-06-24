@@ -1,4 +1,4 @@
-import { ComPropExample } from '../../../../core';
+import { ComPropExample } from '../../../../_type';
 import { SorterProps } from '../ti-sorter-types';
 
 export default {

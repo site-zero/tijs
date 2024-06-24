@@ -3,13 +3,13 @@ import {
   IconTextEvents,
   IconTextFeature,
   IconTextOptions,
-  IconTextProps,
   IconTextState,
   UseIconEvents,
   UseTextEvents,
   useIconText,
 } from '../../';
-import { CommonProps, CssUtils, I18n, IconInput, Link } from '../../../core';
+import { IconInput } from '../../../_type';
+import { CssUtils, I18n } from '../../../core';
 import { RoadblockProps, RoadblockSize } from './ti-roadblock-types';
 /*-------------------------------------------------------
 

@@ -6,10 +6,10 @@
     AppModalInitProps,
     AppModelBinding,
     BUS_KEY,
-    CssUtils,
     EmitAdaptor,
-    getLogger,
-  } from '../../core';
+  } from '../../_type';
+  import { CssUtils } from '../../core';
+  import { getLogger } from '../../core/log/ti-log';
   import {
     BlockProps,
     TiActionBar,

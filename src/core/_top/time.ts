@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { TimeInfo } from './_types';
+import { TimeInfo } from '../../_type';
 
 type TimeInput = number | string | Date | TimeInfo;
 
@@ -103,7 +103,7 @@ export class TiTime implements TimeInfo {
       // Time string
       m =
         /^([0-9]{1,2}):?([0-9]{1,2})(:?([0-9]{1,2})([.,]([0-9]{1,3}))?)?$/.exec(
-          input,
+          input
         );
       if (m) {
         // Min: 23:59
@@ -164,8 +164,8 @@ export class TiTime implements TimeInfo {
         this.milliseconds > 0
           ? 'HH:mm:ss.SSS'
           : this.seconds > 0
-            ? 'HH:mm:ss'
-            : 'HH:mm';
+          ? 'HH:mm:ss'
+          : 'HH:mm';
     }
     // To Min
     else if ('min' == fmt) {

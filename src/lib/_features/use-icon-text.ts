@@ -1,14 +1,7 @@
 import _ from 'lodash';
 import { TextShowProps, useClassStyle } from '.';
-import {
-  Callback,
-  Callback1,
-  CommonProps,
-  CssUtils,
-  I18n,
-  IconInput,
-  Vars,
-} from '../../core';
+import { Callback, Callback1, CommonProps, IconInput, Vars } from '../../_type';
+import { CssUtils, I18n } from '../../core';
 export type IconTextState = {
   iconHovered?: boolean;
   textHovered?: boolean;
@@ -171,7 +164,7 @@ export function useIconText<I extends string, T extends string>(
       }
     },
     setIconHover: function (hovred: boolean) {
-      console.log('setIconHover', hovred)
+      console.log('setIconHover', hovred);
       if (canHoverIcon) {
         state.iconHovered = hovred;
       }

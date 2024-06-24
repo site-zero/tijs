@@ -1,5 +1,5 @@
 import { App } from 'vue';
-import { TiComInfo, TiComRace } from '../../../core/_top/_types';
+import { TiComInfo, TiComRace } from '../../../_type';
 import { COM_TYPES } from '../../lib-com-types';
 import TiActionBar from './TiActionBar.vue';
 import * as example from './example';
@@ -7,12 +7,12 @@ import * as example from './example';
 const en_us = {
   'com-name': 'Action Bar',
   'example-visibility': 'Visibility',
-  'exmple-mode-v': 'Vertical Mode'
+  'exmple-mode-v': 'Vertical Mode',
 };
 const zh_cn = {
   'com-name': '动作条',
   'example-visibility': '可见性',
-  'exmple-mode-v': '垂直模式'
+  'exmple-mode-v': '垂直模式',
 };
 
 const COM_TYPE = COM_TYPES.ActionBar;
@@ -36,5 +36,5 @@ const TiActionBarInfo: TiComInfo = {
   exampleProps: [example.simple, example.visiblity, example.modeV],
 };
 
-export { TiActionBar, TiActionBarInfo };
 export * from './ti-action-bar-types';
+export { TiActionBar, TiActionBarInfo };

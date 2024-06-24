@@ -1,4 +1,4 @@
-import { ComPropExample } from '../../../../core';
+import { ComPropExample } from '../../../../_type';
 import { InputCurrencyProps } from '../ti-input-currency-types';
 
 export default {

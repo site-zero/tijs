@@ -1,5 +1,5 @@
-import { KeyboardStatus } from '../';
 import _ from 'lodash';
+import { KeyboardStatus } from '../../_type';
 
 export function getKeyboardStatus(e: Event): KeyboardStatus {
   if (e instanceof KeyboardEvent) {

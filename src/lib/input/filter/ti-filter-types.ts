@@ -7,7 +7,7 @@ import {
   IconInput,
   StrCaseMode,
   Vars,
-} from '../../../core';
+} from '../../../_type';
 
 export type FilterValue = Vars;
 

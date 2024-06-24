@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { TableRowID, TextStrValue, Util } from '../ti';
+import { Util } from '../';
+import { TableRowID, TextStrValue } from '../../_type';
 
 /***
  * 将一组值推到一个对象的某个指定键下,

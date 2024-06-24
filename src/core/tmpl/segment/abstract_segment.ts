@@ -1,6 +1,6 @@
 import _ from 'lodash';
+import { Vars } from '../../../_type';
 import { TmplEle, TmplSegment } from '../ti-tmpl';
-import { Vars } from '../../ti';
 
 export class AbstractTmplSegment implements TmplSegment {
   protected _type_name: string;

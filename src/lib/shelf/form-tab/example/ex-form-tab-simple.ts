@@ -1,4 +1,4 @@
-import { ComPropExample } from '../../../../core';
+import { ComPropExample } from '../../../../_type';
 import { FormTabProps } from '../ti-form-tab-types';
 
 export default {

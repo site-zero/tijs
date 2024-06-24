@@ -1,14 +1,8 @@
 import _, { kebabCase } from 'lodash';
 import { SetupContext, VNode, h } from 'vue';
 import { TiIcon } from '../';
-import {
-  CssUtils,
-  I18n,
-  IconInput,
-  TextContentType,
-  ValueChange,
-  Vars,
-} from '../../core';
+import { IconInput, TextContentType, ValueChange, Vars } from '../../_type';
+import { CssUtils, I18n } from '../../core';
 import { FieldComProps, useFieldCom } from '../_features';
 
 export type TextSnippetEmitter = {

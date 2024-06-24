@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { NumRange, TiColor } from '../../core/ti';
+import { NumRange, TiColor } from '../../core/';
 
 test('color:HEX', () => {
   expect('#FFFFFF').eq(new TiColor([255, 255, 255]).hex);

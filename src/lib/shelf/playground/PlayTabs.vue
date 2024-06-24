@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { computed } from 'vue';
-  import { TiCom } from '../../../core';
+  import { TiCom } from '../../../_type';
   import { TiIcon } from '../../../lib';
   import { LiveBgMode, PlayLayoutMode } from './use-play-mode';
   import { getExampleList } from './use-playground';
@@ -144,9 +144,9 @@
     border: 1px solid var(--ti-color-border-shallow);
     color: var(--ti-color-tab-f);
     background-color: var(--ti-color-tab);
-    padding: .2em .7em;
-    border-radius: .4em;
-    margin: .2em;
+    padding: 0.2em 0.7em;
+    border-radius: 0.4em;
+    margin: 0.2em;
     cursor: pointer;
   }
 

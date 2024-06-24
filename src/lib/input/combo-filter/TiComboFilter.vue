@@ -11,7 +11,8 @@
     TiSorter,
     useKeep,
   } from '../../';
-  import { ActionBarItem, CssUtils } from '../../../core';
+  import { CssUtils } from '../../../core';
+  import { ActionBarItem } from '../../../_type';
   import { useComboFilterKeep } from './use-combo-filter-keep';
   //-------------------------------------------------
   const emit = defineEmits<ComboFilterEmitter>();

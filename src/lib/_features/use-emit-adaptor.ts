@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { CustomizedEmitAdaptor, EmitAdaptorProps, Tmpl } from '../../core';
+import { Tmpl } from '../../core';
+import { CustomizedEmitAdaptor, EmitAdaptorProps } from '../../_type';
 
 import { getLogger } from '../../core/log/ti-log';
 

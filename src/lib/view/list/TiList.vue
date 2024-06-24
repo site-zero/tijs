@@ -2,7 +2,8 @@
   import _ from 'lodash';
   import { computed, reactive, watch } from 'vue';
   import { SelectableState, TiIcon, TiRoadblock } from '../../';
-  import { CssUtils, TableRowID } from '../../../core';
+  import { TableRowID } from '../../../_type';
+  import { CssUtils } from '../../../core';
   import { ListEmitter, ListProps } from './ti-list-types';
   import { useList } from './use-list';
 

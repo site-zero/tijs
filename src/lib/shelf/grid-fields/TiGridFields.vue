@@ -7,7 +7,8 @@
     TiRoadblock,
     useFieldChange,
   } from '../../';
-  import { CssUtils, FieldChange } from '../../../core';
+  import { FieldChange } from '../../../_type';
+  import { CssUtils } from '../../../core';
   import GFItField from './GFItField.vue';
   import GFItGroup from './GFItGroup.vue';
   import GFItLabel from './GFItLabel.vue';

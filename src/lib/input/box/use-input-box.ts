@@ -1,5 +1,6 @@
 import { Ref } from 'vue';
-import { DictItem, Dicts, TiMatch, Vars } from '../../../core';
+import { TiMatch, Vars } from '../../../_type';
+import { DictItem, Dicts } from '../../../core';
 import { ValueInputTidyMode } from '../../_features';
 import { InputBoxState, TipBoxShowTime } from './ti-input-types';
 

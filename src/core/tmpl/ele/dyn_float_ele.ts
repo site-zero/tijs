@@ -1,8 +1,8 @@
 import _ from 'lodash';
-import { Vars } from '../../ti';
+import { sprintf } from 'sprintf-js';
+import { Vars } from '../../../_type';
 import { DynElInfo } from '../ti-tmpl';
 import { DynEle } from './abstract_dyn_ele';
-import { sprintf } from 'sprintf-js';
 
 export class DynFloatEle extends DynEle {
   private _fmt: string;

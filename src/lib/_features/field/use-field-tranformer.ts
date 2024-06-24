@@ -1,6 +1,5 @@
-import { Convertor, Vars } from '../../../core';
-import { Field, getFieldConvertor } from '../../';
 import _ from 'lodash';
+import { Convertor, Field, Vars, getFieldConvertor } from '../../../_type';
 
 /*-------------------------------------------------------
 

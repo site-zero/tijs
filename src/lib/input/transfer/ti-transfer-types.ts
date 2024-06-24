@@ -1,4 +1,4 @@
-import { StdOptionItem, TableRowID } from '../../../core';
+import { StdOptionItem, TableRowID } from '../../../_type';
 import { ReadonlyProps, StdListItemProps } from '../../_features';
 import { OptionsProps } from '../../_features/use-options';
 

@@ -1,10 +1,6 @@
 import _ from 'lodash';
-import {
-  TableProps,
-  TableStrictColumn,
-  makeFieldUniqKey,
-  parseFieldConverter,
-} from '../../';
+import { TableProps, TableStrictColumn } from '../../';
+import { makeFieldUniqKey, parseFieldConverter } from '../../../_type';
 import { Util } from '../../../core';
 
 export function buildTableColumns(props: TableProps) {

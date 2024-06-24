@@ -1,13 +1,8 @@
 import _ from 'lodash';
 import { Ref } from 'vue';
-import {
-  COM_TYPES,
-  KeepFeature,
-  TableKeepProps,
-  makeKeepProps,
-  useKeep,
-} from '../../';
-import { getLogger } from '../../../core';
+import { KeepFeature, TableKeepProps, makeKeepProps, useKeep } from '../../';
+import { getLogger } from '../../../core/log/ti-log';
+import { COM_TYPES } from '../../lib-com-types';
 
 export type TableKeepFeature = {
   KeepColumns: KeepFeature;

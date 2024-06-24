@@ -2,7 +2,7 @@
   import _ from 'lodash';
   import { computed } from 'vue';
   import { TiGridFields } from '../../';
-  import { Vars } from '../../../core/_top/_types';
+  import { Vars } from '../../../_type';
   import { GridFieldsInput } from '../../shelf/grid-fields/ti-grid-fields-types';
   import { InputGroupProps } from './ti-input-group-types';
 
@@ -23,7 +23,7 @@
   const LayoutHint = computed(() => (props.fields ? props.fields.length : 0));
 
   function onValueChange(change: Vars) {
-    console.log("change", change)
+    console.log('change', change);
     let old = _.cloneDeep(props.value);
     let val = _.assign(old, change);
     if (props.ignoreNil) {

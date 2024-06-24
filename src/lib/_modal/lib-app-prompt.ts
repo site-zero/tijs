@@ -6,7 +6,7 @@ import {
   IconInput,
   LogicType,
   PopItemProps,
-} from '../../core';
+} from '../../_type';
 import { __get_msg_box_html } from './get-msg-box-html';
 
 export type PromptOptions = PopItemProps & {

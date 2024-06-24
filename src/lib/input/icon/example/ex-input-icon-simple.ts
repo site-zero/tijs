@@ -1,4 +1,4 @@
-import { ComPropExample } from '../../../../core';
+import { ComPropExample } from '../../../../_type';
 import { InputIconProps } from '../ti-input-icon-types';
 
 export default {

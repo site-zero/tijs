@@ -1,8 +1,10 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed } from 'vue';
-  import { Alert, COM_TYPES, TiInput } from '../..';
-  import { DateInput, DateTime, tiGetDefaultComPropValue } from '../../../core';
+  import { Alert, TiInput } from '../../';
+  import { DateInput } from '../../../_type';
+  import { DateTime, tiGetDefaultComPropValue } from '../../../core';
+  import { COM_TYPES } from '../../lib-com-types';
   import { InputDatetimeProps } from './ti-input-datetime-types';
   //-----------------------------------------------------
   let emit = defineEmits<{

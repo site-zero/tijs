@@ -1,4 +1,4 @@
-import { TiComSet } from '../../core';
+import { TiComSet } from '../../_type';
 import { TiFallsInfo } from './falls/ti-falls-index';
 import { TiListInfo } from './list/ti-list-index';
 import { TiTableInfo } from './table/ti-table-index';

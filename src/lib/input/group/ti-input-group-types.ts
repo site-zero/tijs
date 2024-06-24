@@ -1,4 +1,4 @@
-import { CommonProps, Vars } from '../../../core';
+import { CommonProps, Vars } from '../../../_type';
 import { GridFieldsProps } from '../../shelf/all-shelf';
 
 export type InputGroupProps = CommonProps &

@@ -4,9 +4,8 @@ import {
   GridFieldsProps,
   TagNameInfo,
   TagsProps,
-  getFieldUniqKey,
 } from '../../';
-import { Vars } from '../../../core';
+import { Vars, getFieldUniqKey } from '../../../_type';
 import { FilterFeature, FilterProps } from './ti-filter-types';
 
 export function getFilterFormConfig(

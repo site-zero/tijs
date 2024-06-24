@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Vars } from '..';
+import { Vars } from '../../_type';
 
 export type RecordDiffOptions = {
   checkRemoveFromOrgin?: boolean;

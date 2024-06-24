@@ -1,13 +1,7 @@
 import JSON5 from 'json5';
 import _ from 'lodash';
-import {
-  DictName,
-  DictSetup,
-  Dicts,
-  TiDict,
-  Vars,
-  isDictSetup,
-} from '../../core';
+import { Vars } from '../../_type';
+import { DictName, DictSetup, Dicts, TiDict, isDictSetup } from '../../core';
 
 export type OptionsInput = string | DictName | DictSetup | Vars[];
 

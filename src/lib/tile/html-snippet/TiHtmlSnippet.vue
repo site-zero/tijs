@@ -1,7 +1,9 @@
 <script setup lang="ts">
   import _ from 'lodash';
   import { computed, onMounted, ref } from 'vue';
-  import { Dom, HtmlSnippetListenner, getLogger } from '../../../core';
+  import { HtmlSnippetListenner } from '../../../_type';
+  import { Dom } from '../../../core';
+  import { getLogger } from '../../../core/log/ti-log';
   import { COM_TYPES } from '../../lib-com-types';
 
   const COM_TYPE = COM_TYPES.HtmlSnippet;

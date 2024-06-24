@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { computed } from 'vue';
+  import { getFieldValue } from '../../../_type';
   import { useFieldCom } from '../../_features/field';
-  import { getFieldValue } from '../../_top';
   import { TableCellEmitter, TableCellProps } from './ti-table-types';
   //-------------------------------------------------------
   defineOptions({

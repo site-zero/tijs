@@ -2,7 +2,8 @@
   import _ from 'lodash';
   import { computed, ref, watch } from 'vue';
   import { TiLabel, usePlaceholder } from '../../';
-  import { I18n, Vars } from '../../../core';
+  import { I18n } from '../../../core';
+  import { Vars } from '../../../_type';
   import { TagItem, TagsProps } from './ti-tags-types';
   import { useTags } from './use-tags';
   //-----------------------------------------------------

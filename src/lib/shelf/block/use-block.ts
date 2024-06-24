@@ -1,13 +1,6 @@
 import { BlockProps, useFieldCom } from '../../';
-import {
-  BusMsg,
-  Callback,
-  Callback1,
-  CssGridLayout,
-  CssUtils,
-  I18n,
-  TiAppBus,
-} from '../../../core';
+import { CssGridLayout } from '../../../_type';
+import { CssUtils, I18n } from '../../../core';
 
 /*-------------------------------------------------------
 

@@ -2,7 +2,6 @@
   import _ from 'lodash';
   import { computed, onUnmounted } from 'vue';
   import { BlockProps, TiActionBar, TiIcon, useEmitAdaptor } from '../../';
-  import { Callback2 } from '../../../core';
   import { COM_TYPES } from '../../lib-com-types';
   import { useBlock } from './use-block';
 

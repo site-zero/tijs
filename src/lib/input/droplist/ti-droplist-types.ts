@@ -1,4 +1,4 @@
-import { CommonProps } from '../../../core';
+import { CommonProps } from '../../../_type';
 import { InputBoxProps } from '../box/ti-input-types';
 
 export type DropListProps = CommonProps &

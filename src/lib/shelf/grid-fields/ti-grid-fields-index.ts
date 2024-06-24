@@ -1,5 +1,5 @@
 import { App } from 'vue';
-import { TiComInfo, TiComRace } from '../../../core/_top/_types';
+import { TiComInfo, TiComRace } from '../../../_type';
 import { COM_TYPES } from '../../lib-com-types';
 import TiGridFields from './TiGridFields.vue';
 import example from './example';
@@ -29,6 +29,10 @@ const TiGridFieldsInfo: TiComInfo = {
     zh_hk: zh_cn,
   },
   com: TiGridFields,
+  liveStyle: {
+    width: '100%',
+    height: '100%',
+  },
   install: (app: App) => {
     app.component(COM_TYPE, TiGridFields);
   },

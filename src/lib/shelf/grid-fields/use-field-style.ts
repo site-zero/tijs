@@ -1,5 +1,10 @@
 import _ from 'lodash';
-import { CssGridLayout, IconInput, TextContentType, Vars } from '../../../core';
+import {
+  CssGridLayout,
+  IconInput,
+  TextContentType,
+  Vars,
+} from '../../../_type';
 import {
   GridFieldLayoutMode,
   GridFieldsProps,

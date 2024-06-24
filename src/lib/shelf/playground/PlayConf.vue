@@ -2,7 +2,7 @@
   import JSON5 from 'json5';
   import _ from 'lodash';
   import { Ref, computed, ref } from 'vue';
-  import { Vars } from '../../../core/ti';
+  import { Vars } from '../../../_type';
   import { formatExampleConfData } from './use-playground';
 
   const emit = defineEmits<{

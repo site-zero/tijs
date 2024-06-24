@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { expect, test } from 'vitest';
-import { Util, Vars } from '../../core/ti';
+import { Vars } from '../../_type';
+import { Util } from '../../core/';
 
 test('BaseExplain', () => {
   let context = {

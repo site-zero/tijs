@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { expect, test } from 'vitest';
-import { Str } from '../../core/ti';
+import { Str } from '../../core/';
 
 test('isBlank', function () {
   expect(Str.isBlank('')).eq(true);

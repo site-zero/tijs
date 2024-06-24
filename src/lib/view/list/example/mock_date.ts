@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Vars } from '../../../../core';
+import { Vars } from '../../../../_type';
 
 type get_options = { icon: boolean; tip: boolean };
 export function getListData(

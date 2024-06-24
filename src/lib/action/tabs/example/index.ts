@@ -1,4 +1,4 @@
-import { ComPropExample } from '../../../../core';
+import { ComPropExample } from '../../../../_type';
 import exAtBottom from './tabs-at-bottom';
 import exAtTop from './tabs-at-top';
 

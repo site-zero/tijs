@@ -1,12 +1,11 @@
-import _ from 'lodash';
+import { Util } from '../../';
 import {
-  Vars,
   ExplainOptions,
   Explainer,
-  InvokeOptions,
   Invoke,
-  Util,
-} from '../../ti';
+  InvokeOptions,
+  Vars,
+} from '../../../_type';
 
 export class InvokeExplainer implements Explainer {
   // 解析后的处理函数

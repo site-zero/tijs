@@ -1,7 +1,7 @@
 import JSON5 from 'json5';
 import _ from 'lodash';
-import { Vars } from '../_top/_types';
-import { Str } from '../ti';
+import { Str } from '../';
+import { Vars } from '../../_type';
 
 export class TiStorage {
   private storage: Storage;
@@ -29,7 +29,7 @@ export class TiStorage {
   }
   getBoolean(key: string, dft = false) {
     return this.get(key, dft, (s) =>
-      /^(true|yes|on|ok)$/.test(s) ? true : false,
+      /^(true|yes|on|ok)$/.test(s) ? true : false
     );
   }
   getNumber(key: string, dft = -1) {

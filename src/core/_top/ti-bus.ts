@@ -1,35 +1,12 @@
 import _ from 'lodash';
-import { Callback, Match, TiMatch, getEnv } from '../ti';
-
-export type BusMsg<T> = {
-  /**
-   * 消息发源自哪个 bus
-   */
-  srcBus: string;
-  /**
-   * 消息流经的 bus
-   */
-  busPath: string[];
-  /**
-   * 消息的名称
-   */
-  name: string;
-  /**
-   * 消息的数据
-   */
-  data?: T;
-};
-
-export type BusListenerHanlder<T> = {
-  (msg: BusMsg<T>): void;
-};
-
-/**
- * 一个注册函数，注册监听器的注销行为。通常是组件的 onUnmounted
- */
-export type BusDeposer = {
-  (callback: Callback): void;
-};
+import { Match, getEnv } from '../';
+import {
+  BusDeposer,
+  BusListenerHanlder,
+  BusMsg,
+  TiBus,
+  TiMatch,
+} from '../../_type';
 
 class BusListener<T> {
   _name: string;
@@ -61,7 +38,7 @@ function name_is_conditional(name: string) {
 
 let BUS_NB = 0;
 
-export class TiBus<T> {
+export class TiBusImpl<T> implements TiBus<T> {
   private _uniqKey: string;
   /**
    * ### 任意监听
@@ -119,7 +96,7 @@ export class TiBus<T> {
     eventNames?: string[],
     adaptor?: BusListenerHanlder<T>
   ): TiBus<T> {
-    let subBus = new TiBus<T>(name);
+    let subBus = new TiBusImpl<T>(name);
     subBus.connectTo(this, eventNames, adaptor);
     return subBus;
   }
@@ -349,5 +326,5 @@ export class TiBus<T> {
 }
 
 export function createBus<T>(name?: string): TiBus<T> {
-  return new TiBus<T>(name);
+  return new TiBusImpl<T>(name);
 }

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { BlockEvent } from '../ti';
+import { BlockEvent } from '../../_type';
 
 /***
  * Get the name of a Ti linked path, such as:

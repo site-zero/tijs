@@ -1,5 +1,6 @@
-import { Callback1, Dom, DomSelector, Rects } from '../../';
 import _ from 'lodash';
+import { Dom, Rects } from '../../';
+import { Callback1, DomSelector } from '../../../_type';
 
 export type BlinkOptions = {
   /**

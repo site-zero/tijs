@@ -3,12 +3,11 @@ import {
   Callback,
   Callback1,
   Convertor,
-  Dom,
   FuncA0,
   Point2D,
   Rect,
-  Rects,
-} from '../../core';
+} from '../../_type';
+import { Dom, Rects } from '../../core';
 import { getLogger } from '../../core/log/ti-log';
 import { Dragging } from './drag/dragging';
 export { Dragging } from './drag/dragging';
@@ -152,9 +151,12 @@ function whenMoving(
   p2d: Point2D,
   options: Pick<DraggingOptions, 'onMoving' | 'onEnd'>
 ) {
+  // console.log('whenMoving 1', ing._dead);
   if (ing.update(p2d)) {
+    // console.log('whenMoving 2', ing._dead);
     // 处理推拽
     options.onMoving(ing);
+    // console.log('whenMoving 3', ing._dead);
     if (ing.isDead()) {
       deposeDragging(ing, options.onEnd);
     }
@@ -174,14 +176,13 @@ export function useDragging(options: DraggingOptions) {
   let ing: Dragging;
 
   //console.log('useDraggable', $watchTarget);
-  log.debug('useDraggable', $watchTarget);
   // 准备监听
   let { POINTER_DOWN, POINTER_UP, POINTER_MOVE, getPointerEvent, getPoint2D } =
     getWatchEvent();
 
   // 准备结束监听
   function OnPointerUp() {
-    //console.log("OnPointerUp");
+    //console.log('OnPointerUp');
     deposeDragging(ing, options.onEnd);
   }
 
@@ -189,13 +190,13 @@ export function useDragging(options: DraggingOptions) {
   function OnPointerMove(e: Event) {
     let evt = getPointerEvent(e);
     let p2d = getPoint2D(evt);
-    //console.log("OnPointerMove", p2d);
+    //console.log('OnPointerMove', p2d, ing);
     whenMoving(ing, p2d, options);
   }
 
   // 准备监听指针按下的事件
   function OnPointerDown(evt: Event) {
-    //console.log("OnPointerDown", evt);
+    //console.log('OnPointerDown', evt);
     evt.stopPropagation();
     // 获取视口信息
     let $viewport = getViewport ? getViewport() : $watchTarget;
@@ -215,7 +216,7 @@ export function useDragging(options: DraggingOptions) {
 
     // 设定释放回调
     ing.onRelease = () => {
-      //console.log("release listen");
+      //console.log('release listen');
       $body.removeEventListener(POINTER_UP, OnPointerUp);
       $body.removeEventListener(POINTER_MOVE, OnPointerMove, { capture: true });
     };

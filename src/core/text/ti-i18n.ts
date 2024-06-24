@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { I18nLang, I18nSet, MessageMap, Str, Vars } from '../ti';
+import { Str } from '../';
+import { I18nLang, I18nSet, MessageMap, Vars } from '../../_type';
 
 const I18N = {} as MessageMap;
 function __MSG(key: string): string {

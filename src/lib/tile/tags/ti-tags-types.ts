@@ -1,4 +1,4 @@
-import { CommonProps, IconInput, LogicType, Vars } from '../../../core';
+import { CommonProps, IconInput, LogicType, Vars } from '../../../_type';
 import { PlaceholderProps, ValueTranslatorProps } from '../../../lib';
 
 /**
@@ -34,7 +34,7 @@ export type TagsProps = CommonProps &
     /**
      * 前缀标题
      */
-    title?:string;
+    title?: string;
 
     /**
      * 强制不换行

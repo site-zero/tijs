@@ -1,9 +1,5 @@
 import _ from 'lodash';
 import { App, DefineComponent, InjectionKey } from 'vue';
-import { I18n, TiBus } from '../ti';
-import { Rect } from './ti-rect';
-export * from './_types_css';
-export { Rect } from './ti-rect';
 
 /*---------------------------------------------------`
 
@@ -16,6 +12,82 @@ export function isArray<T>(input: any): input is T[] {
 
 export type PickRequired<T, K extends keyof T> = T & Required<Pick<T, K>>;
 export type PickPartial<T, K extends keyof T> = T & Partial<Pick<T, K>>;
+
+/*---------------------------------------------------`
+
+                     Bus
+
+---------------------------------------------------*/
+export type BusMsg<T> = {
+  /**
+   * 消息发源自哪个 bus
+   */
+  srcBus: string;
+  /**
+   * 消息流经的 bus
+   */
+  busPath: string[];
+  /**
+   * 消息的名称
+   */
+  name: string;
+  /**
+   * 消息的数据
+   */
+  data?: T;
+};
+
+export type BusListenerHanlder<T> = {
+  (msg: BusMsg<T>): void;
+};
+
+/**
+ * 一个注册函数，注册监听器的注销行为。通常是组件的 onUnmounted
+ */
+export type BusDeposer = {
+  (callback: Callback): void;
+};
+
+export interface TiBus<T> {
+  createSubBus: (
+    name: string,
+    eventNames?: string[],
+    adaptor?: BusListenerHanlder<T>
+  ) => TiBus<T>;
+
+  connectTo: (
+    srcBus: TiBus<T>,
+    eventNames?: string[],
+    adaptor?: BusListenerHanlder<T>
+  ) => void;
+
+  tryDisconnect: () => void;
+  emit: (name: string, payload?: T) => void;
+  send: (msg: BusMsg<T>) => void;
+  on: (
+    name: string,
+    handler: BusListenerHanlder<T>,
+    deposer?: BusDeposer
+  ) => void;
+  onAny: (handler: BusListenerHanlder<T>, deposer?: BusDeposer) => void;
+  onMatch: (
+    name: string,
+    handler: BusListenerHanlder<T>,
+    deposer?: BusDeposer
+  ) => void;
+  onName: (
+    name: string,
+    handler: BusListenerHanlder<T>,
+    deposer?: BusDeposer
+  ) => void;
+  off: (handler: BusListenerHanlder<T>, name?: string) => void;
+  offAny: (handler: BusListenerHanlder<T>) => void;
+  offMatch: (handler: BusListenerHanlder<T>, name?: string) => void;
+  offName: (name: string, handler: BusListenerHanlder<T>) => void;
+  offAll: (handler: BusListenerHanlder<T>) => void;
+  depose: () => void;
+}
+
 /*---------------------------------------------------`
 
                       结构/联合类型
@@ -132,6 +204,67 @@ export type QuadrantName =
   | 'bottom-left'
   | 'bottom-right';
 
+export interface RectInfo {
+  width?: number;
+  height?: number;
+  left?: number;
+  right?: number;
+  top?: number;
+  bottom?: number;
+  x?: number;
+  y?: number;
+}
+
+export type RectZoomToOptions = {
+  width: number;
+  height: number;
+  mode?: string;
+  round?: boolean;
+};
+
+export type RectCentreToOptions = {
+  width: number;
+  height: number;
+  top?: number;
+  left?: number;
+};
+
+export interface Rect extends Required<RectInfo> {
+  __I_am_rect: () => boolean;
+  update: (mode?: string) => Rect;
+  toSize2D: () => Size2D;
+  updateBy: (mode?: string) => Rect;
+  raw: (keys?: string, dft?: number) => Record<string, number>;
+  round: (precise?: number) => Rect;
+  toCss: (keys?: string, viewport?: Size2D) => Vars;
+  relative: (rect: Rect, scroll?: Point2D) => Rect;
+  coordOnMe: (p2d: Point2D) => Point2D;
+  getQuadrant: (p2d: Point2D) => QuadrantName;
+  zoom: (scale: Partial<Point2D>, centre?: Point2D) => Rect;
+  zoomTo: (options: RectZoomToOptions) => Rect;
+  centreTo: (
+    options: RectCentreToOptions,
+    axis?: { xAxis?: boolean; yAxis?: boolean }
+  ) => Rect;
+  translate: (p?: Point2D) => Rect;
+  moveTo: (pos?: Point2D, offset?: Point2D, mode?: string) => Rect;
+  dockTo: (rect: Rect, options?: DockOptions) => string;
+  dockIn: (rect: Rect, axis: DockAxis, space?: Point2D) => Rect;
+  wrap: (rect: Rect) => Rect;
+  wrapCut: (rect: Rect) => Rect;
+  union: (...rects: Rect[]) => Rect;
+  overlap: (...rects: Rect[]) => Rect;
+  contains: (rect: Rect, border?: number) => boolean;
+  containsX: (rect: Rect, border?: number) => boolean;
+  containsY: (rect: Rect, border?: number) => boolean;
+  hasPoint: (point: Point2D, border?: number) => boolean;
+  hasPointX: (x?: number, border?: number) => boolean;
+  hasPointY: (y?: number, border?: number) => boolean;
+  isOverlap: (rect: Rect) => boolean;
+  area: () => number;
+  clone: (border?: number) => Rect;
+}
+
 export type KeyDisplay =
   | string
   | MessageMap
@@ -146,27 +279,18 @@ export type BlockEvent = {
 /** 贴着 水平边 或 垂直边 */
 export type DockMode = 'H' | 'V';
 
+export interface DockAxis {
+  x: 'left' | 'right' | 'center' | 'auto';
+  y: 'top' | 'bottom' | 'center' | 'auto';
+}
+
 export interface DockOptions {
   mode?: DockMode;
-  axis?: {
-    x?: 'left' | 'right' | 'center' | 'auto';
-    y?: 'top' | 'bottom' | 'center' | 'auto';
-  };
+  axis?: Partial<DockAxis>;
   space?: number | Point2D;
   viewport?: Rect;
   viewportBorder?: number;
   wrapCut?: boolean;
-}
-
-export interface RectInfo {
-  width?: number;
-  height?: number;
-  left?: number;
-  right?: number;
-  top?: number;
-  bottom?: number;
-  x?: number;
-  y?: number;
 }
 
 export type Link = {
@@ -579,76 +703,6 @@ export type TiComExampleModelTarget =
       mode?: 'set' | 'merge' | 'assign';
     };
 
-export class TiCom implements TiComInfo {
-  icon: string;
-  race: TiComRace;
-  name: string;
-  text: string;
-  i18n: I18nSet;
-  tags: string[];
-  liveStyle?: Vars;
-  com: TiRawCom;
-  events: string[];
-  asInner?: boolean;
-  install: (app: App) => void;
-  defaultProps?: string;
-  exampleProps: ComPropExample[];
-  exampleModel?: Record<
-    string,
-    TiComExampleModelTarget | TiComExampleModelTarget[]
-  >;
-
-  constructor(info: TiComInfo) {
-    this.icon = info.icon || 'fas-question';
-    this.race = info.race;
-    this.name = info.name;
-    this.text = info.text;
-    this.i18n = info.i18n;
-    this.tags = info.tags || [];
-    this.liveStyle = info.liveStyle;
-    this.com = info.com;
-    this.asInner = info.asInner;
-    this.install = info.install;
-    this.defaultProps = info.defaultProps;
-    this.exampleProps = _.cloneDeep(info.exampleProps);
-    this.exampleModel = _.cloneDeep(info.exampleModel);
-
-    this.events = [];
-    if (this.com.emits) {
-      _.forEach(this.com.emits, (eventName) => this.events.push(eventName));
-    }
-  }
-
-  getProps(name?: string): Vars | undefined {
-    if (!name) {
-      name = this.defaultProps;
-    }
-    //console.log('getProps',name)
-    let it = _.find(this.exampleProps, (it) => it.name == name);
-    if (_.isFunction(it?.comConf)) {
-      return it?.comConf() as Vars;
-    }
-    return _.cloneDeep(it?.comConf);
-  }
-
-  checkProps(name?: string) {
-    let props = this.getProps(name);
-    if (!props) {
-      throw new Error(`Fail to found props: ${name}`);
-    }
-    return props;
-  }
-
-  toString(): string {
-    let text = I18n.text(this.text);
-    return `[${this.race}] <${text}> #${this.name}`;
-  }
-}
-
-export interface TiComSet {
-  [key: string]: TiComInfo;
-}
-
 export interface TiComInfo {
   icon?: string;
   race: TiComRace;
@@ -669,10 +723,20 @@ export interface TiComInfo {
    *
    * @default `{change:"value"}`
    */
-  exampleModel?: {
-    [k: string]: TiComExampleModelTarget | TiComExampleModelTarget[];
-  };
+  exampleModel?: Record<
+    string,
+    TiComExampleModelTarget | TiComExampleModelTarget[]
+  >;
 }
+
+export type TiComSet = Record<string, TiComInfo>;
+
+export type TiCom = Required<TiComInfo> & {
+  events: string[];
+  getProps: (name?: string) => Vars | undefined;
+  checkProps: (name?: string) => Vars;
+  toString: () => string;
+};
 
 export type ComRef = {
   /**

@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { Convertor, FuncA1, FuncA3, Render, Str, Tmpl, Vars } from '../../core';
+import { Str, Tmpl } from '../../core';
+import { Convertor, FuncA1, FuncA3, Render, Vars } from '../../_type';
 
 export type FormatValueProps = {
   /**
@@ -60,7 +61,7 @@ export function useFormatValue(
         c[valueKeyOfVars] = input;
         return tmpl.render(c);
       },
-  } as FormatValueOptions,
+  } as FormatValueOptions
 ): FormatValueFeature {
   let __create_formatter = (): Convertor<any, string> => {
     let { format, valueKeyOfVars, vars } = props;

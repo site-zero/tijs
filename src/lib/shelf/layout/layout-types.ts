@@ -14,7 +14,7 @@ import {
   TranName,
   TranSpeed,
   Vars,
-} from '../../../core';
+} from '../../../_type';
 import { KeepInfo } from '../../_features';
 
 export type LayoutSchema = Record<string, ComRef>;

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { useKeep } from '../../../';
-import { Vars } from '../../../../core';
+import { Vars } from '../../../../_type';
 import {
   GridResizingState,
   LayoutGridKeepFeature,

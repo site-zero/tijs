@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { ComRef, TiRawCom, Util, Vars, tiCheckComponent } from '../../../core';
-
+import { ComRef, TiRawCom, Vars } from '../../../_type';
+import { Util, tiCheckComponent } from '../../../core';
 export type FieldMode = {
   readonly?: boolean;
   actived?: boolean;

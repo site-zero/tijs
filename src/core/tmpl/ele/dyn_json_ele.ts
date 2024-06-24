@@ -1,6 +1,6 @@
-import _ from 'lodash';
 import JSON5 from 'json5';
-import { Vars } from '../../ti';
+import _ from 'lodash';
+import { Vars } from '../../../_type';
 import { DynElInfo, TmplEle } from '../ti-tmpl';
 
 export class DynJsonEle implements TmplEle {

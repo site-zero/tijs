@@ -1,4 +1,4 @@
-import { ComPropExample } from '../../../../core';
+import { ComPropExample } from '../../../../_type';
 import { ToggleProps } from '../ti-toggle-types';
 
 export default {

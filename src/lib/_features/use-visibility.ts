@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { Match, Vars, VisibilityProps } from '../../core';
+import { Vars, VisibilityProps } from '../../_type';
+import { Match } from '../../core';
 
 /*-------------------------------------------------------
 

@@ -1,4 +1,4 @@
-import { ComPropExample } from '../../../../core';
+import { ComPropExample } from '../../../../_type';
 import { SwitcherProps } from '../ti-switcher-types';
 
 export default {

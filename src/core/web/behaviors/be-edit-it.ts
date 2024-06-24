@@ -1,4 +1,4 @@
-import { Callback3, DomSelector } from '../../';
+import { Callback3, DomSelector } from '../../../_type';
 
 export type EditItOptions = Partial<{
   /**

@@ -1,4 +1,5 @@
-import { CommonProps, IconInput, TiColor, TiDict, Vars } from '../../../core';
+import { CommonProps, IconInput, Vars } from '../../../_type';
+import { TiColor, TiDict } from '../../../core';
 
 export interface IconProps extends CommonProps {
   //

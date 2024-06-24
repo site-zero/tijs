@@ -1,4 +1,5 @@
-import { I18n, TiMatch, ExplainI18n, Str } from '../ti';
+import { I18n, Str } from '../';
+import { ExplainI18n, TiMatch } from '../../_type';
 import { MakeTiMatch } from './ti-match';
 
 export const gen_by_wildcard: MakeTiMatch<string> = function (

@@ -1,13 +1,6 @@
 import _ from 'lodash';
-import {
-  FuncA2,
-  MessageMap,
-  Str,
-  Size2D,
-  StrCaseMode,
-  Util,
-  Vars,
-} from '../ti';
+import { Str, Util } from '../';
+import { FuncA2, MessageMap, Size2D, StrCaseMode, Vars } from '../../_type';
 import * as Dom from './web-dom';
 import { AttrFilter } from './web-dom';
 

@@ -6,7 +6,7 @@ import {
   CssBorderStyle,
   TableRowID,
   Vars,
-} from '../../../core';
+} from '../../../_type';
 import {
   SelectEmitInfo,
   SelectableProps,

@@ -1,4 +1,4 @@
-import { Vars, TiMatch } from '../../ti';
+import { TiMatch, Vars } from '../../../_type';
 import { TmplSegment } from '../ti-tmpl';
 import { AbstractTmplSegment } from './abstract_segment';
 

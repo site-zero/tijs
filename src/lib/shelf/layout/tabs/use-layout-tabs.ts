@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { KeepFeature, LayoutItem, TabsProps, useFieldCom } from '../../../';
 
 import { ComputedRef, Ref } from 'vue';
-import { IconInput, StrOptionItem, TiRawCom, Vars } from '../../../../core';
+import { IconInput, StrOptionItem, TiRawCom, Vars } from '../../../../_type';
 import { LayoutTabItem, LayoutTabsProps } from './ti-layout-tabs-types';
 
 export type TabMain = {

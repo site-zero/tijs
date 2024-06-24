@@ -5,7 +5,7 @@ import {
   SorterProps,
   SorterValue,
 } from '../../';
-import { ActionBarItem, CommonProps } from '../../../core';
+import { ActionBarItem, CommonProps } from '../../../_type';
 
 export type ComboFilterValue = {
   filter?: FilterValue;
@@ -25,11 +25,11 @@ export type ComboFilterProps = CommonProps & {
 
   /**
    * 布局模式
-   * 
+   *
    * - comfy : 默认
    * - online : 尽量保持一行
    */
-  layout?:'oneline'|'comfy'
+  layout?: 'oneline' | 'comfy';
 
   /**
    * 更多自定义命令

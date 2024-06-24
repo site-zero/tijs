@@ -1,6 +1,5 @@
-import _ from 'lodash';
-import { StrConvertor } from '../../../ti';
 import { sprintf } from 'sprintf-js';
+import { StrConvertor } from '../../../../_type';
 
 /*
  sprintf 采用了开源库: https://github.com/alexei/sprintf.js

@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import { I18n } from '../../../core';
+import { Alert, Prompt } from '../../../lib';
 import {
   PageNumberItem,
   PagerEmitter,
   PagerMode,
   PagerProps,
 } from './ti-pager-types';
-import { Alert, Prompt } from '../../../lib';
 
 type UsePagerOptions = {
   emit: PagerEmitter;

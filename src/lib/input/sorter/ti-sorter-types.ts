@@ -1,5 +1,5 @@
 import { OptionsInput } from '../../';
-import { CommonProps, IconInput, LogicType } from '../../../core';
+import { CommonProps, IconInput, LogicType } from '../../../_type';
 
 export type SorterExportApi = {
   onSetup: () => Promise<void>;

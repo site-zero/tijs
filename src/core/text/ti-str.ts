@@ -1,15 +1,14 @@
 import JSON5 from 'json5';
 import _ from 'lodash';
-import * as DateTime from '../_top/ti-datetime';
+import { Tmpl, Util } from '../';
 import {
   StrCaseFunc,
   StrCaseMode,
   StrConvertor,
-  Tmpl,
   ToJsValueOptions,
-  Util,
   Vars,
-} from '../ti';
+} from '../../_type';
+import * as DateTime from '../_top/ti-datetime';
 
 /*---------------------------------------------------
 

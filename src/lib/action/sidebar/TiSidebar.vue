@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed } from 'vue';
-  import { SideBarItem } from '../..';
+  import { SideBarItem } from '../../../_type';
   import TiSidebarItem from './TiSidebarItem.vue';
 
   let emit = defineEmits<(event: 'fire', payload: SideBarItem) => void>();

@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { CssUtils, Match, Vars } from '../../../core';
-import { makeFieldUniqKey, parseFieldConverter } from '../../../lib/_top';
+import { Vars, makeFieldUniqKey, parseFieldConverter } from '../../../_type';
+import { CssUtils, Match } from '../../../core';
 import { useVisibility } from '../../_features';
 import {
   GridFieldsInput,

@@ -8,7 +8,8 @@
     TiInput,
     TiList,
   } from '../../';
-  import { I18n, StdOptionItem, TableRowID, Util } from '../../../core';
+  import { StdOptionItem, TableRowID } from '../../../_type';
+  import { I18n, Util } from '../../../core';
   import { TransferProps, TransferState } from './ti-transfer-types';
   import { TransferEmitter, useTransfer } from './use-transfer';
   //-----------------------------------------------------
@@ -168,7 +169,9 @@
           @open="onSelOpen">
           <template v-slot:head>
             <div class="list-head transfer-menu">
-              <div class="sel-text">{{ I18n.get('ti-transfer-sel-list') }}:</div>
+              <div class="sel-text">
+                {{ I18n.get('ti-transfer-sel-list') }}:
+              </div>
               <TiActionBar
                 :items="SelMenuActionItems"
                 :vars="ActionStatus" />

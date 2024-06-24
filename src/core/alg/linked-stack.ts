@@ -1,6 +1,7 @@
 import _ from 'lodash';
-import { Predicate, WnStack } from '../_top/_types';
+
 import { sprintf } from 'sprintf-js';
+import { Predicate, WnStack } from '../../_type';
 
 export class LinkedStack<T> implements WnStack<T> {
   private stack = [] as T[];

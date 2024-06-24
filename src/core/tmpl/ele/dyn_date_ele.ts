@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { Vars, DateTime, DateInput } from '../../ti';
+import { DateTime } from '../../';
+import { DateInput, Vars } from '../../../_type';
 import { DynElInfo } from '../ti-tmpl';
 import { DynEle } from './abstract_dyn_ele';
 

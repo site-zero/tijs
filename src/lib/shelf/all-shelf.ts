@@ -1,4 +1,4 @@
-import { TiComSet } from '../../core';
+import { TiComSet } from '../../_type';
 import { TiBlockInfo } from './block/ti-block-index';
 import { TiFormTabInfo } from './form-tab/ti-form-tab-index';
 import { TiFormInfo } from './form/ti-form-index';

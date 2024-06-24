@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { ExplainI18n, I18n, TiMatch } from '../ti';
+import { I18n } from '../';
+import { ExplainI18n, TiMatch } from '../../_type';
 
 export const gen_by_nil = function (): TiMatch {
   return {

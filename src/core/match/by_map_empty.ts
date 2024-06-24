@@ -1,9 +1,10 @@
 import _ from 'lodash';
-import { I18n, TiMatch, ExplainI18n, Str } from '../ti';
+import { I18n, Str } from '../';
+import { ExplainI18n, TiMatch } from '../../_type';
 import { MakeTiMatch } from './ti-match';
 
 export const gen_by_map_empty: MakeTiMatch<string> = function (
-  key_of_obj: string,
+  key_of_obj: string
 ): TiMatch {
   return {
     test: (input: any): boolean => {

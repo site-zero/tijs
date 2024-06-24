@@ -1,4 +1,4 @@
-import { Logger, LogLevel } from './log-types';
+import { Logger, LogLevel } from '../../_type/log-types';
 import { _find_logger_level, getCallerInfo } from './ti-log';
 
 export class ConsoleLogger implements Logger {

@@ -13,14 +13,8 @@ import {
   usePrefixSuffix,
   useValueInput,
 } from '..';
-import {
-  Be,
-  CommonProps,
-  Dicts,
-  IconInput,
-  Str,
-  tiGetDefaultComPropValue,
-} from '../../core';
+import { CommonProps, IconInput } from '../../_type';
+import { Be, Dicts, Str, tiGetDefaultComPropValue } from '../../core';
 /*-------------------------------------------------------
 
                      Emit 

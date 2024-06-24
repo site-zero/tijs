@@ -1,5 +1,5 @@
 import { App } from 'vue';
-import { TiComInfo, TiComRace } from '../../../core/_top/_types';
+import { TiComInfo, TiComRace } from '../../../_type';
 import { COM_TYPES } from '../../lib-com-types';
 import TiMainFrame from './TiMainFrame.vue';
 import { simple } from './example';
@@ -24,6 +24,10 @@ const TiMainFrameInfo: TiComInfo = {
     zh_cn: cn,
     zh_hk: cn,
   },
+  liveStyle: {
+    width: '100%',
+    height: '100%',
+  },
   com: TiMainFrame,
   install: (app: App) => {
     app.component(COM_TYPE, TiMainFrame);
@@ -33,4 +37,3 @@ const TiMainFrameInfo: TiComInfo = {
 };
 
 export { TiMainFrame, TiMainFrameInfo };
-

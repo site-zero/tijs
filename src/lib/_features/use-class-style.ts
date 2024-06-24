@@ -1,4 +1,5 @@
-import { CommonProps, Convertor, CssUtils, Vars } from '../../core';
+import { CommonProps, Convertor, Vars } from '../../_type';
+import { CssUtils } from '../../core';
 
 export type ClassStyleFeatureProps = Pick<CommonProps, 'className'> & {
   style?: Vars;

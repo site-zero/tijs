@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Vars } from '../ti';
+import { Vars } from '../../_type';
 import { DFMaker, DynDictFactory, IDict } from './dict-types';
 
 /**

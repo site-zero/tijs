@@ -1,9 +1,9 @@
 import _ from 'lodash';
-import { KeyDisplay } from '../ti';
+import { KeyDisplay } from '../../_type';
 
 export function explainKeyDisplay(
   key: string,
-  keyDisplayBy?: KeyDisplay,
+  keyDisplayBy?: KeyDisplay
 ): string {
   // Translate the key
   if (_.isFunction(keyDisplayBy)) {

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { TmplEle, TmplSegment } from '../ti-tmpl';
-import { Vars } from '../../ti';
+import { Vars } from '../../../_type';
 import { AbstractTmplSegment } from './abstract_segment';
 
 export class BlockTmplSegment extends AbstractTmplSegment {

@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { I18n, Str, TiCurrency } from '../ti';
+import { I18n, Str } from '../';
+import { TiCurrency } from '../../_type';
 
 ///////////////////////////////////////
 const CURRENCIES = {
@@ -70,7 +71,7 @@ export function exchange(
     to?: string;
     bridge?: string;
     exrs?: { [k: string]: number };
-  },
+  }
 ): number | undefined {
   // 解析出 cent 和 货币单位
   let { cent, currency } = parseCurrency(val, {
@@ -145,8 +146,6 @@ export function getCurrencyList(): any[] {
   return list;
 }
 
-
-
 //-----------------------------------
 /**
  * 解析给定的金额（数字、字符串、或对象）
@@ -164,7 +163,7 @@ export function parseCurrency(
   { unit = 100, currency = 'RMB' } = {} as {
     unit: number;
     currency?: string;
-  },
+  }
 ) {
   let [cent, yuan] = [NaN, NaN];
 
@@ -225,7 +224,7 @@ export function autoYuanTokenText(
     currency?: string;
     precision?: number;
     auto?: boolean;
-  },
+  }
 ): string {
   cent = Math.round(cent);
   let neg = cent < 0 ? '-' : '';
@@ -274,7 +273,7 @@ export function toYuanText(cent = 0.0, precision = 2): string {
 export function toYuanTokenText(
   cent = 0.0,
   currency = 'RMB',
-  precision = 2,
+  precision = 2
 ): string {
   return autoYuanTokenText(cent, { currency, precision, auto: true });
 }
@@ -282,7 +281,7 @@ export function toYuanTokenText(
 export function toYuanTokenText2(
   cent = 0.0,
   currency = 'RMB',
-  precision = 2,
+  precision = 2
 ): string {
   let s = toYuanTokenText(cent, currency, precision);
   return `${s}${currency}`;
@@ -294,7 +293,7 @@ export function toZeroText(
   { precision = 2, placeholder = '---' } = {} as {
     precision?: number;
     placeholder?: string;
-  },
+  }
 ) {
   if (!cent) {
     return placeholder;
@@ -309,7 +308,7 @@ export function toZeroTokenText(
     currency?: string;
     precision?: number;
     placeholder?: string;
-  },
+  }
 ): string {
   if (!cent) {
     return placeholder;
@@ -324,7 +323,7 @@ export function toZeroTokenText2(
     currency?: string;
     precision?: number;
     placeholder?: string;
-  },
+  }
 ) {
   if (!cent) {
     return placeholder;
@@ -370,7 +369,7 @@ export function toBankText(
     part?: number;
     sep?: string;
     to?: string;
-  },
+  }
 ): string {
   if (_.isNil(v)) {
     return v;
@@ -421,7 +420,7 @@ export function getPayTypeText(payType: string, autoI18n = false) {
 //-----------------------------------
 export function getPayTypeChooseI18nText(
   payType: string,
-  { text = 'pay-step-choose-tip2', nil = 'pay-step-choose-nil' } = {},
+  { text = 'pay-step-choose-tip2', nil = 'pay-step-choose-nil' } = {}
 ) {
   let ptt = getPayTypeText(payType, true);
   if (ptt) {

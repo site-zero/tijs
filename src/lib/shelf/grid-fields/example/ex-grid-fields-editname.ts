@@ -1,4 +1,4 @@
-import { ComPropExample, IconInput } from '../../../../core';
+import { ComPropExample, IconInput } from '../../../../_type';
 import { GridFieldsProps } from '../ti-grid-fields-types';
 
 export default {

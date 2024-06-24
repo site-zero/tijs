@@ -1,4 +1,4 @@
-import { ComPropExample } from '../../../../core';
+import { ComPropExample } from '../../../../_type';
 import { InputDatetimeProps } from '../ti-input-datetime-types';
 
 export default {

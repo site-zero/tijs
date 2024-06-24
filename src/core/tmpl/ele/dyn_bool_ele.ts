@@ -1,8 +1,9 @@
 import _ from 'lodash';
-import { Vars, Str } from '../../ti';
+import { Str } from '../../';
+import { Vars } from '../../../_type';
+import { anyToBool } from '../../util/util-lang';
 import { DynElInfo } from '../ti-tmpl';
 import { DynEle } from './abstract_dyn_ele';
-import { anyToBool } from '../../util/util-lang';
 
 export class DynBoolEle extends DynEle {
   // [false, true]

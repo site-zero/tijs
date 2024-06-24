@@ -1,12 +1,6 @@
 import _ from 'lodash';
-import {
-  ExplainOptions,
-  Explainer,
-  InvokePartial,
-  Str,
-  Util,
-  Vars,
-} from '../../ti';
+import { Str, Util } from '../../';
+import { ExplainOptions, Explainer, InvokePartial, Vars } from '../../../_type';
 
 type ValueGetter = (context: Vars, options: ExplainOptions) => any;
 type MakeValueGetter = (val: string, getDft: ValueGetter) => ValueGetter;

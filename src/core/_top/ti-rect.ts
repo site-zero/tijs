@@ -1,14 +1,20 @@
 import _ from 'lodash';
+import { Num, Util } from '../';
 import {
+  DockAxis,
   DockOptions,
-  Num,
   Point2D,
   QuadrantName,
+  Rect,
+  RectCentreToOptions,
   RectInfo,
+  RectZoomToOptions,
   Size2D,
-  Util,
   Vars,
-} from '../';
+  isDocument,
+  isHTMLElement,
+  isWindow,
+} from '../../_type';
 
 const RECTINFO_NAMES = {
   w: 'width',
@@ -65,7 +71,7 @@ export function pickKeys(
   return re;
 }
 
-export class Rect implements RectInfo {
+class RectImpl implements Rect {
   width: number = 0;
   height: number = 0;
   left: number = 0;
@@ -79,6 +85,9 @@ export class Rect implements RectInfo {
     rect = { top: 0, left: 0, height: 0, width: 0 } as RectInfo,
     mode?: string
   ) {
+    if (_.isEmpty(rect)) {
+      rect = { top: 0, left: 0, height: 0, width: 0 };
+    }
     let key: keyof RectInfo;
 
     // 如果 mode 为空，则选择 keys 来更新
@@ -105,7 +114,11 @@ export class Rect implements RectInfo {
     if ('bhlrtwxy' == mode) return this;
 
     // 按照 mode 更新其他属性
-    return this.updateBy(mode);
+    this.updateBy(mode);
+  }
+
+  __I_am_rect(): boolean {
+    return true;
   }
 
   update(mode?: string): Rect {
@@ -205,7 +218,7 @@ export class Rect implements RectInfo {
       }
     )[alg]();
 
-    return this;
+    return this as Rect;
   }
 
   /**
@@ -214,7 +227,7 @@ export class Rect implements RectInfo {
    * @param dft 属性默认值
    * @returns 含有指定属性的原生对象
    */
-  raw(keys = 'tlwh', dft?: number): { [k: string]: number } {
+  raw(keys = 'tlwh', dft?: number): Record<string, number> {
     return _.isNil(dft) ? pickKeys(this, keys) : pickKeys(this, keys, dft);
   }
   /**
@@ -222,7 +235,7 @@ export class Rect implements RectInfo {
    * @param precise 精确度，100 表示保持小数点后2位
    * @returns 自身
    */
-  round(precise = 1) {
+  round(precise = 1): Rect {
     this.top = Num.round(this.top, precise);
     this.left = Num.round(this.left, precise);
     this.right = Num.round(this.right, precise);
@@ -231,7 +244,7 @@ export class Rect implements RectInfo {
     this.height = Num.round(this.height, precise);
     this.x = Num.round(this.x, precise);
     this.y = Num.round(this.y, precise);
-    return this;
+    return this as Rect;
   }
 
   /**
@@ -327,13 +340,17 @@ export class Rect implements RectInfo {
    *  - centre : 相对的顶点 {x,y}，默认取自己的中心点
    * @returns 矩形本身
    */
-  zoom({
-    x = 1,
-    y = x,
-    centre = { x: this.x, y: this.y },
-  }: Partial<Point2D> & {
-    centre?: Point2D;
-  }) {
+  // zoom({
+  //   x = 1,
+  //   y = x,
+  //   centre = { x: this.x, y: this.y },
+  // }: Partial<Point2D> & {
+  //   centre?: Point2D;
+  // })
+  zoom(scale: Partial<Point2D>, centre?: Point2D): Rect {
+    let x = scale.x ?? 1;
+    let y = scale.y ?? x;
+    centre = centre ?? { x: this.x, y: this.y };
     this.top = (this.top - centre.y) * y + centre.y;
     this.left = (this.left - centre.x) * x + centre.x;
     this.width = this.width * x;
@@ -352,22 +369,13 @@ export class Rect implements RectInfo {
    *    - cover   : 最大限度撑满视口
    * @returns 矩形自身
    */
-  zoomTo({
-    width,
-    height,
-    mode = 'contain',
-    round = false,
-  }: {
-    width: number;
-    height: number;
-    mode?: string;
-    round?: boolean;
-  }) {
+  zoomTo(options: RectZoomToOptions): Rect {
+    let { width, height, mode = 'contain', round = false } = options;
     // 无需缩放的情况
     if ('contain' == mode) {
-      let viewport = new Rect({ top: 0, left: 0, width, height });
-      if (viewport.contains(this)) {
-        return this;
+      let viewport = new RectImpl({ top: 0, left: 0, width, height });
+      if (viewport.contains(this as Rect)) {
+        return this as Rect;
       }
     }
 
@@ -424,19 +432,11 @@ export class Rect implements RectInfo {
    * @returns 移动后的矩形
    */
   centreTo(
-    {
-      width,
-      height,
-      top = 0,
-      left = 0,
-    }: {
-      width: number;
-      height: number;
-      top?: number;
-      left?: number;
-    },
-    { xAxis = true, yAxis = true } = {}
-  ) {
+    options: RectCentreToOptions,
+    axis?: { xAxis?: boolean; yAxis?: boolean }
+  ): Rect {
+    let { width, height, top = 0, left = 0 } = options;
+    let { xAxis = true, yAxis = true } = axis ?? {};
     // Translate xAxis
     if (xAxis) {
       if (width > 0) {
@@ -486,7 +486,7 @@ export class Rect implements RectInfo {
     pos: Point2D = { x: 0, y: 0 },
     offset: Point2D = { x: 0, y: 0 },
     mode = 'tl'
-  ) {
+  ): Rect {
     // _.defaults(pos, { x: 0, y: 0 });
     // _.defaults(offset, { x: 0, y: 0 });
     let ary = explainToArray(mode);
@@ -518,7 +518,7 @@ export class Rect implements RectInfo {
       }
     )[alg]();
 
-    return this;
+    return this as Rect;
   }
 
   /**
@@ -668,14 +668,7 @@ export class Rect implements RectInfo {
    *         +-----bottom-----+
    * @see #dockTo
    */
-  dockIn(
-    rect: Rect,
-    axis: {
-      x?: 'left' | 'right' | 'center' | 'auto';
-      y?: 'top' | 'bottom' | 'center' | 'auto';
-    },
-    space = { x: 0, y: 0 } as Point2D
-  ): Rect {
+  dockIn(rect: Rect, axis: DockAxis, space = { x: 0, y: 0 } as Point2D): Rect {
     _.defaults(axis, { x: 'center', y: 'center' });
     _.defaults(space, { x: 0, y: 0 });
 
@@ -720,7 +713,7 @@ export class Rect implements RectInfo {
       }) as { [k: string]: () => undefined }
     )[alg]();
 
-    return this;
+    return this as Rect;
   }
 
   //--------------------------------------
@@ -871,7 +864,7 @@ export class Rect implements RectInfo {
   }
 
   clone(border = 0): Rect {
-    return new Rect(
+    return new RectImpl(
       {
         left: this.left + border,
         right: this.right - border,
@@ -890,19 +883,34 @@ export class Rect implements RectInfo {
  * @param $el Element | Document | Window 中的一种
  * @returns 创建的矩形
  */
-export function createBy($el: Element | Document | Window | Rect): Rect {
-  if ($el instanceof Rect) {
+export function createBy(
+  $el: Element | Document | Window | Rect | RectInfo
+): Rect {
+  if (_.isNil($el)) {
+    return new RectImpl() as Rect;
+  }
+  if (isRect($el)) {
     return $el.clone();
   }
-  if ($el instanceof Element) {
-    let domRect = $el.getBoundingClientRect();
-    return new Rect(domRect, 'tlwh');
+  if (isHTMLElement($el)) {
+    let { top, left, width, height } = $el.getBoundingClientRect();
+    return new RectImpl(
+      {
+        top,
+        left,
+        width,
+        height,
+      },
+      'tlwh'
+    ) as Rect;
   }
   let wd;
-  if ($el instanceof Document) {
+  if (isDocument($el)) {
     wd = $el.defaultView;
-  } else {
+  } else if (isWindow($el)) {
     wd = $el;
+  } else {
+    return new RectImpl($el as RectInfo) as Rect;
   }
 
   if (!wd) {
@@ -911,29 +919,36 @@ export function createBy($el: Element | Document | Window | Rect): Rect {
 
   let w = wd.document.documentElement.clientWidth;
   let h = wd.document.documentElement.clientHeight;
-  return new Rect({ top: 0, left: 0, width: w, height: h });
+  return new RectImpl({ top: 0, left: 0, width: w, height: h }) as Rect;
 }
 
-export function union(...rects: Rect[]) {
+export function union(...rects: Rect[]): Rect {
   // empty
-  if (rects.length == 0) return new Rect();
+  if (rects.length == 0) {
+    return new RectImpl();
+  }
 
-  let r0 = new Rect(rects[0]);
+  let r0: Rect = new RectImpl(rects[0]);
   r0.union(...rects.slice(1));
 
   return r0;
 }
 
-export function overlap(...rects: Rect[]) {
+export function overlap(...rects: Rect[]): Rect {
   // empty
-  if (rects.length == 0) return new Rect();
+  if (rects.length == 0) {
+    return new RectImpl() as Rect;
+  }
 
-  let r0 = new Rect(rects[0]);
+  let r0: Rect = new RectImpl(rects[0]);
   r0.overlap(...rects.slice(1));
 
   return r0;
 }
 
-export function isRect(r: any): r is Rect {
-  return r && r instanceof Rect;
+export function isRect(input: any): input is Rect {
+  if (input && _.isFunction(input.__I_am_rect)) {
+    return input.__I_am_rect();
+  }
+  return false;
 }

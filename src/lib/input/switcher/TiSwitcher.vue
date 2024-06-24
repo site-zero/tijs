@@ -1,7 +1,8 @@
 <script lang="ts" setup>
   import { computed, reactive, watch } from 'vue';
   import { SelectableState, TiIcon } from '../../';
-  import { CssUtils, TableRowID } from '../../../core';
+  import { TableRowID } from '../../../_type';
+  import { CssUtils } from '../../../core';
   import { SwitcherProps } from './ti-switcher-types';
   import { SwitcherEmitter, useSwitcher } from './use-switcher';
   //-----------------------------------------------------

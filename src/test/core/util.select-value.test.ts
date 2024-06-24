@@ -1,7 +1,7 @@
-import { Size2D } from '../../core';
-import { SelectValueArm, selectValue } from '../../core/util';
 import _ from 'lodash';
 import { expect, test } from 'vitest';
+import { Size2D } from '../../_type';
+import { SelectValueArm, selectValue } from '../../core/util';
 
 test('Simple', () => {
   let arms = [[3, '[1000,]'], [2, '[500,]'], 1] as SelectValueArm<
@@ -27,7 +27,7 @@ test('Cus-By', () => {
   let opts = {
     by: (
       arm: [number, any],
-      { width } = {} as Partial<Size2D>,
+      { width } = {} as Partial<Size2D>
     ): number | undefined => {
       let [v, m] = arm;
       // 没有宽度，那么必须要默认的 Arm

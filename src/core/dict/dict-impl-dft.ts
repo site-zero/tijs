@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Match, NumRange } from '../ti';
+import { Match, NumRange } from '../';
 import { DictImpl } from './dict-impl';
 import {
   GetItemText,

@@ -1,4 +1,4 @@
-import { FuncA1, Size2D } from '../../core';
+import { FuncA1, Size2D } from '../../_type';
 
 /**
  * 计算视口内大量的行，应该渲染哪些行
@@ -65,7 +65,7 @@ export type LargeScrollingState = {
 };
 
 export function useLargeScrolling(
-  state: LargeScrollingState,
+  state: LargeScrollingState
 ): FuncA1<number, boolean> {
   // 解析参数
   let {

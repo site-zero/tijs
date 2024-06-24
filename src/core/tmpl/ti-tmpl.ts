@@ -1,8 +1,7 @@
-import _ from 'lodash';
-import { Vars } from '../ti';
+import { Vars } from '../../_type';
 import { AbstractTmplSegment } from './segment/abstract_segment';
-import { WnTmplTokenExpert } from './token-expert';
 import { WnTmplParsing } from './tmpl-parsing';
+import { WnTmplTokenExpert } from './token-expert';
 
 /*-----------------------------------
 

@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { Dicts } from '../../core/ti';
+import { Dicts } from '../../core/';
 
 let $d = Dicts.getOrCreate(
   Dicts.makeDictOptions({

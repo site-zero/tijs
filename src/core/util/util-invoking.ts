@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { Invoke, InvokeOptions, Str } from '../ti';
+import { Str } from '../';
+import { Invoke, InvokeOptions } from '../../_type';
 
 /**
  * 根据一个调用语句，返回一个包裹的函数调用
@@ -11,7 +12,7 @@ import { Invoke, InvokeOptions, Str } from '../ti';
  */
 export function genInvoking(
   str: string | Function,
-  options: InvokeOptions,
+  options: InvokeOptions
 ): Function {
   // 传入函数就直接返回了
   if (_.isFunction(str)) {
@@ -24,7 +25,7 @@ export function genInvoking(
 
 export function genInvokingBy(
   invoke: Invoke,
-  options: InvokeOptions,
+  options: InvokeOptions
 ): Function {
   // 分析选项
   let {

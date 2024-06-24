@@ -10,10 +10,10 @@
     parseGridLayout,
   } from './build-grid-field-layout';
   import {
-    GridItemEmitter,
     GridFieldsStrictField,
     GridFieldsStrictGroup,
     GridFieldsStrictLabel,
+    GridItemEmitter,
   } from './ti-grid-fields-types';
   import { getBodyPartStyle, getGridItemStyle } from './use-field-style';
   //-------------------------------------------------

@@ -1,4 +1,4 @@
-import { ComPropExample } from '../../../../core';
+import { ComPropExample } from '../../../../_type';
 import ex10k from './ex-10k';
 import ex1k from './ex-1k';
 import ex300 from './ex-300';

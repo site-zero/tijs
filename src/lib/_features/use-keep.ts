@@ -1,6 +1,7 @@
 import JSON5 from 'json5';
 import _ from 'lodash';
-import { Callback1, TiStore, Vars } from '../../core';
+import { Callback1, Vars } from '../../_type';
+import { TiStore } from '../../core';
 /*-------------------------------------------------------
 
                     Events & Types

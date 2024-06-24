@@ -1,4 +1,5 @@
-import { ExplainI18n, I18n, Str, TiMatch } from '../ti';
+import { I18n, Str } from '../';
+import { ExplainI18n, TiMatch } from '../../_type';
 import { MakeTiMatch } from './ti-match';
 
 export const gen_by_stict_eq: MakeTiMatch<any> = function (src: any): TiMatch {

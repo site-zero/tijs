@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { Str, MessageMap, StrConvertor } from '../../../ti';
+import { Str } from '../../../';
+import { MessageMap, StrConvertor } from '../../../../_type';
 
 export function str_mapping(input: string): StrConvertor {
   let mapping = {} as MessageMap;

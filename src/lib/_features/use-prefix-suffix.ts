@@ -1,5 +1,5 @@
 import { ClassStyleFeature, IconTextFeature, useIconText } from '.';
-import { Callback1, IconInput, Vars } from '../../core';
+import { Callback1, IconInput, Vars } from '../../_type';
 /*-------------------------------------------------------
 
                      Events

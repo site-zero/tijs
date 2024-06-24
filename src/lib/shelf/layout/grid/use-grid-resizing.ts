@@ -1,7 +1,8 @@
 import _ from 'lodash';
 import { ComputedRef } from 'vue';
 import { Dragging, LayoutBar, useDragging } from '../../../';
-import { CssUtils, Dom, NameStrValue, Num, Str } from '../../../../core';
+import { NameStrValue } from '../../../../_type';
+import { CssUtils, Dom, Num, Str } from '../../../../core';
 import {
   GridResizingState,
   LayoutGridKeepFeature,

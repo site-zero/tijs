@@ -1,5 +1,5 @@
 import { ValueBoxOptions, ValueBoxProps, ValueBoxState } from '../../';
-import { CssTextAlign, LogicType } from '../../../core';
+import { CssTextAlign, LogicType } from '../../../_type';
 
 export type LabelState = ValueBoxState<any>;
 export type LabelProps = ValueBoxProps<any> & {

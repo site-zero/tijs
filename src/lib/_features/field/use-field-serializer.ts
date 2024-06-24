@@ -1,6 +1,5 @@
-import { FuncA2, Vars } from '../../../core';
-import { Field, getFieldConvertor } from '../../';
 import _ from 'lodash';
+import { Field, FuncA2, Vars, getFieldConvertor } from '../../../_type';
 
 /*-------------------------------------------------------
 
@@ -25,7 +24,7 @@ export type FieldSerializerFeature = {
 
 -------------------------------------------------------*/
 export function useFieldSerializer(
-  props: FieldSerializerProps,
+  props: FieldSerializerProps
 ): FieldSerializerFeature {
   return {
     prepareFieldValue(val: any, data: Vars) {

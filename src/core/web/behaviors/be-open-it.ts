@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { Dom, Vars } from '../../';
+import { Dom } from '../../';
+import { Vars } from '../../../_type';
 
 export type OpenUrlOptions = {
   target?: '_blank' | '_self';

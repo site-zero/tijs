@@ -1,4 +1,4 @@
-import { ComPropExample } from '../../../../core';
+import { ComPropExample } from '../../../../_type';
 import { InputNumProps } from '../ti-input-num-types';
 
 export default {

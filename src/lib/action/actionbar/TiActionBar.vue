@@ -9,7 +9,8 @@
     ref,
     watch,
   } from 'vue';
-  import { AppEvents, BUS_KEY, BusMsg, CssUtils, Vars } from '../../../core';
+  import { BusMsg, AppEvents, BUS_KEY, Vars } from '../../../_type';
+  import { CssUtils } from '../../../core';
   import ItemAsAction from './ItemAsAction.vue';
   import ItemAsFolderGroup from './ItemAsFolderGroup.vue';
   import { buildActionBarItems } from './build-action-bar-items';

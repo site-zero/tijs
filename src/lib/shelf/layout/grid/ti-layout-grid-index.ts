@@ -1,5 +1,5 @@
 import { App } from 'vue';
-import { TiComInfo, TiComRace } from '../../../../core';
+import { TiComInfo, TiComRace } from '../../../../_type';
 import { COM_TYPES } from '../../../lib-com-types';
 import TiLayoutGrid from './TiLayoutGrid.vue';
 import { simple } from './example';
@@ -14,6 +14,10 @@ const TiLayoutGridInfo: TiComInfo = {
   text: 'i18n:ti-layout-grid-com-name',
   i18n,
   com: TiLayoutGrid,
+  liveStyle: {
+    width: '100%',
+    height: '100%',
+  },
   install: (app: App) => {
     app.component(COM_TYPE, TiLayoutGrid);
   },

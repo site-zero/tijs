@@ -5,7 +5,7 @@ import {
   LogicType,
   TableRowID,
   Vars,
-} from '../../../core';
+} from '../../../_type';
 
 export type SwitcherProps = CommonProps &
   Pick<SelectableProps<TableRowID>, 'minChecked' | 'maxChecked'> &

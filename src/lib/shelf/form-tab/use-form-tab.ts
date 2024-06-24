@@ -1,6 +1,5 @@
 import _ from 'lodash';
-import { StrOptionItem } from '../../../core';
-import { makeFieldUniqKey } from '../../../lib';
+import { StrOptionItem, makeFieldUniqKey } from '../../../_type';
 import { GridFieldsProps } from '../all-shelf';
 import { FormTabProps } from './ti-form-tab-types';
 

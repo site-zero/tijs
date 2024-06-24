@@ -1,21 +1,17 @@
 import JSON5 from 'json5';
 import _ from 'lodash';
-import { FieldComProps } from '..';
+import { DateTime, ENV_KEYS, Str, Util, getEnv } from '../core';
+import { FieldComProps } from '../lib';
 import {
   CommonProps,
   Convertor,
   DateInput,
-  DateTime,
-  ENV_KEYS,
   FieldChange,
   FieldName,
   InvokePartial,
   NameValue,
-  Str,
-  Util,
   Vars,
-  getEnv,
-} from '../../core';
+} from './core-types';
 
 export type Field = {
   /**

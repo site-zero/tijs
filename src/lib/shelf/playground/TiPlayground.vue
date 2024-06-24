@@ -1,14 +1,8 @@
 <script setup lang="ts">
   import _ from 'lodash';
   import { Ref, computed, onMounted, reactive, ref, watch } from 'vue';
-  import {
-    DateTime,
-    TiComExampleModelTarget,
-    Tmpl,
-    Util,
-    Vars,
-    tiCheckComponent,
-  } from '../../../core';
+  import { DateTime, Tmpl, Util, tiCheckComponent } from '../../../core';
+  import { TiComExampleModelTarget, Vars } from '../../../_type';
   import TiLayoutGrid from '../layout/grid/TiLayoutGrid.vue';
   import PlayConf from './PlayConf.vue';
   import PlayLive from './PlayLive.vue';
@@ -117,7 +111,7 @@
       payload = args;
     }
     // 适配模式
-    let model = PlayCom.value.exampleModel ?? { change: 'value' };
+    let model = PlayCom.value.exampleModel;
     let target = model[eventName];
     if (target) {
       let targets: TiComExampleModelTarget[];

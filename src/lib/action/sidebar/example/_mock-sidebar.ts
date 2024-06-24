@@ -1,6 +1,5 @@
 import { Chance } from 'chance';
-import { SideBarItem } from '../../../';
-import _ from 'lodash';
+import { SideBarItem } from '../../../../_type';
 
 // 创建一个 Chance 实例
 const chance = new Chance();
@@ -26,10 +25,10 @@ export function genItem(childCount = 0, depth = 0): SideBarItem {
   return re;
 }
 
-export function genItems(N=0):SideBarItem[]{
-    let list = [] as SideBarItem[]
-    for(let i=0;i<N;i++){
-        list.push(genItem(3))
-    }
-    return list
+export function genItems(N = 0): SideBarItem[] {
+  let list = [] as SideBarItem[];
+  for (let i = 0; i < N; i++) {
+    list.push(genItem(3));
+  }
+  return list;
 }

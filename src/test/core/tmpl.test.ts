@@ -1,5 +1,6 @@
 import { expect, test } from 'vitest';
-import { DateTime, Tmpl, Vars } from '../../core/ti';
+import { Vars } from '../../_type';
+import { DateTime, Tmpl } from '../../core/';
 
 test('list_index', () => {
   let vars = {

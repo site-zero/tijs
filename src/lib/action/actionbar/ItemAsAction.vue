@@ -1,9 +1,9 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { inject } from 'vue';
+  import { BUS_KEY } from '../../../_type';
   import BarItemTmpl from './BarItemTmpl.vue';
   import { ABAR_STATE, ABarUsedItem } from './ti-action-bar-types';
-  import { BUS_KEY } from '../../../core';
   //-------------------------------------------------------
   defineOptions({
     inheritAttrs: false,

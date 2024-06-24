@@ -1,5 +1,6 @@
-import { Callback, Callback1, G2D, Point2D, Rect, Rects } from '../../../core';
 import _ from 'lodash';
+import { Callback, Callback1, Point2D, Rect } from '../../../_type';
+import { G2D, Rects } from '../../../core';
 
 export type MoveDirectionX = 'left' | 'right';
 export type MoveDirectionY = 'up' | 'down';
@@ -232,7 +233,7 @@ export class Dragging {
 
     // 根据步偏移，求出距离方向等步进信息
     this.moveDistance = Math.sqrt(
-      Math.pow(this.move.x, 2) + Math.pow(this.move.y, 2),
+      Math.pow(this.move.x, 2) + Math.pow(this.move.y, 2)
     );
     this.directionX = this.move.x < 0 ? 'left' : 'right';
     this.directionY = this.move.y < 0 ? 'up' : 'down';

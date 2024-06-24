@@ -1,13 +1,8 @@
 import { ComputedRef, Ref } from 'vue';
 import { Dragging, useDragging } from '../../';
-import {
-  Callback,
-  Callback1,
-  Dom,
-  FuncA0,
-  Num,
-  getLogger,
-} from '../../../core';
+import { Callback, Callback1, FuncA0 } from '../../../_type';
+import { Dom, Num } from '../../../core';
+import { getLogger } from '../../../core/log/ti-log';
 import { ColResizingState } from './use-table';
 import { TableKeepFeature } from './use-table-keep';
 

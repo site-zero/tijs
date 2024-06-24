@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { Num } from '../../core/ti';
+import { Num } from '../../core/';
 import _ from 'lodash';
 
 test('scrollIndex', () => {

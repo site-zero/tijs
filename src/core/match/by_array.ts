@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { ExplainI18n, I18n, TiMatch } from '../ti';
+import { I18n } from '../';
+import { ExplainI18n, TiMatch } from '../../_type';
 import { MakeTiMatch, parse_strictly } from './ti-match';
 
 export const gen_by_array: MakeTiMatch<any[]> = function (src: any[]): TiMatch {

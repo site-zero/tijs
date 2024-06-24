@@ -1,16 +1,18 @@
 import {
+  AbstractField,
   AspectSize,
   CommonProps,
   CssGridLayout,
   CssTextAlign,
   FieldChange,
+  FieldValueType,
   IconInput,
   InvokePartial,
   TextContentType,
   ValueChange,
   Vars,
   VisibilityProps,
-} from '../../../core';
+} from '../../../_type';
 import { RoadblockProps } from '../../../lib';
 import {
   FieldChangeEmitter,
@@ -19,7 +21,6 @@ import {
   ReadonlyProps,
   VisibilityFeature,
 } from '../../../lib/_features';
-import { AbstractField, FieldValueType } from '../../_top';
 
 export type GridFieldsDomReadyInfo = {
   el: HTMLElement;

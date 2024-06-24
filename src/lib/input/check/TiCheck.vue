@@ -1,7 +1,8 @@
 <script lang="ts" setup>
   import { computed } from 'vue';
   import { BooleanEmitter, TiIcon, useBooleanInput } from '../../';
-  import { I18n, IconInput } from '../../../core';
+  import { IconInput } from '../../../_type';
+  import { I18n } from '../../../core';
   import { CheckProps } from './ti-check-types';
 
   const props = withDefaults(defineProps<CheckProps>(), {

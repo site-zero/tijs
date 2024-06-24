@@ -1,7 +1,8 @@
 import _ from 'lodash';
 import { ComputedRef, Ref } from 'vue';
-import { Dragging, KeepFeature, KeepInfo, useDragging, useKeep } from '../../';
-import { Dom, Vars } from '../../../core';
+import { Dragging, KeepFeature, useDragging } from '../../';
+import { Vars } from '../../../_type';
+import { Dom } from '../../../core';
 import { saveChuteWidthToLocal } from './use-main-frame';
 
 export type MainFrameResizingState = {

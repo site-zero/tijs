@@ -1,4 +1,5 @@
-import { AppEvents, TiAppBus, createBus, setEnv } from '../../core';
+import { AppEvents, TiAppBus } from '../../_type';
+import { createBus, setEnv } from '../../core';
 
 type BusDeposeCallback = (hook: () => void) => void;
 

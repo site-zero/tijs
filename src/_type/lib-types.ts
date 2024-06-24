@@ -1,4 +1,4 @@
-import { IconInput } from '../../core';
+import { IconInput } from './core-types';
 
 /*---------------------------------------------------
 

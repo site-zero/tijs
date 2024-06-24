@@ -1,4 +1,5 @@
-import { ExplainI18n, I18n, Str, TiMatch } from '../ti';
+import { I18n, Str } from '../';
+import { ExplainI18n, TiMatch } from '../../_type';
 
 export const gen_by_regex = function (reg: RegExp, not?: boolean): TiMatch {
   return {

@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { Util } from '../../core/ti';
+import { Util } from '../../core/';
 
 test('Simple', () => {
   let invoke = Util.genInvoking("abc(m, 'demo')", {

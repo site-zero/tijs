@@ -1,6 +1,6 @@
 import _ from 'lodash';
+import { AnyGetter, AnyTester } from '../../_type';
 import { splitIgnoreBlank, splitQuote } from '../text/ti-str';
-import { AnyTester, AnyGetter } from '../ti';
 
 export type GetOptions = {
   test?: AnyTester;
@@ -72,7 +72,7 @@ export function genObjPathGetter(input: string): AnyGetter {
  */
 export function genObjGetter(
   input: string,
-  options = {} as GetOptions,
+  options = {} as GetOptions
 ): AnyGetter {
   let { test = (v) => !_.isNil(v), enableKeyPath = true, dft } = options;
 

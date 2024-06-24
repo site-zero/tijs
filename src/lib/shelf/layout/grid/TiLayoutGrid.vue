@@ -9,8 +9,10 @@
     ref,
     watch,
   } from 'vue';
-  import { COM_TYPES, TiBlock, TiLayoutTabs } from '../../../';
-  import { CssUtils, Rect, Rects, Vars } from '../../../../core';
+  import { TiBlock, TiLayoutTabs } from '../../../';
+  import { Rect, Vars } from '../../../../_type';
+  import { CssUtils, Rects } from '../../../../core';
+  import { COM_TYPES } from '../../../lib-com-types';
   import {
     loadAllState,
     resetSizeState,

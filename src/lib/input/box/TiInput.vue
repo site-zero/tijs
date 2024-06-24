@@ -17,7 +17,8 @@
     usePlaceholder,
     useValueBox,
   } from '../../';
-  import { BUS_KEY, CssUtils, Match, Rect, Rects, Vars } from '../../../core';
+  import { BUS_KEY, Rect, Vars } from '../../../_type';
+  import { CssUtils, Match, Rects } from '../../../core';
   import { COM_TYPES } from '../../lib-com-types';
   import { InputBoxProps, InputBoxState } from './ti-input-types';
   import { resetTipList, updateTipList } from './use-input-box';

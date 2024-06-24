@@ -1,4 +1,5 @@
-import { QuadrantName, Rect, Rects, Vars } from '../../core';
+import { QuadrantName, Rect, Vars } from '../../_type';
+import { Rects } from '../../core';
 
 export type DockProps = {
   width?: string;
@@ -9,7 +10,11 @@ export type DockProps = {
   maxHeight?: string;
 };
 
-export function getDockingStyle(props: DockProps, $el?: HTMLElement, box?: Rect) {
+export function getDockingStyle(
+  props: DockProps,
+  $el?: HTMLElement,
+  box?: Rect
+) {
   if (!box || !$el) {
     return {};
   }

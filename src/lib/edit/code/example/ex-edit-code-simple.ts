@@ -1,4 +1,4 @@
-import { ComPropExample } from '../../../../core';
+import { ComPropExample } from '../../../../_type';
 import { EditCodeProps } from '../ti-edit-code-types';
 
 export default {

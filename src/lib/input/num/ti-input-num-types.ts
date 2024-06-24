@@ -1,10 +1,10 @@
 import {
   InputBoxAspect,
   PlaceholderProps,
-  ReadonlyProps,
   PrefixSuffixProps,
+  ReadonlyProps,
 } from '../../';
-import { CommonProps, Vars } from '../../../core';
+import { CommonProps, Vars } from '../../../_type';
 
 export type InputNumProps = CommonProps &
   PlaceholderProps &

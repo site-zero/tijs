@@ -1,4 +1,4 @@
-import { ComPropExample } from '../../../../core';
+import { ComPropExample } from '../../../../_type';
 import { InputColorProps } from '../ti-input-color-types';
 
 export default {

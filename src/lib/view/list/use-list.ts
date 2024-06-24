@@ -1,5 +1,7 @@
 import _ from 'lodash';
-import { EventUtils, I18n, TableRowID, Vars, getLogger } from '../../../core';
+import { TableRowID, Vars } from '../../../_type';
+import { EventUtils, I18n } from '../../../core';
+import { getLogger } from '../../../core/log/ti-log';
 import {
   SelectableState,
   useSelectable,

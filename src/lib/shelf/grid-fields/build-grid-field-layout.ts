@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { Str, Util, Vars } from '../../../core';
+import { Vars } from '../../../_type';
+import { Str, Util } from '../../../core';
 import {
   GridFieldsItemLayoutProps,
   GridLayoutHint,

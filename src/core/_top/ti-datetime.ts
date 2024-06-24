@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { DateFormatOptions, DateInput, I18n, Str, getEnv } from '../ti';
+import { I18n, Str, getEnv } from '../';
+import { DateFormatOptions, DateInput } from '../../_type';
 
 ///////////////////////////////////////////
 // const P_DATE = new RegExp(

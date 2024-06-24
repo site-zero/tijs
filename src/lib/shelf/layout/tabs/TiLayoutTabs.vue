@@ -1,13 +1,9 @@
 <script lang="ts" setup>
   import { computed, ref, watch } from 'vue';
-  import {
-    COM_TYPES,
-    TiRoadblock,
-    TiTabs,
-    getLayoutItem,
-    useKeep,
-  } from '../../../';
-  import { CssUtils, getLogger } from '../../../../core';
+  import { TiRoadblock, TiTabs, getLayoutItem, useKeep } from '../../../';
+  import { CssUtils } from '../../../../core';
+  import { getLogger } from '../../../../core/log/ti-log';
+  import { COM_TYPES } from '../../../lib-com-types';
   import { TabDisplayItem } from '../layout-types';
   import { LayoutTabsProps } from './ti-layout-tabs-types';
   import {

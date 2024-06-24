@@ -1,7 +1,8 @@
 <script lang="ts" setup>
   import { computed } from 'vue';
-  import { TextSnippet, getFieldValue, useFieldCom } from '../../';
-  import { CssUtils, ValueChange } from '../../../core';
+  import { TextSnippet, useFieldCom } from '../../';
+  import { ValueChange, getFieldValue } from '../../../_type';
+  import { CssUtils } from '../../../core';
   import {
     GridFieldsStrictField,
     GridItemEmitter,
@@ -13,7 +14,6 @@
     getFieldTitleStyle,
     getFieldTopStyle,
   } from './use-field-style';
-  import _ from 'lodash';
 
   defineOptions({
     inheritAttrs: false,

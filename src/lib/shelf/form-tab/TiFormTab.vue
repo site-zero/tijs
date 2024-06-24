@@ -9,7 +9,8 @@
     TiTabs,
     useKeep,
   } from '../../';
-  import { CssUtils, Dom, Vars } from '../../../core/';
+  import { Vars } from '../../../_type';
+  import { CssUtils, Dom } from '../../../core/';
   import { FormTabProps } from './ti-form-tab-types';
   import { getCurrentFormProps, getFormTabItems } from './use-form-tab';
   //-------------------------------------------------

@@ -4,7 +4,7 @@ import {
   ValueBoxState,
   ValueInputTidyMode,
 } from '../../';
-import { Vars } from '../../../core';
+import { Vars } from '../../../_type';
 
 //--------------------------------------------------
 export type InputBoxState = ValueBoxState<any> & {

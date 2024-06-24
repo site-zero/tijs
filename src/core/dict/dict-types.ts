@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { AnyGetter, OptionItem, StdOptionItem, ValGetter, Vars } from '../ti';
+import { AnyGetter, OptionItem, ValGetter, Vars } from '../../_type';
 
 export type DictSetup = {
   value?: string | AnyGetter;

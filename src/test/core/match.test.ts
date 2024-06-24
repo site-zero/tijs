@@ -1,5 +1,6 @@
 import { expect, test } from 'vitest';
-import { Match, TiMap, TiMatch } from '../../core/ti';
+import { TiMap, TiMatch } from '../../_type';
+import { Match } from '../../core/';
 
 test('match_num', () => {
   expect(Match.test('[2,5)', 5)).eq(false);
@@ -170,9 +171,9 @@ test('match_record', function () {
   expect(vli.test({ x: 100, y: 99 })).eq(false);
 
   vli = Match.parse({ saving: true });
-  expect(vli.test({ changed:true,saving:true })).eq(true);
-  expect(vli.test({ changed:true})).eq(false);
-  expect(vli.test({ changed:true,saving:false })).eq(false);
+  expect(vli.test({ changed: true, saving: true })).eq(true);
+  expect(vli.test({ changed: true })).eq(false);
+  expect(vli.test({ changed: true, saving: false })).eq(false);
 });
 
 test('test_match_exists2', function () {

@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { I18n, DateTime, DateInput } from '../ti';
+import { DateTime, I18n } from '../';
+import { DateInput } from '../../_type';
 import { NumRange } from './num-range';
 
 export class MsRange extends NumRange {

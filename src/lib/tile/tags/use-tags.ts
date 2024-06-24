@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { Ref, computed } from 'vue';
-import { getFieldUniqKey, useValueTranslator } from '../../';
+import { useValueTranslator } from '../../';
+import { getFieldUniqKey } from '../../../_type';
 import { TagItem, TagsProps } from './ti-tags-types';
 import { useTagsTitleTranslator } from './use-tag-title-translator';
 

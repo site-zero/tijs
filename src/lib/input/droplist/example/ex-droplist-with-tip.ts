@@ -1,4 +1,4 @@
-import { ComPropExample } from '../../../../core';
+import { ComPropExample } from '../../../../_type';
 import { DropListProps } from '../ti-droplist-types';
 
 export default {

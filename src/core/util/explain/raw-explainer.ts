@@ -1,5 +1,4 @@
-import _ from 'lodash';
-import { Explainer } from '../../ti';
+import { Explainer } from '../../../_type';
 
 export class RawExplainer implements Explainer {
   // 解析后的处理函数

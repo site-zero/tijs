@@ -1,4 +1,4 @@
-import { Vars } from '../../../../core';
+import { Vars } from '../../../../_type';
 import { generateUser } from './fake_data';
 
 export function mockData(n = 10): Vars[] {

@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { I18n, TiMatch, ExplainI18n, Str } from '../ti';
+import { I18n, Str } from '../';
+import { ExplainI18n, TiMatch } from '../../_type';
 import { MakeTiMatch, parse } from './ti-match';
 
 export type MapFindInArrayPayload = {

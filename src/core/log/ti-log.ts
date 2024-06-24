@@ -1,8 +1,6 @@
 import _ from 'lodash';
+import { Logger, LogLevel, LogLvNames, LogLvNameTable } from '../../_type/';
 import { ConsoleLogger } from './console-logger';
-import { Logger, LogLevel, LogLvNames, LogLvNameTable } from './log-types';
-
-export * from './log-types';
 
 type LOG_LV_ROW = [string, LogLevel];
 const LL = {

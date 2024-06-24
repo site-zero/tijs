@@ -1,17 +1,6 @@
-import JSON5 from 'json5';
 import _ from 'lodash';
-import {
-  AsyncFuncA1,
-  DictName,
-  DictSetup,
-  Dicts,
-  FuncA1,
-  Str,
-  StrCaseMode,
-  TiDict,
-  Vars,
-  isDictSetup,
-} from '../../core';
+import { AsyncFuncA1, FuncA1, StrCaseMode } from '../../_type';
+import { Dicts, Str, TiDict } from '../../core';
 import { wrapPromiseFunc } from '../../core/util/util-lang.ts';
 import { OptionsFeature, OptionsProps, useOptions } from './use-options.ts';
 /*-------------------------------------------------------

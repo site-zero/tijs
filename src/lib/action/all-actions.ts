@@ -1,4 +1,4 @@
-import { TiComSet } from '../../core';
+import { TiComSet } from '../../_type';
 import { TiActionBarInfo } from './actionbar/ti-action-bar-index';
 import { TiDropTagInfo } from './drop-tag/ti-drop-tag-index';
 import { TiButtonInfo } from './button/ti-button-index';

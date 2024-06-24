@@ -4,13 +4,12 @@ import {
   ActionBarAction,
   ActionBarItem,
   ActionBarItemAltDisplay,
-  Match,
   TiAppBus,
-  Util,
   Vars,
   isEventInfo,
   isInvoke,
-} from '../../../core';
+} from '../../../_type';
+import { Match, Util } from '../../../core';
 import {
   ABarAltDisplay,
   ABarParsedItem,

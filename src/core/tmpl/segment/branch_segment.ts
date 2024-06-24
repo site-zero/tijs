@@ -1,6 +1,6 @@
 import _ from 'lodash';
+import { TiMatch, Vars } from '../../../_type';
 import { TmplEle } from '../ti-tmpl';
-import { Vars, TiMatch } from '../../ti';
 import { AbstractTmplSegment } from './abstract_segment';
 import { BlockTmplSegment } from './block_segment';
 import { ConditionTmplSegment } from './condition_segment';

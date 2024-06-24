@@ -1,13 +1,7 @@
 import _ from 'lodash';
 import { computed, ref } from 'vue';
-import {
-  GridFieldsInput,
-  getFieldUniqKey,
-  makeFieldUniqKey,
-  useValueTranslator,
-  useVisibility,
-} from '../../';
-import { I18n, Vars } from '../../../core';
+import { GridFieldsInput, useValueTranslator, useVisibility } from '../../';
+import { Vars, makeFieldUniqKey } from '../../../_type';
 import {
   FilterFeature,
   FilterMoreItem,
@@ -151,8 +145,7 @@ export function useFilter(props: FilterProps): FilterFeature {
 
       // 虽然不太可能，但是防守一下
       if (!field) {
-        console.warn('虽然不太可能，但是防守一下');
-        continue;
+        throw '虽然不太可能，但是防守一下';
       }
 
       // 获取字段的唯一键，加入映射，以便去重复

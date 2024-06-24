@@ -1,4 +1,4 @@
-import { CssGridLayout, Vars } from '../../../../core';
+import { CssGridLayout, Vars } from '../../../../_type';
 import { KeepFeature, KeepInfo } from '../../../../lib/_features';
 import {
   LayoutBar,

@@ -1,6 +1,6 @@
 //"use sloppy";
 import _ from 'lodash';
-import { Vars } from '../../ti';
+import { Vars } from '../../../_type';
 import { TmplEle } from '../ti-tmpl';
 
 export class DynElEle implements TmplEle {

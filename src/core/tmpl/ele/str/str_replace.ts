@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { Str, StrConvertor } from '../../../ti';
+import { Str } from '../../../';
+import { StrConvertor } from '../../../../_type';
 
 export function str_replace(input: string): StrConvertor {
   let args = Str.splitQuote(input, {

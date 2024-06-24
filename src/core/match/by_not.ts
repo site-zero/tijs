@@ -1,8 +1,9 @@
-import { ExplainI18n, I18n, TiMatch } from '../ti';
+import { I18n } from '../';
+import { ExplainI18n, TiMatch } from '../../_type';
 import { MakeTiMatch } from './ti-match';
 
 export const gen_by_not: MakeTiMatch<TiMatch> = function (
-  src: TiMatch,
+  src: TiMatch
 ): TiMatch {
   return {
     test: (input: any): boolean => {

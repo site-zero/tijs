@@ -1,5 +1,4 @@
-import { CommonProps, Vars } from '../../../core';
-import { Pager } from '../../../lib/_top';
+import { CommonProps, Pager, Vars } from '../../../_type';
 
 export type PagerEmitter = (
   eventName: 'change-page-number' | 'change-page-size',

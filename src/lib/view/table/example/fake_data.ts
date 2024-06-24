@@ -1,5 +1,5 @@
 import { Chance } from 'chance';
-import { Vars } from '../../../../core';
+import { Vars } from '../../../../_type';
 import * as DateTime from '../../../../core/_top/ti-datetime';
 
 // 创建一个 Chance 实例

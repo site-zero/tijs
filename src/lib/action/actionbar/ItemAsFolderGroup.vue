@@ -1,7 +1,8 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed, inject, ref, watch } from 'vue';
-  import { DockMode, Dom, Point2D } from '../../../core';
+  import { Dom } from '../../../core';
+  import { DockMode, Point2D } from '../../../_type';
   import BarItemTmpl from './BarItemTmpl.vue';
   import ItemAsAction from './ItemAsAction.vue';
   import { ABAR_STATE, ABarUsedItem } from './ti-action-bar-types';

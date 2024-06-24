@@ -1,7 +1,8 @@
 import _ from 'lodash';
 import JSON5 from 'json5';
 import { sprintf } from 'sprintf-js';
-import { Match, TiMatch } from '../ti';
+import { Match } from '../';
+import { TiMatch } from '../../_type';
 import { ConditionTmplSegment } from './segment/condition_segment';
 import { LoopTmplSegment } from './segment/loop_segment';
 import { BlockTmplSegment } from './segment/block_segment';

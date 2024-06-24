@@ -1,21 +1,18 @@
 import _ from 'lodash';
 import {
+  AbstractField,
   FieldChange,
   FieldValueChange,
-  I18n,
   LinkFieldChange,
-  Util,
-  Vars,
-} from '../../../core';
-import { getLogger } from '../../../core/log/ti-log';
-import { Alert } from '../../_modal';
-import {
-  AbstractField,
   ValidateResult,
+  Vars,
   getFieldUniqKey,
   makeFieldUniqKey,
   mergeFieldChanges,
-} from '../../_top';
+} from '../../../_type';
+import { I18n, Util } from '../../../core';
+import { getLogger } from '../../../core/log/ti-log';
+import { Alert } from '../../_modal';
 
 const log = getLogger('ti.lib.use-record');
 

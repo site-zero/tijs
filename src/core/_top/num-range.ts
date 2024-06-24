@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { I18n } from '../ti';
+import { I18n } from '../';
 
 export interface NumRangeBorder {
   open: boolean;

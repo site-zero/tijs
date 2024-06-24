@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { AnyGetter, Vars } from '../../ti';
+import { AnyGetter, Vars } from '../../../_type';
 import { genObjGetter } from '../../util/util-getter';
 import { DynElInfo, TmplEle } from '../ti-tmpl';
 

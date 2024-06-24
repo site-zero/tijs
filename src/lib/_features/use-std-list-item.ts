@@ -5,7 +5,7 @@ import {
   StdOptionItem,
   TableRowID,
   Vars,
-} from '../../core';
+} from '../../_type';
 
 export type StdListItemProps = {
   /**

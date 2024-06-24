@@ -1,5 +1,5 @@
-import { Dom, Str } from '../../';
 import _ from 'lodash';
+import { Dom, Str } from '../../';
 
 export function write(input: any): void {
   let str: string;

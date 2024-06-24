@@ -5,10 +5,9 @@ import {
   IconInput,
   StdOptionItem,
   TableRowID,
-  Util,
-  Vars,
-  getLogger,
-} from '../../../core';
+} from '../../../_type';
+import { Util } from '../../../core';
+import { getLogger } from '../../../core/log/ti-log';
 import { ListProps, RoadblockProps } from '../../../lib';
 import { useOptions, useStdListItem } from '../../../lib/_features';
 import { TransferProps, TransferState } from './ti-transfer-types';

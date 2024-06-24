@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { computed, inject, ref } from 'vue';
-  import { TiIcon } from '../../';
   import { CssUtils, I18n } from '../../../core';
+  import { TiIcon } from '../../../lib';
   import { ABAR_STATE, ABarUsedItem } from './ti-action-bar-types';
   import { openBarItem } from './use-action-bar';
   //-------------------------------------------------------

@@ -1,10 +1,11 @@
 import _ from 'lodash';
-import { I18n, TiMatch, ExplainI18n, Str } from '../ti';
+import { I18n, Str } from '../';
+import { ExplainI18n, TiMatch } from '../../_type';
 import { explainKeyDisplay } from './key_display';
 
 export const gen_by_map_exitst = function (
   key_of_obj: string,
-  not?: boolean,
+  not?: boolean
 ): TiMatch {
   return {
     test: (input: any): boolean => {

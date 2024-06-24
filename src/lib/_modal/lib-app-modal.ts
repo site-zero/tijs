@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { createApp } from 'vue';
-import { AppModalInitProps, AppModalProps, Dom, EleOptions } from '../../core';
+import { AppModalInitProps, AppModalProps, EleOptions } from '../../_type';
+import { Dom } from '../../core';
 import TiAppModal from './TiAppModal.vue';
 
 export async function openAppModal(props: AppModalProps): Promise<any> {

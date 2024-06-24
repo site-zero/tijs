@@ -7,7 +7,7 @@ import {
   TiAppBus,
   TiMatch,
   Vars,
-} from '../../../core';
+} from '../../../_type';
 
 export type ActionBarEvent = {
   name: string;

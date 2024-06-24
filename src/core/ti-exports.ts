@@ -1,4 +1,3 @@
-export * from './_top/_types';
 export * from './_top/color';
 export * from './_top/ms-range';
 export * from './_top/num-range';

@@ -1,4 +1,4 @@
-import { ComPropExample } from '../../../../core';
+import { ComPropExample } from '../../../../_type';
 import { ListProps } from '../ti-list-types';
 import { Chance } from 'chance';
 import { getListData } from './mock_date';

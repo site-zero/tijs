@@ -1,5 +1,5 @@
 import { PlaceholderProps, ReadonlyProps } from '../../';
-import { CommonProps, Vars } from '../../../core';
+import { CommonProps, Vars } from '../../../_type';
 
 export type InputTextProps = CommonProps &
   ReadonlyProps &

@@ -1,11 +1,11 @@
 import _ from 'lodash';
-import { Vars, ExplainOptions, Explainer, Invoke } from '../ti';
-import { StringExplainer } from './explain/str-explainer';
-import { FuncExplainer } from './explain/func-explainer';
+import { ExplainOptions, Explainer, Invoke, Vars } from '../../_type';
 import { ArrayExplainer } from './explain/array-explainer';
+import { FuncExplainer } from './explain/func-explainer';
+import { InvokeExplainer } from './explain/invoke-explainer';
 import { MapExplainer } from './explain/map-explainer';
 import { RawExplainer } from './explain/raw-explainer';
-import { InvokeExplainer } from './explain/invoke-explainer';
+import { StringExplainer } from './explain/str-explainer';
 
 export function buildExplainer(obj: any): Explainer {
   if (_.isString(obj)) {

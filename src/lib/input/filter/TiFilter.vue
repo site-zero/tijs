@@ -1,7 +1,8 @@
 <script lang="ts" setup>
   import { computed, watch } from 'vue';
   import { ActionBarEvent, TiActionBar, TiGridFields } from '../../';
-  import { CssUtils, Vars } from '../../../core';
+  import { Vars } from '../../../_type';
+  import { CssUtils } from '../../../core';
   import { FilterProps } from './ti-filter-types';
   import { FilterEmitter, useFilter } from './use-filter';
   import { useFilterActions } from './use-filter-actions';

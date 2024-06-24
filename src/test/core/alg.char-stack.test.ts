@@ -1,5 +1,5 @@
 import { expect, test } from 'vitest';
-import { Alg } from '../../core/ti';
+import { Alg } from '../../core/';
 import _ from 'lodash';
 
 test('simple', () => {

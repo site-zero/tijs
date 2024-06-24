@@ -6,7 +6,8 @@ import {
   LayoutState,
   positionToTransName,
 } from '../../';
-import { CssUtils, Vars } from '../../../core';
+import { Vars } from '../../../_type';
+import { CssUtils } from '../../../core';
 
 import { autoSetLayoutItemType, setLayoutItemConfig } from './layout-support';
 

@@ -1,4 +1,4 @@
-import { ActionBarItem } from '../../../core';
+import { ActionBarItem } from '../../../_type';
 import { FilterFeature, FilterProps } from './ti-filter-types';
 import { FilterEmitter } from './use-filter';
 import { openAdvanceForm } from './use-filter-advance';

@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { ExplainI18n, I18n, TiMap, TiMatch } from '../ti';
+import { I18n } from '../';
+import { ExplainI18n, TiMap, TiMatch } from '../../_type';
 import { gen_by_map_exitst } from './by_map_exists';
 import { gen_by_not } from './by_not';
 import { explainKeyDisplay } from './key_display';
@@ -38,7 +39,7 @@ export const gen_by_map: MakeTiMatch<TiMap> = function (map: TiMap): TiMatch {
       m = gen_by_not(m);
     }
 
-    matchs.push({ key, m });
+    matchs.push({ key, m: m! });
   };
 
   // 循环 Map 的键

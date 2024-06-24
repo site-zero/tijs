@@ -1,4 +1,4 @@
-import { ComPropExample } from '../../../../core';
+import { ComPropExample } from '../../../../_type';
 import { ThumbProps } from '../ti-thumb-types';
 
 export default {

@@ -1,5 +1,5 @@
+import { IconInput } from '../../../_type';
 import { BooleanProps, ReadonlyProps } from '../../_features';
-import { IconInput } from '../../../core';
 
 export type CheckProps = BooleanProps &
   ReadonlyProps & {

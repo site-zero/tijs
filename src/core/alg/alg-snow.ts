@@ -1,4 +1,4 @@
-import { DateTime, getRandomStr } from '../ti';
+import { DateTime, getRandomStr } from '../';
 
 export function genSnowQ(n: number = 4, prefix?: string) {
   let sb = [] as string[];

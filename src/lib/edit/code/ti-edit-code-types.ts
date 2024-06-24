@@ -1,3 +1,3 @@
-import { CommonProps } from '../../../core';
+import { CommonProps } from '../../../_type';
 
 export type EditCodeProps = CommonProps & {};

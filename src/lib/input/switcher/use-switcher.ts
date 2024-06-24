@@ -2,14 +2,12 @@ import _ from 'lodash';
 import { computed, ref } from 'vue';
 import {
   AnyOptionItem,
-  CssUtils,
-  EventUtils,
   KeyboardStatus,
   LogicType,
   TableRowID,
-  Util,
   Vars,
-} from '../../../core';
+} from '../../../_type';
+import { CssUtils, EventUtils, Util } from '../../../core';
 import { SelectableState, useOptions, useSelectable } from '../../../lib';
 import { SwitcherProps } from './ti-switcher-types';
 

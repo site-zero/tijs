@@ -1,5 +1,13 @@
 import _ from 'lodash';
 import { App } from 'vue';
+import {
+  ComInfoFilter,
+  I18nLang,
+  I18nSet,
+  MessageMap,
+  TiCom,
+  TiComSet,
+} from '../_type';
 import en_us from '../i18n/en-us';
 import zh_cn from '../i18n/zh-cn';
 import _com_set_action from '../lib/action/all-actions';
@@ -8,19 +16,11 @@ import _com_set_input from '../lib/input/all-input';
 import _com_set_shelf from '../lib/shelf/all-shelf';
 import _com_set_tile from '../lib/tile/all-tiles';
 import _com_set_view from '../lib/view/all-views';
-import {
-  ComInfoFilter,
-  I18n,
-  I18nLang,
-  I18nSet,
-  MessageMap,
-  Str,
-  TiCom,
-  TiComSet,
-  getEnv,
-  getLogger,
-  setEnv,
-} from './ti';
+import { getEnv, setEnv } from './ti';
+import { I18n, Str } from './ti-exports';
+
+import { getLogger } from '../core/log/ti-log';
+import { TiComImpl } from './_top/ti-com';
 
 const log = getLogger('ti.lib');
 
@@ -31,7 +31,7 @@ const ALL_TI_COMS = new Map<string, TiCom>();
 
 function _put_com_set(coms: TiComSet) {
   _.forEach(coms, (info, key) => {
-    let com = new TiCom(info);
+    let com = new TiComImpl(info);
     // if ('TiSwitcher' == com.name) {
     //   console.log(com.exampleProps);
     // }

@@ -1,5 +1,4 @@
-import _ from 'lodash';
-import { Vars, ExplainOptions, Explainer } from '../../ti';
+import { ExplainOptions, Explainer, Vars } from '../../../_type';
 import { buildExplainer } from '../util-explain';
 
 export class ArrayExplainer implements Explainer {

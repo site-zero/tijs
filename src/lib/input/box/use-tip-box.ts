@@ -1,5 +1,6 @@
 import _ from 'lodash';
-import { CssUtils, QuadrantName, Rect, Rects, Vars } from '../../../core';
+import { Rect, Vars } from '../../../_type';
+import { CssUtils } from '../../../core';
 import { ListProps, getDockingStyle } from '../../../lib';
 import { TipBoxProps } from './ti-input-types';
 
