@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { computed, watch } from 'vue';
+  import { computed, onMounted, watch } from 'vue';
   import { ActionBarEvent, TiActionBar, TiGridFields } from '../../';
   import { Vars } from '../../../_type';
   import { CssUtils } from '../../../core';
@@ -20,7 +20,7 @@
   const emit: FilterEmitter = useFilterEmit(props, _emit);
 
   //-------------------------------------------------
-  const Flt = computed(() => useFilter(props));
+  const Flt = computed(() => useFilter(props, emit));
   //-----------------------------------------------------
   const TopClass = computed(() =>
     CssUtils.mergeClassName(props.className, `layout-${props.layout}`)
@@ -29,7 +29,7 @@
   const MajorFormConf = computed(() => getFilterFormConfig(props, Flt.value));
   const MajorFormData = computed(() => getFilterFormData(Flt.value));
   //-------------------------------------------------
-  const ActionItems = computed(() => useFilterActions(props, Flt.value, emit));
+  const ActionItems = computed(() => useFilterActions(props, Flt.value));
   const ActionLayoutMode = computed(() =>
     props.layout == 'oneline' ? 'H' : 'V'
   );
@@ -65,6 +65,15 @@
       immediate: true,
     }
   );
+  //-----------------------------------------------------
+  onMounted(() => {
+    if (props.exportApi) {
+      props.exportApi({
+        setupFilterMajorFields: Flt.value.setupMajorFields,
+        openFilterAdvanceSettings: Flt.value.openAdvanceSettings,
+      });
+    }
+  });
   //-------------------------------------------------
 </script>
 <template>

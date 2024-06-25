@@ -9,6 +9,11 @@ import {
   Vars,
 } from '../../../_type';
 
+export type FilterExportApi = {
+  setupFilterMajorFields: () => Promise<void>;
+  openFilterAdvanceSettings: () => Promise<void>;
+};
+
 export type FilterValue = Vars;
 
 export type FilterMoreItem = {
@@ -149,6 +154,13 @@ export type FilterProps = CommonProps &
     actionCollapse?: boolean;
 
     layout?: 'oneline' | 'comfy';
+    //-----------------------------------------
+    // Callback
+    //-----------------------------------------
+    /**
+     * @param api 本控件导出的可被外部使用的方法
+     */
+    exportApi?: (api: FilterExportApi) => void;
   };
 
 export type FilterFeature = {
@@ -167,4 +179,7 @@ export type FilterFeature = {
 
   useDiffData: (diff: Vars) => Vars;
   loadMoreItems: () => Promise<void>;
+
+  setupMajorFields: () => Promise<void>;
+  openAdvanceSettings: () => Promise<void>;
 };

@@ -4,6 +4,7 @@
   import {
     ComboFilterEmitter,
     ComboFilterProps,
+    FilterExportApi,
     FilterValue,
     SorterExportApi,
     SorterValue,
@@ -11,8 +12,8 @@
     TiSorter,
     useKeep,
   } from '../../';
-  import { CssUtils } from '../../../core';
   import { ActionBarItem } from '../../../_type';
+  import { CssUtils } from '../../../core';
   import { useComboFilterKeep } from './use-combo-filter-keep';
   //-------------------------------------------------
   const emit = defineEmits<ComboFilterEmitter>();
@@ -67,8 +68,8 @@
         icon: 'zmdi-sort-asc',
         text: 'i18n:ti-combo-filter-sort-setup',
         action: () => {
-          console.log(_sort_api.value);
-          _sort_api.value?.onSetup();
+          console.log(_sorter_api.value);
+          _sorter_api.value?.setupSorterFields();
         },
       },
     ];
@@ -78,10 +79,27 @@
     return re;
   });
   //-------------------------------------------------
-  const _sort_api = ref<SorterExportApi>();
+  const _sorter_api = ref<SorterExportApi>();
   function regSorterApi(sortApi: SorterExportApi) {
-    _sort_api.value = sortApi;
+    _sorter_api.value = sortApi;
   }
+  //-------------------------------------------------
+  const _filter_api = ref<FilterExportApi>();
+  function regFilterApi(filterApi: FilterExportApi) {
+    _filter_api.value = filterApi;
+  }
+  //-------------------------------------------------
+  watch(
+    () => [_sorter_api.value, _filter_api.value],
+    () => {
+      if (props.exportApi && _sorter_api.value && _filter_api.value) {
+        props.exportApi({
+          ..._sorter_api.value,
+          ..._filter_api.value,
+        });
+      }
+    }
+  );
   //-------------------------------------------------
   watch(
     () => props.keepMajor,
@@ -104,6 +122,7 @@
     :value="FltValue"
     :layout="props.layout"
     :more-actions="MoreActions"
+    :export-api="regFilterApi"
     @change="onFilterChange"
     @change-major="onFilterMajorChange"
     @search="emit('search')"
@@ -111,10 +130,10 @@
     <template v-slot:foot>
       <TiSorter
         class="part-sorter"
-        v-bind="SrtConfig"
-        title="i18n:ti-combo-filter-sort-title"
-        :value="SrtValue"
         :can-setup="false"
+        title="i18n:ti-combo-filter-sort-title"
+        v-bind="SrtConfig"
+        :value="SrtValue"       
         :export-api="regSorterApi"
         @change="onSorterChange" />
     </template>

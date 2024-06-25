@@ -28,7 +28,7 @@
     emit('change', sv);
   }
   //-----------------------------------------------------
-  async function onSetupSortFields() {
+  async function onSetupSorterFields() {
     let re = await Sorter.value.onSetupSorterValue();
     // 用户取消
     if (!re) {
@@ -51,7 +51,7 @@
   onMounted(() => {
     if (props.exportApi) {
       props.exportApi({
-        onSetup: onSetupSortFields,
+        setupSorterFields: onSetupSorterFields,
       });
     }
   });
@@ -74,7 +74,7 @@
     <div
       v-if="props.canSetup"
       class="part-setup"
-      @click="onSetupSortFields">
+      @click="onSetupSorterFields">
       <a><i class="zmdi zmdi-settings"></i></a>
     </div>
   </div>

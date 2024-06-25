@@ -8,6 +8,8 @@ import {
   FilterProps,
   FilterValue,
 } from './ti-filter-types';
+import { openAdvanceForm } from './use-filter-advance';
+import { useFilterCustomization } from './use-filter-customize';
 import {
   getFieldsNames,
   joinFieldsList,
@@ -28,7 +30,10 @@ export type FilterEmitter = {
  * @param emit 消息通知
  * @returns 控件主特性
  */
-export function useFilter(props: FilterProps): FilterFeature {
+export function useFilter(
+  props: FilterProps,
+  emit: FilterEmitter
+): FilterFeature {
   //-----------------------------------------------------
   // 显示除了 Major 字段外的扩展过滤信息
   const moreItems = ref<FilterMoreItem[]>();
@@ -203,5 +208,12 @@ export function useFilter(props: FilterProps): FilterFeature {
 
     useDiffData,
     loadMoreItems,
+
+    setupMajorFields: async () => {
+      await useFilterCustomization(props, emit);
+    },
+    openAdvanceSettings: async () => {
+      await openAdvanceForm(props, emit);
+    },
   };
 }

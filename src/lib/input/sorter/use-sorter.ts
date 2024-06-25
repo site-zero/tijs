@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { computed, ref } from 'vue';
-import { Dicts } from '../../../core';
 import { PickRequired } from '../../../_type';
+import { Dicts } from '../../../core';
 import { TagItem, openAppModal, useOptions } from '../../../lib';
 import { SorterProps, SorterValue } from './ti-sorter-types';
 
@@ -79,7 +79,7 @@ export function useSorter(props: SorterProps) {
       type: 'info',
       position: 'top',
       width: '72%',
-      minWidth: '840px',
+      minWidth: '800px',
       maxWidth: '1200px',
       height: '80%',
       clickMaskToClose: true,

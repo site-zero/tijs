@@ -1,11 +1,15 @@
 import {
+  FilterExportApi,
   FilterProps,
   FilterValue,
   KeepInfo,
+  SorterExportApi,
   SorterProps,
   SorterValue,
 } from '../../';
 import { ActionBarItem, CommonProps } from '../../../_type';
+
+export type ComboFilterExportApi = FilterExportApi & SorterExportApi;
 
 export type ComboFilterValue = {
   filter?: FilterValue;
@@ -47,4 +51,9 @@ export type ComboFilterProps = CommonProps & {
   filterConfig?: Omit<FilterProps, 'value' | 'moreActions'>;
 
   sorterConfig?: Omit<SorterProps, 'value' | 'exportApi'>;
+
+  /**
+   * @param api 本控件导出的可被外部使用的方法
+   */
+  exportApi?: (api: ComboFilterExportApi) => void;
 };

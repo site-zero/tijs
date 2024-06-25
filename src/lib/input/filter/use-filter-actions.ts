@@ -1,14 +1,8 @@
 import { ActionBarItem } from '../../../_type';
 import { FilterFeature, FilterProps } from './ti-filter-types';
-import { FilterEmitter } from './use-filter';
 import { openAdvanceForm } from './use-filter-advance';
-import { useFilterCustomization } from './use-filter-customize';
 
-export function useFilterActions(
-  props: FilterProps,
-  Flt: FilterFeature,
-  emit: FilterEmitter
-) {
+export function useFilterActions(props: FilterProps, Flt: FilterFeature) {
   let items = [] as ActionBarItem[];
 
   if (props.searchIcon || props.searchText) {
@@ -31,8 +25,8 @@ export function useFilterActions(
     moreItems.push({
       icon: 'zmdi-toys',
       text: 'i18n:ti-filter-customize',
-      action: () => {
-        useFilterCustomization(props, emit);
+      action: async () => {
+        await Flt.setupMajorFields();
       },
     });
   }
@@ -41,8 +35,8 @@ export function useFilterActions(
     moreItems.push({
       icon: 'zmdi-traffic',
       text: 'i18n:ti-filter-advance',
-      action: () => {
-        openAdvanceForm(props, emit);
+      action: async () => {
+        await Flt.openAdvanceSettings();
       },
     });
   }
