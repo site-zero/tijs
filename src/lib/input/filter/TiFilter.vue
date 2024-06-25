@@ -72,7 +72,9 @@
     class="ti-filter"
     :class="TopClass">
     <div class="part-left">
-      <slot name="head"></slot>
+      <div class="part-head">
+        <slot name="head"></slot>
+      </div>
       <!--================: Major Fields :===============-->
       <div
         class="part-major"
@@ -91,7 +93,9 @@
           </template>
         </TiGridFields>
       </div>
-      <slot name="foot"></slot>
+      <div class="part-foot">
+        <slot name="foot"></slot>
+      </div>
     </div>
     <div
       class="part-right"

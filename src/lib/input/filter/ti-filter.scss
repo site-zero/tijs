@@ -3,6 +3,16 @@
   //---------------------------------------
   > .part-left {
     flex: 1 1 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr auto;
+    > .part-major {
+      position: relative;
+      > .ti-grid-fields {
+        position: absolute;
+        inset: 0;
+      }
+    }
   }
   //---------------------------------------
   > .part-right {

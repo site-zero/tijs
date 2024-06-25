@@ -3,8 +3,8 @@ import { getFilterExampleFields } from '../../filter/example/ex-fields';
 import { ComboFilterProps } from '../ti-combo-filter-types';
 
 export default {
-  name: 'comfy',
-  text: 'i18n:ti-combo-filter-example-comfy',
+  name: 'nomenu',
+  text: 'i18n:ti-combo-filter-example-nomenu',
   comConf: {
     className: 'fit-parent',
     value: {
@@ -19,12 +19,12 @@ export default {
         name: -1,
       },
     },
-    keepMajor: 'local:Ti-Demo-TiComboFilter-Major-comfy',
+    keepMajor: 'local:Ti-Demo-TiComboFilter-Major-nomenu',
     filterConfig: {
       majorFields: ['type', '__keywords', 'dob'],
       canCustomizedMajor: true,
       actionCollapse: false,
-      actionAt: 'right',
+      actionAt: 'none',
       fields: [...getFilterExampleFields()],
     },
     sorterConfig: {

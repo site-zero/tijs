@@ -141,7 +141,7 @@ export type FilterProps = CommonProps &
     /**
      * 动作菜单位置
      */
-    actionAt?: 'right' | 'bottom';
+    actionAt?: 'right' | 'bottom' | 'none';
     /**
      * 是否尽量缩起动作按钮，
      * 如果为 true，那么除了 search 按钮，都会缩进一个菜单里

@@ -6,6 +6,7 @@ export default {
   name: 'tight',
   text: 'i18n:ti-combo-filter-example-tight',
   comConf: {
+    className: 'fit-parent',
     value: {
       filter: {
         name: 'foxa',

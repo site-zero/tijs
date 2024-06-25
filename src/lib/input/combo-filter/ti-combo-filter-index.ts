@@ -11,6 +11,7 @@ const en_us = {
   'example-comfy': 'Comfy',
   'example-tight': 'Tight',
   'example-oneline': 'One Line',
+  'example-nomenu': 'No Menu',
 };
 const zh_cn = {
   'com-name': '组合过滤器',
@@ -19,6 +20,7 @@ const zh_cn = {
   'example-comfy': '舒适布局',
   'example-tight': '紧凑布局',
   'example-oneline': '单行布局',
+  'example-nomenu': '无菜单舒适布局',
 };
 
 const COM_TYPE = COM_TYPES.ComboFilter;
@@ -36,14 +38,15 @@ const TiComboFilterInfo: TiComInfo = {
   },
   com: TiComboFilter,
   liveStyle: {
-    width: '80%',
-    maxWidth: '1000px',
+    width: '100%',
+    height: '100%',
+    padding: '20px',
   },
   install: (app: App) => {
     app.component(COM_TYPE, TiComboFilter);
   },
   defaultProps: 'comfy',
-  exampleProps: [example.comfy, example.tight, example.oneline],
+  exampleProps: [example.comfy, example.tight, example.oneline, example.nomenu],
 };
 
 export * from './ti-combo-filter-types';
