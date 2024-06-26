@@ -6,5 +6,7 @@ export type LabelProps = ValueBoxProps<any> & {
   type?: LogicType;
   textAlign?: CssTextAlign;
   clickable?: boolean;
+  nowrap?: boolean;
+  disable?: boolean;
 };
 export type LabelOptions = ValueBoxOptions;

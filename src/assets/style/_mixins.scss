@@ -280,18 +280,18 @@ $BARLINE: 1px;
 }
 
 //-------------------------------------------------------------
-@mixin __fontsz($prefix, $sz) {
-  #{$prefix}-#{$sz} {
+@mixin __fontsz($prefix, $sz, $suffix:'') {
+  #{$prefix}-#{$sz} #{$suffix} {
     font-size: var(--ti-fontsz-#{$sz});
   }
 }
 //-------------------------------------------------------------
-@mixin aspect_fontsize($prefix) {
-  @include __fontsz($prefix, t);
-  @include __fontsz($prefix, s);
-  @include __fontsz($prefix, m);
-  @include __fontsz($prefix, b);
-  @include __fontsz($prefix, h);
+@mixin aspect_fontsize($prefix, $suffix:'') {
+  @include __fontsz($prefix, t, $suffix);
+  @include __fontsz($prefix, s, $suffix);
+  @include __fontsz($prefix, m, $suffix);
+  @include __fontsz($prefix, b, $suffix);
+  @include __fontsz($prefix, h, $suffix);
 }
 
 //-------------------------------------------------------------

@@ -14,7 +14,6 @@ export class DynStrEle extends DynEle {
   constructor(input: DynElInfo) {
     super(input);
     this._convertors = [];
-    console.log('DynStrEle', input);
 
     // 预先分析处理器
     let ss = Str.splitIgnoreBlank(input.fmt, ';');

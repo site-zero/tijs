@@ -5,7 +5,7 @@ import { FilterProps } from './ti-filter-types';
 import { FilterEmitter } from './use-filter';
 import { joinFieldsTitle, makeFieldsMap } from './use-filter-fields';
 
-export async function useFilterCustomization(
+export async function useSetupMajorFields(
   props: FilterProps,
   emit: FilterEmitter
 ) {
@@ -30,6 +30,15 @@ export async function useFilterCustomization(
     maxWidth: '1200px',
     height: '80%',
     clickMaskToClose: true,
+    actions: [
+      {
+        icon: 'zmdi-time-restore',
+        text: 'Reset Major',
+        action: () => {
+          emit('reset-major');
+        },
+      },
+    ],
     result: props.majorFields ?? [],
     comType: 'TiTransfer',
     comConf: {

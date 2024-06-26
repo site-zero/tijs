@@ -32,6 +32,10 @@ export function useFilterEmit(
     else if (event === 'change-major') {
       _emit('change-major', payload ?? []);
     }
+    // Rest major
+    else if (event === 'reset-major') {
+      _emit('reset-major');
+    }
     // Invalide Event
     else {
       throw new Error(`Unhandled event: ${event}`);

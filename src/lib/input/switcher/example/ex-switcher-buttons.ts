@@ -5,7 +5,7 @@ export default {
   name: 'buttons',
   text: 'i18n:ti-switcher-example-buttons',
   comConf: {
-    value: 'cow',
+    value: 'info',
     multi: true,
     nowrap: false,
     itemSize: 'b',

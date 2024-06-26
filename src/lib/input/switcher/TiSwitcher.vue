@@ -20,15 +20,16 @@
   } as SelectableState<TableRowID>);
   //-----------------------------------------------------
   const props = withDefaults(defineProps<SwitcherProps>(), {
+    defaultItemType: 'info',
     itemSize: 'm',
     itemGap: 's',
     itemRadius: 's',
     nowrap: false,
   });
   //-----------------------------------------------------
-  const Swt = computed(() => useSwitcher(selection, props, emit));
+  const Swt = useSwitcher(selection, props, emit);
   //-----------------------------------------------------
-  const DisplayItems = computed(() => Swt.value.getDisplayItems());
+  const DisplayItems = computed(() => Swt.getDisplayItems());
   //-----------------------------------------------------
   const TopClass = computed(() =>
     CssUtils.mergeClassName(
@@ -46,8 +47,9 @@
   //-----------------------------------------------------
   watch(
     () => [props.options],
-    () => {
-      Swt.value.loadOptions();
+    async () => {
+      Swt.loadOptions();
+      Swt.updateSelection(props.value);
     },
     {
       immediate: true,
@@ -58,7 +60,7 @@
   watch(
     () => [props.value],
     () => {
-      Swt.value.updateSelection(props.value);
+      Swt.updateSelection(props.value);
     },
     {
       immediate: true,

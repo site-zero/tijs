@@ -50,6 +50,11 @@
     KeepMajor.value.save(_major_fields.value);
   }
   //-------------------------------------------------
+  function onFilterMajorReset() {
+    _major_fields.value = props.filterConfig?.majorFields ?? [];
+    KeepMajor.value.reset();
+  }
+  //-------------------------------------------------
   function onFilterChange(flt: FilterValue) {
     let val = _.cloneDeep(props.value) ?? {};
     val.filter = flt;
@@ -125,6 +130,7 @@
     :export-api="regFilterApi"
     @change="onFilterChange"
     @change-major="onFilterMajorChange"
+    @reset-major="onFilterMajorReset"
     @search="emit('search')"
     @reset="emit('reset')">
     <template v-slot:foot>
@@ -133,7 +139,7 @@
         :can-setup="false"
         title="i18n:ti-combo-filter-sort-title"
         v-bind="SrtConfig"
-        :value="SrtValue"       
+        :value="SrtValue"
         :export-api="regSorterApi"
         @change="onSorterChange" />
     </template>

@@ -27,16 +27,18 @@ export function useSwitcher(
   props: SwitcherProps,
   emit: SwitcherEmitter
 ) {
-  const { dict } = useOptions({
-    options: props.options,
-    dictVars: props.dictVars,
-    mustInOptions: true,
-  });
+  //console.log('useSwitcher')
+  const _sw_options = computed(() =>
+    useOptions({
+      options: props.options,
+      dictVars: props.dictVars,
+      mustInOptions: true,
+    })
+  );
   const options = ref<OptionDisplayItem[]>([]);
 
   function getDisplayItems() {
     let items = _.cloneDeep(options.value);
-    //console.log('getDisplayItems', items.length);
     let dftStyle = CssUtils.toCssStyle(props.itemStyle);
     for (let it of items) {
       it.checked = isChecked(it);
@@ -88,17 +90,21 @@ export function useSwitcher(
     return Util.arrayToMap(vals);
   });
 
-  const selectable = useSelectable<any>({
-    getId: 'value',
-    multi: props.multi,
-    checkedIds: SwitcherCheckedIds.value,
-    canSelect: props.readonly ? false : true,
-    canCheck: props.readonly ? false : true,
-    minChecked: props.minChecked,
-    maxChecked: props.maxChecked,
-  });
+  const selectable = computed(() =>
+    useSelectable<any>({
+      getId: 'value',
+      multi: props.multi,
+      checkedIds: SwitcherCheckedIds.value,
+      canSelect: props.readonly ? false : true,
+      canCheck: props.readonly ? false : true,
+      minChecked: props.minChecked,
+      maxChecked: props.maxChecked,
+    })
+  );
 
   async function loadOptions() {
+    //console.log('loadOptions');
+    let dict = _sw_options.value.dict;
     let list = [] as OptionDisplayItem[];
     let ids = [] as TableRowID[];
     let items = await dict?.getData();
@@ -121,7 +127,7 @@ export function useSwitcher(
   }
 
   function isChecked(it: OptionDisplayItem) {
-    return selectable.isIDChecked(selection, it.value);
+    return selectable.value.isIDChecked(selection, it.value);
   }
 
   function onSelect(itemId: TableRowID, event?: Event) {
@@ -143,7 +149,7 @@ export function useSwitcher(
           se.ctrlKey = true;
         }
       }
-      selectable.select(selection, itemId, se);
+      selectable.value.select(selection, itemId, se);
       // 通知改动
       let vals = Util.mapTruthyKeys(selection.checkedIds);
       if (!_.isEqual(vals, props.value)) {
@@ -154,11 +160,11 @@ export function useSwitcher(
     else {
       // 取消
       if (selection.currentId == itemId) {
-        selectable.toggleId(selection, itemId);
+        selectable.value.toggleId(selection, itemId);
       }
       // 选择
       else {
-        selectable.selectId(selection, itemId);
+        selectable.value.selectId(selection, itemId);
       }
       // 通知改动
       let val = selection.currentId;
@@ -171,7 +177,7 @@ export function useSwitcher(
   function updateSelection(value?: TableRowID | TableRowID[]) {
     //console.log('updateSelection', _.cloneDeep(value));
     if (_.isNil(value)) {
-      selectable.updateSelection(selection, options.value, null, {});
+      selectable.value.updateSelection(selection, options.value, null, {});
     }
     // 多选
     else if (props.multi) {
@@ -187,7 +193,7 @@ export function useSwitcher(
         }
       }
       //console.log(' --', currentId, checkedIds);
-      selectable.updateSelection(
+      selectable.value.updateSelection(
         selection,
         options.value,
         currentId,
@@ -208,7 +214,7 @@ export function useSwitcher(
           checkedIds.set(currentId as TableRowID, true);
         }
       }
-      selectable.updateSelection(
+      selectable.value.updateSelection(
         selection,
         options.value,
         currentId,

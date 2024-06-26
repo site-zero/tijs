@@ -15,6 +15,7 @@
     maxFieldNameWidth: 'auto',
     fieldLayoutMode: 'h-title-icon-suffix',
     defaultComType: 'TiInput',
+    ignoreNil: true,
     fields: () => [] as GridFieldsInput[],
   });
 

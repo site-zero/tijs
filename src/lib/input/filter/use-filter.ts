@@ -9,7 +9,7 @@ import {
   FilterValue,
 } from './ti-filter-types';
 import { openAdvanceForm } from './use-filter-advance';
-import { useFilterCustomization } from './use-filter-customize';
+import { useSetupMajorFields } from './use-filter-setup-major';
 import {
   getFieldsNames,
   joinFieldsList,
@@ -19,7 +19,7 @@ import {
 
 export type FilterEmitter = {
   (event: 'change', payload: FilterValue): void;
-  (event: 'search' | 'reset'): void;
+  (event: 'search' | 'reset' | 'reset-major'): void;
   (event: 'change-major', payload: string[]): void;
 };
 
@@ -210,7 +210,7 @@ export function useFilter(
     loadMoreItems,
 
     setupMajorFields: async () => {
-      await useFilterCustomization(props, emit);
+      await useSetupMajorFields(props, emit);
     },
     openAdvanceSettings: async () => {
       await openAdvanceForm(props, emit);

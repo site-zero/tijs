@@ -154,13 +154,17 @@
     return list;
   });
 
-  const hasModalActions = computed(() => {
+  const hasModalLeftActions = computed(() => {
+    return !_.isEmpty(props.actions);
+  });
+
+  const hasModalRightActions = computed(() => {
     return !_.isEmpty(ModalRightActions.value);
   });
 
   const ModalClass = computed(() =>
     CssUtils.mergeClassName(props.className, `is-${props.type}`, {
-      'show-footer': hasModalActions.value,
+      'show-footer': hasModalRightActions.value,
     })
   );
   const ModalStyle = computed(() => {
@@ -230,8 +234,17 @@
           :emit-adaptors="BlockEmitAdaptors"
           v-on="OnAllEvents" />
         <!------------------------------>
-        <footer v-if="hasModalActions">
-          <div class="at-right">
+        <footer v-if="hasModalLeftActions || hasModalRightActions">
+          <div
+            class="at-left"
+            v-if="hasModalLeftActions && props.actions">
+            <TiActionBar
+              :items="props.actions"
+              top-item-aspect-mode="button" />
+          </div>
+          <div
+            class="at-right"
+            v-if="hasModalRightActions">
             <TiActionBar
               :items="ModalRightActions"
               top-item-aspect-mode="button" />

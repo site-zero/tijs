@@ -1,5 +1,5 @@
-import { ComboFilterProps, KeepFeature } from '../../';
 import { ComputedRef, Ref } from 'vue';
+import { ComboFilterProps, KeepFeature } from '../../';
 
 export function useComboFilterKeep(
   KeepMajor: ComputedRef<KeepFeature>,

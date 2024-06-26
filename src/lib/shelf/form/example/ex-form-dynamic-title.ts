@@ -1,4 +1,4 @@
-import { DropListProps } from 'src/lib/input/all-input';
+import { DropListProps } from '../../../input/all-input';
 import { ComPropExample } from '../../../../_type';
 import { FormProps } from '../ti-form-types';
 

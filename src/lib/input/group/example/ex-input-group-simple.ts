@@ -10,7 +10,7 @@ export default {
       phone: '+86 13910110054',
       phoneComment: 'Ava from 8:00 a.m. to 5:00 p.m',
     },
-    layoutGridTracks: ['60px', '30%', '1fr'],
+    layoutGridTracks: '60px,30%,1fr',
     bodyPartGap: 't',
     ignoreNil: true,
     fields: [

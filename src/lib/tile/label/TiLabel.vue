@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import _ from 'lodash';
-  import { computed, onMounted, reactive, ref, watch } from 'vue';
-  import { PrefixSuffixEvents, TiIcon, usePlaceholder } from '../../';
-  import { CssUtils } from '../../../core';
-  import { COM_TYPES } from '../../lib-com-types';
-  import { LabelProps, LabelState } from './ti-label-types';
-  import { useLabel } from './use-label';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { PrefixSuffixEvents, TiIcon, usePlaceholder } from '../../';
+import { CssUtils } from '../../../core';
+import { COM_TYPES } from '../../lib-com-types';
+import { LabelProps, LabelState } from './ti-label-types';
+import { useLabel } from './use-label';
   //-----------------------------------------------------
   defineOptions({
     inheritAttrs: true,
@@ -32,6 +32,7 @@
 
   let props = withDefaults(defineProps<LabelProps>(), {
     autoI18n: true,
+    nowrap: true,
   });
   //-----------------------------------------------------
   const $el = ref<any>(null);
@@ -59,6 +60,8 @@
         'has-value': hasValue.value,
         'nil-value': !hasValue.value,
         'is-clickable': props.clickable,
+        'is-nowrap': props.nowrap,
+        'is-disable': props.disable,
       },
       () => {
         if (props.type) {
