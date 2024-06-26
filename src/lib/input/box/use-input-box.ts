@@ -1,8 +1,12 @@
 import { Ref } from 'vue';
-import { TiMatch, Vars } from '../../../_type';
-import { DictItem, Dicts } from '../../../core';
+import { OptionItem, Vars } from '../../../_type';
+import { Dicts } from '../../../core';
 import { ValueInputTidyMode } from '../../_features';
-import { InputBoxState, TipBoxShowTime } from './ti-input-types';
+import {
+  InputBoxState,
+  OptionPredicater,
+  TipBoxShowTime,
+} from './ti-input-types';
 
 export type LoadTipListOptions = {
   box: InputBoxState;
@@ -11,7 +15,7 @@ export type LoadTipListOptions = {
   tipUseHint: boolean;
   tipTidyBy: ValueInputTidyMode[];
   tidyValue: (val: any, mode?: ValueInputTidyMode[]) => Promise<any>;
-  optionFiler?: TiMatch;
+  isVisible: OptionPredicater;
 };
 
 export function resetTipList(
@@ -33,15 +37,8 @@ export async function updateTipList(
   tips: Ref<Vars[] | undefined>,
   options: LoadTipListOptions
 ) {
-  let {
-    dict,
-    box,
-    tipShowTime,
-    tipUseHint,
-    tipTidyBy,
-    tidyValue,
-    optionFiler,
-  } = options;
+  let { dict, box, tipShowTime, tipUseHint, tipTidyBy, tidyValue, isVisible } =
+    options;
 
   let { boxValue, boxInputing, boxFocused, keyboard, lastUpdateAMS } = box;
 
@@ -91,19 +88,7 @@ export async function updateTipList(
     }
     // console.log(`dict.queryStdData('${hintVal}')`);
     dict.queryData(hintVal, box.lastAbort.signal).then((list) => {
-      let list2 = [] as DictItem<any>[];
-      if (optionFiler) {
-        for (let li of list) {
-          if (optionFiler.test(li)) {
-            list2.push(dict!.toStdItem(li));
-          }
-        }
-      } else {
-        for (let li of list) {
-          list2.push(dict!.toStdItem(li));
-        }
-      }
-      __set_tip_list(tips, list2);
+      __set_tip_list(tips, list, isVisible, dict!);
     });
   }
   // 全量查询
@@ -114,37 +99,25 @@ export async function updateTipList(
     }
     //console.log(`dict.queryStdData('${hintVal}')`);
     dict.queryData(box.lastAbort.signal).then((list) => {
-      let list2 = [] as DictItem<any>[];
-      if (optionFiler) {
-        for (let li of list) {
-          if (optionFiler.test(li)) {
-            list2.push(dict!.toStdItem(li));
-          }
-        }
-      } else {
-        for (let li of list) {
-          list2.push(dict!.toStdItem(li));
-        }
-      }
-      __set_tip_list(tips, list2);
+      __set_tip_list(tips, list, isVisible, dict!);
     });
   }
 }
 
 function __set_tip_list(
   tips: Ref<Vars[] | undefined>,
-  list: Dicts.DictItem<any>[]
+  list: any[],
+  isVisible: OptionPredicater,
+  dict: Dicts.TiDict
 ) {
-  let re = [] as Vars[];
+  let list2 = [] as OptionItem<any>[];
   for (let li of list) {
-    re.push({
-      icon: li.icon,
-      text: li.text,
-      tip: li.tip,
-      value: li.value,
-    });
+    if (isVisible(li)) {
+      let item = dict.toStdItem(li).toOptionItem();
+      list2.push(item);
+    }
   }
-  tips.value = re;
+  tips.value = list2;
 }
 
 export function dumpBoxState(box: InputBoxState): string {

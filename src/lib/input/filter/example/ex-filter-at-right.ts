@@ -6,6 +6,7 @@ export default {
   name: 'at_right',
   text: 'i18n:ti-filter-example-at-right',
   comConf: {
+    className: 'fit-parent',
     value: {
       type: 'hippo',
       age: '[3,89)',

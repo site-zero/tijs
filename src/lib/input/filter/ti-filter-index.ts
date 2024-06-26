@@ -36,8 +36,9 @@ const TiFilterInfo: TiComInfo = {
   },
   com: TiFilter,
   liveStyle: {
-    width: '80%',
-    maxWidth: '1000px',
+    width: '100%',
+    height: '100%',
+    padding: '20px',
   },
   install: (app: App) => {
     app.component(COM_TYPE, TiFilter);

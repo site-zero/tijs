@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import { Rect, Vars } from '../../../_type';
-import { CssUtils } from '../../../core';
+import { CssUtils, Match, Util } from '../../../core';
 import { ListProps, getDockingStyle } from '../../../lib';
-import { TipBoxProps } from './ti-input-types';
+import { OptionPredicateMaker, TipBoxProps } from './ti-input-types';
 
 export function getTipListConf(props?: ListProps) {
   let re = _.assign(
@@ -37,4 +37,27 @@ export function getTipWrapperStyle(
     $el,
     box
   );
+}
+
+export function makeOptionPredicate(props: TipBoxProps): OptionPredicateMaker {
+  if (props.optionFilter) {
+    // 如果是函数
+    if (_.isFunction(props.optionFilter)) {
+      return props.optionFilter as OptionPredicateMaker;
+    }
+    // 否则，就是对象
+    return (vars: Vars) => {
+      let m_input = props.optionFilter;
+      if (!_.isEmpty(vars)) {
+        m_input = Util.explainObj(vars, props.optionFilter);
+      }
+      let _mat = Match.parse(m_input, false);
+      return (item: Record<string, any>) => {
+        return _mat.test(item);
+      };
+    };
+  }
+  return (_vars: Vars) => {
+    return () => true;
+  };
 }

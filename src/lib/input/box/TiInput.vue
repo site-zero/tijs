@@ -18,11 +18,15 @@
     useValueBox,
   } from '../../';
   import { BUS_KEY, Rect, Vars } from '../../../_type';
-  import { CssUtils, Match, Rects } from '../../../core';
+  import { CssUtils, Rects } from '../../../core';
   import { COM_TYPES } from '../../lib-com-types';
   import { InputBoxProps, InputBoxState } from './ti-input-types';
   import { resetTipList, updateTipList } from './use-input-box';
-  import { getTipListConf, getTipWrapperStyle } from './use-tip-box';
+  import {
+    getTipListConf,
+    getTipWrapperStyle,
+    makeOptionPredicate,
+  } from './use-tip-box';
   //-----------------------------------------------------
   defineOptions({
     inheritAttrs: false,
@@ -249,13 +253,9 @@
     }
   }
   //-----------------------------------------------------
-  const BoxOptionFilter = computed(() => {
-    if (props.optionFilter) {
-      return Match.parse(props.optionFilter, false);
-    }
-  });
-  //-----------------------------------------------------
   function doUpdateTipList() {
+    const prediMaker = makeOptionPredicate(props);
+    const predicate = prediMaker(props.boxVars ?? {});
     updateTipList(_box_state.boxInputing, _tips, {
       box: _box_state,
       tipShowTime: props.tipShowTime,
@@ -263,7 +263,7 @@
       tipUseHint: props.tipUseHint ?? false,
       tipTidyBy: props.tipTidyBy ?? ['main'],
       tidyValue: Box.value.tidyValue,
-      optionFiler: BoxOptionFilter.value,
+      isVisible: predicate
     });
   }
   //-----------------------------------------------------

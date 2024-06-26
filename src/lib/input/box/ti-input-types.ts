@@ -25,15 +25,24 @@ export type InputBoxAspect = {
   width?: string;
   style?: Vars;
 };
-
+//--------------------------------------------------
+export type OptionPredicateMaker = (vars: Vars) => OptionPredicater;
+export type OptionPredicater = (item: Record<string, any>) => boolean;
 //--------------------------------------------------
 //
 //              提示框相关属性
 //
 //--------------------------------------------------
 export type TipBoxProps = {
+  // 动态渲染的上下文
+  boxVars?: Vars;
   // 一个过滤器 AutoMatch，用来预先过滤字典项
-  optionFilter?: any;
+  // 第二个参数是解析上下文，来自 box 的 vars 字段
+  // 如果控件在表单里，自然采用表单字段的动态上下文
+  optionFilter?:
+    | Record<string, any>
+    | Record<string, any>[]
+    | OptionPredicateMaker;
 
   /**
    * 对于 droplist 设置为 false，则关闭的时候不检查之，默认为 true

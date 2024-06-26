@@ -6,8 +6,9 @@ export default {
   name: 'at_none',
   text: 'i18n:ti-filter-example-at-none',
   comConf: {
+    className: 'fit-parent',
     value: {
-      type: 'hippo',
+      type: 'hippof',
       age: '[3,89)',
     },
     keywords: [

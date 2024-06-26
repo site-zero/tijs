@@ -6,6 +6,7 @@ export default {
   name: 'at_bottom',
   text: 'i18n:ti-filter-example-at-bottom',
   comConf: {
+    className: 'fit-parent',
     value: {
       type: 'hippo',
       name: 'hello',
