@@ -14,6 +14,7 @@ export class DynStrEle extends DynEle {
   constructor(input: DynElInfo) {
     super(input);
     this._convertors = [];
+    console.log('DynStrEle', input);
 
     // 预先分析处理器
     let ss = Str.splitIgnoreBlank(input.fmt, ';');
@@ -35,7 +36,9 @@ export class DynStrEle extends DynEle {
         this._convertors.push(str_mapping(is));
       }
       // 大小写转换
-      else if (/^(upper|lower|camel|kebab|snake)$/i.test(s)) {
+      else if (
+        /^(upper(All|First)?|lower(All)?|camel|kebab|snake|start|raw)$/i.test(s)
+      ) {
         let caseName = s.toLowerCase();
         let func = Str.getCaseFunc(caseName as StrCaseMode);
         this._convertors.push(func);

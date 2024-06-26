@@ -6,9 +6,11 @@ import example from './example';
 
 const en_us = {
   'com-name': 'Form',
+  'example-dynamic-title': 'Dynamic Title',
 };
 const zh_cn = {
   'com-name': '表单',
+  'example-dynamic-title': '动态字段标题',
 };
 
 const COM_TYPE = COM_TYPES.Form;
@@ -33,7 +35,7 @@ const TiFormInfo: TiComInfo = {
     app.component(COM_TYPE, TiForm);
   },
   defaultProps: 'simple',
-  exampleProps: [example.simple],
+  exampleProps: [example.simple, example.dynamicTitle],
   exampleModel: {
     change: {
       key: 'data',

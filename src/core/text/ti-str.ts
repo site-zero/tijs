@@ -532,8 +532,11 @@ function _to_chinese_number(input: number, { CN_NC0, CN_NU0 }: CN_DICT) {
 ---------------------------------------------------*/
 
 const STR_CASE_FUNC = {
-  upper: (s: string) => (s ? s.toUpperCase() : s),
-  lower: (s: string) => (s ? s.toLowerCase() : s),
+  lowerAll: (s: string) => _.toLower(s),
+  upperAll: (s: string) => _.toUpper(s),
+  upperFirst: (s: string) => _.upperFirst(s),
+  upper: (s: string) => _.upperCase(s),
+  lower: (s: string) => _.lowerCase(s),
   camel: (s: string) => _.camelCase(s),
   snake: (s: string) => _.snakeCase(s),
   kebab: (s: string) => _.kebabCase(s),

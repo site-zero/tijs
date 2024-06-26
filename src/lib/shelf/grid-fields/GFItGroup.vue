@@ -15,7 +15,11 @@
     GridFieldsStrictLabel,
     GridItemEmitter,
   } from './ti-grid-fields-types';
-  import { getBodyPartStyle, getGridItemStyle } from './use-field-style';
+  import {
+    getBodyPartStyle,
+    getFieldTextInfo,
+    getGridItemStyle,
+  } from './use-field-style';
   //-------------------------------------------------
   defineOptions({
     inheritAttrs: false,
@@ -52,6 +56,8 @@
     return _.assign(css_1, css_2);
   });
   //-------------------------------------------------
+  const GroupText = computed(() => getFieldTextInfo(props, props.vars));
+  //-------------------------------------------------
   const $main = ref<HTMLElement>();
   //-------------------------------------------------
   const obResize = new ResizeObserver((_entries) => {
@@ -80,8 +86,8 @@
     <TextSnippet
       v-if="props.title || props.comType"
       className="as-group-title"
-      :text="props.title || ''"
-      :textType="props.titleType"
+      :text="GroupText.title"
+      :textType="GroupText.titleType"
       :comType="props.comType"
       :comConf="props.comConf"
       :autoValue="props.autoValue"
@@ -95,8 +101,8 @@
     <TextSnippet
       v-if="props.tip || props.tipBy"
       className="as-group-title"
-      :text="props.tip || ''"
-      :textType="props.tipType"
+      :text="GroupText.tip ?? ''"
+      :textType="GroupText.tipType"
       :comType="props.tipBy?.comType"
       :comConf="props.tipBy?.comConf"
       :autoValue="props.tipBy?.autoValue"

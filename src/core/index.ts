@@ -1,4 +1,5 @@
-import * as Ti from './ti';
+import * as ti_global from './ti';
+import * as ti_core from './ti-exports';
 
 //
 // 为浏览器环境，做的引入索引
@@ -6,7 +7,10 @@ import * as Ti from './ti';
 
 const G = globalThis as any;
 if (!G.Ti) {
-  G.Ti = Ti;
+  G.Ti = {
+    ...ti_global,
+    ...ti_core,
+  };
 }
 
 export * from './ti';

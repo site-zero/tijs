@@ -5,6 +5,7 @@ import {
   TextContentType,
   Vars,
 } from '../../../_type';
+import { Util } from '../../../core';
 import {
   GridFieldLayoutMode,
   GridFieldsProps,
@@ -275,25 +276,52 @@ export function getFieldIcon(
   return reIcon;
 }
 
-export type FieldTitleTextInfo = {
+export type FieldTextInfo = {
   title: string;
-  type?: TextContentType;
+  titleType?: TextContentType;
+  tip?: string;
+  tipType?: TextContentType;
 };
 
-export function getFieldTitle(
-  field: GridFieldsStrictField
-): FieldTitleTextInfo {
-  let { title, titleType, fieldTitleBy, required } = field;
-  title = title || '';
+export function getFieldTextInfo(
+  field: Pick<
+    GridFieldsStrictField,
+    | 'title'
+    | 'titleType'
+    | 'fieldTitleBy'
+    | 'tip'
+    | 'tipType'
+    | 'required'
+    | 'data'
+  >,
+  vars?: Vars
+): FieldTextInfo {
+  let {
+    title: title_arms,
+    titleType,
+    fieldTitleBy,
+    required,
+    tip: tip_arms,
+    tipType,
+  } = field;
+  let ctx = { data: field.data, vars };
+
+  // for title
+  let title = Util.selectValue(ctx, title_arms, {
+    explain: true,
+  });
   if (required && required(field.data) && title && !fieldTitleBy) {
     if ('text' == titleType) {
       title = _.escape(title);
     }
-    title = '<b class="required-mark">*</b>' + title;
+    title = '<b class="required-mark">*</b>' + title_arms;
     titleType = 'html';
   }
 
-  return { title, type: titleType };
+  // for tip
+  let tip = Util.selectValue(ctx, tip_arms, { explain: true });
+
+  return { title: title ?? '', titleType, tip, tipType };
 }
 
 export function getBodyPartStyle(

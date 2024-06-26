@@ -15,7 +15,6 @@ export default {
       { value: 'frog', text: 'Frog', icon: 'fas-frog' },
       { value: 'bugs', text: 'Bugs', icon: 'fas-bugs' },
       { value: 'otter', text: 'Otter', icon: 'fas-otter' },
-      { value: 'feather', text: 'Feather', icon: 'fas-feather' },
       { value: 'fish', text: 'Fish', icon: 'fas-fish' },
       { value: 'dragon', text: 'Dragon', icon: 'fas-dragon' },
       { value: 'locust', text: 'Locust', icon: 'fas-locust' },

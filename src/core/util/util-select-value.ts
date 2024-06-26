@@ -1,14 +1,12 @@
 import JSON5 from 'json5';
 import _ from 'lodash';
 import { Match, Util } from '../';
-import { FuncA2, Vars } from '../../_type';
+import { FuncA2, SelectValueArm, Vars } from '../../_type';
 
 export type SelectValueOptions<T, CTX> = {
   explain?: boolean;
   by?: FuncA2<[T, any], CTX, T | undefined>;
 };
-export type SelectValueArmItem<T, M> = T | [T, M];
-export type SelectValueArm<T, M> = T | Array<SelectValueArmItem<T, M>>;
 /***
  * Select value from the arm which match the context
  *
@@ -40,16 +38,9 @@ export type SelectValueArm<T, M> = T | Array<SelectValueArmItem<T, M>>;
  */
 export function selectValue<C, T, M>(
   context: C,
-  arms: string | SelectValueArm<T, M> = [],
+  arms: SelectValueArm<T, M> = [],
   options: SelectValueOptions<T, C> = {}
-): T {
-  // Auto Parse
-  if (_.isString(arms)) {
-    try {
-      let parsedArms = JSON.parse(arms) as unknown as SelectValueArm<T, M>;
-      return selectValue(context, parsedArms, options);
-    } catch (err) {}
-  }
+): T | undefined {
   // Eval options
   let explain = options.explain ?? false;
   let by =
@@ -60,11 +51,6 @@ export function selectValue<C, T, M>(
         return v;
       }
     };
-
-  // Guard
-  if (_.isString(arms)) {
-    throw new Error('Arms is string but it should be impossible! : ' + arms);
-  }
 
   // Walk Arm
   if (_.isArray(arms)) {
@@ -80,7 +66,6 @@ export function selectValue<C, T, M>(
         return v;
       }
     }
-    throw Error('Arms without default : ' + JSON5.stringify(arms));
   }
   // Simple value
   else {

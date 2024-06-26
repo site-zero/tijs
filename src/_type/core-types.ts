@@ -301,6 +301,9 @@ export type Link = {
 };
 
 export type StrCaseFunc = {
+  lowerAll: StrConvertor;
+  upperAll: StrConvertor;
+  upperFirst: StrConvertor;
   upper: StrConvertor;
   lower: StrConvertor;
   camel: StrConvertor;

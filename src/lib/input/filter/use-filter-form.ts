@@ -6,6 +6,7 @@ import {
   TagsProps,
 } from '../../';
 import { Vars, getFieldUniqKey } from '../../../_type';
+import { I18n, Util } from '../../../core';
 import { FilterFeature, FilterProps } from './ti-filter-types';
 
 export function getFilterFormConfig(
@@ -64,10 +65,17 @@ export function getFilterFormConfig(
       let nameTranslator = {} as Record<string, TagNameInfo>;
       for (let fld of Flt.AllFields.value) {
         if (fld.name) {
+          let title = Util.selectValue({}, fld.title, {
+            explain: true,
+          });
+          if (title) {
+            title = I18n.text(title);
+          }
+          title = title ?? fld.uniqKey ?? '';
           // 复合字段
           if (_.isArray(fld.name)) {
             let info = {
-              title: fld.title ?? getFieldUniqKey(fld.name),
+              title: title ?? getFieldUniqKey(fld.name),
               name: fld.name,
             };
             for (let fldName of fld.name) {
@@ -77,7 +85,7 @@ export function getFilterFormConfig(
           // 简单字段
           else {
             nameTranslator[fld.name] = {
-              title: fld.title ?? fld.name,
+              title: title ?? fld.name,
               name: fld.name,
             };
           }

@@ -3,7 +3,7 @@
   import { computed } from 'vue';
   import { TextSnippet } from '../../';
   import { GridFieldsStrictLabel } from './ti-grid-fields-types';
-  import { getGridItemStyle } from './use-field-style';
+  import { getFieldTextInfo, getGridItemStyle } from './use-field-style';
 
   defineOptions({
     inheritAttrs: false,
@@ -14,6 +14,8 @@
     let css_1 = getGridItemStyle(props);
     return _.assign({}, props.style, css_1);
   });
+
+  const LabelText = computed(() => getFieldTextInfo(props, props.vars));
 </script>
 <template>
   <div
@@ -25,8 +27,8 @@
       v-if="props.title || props.comType"
       className="as-label-title"
       :style="TopStyle"
-      :text="props.title || ''"
-      :textType="props.titleType"
+      :text="LabelText.title"
+      :textType="LabelText.titleType"
       :comType="props.comType"
       :comConf="props.comConf"
       :autoValue="props.autoValue"
@@ -40,8 +42,8 @@
     <TextSnippet
       v-if="props.tip || props.tipBy"
       className="as-group-title"
-      :text="props.tip || ''"
-      :textType="props.tipType"
+      :text="LabelText.tip ?? ''"
+      :textType="LabelText.tipType"
       :comType="props.tipBy?.comType"
       :comConf="props.tipBy?.comConf"
       :autoValue="props.tipBy?.autoValue"

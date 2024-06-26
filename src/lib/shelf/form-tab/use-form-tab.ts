@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { StrOptionItem, makeFieldUniqKey } from '../../../_type';
 import { GridFieldsProps } from '../all-shelf';
 import { FormTabProps } from './ti-form-tab-types';
+import { Util } from '../../../core';
 
 export type TabItem = StrOptionItem;
 
@@ -11,11 +12,18 @@ export function getFormTabItems(props: FormTabProps) {
 
   // 收集一下标签列表
   if (props.fields) {
+    let ctx = {
+      data: props.data,
+      vars: props.vars,
+    };
     for (let i = 0; i < props.fields.length; i++) {
       let field = props.fields[i];
       let uniqKey = makeFieldUniqKey([i], field.name, field.uniqKey);
+      let title = Util.selectValue(ctx, field.title, {
+        explain: true,
+      });
       tabItems.push({
-        text: field.title ?? uniqKey,
+        text: title ?? uniqKey,
         icon: field.titleIcon,
         tip: field.tip,
         value: uniqKey,

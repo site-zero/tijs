@@ -9,7 +9,7 @@
   } from './ti-grid-fields-types';
   import {
     getFieldIcon,
-    getFieldTitle,
+    getFieldTextInfo,
     getFieldTitleAlign,
     getFieldTitleStyle,
     getFieldTopStyle,
@@ -45,7 +45,7 @@
   );
   const FieldTitleStyle = computed(() => getFieldTitleStyle(props));
   const TitleAlign = computed(() => getFieldTitleAlign(props));
-  const FieldTitle = computed(() => getFieldTitle(props));
+  const FieldText = computed(() => getFieldTextInfo(props, props.vars));
   const FieldIcon = computed(() =>
     getFieldIcon(props, hasTitle.value, hasTip.value)
   );
@@ -114,11 +114,12 @@
     <TextSnippet
       v-if="hasTitle"
       class="field-part as-title"
+      :dynamic="true"
       :style="FieldTitleStyle"
       :textStyle="props.titleTextStyle"
       :attrs="{ dataAlign: TitleAlign }"
-      :text="FieldTitle.title"
-      :textType="FieldTitle.type"
+      :text="FieldText.title"
+      :textType="FieldText.titleType"
       :autoI18n="false"
       :comType="props.fieldTitleBy?.comType"
       :comConf="props.fieldTitleBy?.comConf"
@@ -148,8 +149,8 @@
       :style="props.tipStyle"
       :textStyle="props.tipTextStyle"
       :attrs="{ dataAlign: props.tipAlign }"
-      :text="props.tip || ''"
-      :textType="props.tipType"
+      :text="FieldText.tip ?? ''"
+      :textType="FieldText.tipType"
       :comType="props.tipBy?.comType"
       :comConf="props.tipBy?.comConf"
       :autoValue="props.tipBy?.autoValue"

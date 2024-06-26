@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { GridFieldsInput } from '../../';
 import { getFieldUniqKey } from '../../../_type';
-import { I18n } from '../../../core';
+import { I18n, Util } from '../../../core';
 
 export function getFieldsNames(fields: GridFieldsInput[] = []) {
   let re = new Set<string>();
@@ -68,7 +68,12 @@ export function joinFieldsList(
 export function joinFieldsTitle(flds: GridFieldsInput[]) {
   let texts = _.map(flds, (fld) => {
     if (fld.title) {
-      return I18n.text(fld.title);
+      let title = Util.selectValue({}, fld.title, {
+        explain: true,
+      });
+      if (title) {
+        return I18n.text(title);
+      }
     }
     return fld.uniqKey ?? getFieldUniqKey(fld.name ?? []);
   });

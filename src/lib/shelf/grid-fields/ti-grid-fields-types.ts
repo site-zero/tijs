@@ -8,6 +8,7 @@ import {
   FieldValueType,
   IconInput,
   InvokePartial,
+  SelectValueArm,
   TextContentType,
   ValueChange,
   Vars,
@@ -27,6 +28,8 @@ export type GridFieldsDomReadyInfo = {
   main: HTMLElement;
 };
 
+export type TextArm = SelectValueArm<string, any>;
+
 export type GridFieldsFeature = {
   strictItems: GridFieldsStrictItem[];
   fieldItems: GridFieldsStrictField[];
@@ -34,7 +37,7 @@ export type GridFieldsFeature = {
   className?: Vars;
   style?: Vars;
   // 标题 & 提示
-  title: string | null;
+  title: string | null | TextArm;
   titleType: TextContentType;
   tip: string | null;
   tipType: TextContentType;
@@ -105,7 +108,7 @@ export type GridFieldsInput = CommonProps &
     //------------------------------------
     // 显示
     //------------------------------------
-    title?: string;
+    title?: string | TextArm;
     titleType?: TextContentType; // 默认 text
     titleIcon?: IconInput;
     titleStyle?: Vars;
@@ -315,13 +318,13 @@ export type GridFieldsStrictAbstractItem = FieldComProps &
     uniqKey: string;
     index: number;
     race: GridFieldsItemRace;
-    title: null | string;
+    title?: TextArm;
     titleIcon?: IconInput;
     titleType: TextContentType; // 默认 text
     titleStyle?: Vars;
     titleAlign?: CssTextAlign;
     titleClass?: any;
-    tip: null | string;
+    tip?: TextArm;
     tipType: TextContentType; // 默认 text
     tipBy?: FieldComProps;
     tipStyle?: Vars;

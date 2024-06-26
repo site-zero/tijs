@@ -24,7 +24,7 @@
     GridFieldsStrictGroup,
     GridFieldsStrictLabel,
   } from './ti-grid-fields-types';
-  import { getBodyPartStyle } from './use-field-style';
+  import { getBodyPartStyle, getFieldTextInfo } from './use-field-style';
   import { useGridFields } from './use-grid-fields';
   //-------------------------------------------------
   defineOptions({
@@ -104,6 +104,21 @@
     return _.assign(css_1, css_2);
   });
   //-------------------------------------------------
+  const GridText = computed(() =>
+    getFieldTextInfo(
+      {
+        title: props.title,
+        titleType: props.titleType ?? 'text',
+        fieldTitleBy: props.fieldTitleBy,
+        tip: props.tip,
+        tipType: props.tipType ?? 'text',
+        required: props.required,
+        data: props.data,
+      },
+      props.vars
+    )
+  );
+  //-------------------------------------------------
   const $el = ref<HTMLElement>();
   const $main = ref<HTMLElement>();
   //-------------------------------------------------
@@ -172,8 +187,8 @@
         :class="props.titleClass"
         :style="props.titleStyle"
         :prefixIcon="props.titleIcon"
-        :text="props.title || ''"
-        :textType="props.titleType"
+        :text="GridText.title"
+        :textType="GridText.titleType"
         :comType="props.comType"
         :comConf="props.comConf"
         :autoValue="props.autoValue"

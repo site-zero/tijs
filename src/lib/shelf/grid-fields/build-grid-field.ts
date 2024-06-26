@@ -44,13 +44,13 @@ export function buildOneGridField(
     ...visiblity,
 
     // 标题 & 提示
-    title: field.title ?? null,
+    title: field.title,
     titleType: field.titleType ?? 'text',
     titleIcon: field.titleIcon,
     titleStyle: field.titleStyle,
     titleAlign: field.titleAlign ?? dft.fieldTitleAlign,
     titleClass: field.titleClass,
-    tip: field.tip ?? null,
+    tip: field.tip,
     tipType: field.tipType ?? 'text',
     tipBy: field.tipBy,
     tipStyle: field.tipStyle,

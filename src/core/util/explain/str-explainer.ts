@@ -82,6 +82,7 @@ function __get_call(path: string, partial: InvokePartial) {
         dft: () => path,
       });
     }
+    console.log('__get_call', func)
     return func();
   };
 }
