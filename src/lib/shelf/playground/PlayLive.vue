@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import _ from 'lodash';
   import { computed } from 'vue';
   import { TiCom, Vars } from '../../../_type';
   import { CssUtils } from '../../../core';
@@ -15,7 +16,8 @@
 
   const PlayLiveStyle = computed(() => {
     let { race, liveStyle } = props.playCom;
-    if (liveStyle) {
+    //console.log(race, liveStyle);
+    if (!_.isEmpty(liveStyle)) {
       return CssUtils.toStyle(liveStyle);
     }
     // 根据模式给个默认

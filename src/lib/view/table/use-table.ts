@@ -1,6 +1,12 @@
 import _ from 'lodash';
 import { ComputedRef, Ref } from 'vue';
-import { CheckStatus, SelectableFeature, useSelectable } from '../../';
+import {
+  CheckStatus,
+  CheckedIds,
+  SelectableFeature,
+  SelectableState,
+  useSelectable,
+} from '../../';
 import { Callback, Callback1, TableRowID, Vars } from '../../../_type';
 import { EventUtils } from '../../../core';
 import { getLogger } from '../../../core/log/ti-log';
@@ -18,6 +24,51 @@ import { TableKeepFeature } from './use-table-keep';
 import { useTableResizing } from './use-table-resizing';
 
 const log = getLogger('TiTable.use-table');
+
+export type TableFeature = {
+  selectable: SelectableFeature<TableRowID>;
+  getRowIds: (data: Vars[]) => TableRowID[];
+  getTableHeadClass: (selection: TableSelection, colIndex: number) => Vars;
+  getTableData: () => TableRowData[];
+  bindTableResizing: (
+    $main: HTMLElement,
+    colResizing: ColResizingState,
+    columnSizes: Ref<number[]>,
+    showRowMarker: boolean,
+    onDestroy: Callback1<Callback>,
+    Keep: ComputedRef<TableKeepFeature>
+  ) => void;
+  getCheckStatus(selection: TableSelection): CheckStatus;
+  getCurrentRow: (
+    selection: TableSelection,
+    rows: TableRowData[]
+  ) => TableRowData | undefined;
+  getCheckedRows: (
+    selection: TableSelection,
+    rows: TableRowData[]
+  ) => TableRowData[];
+  // OnTableHeadCheckerClick: (
+  //   selection: TableSelection,
+  //   status: CheckStatus
+  // ) => void;
+  selectAll: (selection: TableSelection) => void;
+  selectNone: (selection: TableSelection) => void;
+  OnRowSelect: (selection: TableSelection, rowEvent: TableEventPayload) => void;
+  OnRowCheck: (selection: TableSelection, rowEvent: TableEventPayload) => void;
+  OnCellSelect: (
+    selection: TableSelection,
+    rowEvent: TableEventPayload,
+    columns: TableStrictColumn[]
+  ) => void;
+  updateSelection: (
+    selection: SelectableState<TableRowID>,
+    data: Vars[],
+    currentId?: TableRowID | null,
+    checkedIds?: CheckedIds<TableRowID>
+  ) => void;
+  OnRowOpen: (_selection: TableSelection, rowEvent: TableEventPayload) => void;
+  OnCellOpen: (_selection: TableSelection, rowEvent: TableEventPayload) => void;
+};
 
 /**
  * 拖动时的状态
@@ -79,7 +130,7 @@ function _get_table_data(
                    Use Feature
                 
 -----------------------------------------------------*/
-export function useTable(props: TableProps, emit: TableEmitter) {
+export function useTable(props: TableProps, emit: TableEmitter): TableFeature {
   // 启用特性
   let selectable = useSelectable<TableRowID>(props);
 
@@ -115,7 +166,7 @@ export function useTable(props: TableProps, emit: TableEmitter) {
         'is-actived-column': selection.columnIndex == colIndex,
       };
     },
-    getTableData: (_state: TableSelection) => {
+    getTableData: () => {
       return _get_table_data(selectable, props.data);
     },
     bindTableResizing: (
@@ -154,23 +205,57 @@ export function useTable(props: TableProps, emit: TableEmitter) {
     getCurrentRow,
     getCheckedRows,
 
-    OnTableHeadCheckerClick(selection: TableSelection, status: CheckStatus) {
-      let { ids, currentId, checkedIds } = selection;
+    // OnTableHeadCheckerClick(selection: TableSelection, status: CheckStatus) {
+    //   let { ids, currentId, checkedIds } = selection;
+    //   let oldCurrentId = _.cloneDeep(selection.currentId);
+    //   let oldCheckedIds = _.cloneDeep(selection.checkedIds);
+    //   checkedIds.clear();
+    //   if ('all' != status) {
+    //     for (let id of ids) {
+    //       checkedIds.set(id, true);
+    //     }
+    //   }
+    //   if (currentId && !checkedIds.get(currentId)) {
+    //     selection.currentId = undefined;
+    //   }
+
+    //   //
+    //   // Prepare the emit info
+    //   //
+    //   let info = selectable.getSelectionEmitInfo(
+    //     selection,
+    //     props.data,
+    //     oldCheckedIds,
+    //     oldCurrentId
+    //   ) as TableSelectEmitInfo;
+
+    //   emit('select', info);
+    // },
+
+    selectAll(selection: TableSelection) {
+      let { ids, checkedIds } = selection;
       let oldCurrentId = _.cloneDeep(selection.currentId);
       let oldCheckedIds = _.cloneDeep(selection.checkedIds);
-      checkedIds.clear();
-      if ('all' != status) {
-        for (let id of ids) {
-          checkedIds.set(id, true);
-        }
+      console.log('selectAll', ids);
+      for (let id of ids) {
+        checkedIds.set(id, true);
       }
-      if (currentId && !checkedIds.get(currentId)) {
-        selection.currentId = undefined;
-      }
+      let info = selectable.getSelectionEmitInfo(
+        selection,
+        props.data,
+        oldCheckedIds,
+        oldCurrentId
+      ) as TableSelectEmitInfo;
 
-      //
-      // Prepare the emit info
-      //
+      emit('select', info);
+    },
+
+    selectNone(selection: TableSelection) {
+      let { checkedIds } = selection;
+      let oldCurrentId = _.cloneDeep(selection.currentId);
+      let oldCheckedIds = _.cloneDeep(selection.checkedIds);
+      selection.currentId = undefined;
+      checkedIds.clear();
       let info = selectable.getSelectionEmitInfo(
         selection,
         props.data,

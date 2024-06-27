@@ -4,6 +4,7 @@ import {
   KeepInfo,
   RoadblockProps,
   SelectEmitInfo,
+  SelectableFeature,
   SelectableProps,
   SelectableState,
 } from '../..';
@@ -20,6 +21,8 @@ import {
   TextContentType,
   Vars,
 } from '../../../_type';
+
+export type TableSelectable = SelectableFeature<TableRowID>;
 
 export type TableRowData = {
   index: number;

@@ -12,6 +12,7 @@
   import {
     Alert,
     TiIcon,
+    TiActionBar,
     TiRoadblock,
     useFieldChange,
     useLargeScrolling,
@@ -34,8 +35,10 @@
     useTable,
   } from './use-table';
   import { TableScrolling, getTableDebugInfo } from './use-table-debug-info';
+  import { useTableHeadMenu } from './use-table-head-menu';
   import { loadColumnSizes, useKeepTable } from './use-table-keep';
   import { useViewMeasure } from './use-view-measure';
+
   //-------------------------------------------------------
   const COM_TYPE = COM_TYPES.Table;
   const log = getLogger(COM_TYPE);
@@ -128,20 +131,13 @@
   const TopClass = computed(() => CssUtils.mergeClassName(props.className));
   const TableColumns = computed(() => buildTableColumns(props));
   const TableData = computed(() => {
-    return Table.value.getTableData(selection);
+    return Table.value.getTableData();
   });
   const hasData = computed(() => TableData.value.length > 0);
   const ShowRowMarker = computed(
     () => props.showCheckbox || props.showRowIndex
   );
-  const RowCheckStatus = computed(() => Table.value.getCheckStatus(selection));
-  const RowCheckStatusIcon = computed(() => {
-    return {
-      all: 'zmdi-check-square',
-      part: 'zmdi-minus-square',
-      none: 'zmdi-square-o',
-    }[RowCheckStatus.value];
-  });
+  const HeadMenu = computed(() => useTableHeadMenu(selection, Table.value));
 
   const Change = useFieldChange(
     {
@@ -231,25 +227,8 @@
     scrolling.lineHeights[rowIndex] = height + props.rowGap;
   }
   //-------------------------------------------------------
-  function onClickSettings() {
-    Alert(
-      `设置包括：
-       - 表格列布局(显示隐藏哪些列，以及列的顺序)，
-       - 如何与其他用户分享设置
-      同时我还没想好这个设置按钮放在哪里比较好，放在这里好像有点丑
-      我可以有下面的选择:
-       A. 放到最右侧
-       B. 不放按钮，右键点击标题栏在菜单中体现
-       C. 鼠标移动到标题第一栏，显示设置按钮`,
-      {
-        bodyIcon: 'far-lightbulb',
-        clickMaskToClose: true,
-      }
-    );
-  }
-  //-------------------------------------------------------
   function onClickTop() {
-    Table.value.OnTableHeadCheckerClick(selection, 'all');
+    Table.value.selectNone(selection);
   }
   //-------------------------------------------------------
   //                Event Cell Changed
@@ -362,7 +341,7 @@
         <div
           v-if="ShowRowMarker"
           class="table-cell as-head as-marker">
-          <div
+          <!--div
             class="as-checker"
             @click.stop="
               Table.OnTableHeadCheckerClick(selection, RowCheckStatus)
@@ -373,7 +352,8 @@
             class="as-settings"
             @click.stop="onClickSettings">
             <TiIcon :value="'fas-bars'" />
-          </div>
+          </div-->
+          <TiActionBar v-bind="HeadMenu" />
         </div>
         <!-- 表头: 列 -->
         <template
