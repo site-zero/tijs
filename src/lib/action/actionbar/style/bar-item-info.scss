@@ -3,7 +3,6 @@
   grid-auto-columns: auto;
   grid-auto-flow: column;
   gap: 0.5em;
-  font-size: var(--ti-measure-menu-fontsz);
   line-height: var(--ti-measure-menu-lineheight);
   padding: 0.3em 0.6em;
   //-----------------------------------------------------
@@ -42,8 +41,8 @@
     }
   }
   //-----------------------------------------------------
-  &[aspect="top"][bar-layout-mode="H"] {
-    border-radius: var(--ti-measure-r-s);
+  &[aspect="top"] {
+    @include aspect_radius("&.item-r");
   }
   //-----------------------------------------------------
   &[aspect="sub"],

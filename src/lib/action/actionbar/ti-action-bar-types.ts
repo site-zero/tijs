@@ -5,6 +5,8 @@ import {
   ActionBarItemInfo,
   AspectSize,
   CommonProps,
+  CssAlignment,
+  FlexAlignment,
   TiAppBus,
   TiMatch,
   Vars,

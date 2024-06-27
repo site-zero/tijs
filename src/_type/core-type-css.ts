@@ -2,6 +2,13 @@
 
                      Css 相关
 -------------------------------------------------------*/
+export type FlexAlignment =
+  | 'flex-start'
+  | 'flex-end'
+  | 'center'
+  | 'stretch'
+  | 'space-around'
+  | 'space-between';
 export type CssItemAlignment = 'start' | 'end' | 'center' | 'stretch';
 export type CssContentAlignment =
   | 'start'
@@ -64,6 +71,7 @@ export type CssGridItem = Partial<{
   alignSelf: CssItemAlignment;
 }>;
 
+export type CssAlignment = 'left' | 'right' | 'center';
 export type CssTextAlign =
   | 'left'
   | 'right'

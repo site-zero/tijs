@@ -105,6 +105,9 @@ export type SelectableFeature<ID extends string | number> = {
     checkedIds?: CheckedIds<ID>
   ) => void;
 
+  checkAll: (selection: SelectableState<ID>) => void;
+  selectNone: (selection: SelectableState<ID>) => void;
+
   select: (
     selection: SelectableState<ID>,
     rowId: ID,
@@ -454,6 +457,19 @@ export function useSelectable<ID extends string | number>(
     selection.lastSelectIndex = getRowIndex(selection, lastId);
   }
 
+  function checkAll(selection: SelectableState<ID>) {
+    for (let id of selection.ids) {
+      selection.checkedIds.set(id, true);
+    }
+    clampSelect(selection);
+  }
+
+  function selectNone(selection: SelectableState<ID>) {
+    selection.checkedIds.clear();
+    selection.currentId = undefined;
+    clampSelect(selection);
+  }
+
   function select(
     selection: SelectableState<ID>,
     rowId: ID,
@@ -609,6 +625,9 @@ export function useSelectable<ID extends string | number>(
     getCheckStatus,
 
     updateSelection,
+
+    checkAll,
+    selectNone,
     select,
     selectId,
     toggleId,

@@ -11,7 +11,7 @@ export function useTableHeadMenu(
       icon: 'zmdi-check-all',
       text: 'Select All',
       action: () => {
-        Table.selectAll(selection);
+        Table.checkAll(selection);
       },
     },
     {
@@ -52,12 +52,24 @@ export function useTableHeadMenu(
   //     none: 'zmdi-square-o',
   //   }[rowCheckedStatus];
   return {
+    className: 'cover-parent',
+    style: {
+      justifyContent: 'center',
+      alignItem: 'center',
+    },
+    barPad: 'none',
     vars: {
       checked: rowCheckedStatus,
     },
     items: [
       {
         icon: 'zmdi-square-o',
+        className: 'bg-transparent fit-parent',
+        style: {
+          justifyContent: 'center',
+          alignItem: 'center',
+          borderRadius: '2px',
+        },
         altDisplay: [
           { icon: 'zmdi-check-square', test: { checked: 'all' } },
           { icon: 'zmdi-minus-square', test: { checked: 'part' } },

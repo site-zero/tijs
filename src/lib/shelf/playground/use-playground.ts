@@ -20,7 +20,7 @@ export type ExampleState = {
 };
 
 export function selectExample(com: TiCom, ex: ExampleState, name?: string) {
-  console.log('selectExample', name, _.cloneDeep(com.exampleProps));
+  //console.log('selectExample', name, _.cloneDeep(com.exampleProps));
   ex.name = name;
   ex.comConf = loadLocalSetting(com, ex.name);
 }

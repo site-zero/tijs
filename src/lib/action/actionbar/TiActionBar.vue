@@ -50,6 +50,8 @@
     layoutMode: 'H',
     topItemAspectMode: 'normal',
     barPad: 's',
+    itemSize: 's',
+    itemRadius: 's',
   });
   //-------------------------------------------------------
   watch(
@@ -62,6 +64,7 @@
   //-------------------------------------------------------
   const ParsedBarItems = computed(() => {
     return buildActionBarItems(
+      props,
       [],
       props.items ?? [],
       props.layoutMode ?? 'H',

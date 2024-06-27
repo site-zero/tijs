@@ -227,10 +227,6 @@
     scrolling.lineHeights[rowIndex] = height + props.rowGap;
   }
   //-------------------------------------------------------
-  function onClickTop() {
-    Table.value.selectNone(selection);
-  }
-  //-------------------------------------------------------
   //                Event Cell Changed
   //-------------------------------------------------------
   function onCellChange(changed: TableCellChanged) {
@@ -330,8 +326,7 @@
 <template>
   <div
     class="ti-table"
-    :class="TopClass"
-    @click="onClickTop">
+    :class="TopClass">
     <main
       ref="$main"
       :style="MainStyle">
@@ -341,18 +336,6 @@
         <div
           v-if="ShowRowMarker"
           class="table-cell as-head as-marker">
-          <!--div
-            class="as-checker"
-            @click.stop="
-              Table.OnTableHeadCheckerClick(selection, RowCheckStatus)
-            ">
-            <TiIcon :value="RowCheckStatusIcon" />
-          </div>
-          <div
-            class="as-settings"
-            @click.stop="onClickSettings">
-            <TiIcon :value="'fas-bars'" />
-          </div-->
           <TiActionBar v-bind="HeadMenu" />
         </div>
         <!-- 表头: 列 -->

@@ -295,18 +295,18 @@ $BARLINE: 1px;
 }
 
 //-------------------------------------------------------------
-@mixin __radius($prefix, $sz) {
-  #{$prefix}-#{$sz} {
+@mixin __radius($prefix, $sz, $suffix: "") {
+  #{$prefix}-#{$sz} #{$suffix} {
     border-radius: var(--ti-measure-r-#{$sz});
   }
 }
 //-------------------------------------------------------------
-@mixin aspect_radius($prefix) {
-  @include __radius($prefix, t);
-  @include __radius($prefix, s);
-  @include __radius($prefix, m);
-  @include __radius($prefix, b);
-  @include __radius($prefix, h);
+@mixin aspect_radius($prefix, $suffix: "") {
+  @include __radius($prefix, t, $suffix);
+  @include __radius($prefix, s, $suffix);
+  @include __radius($prefix, m, $suffix);
+  @include __radius($prefix, b, $suffix);
+  @include __radius($prefix, h, $suffix);
 }
 
 //-------------------------------------------------------------

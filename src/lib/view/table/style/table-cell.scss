@@ -26,22 +26,11 @@
     //---------------------------------
     // 固定指示块
     &.as-marker {
-      @include flex-align-nowrap;
       left: 0;
       z-index: $z-above + 1;
       border-right: 1px solid var(--ti-color-card);
-      > .as-checker {
-        font-size: SZ(16);
-        padding: 0 0.2em;
-        @include hover-scale($s: 1.3);
-      }
-      > .as-settings {
-        @include flex-center;
-        color: var(--ti-color-tab-f);
-        flex: 1 1 auto;
-        font-size: SZ(16);
-        @include hover-scale($s: 1.3, $c: primary);
-      }
+      position: relative;
+      overflow: hidden;
     } // &.as-marker {
     //---------------------------------
     // 表头列单元格

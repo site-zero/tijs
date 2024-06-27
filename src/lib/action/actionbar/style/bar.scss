@@ -1,6 +1,7 @@
 .ti-actionbar {
   user-select: none;
   @include aspect_pad("&.bar-pad");
+  @include aspect_fontsize("&.item-size");
   $BR: var(--ti-measure-r-s);
   // 菜单项
   .bar-item {

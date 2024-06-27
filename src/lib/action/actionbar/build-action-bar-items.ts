@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { useVisibility } from '../../';
+import { ActionBarProps, useVisibility } from '../../';
 import {
   ActionBarAction,
   ActionBarItem,
@@ -9,7 +9,7 @@ import {
   isEventInfo,
   isInvoke,
 } from '../../../_type';
-import { Match, Util } from '../../../core';
+import { CssUtils, Match, Util } from '../../../core';
 import {
   ABarAltDisplay,
   ABarParsedItem,
@@ -89,6 +89,7 @@ function makeItemAction(
 }
 
 export function buildActionBarItems(
+  props: ActionBarProps,
   indexes: number[],
   items: ActionBarItem[],
   layoutMode: ActionBarLayoutMode,
@@ -139,7 +140,11 @@ export function buildActionBarItems(
       //.....................................
       icon: it.icon,
       text: it.text,
-      className: it.className,
+      className: CssUtils.mergeClassName(
+        {},
+        it.className,
+        `item-r-${props.itemRadius ?? 's'}`
+      ),
       style: it.style,
       tip: it.tip,
       //.....................................
@@ -158,6 +163,7 @@ export function buildActionBarItems(
     // 尝试构建子项目
     if (it.items) {
       parsed.items = buildActionBarItems(
+        props,
         selfIndexes,
         it.items,
         layoutMode,

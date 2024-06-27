@@ -34,7 +34,7 @@
   //-------------------------------------------------------
   function OnClickHead() {
     let st = OpenStatus.value ?? 'closed';
-    console.log('OnClickHead', st);
+    //console.log('OnClickHead', st);
     if (state && /^(closed)$/.test(st)) {
       openBarItem(state, props);
     }
@@ -49,7 +49,7 @@
       if (!$con.value) {
         return;
       }
-      console.log('Show!!!', $con.value);
+      //console.log('Show!!!', $con.value);
       let mode: DockMode =
         props.depth > 0 || 'V' == props.layoutMode ? 'V' : 'H';
       let space: Point2D =

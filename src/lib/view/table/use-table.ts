@@ -51,7 +51,7 @@ export type TableFeature = {
   //   selection: TableSelection,
   //   status: CheckStatus
   // ) => void;
-  selectAll: (selection: TableSelection) => void;
+  checkAll: (selection: TableSelection) => void;
   selectNone: (selection: TableSelection) => void;
   OnRowSelect: (selection: TableSelection, rowEvent: TableEventPayload) => void;
   OnRowCheck: (selection: TableSelection, rowEvent: TableEventPayload) => void;
@@ -205,41 +205,12 @@ export function useTable(props: TableProps, emit: TableEmitter): TableFeature {
     getCurrentRow,
     getCheckedRows,
 
-    // OnTableHeadCheckerClick(selection: TableSelection, status: CheckStatus) {
-    //   let { ids, currentId, checkedIds } = selection;
-    //   let oldCurrentId = _.cloneDeep(selection.currentId);
-    //   let oldCheckedIds = _.cloneDeep(selection.checkedIds);
-    //   checkedIds.clear();
-    //   if ('all' != status) {
-    //     for (let id of ids) {
-    //       checkedIds.set(id, true);
-    //     }
-    //   }
-    //   if (currentId && !checkedIds.get(currentId)) {
-    //     selection.currentId = undefined;
-    //   }
-
-    //   //
-    //   // Prepare the emit info
-    //   //
-    //   let info = selectable.getSelectionEmitInfo(
-    //     selection,
-    //     props.data,
-    //     oldCheckedIds,
-    //     oldCurrentId
-    //   ) as TableSelectEmitInfo;
-
-    //   emit('select', info);
-    // },
-
-    selectAll(selection: TableSelection) {
-      let { ids, checkedIds } = selection;
+    checkAll(selection: TableSelection) {
       let oldCurrentId = _.cloneDeep(selection.currentId);
       let oldCheckedIds = _.cloneDeep(selection.checkedIds);
-      console.log('selectAll', ids);
-      for (let id of ids) {
-        checkedIds.set(id, true);
-      }
+      console.log('selectAll', selection.ids);
+      selectable.checkAll(selection);
+
       let info = selectable.getSelectionEmitInfo(
         selection,
         props.data,
@@ -251,11 +222,9 @@ export function useTable(props: TableProps, emit: TableEmitter): TableFeature {
     },
 
     selectNone(selection: TableSelection) {
-      let { checkedIds } = selection;
       let oldCurrentId = _.cloneDeep(selection.currentId);
       let oldCheckedIds = _.cloneDeep(selection.checkedIds);
-      selection.currentId = undefined;
-      checkedIds.clear();
+      selectable.selectNone(selection);
       let info = selectable.getSelectionEmitInfo(
         selection,
         props.data,
