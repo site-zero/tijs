@@ -12,46 +12,10 @@
     buildLayoutTabsConfig,
     buildMainTab,
   } from './use-layout-tabs';
-
+  //-------------------------------------------------
   const COM_TYPE = COM_TYPES.LayoutTabs;
   const log = getLogger(COM_TYPE);
-
-  defineOptions({
-    inheritAttrs: false,
-  });
-
-  const props = withDefaults(defineProps<LayoutTabsProps>(), {
-    wrapTabs: false,
-    tabItemSpace: 'm',
-    tabsAt: 'top',
-    tabsAlign: 'center',
-  });
-  const Keep = computed(() => useKeep(props.keepTab));
-
-  const TabBlocks = computed(() => getLayoutItem({ shown: {} }, props));
-
-  //const $main: Ref<HTMLElement> = ref() as Ref<HTMLElement>;
-  // const state = reactive({
-  //   shown: {},
-  // } as LayoutState);
-  const _current_tab_key = ref<string | undefined>();
-  //
-  // Computed
-  //
-  const TopClass = computed(() => CssUtils.mergeClassName(props.className));
-
-  let TabDisplayBlocks = computed(() =>
-    buildLayoutTabBlocks(TabBlocks.value, _current_tab_key.value)
-  );
-  const TabsConfig = computed(() =>
-    buildLayoutTabsConfig(props, TabDisplayBlocks.value)
-  );
-  let MainTab = computed(() => {
-    return buildMainTab(TabDisplayBlocks.value);
-  });
-  //
-  // Event Handle
-  //
+  //-------------------------------------------------
   const emit = defineEmits<{
     (
       eventName: 'tab-change',
@@ -59,14 +23,40 @@
       old?: TabDisplayItem
     ): void;
   }>();
+  //-------------------------------------------------
+  const props = withDefaults(defineProps<LayoutTabsProps>(), {
+    wrapTabs: false,
+    tabItemSpace: 'm',
+    tabsAt: 'top',
+    tabsAlign: 'center',
+  });
+  //-------------------------------------------------
+  const Keep = computed(() => useKeep(props.keepTab));
+  //-------------------------------------------------
+  const TabBlocks = computed(() => getLayoutItem({ shown: {} }, props));
+  //-------------------------------------------------
+  const _current_tab_key = ref<string | undefined>();
+  //-------------------------------------------------
+  const TopClass = computed(() => CssUtils.mergeClassName(props.className));
+  //-------------------------------------------------
+  let TabDisplayBlocks = computed(() =>
+    buildLayoutTabBlocks(TabBlocks.value, _current_tab_key.value)
+  );
+  //-------------------------------------------------
+  const TabsConfig = computed(() =>
+    buildLayoutTabsConfig(props, TabDisplayBlocks.value)
+  );
+  //-------------------------------------------------
+  let MainTab = computed(() => {
+    return buildMainTab(TabDisplayBlocks.value);
+  });
+  //-------------------------------------------------
   function OnTabChange(item: TabDisplayItem, old?: TabDisplayItem) {
     _current_tab_key.value = item.value;
     Keep.value.save(item.value);
     emit('tab-change', item, old);
   }
-  //
-  // Watcher
-  //
+  //-------------------------------------------------
   watch(
     () => [Keep.value, TabBlocks.value, props.defaultTab],
     () => {
@@ -95,6 +85,7 @@
       immediate: true,
     }
   );
+  //-------------------------------------------------
 </script>
 <template>
   <div

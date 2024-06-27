@@ -7,7 +7,7 @@
 
   const props = withDefaults(defineProps<ToggleProps>(), {
     value: false,
-    values: () => [false, true] as [any, any],
+    //values: () => [false, true] as [any, any],
   });
   const emit = defineEmits<BooleanEmitter>();
   const Bool = computed(() => useBooleanInput(props, { emit }));

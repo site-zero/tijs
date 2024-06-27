@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import { BlockEvent } from '../../_type';
 
 /***
  * Get the name of a Ti linked path, such as:
@@ -206,18 +205,6 @@ export function getRelativePath(base = '', path = '', equalPath = '.') {
   }
   //............................................
   return rph.join('/');
-}
-/***
- * 'arena>item:change' -> {block:"arena", event:"item:change"}
- */
-export function explainEventName(name: string) {
-  let m = /^(([^>]+)>)?(.+)$/.exec(name);
-  if (m) {
-    let re = {} as BlockEvent;
-    re.block = _.trim(m[2]);
-    re.event = _.trim(m[3]);
-    return re;
-  }
 }
 /***
  * 'arena>item:change' -> {block:"arena", event:"item:change"}

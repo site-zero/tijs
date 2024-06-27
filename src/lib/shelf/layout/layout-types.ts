@@ -16,7 +16,7 @@ import {
 } from '../../../_type';
 import { KeepInfo } from '../../_features';
 
-export type LayoutSchema = Record<string, ComRef>;
+export type LayoutSchema = Record<string, ComRef & EmitAdaptorProps>;
 
 export type LayoutState = {
   shown: Record<string, boolean>;

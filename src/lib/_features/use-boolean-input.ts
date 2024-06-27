@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { ReadonlyProps, useReadonly } from './use-readonly';
+import { computed } from 'vue';
 
 export type BooleanProps = {
   value?: any;
@@ -22,16 +23,31 @@ export function useBooleanInput(
 ) {
   let { emit } = options;
   const Readonly = useReadonly(props);
-  function getTrueValue() {
-    return _.nth(props.values, 1) ?? true;
-  }
+  // function getTrueValue() {
+  //   return _.nth(props.values, 1) ?? true;
+  // }
+
+  const BoolValues = computed(() => {
+    if (props.values) {
+      return props.values;
+    }
+    if (_.isNumber(props.value)) {
+      return [0, 1];
+    }
+    if (_.isBoolean(props.value)) {
+      return [false, true];
+    }
+    // 默认
+    return [false, true];
+  });
 
   function isTrue(val: any) {
+    //console.log('isTrue', val);
     if (_.isFunction(props.isTrue)) {
       return props.isTrue(val);
     }
-    if (props.values && props.values.length > 1) {
-      return _.isEqual(props.values[1], val);
+    if (BoolValues.value.length > 1) {
+      return _.isEqual(BoolValues.value[1], val);
     }
     return val ? true : false;
   }
@@ -41,14 +57,13 @@ export function useBooleanInput(
       return;
     }
     let I = isTrue(props.value) ? 0 : 1;
-    let vals = props.values ?? [];
-    let val = vals[I];
+    let val = BoolValues.value[I];
     emit('change', val);
   }
 
   return {
     yes: isTrue(props.value),
-    getTrueValue,
+    //getTrueValue,
     isTrue,
     emitToggle,
   };

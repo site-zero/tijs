@@ -271,11 +271,6 @@ export type KeyDisplay =
   | MessageMap[]
   | { (s: string): string };
 
-export type BlockEvent = {
-  block: string;
-  event: string;
-};
-
 /** 贴着 水平边 或 垂直边 */
 export type DockMode = 'H' | 'V';
 
@@ -853,20 +848,28 @@ export type TiAppBus = TiBus<any>;
 
 export const BUS_KEY: InjectionKey<TiAppBus> = Symbol('EVENT_BUS');
 
+/**
+ *  如果仅仅是名称适配
+ */
+export type EmitAdaptorPayload = {
+  // 适配后名称
+  eventName: string;
+  // 原始名称
+  orginName: string;
+  // 数据
+  data: any;
+};
+
 // 这个适配函数，接收捕获的事件以及事件参数，然后自行决定 emit 什么
-export type CustomizedEmitAdaptor = (
-  eventName: string,
-  payload: any,
-  emit: (name: string, payload?: any) => void
-) => void;
+export type EmitAdaptorHandler = (payload: EmitAdaptorPayload) => void;
 
-export function isCustomizedEmitAdaptor(
-  input: any
-): input is CustomizedEmitAdaptor {
-  return _.isFunction(input);
-}
+// export function isCustomizedEmitAdaptor(
+//   input: any
+// ): input is CustomizedEmitAdaptor {
+//   return _.isFunction(input);
+// }
 
-export type EmitAdaptor = string | CustomizedEmitAdaptor;
+export type EmitAdaptor = string | EmitAdaptorHandler;
 
 export type EmitAdaptorProps = {
   emitAdaptors?: Record<string, EmitAdaptor>;
@@ -941,6 +944,11 @@ export type BlockInfoProps = {
   icon?: IconInput;
   title?: string;
 
+  // 采用 .cover-parent 以便最大限度适配区域
+  // 对于 auto 的轨道，会造成内容塌陷
+  // auto 是默认
+  blockFit?: 'fit' | 'cover' | 'auto';
+
   /**
    * 块名称
    */
@@ -957,6 +965,7 @@ export type BlockInfoProps = {
   //
   // 外观样式
   //
+  blockClass?: any;
   headClass?: any;
   headStyle?: Vars;
 

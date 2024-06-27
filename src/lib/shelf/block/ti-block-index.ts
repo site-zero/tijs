@@ -50,3 +50,4 @@ const TiBlockInfo: TiComInfo = {
 };
 
 export { TiBlock, TiBlockInfo };
+export * from './ti-block-types';

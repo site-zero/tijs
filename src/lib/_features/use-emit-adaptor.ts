@@ -1,6 +1,6 @@
 import _ from 'lodash';
+import { EmitAdaptorHandler, EmitAdaptorProps } from '../../_type';
 import { Tmpl } from '../../core';
-import { CustomizedEmitAdaptor, EmitAdaptorProps } from '../../_type';
 
 import { getLogger } from '../../core/log/ti-log';
 
@@ -8,12 +8,12 @@ const log = getLogger('ti.use-emit-adaptor');
 
 export type EmitAdaptorOptions = {
   ignoreNativeEvents?: boolean;
+  handler?: EmitAdaptorHandler;
 };
 
 export function useEmitAdaptor(
   COM_TYPE: string,
   props: EmitAdaptorProps,
-  emit: (event: string, payload: any) => void,
   options: EmitAdaptorOptions = {}
 ): Record<string, Function> {
   let { ignoreNativeEvents = true } = options;
@@ -40,14 +40,23 @@ export function useEmitAdaptor(
             payload,
           });
           log.debug(`👽<${COM_TYPE}>`, 'newEventName =>', newEventName);
-          emit(newEventName, payload);
+          if (options.handler) {
+            options.handler({
+              eventName: newEventName,
+              orginName: eventName,
+              data: payload,
+            });
+          }
+          // 警告一下
+          else {
+          }
         };
         //.............<监听函数: String>.....................
       }
       // 纯自定义
       else {
         //.............<监听函数: Customized>.................
-        let customizedAdapt = adaptEmit as CustomizedEmitAdaptor;
+        let customizedAdapt = adaptEmit as EmitAdaptorHandler;
         listens[eventName] = (payload: any) => {
           // 忽略原生事件
           if (ignoreNativeEvents) {
@@ -62,7 +71,11 @@ export function useEmitAdaptor(
             eventName,
             payload
           );
-          customizedAdapt(eventName, payload, emit);
+          customizedAdapt({
+            eventName: eventName,
+            orginName: eventName,
+            data: payload,
+          });
         };
         //.............<监听函数: Customized>.................
       }

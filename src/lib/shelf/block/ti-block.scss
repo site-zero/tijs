@@ -7,6 +7,7 @@
     background-color: var(--ti-color-bar);
     color: var(--ti-color-bar-f);
     padding: 1px;
+    overflow: hidden;
     > .as-icon {
       @include flex-center;
       padding-left: 0.618em;
@@ -24,6 +25,7 @@
 
   > main {
     position: relative;
+    overflow: hidden;
   }
 }
 

@@ -4,6 +4,8 @@
   import { BlockProps, TiActionBar, TiIcon, useEmitAdaptor } from '../../';
   import { COM_TYPES } from '../../lib-com-types';
   import { useBlock } from './use-block';
+  import { BlockEvent } from './ti-block-types';
+  import { EmitAdaptorPayload } from '../../../_type';
 
   const COM_TYPE = COM_TYPES.Block;
 
@@ -17,9 +19,16 @@
   //
   const Block = computed(() => useBlock(props, {}));
   let emit = defineEmits<{
-    (name: string, payload?: any): void;
+    (name: 'happen', payload: BlockEvent): void;
   }>();
-  const OnAllEvents = useEmitAdaptor(COM_TYPE, props, emit);
+  const OnAllEvents = useEmitAdaptor(COM_TYPE, props, {
+    handler: (payload: EmitAdaptorPayload) => {
+      emit('happen', {
+        ...payload,
+        block: _.pick(props, 'title', 'name'),
+      });
+    },
+  });
 
   //
   // Life Hooks

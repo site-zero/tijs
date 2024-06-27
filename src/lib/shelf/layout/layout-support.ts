@@ -104,7 +104,14 @@ export function getLayoutItem(state: LayoutState, props: LayoutItemsInput) {
     it.itemConfig = {};
 
     // 布局项的 ClassName
-    it.className = CssUtils.mergeClassName(it.className, `as-${it.type}`);
+    it.className = CssUtils.mergeClassName(it.className, `as-${it.type}`, {
+      'cover-parent': 'cover' == it.blockFit,
+      'fit-parent': 'fit' == it.blockFit,
+    });
+    it.blockClass = CssUtils.mergeClassName(it.blockClass, {
+      'cover-parent': 'cover' == it.blockFit,
+      'fit-parent': 'fit' == it.blockFit,
+    });
 
     // 布局项的样式
     it.conStyle = CssUtils.mergeStyles([itemStyle, it.style]);

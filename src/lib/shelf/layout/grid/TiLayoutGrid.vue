@@ -9,10 +9,9 @@
     ref,
     watch,
   } from 'vue';
-  import { TiBlock, TiLayoutTabs } from '../../../';
+  import { BlockEvent, TiBlock, TiLayoutTabs } from '../../../';
   import { Rect, Vars } from '../../../../_type';
   import { CssUtils, Rects } from '../../../../core';
-  import { COM_TYPES } from '../../../lib-com-types';
   import {
     loadAllState,
     resetSizeState,
@@ -25,29 +24,26 @@
   import { getLayoutGridItems, isLayoutAdjustable } from './use-grid-items';
   import { getTopStyle } from './use-grid-util.ts';
   //-------------------------------------------------
-  defineOptions({
-    name: COM_TYPES.LayoutGrid,
-    inheritAttrs: true,
-  });
-  //-------------------------------------------------
   const props = withDefaults(defineProps<LayoutGridProps>(), {
     shown: () => ({}),
   });
+  //-------------------------------------------------
   const $main = ref() as Ref<HTMLElement>;
   const state = reactive({
     shown: _.cloneDeep(props.shown),
     columns: [],
     rows: [],
   }) as LayoutGridState;
+  //-------------------------------------------------
   let emit = defineEmits<{
     (event: 'show' | 'hide', name: string): void;
     (event: 'resize', payload: Rect): void;
+    (event: 'block', payload: BlockEvent): void;
   }>();
-  //
-  // Computed
-  //
+  //-------------------------------------------------
   let TopClass = computed(() => CssUtils.mergeClassName(props.className));
   let TopStyle = computed(() => getTopStyle(state, props));
+  //-------------------------------------------------
   let GridItems = computed(() =>
     getLayoutGridItems(state, {
       schema: props.schema,
@@ -55,6 +51,7 @@
       itemStyle: props.itemStyle,
     })
   );
+  //-------------------------------------------------
   let GridPanels = computed(() => getLayoutPanelItems(state, props));
   //-------------------------------------------------
   let isAdjustable = computed(() => isLayoutAdjustable(GridItems.value));
@@ -67,8 +64,12 @@
     }
   }
   //-------------------------------------------------
-  function onDblClickAdjustBar(_bar: LayoutBar) {
+  function OnDblClickAdjustBar(_bar: LayoutBar) {
     resetSizeState(state, Keep.value);
+  }
+  //-------------------------------------------------
+  function OnBlockEventHappen(event: BlockEvent) {
+    emit('block', event);
   }
   //-------------------------------------------------
   const obResize = new ResizeObserver((_entries) => {
@@ -150,6 +151,7 @@
           <TiBlock
             v-if="'block' == it.type"
             v-bind="it.itemConfig"
+            :class-name="it.className"
             :icon="it.icon"
             :title="it.title"
             :actions="it.actions"
@@ -159,12 +161,14 @@
             :head-class="it.headClass"
             :head-style="it.headStyle"
             :main-class="it.mainClass"
-            :main-style="it.mainStyle" />
+            :main-style="it.mainStyle"
+            @happen="OnBlockEventHappen" />
           <!-- 格子布局-->
           <TiLayoutGrid
             v-else-if="'grid' == it.type"
             v-bind="it.itemConfig"
-            :schema="schema" />
+            :schema="schema"
+            @block="emit('block', $event)" />
           <!-- 标签布局-->
           <TiLayoutTabs
             v-else-if="'tabs' == it.type"
@@ -184,7 +188,7 @@
           :bar-mode="bar.mode"
           :bar-adjust-index="bar.adjustIndex"
           :bar-position="bar.position"
-          @dblclick="onDblClickAdjustBar(bar)"></div>
+          @dblclick="OnDblClickAdjustBar(bar)"></div>
       </template>
     </div>
     <!-- 
@@ -194,15 +198,6 @@
       <Transition
         :name="pan.tranName"
         appear>
-        <!--@before-enter="console.log('before-enter')"
-        @before-leave="console.log('before-leave')" @enter="console.log('enter')"
-        @leave="console.log('leave')" @appear="console.log('appear')"
-        @after-enter="console.log('after-enter')"
-        @after-leave="console.log('after-leave')"
-        @after-appear="console.log('after-appear')"
-        @enter-cancelled="console.log('enter-cancelled')"
-        @leave-cancelled="console.log('leave-cancelled')"
-        @appear-cancelled="console.log('appear-cancelled')"-->
         <div
           v-if="pan.visible"
           class="layout-panel trans-mask"
@@ -223,12 +218,14 @@
                 v-if="'block' == pan.type"
                 :title="pan.title"
                 :icon="pan.icon"
-                v-bind="pan.itemConfig" />
+                v-bind="pan.itemConfig"
+                @happen="OnBlockEventHappen" />
               <!-- 格子布局-->
               <TiLayoutGrid
                 v-else-if="'grid' == pan.type"
                 v-bind="pan.itemConfig"
-                :schema="schema" />
+                :schema="schema"
+                @block="emit('block', $event)" />
               <!-- 标签布局-->
               <TiLayoutTabs
                 v-else-if="'tabs' == pan.type"
