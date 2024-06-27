@@ -35,6 +35,7 @@
     <!--Block:Head-->
     <header
       v-if="Block.showHeadBar"
+      :class="Block.HeadClass"
       :style="Block.HeadStyle">
       <!---------Icon------------>
       <div
@@ -59,7 +60,9 @@
         :style="props.actionStyle" />
     </header>
     <!--Block:Main-->
-    <main :style="Block.MainStyle">
+    <main
+      :class="Block.MainClass"
+      :style="Block.MainStyle">
       <slot>
         <component
           :is="Block.BlockComType"

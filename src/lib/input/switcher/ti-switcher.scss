@@ -1,5 +1,5 @@
 .ti-switcher {
-  @include flex-align;
+  @include flex-align($ai: center, $ac: center);
   @include aspect_fontsize("&.item-size", ".sw-item");
   @include aspect_gap("&.item-gap");
   user-select: none;

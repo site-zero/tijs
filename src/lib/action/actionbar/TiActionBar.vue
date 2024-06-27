@@ -49,6 +49,7 @@
   const props = withDefaults(defineProps<ActionBarProps>(), {
     layoutMode: 'H',
     topItemAspectMode: 'normal',
+    barPad: 's',
   });
   //-------------------------------------------------------
   watch(
@@ -81,7 +82,9 @@
         'show-click-mask': HasOpenedGroup.value,
       },
       `layout-mode-${props.layoutMode ?? 'H'}`,
-      `top-as-${props.topItemAspectMode ?? 'normal'}`
+      `top-as-${props.topItemAspectMode ?? 'normal'}`,
+      `item-size-${props.itemSize ?? 'm'}`,
+      `bar-pad-${props.barPad ?? 'none'}`
     )
   );
   //-------------------------------------------------------

@@ -1,5 +1,6 @@
 .ti-actionbar {
   user-select: none;
+  @include aspect_pad("&.bar-pad");
   $BR: var(--ti-measure-r-s);
   // 菜单项
   .bar-item {
@@ -11,7 +12,7 @@
       opacity: 0.4;
       filter: grayscale(100%);
     }
-    &[aspect='sub'] {
+    &[aspect="sub"] {
       &:first-child {
         border-radius: $BR $BR 0 0;
       }

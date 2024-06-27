@@ -3,6 +3,7 @@ import { VisibilityFeature } from '../../';
 import {
   ActionBarItem,
   ActionBarItemInfo,
+  AspectSize,
   CommonProps,
   TiAppBus,
   TiMatch,
@@ -52,6 +53,21 @@ export type ActionBarProps = CommonProps & {
   style?: Vars;
   layoutMode?: ActionBarLayoutMode;
   topItemAspectMode?: BarTopItemAspectMode;
+
+  /**
+   * 选项间距
+   */
+  barPad?: AspectSize | 'none';
+
+  /**
+   * 选项字体大小
+   */
+  itemSize?: AspectSize;
+
+  /**
+   * 选项圆角
+   */
+  itemRadius?: AspectSize | 'none';
 };
 
 type ActionBarAspect = 'top' | 'sub';

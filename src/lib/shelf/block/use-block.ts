@@ -61,7 +61,10 @@ export function useBlock(props: BlockProps, _options: BlockOptions) {
     gridStyle,
     CssUtils.pickGridItemStyle(props)
   );
+  const HeadClass = CssUtils.mergeClassName(props.headClass);
   const HeadStyle = CssUtils.mergeStyles({}, props.headStyle);
+
+  const MainClass = CssUtils.mergeClassName(props.mainClass);
   const MainStyle = CssUtils.mergeStyles({}, props.mainStyle);
 
   //
@@ -78,8 +81,10 @@ export function useBlock(props: BlockProps, _options: BlockOptions) {
     showHeadBar,
     TopClass,
     TopStyle,
+    HeadClass,
     HeadStyle,
     HeadActions,
+    MainClass,
     MainStyle,
     BlockIcon,
     BlockTitle,

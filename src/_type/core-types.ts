@@ -952,13 +952,16 @@ export type BlockInfoProps = {
   actions?: ActionBarItem[];
   actionVars?: Vars;
   actionClass?: any;
+  actionStyle?: Vars;
 
   //
   // 外观样式
   //
+  headClass?: any;
   headStyle?: Vars;
+
+  mainClass?: any;
   mainStyle?: Vars;
-  actionStyle?: Vars;
 };
 /**
  * 对应到主控件的哪个 Key, 有下面几种绑定方法：

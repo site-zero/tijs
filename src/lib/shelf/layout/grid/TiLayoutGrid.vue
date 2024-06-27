@@ -149,7 +149,17 @@
           <!-- 布局块-->
           <TiBlock
             v-if="'block' == it.type"
-            v-bind="it.itemConfig" />
+            v-bind="it.itemConfig"
+            :icon="it.icon"
+            :title="it.title"
+            :actions="it.actions"
+            :action-vars="it.actionVars"
+            :action-class="it.actionClass"
+            :action-style="it.actionStyle"
+            :head-class="it.headClass"
+            :head-style="it.headStyle"
+            :main-class="it.mainClass"
+            :main-style="it.mainStyle" />
           <!-- 格子布局-->
           <TiLayoutGrid
             v-else-if="'grid' == it.type"
