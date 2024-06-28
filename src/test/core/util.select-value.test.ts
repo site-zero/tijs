@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { expect, test } from 'vitest';
-import { Size2D } from '../../_type';
-import { SelectValueArm, selectValue } from '../../core/util';
+import { Size2D, SelectValueArm } from '../../_type';
+import { selectValue } from '../../core/util';
 
 test('Simple', () => {
   let arms = [[3, '[1000,]'], [2, '[500,]'], 1] as SelectValueArm<

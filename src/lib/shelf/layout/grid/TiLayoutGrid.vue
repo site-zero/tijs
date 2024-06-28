@@ -150,7 +150,7 @@
           <!-- 布局块-->
           <TiBlock
             v-if="'block' == it.type"
-            v-bind="it.itemConfig"
+            v-bind="it.propsForBlock"
             :class-name="it.className"
             :icon="it.icon"
             :title="it.title"
@@ -166,14 +166,15 @@
           <!-- 格子布局-->
           <TiLayoutGrid
             v-else-if="'grid' == it.type"
-            v-bind="it.itemConfig"
+            v-bind="it.propsForLayoutGrid"
             :schema="schema"
             @block="emit('block', $event)" />
           <!-- 标签布局-->
           <TiLayoutTabs
             v-else-if="'tabs' == it.type"
-            v-bind="it.itemConfig"
-            :schema="schema" />
+            v-bind="it.propsForLayoutTabs"
+            :schema="schema"
+            @block="emit('block', $event)" />
           <!-- 未知布局-->
           <div v-else>
             Unknown layout item type: <code>{{ it.type }}</code>
@@ -218,19 +219,20 @@
                 v-if="'block' == pan.type"
                 :title="pan.title"
                 :icon="pan.icon"
-                v-bind="pan.itemConfig"
+                v-bind="pan.propsForBlock"
                 @happen="OnBlockEventHappen" />
               <!-- 格子布局-->
               <TiLayoutGrid
                 v-else-if="'grid' == pan.type"
-                v-bind="pan.itemConfig"
+                v-bind="pan.propsForLayoutGrid"
                 :schema="schema"
                 @block="emit('block', $event)" />
               <!-- 标签布局-->
               <TiLayoutTabs
                 v-else-if="'tabs' == pan.type"
-                v-bind="pan.itemConfig"
-                :schema="schema" />
+                v-bind="pan.propsForLayoutTabs"
+                :schema="schema"
+                @block="emit('block', $event)" />
               <!-- 未知布局-->
               <div v-else>
                 Unknown layout item type: <code>{{ pan.type }}</code>

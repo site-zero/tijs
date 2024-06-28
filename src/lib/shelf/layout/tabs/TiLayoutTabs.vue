@@ -1,6 +1,15 @@
 <script lang="ts" setup>
   import { computed, ref, watch } from 'vue';
-  import { TiRoadblock, TiTabs, getLayoutItem, useKeep } from '../../../';
+  import {
+    BlockEvent,
+    TiBlock,
+    TiLayoutTabs,
+    TiRoadblock,
+    TiTabs,
+    TiLayoutGrid,
+    getLayoutItem,
+    useKeep,
+  } from '../../../';
   import { CssUtils } from '../../../../core';
   import { getLogger } from '../../../../core/log/ti-log';
   import { COM_TYPES } from '../../../lib-com-types';
@@ -22,6 +31,7 @@
       current: TabDisplayItem,
       old?: TabDisplayItem
     ): void;
+    (event: 'block', payload: BlockEvent): void;
   }>();
   //-------------------------------------------------
   const props = withDefaults(defineProps<LayoutTabsProps>(), {
@@ -51,6 +61,10 @@
     return buildMainTab(TabDisplayBlocks.value);
   });
   //-------------------------------------------------
+  function OnBlockEventHappen(event: BlockEvent) {
+    emit('block', event);
+  }
+  //-------------------------------------------------
   function OnTabChange(item: TabDisplayItem, old?: TabDisplayItem) {
     _current_tab_key.value = item.value;
     Keep.value.save(item.value);
@@ -68,12 +82,12 @@
       );
       if (MainTab.value) {
         emit('tab-change', {
-          className: MainTab.value.item.className,
+          className: MainTab.value.className,
           current: true,
-          index: MainTab.value.item.index || 0,
-          icon: MainTab.value.item.icon,
-          text: MainTab.value.item.title,
-          value: MainTab.value.item.uniqKey,
+          index: MainTab.value.index || 0,
+          icon: MainTab.value.icon,
+          text: MainTab.value.title,
+          value: MainTab.value.uniqKey,
         });
       } else {
         log.warn(
@@ -103,9 +117,31 @@
       <!----------------------------->
       <template v-if="MainTab">
         <slot :main="MainTab">
-          <component
-            :is="MainTab.com"
-            v-bind="MainTab.config" />
+          <TiBlock
+            v-if="'block' == MainTab.type"
+            block-fit="cover"
+            v-bind="MainTab.propsForBlock"
+            :class-name="MainTab.className"
+            :main-class="MainTab.mainClass"
+            :main-style="MainTab.mainStyle"
+            @happen="OnBlockEventHappen" />
+          <!-- 格子布局-->
+          <TiLayoutGrid
+            v-else-if="'grid' == MainTab.type"
+            v-bind="MainTab.propsForLayoutGrid"
+            :schema="schema"
+            @block="emit('block', $event)" />
+          <!-- 标签布局-->
+          <TiLayoutTabs
+            v-else-if="'tabs' == MainTab.type"
+            v-bind="MainTab.propsForLayoutTabs"
+            :schema="schema"
+            @block="emit('block', $event)" />
+          <!-- 未知布局-->
+          <div v-else>
+            Unknown layout item type:
+            <pre>{{ MainTab }}</pre>
+          </div>
         </slot>
       </template>
       <!----------------------------->

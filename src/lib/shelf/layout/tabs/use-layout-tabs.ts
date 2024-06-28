@@ -4,13 +4,16 @@ import { KeepFeature, LayoutItem, TabsProps, useFieldCom } from '../../../';
 import { ComputedRef, Ref } from 'vue';
 import { IconInput, StrOptionItem, TiRawCom, Vars } from '../../../../_type';
 import { LayoutTabItem, LayoutTabsProps } from './ti-layout-tabs-types';
+import { CssUtils } from '../../../../core';
 
-export type TabMain = {
-  item: LayoutTabItem;
-  title?: string;
-  icon?: IconInput;
-  com: TiRawCom;
-  config: Vars;
+export type TabMain = LayoutTabItem & {
+  // uniqKey?: string;
+  // name?: string;
+  // title?: string;
+  // icon?: IconInput;
+  // com: TiRawCom;
+  // config: Vars;
+  //tabInfo: LayoutTabItem;
 };
 
 export function buildMainTab(items: LayoutTabItem[]): TabMain | undefined {
@@ -18,19 +21,29 @@ export function buildMainTab(items: LayoutTabItem[]): TabMain | undefined {
     if (!item.current) {
       continue;
     }
-    let comType = item?.itemConfig?.comType;
-    let comConf = item?.itemConfig?.comConf;
-    const { getComType } = useFieldCom({
-      comType,
-      comConf,
+    let re = _.cloneDeep(item);
+    re.className = CssUtils.mergeClassName(item.className, {
+      'cover-parent': true,
     });
-    return {
-      item,
-      title: item?.title,
-      icon: item?.icon,
-      com: getComType(),
-      config: comConf,
-    };
+    re.blockClass = CssUtils.mergeClassName(item.blockClass, {
+      'cover-parent': true,
+    });
+    return re;
+    //   const { getComType } = useFieldCom({
+    //     comType,
+    //     comConf,
+    //   });
+    //   return {
+    //     tabInfo: item,
+    //     uniqKey: item.uniqKey,
+    //     title: item?.title,
+    //     icon: item?.icon,
+    //     name: item.name,
+
+    //     com: getComType(),
+    //     config: comConf,
+    //   };
+    // }
   }
 }
 

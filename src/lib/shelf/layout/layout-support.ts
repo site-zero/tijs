@@ -37,14 +37,15 @@ export function autoSetLayoutItemType(it: LayoutItem) {
 export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
   // 布局块
   if ('block' == it.type && !it.comType) {
+    it.propsForBlock = {};
     let refName = it.body || it.name;
     if (refName) {
       let ref = schema[refName];
-      _.assign(it.itemConfig, ref);
+      _.assign(it.propsForBlock, ref);
     }
     // 设置默认
-    if (!it.itemConfig?.comType) {
-      _.assign(it.itemConfig, {
+    if (!it.propsForBlock.comType) {
+      _.assign(it.propsForBlock, {
         comType: 'TiRoadblock',
         comConf: {
           icon: 'fas-person-digging',
@@ -55,11 +56,11 @@ export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
   }
   // 格子布局
   else if ('grid' == it.type) {
-    it.itemConfig = _.pick(it, 'name', 'blocks', 'layout');
+    it.propsForLayoutGrid = _.pick(it, 'name', 'blocks', 'layout');
   }
   // 标签布局
   else if ('tabs' == it.type) {
-    it.itemConfig = _.pick(
+    it.propsForLayoutTabs = _.pick(
       it,
       'name',
       'blocks',
@@ -101,7 +102,6 @@ export function getLayoutItem(state: LayoutState, props: LayoutItemsInput) {
       it.uniqKey = it.name ?? `B${i}`;
     }
     autoSetLayoutItemType(it);
-    it.itemConfig = {};
 
     // 布局项的 ClassName
     it.className = CssUtils.mergeClassName(it.className, `as-${it.type}`, {

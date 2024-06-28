@@ -1,3 +1,4 @@
+import { FormProps } from 'src/lib/shelf/all-shelf';
 import { LayoutTabsProps } from '../ti-layout-tabs-types';
 
 export default {
@@ -37,11 +38,12 @@ export default {
         },
       },
       detail: {
-        comType: 'TiRoadblock',
+        comType: 'TiForm',
         comConf: {
-          className: 'is-warn-r',
-          text: '详情区',
-          icon: 'zmdi-navigation',
+          fields: [{ title: 'Name', name: 'name', comType: 'TiInput' }],
+        } as FormProps,
+        emitAdaptors: {
+          change: 'detail-change',
         },
       },
       more: {

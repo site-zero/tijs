@@ -15,8 +15,12 @@ import {
   Vars,
 } from '../../../_type';
 import { KeepInfo } from '../../_features';
+import { LayoutGridProps } from './grid/ti-layout-grid-types';
+import { LayoutTabsProps } from './tabs/ti-layout-tabs-types';
 
-export type LayoutSchema = Record<string, ComRef & EmitAdaptorProps>;
+export type BlockSchema = ComRef & EmitAdaptorProps;
+
+export type LayoutSchema = Record<string, BlockSchema>;
 
 export type LayoutState = {
   shown: Record<string, boolean>;
@@ -217,11 +221,13 @@ export type LayoutItem = LayoutBlock & {
   uniqKey: string;
   index: number;
   conStyle?: Vars;
-  itemConfig?: Vars;
+  //itemConfig?: Vars;
+  propsForBlock?: BlockSchema;
+  propsForLayoutGrid?: LayoutGridProps;
+  propsForLayoutTabs?: LayoutTabsProps;
 };
 
 export type BlockProps = CommonProps &
   CssGridItem &
   BlockInfoProps &
-  ComRef &
-  EmitAdaptorProps;
+  BlockSchema;

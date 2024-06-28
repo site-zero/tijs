@@ -29,7 +29,6 @@ export function getLayoutPanelItems(
       it.uniqKey = it.name ?? `B${i}`;
     }
     autoSetLayoutItemType(it);
-    it.itemConfig = {};
 
     if (it.clickMaskToClose && _.isNil(it.showMask)) {
       it.showMask = true;
