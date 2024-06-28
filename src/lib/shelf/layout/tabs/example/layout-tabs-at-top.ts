@@ -1,4 +1,4 @@
-import { FormProps } from 'src/lib/shelf/all-shelf';
+import { FormProps } from '../../../../';
 import { LayoutTabsProps } from '../ti-layout-tabs-types';
 
 export default {
