@@ -1,4 +1,5 @@
 import * as ti_global from './ti';
+import * as ti_coms from './ti-coms';
 import * as ti_core from './ti-exports';
 
 //
@@ -9,6 +10,7 @@ const G = globalThis as any;
 if (!G.Ti) {
   G.Ti = {
     ...ti_global,
+    ...ti_coms,
     ...ti_core,
   };
 }

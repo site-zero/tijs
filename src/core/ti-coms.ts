@@ -31,11 +31,10 @@ const ALL_TI_COMS = new Map<string, TiCom>();
 
 function _put_com_set(coms: TiComSet) {
   _.forEach(coms, (info, key) => {
+    let comType = Str.toComType(key);
     let com = new TiComImpl(info);
-    // if ('TiSwitcher' == com.name) {
-    //   console.log(com.exampleProps);
-    // }
-    ALL_TI_COMS.set(key, com);
+    //console.log(key, info)
+    ALL_TI_COMS.set(comType, com);
   });
 }
 

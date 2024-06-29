@@ -590,7 +590,8 @@ export function toCase(str: string, mode?: StrCaseMode | null): string {
  * @returns 会自动将控件名称变成首字母大写的驼峰
  */
 export function toComType(comType: string): string {
-  return _.upperFirst(_.camelCase(comType));
+  //return _.upperFirst(_.camelCase(comType));
+  return _.kebabCase(comType);
 }
 
 // export function isValidCase(mode: string): boolean {

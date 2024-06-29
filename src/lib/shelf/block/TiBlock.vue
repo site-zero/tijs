@@ -23,6 +23,7 @@
   }>();
   const OnAllEvents = useEmitAdaptor(COM_TYPE, props, {
     handler: (payload: EmitAdaptorPayload) => {
+      console.log('OnAllEvents.handler', payload)
       emit('happen', {
         ...payload,
         block: _.pick(props, 'title', 'name'),

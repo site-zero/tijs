@@ -10,8 +10,6 @@
     watch,
   } from 'vue';
   import {
-    Alert,
-    TiIcon,
     TiActionBar,
     TiRoadblock,
     useFieldChange,
@@ -68,6 +66,7 @@
     canSelect: true,
     canCheck: true,
     changeMode: 'diff',
+    data: () => [],
     emptyRoadblock: () => ({
       text: 'i18n:empty-data',
       mode: 'auto',
@@ -229,6 +228,10 @@
   //-------------------------------------------------------
   //                Event Cell Changed
   //-------------------------------------------------------
+  function onClickMain() {
+    Table.value.selectNone(selection);
+  }
+  //-------------------------------------------------------
   function onCellChange(changed: TableCellChanged) {
     let { colIndex, rowIndex } = changed;
     log.debug('OnCellChange', changed);
@@ -329,13 +332,15 @@
     :class="TopClass">
     <main
       ref="$main"
-      :style="MainStyle">
+      :style="MainStyle"
+      @click="onClickMain">
       <!-- 表格头 -->
       <template v-if="showHeader">
         <!-- 表头: 标记块 -->
         <div
           v-if="ShowRowMarker"
-          class="table-cell as-head as-marker">
+          class="table-cell as-head as-marker"
+          @click.stop>
           <TiActionBar v-bind="HeadMenu" />
         </div>
         <!-- 表头: 列 -->
