@@ -242,6 +242,23 @@ export function arrayToMap<T>(ids?: T[]): Map<T, boolean> {
 }
 
 /**
+ * 一个帮助函数而已，方便通过  `ID[]` 生成 `Map<ID,boolean>`
+ *
+ * @param ids ID 列表
+ */
+export function arrayToRecord<T extends string | number | symbol>(
+  ids?: T[]
+): Record<T, boolean> {
+  let re = {} as Record<T, boolean>;
+  if (ids) {
+    for (let id of ids) {
+      re[id] = true;
+    }
+  }
+  return re;
+}
+
+/**
  * 一个帮助函数而已，方便通过 `Map<T,any>` 生成 `ID[]`
  *
  * @param ids ID 列表
