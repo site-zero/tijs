@@ -38,7 +38,7 @@ div.ti-input-box {
     background-color: var(--ti-color-disable);
     color: var(--ti-color-disable-r);
     input {
-      color:inherit;
+      color: inherit;
     }
   }
 }
@@ -46,8 +46,6 @@ div.ti-input-box {
 .ti-input-bracing {
   display: none;
 }
-
-
 
 .ti-input-tip-mask {
   position: fixed;
@@ -74,10 +72,9 @@ div.ti-input-box {
     background-color: var(--ti-color-card);
     border: 1px solid var(--ti-color-primary);
     border-radius: var(--ti-measure-r-s);
-    box-shadow:
-      -1px -1px var(--ti-color-light),
-      1px 1px var(--ti-color-dark),
+    box-shadow: -1px -1px var(--ti-color-light), 1px 1px var(--ti-color-dark),
       4px 4px 12px var(--ti-color-mask-thin);
+    //box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     overflow: auto;
   }
 }
