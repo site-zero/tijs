@@ -168,12 +168,18 @@
             v-else-if="'grid' == it.type"
             v-bind="it.propsForLayoutGrid"
             :schema="schema"
+            :class-name="it.className"
+            :item-style="it.itemStyle"
+            :keep-sizes="it.keep"
             @block="emit('block', $event)" />
           <!-- 标签布局-->
           <TiLayoutTabs
             v-else-if="'tabs' == it.type"
             v-bind="it.propsForLayoutTabs"
             :schema="schema"
+            :class-name="it.className"
+            :item-style="it.itemStyle"
+            :keep-tab="it.keep"
             @block="emit('block', $event)" />
           <!-- 未知布局-->
           <div v-else>

@@ -93,17 +93,19 @@
           :data="MajorFormData"
           @change="onMajorChange">
           <template v-slot:foot>
-            <TiActionBar
-              v-if="'bottom' == props.actionAt"
-              :items="ActionItems"
-              layoutMode="H"
-              topItemAspectMode="button"
-              @fire="onActionFire" />
+            <div class="part-major-foot">
+              <div class="major-foot-slot">
+                <slot name="foot"></slot>
+              </div>
+              <TiActionBar
+                v-if="'bottom' == props.actionAt"
+                :items="ActionItems"
+                layoutMode="H"
+                topItemAspectMode="button"
+                @fire="onActionFire" />
+            </div>
           </template>
         </TiGridFields>
-      </div>
-      <div class="part-foot">
-        <slot name="foot"></slot>
       </div>
     </div>
     <div

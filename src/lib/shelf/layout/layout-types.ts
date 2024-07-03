@@ -27,13 +27,8 @@ export type LayoutState = {
 };
 
 export type LayoutProps = CommonProps &
-  Pick<LayoutItem, 'name' | 'blocks'> & {
+  Pick<LayoutItem, 'name' | 'blocks' | 'itemStyle'> & {
     schema?: LayoutSchema;
-
-    /**
-     * 统一为所有的布局项设置一个样式
-     */
-    itemStyle?: Vars;
   };
 
 //
@@ -152,6 +147,12 @@ export type LayoutBlock = TabsAspect &
      * 2. `B${index}`  // index 是块下标 0 base
      */
     uniqKey?: string;
+
+    /**
+     * 对于 Tabs 布局，就传递到 'keepTab'
+     * 对于 Grid 布局，就传递到 'KeepSizes'
+     */
+    keep?: KeepInfo;
     /**
      * 本布局项的名称，在事件传递中，会将自己名称叠加在事件名称前缀
      * 譬如，如果 `name="foo"`，当收到任何一个总线消息，譬如"bar"，那么
@@ -213,6 +214,11 @@ export type LayoutBlock = TabsAspect &
      * 如果未指定，则会默认给一个 `1fr`
      */
     layout?: CssGridLayout;
+
+    /**
+     * 统一为所有的布局项设置一个样式
+     */
+    itemStyle?: Vars;
   };
 /**
  * 根据 `LayoutBlock` 解析出来的布局块显示项
@@ -221,7 +227,7 @@ export type LayoutItem = LayoutBlock & {
   uniqKey: string;
   index: number;
   conStyle?: Vars;
-  //itemConfig?: Vars;
+  //itemConfig?: Vars; zozoh: 废弃了，采用下面的三个属性分别设置三种块
   propsForBlock?: BlockSchema;
   propsForLayoutGrid?: LayoutGridProps;
   propsForLayoutTabs?: LayoutTabsProps;

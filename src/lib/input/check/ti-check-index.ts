@@ -74,3 +74,4 @@ const TiCheckInfo: TiComInfo = {
 };
 
 export { TiCheck, TiCheckInfo };
+export * from './ti-check-types';

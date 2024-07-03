@@ -11,6 +11,15 @@
       > .ti-grid-fields {
         position: absolute;
         inset: 0;
+        .part-major-foot {
+          @include flex-align-nowrap;
+          > .major-foot-slot {
+            flex: 1 1 auto;
+          }
+          > .ti-actionbar {
+            flex: 0 0 auto;
+          }
+        }
       }
     }
   }
