@@ -1,4 +1,4 @@
-import { CssGridLayout, Vars } from '../../../../_type';
+import { GridLayoutProps, Vars } from '../../../../_type';
 import { KeepFeature, KeepInfo } from '../../../../lib/_features';
 import {
   LayoutBar,
@@ -40,7 +40,11 @@ export type LayoutGridItem = LayoutItem & {
 export type LayoutGridState = LayoutState & GridResizingState;
 export type LayoutGridProps = LayoutProps &
   LayoutGridKeepProps &
-  LayoutPanelProps & {
-    layout?: CssGridLayout;
+  LayoutPanelProps &
+  GridLayoutProps & {
     gridStyle?: Vars;
+    /**
+     *  如果根据 layoutHint 自动改动了轨道数量，是否要自动清除本地的轨道状态
+     */
+    resetLocalGridTracks?: boolean;
   };

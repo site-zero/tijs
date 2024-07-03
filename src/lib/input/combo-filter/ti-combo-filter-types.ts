@@ -1,4 +1,5 @@
 import {
+  DataChangeMode,
   FilterExportApi,
   FilterProps,
   FilterValue,
@@ -26,6 +27,14 @@ export type ComboFilterProps = CommonProps & {
    * 输入的值
    */
   value?: ComboFilterValue;
+
+  /**
+   * 当记录修改后，怎么向外通知改动
+   *
+   *  - `diff` 只传递差异 `{age: 40}`
+   *  - `all` 传递合并后的数据 `{... age:40 ...}` 默认
+   */
+  changeMode?: 'diff' | 'all';
 
   /**
    * 布局模式

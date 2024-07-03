@@ -7,7 +7,7 @@ export default {
   comConf: {
     data: {
       id: 'Um5Cub2yX',
-      name: 'Mahanta Lloyd', 
+      name: 'Mahanta Lloyd',
       title: 'pamperedly schmitz enne',
       brief: 'Earthy numerably abulia globus rosinweed. ',
       client: '192.168.12.211',
@@ -21,7 +21,7 @@ export default {
 
     bodyPartGap: 'b',
     bodyPartFontSize: 'm',
-    layoutHint: '[[3,600],[2,400],1]',
+    layoutHint: '[[6,1400],[5,1150],[4,900],[3,750],[2,500],1]',
     maxFieldNameWidth: 60,
     bodyPartDense: true,
     fields: [
@@ -61,8 +61,8 @@ export default {
         tipIcon: 'zmdi-face',
         fieldLayoutMode: 'h-title-icon-prefix',
         disabled: {
-          age: '[40,80]'
-        }
+          age: '[40,80]',
+        },
       },
       {
         title: 'Brief',

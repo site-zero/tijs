@@ -2,10 +2,10 @@
   import _ from 'lodash';
   import { computed, onUnmounted } from 'vue';
   import { BlockProps, TiActionBar, TiIcon, useEmitAdaptor } from '../../';
-  import { COM_TYPES } from '../../lib-com-types';
-  import { useBlock } from './use-block';
-  import { BlockEvent } from './ti-block-types';
   import { EmitAdaptorPayload } from '../../../_type';
+  import { COM_TYPES } from '../../lib-com-types';
+  import { BlockEvent } from './ti-block-types';
+  import { useBlock } from './use-block';
 
   const COM_TYPE = COM_TYPES.Block;
 
@@ -23,7 +23,7 @@
   }>();
   const OnAllEvents = useEmitAdaptor(COM_TYPE, props, {
     handler: (payload: EmitAdaptorPayload) => {
-      console.log('OnAllEvents.handler', payload)
+      // console.log('OnAllEvents.handler', payload)
       emit('happen', {
         ...payload,
         block: _.pick(props, 'title', 'name'),

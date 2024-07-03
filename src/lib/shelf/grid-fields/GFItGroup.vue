@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-  import _ from 'lodash';
   import { computed, onMounted, onUnmounted, ref } from 'vue';
-  import { TextSnippet } from '../../';
+  import {
+    TextSnippet,
+    useGridLayout,
+    useGridLayoutStyle,
+    useViewport,
+  } from '../../';
   import { CssUtils } from '../../../core';
   import GFItField from './GFItField.vue';
   import GFItLabel from './GFItLabel.vue';
-  import {
-    buildGridFieldsLayoutStyle,
-    parseGridLayout,
-  } from './build-grid-field-layout';
   import {
     GridFieldsStrictField,
     GridFieldsStrictGroup,
@@ -27,13 +27,19 @@
   //-------------------------------------------------
   const emit = defineEmits<GridItemEmitter>();
   const props = defineProps<GridFieldsStrictGroup>();
-  const _viewport_width = ref(0);
   //-------------------------------------------------
-  const TrackCount = computed(() => {
-    const getTrackCount = parseGridLayout(props.layoutHint);
-    return getTrackCount(_viewport_width.value);
+  const $main = ref<HTMLElement>();
+  //-------------------------------------------------
+  const _viewport = useViewport({
+    $main,
+    onMounted,
+    onUnmounted,
   });
-  const getLayoutCss = computed(() => buildGridFieldsLayoutStyle(props));
+  //-------------------------------------------------
+  let GridLayout = computed(() => useGridLayout(props));
+  let GridLayoutStyle = computed(() =>
+    useGridLayoutStyle(GridLayout.value, _viewport.size.width)
+  );
   //-------------------------------------------------
   const TopClass = computed(() => {
     let names = [`aspect-${props.groupAspect ?? 'legend'}`];
@@ -51,31 +57,12 @@
   const TopStyle = computed(() => getGridItemStyle(props));
   //-------------------------------------------------
   const BodyStyle = computed(() => {
-    let css_1 = getBodyPartStyle(props);
-    let css_2 = getLayoutCss.value(TrackCount.value);
-    return _.assign(css_1, css_2);
+    let css = getBodyPartStyle(props);
+    return GridLayoutStyle.value.mergetStyle(css);
   });
   //-------------------------------------------------
   const GroupText = computed(() => getFieldTextInfo(props, props.vars));
   //-------------------------------------------------
-  const $main = ref<HTMLElement>();
-  //-------------------------------------------------
-  const obResize = new ResizeObserver((_entries) => {
-    let w = $main.value?.getBoundingClientRect().width ?? 0;
-    if (w > 0 && w != _viewport_width.value) {
-      _viewport_width.value = $main.value?.clientWidth ?? 0;
-      //console.log('obResize', _viewport_width.value, $main.value);
-    }
-  });
-  //-------------------------------------------------
-  onMounted(() => {
-    if ($main.value) {
-      obResize.observe($main.value);
-    }
-  });
-  onUnmounted(() => {
-    obResize.disconnect();
-  });
 </script>
 <template>
   <div
@@ -123,21 +110,21 @@
           <GFItField
             v-if="'field' == fld.race"
             v-bind="(fld as GridFieldsStrictField)"
-            :max-track-count="TrackCount"
+            :max-track-count="GridLayoutStyle.trackCount"
             @name-change="emit('name-change', $event)"
             @value-change="emit('value-change', $event)" />
           <!------[:Group:]---------->
           <GFItGroup
             v-else-if="'group' == fld.race"
             v-bind="(fld as GridFieldsStrictGroup)"
-            :max-track-count="TrackCount"
+            :max-track-count="GridLayoutStyle.trackCount"
             @name-change="emit('name-change', $event)"
             @value-change="emit('value-change', $event)" />
           <!------[:Label:]---------->
           <GFItLabel
             v-else-if="'label' == fld.race"
             v-bind="(fld as GridFieldsStrictLabel)"
-            :max-track-count="TrackCount" />
+            :max-track-count="GridLayoutStyle.trackCount" />
           <!------[!Invalid!]---------->
           <blockquote
             v-else

@@ -13,13 +13,14 @@
     useKeep,
   } from '../../';
   import { ActionBarItem } from '../../../_type';
-  import { CssUtils } from '../../../core';
+  import { CssUtils, Util } from '../../../core';
   import { useComboFilterKeep } from './use-combo-filter-keep';
   //-------------------------------------------------
   const emit = defineEmits<ComboFilterEmitter>();
   //-------------------------------------------------
   const props = withDefaults(defineProps<ComboFilterProps>(), {
     layout: 'comfy',
+    changeMode: 'all',
   });
   //-------------------------------------------------
   const _major_fields = ref<string[]>([]);
@@ -56,15 +57,34 @@
   }
   //-------------------------------------------------
   function onFilterChange(flt: FilterValue) {
-    let val = _.cloneDeep(props.value) ?? {};
-    val.filter = flt;
-    emit('change', val);
+    // 差异模式
+    if ('diff' == props.changeMode) {
+      let old = _.cloneDeep(props.value?.filter ?? {});
+      let diff = Util.getRecordDiff(old, flt, { checkRemoveFromOrgin: true });
+      console.log('---', old, diff);
+      emit('change', { filter: diff });
+    }
+    // 全量模式
+    else {
+      let val = _.cloneDeep(props.value) ?? {};
+      val.filter = flt;
+      emit('change', val);
+    }
   }
   //-------------------------------------------------
   function onSorterChange(srt: SorterValue) {
-    let val = _.cloneDeep(props.value) ?? {};
-    val.sorter = srt;
-    emit('change', val);
+    // 差异模式
+    if ('diff' == props.changeMode) {
+      let old = _.cloneDeep(props.value?.sorter ?? {});
+      let diff = Util.getRecordDiff(old, srt, { checkRemoveFromOrgin: true });
+      emit('change', { sorter: diff });
+    }
+    // 全量模式
+    else {
+      let val = _.cloneDeep(props.value) ?? {};
+      val.sorter = srt;
+      emit('change', val);
+    }
   }
   //-------------------------------------------------
   const MoreActions = computed(() => {

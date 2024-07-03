@@ -1,12 +1,12 @@
 import _ from 'lodash';
-import { Vars } from '../../../_type';
-import { Str, Util } from '../../../core';
 import {
-  GridFieldsItemLayoutProps,
   GridLayoutHint,
   GridLayoutHintItem,
+  GridLayoutProps,
   GridLayoutTrackGetter,
-} from './ti-grid-fields-types';
+  Vars,
+} from '../../_type';
+import { Str, Util } from '../../core';
 
 const DFT_GRID_LAYOUT_HINT: GridLayoutHint = [
   [5, 1500],
@@ -23,7 +23,7 @@ const DFT_GRID_LAYOUT_HINT: GridLayoutHint = [
  * @param hint - 网格的布局提示。
  * @returns 要显示的网格字段的数量。
  */
-export function autoCountGrid(width: number, hint: GridLayoutHintItem): number {
+function autoCountGrid(width: number, hint: GridLayoutHintItem): number {
   //console.log('autoCountGrid', view, layout);
   let by = function (arm: [number, any], width: number): number | undefined {
     let [v, m] = arm;
@@ -44,13 +44,13 @@ export function autoCountGrid(width: number, hint: GridLayoutHintItem): number {
 
 /**
  * 将 layout 的输入变成标准形式
- * @param layout 用户配置信息
+ * @param layoutHint 用户配置信息
  * @returns  标准形式的布局选择线索
  */
-export function parseGridLayout(
-  layout: GridLayoutHint = DFT_GRID_LAYOUT_HINT
+function parseGridLayout(
+  layoutHint: GridLayoutHint = DFT_GRID_LAYOUT_HINT
 ): GridLayoutTrackGetter {
-  let input: GridLayoutHint = layout;
+  let input: GridLayoutHint = layoutHint;
   //  如果是字符串，那么就假设它是对的
   if (_.isString(input)) {
     input = JSON.parse(input);
@@ -67,7 +67,7 @@ export function parseGridLayout(
       return autoCountGrid(w, input as GridLayoutHintItem);
     };
   }
-  throw `Invalid layout: '${JSON.stringify(layout)}'`;
+  throw `Invalid layout: '${JSON.stringify(layoutHint)}'`;
 }
 
 /**
@@ -79,65 +79,112 @@ export function parseGridLayout(
  *
  * > ! Recommanded use it in a computed variable
  */
-export function buildGridFieldsLayoutStyle(
-  props: GridFieldsItemLayoutProps
-): (_w: number) => Vars {
+function buildGridFieldsLayoutStyle(
+  props: GridLayoutProps
+): (_track_count: number) => Vars {
   // 这段代码主要用于生成 CSS 格式的网格布局。
   // 首先，它从 props 对象中解构出 layout，layoutHint 和 layoutGridTracks 三个属性。
   // 如果这些属性没有被提供，它们会被赋予默认值。
-  let { layout, layoutGridTracks = (_i: number) => '1fr' } = props;
+  let { layout, layoutGridTracks, customizedGridTracks } = props;
+
+  // Default Track Getter
+  let gridTracks = ['1fr'];
+  if (_.isString(layoutGridTracks) || _.isArray(layoutGridTracks)) {
+    gridTracks = _.concat(layoutGridTracks);
+  }
+  // 逐个轨道分析
+  let _map_tracks = new Map<number, string[]>();
+  let _dft_tracks = [] as string[];
+  for (let tr of gridTracks) {
+    let m = /^#([0-9]+):(.+)$/.exec(tr);
+    if (m) {
+      let k = parseInt(m[1]);
+      let v = Str.splitIgnoreBlank(m[2]);
+      _map_tracks.set(k, v);
+    } else {
+      _dft_tracks = Str.splitIgnoreBlank(tr);
+    }
+  }
 
   // 接下来，它检查 layoutGridTracks 是否为一个函数。
   // 如果是，就将其赋值给 getTrackSize。
   // 否则，getTrackSize 会被赋值为一个新的函数，
   // 这个函数接受一个数字参数 i，返回 layoutGridTracks 中的第 i 个元素，
   // 如果该元素不存在，则返回 '1fr'。
+  function defaultGetTrackSize(i: number, track_count: number) {
+    let tracks = _map_tracks.get(track_count) ?? _dft_tracks;
+    if (_.isEmpty(tracks)) {
+      return '1fr';
+    }
+    let realI = _.clamp(i, 0, tracks.length - 1);
+    return tracks[realI]!;
+  }
+
+  // 准备函数
   let getTrackSize: (_i: number, _track_count: number) => string;
 
   // customized function call
-  if (_.isFunction(layoutGridTracks)) {
-    getTrackSize = layoutGridTracks;
-  }
-  // pick from string arry
-  else {
-    let gridTracks = _.concat(layoutGridTracks);
-    // 逐个轨道分析
-    let _map_tracks = new Map<number, string[]>();
-    let _dft_tracks = [] as string[];
-    for (let tr of gridTracks) {
-      let m = /^#([0-9]+):(.+)$/.exec(tr);
-      if (m) {
-        let k = parseInt(m[1]);
-        let v = Str.splitIgnoreBlank(m[2]);
-        _map_tracks.set(k, v);
-      } else {
-        _dft_tracks = Str.splitIgnoreBlank(tr);
-      }
-    }
-
-    getTrackSize = (i: number, track_count: number) => {
-      let tracks = _map_tracks.get(track_count) ?? _dft_tracks;
-      if (_.isEmpty(tracks)) {
-        return '1fr';
-      }
-      let realI = _.clamp(i, 0, tracks.length - 1);
-      return tracks[realI]!;
+  if (_.isFunction(customizedGridTracks)) {
+    getTrackSize = (_i: number, _track_count: number): string => {
+      return customizedGridTracks(_i, _track_count, defaultGetTrackSize);
     };
+  } else {
+    getTrackSize = defaultGetTrackSize;
   }
+
   // 最后，它返回一个函数，这个函数接受一个数字参数 w，生成一个 CSS 格式的网格布局。
   // 这个函数首先创建一个空的 CSS 对象，然后使用 getTrackCount 函数计算网格的列数 N。
   // 然后，它创建一个空的列数组 cols，并使用 getTrackSize 函数生成每一列的大小。
   // 最后，它将 layout 和 gridTemplateColumns 属性合并到 CSS 对象中，并返回。
   return (trackCount = 1) => {
     let css: Vars = {};
-    let cols = [] as string[];
-    for (let i = 0; i < trackCount; i++) {
-      let col = getTrackSize(i, trackCount);
-      cols.push(col);
+    _.assign(css, layout);
+    if (!css.gridTemplateColumns) {
+      let cols = [] as string[];
+      for (let i = 0; i < trackCount; i++) {
+        let col = getTrackSize(i, trackCount);
+        cols.push(col);
+      }
+      css.gridTemplateColumns = cols.join(' ');
     }
-    _.assign(css, layout, {
-      gridTemplateColumns: cols.join(' '),
-    });
     return css;
+  };
+}
+
+export type GridLayoutFeature = {
+  getTrackCount: (viewWidth: number) => number;
+  getLayoutCss: (_track_count: number) => Vars;
+};
+
+export function useGridLayout(props: GridLayoutProps): GridLayoutFeature {
+  const getTrackCount = parseGridLayout(props.layoutHint);
+  const getLayoutCss = buildGridFieldsLayoutStyle(props);
+
+  return {
+    getTrackCount,
+    getLayoutCss,
+  };
+}
+
+export type GridLayoutStyleFeature = {
+  trackCount: number;
+  layoutCss: Vars;
+  mergetStyle: (css: Vars) => Vars;
+};
+
+export function useGridLayoutStyle(
+  grid: GridLayoutFeature,
+  _viewport_width: number
+): GridLayoutStyleFeature {
+  const trackCount = grid.getTrackCount(_viewport_width);
+  const layoutCss = grid.getLayoutCss(trackCount);
+  return {
+    trackCount,
+    layoutCss,
+    mergetStyle: (css: Vars) => {
+      let re = _.cloneDeep(layoutCss);
+      _.assign(re, css);
+      return re;
+    },
   };
 }

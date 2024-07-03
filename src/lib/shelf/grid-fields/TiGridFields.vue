@@ -6,16 +6,19 @@
     TextSnippet,
     TiRoadblock,
     useFieldChange,
+    useGridLayout,
+    useGridLayoutStyle,
+    useViewport,
   } from '../../';
   import { FieldChange } from '../../../_type';
   import { CssUtils } from '../../../core';
   import GFItField from './GFItField.vue';
   import GFItGroup from './GFItGroup.vue';
   import GFItLabel from './GFItLabel.vue';
-  import {
-    buildGridFieldsLayoutStyle,
-    parseGridLayout,
-  } from './build-grid-field-layout';
+  // import {
+  //   buildGridFieldsLayoutStyle,
+  //   parseGridLayout,
+  // } from './build-grid-field-layout';
   import {
     GridFieldsDomReadyInfo,
     GridFieldsEmitter,
@@ -37,12 +40,21 @@
     bodyPartGap: 'm',
     bodyPartFontSize: 's',
     //fieldLayoutMode: 'h-wrap',
-    fieldLayoutMode:'h-title-icon-suffix',
+    fieldLayoutMode: 'h-title-icon-suffix',
     maxFieldNameWidth: '6em',
     changeMode: 'diff',
     data: () => ({}),
   });
-  const _viewport_width = ref(0);
+  //const _viewport_width = ref(0);
+  //-------------------------------------------------
+  const $el = ref<HTMLElement>();
+  const $main = ref<HTMLElement>();
+  //-------------------------------------------------
+  const _viewport = useViewport({
+    $main,
+    onMounted,
+    onUnmounted,
+  });
   //-------------------------------------------------
   const Grid = computed(() => useGridFields(props));
   //-------------------------------------------------
@@ -61,35 +73,10 @@
     ) as RoadblockProps;
   });
   //-------------------------------------------------
-  const TrackCount = computed(() => {
-    const getTrackCount = parseGridLayout(props.layoutHint);
-    return getTrackCount(_viewport_width.value);
-  });
-  //-------------------------------------------------
-  const getLayoutCss = computed(() => buildGridFieldsLayoutStyle(props));
-  //-------------------------------------------------
-  const Change = computed(() =>
-    useFieldChange<GridFieldsStrictField>(
-      {
-        changeMode: props.changeMode,
-        linkFields: props.linkFields,
-      },
-      Grid.value.fieldItems
-    )
+  let GridLayout = computed(() => useGridLayout(props));
+  let GridLayoutStyle = computed(() =>
+    useGridLayoutStyle(GridLayout.value, _viewport.size.width)
   );
-  //-------------------------------------------------
-  /**
-   * 处理值的修改
-   *
-   * @param change 修改的值
-   */
-  async function onValueChange(change: FieldChange) {
-    Change.value.handleValueChange(change, {
-      emit,
-      data: props.data || {},
-      checkEquals: props.checkEquals,
-    });
-  }
   //-------------------------------------------------
   const TopClass = computed(() =>
     CssUtils.mergeClassName(
@@ -100,10 +87,19 @@
   );
   //-------------------------------------------------
   const BodyStyle = computed(() => {
-    let css_1 = getBodyPartStyle(props);
-    let css_2 = getLayoutCss.value(TrackCount.value);
-    return _.assign(css_1, css_2);
+    let css = getBodyPartStyle(props);
+    return GridLayoutStyle.value.mergetStyle(css);
   });
+  //-------------------------------------------------
+  const Change = computed(() =>
+    useFieldChange<GridFieldsStrictField>(
+      {
+        changeMode: props.changeMode,
+        linkFields: props.linkFields,
+      },
+      Grid.value.fieldItems
+    )
+  );
   //-------------------------------------------------
   const GridText = computed(() =>
     getFieldTextInfo(
@@ -120,20 +116,30 @@
     )
   );
   //-------------------------------------------------
-  const $el = ref<HTMLElement>();
-  const $main = ref<HTMLElement>();
+  // function updateViewportWidth() {
+  //   let w = $main.value?.getBoundingClientRect().width ?? 0;
+  //   if (w > 0 && w != _viewport_width.value) {
+  //     _viewport_width.value = $main.value?.clientWidth ?? 0;
+  //     //console.log('obResize', _viewport_width.value, $main.value);
+  //   }
+  // }
   //-------------------------------------------------
-  function updateViewportWidth() {
-    let w = $main.value?.getBoundingClientRect().width ?? 0;
-    if (w > 0 && w != _viewport_width.value) {
-      _viewport_width.value = $main.value?.clientWidth ?? 0;
-      //console.log('obResize', _viewport_width.value, $main.value);
-    }
+  /**
+   * 处理值的修改
+   *
+   * @param change 修改的值
+   */
+  async function onValueChange(change: FieldChange) {
+    Change.value.handleValueChange(change, {
+      emit,
+      data: props.data || {},
+      checkEquals: props.checkEquals,
+    });
   }
   //-------------------------------------------------
-  const obResize = new ResizeObserver((_entries) => {
-    updateViewportWidth();
-  });
+  // const obResize = new ResizeObserver((_entries) => {
+  //   updateViewportWidth();
+  // });
   //-------------------------------------------------
   if (props.whenGrid) {
     watch(
@@ -151,14 +157,13 @@
     () => isEmptyData.value,
     () => {
       if (!isEmptyData.value) {
-        updateViewportWidth();
+        _viewport.updateViewPortSize();
       }
     }
   );
   //-------------------------------------------------
   onMounted(() => {
     if ($el.value) {
-      obResize.observe($el.value);
       if ($main.value) {
         let info: GridFieldsDomReadyInfo = {
           el: $el.value!,
@@ -167,10 +172,6 @@
         emit('dom-ready', info);
       }
     }
-  });
-  //-------------------------------------------------
-  onUnmounted(() => {
-    obResize.disconnect();
   });
   //-------------------------------------------------
 </script>
@@ -216,6 +217,7 @@
       <div
         ref="$main"
         class="part-body"
+        hello="zzh"
         :style="BodyStyle">
         <template v-for="fld in Grid.strictItems">
           <template v-if="!fld.isHidden(props.data)">
@@ -223,21 +225,21 @@
             <GFItField
               v-if="'field' == fld.race"
               v-bind="(fld as GridFieldsStrictField)"
-              :max-track-count="TrackCount"
+              :max-track-count="GridLayoutStyle.trackCount"
               @name-change="emit('name-change', $event)"
               @value-change="onValueChange" />
             <!------[:Group:]---------->
             <GFItGroup
               v-else-if="'group' == fld.race"
               v-bind="(fld as GridFieldsStrictGroup)"
-              :max-track-count="TrackCount"
+              :max-track-count="GridLayoutStyle.trackCount"
               @name-change="emit('name-change', $event)"
               @value-change="onValueChange" />
             <!------[:Label:]---------->
             <GFItLabel
               v-else-if="'label' == fld.race"
               v-bind="(fld as GridFieldsStrictLabel)"
-              :max-track-count="TrackCount" />
+              :max-track-count="GridLayoutStyle.trackCount" />
             <!------[!Invalid!]---------->
             <blockquote
               v-else

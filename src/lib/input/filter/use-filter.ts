@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { computed, ref } from 'vue';
 import { GridFieldsInput, useValueTranslator, useVisibility } from '../../';
 import { Vars, makeFieldUniqKey } from '../../../_type';
+import { Util } from '../../../core';
 import {
   FilterFeature,
   FilterMoreItem,
@@ -9,13 +10,13 @@ import {
   FilterValue,
 } from './ti-filter-types';
 import { openAdvanceForm } from './use-filter-advance';
-import { useSetupMajorFields } from './use-filter-setup-major';
 import {
   getFieldsNames,
   joinFieldsList,
   joinFieldsTitle,
   makeFieldsMap,
 } from './use-filter-fields';
+import { useSetupMajorFields } from './use-filter-setup-major';
 
 export type FilterEmitter = {
   (event: 'change', payload: FilterValue): void;
@@ -111,7 +112,7 @@ export function useFilter(
 
   async function loadMoreItems() {
     let morItems = [] as FilterMoreItem[];
-    let morVal = _.cloneDeep(MoreData.value);
+    let morVal = Util.filterRecordNilValue(MoreData.value);
 
     /**
      * 这里的逻辑是这样的，
@@ -150,7 +151,7 @@ export function useFilter(
 
       // 虽然不太可能，但是防守一下
       if (!field) {
-        throw '虽然不太可能，但是防守一下';
+        throw `虽然不太可能，但是防守一下: ${key}`;
       }
 
       // 获取字段的唯一键，加入映射，以便去重复

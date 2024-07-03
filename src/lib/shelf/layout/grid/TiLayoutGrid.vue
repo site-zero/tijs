@@ -9,9 +9,16 @@
     ref,
     watch,
   } from 'vue';
-  import { BlockEvent, TiBlock, TiLayoutTabs } from '../../../';
+  import {
+    BlockEvent,
+    TiBlock,
+    TiLayoutTabs,
+    useGridLayout,
+    useGridLayoutStyle,
+    useViewport,
+  } from '../../../';
   import { Rect, Vars } from '../../../../_type';
-  import { CssUtils, Rects } from '../../../../core';
+  import { CssUtils } from '../../../../core';
   import {
     loadAllState,
     resetSizeState,
@@ -28,7 +35,8 @@
     shown: () => ({}),
   });
   //-------------------------------------------------
-  const $main = ref() as Ref<HTMLElement>;
+  //const _viewport_width = ref(0);
+  const $main = ref() as Ref<HTMLElement | undefined>;
   const state = reactive({
     shown: _.cloneDeep(props.shown),
     columns: [],
@@ -41,8 +49,40 @@
     (event: 'block', payload: BlockEvent): void;
   }>();
   //-------------------------------------------------
+  const _viewport = useViewport({
+    $main,
+    emit,
+    onMounted,
+    onUnmounted,
+  });
+  //-------------------------------------------------
+  let GridLayout = computed(() =>
+    useGridLayout({
+      layout: props.layout,
+      layoutHint: props.layoutHint,
+      layoutGridTracks: props.layoutGridTracks,
+      customizedGridTracks: props.customizedGridTracks,
+      // customizedGridTracks: (
+      //   trackIndex: number,
+      //   trackCount: number,
+      //   defaultGetTrackSize: GridLayoutTrackSizeGetter
+      // ): string => {
+      //   if (!_.isEmpty(state.columns)) {
+      //     let col = _.nth(state.columns, trackIndex) ?? '1fr';
+      //     return col;
+      //   }
+      //   return defaultGetTrackSize(trackIndex, trackCount);
+      // },
+    })
+  );
+  let GridLayoutStyle = computed(() =>
+    useGridLayoutStyle(GridLayout.value, _viewport.size.width)
+  );
+  //-------------------------------------------------
   let TopClass = computed(() => CssUtils.mergeClassName(props.className));
-  let TopStyle = computed(() => getTopStyle(state, props));
+  let TopStyle = computed(() =>
+    getTopStyle(state, props, GridLayoutStyle.value)
+  );
   //-------------------------------------------------
   let GridItems = computed(() =>
     getLayoutGridItems(state, {
@@ -68,20 +108,32 @@
     resetSizeState(state, Keep.value);
   }
   //-------------------------------------------------
-  function OnBlockEventHappen(event: BlockEvent) {
+  function onBlockEventHappen(event: BlockEvent) {
     emit('block', event);
   }
   //-------------------------------------------------
-  const obResize = new ResizeObserver((_entries) => {
-    if ($main.value) {
-      let rect = Rects.createBy($main.value);
-      emit('resize', rect);
-    }
-  });
+  // const obResize = new ResizeObserver((_entries) => {
+  //   if ($main.value) {
+  //     let rect = Rects.createBy($main.value);
+  //     if (rect.width > 0 && rect.width != _viewport_width.value) {
+  //       _viewport_width.value = rect.width;
+  //     }
+  //     emit('resize', rect);
+  //   }
+  // });
   //-------------------------------------------------
   //
   // Life Hooks
   //
+  watch(
+    () => GridLayoutStyle.value.trackCount,
+    (newVal, oldVal) => {
+      if (newVal != oldVal && props.resetLocalGridTracks) {
+        // console.log('TrackCount Changed', { newVal, oldVal });
+        resetSizeState(state, Keep.value);
+      }
+    }
+  );
   watch(
     () => [props.keepShown, props.keepSizes],
     () => {
@@ -104,25 +156,23 @@
           release_resizing.value();
         }
         // 初始化
-        release_resizing.value = useGridResizing($main.value, state, Keep);
+        if ($main.value) {
+          release_resizing.value = useGridResizing($main.value, state, Keep);
+        }
       }
     }
   );
   //-------------------------------------------------
   onMounted(() => {
-    //console.log('TiLayoutGrid onMounted');
-    if ($main.value) {
-      obResize.observe($main.value);
-    }
-    if (isAdjustable.value) {
+    if (isAdjustable.value && $main.value) {
       release_resizing.value = useGridResizing($main.value, state, Keep);
     }
     loadAllState(props, state, Keep.value);
   });
-  //-------------------------------------------------
-  onUnmounted(() => {
-    obResize.disconnect();
-  });
+  // //-------------------------------------------------
+  // onUnmounted(() => {
+  //   obResize.disconnect();
+  // });
   //-------------------------------------------------
 </script>
 <template>
@@ -162,7 +212,7 @@
             :head-style="it.headStyle"
             :main-class="it.mainClass"
             :main-style="it.mainStyle"
-            @happen="OnBlockEventHappen" />
+            @happen="onBlockEventHappen" />
           <!-- 格子布局-->
           <TiLayoutGrid
             v-else-if="'grid' == it.type"
@@ -226,7 +276,7 @@
                 :title="pan.title"
                 :icon="pan.icon"
                 v-bind="pan.propsForBlock"
-                @happen="OnBlockEventHappen" />
+                @happen="onBlockEventHappen" />
               <!-- 格子布局-->
               <TiLayoutGrid
                 v-else-if="'grid' == pan.type"

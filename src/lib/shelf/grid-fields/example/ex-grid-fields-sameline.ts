@@ -13,7 +13,7 @@ export default {
     bodyPartGap: 's',
     bodyPartFontSize: 'm',
     layoutHint: 3,
-    layoutGridTracks: ['80px', '200px', '1fr'],
+    layoutGridTracks: '80px,200px,1fr',
     maxFieldNameWidth: 'auto',
     fieldLayoutMode: 'h-title-icon-prefix',
     defaultComType: 'TiInput',
