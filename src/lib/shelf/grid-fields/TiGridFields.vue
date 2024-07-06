@@ -217,7 +217,6 @@
       <div
         ref="$main"
         class="part-body"
-        hello="zzh"
         :style="BodyStyle">
         <template v-for="fld in Grid.strictItems">
           <template v-if="!fld.isHidden(props.data)">

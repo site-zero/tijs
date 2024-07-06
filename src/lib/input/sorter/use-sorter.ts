@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import { computed, ref } from 'vue';
-import { PickRequired } from '../../../_type';
-import { Dicts } from '../../../core';
+import { AnyOptionItem, PickRequired } from '../../../_type';
 import { TagItem, openAppModal, useOptions } from '../../../lib';
 import { SorterProps, SorterValue } from './ti-sorter-types';
 
@@ -20,21 +19,28 @@ export type SorterItem = PickRequired<TagItem, 'name' | 'text' | 'icon'>;
 
 export function useSorter(props: SorterProps) {
   let { dict } = useOptions({ options: props.options });
-  let options = ref<Dicts.DictItem<string>[]>();
+  let options = ref<AnyOptionItem[]>();
   let sorterIcons = props.sorterIcons ?? {
     ASC: 'fas-arrow-down-short-wide',
     DESC: 'fas-arrow-up-wide-short',
   };
 
   async function loadOptions() {
-    options.value = await dict?.getStdData();
+    let list = [] as AnyOptionItem[];
+    let data = await dict?.getStdData();
+    if (data) {
+      for (let it of data) {
+        list.push(it.toOptionItem());
+      }
+    }
+    options.value = list;
   }
 
   const OptionsMap = computed(() => {
     let map = new Map<string, string>();
     if (options.value) {
       for (let it of options.value) {
-        map.set(it.value, it.text);
+        map.set(it.value, it.text ?? it.value);
       }
     }
     return map;
@@ -74,6 +80,7 @@ export function useSorter(props: SorterProps) {
 
   async function onSetupSorterValue(): Promise<SorterValue | undefined> {
     let vals = _.keys(props.value ?? {});
+    console.log(options.value);
     let re = await openAppModal({
       title: 'i18n:ti-sorter-choose',
       type: 'info',

@@ -30,7 +30,7 @@ export function makeAppModelDataProps(
   let result = getResult();
   // 2. `"value"` 【默认】将 result 传递给 value 属性
   if (_.isString(bindingData)) {
-    log.debug('string => props[bindingData] = result;');
+    log.debug(`string => props[${bindingData}] = result;`);
     props[bindingData] = _.cloneDeep(result);
   }
   // 3. `["a","b"] 将 result.a 传递给 a 属性，result.b 传递给 b 属性
@@ -65,6 +65,8 @@ export function makeAppModelEventListeners(
   bindingEvent: AppModelBindingEvent,
   result: Ref<any>
 ): Record<string, Callback1<any>> {
+  console.log(COM_TYPE, bindingEvent, result);
+  log.debug('listenResult:', COM_TYPE, bindingEvent, result);
   let listeners = {} as Record<string, Callback1<any>>;
   // 1. `null` 不传递
   if (!bindingEvent) {
@@ -72,6 +74,7 @@ export function makeAppModelEventListeners(
   }
   // 2. `"change"` 【默认】将 change 事件的 payload 设置为 result
   if (_.isString(bindingEvent)) {
+    log.debug(`'${bindingEvent}' => result`);
     listeners[bindingEvent] = (payload: any) => {
       log.debug(`🎃<${COM_TYPE}>`, bindingEvent, '=', payload);
       result.value = payload;
@@ -84,6 +87,7 @@ export function makeAppModelEventListeners(
       // 3. `{change:["a","b"]}`
       //     将 change 事件的 payload.a =>result.a,payload.b => result.b
       if (isArray<string>(handler)) {
+        log.debug(`{change:["a","b"]}`);
         let asKeys = handler as string[];
         listeners[eventName] = (payload: any) => {
           log.debug(
@@ -100,6 +104,7 @@ export function makeAppModelEventListeners(
       // 4. `{change:{a:"x",b:"y"}}`
       //     将 change 事件的 payload.a =>result.x,payload.b => result.y
       else {
+        log.debug(`{change:{a:"x",b:"y"}}`);
         let asMapping = handler as Record<string, string>;
         listeners[eventName] = (payload: any) => {
           log.debug(
@@ -118,6 +123,7 @@ export function makeAppModelEventListeners(
       }
     }
   }
+  log.debug('listeners=', listeners);
   return listeners;
 }
 

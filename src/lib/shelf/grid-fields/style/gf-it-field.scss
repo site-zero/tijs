@@ -44,6 +44,8 @@
       grid-area: title;
       line-height: var(--ti-measure-box-height);
       flex-wrap: nowrap;
+      align-items: stretch;
+      align-content: center;
       > .as-snippet-text .required-mark {
         @include font-fixed;
         color: var(--ti-color-danger);
@@ -68,9 +70,15 @@
         }
       }
       > .as-snippet-text {
-        white-space: nowrap;
+        display: flex;
+        align-items: center;
+        align-content: center;
         overflow: hidden;
-        text-overflow: ellipsis;
+        white-space: break-spaces;
+        line-height: 1.1em;
+        text-align: right;
+        // white-space: nowrap;
+        // text-overflow: ellipsis;
       }
     } // .as-title
     //-----------------------------------------------------------

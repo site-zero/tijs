@@ -37,6 +37,17 @@
       }
       > .part-major {
         flex: 1 1 auto;
+        > .ti-grid-fields {
+          @include flex-align-nowrap($ai: center);
+          flex-direction: row;
+          overflow: hidden;
+          > .part-body {
+            flex: 1 1 auto;
+          }
+          > .part-major-foot {
+            flex: 0 0 auto;
+          }
+        }
       }
     }
   }

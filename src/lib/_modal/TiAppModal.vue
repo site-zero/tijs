@@ -11,6 +11,7 @@
   import { CssUtils } from '../../core';
   import { getLogger } from '../../core/log/ti-log';
   import {
+    BlockEvent,
     BlockProps,
     TiActionBar,
     TiBlock,
@@ -21,6 +22,7 @@
     positionToTransName,
     watchAppResize,
   } from '../../lib';
+  import { O } from 'vitest/dist/reporters-5f784f42.js';
 
   const log = getLogger('TiAppModal');
 
@@ -100,9 +102,17 @@
   });
 
   // 监控控件的事件以便更新 result
-  const OnAllEvents = computed(() =>
+  const Listeners = computed(() =>
     makeAppModelEventListeners('TiAppModal', model?.event, _result)
   );
+
+  function onBlockEvent(event: BlockEvent) {
+    let { eventName, data } = event;
+    let handler = Listeners.value[eventName];
+    if (handler) {
+      handler(data);
+    }
+  }
 
   const BlockEmitAdaptors = computed(() => {
     let re = {} as Record<string, EmitAdaptor>;
@@ -232,7 +242,7 @@
           v-bind="BlockConfig"
           :com-conf="BlockComConf"
           :emit-adaptors="BlockEmitAdaptors"
-          v-on="OnAllEvents" />
+          @happen="onBlockEvent" />
         <!------------------------------>
         <footer v-if="hasModalLeftActions || hasModalRightActions">
           <div
