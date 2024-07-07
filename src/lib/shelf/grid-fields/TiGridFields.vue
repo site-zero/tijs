@@ -51,7 +51,7 @@
   const $main = ref<HTMLElement>();
   //-------------------------------------------------
   const _viewport = useViewport({
-    $main,
+    el: $el,
     onMounted,
     onUnmounted,
   });
@@ -157,6 +157,7 @@
     () => isEmptyData.value,
     () => {
       if (!isEmptyData.value) {
+        console.log('_viewport.value.updateViewPortSize();');
         _viewport.updateViewPortSize();
       }
     }
@@ -164,13 +165,11 @@
   //-------------------------------------------------
   onMounted(() => {
     if ($el.value) {
-      if ($main.value) {
-        let info: GridFieldsDomReadyInfo = {
-          el: $el.value!,
-          main: $main.value!,
-        };
-        emit('dom-ready', info);
-      }
+      let info: GridFieldsDomReadyInfo = {
+        el: $el.value!,
+        main: $main.value,
+      };
+      emit('dom-ready', info);
     }
   });
   //-------------------------------------------------

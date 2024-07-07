@@ -25,7 +25,7 @@ import {
 
 export type GridFieldsDomReadyInfo = {
   el: HTMLElement;
-  main: HTMLElement;
+  main?: HTMLElement;
 };
 
 export type TextArm = SelectValueArm<string, any>;

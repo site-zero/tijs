@@ -31,7 +31,7 @@
   const $main = ref<HTMLElement>();
   //-------------------------------------------------
   const _viewport = useViewport({
-    $main,
+    el: $main,
     onMounted,
     onUnmounted,
   });

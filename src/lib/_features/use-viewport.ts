@@ -8,14 +8,14 @@ export type ViewportFeature = {
 };
 
 export type ViewportOptions = {
-  $main: Ref<HTMLElement | undefined>;
+  el: Ref<HTMLElement | undefined>;
   emit?: (event: 'resize', rect: Rect) => void;
   onMounted?: (callback: Callback) => void;
   onUnmounted?: (callback: Callback) => void;
 };
 
 export function useViewport(options: ViewportOptions): ViewportFeature {
-  let { $main, emit, onMounted, onUnmounted } = options;
+  let { el: $main, emit, onMounted, onUnmounted } = options;
   const _viewport = reactive({
     width: 0,
     height: 0,

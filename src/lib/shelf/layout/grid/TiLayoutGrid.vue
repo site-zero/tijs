@@ -50,7 +50,7 @@
   }>();
   //-------------------------------------------------
   const _viewport = useViewport({
-    $main,
+    el: $main,
     emit,
     onMounted,
     onUnmounted,
