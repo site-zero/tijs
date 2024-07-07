@@ -23,7 +23,7 @@
 
   const TopClass = computed(() => {
     let yes = Bool.value.yes;
-    return CssUtils.mergeClassName({
+    return CssUtils.mergeClassName(props.className, {
       'is-on': yes,
       'is-off': !yes,
     });

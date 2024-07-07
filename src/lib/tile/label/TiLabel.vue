@@ -1,11 +1,11 @@
 <script setup lang="ts">
   import _ from 'lodash';
-import { computed, onMounted, reactive, ref, watch } from 'vue';
-import { PrefixSuffixEvents, TiIcon, usePlaceholder } from '../../';
-import { CssUtils } from '../../../core';
-import { COM_TYPES } from '../../lib-com-types';
-import { LabelProps, LabelState } from './ti-label-types';
-import { useLabel } from './use-label';
+  import { computed, onMounted, reactive, ref, watch } from 'vue';
+  import { PrefixSuffixEvents, TiIcon, usePlaceholder } from '../../';
+  import { CssUtils } from '../../../core';
+  import { COM_TYPES } from '../../lib-com-types';
+  import { LabelProps, LabelState } from './ti-label-types';
+  import { useLabel } from './use-label';
   //-----------------------------------------------------
   defineOptions({
     inheritAttrs: true,
@@ -49,7 +49,7 @@ import { useLabel } from './use-label';
 
 -------------------------------------------------------*/
   const hasValue = computed(() => {
-    return !_.isNil(state.boxValue);
+    return !_.isEmpty(state.boxValue);
   });
 
   const TopClass = computed(() =>

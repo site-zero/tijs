@@ -558,16 +558,20 @@ export function getCaseFunc(mode: StrCaseMode): StrConvertor {
  *
  * @param str - 输入的字符串
  * @param mode - 转换格式
+ *  - `"lowerAll"`: 全小写
+ *  - `"upperAll"`: 全大写
+ *  - `"upperFirst"`: 首字母大写
  *  - `"upper"` : 大写格式
  *  - `"lower"` : 小写格式
  *  - `"camel"` : 驼峰格式
  *  - `"snake"` : 下划线连接格式
  *  - `"kebab"` : 短横线连接格式
  *  - `"start"` : 每个单词的首字母都大写的格式
- *  - `null`  : 保持原样
+ *  - `"raw"` : 保持原样
+ *  - `undefine`  : 保持原样
  * @returns 格式转换后的字符串
  */
-export function toCase(str: string, mode?: StrCaseMode | null): string {
+export function toCase(str: string, mode?: StrCaseMode): string {
   // Guard
   if (!str || !mode) {
     return str;

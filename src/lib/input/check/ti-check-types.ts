@@ -1,7 +1,8 @@
-import { IconInput } from '../../../_type';
-import { BooleanProps, ReadonlyProps } from '../../_features';
+import { BooleanProps, ReadonlyProps } from '../../';
+import { CommonProps, IconInput } from '../../../_type';
 
-export type CheckProps = BooleanProps &
+export type CheckProps = CommonProps &
+  BooleanProps &
   ReadonlyProps & {
     text?: string;
     // [falseIcon, trueIcon]

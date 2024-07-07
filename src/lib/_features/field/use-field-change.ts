@@ -14,7 +14,7 @@ import { I18n, Util } from '../../../core';
 import { getLogger } from '../../../core/log/ti-log';
 import { Alert } from '../../_modal';
 
-const log = getLogger('ti.lib.use-record');
+const log = getLogger('ti.use-field-change');
 
 export type FieldChangeEmitter = {
   (eventName: 'change', payload: Vars | FieldChange[]): void;

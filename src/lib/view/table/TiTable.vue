@@ -233,8 +233,13 @@
   }
   //-------------------------------------------------------
   function onCellChange(changed: TableCellChanged) {
-    let { colIndex, rowIndex } = changed;
     log.debug('OnCellChange', changed);
+
+    // 首先通知单元格改动
+    emit('cell-change', changed);
+
+    // 尝试通知行改动
+    let { colIndex, rowIndex } = changed;
 
     let oldRowData = _.nth(TableData.value, rowIndex)?.rawData;
 
