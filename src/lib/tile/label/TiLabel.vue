@@ -49,7 +49,10 @@
 
 -------------------------------------------------------*/
   const hasValue = computed(() => {
-    return !_.isEmpty(state.boxValue);
+    if (_.isString(state.boxValue)) {
+      return !_.isEmpty(state.boxValue);
+    }
+    return !_.isNil(state.boxValue);
   });
 
   const TopClass = computed(() =>
