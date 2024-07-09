@@ -157,7 +157,7 @@
     () => isEmptyData.value,
     () => {
       if (!isEmptyData.value) {
-        console.log('_viewport.value.updateViewPortSize();');
+        //console.log('_viewport.value.updateViewPortSize();');
         _viewport.updateViewPortSize();
       }
     }

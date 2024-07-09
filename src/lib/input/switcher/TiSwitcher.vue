@@ -79,6 +79,7 @@
       :class="it.className"
       :style="it.style"
       :data-type="it.type"
+      :title="it.tip"
       @click.left="Swt.onSelect(it.value, $event)">
       <div
         class="it-icon"

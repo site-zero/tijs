@@ -25,14 +25,16 @@ export function getFilterFormConfig(
   let fields = _.cloneDeep(Flt.MajorFields.value);
 
   // 去掉 Major Fields 的 title ，变成默认的 placeholder
-  for (let fld of fields) {
-    if (fld.title) {
-      let title = fld.title;
-      fld.title = undefined;
-      fld.comConf = fld.comConf ?? {};
-      _.defaults(fld.comConf, {
-        placeholder: title,
-      });
+  if (Flt.shouldAutoHideMajorFieldTitle.value) {
+    for (let fld of fields) {
+      if (fld.title) {
+        let title = fld.title;
+        fld.title = undefined;
+        fld.comConf = fld.comConf ?? {};
+        _.defaults(fld.comConf, {
+          placeholder: title,
+        });
+      }
     }
   }
 

@@ -24,7 +24,8 @@ export default {
       majorFields: ['type', '__keywords', 'dob'],
       canCustomizedMajor: true,
       actionCollapse: false,
-      actionAt: 'right',
+      title: 'Search',
+      actionAt: 'top',
       fields: [...getFilterExampleFields()],
     },
     sorterConfig: {

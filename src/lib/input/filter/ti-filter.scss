@@ -6,6 +6,20 @@
     display: grid;
     grid-template-columns: 1fr;
     grid-template-rows: auto 1fr auto;
+    > .part-head {
+      > .filter-head {
+        @include flex-align-nowrap;
+        background-color: var(--ti-color-tab);
+        border-radius: var(--ti-measure-r-s);
+        margin: var(--ti-gap-s);
+        > .head-title {
+          flex: 1 1 auto;
+          padding: 0 0.2em 0 1.2em;
+          font-weight: bold;
+          font-size: 1.2em;
+        }
+      }
+    }
     > .part-major {
       position: relative;
       > .ti-grid-fields {

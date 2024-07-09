@@ -2,7 +2,7 @@
   import { computed, onMounted, watch } from 'vue';
   import { ActionBarEvent, TiActionBar, TiGridFields } from '../../';
   import { Vars } from '../../../_type';
-  import { CssUtils } from '../../../core';
+  import { CssUtils, I18n } from '../../../core';
   import { FilterProps } from './ti-filter-types';
   import { FilterEmitter, useFilter } from './use-filter';
   import { useFilterActions } from './use-filter-actions';
@@ -14,6 +14,7 @@
     layout: 'comfy',
     searchIcon: 'zmdi-search',
     searchText: 'i18n:search',
+    majorFieldTitle: 'auto',
   });
   //-------------------------------------------------
   const _emit = defineEmits<FilterEmitter>();
@@ -82,7 +83,21 @@
     :class="TopClass">
     <div class="part-left">
       <div class="part-head">
-        <slot name="head"></slot>
+        <slot name="head">
+          <div class="filter-head">
+            <div
+              class="head-title"
+              v-if="props.title">
+              {{ I18n.text(props.title) }}
+            </div>
+            <TiActionBar
+              v-if="'top' == props.actionAt"
+              :items="ActionItems"
+              layoutMode="H"
+              topItemAspectMode="button"
+              @fire="onActionFire" />
+          </div>
+        </slot>
       </div>
       <!--================: Major Fields :===============-->
       <div

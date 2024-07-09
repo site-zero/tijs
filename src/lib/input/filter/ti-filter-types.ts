@@ -144,9 +144,14 @@ export type FilterProps = CommonProps &
     advanceModal?: AppModalProps;
 
     /**
+     * 是否显示标题，只有在 actionAt:'top' 才有效
+     */
+    title?: string;
+
+    /**
      * 动作菜单位置
      */
-    actionAt?: 'right' | 'bottom' | 'none';
+    actionAt?: 'right' | 'bottom' | 'top' | 'none';
     /**
      * 是否尽量缩起动作按钮，
      * 如果为 true，那么除了 search 按钮，都会缩进一个菜单里
@@ -154,6 +159,13 @@ export type FilterProps = CommonProps &
     actionCollapse?: boolean;
 
     layout?: 'oneline' | 'comfy';
+
+    /**
+     * 对于主字段是否自动隐藏标题以便获得更好的展示空间。
+     * 默认是 'auto', 相当于对于 online 的 layout 则会是 'hide'，
+     * 其他是 'show'
+     */
+    majorFieldTitle?: 'hide' | 'show' | 'auto';
     //-----------------------------------------
     // Callback
     //-----------------------------------------
@@ -173,6 +185,7 @@ export type FilterFeature = {
   hasMajorFields: ComputedRef<boolean>;
   hasMoreData: ComputedRef<boolean>;
   isNeedAdvanceForm: ComputedRef<boolean>;
+  shouldAutoHideMajorFieldTitle: ComputedRef<boolean>;
 
   MajorData: ComputedRef<Vars>;
   MoreData: ComputedRef<Vars>;

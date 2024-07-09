@@ -66,6 +66,16 @@ export function useFilter(
     return !_.isEmpty(MajorFields.value);
   });
   //-----------------------------------------------------
+  const shouldAutoHideMajorFieldTitle = computed(() => {
+    if (/^(show|hide)/.test(props.majorFieldTitle ?? 'auto')) {
+      return 'hide' == props.majorFieldTitle;
+    }
+    if (props.layout == 'oneline') {
+      return true;
+    }
+    return false;
+  });
+  //-----------------------------------------------------
   /**
    * 主字段包括哪些值
    */
@@ -203,6 +213,7 @@ export function useFilter(
     hasMajorFields,
     hasMoreData,
     isNeedAdvanceForm,
+    shouldAutoHideMajorFieldTitle,
 
     MajorData,
     MoreData,
