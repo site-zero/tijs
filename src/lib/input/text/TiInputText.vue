@@ -113,11 +113,11 @@
     }
     &[readonly] {
       border-color: var(--ti-color-border-dark);
+      background-color: var(--ti-color-disable-r);
+      color: var(--ti-color-disable);
       &.is-focused {
         border-color: var(--ti-color-border-dark);
       }
-      background-color: var(--ti-color-disable-r);
-      color: var(--ti-color-disable);
     }
   }
 </style>

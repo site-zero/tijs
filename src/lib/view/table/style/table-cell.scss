@@ -1,7 +1,9 @@
 .ti-table > main > .table-cell {
-  display: grid;
   @include colorized;
-  background-color: var(--ti-color-card);
+  & {
+    display: grid;
+    background-color: var(--ti-color-card);
+  }
   //background-color: blue;
   &.is-checked {
     color: var(--ti-color-selected-r);
@@ -58,7 +60,7 @@
         &::before {
           width: 2px;
           display: block;
-          content: "";
+          content: '';
           background-color: var(--ti-color-mask-thin);
           transition: opacity 300ms;
           opacity: 0;

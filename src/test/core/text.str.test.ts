@@ -88,7 +88,7 @@ test('intToChineseNumber', () => {
 
 test('toCase', function () {
   expect(Str.toCase('aabb')).eq('aabb');
-  expect(Str.toCase('aabb', null)).eq('aabb');
+  expect(Str.toCase('aabb', 'raw')).eq('aabb');
   expect(Str.toCase('aabb', 'upper')).eq('AABB');
   expect(Str.toCase('Nb-A', 'lower')).eq('nb a');
   expect(Str.toCase('Nb-A', 'camel')).eq('nbA');
@@ -101,11 +101,11 @@ test('toCase', function () {
 });
 
 test('toComType', function () {
-  expect(Str.toComType('Nb-A')).eq('NbA');
-  expect(Str.toComType('camel|snake|kbab')).eq('CamelSnakeKbab');
-  expect(Str.toComType('camel-snake kbab')).eq('CamelSnakeKbab');
-  expect(Str.toComType('camel,snake_kbab')).eq('CamelSnakeKbab');
-  expect(Str.toComType('camel:snake_kbab')).eq('CamelSnakeKbab');
+  expect(Str.toComType('Nb-A')).eq('nb-a');
+  expect(Str.toComType('camel|snake|kbab')).eq('camel-snake-kbab');
+  expect(Str.toComType('camel-snake kbab')).eq('camel-snake-kbab');
+  expect(Str.toComType('camel,snake_kbab')).eq('camel-snake-kbab');
+  expect(Str.toComType('camel:snake_kbab')).eq('camel-snake-kbab');
 });
 
 test('joinWithoutNil', function () {

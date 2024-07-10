@@ -1,20 +1,22 @@
 .ti-switcher {
-  @include flex-align($ai: center, $ac: center);
-  @include aspect_fontsize("&.item-size", ".sw-item");
-  @include aspect_gap("&.item-gap");
   user-select: none;
+  @include flex-align($ai: center, $ac: center);
+  @include aspect_fontsize('&.item-size', '.sw-item');
+  @include aspect_gap('&.item-gap');
   //---------------------------------------
   .sw-item {
     @include flex-align-nowrap;
-    @include aspect_radius("&.item-r");
-    @include aspect_color("&.is-checked.is");
-    @include aspect_color_fborder("&.is");
-    height: 2em;
-    line-height: 2em;
-    padding: 0 0.6em;
-    border-width: 1px;
-    border-style: solid;
-    gap: 0.5em;
+    @include aspect_radius('&.item-r');
+    @include aspect_color('&.is-checked.is');
+    @include aspect_color_fborder('&.is');
+    & {
+      height: 2em;
+      line-height: 2em;
+      padding: 0 0.6em;
+      border-width: 1px;
+      border-style: solid;
+      gap: 0.5em;
+    }
     > .it-text {
       line-height: 2em;
     }

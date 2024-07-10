@@ -22,11 +22,11 @@ dl.sidebar-item dt {
   padding: var(--ti-measure-box-pad);
   cursor: pointer;
   > .as-indent-block {
+    min-width: SZ(16);
     &::before {
       display: inline;
       content: "";
     }
-    min-width: SZ(16);
   }
   > .ti-icon {
     min-width: 24px;

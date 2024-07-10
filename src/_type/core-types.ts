@@ -710,7 +710,7 @@ export interface TiComInfo {
   com: any;
   asInner?: boolean;
   tags?: string[];
-  install: (app: App) => void;
+  install: (app: App<Element>) => void;
   defaultProps?: string;
   // 在 playground 中，显示时， .play-live-con 应该有什么样的样式
   // 通常是为TiInput 等自适应宽度的控件设置一个演示区的默认尺寸等

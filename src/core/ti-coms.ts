@@ -31,7 +31,8 @@ const ALL_TI_COMS = new Map<string, TiCom>();
 
 function _put_com_set(coms: TiComSet) {
   _.forEach(coms, (info, key) => {
-    let comType = Str.toComType(key);
+    //console.log(Str.toComType(key))
+    let comType = _.kebabCase(key);
     let com = new TiComImpl(info);
     //console.log(key, info)
     ALL_TI_COMS.set(comType, com);
