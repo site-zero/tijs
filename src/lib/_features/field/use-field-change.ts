@@ -17,7 +17,8 @@ import { Alert } from '../../_modal';
 const log = getLogger('ti.use-field-change');
 
 export type FieldChangeEmitter = {
-  (eventName: 'change', payload: Vars | FieldChange[]): void;
+  (eventName: 'change', payload: Vars): void;
+  (eventName: 'change-fields', payload: FieldChange[]): void;
 };
 
 /**
@@ -60,7 +61,7 @@ export type LinkFieldLoader<T extends AbstractField> = {
  *  - `all` 传递合并后的数据 `{... age:40 ...}`
  *  - `pair` 传递原始明值对列表: `[ {name:'age', value: 40, oldVal:38} ...]`
  */
-export type DataChangeMode = 'diff' | 'all' | 'pair';
+export type DataChangeMode = 'diff' | 'all';
 
 export type HandleValueChangeOptions = {
   emit: FieldChangeEmitter;
@@ -181,20 +182,13 @@ export function useFieldChange<T extends AbstractField>(
   }
 
   //...................................................
-  function makeChangeData(
-    changes: FieldChange[],
-    data?: Vars
-  ): Vars | FieldChange[] {
+  function makeChangeData(changes: FieldChange[], data?: Vars): Vars {
     // 差异
     if ('diff' == props.changeMode) {
       return mergeFieldChanges(changes, {});
     }
     // 合并数据
-    else if ('all' == props.changeMode) {
-      return mergeFieldChanges(changes, data);
-    }
-    // 原始明值对列表
-    return changes;
+    return mergeFieldChanges(changes, data);
   }
 
   //...................................................
@@ -224,7 +218,7 @@ export function useFieldChange<T extends AbstractField>(
   async function tidyValueChange(
     change: FieldValueChange,
     options: Omit<HandleValueChangeOptions, 'emit'>,
-    callback: (changeData: Vars | FieldChange[], field: T) => void
+    callback: (changeData: Vars, pairs: FieldChange[], field: T) => void
   ) {
     let { data, checkEquals } = options;
     let msg_vars: Vars = { key: change.uniqKey, val: change.value };
@@ -303,12 +297,12 @@ export function useFieldChange<T extends AbstractField>(
         return;
       }
       log.debug('notify diff=', diff);
-      callback(diff, field);
+      callback(changedData, changes, field);
     }
     // 通知改动
     else {
       log.debug('notify change', changedData);
-      callback(changedData, field);
+      callback(changedData, changes, field);
     }
   }
 
@@ -323,9 +317,10 @@ export function useFieldChange<T extends AbstractField>(
     options: HandleValueChangeOptions
   ) {
     //console.log('handleValueChange');
-    await tidyValueChange(change, options, (changedData, _field) => {
+    await tidyValueChange(change, options, (data, changes) => {
       let { emit } = options;
-      emit('change', changedData);
+      emit('change', data);
+      emit('change-fields', changes);
     });
   }
 

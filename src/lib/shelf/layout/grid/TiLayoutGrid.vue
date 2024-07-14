@@ -204,6 +204,7 @@
             :class-name="it.className"
             :icon="it.icon"
             :title="it.title"
+            :name="it.name"
             :actions="it.actions"
             :action-vars="it.actionVars"
             :action-class="it.actionClass"
@@ -220,7 +221,6 @@
             :schema="schema"
             :class-name="it.className"
             :item-style="it.itemStyle"
-            :keep-sizes="it.keep"
             @block="emit('block', $event)" />
           <!-- 标签布局-->
           <TiLayoutTabs
@@ -229,7 +229,6 @@
             :schema="schema"
             :class-name="it.className"
             :item-style="it.itemStyle"
-            :keep-tab="it.keep"
             @block="emit('block', $event)" />
           <!-- 未知布局-->
           <div v-else>

@@ -125,6 +125,7 @@ export function findCurrentTabKey(
       // 默认标签是下标
       if (_.isNumber(defaultTab) && i == defaultTab) {
         dftKey = block.uniqKey;
+        break;
       }
       // 默认标签是块名
       else if (
@@ -133,6 +134,7 @@ export function findCurrentTabKey(
         defaultTab == block.name
       ) {
         dftKey = block.uniqKey;
+        break;
       }
     }
   }
@@ -142,5 +144,7 @@ export function findCurrentTabKey(
   }
 
   // 从本地恢复
-  return Keep.value.load(dftKey) || undefined;
+  let re = Keep.value.load(dftKey) || undefined;
+  // console.log('from local', re, dftKey);
+  return re;
 }

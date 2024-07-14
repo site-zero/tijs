@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { IconObj, MessageMap } from '../../_type';
+import { Iconable, IconInput, IconObj, MessageMap } from '../../_type';
 
 //-----------------------------------
 const TYPES = {
@@ -16,7 +16,7 @@ const TYPES = {
   'hmaker_site': 'zmdi-globe-alt',
   'html': 'fab-html5',
   'js': 'fab-node-js',
-  'json': 'fas-quote-right',
+  'json': 'far-file-code',
   'less': 'fab-first-order-alt',
   'md': 'fab-markdown',
   'mjs': 'fab-node-js',
@@ -125,20 +125,14 @@ export function put(input: IconPutOptions): void {
   _.assign(_DFT_FONT_ICON, dft);
 }
 
-export interface Iconable {
-  tp?: string;
-  type?: string;
-  mime?: string;
-  race?: string;
-  name?: string;
-  icon?: string | IconObj;
-}
-
 export function isEmoji(str: string) {
   return /[\u{1F300}-\u{1F6FF}]/u.test(str);
 }
 
-export function getIcon(input: string | Iconable, dft = _DFT_FONT_ICON) {
+export function getIcon(
+  input?: string | Iconable,
+  dft = _DFT_FONT_ICON
+): IconInput {
   // Default icon
   if (!input) {
     return dft;

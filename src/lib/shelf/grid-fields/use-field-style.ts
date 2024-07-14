@@ -5,7 +5,7 @@ import {
   TextContentType,
   Vars,
 } from '../../../_type';
-import { Util } from '../../../core';
+import { I18n, Util } from '../../../core';
 import {
   GridFieldLayoutMode,
   GridFieldsProps,
@@ -310,11 +310,16 @@ export function getFieldTextInfo(
   let title = Util.selectValue(ctx, title_arms, {
     explain: true,
   });
+  // auto i18n
+  if (title) {
+    title = I18n.text(title);
+  }
+
   if (required && required(field.data) && title && !fieldTitleBy) {
     if ('text' == titleType) {
       title = _.escape(title);
     }
-    title = '<b class="required-mark">*</b>' + title_arms;
+    title = '<b class="required-mark">*</b>' + title;
     titleType = 'html';
   }
 

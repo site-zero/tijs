@@ -165,9 +165,9 @@ export class StringExplainer implements Explainer {
         m_val = _.trim(m[2]);
 
         // support dynamic default getter
-        let m_dft = _.trim(m[4]);
+        let m_dft = _.trim(m[4]) || undefined;
         let _get_dft: ValueGetter;
-        if (/^=/.test(m_dft)) {
+        if (m_dft && /^=/.test(m_dft)) {
           let s = m_dft.substring(1).trim();
           _get_dft = __get_val(s, { getDft: () => s, autoJsValue: true });
         } else {

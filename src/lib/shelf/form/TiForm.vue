@@ -13,6 +13,7 @@
   <TiGridFields
     v-bind="props"
     @change="emit('change', $event)"
+    @change-fields="emit('change-fields', $event)"
     @name-change="emit('name-change', $event)"
     @dom-ready="emit('dom-ready', $event)" />
 </template>

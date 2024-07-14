@@ -241,7 +241,7 @@
         <TiBlock
           v-bind="BlockConfig"
           :com-conf="BlockComConf"
-          :emit-adaptors="BlockEmitAdaptors"
+          :events="BlockEmitAdaptors"
           @happen="onBlockEvent" />
         <!------------------------------>
         <footer v-if="hasModalLeftActions || hasModalRightActions">

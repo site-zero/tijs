@@ -6,8 +6,10 @@ div.ti-label {
     font-style: italic;
   }
 
-  > .part-value {
+  &.is-nowrap > .part-value {
     overflow: hidden;
     text-overflow: ellipsis;
+    display: block;
+    margin: auto 0;
   }
 }

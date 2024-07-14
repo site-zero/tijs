@@ -56,7 +56,20 @@ export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
   }
   // 格子布局
   else if ('grid' == it.type) {
-    it.propsForLayoutGrid = _.pick(it, 'name', 'blocks', 'layout');
+    it.propsForLayoutGrid = _.pick(
+      it,
+      'name',
+      'blocks',
+      'conStyle',
+      'layout',
+      'keepSizes',
+      'KeepShown',
+      'layoutHint',
+      'layoutGridTracks',
+      'customizedGridTracks',
+      'gridStyle',
+      'resetLocalGridTracks'
+    );
   }
   // 标签布局
   else if ('tabs' == it.type) {
@@ -64,9 +77,11 @@ export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
       it,
       'name',
       'blocks',
-      'tabAt',
-      'tabAlign',
-      'defaultTab'
+      'tabsAt',
+      'tabsAlign',
+      'wrapTabs',
+      'defaultTab',
+      'keepTab'
     );
   }
 }

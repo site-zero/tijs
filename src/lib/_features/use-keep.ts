@@ -56,7 +56,7 @@ export type KeepFeature = {
   _enabled: boolean;
   _mode: KeepMode;
   save: Callback1<any>;
-  load: (dft?: string) => string | null;
+  load: (dft?: string) => string | undefined;
   loadObj: (dft?: Vars) => Vars | null;
   loadArray: (dft?: any[]) => any[] | null;
   reset: () => void;
@@ -76,9 +76,9 @@ export function useKeep(info?: KeepInfo): KeepFeature {
   //------------------------------------------------
   function load(dft?: string) {
     if (!keepAt) {
-      return null;
+      return dft;
     }
-    return keep.getString(keepAt, dft) || null;
+    return keep.getString(keepAt, dft);
   }
 
   //------------------------------------------------

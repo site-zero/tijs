@@ -164,6 +164,7 @@ export function buildGridFields(
     let is = _.concat(indexes, i);
     let field = fields[i];
     let it = buildOneGridField(is, field, dft);
+    // console.log(it.uniqKey, `[${it.title}]`);
     items.push(it);
   }
   return items;

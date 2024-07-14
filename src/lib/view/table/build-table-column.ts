@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { TableProps, TableStrictColumn } from '../../';
 import { makeFieldUniqKey, parseFieldConverter } from '../../../_type';
-import { Util } from '../../../core';
+import { I18n, Util } from '../../../core';
 
 export function buildTableColumns(props: TableProps) {
   //console.log('buildTableColumns', props.columns.length);
@@ -18,6 +18,14 @@ export function buildTableColumns(props: TableProps) {
 
       let candidate = col.candidate ?? false;
 
+      // 列标题
+      let title: string;
+      if (col.title) {
+        title = I18n.text(col.title);
+      } else {
+        title = _.upperCase(uniqKey);
+      }
+
       // 准备列
       let re: TableStrictColumn = {
         uniqKey,
@@ -25,7 +33,7 @@ export function buildTableColumns(props: TableProps) {
         name: col.name,
         type: col.type ?? 'String',
         className: col.className,
-        title: col.title ?? _.upperCase(uniqKey),
+        title,
         titleType: col.titleType ?? 'text',
         titleIcon: col.titleIcon,
         titleStyle: col.titleStyle,

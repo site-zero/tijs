@@ -148,6 +148,15 @@ export type IconObj = {
   topClass?: any;
 };
 
+export interface Iconable {
+  tp?: string;
+  type?: string;
+  mime?: string;
+  race?: string;
+  name?: string;
+  icon?: string | IconObj;
+}
+
 export function isIconObj(input: any): input is IconObj {
   if (!input) {
     return false;
@@ -705,8 +714,8 @@ export interface TiComInfo {
   icon?: string;
   race: TiComRace;
   name: string;
-  text: string;
-  i18n: I18nSet;
+  text?: string;
+  i18n?: I18nSet;
   com: any;
   asInner?: boolean;
   tags?: string[];
@@ -715,7 +724,7 @@ export interface TiComInfo {
   // 在 playground 中，显示时， .play-live-con 应该有什么样的样式
   // 通常是为TiInput 等自适应宽度的控件设置一个演示区的默认尺寸等
   liveStyle?: Vars;
-  exampleProps: ComPropExample[];
+  exampleProps?: ComPropExample[];
   /**
    * 当事件发生，需要将 key 对应的事件，存放到comConf 的哪个字段里
    *
@@ -872,7 +881,7 @@ export type EmitAdaptorHandler = (payload: EmitAdaptorPayload) => void;
 export type EmitAdaptor = string | EmitAdaptorHandler;
 
 export type EmitAdaptorProps = {
-  emitAdaptors?: Record<string, EmitAdaptor>;
+  events?: Record<string, EmitAdaptor>;
 };
 /*-------------------------------------------
 

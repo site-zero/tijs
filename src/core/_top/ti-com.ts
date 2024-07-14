@@ -35,15 +35,20 @@ export class TiComImpl implements TiCom {
     this.icon = info.icon || 'fas-question';
     this.race = info.race;
     this.name = info.name;
-    this.text = info.text;
-    this.i18n = info.i18n;
+    this.text = info.text ?? info.name;
+    this.i18n = info.i18n ?? {
+      zh_cn: {},
+      zh_hk: {},
+      en_uk: {},
+      en_us: {},
+    };
     this.tags = info.tags || [];
     this.liveStyle = info.liveStyle ?? {};
     this.com = info.com;
     this.asInner = info.asInner ?? false;
     this.install = info.install;
     this.defaultProps = info.defaultProps ?? '_auto_';
-    this.exampleProps = _.cloneDeep(info.exampleProps);
+    this.exampleProps = _.cloneDeep(info.exampleProps ?? []);
     this.exampleModel = _.cloneDeep(info.exampleModel) ?? { change: 'value' };
 
     this.events = [];

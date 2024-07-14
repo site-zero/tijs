@@ -247,13 +247,13 @@
     Change.tidyValueChange(
       changed,
       { checkEquals: true, data: oldRowData || {} },
-      (changedData, field) => {
+      (rowData, _changes, field) => {
         emit('row-change', {
           colIndex,
           rowIndex,
           uniqKey: field.uniqKey,
           name: field.name,
-          changed: changedData,
+          changed: rowData,
           oldRowData,
         });
       }

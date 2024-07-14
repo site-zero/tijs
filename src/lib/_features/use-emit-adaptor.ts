@@ -16,12 +16,13 @@ export function useEmitAdaptor(
   props: EmitAdaptorProps,
   options: EmitAdaptorOptions = {}
 ): Record<string, Function> {
+  //console.log('-----------useEmitAdaptor', _.get(props, 'name'), props.emitAdaptors);
   let { ignoreNativeEvents = true } = options;
-  log.info(`useEmitAdaptor<${COM_TYPE}>`, _.cloneDeep(props.emitAdaptors));
+  log.info(`useEmitAdaptor<${COM_TYPE}>`, _.cloneDeep(props.events));
   let listens = {} as Record<string, Function>;
-  if (props.emitAdaptors) {
-    for (let eventName of _.keys(props.emitAdaptors)) {
-      let adaptEmit = props.emitAdaptors[eventName];
+  if (props.events) {
+    for (let eventName of _.keys(props.events)) {
+      let adaptEmit = props.events[eventName];
       // 字符串，就是修改一下事件的名称
       if (_.isString(adaptEmit)) {
         //.............<监听函数: String>.....................

@@ -42,7 +42,7 @@ export default {
         comConf: {
           fields: [{ title: 'Name', name: 'name', comType: 'TiInput' }],
         } as FormProps,
-        emitAdaptors: {
+        events: {
           change: 'detail-change',
         },
       },

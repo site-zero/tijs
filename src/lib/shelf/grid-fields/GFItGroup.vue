@@ -26,7 +26,11 @@
   });
   //-------------------------------------------------
   const emit = defineEmits<GridItemEmitter>();
-  const props = defineProps<GridFieldsStrictGroup>();
+  const props = defineProps<
+    GridFieldsStrictGroup & {
+      activedUniqKey?: string;
+    }
+  >();
   //-------------------------------------------------
   const $main = ref<HTMLElement>();
   //-------------------------------------------------
@@ -111,13 +115,16 @@
             v-if="'field' == fld.race"
             v-bind="(fld as GridFieldsStrictField)"
             :max-track-count="GridLayoutStyle.trackCount"
+            :is-actived="fld.uniqKey == props.activedUniqKey"
             @name-change="emit('name-change', $event)"
-            @value-change="emit('value-change', $event)" />
+            @value-change="emit('value-change', $event)"
+            @field-active="emit('field-active', $event)" />
           <!------[:Group:]---------->
           <GFItGroup
             v-else-if="'group' == fld.race"
             v-bind="(fld as GridFieldsStrictGroup)"
             :max-track-count="GridLayoutStyle.trackCount"
+            :actived-uniq-key="props.activedUniqKey"
             @name-change="emit('name-change', $event)"
             @value-change="emit('value-change', $event)" />
           <!------[:Label:]---------->

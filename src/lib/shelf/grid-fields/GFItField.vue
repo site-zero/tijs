@@ -20,7 +20,11 @@
   });
 
   const emit = defineEmits<GridItemEmitter>();
-  const props = defineProps<GridFieldsStrictField>();
+  const props = defineProps<
+    GridFieldsStrictField & {
+      isActived?: boolean;
+    }
+  >();
 
   const hasTitle = computed(() =>
     props.title || props.fieldTitleBy ? true : false
@@ -77,7 +81,7 @@
   const FieldCom = computed(() => {
     let com = useFieldCom(props);
     return com.autoGetCom(
-      { readonly: props.readonly },
+      { readonly: props.readonly, actived: props.isActived },
       { value: FieldValue.value, data: props.data, vars: props.vars ?? {} },
       FieldValue.value
     );
@@ -87,6 +91,7 @@
     let key = props.changeEventName ?? 'change';
     return {
       [key]: (val: any) => {
+        console.log('value-chagne!!!', val);
         emit('value-change', {
           uniqKey: props.uniqKey,
           name: props.name,
@@ -104,12 +109,17 @@
       oldVal: props.uniqKey,
     });
   }
+
+  function onFieldMouseDown() {
+    emit('field-active', props.uniqKey);
+  }
 </script>
 <template>
   <div
     class="ti-grid-fiels-item part-field"
     :class="TopClass"
-    :style="TopStyle">
+    :style="TopStyle"
+    @mousedown="onFieldMouseDown">
     <!--===============: 字段名 :===================-->
     <TextSnippet
       v-if="hasTitle"

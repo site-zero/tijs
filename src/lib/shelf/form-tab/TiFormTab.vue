@@ -98,6 +98,7 @@
     :vars="props.vars"
     :data="props.data"
     @change="emit('change', $event)"
+    @change-fields="emit('change-fields', $event)"
     @name-change="emit('name-change', $event)"
     @dom-ready="onDomReady">
     <!--=======: 头部标签 :=======-->

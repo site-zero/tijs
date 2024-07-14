@@ -55,6 +55,7 @@
     onMounted,
     onUnmounted,
   });
+  const _actived_uniqKey = ref<string>();
   //-------------------------------------------------
   const Grid = computed(() => useGridFields(props));
   //-------------------------------------------------
@@ -135,6 +136,12 @@
       data: props.data || {},
       checkEquals: props.checkEquals,
     });
+  }
+  //-------------------------------------------------
+  function onFieldActived(uniqKey: string) {
+    _.delay(() => {
+      _actived_uniqKey.value = uniqKey;
+    }, 10);
   }
   //-------------------------------------------------
   // const obResize = new ResizeObserver((_entries) => {
@@ -224,15 +231,19 @@
               v-if="'field' == fld.race"
               v-bind="(fld as GridFieldsStrictField)"
               :max-track-count="GridLayoutStyle.trackCount"
+              :is-actived="fld.uniqKey == _actived_uniqKey"
               @name-change="emit('name-change', $event)"
-              @value-change="onValueChange" />
+              @value-change="onValueChange"
+              @field-active="onFieldActived" />
             <!------[:Group:]---------->
             <GFItGroup
               v-else-if="'group' == fld.race"
               v-bind="(fld as GridFieldsStrictGroup)"
               :max-track-count="GridLayoutStyle.trackCount"
+              :actived-uniq-key="_actived_uniqKey"
               @name-change="emit('name-change', $event)"
-              @value-change="onValueChange" />
+              @value-change="onValueChange"
+              @field-active="onFieldActived" />
             <!------[:Label:]---------->
             <GFItLabel
               v-else-if="'label' == fld.race"

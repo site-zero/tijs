@@ -52,6 +52,7 @@ export type GridFieldsEmitter = FieldChangeEmitter & {
 export type GridItemEmitter = {
   (eventName: 'name-change', payload: ValueChange<string>): void;
   (eventName: 'value-change', payload: FieldChange): void;
+  (eventName: 'field-active', payload: string): void;
 };
 
 export type GridFieldsProps = Omit<
