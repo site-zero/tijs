@@ -126,7 +126,7 @@ function buildGridFieldsLayoutStyle(
   // customized function call
   if (_.isFunction(customizedGridTracks)) {
     getTrackSize = (_i: number, _track_count: number): string => {
-      return customizedGridTracks(_i, _track_count, defaultGetTrackSize);
+      return customizedGridTracks!(_i, _track_count, defaultGetTrackSize);
     };
   } else {
     getTrackSize = defaultGetTrackSize;

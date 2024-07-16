@@ -7,8 +7,8 @@ export const COM_TYPES = {
   Sidebar: 'TiSidebar',
   Tabs: 'TiTabs',
   //------------------- EDIT
-  EditCode: 'TiEditCode',
-  EditPair: 'TiEditPair',
+  CodeEditor: 'TiCodeEditor',
+  PairEditor: 'TiPairEditor',
   //------------------- TILE
   HtmlSnippet: 'TiHtmlSnippet',
   Icon: 'TiIcon',

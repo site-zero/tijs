@@ -1,11 +1,11 @@
 import { TiComSet } from '../../_type';
-import { TiEditCodeInfo } from './code/ti-edit-code-index';
-import { TiEditPairInfo } from './pair/ti-edit-pair-index';
+import { TiCodeEditorInfo } from './code/ti-code-editor-index';
+import { TiPairEditorInfo } from './pair/ti-pair-editor-index';
 
 export default {
-  TiEditCode: TiEditCodeInfo,
-  TiEditPair: TiEditPairInfo,
+  TiCodeEditor: TiCodeEditorInfo,
+  TiPairEditor: TiPairEditorInfo,
 } as TiComSet;
 
-export * from './code/ti-edit-code-index';
-export * from './pair/ti-edit-pair-index';
+export * from './code/ti-code-editor-index';
+export * from './pair/ti-pair-editor-index';

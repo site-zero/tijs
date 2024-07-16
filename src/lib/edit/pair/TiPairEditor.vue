@@ -4,5 +4,5 @@
 </template>
 <style lang="scss" scoped>
   @use '../../../assets/style/_all.scss' as *;
-  @import './ti-edit-pair.scss';
+  @import './ti-pair-editor.scss';
 </style>

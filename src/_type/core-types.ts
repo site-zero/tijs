@@ -651,7 +651,7 @@ export enum TiComRace {
   /**
    *  编辑: 生产比较复杂的数据
    */
-  EIDT = 'EIDT',
+  EDIT = 'EDIT',
   /**
    * 搁架:组合更多子控件，用作界面布局
    */

@@ -1,8 +1,8 @@
 import { ComPropExample } from '../../../../_type';
-import { EditPairProps } from '../ti-edit-pair-types';
+import { PairEditorProps } from '../ti-pair-editor-types';
 
 export default {
   name: 'simple',
   text: 'i18n:simple',
-  comConf: {} as EditPairProps,
+  comConf: {} as PairEditorProps,
 } as ComPropExample;

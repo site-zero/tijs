@@ -21,7 +21,7 @@
       return CssUtils.toStyle(liveStyle);
     }
     // 根据模式给个默认
-    else if (/^(SHELF|VIEW)$/.test(race)) {
+    else if (/^(SHELF|VIEW|EDIT)$/.test(race)) {
       return {
         position: 'absolute',
         inset: 0,

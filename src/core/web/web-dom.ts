@@ -18,7 +18,9 @@ import {
   Size2D,
   StrCaseMode,
   Vars,
+  WindowTheme,
 } from '../../_type';
+import { ref } from 'vue';
 
 /*-------------------------------------------
 
@@ -1443,5 +1445,43 @@ export function scrollIntoView(
     $view.scrollTop += off;
   }
 }
+//----------------------------------------------------
+export function getWindowTheme(): WindowTheme {
+  if (window.matchMedia) {
+    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      return 'dark';
+    }
+  }
+  return 'light';
+}
+//----------------------------------------------------
+export function getDocumentTheme(doc = document): WindowTheme {
+  let rootClass = doc.documentElement.getAttribute('class');
+  if ('light' == rootClass || 'dark' == rootClass) {
+    return rootClass;
+  }
+  // 自动跟随系统的设置
+  return getWindowTheme();
+}
+
+//----------------------------------------------------
+export const RootThemeClass = ref<WindowTheme>('light');
+const _root_theme_observer = new MutationObserver((mutationsList) => {
+  for (var mutation of mutationsList) {
+    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
+      let html = mutation.target as HTMLElement;
+      console.log('<html> 标签的 class 属性发生变化:', html.className);
+      RootThemeClass.value = getDocumentTheme(html.ownerDocument);
+    }
+  }
+});
+export function watchDocumentTheme(doc = document) {
+  _root_theme_observer.observe(doc.documentElement, {
+    attributes: true,
+    attributeFilter: ['class'],
+  });
+}
+watchDocumentTheme();
+//----------------------------------------------------
 
 export * from './web-dom-html';

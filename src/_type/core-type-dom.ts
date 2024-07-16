@@ -1,3 +1,5 @@
+export type WindowTheme = 'light' | 'dark';
+
 export function isElement(input: any): input is Element {
   if (!input) {
     return false;
