@@ -14,7 +14,7 @@
   import { getLogger } from '../../../../core/log/ti-log';
   import { COM_TYPES } from '../../../lib-com-types';
   import { TabDisplayItem } from '../layout-types';
-  import { LayoutTabsProps } from './ti-layout-tabs-types';
+  import { LayoutTabsProps, TabChangeEvent } from './ti-layout-tabs-types';
   import {
     autoSetCurrentTablKey,
     buildLayoutTabBlocks,
@@ -26,11 +26,7 @@
   const log = getLogger(COM_TYPE);
   //-------------------------------------------------
   const emit = defineEmits<{
-    (
-      eventName: 'tab-change',
-      current: TabDisplayItem,
-      old?: TabDisplayItem
-    ): void;
+    (eventName: 'tab-change', payload: TabChangeEvent): void;
     (event: 'block', payload: BlockEvent): void;
   }>();
   //-------------------------------------------------
@@ -68,7 +64,10 @@
   function OnTabChange(item: TabDisplayItem, old?: TabDisplayItem) {
     _current_tab_key.value = item.value;
     Keep.value.save(item.value);
-    emit('tab-change', item, old);
+    emit('tab-change', {
+      to: item,
+      from: old,
+    });
   }
   //-------------------------------------------------
   watch(
@@ -82,12 +81,14 @@
       );
       if (MainTab.value) {
         emit('tab-change', {
-          className: MainTab.value.className,
-          current: true,
-          index: MainTab.value.index || 0,
-          icon: MainTab.value.icon,
-          text: MainTab.value.title,
-          value: MainTab.value.uniqKey,
+          to: {
+            className: MainTab.value.className,
+            current: true,
+            index: MainTab.value.index || 0,
+            icon: MainTab.value.icon,
+            text: MainTab.value.title,
+            value: MainTab.value.uniqKey,
+          },
         });
       } else {
         log.warn(

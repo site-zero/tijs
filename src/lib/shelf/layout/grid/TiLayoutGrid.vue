@@ -11,6 +11,7 @@
   } from 'vue';
   import {
     BlockEvent,
+    TabChangeEvent,
     TiBlock,
     TiLayoutTabs,
     useGridLayout,
@@ -27,7 +28,12 @@
   import { useGridResizing } from '../grid/use-grid-resizing.ts';
   import { getLayoutPanelItems } from '../layout-panel';
   import { LayoutBar, LayoutPanelItem } from '../layout-types';
-  import { LayoutGridProps, LayoutGridState } from './ti-layout-grid-types';
+  import {
+    GridItemTabChangeEvent,
+    LayoutGridItem,
+    LayoutGridProps,
+    LayoutGridState,
+  } from './ti-layout-grid-types';
   import { getLayoutGridItems, isLayoutAdjustable } from './use-grid-items';
   import { getTopStyle } from './use-grid-util.ts';
   //-------------------------------------------------
@@ -47,6 +53,7 @@
     (event: 'show' | 'hide', name: string): void;
     (event: 'resize', payload: Rect): void;
     (event: 'block', payload: BlockEvent): void;
+    (event: 'tab-change', payload: GridItemTabChangeEvent): void;
   }>();
   //-------------------------------------------------
   const _viewport = useViewport({
@@ -110,6 +117,26 @@
   //-------------------------------------------------
   function onBlockEventHappen(event: BlockEvent) {
     emit('block', event);
+  }
+  //-------------------------------------------------
+  function onGridItemTabChange(event: TabChangeEvent, item: LayoutGridItem) {
+    console.log(event, item);
+    emit('tab-change', {
+      ...event,
+      items: [item],
+      path: [item.uniqKey],
+    });
+  }
+  //-------------------------------------------------
+  function onGridLayoutTabChange(
+    event: GridItemTabChangeEvent,
+    item: LayoutGridItem
+  ) {
+    emit('tab-change', {
+      ..._.omit(event, 'items', 'path'),
+      items: _.concat(event.items, item),
+      path: _.concat(event.path, item.uniqKey),
+    });
   }
   //-------------------------------------------------
   // const obResize = new ResizeObserver((_entries) => {
@@ -221,7 +248,8 @@
             :schema="schema"
             :class-name="it.className"
             :item-style="it.itemStyle"
-            @block="emit('block', $event)" />
+            @block="emit('block', $event)"
+            @tab-change="onGridLayoutTabChange($event, it)" />
           <!-- 标签布局-->
           <TiLayoutTabs
             v-else-if="'tabs' == it.type"
@@ -229,7 +257,8 @@
             :schema="schema"
             :class-name="it.className"
             :item-style="it.itemStyle"
-            @block="emit('block', $event)" />
+            @block="emit('block', $event)"
+            @tab-change="onGridItemTabChange($event, it)" />
           <!-- 未知布局-->
           <div v-else>
             Unknown layout item type: <code>{{ it.type }}</code>

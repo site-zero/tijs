@@ -13,6 +13,7 @@ const zh_cn = {
   'example-nested': '嵌套',
   'example-sameline': '整行字段',
   'example-editname': '编辑名称',
+  'example-status': '字段状态',
 };
 
 const COM_TYPE = COM_TYPES.GridFields;
@@ -42,6 +43,7 @@ const TiGridFieldsInfo: TiComInfo = {
     example.nested,
     example.sameline,
     example.editname,
+    example.status,
   ],
   exampleModel: {
     change: {

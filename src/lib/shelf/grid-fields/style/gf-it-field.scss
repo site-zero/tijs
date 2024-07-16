@@ -48,6 +48,7 @@
       flex-wrap: nowrap;
       align-items: stretch;
       align-content: center;
+      transition: color 1s, background-color 1s;
       > .as-snippet-text .required-mark {
         @include font-fixed;
         color: var(--ti-color-danger);

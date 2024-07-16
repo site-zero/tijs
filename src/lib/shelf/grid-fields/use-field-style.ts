@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import {
   CssGridLayout,
+  FieldStatusInfo,
   IconInput,
   TextContentType,
   Vars,
@@ -208,8 +209,32 @@ export function getGridItemStyle(item: GridFieldsStrictAbstractItem) {
   return css;
 }
 
-export function getFieldTitleStyle(field: GridFieldsStrictField) {
-  return _.assign({}, field.titleStyle);
+export function getFieldTitleStyle(
+  field: GridFieldsStrictField,
+  status?: FieldStatusInfo
+) {
+  let re = _.assign({}, field.titleStyle);
+  if (status && status.type) {
+    let colorType = {
+      pending: 'secondary',
+      error: 'danger',
+      warn: 'warn',
+      ok: 'success',
+      highlight: 'hightlight',
+    }[status.type];
+    let bgColorType = {
+      pending: 'secondary-r',
+      error: 'danger-r',
+      warn: 'warn-r',
+      ok: 'success-r',
+      highlight: 'hightlight-f',
+    }[status.type];
+    _.assign(re, {
+      backgroundColor: `var(--ti-color-${bgColorType})`,
+      color: `var(--ti-color-${colorType})`,
+    });
+  }
+  return re;
 }
 
 type FieldTipIconInfo = {
@@ -241,12 +266,13 @@ export function getFieldTitleAlign(field: GridFieldsStrictField): string {
   return field.titleAlign;
 }
 
-export type FieldpTitleIcon = {
+export type FieldTitleIcon = {
   tipAsIcon: boolean;
   titlePrefixIcon?: IconInput;
   titleSuffixIcon?: IconInput;
   tipPrefixIcon?: IconInput;
   tipSuffixIcon?: IconInput;
+  valueIcon?: IconInput;
 };
 
 /**
@@ -255,24 +281,55 @@ export type FieldpTitleIcon = {
 export function getFieldIcon(
   field: GridFieldsStrictField,
   hasTitle: boolean,
-  hasTip: boolean
-): FieldpTitleIcon {
-  let tipIcon = getFieldTipIcon(field, hasTip);
-  let reIcon: FieldpTitleIcon = { tipAsIcon: tipIcon ? true : false };
-  // 标题区提示图标
-  if (hasTitle) {
-    if (tipIcon && tipIcon.position == 'title' && tipIcon.type) {
+  hasTip: boolean,
+  status?: FieldStatusInfo
+): FieldTitleIcon {
+  //
+  // 提示图标
+  //
+  let tipIconInfo = getFieldTipIcon(field, hasTip);
+  let reIcon: FieldTitleIcon = { tipAsIcon: tipIconInfo ? true : false };
+  if (tipIconInfo && tipIconInfo.type) {
+    // 标题区提示图标
+    if (hasTitle && tipIconInfo.position == 'title') {
       // 提示在前缀
-      if ('prefix' == tipIcon.type) {
+      if ('prefix' == tipIconInfo.type) {
         reIcon.titlePrefixIcon = field.tipIcon;
       }
       // 提示在后缀
-      else if ('suffix' == tipIcon.type) {
+      else if ('suffix' == tipIconInfo.type) {
         reIcon.titleSuffixIcon = field.tipIcon;
       }
     }
+    // 值区提示图标
+    else if (tipIconInfo.position == 'value') {
+      // ... 好像没什么需要做的
+    }
+    // 提示区图标
+    else if (hasTip) {
+      // 提示在前缀
+      if ('prefix' == tipIconInfo.type) {
+        reIcon.tipPrefixIcon = field.tipIcon;
+      }
+      // 提示在后缀
+      else if ('suffix' == tipIconInfo.type) {
+        reIcon.tipSuffixIcon = field.tipIcon;
+      }
+    }
   }
-  // 值区提示图标
+  //
+  // 状态图标
+  //
+  if (status && status.icon) {
+    if (hasTitle) {
+      reIcon.titleSuffixIcon = status.icon;
+    } else if (hasTip) {
+      reIcon.tipPrefixIcon = status.icon;
+    } else {
+      reIcon.valueIcon = status.icon;
+    }
+  }
+
   return reIcon;
 }
 

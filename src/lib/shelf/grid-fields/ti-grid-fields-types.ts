@@ -1,9 +1,13 @@
+import { ComputedRef, InjectionKey } from 'vue';
 import {
   AbstractField,
   AspectSize,
   CommonProps,
   CssTextAlign,
   FieldChange,
+  FieldStatus,
+  FieldStatusIcons,
+  FieldStatusInfo,
   FieldValueType,
   GridLayoutProps,
   IconInput,
@@ -27,6 +31,10 @@ export type GridFieldsDomReadyInfo = {
   el: HTMLElement;
   main?: HTMLElement;
 };
+
+export const FIELD_STATUS_KEY: InjectionKey<
+  ComputedRef<Map<string, FieldStatusInfo>>
+> = Symbol('FIELD_STATUS_KEY');
 
 export type TextArm = SelectValueArm<string, any>;
 
@@ -87,6 +95,16 @@ export type GridFieldsProps = Omit<
      * @returns
      */
     whenGrid?: (grid: GridFieldsFeature) => void;
+
+    /**
+     * 得到每个字段的状态
+     */
+    fieldStatus?: Record<string, FieldStatus>;
+
+    /**
+     * 每种状态的图标
+     */
+    fieldStatusIcons?: FieldStatusIcons;
   };
 
 /*

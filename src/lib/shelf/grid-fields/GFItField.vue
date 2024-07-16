@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-  import { computed } from 'vue';
+  import { computed, inject } from 'vue';
   import { TextSnippet, useFieldCom } from '../../';
   import { ValueChange, getFieldValue } from '../../../_type';
   import { CssUtils } from '../../../core';
   import {
+    FIELD_STATUS_KEY,
     GridFieldsStrictField,
     GridItemEmitter,
   } from './ti-grid-fields-types';
@@ -47,11 +48,15 @@
       hasTip: hasTip.value,
     })
   );
-  const FieldTitleStyle = computed(() => getFieldTitleStyle(props));
+  const AllFieldStatus = inject(FIELD_STATUS_KEY);
+  const FieldStatus = computed(() => AllFieldStatus?.value.get(props.uniqKey));
+  const FieldTitleStyle = computed(() =>
+    getFieldTitleStyle(props, FieldStatus.value)
+  );
   const TitleAlign = computed(() => getFieldTitleAlign(props));
   const FieldText = computed(() => getFieldTextInfo(props, props.vars));
   const FieldIcon = computed(() =>
-    getFieldIcon(props, hasTitle.value, hasTip.value)
+    getFieldIcon(props, hasTitle.value, hasTip.value, FieldStatus.value)
   );
   const FieldValue = computed(() => {
     let val = getFieldValue(props.name, props.data);
@@ -169,6 +174,8 @@
       :activatedComType="props.tipBy?.activatedComType"
       :activatedComConf="props.tipBy?.activatedComConf"
       :changeEventName="props.tipBy?.changeEventName"
+      :prefixIcon="FieldIcon?.tipPrefixIcon"
+      :suffixIcon="FieldIcon?.tipSuffixIcon"
       :vars="FieldTitleVars" />
   </div>
 </template>

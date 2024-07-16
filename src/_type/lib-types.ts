@@ -22,7 +22,13 @@ export type FieldStatus = {
   /**
    * 状态描述文字
    */
-  text: string;
+  text?: string;
+};
+
+export type FieldStatusInfo = {
+  type: FieldStatusType;
+  text?: string;
+  icon: IconInput;
 };
 
 export type WnObjStatus = {

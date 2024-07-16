@@ -7,6 +7,7 @@ import {
   LayoutProps,
   LayoutState,
 } from '../layout-types';
+import { TabChangeEvent } from '../tabs/ti-layout-tabs-types';
 
 export type GridResizingState = {
   /**
@@ -27,6 +28,11 @@ export type LayoutGridKeepProps = {
   keepSizes?: KeepInfo;
   shown?: Vars;
   sizes?: GridResizingState;
+};
+
+export type GridItemTabChangeEvent = TabChangeEvent & {
+  items: LayoutGridItem[];
+  path: string[];
 };
 
 export type LayoutGridKeepFeature = {

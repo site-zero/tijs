@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import _ from 'lodash';
-  import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+  import { computed, onMounted, onUnmounted, provide, ref, watch } from 'vue';
   import {
     RoadblockProps,
     TextSnippet,
@@ -20,6 +20,7 @@
   //   parseGridLayout,
   // } from './build-grid-field-layout';
   import {
+    FIELD_STATUS_KEY,
     GridFieldsDomReadyInfo,
     GridFieldsEmitter,
     GridFieldsProps,
@@ -27,6 +28,7 @@
     GridFieldsStrictGroup,
     GridFieldsStrictLabel,
   } from './ti-grid-fields-types';
+  import { useFieldStatus } from './use-field-status';
   import { getBodyPartStyle, getFieldTextInfo } from './use-field-style';
   import { useGridFields } from './use-grid-fields';
   //-------------------------------------------------
@@ -91,6 +93,15 @@
     let css = getBodyPartStyle(props);
     return GridLayoutStyle.value.mergetStyle(css);
   });
+  //-------------------------------------------------
+  const buildFieldStatus = computed(() =>
+    useFieldStatus(Grid.value.fieldItems, props.fieldStatusIcons)
+  );
+  //-------------------------------------------------
+  const _field_status = computed(() =>
+    buildFieldStatus.value(props.fieldStatus)
+  );
+  provide(FIELD_STATUS_KEY, _field_status);
   //-------------------------------------------------
   const Change = computed(() =>
     useFieldChange<GridFieldsStrictField>(
