@@ -9,6 +9,7 @@ export type CodeEditorProps = CommonProps & {
   value?: any;
   editorStyle?: Vars;
   editorOptions?: Vars;
+  editorTheme?: Record<WindowTheme, string>;
   theme?: WindowTheme | 'auto';
   type?: string;
   mime?: string;

@@ -40,11 +40,31 @@ export function useCodeAce(props: CodeEditorProps, emit: CodeEditorEmitter) {
     return _sys_theme.value;
   });
   //-----------------------------------------------------
+  /*
+  Light 主题
+    | chrome | clouds | crayon | dawn | dreamweaver   
+    | eclipse | github | iplastic | solarized_light   
+    | sqlserver| textmate | tomorrow | xcode  
+  Dark 主题
+    | ambiance | chaos | clouds_midnight | cobalt 
+    | dracula  | gruvbox | gob | idle_fingers  | kr_theme 
+    | merbivore  | merbivore_soft | mono_industrial  | monokai 
+    | pastel_on_dark  | solarized_dark  | terminal | tomorrow_night
+    | tomorrow_night_blue | tomorrow_night_bright 
+    | tomorrow_night_eighties | twilight | vibrant_ink 
+  */
   const EditorTheme = computed(() => {
+    let _editor_theme = _.assign(
+      {
+        light: 'chrome',
+        dark: 'terminal',
+      },
+      props.editorTheme
+    );
     if ('dark' == _std_theme.value) {
-      return 'terminal';
+      return _editor_theme.dark;
     }
-    return 'chrome';
+    return _editor_theme.light;
   });
   //-----------------------------------------------------
   const EditorIsLoading = computed(() => _.isUndefined(props.value));

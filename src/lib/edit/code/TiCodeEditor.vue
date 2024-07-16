@@ -17,6 +17,10 @@
       useSoftTabs: true,
       tabSize: 2,
     }),
+    editorTheme: () => ({
+      light: 'tomorrow',
+      dark: 'tomorrow_night_bright',
+    }),
   });
   const $main = ref<HTMLElement>();
   //-----------------------------------------------------
