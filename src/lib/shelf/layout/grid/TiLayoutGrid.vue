@@ -120,7 +120,7 @@
   }
   //-------------------------------------------------
   function onGridItemTabChange(event: TabChangeEvent, item: LayoutGridItem) {
-    console.log(event, item);
+    //console.log(event, item);
     emit('tab-change', {
       ...event,
       items: [item],

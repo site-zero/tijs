@@ -77,9 +77,11 @@ export function useCodeAce(props: CodeEditorProps, emit: CodeEditorEmitter) {
   //-----------------------------------------------------
   const EditorInputValue = computed(() => {
     let val = props.value;
+    
     if (val && !_.isString(val)) {
       val = JSON.stringify(val, null, '  ');
     }
+
     return val || '';
   });
   //-----------------------------------------------------
@@ -129,7 +131,7 @@ export function useCodeAce(props: CodeEditorProps, emit: CodeEditorEmitter) {
 
     // 设置新的内容
     if (current_val != EditorInputValue.value) {
-      console.log('!!!!!!!!!!!!! update value');
+      //console.log('!!!!!!!!!!!!! update value');
       _editor.value.session.setValue(EditorInputValue.value);
     }
 
@@ -145,7 +147,6 @@ export function useCodeAce(props: CodeEditorProps, emit: CodeEditorEmitter) {
     _sys_theme,
     version: ace.version,
     //................................................
-    EditorStyle: props.editorStyle ?? {},
     EditorTheme,
     EditorIsLoading,
     EditorMode,

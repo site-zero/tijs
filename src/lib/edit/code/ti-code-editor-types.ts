@@ -1,4 +1,5 @@
-import { CommonProps, Vars, WindowTheme } from '../../../_type';
+import { RoadblockProps } from '../../../lib';
+import { CommonProps, ObjDataStatus, Vars, WindowTheme } from '../../../_type';
 
 export type CodeEditorEmitter = {
   (event: 'change', payload: string): void;
@@ -7,6 +8,7 @@ export type CodeEditorEmitter = {
 export type CodeEditorProps = CommonProps & {
   style?: Vars;
   value?: any;
+  editorStatus?: ObjDataStatus;
   editorStyle?: Vars;
   editorOptions?: Vars;
   editorTheme?: Record<WindowTheme, string>;
@@ -14,4 +16,9 @@ export type CodeEditorProps = CommonProps & {
   type?: string;
   mime?: string;
   readonly?: boolean;
+
+  /**
+   * 空白数据，显示的样式
+   */
+  emptyRoadblock?: RoadblockProps;
 };

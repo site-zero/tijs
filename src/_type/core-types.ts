@@ -332,6 +332,8 @@ export type LogicType =
   | 'disable'
   | 'text'
   | 'number';
+
+export type ObjDataStatus = 'loading' | 'saving' | 'ready' | 'empty';
 /*---------------------------------------------------
 
                      容器

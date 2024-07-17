@@ -263,6 +263,21 @@ export function arrayToRecord<T extends string | number | symbol>(
  *
  * @param ids ID 列表
  */
+export function recordTruthyKeys<T extends string>(map?: Record<T, any>): T[] {
+  let keys = [] as T[];
+  _.forEach(map, (v, k) => {
+    if (v) {
+      keys.push(k as T);
+    }
+  });
+  return keys;
+}
+
+/**
+ * 一个帮助函数而已，方便通过 `Map<T,any>` 生成 `ID[]`
+ *
+ * @param ids ID 列表
+ */
 export function mapTruthyKeys<T>(map?: Map<T, any>): T[] {
   let keys = [] as T[];
   if (map) {
@@ -326,4 +341,16 @@ export function assignMap<K extends string | number, V>(
     a.set(k, v);
   }
   return a;
+}
+
+/**
+ * 判断输入对象是否是同步函数
+ *
+ * @param input 输入对象
+ * @returns
+ */
+export function isAsyncFunc(input?: any): boolean {
+  // 判断是否是 '[object AsyncFunction]'
+  let type = Object.prototype.toString.call(input);
+  return '[object AsyncFunction]' == type;
 }
