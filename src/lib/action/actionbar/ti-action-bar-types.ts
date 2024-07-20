@@ -7,6 +7,8 @@ import {
   CommonProps,
   CssAlignment,
   FlexAlignment,
+  IconInput,
+  TextContentType,
   TiAppBus,
   TiMatch,
   Vars,
@@ -47,14 +49,26 @@ export type ABarAltDisplay = {
   test?: TiMatch;
 };
 
+export type ActionBarText = CommonProps & {
+  textType?: TextContentType;
+  text?: string;
+  style?: Vars;
+  icon?: IconInput;
+  comType?: string;
+  comConf?: Vars;
+};
+
 export type ActionBarProps = CommonProps & {
   // 指明一个名称，可以方便调试的时候区分各个菜单
   name?: string;
-  items: ActionBarItem[];
+  items?: ActionBarItem[];
   vars?: Vars;
   style?: Vars;
   layoutMode?: ActionBarLayoutMode;
   topItemAspectMode?: BarTopItemAspectMode;
+
+  head?: ActionBarText;
+  tail?: ActionBarText;
 
   /**
    * 选项间距

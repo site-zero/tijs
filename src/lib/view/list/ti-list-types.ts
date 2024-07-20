@@ -27,6 +27,8 @@ export type ListProps = CommonProps &
     // 指明如果带上 tip ， tip 栏的宽度，默认为 1fr
     tipWidth?: string;
 
+    tipStyle?: Vars;
+
     // 列表文字大小
     size?: AspectSize;
 

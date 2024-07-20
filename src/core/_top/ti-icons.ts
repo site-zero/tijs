@@ -131,7 +131,7 @@ export function isEmoji(str: string) {
 
 export function getIcon(
   input?: string | Iconable,
-  dft = _DFT_FONT_ICON
+  dft: IconInput = _DFT_FONT_ICON
 ): IconInput {
   // Default icon
   if (!input) {

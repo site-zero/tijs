@@ -33,3 +33,4 @@ const TiHtmlSnippetInfo: TiComInfo = {
 };
 
 export { TiHtmlSnippet, TiHtmlSnippetInfo };
+export * from './html-snippet-types.ts';

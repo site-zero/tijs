@@ -11,6 +11,7 @@
   } from 'vue';
   import { BusMsg, AppEvents, BUS_KEY, Vars } from '../../../_type';
   import { CssUtils } from '../../../core';
+  import { TextSnippet } from '../../../lib';
   import ItemAsAction from './ItemAsAction.vue';
   import ItemAsFolderGroup from './ItemAsFolderGroup.vue';
   import { buildActionBarItems } from './build-action-bar-items';
@@ -47,6 +48,7 @@
   const $root = ref<HTMLElement>();
   //-------------------------------------------------------
   const props = withDefaults(defineProps<ActionBarProps>(), {
+    items: () => [],
     layoutMode: 'H',
     topItemAspectMode: 'normal',
     barPad: 's',
@@ -111,6 +113,19 @@
     :class="TopClass"
     :style="props.style"
     ref="$root">
+    <!--===: Bar Head :===-->
+    <slot name="head">
+      <TextSnippet
+        v-if="props.head"
+        className="bar-head"
+        :class="props.head.className"
+        :style="props.head.style"
+        :prefixIcon="props.head.icon"
+        :text="props.head.text ?? ''"
+        :textType="props.head.textType"
+        :comType="props.head.comType"
+        :comConf="props.head.comConf" />
+    </slot>
     <!--===: Bar Mask :===-->
     <div
       class="bar-mask"
@@ -147,6 +162,20 @@
         </div>
       </template>
     </template>
+    <!-- // end v-for -->
+    <!--===: Bar Tail :===-->
+    <slot name="tail">
+      <TextSnippet
+        v-if="props.tail"
+        className="bar-tail"
+        :class="props.tail.className"
+        :style="props.tail.style"
+        :prefixIcon="props.tail.icon"
+        :text="props.tail.text ?? ''"
+        :textType="props.tail.textType"
+        :comType="props.tail.comType"
+        :comConf="props.tail.comConf" />
+    </slot>
   </div>
 </template>
 <style lang="scss">
