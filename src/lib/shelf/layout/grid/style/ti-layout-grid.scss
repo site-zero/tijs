@@ -20,9 +20,17 @@
       grid-template-columns: 1fr;
       grid-template-rows: 1fr;
       position: relative;
+      // // TODO 这里是不是给 layout 搞个属性，譬如 cover-fit
+      // // 如果开启，就让每个块都严格覆盖格子
+      // // 在网页开发的场景，通常应该关闭
+      // // 在信息系统开发的场景，通常应该开启
+      // > .ti-block {
+      //   position: absolute;
+      //   inset: 0;
+      // }
     }
 
-    @import "./grid-adjust-bar";
+    @import './grid-adjust-bar';
   } // > .grid-item {
 
   &.as-card {

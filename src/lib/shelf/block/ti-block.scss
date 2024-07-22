@@ -1,6 +1,5 @@
 .ti-block {
   display: grid;
-
   > header {
     @include flex-align-nowrap($ai: stretch);
     font-size: var(--ti-fontsz-block-head);
