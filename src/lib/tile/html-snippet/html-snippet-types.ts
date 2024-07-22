@@ -1,4 +1,4 @@
-import { Callback2 } from '../../../_type';
+import { Callback2, CommonProps } from '../../../_type';
 
 export type HtmlSnippetListenner = {
   // 对片段的什么元素?
@@ -11,7 +11,7 @@ export type HtmlSnippetListenner = {
   setup?: (el: HTMLElement) => void;
 };
 
-export type HtmlSnippetProps = {
+export type HtmlSnippetProps = CommonProps & {
   content?: string;
   listenners?: HtmlSnippetListenner[];
 };

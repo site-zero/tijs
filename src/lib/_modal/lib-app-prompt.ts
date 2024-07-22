@@ -1,12 +1,6 @@
 import _ from 'lodash';
-import { openAppModal } from '..';
-import {
-  AppModalProps,
-  HtmlSnippetListenner,
-  IconInput,
-  LogicType,
-  PopItemProps,
-} from '../../_type';
+import { HtmlSnippetListenner, openAppModal } from '../../lib';
+import { AppModalProps, IconInput, LogicType, PopItemProps } from '../../_type';
 import { __get_msg_box_html } from './get-msg-box-html';
 
 export type PromptOptions = PopItemProps & {

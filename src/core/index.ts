@@ -4,7 +4,7 @@ import * as ti_core from './ti-exports';
 
 import _ from 'lodash';
 
-console.log('ti core index');
+// console.log('ti core index');
 
 //
 // 为浏览器环境，做的引入索引

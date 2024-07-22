@@ -1,30 +1,27 @@
 <script setup lang="ts">
   import _ from 'lodash';
   import { computed, onMounted, ref } from 'vue';
-  import { HtmlSnippetListenner } from '../../../_type';
-  import { Dom } from '../../../core';
+  import { CssUtils, Dom } from '../../../core';
   import { getLogger } from '../../../core/log/ti-log';
   import { COM_TYPES } from '../../lib-com-types';
-
+  import { HtmlSnippetListenner, HtmlSnippetProps } from './html-snippet-types';
+  //-----------------------------------------------------
   const COM_TYPE = COM_TYPES.HtmlSnippet;
-
+  const log = getLogger(COM_TYPE);
+  const $top = ref<HTMLElement>();
+  //-----------------------------------------------------
   const emit = defineEmits<{
     (name: string, playload?: any): void;
   }>();
-
-  const log = getLogger(COM_TYPE);
-
-  const props = defineProps<{
-    content?: string;
-    listenners?: HtmlSnippetListenner[];
-  }>();
-
+  //-----------------------------------------------------
+  const props = defineProps<HtmlSnippetProps>();
+  //-----------------------------------------------------
   const snippetInnerHtml = computed(() => {
     return props.content ?? '<strong>HTML <em>snippet</em></strong>';
   });
-
-  const $top = ref<HTMLElement>();
-
+  //-----------------------------------------------------
+  const TopClass = computed(() => CssUtils.mergeClassName(props.className));
+  //-----------------------------------------------------
   function applyListenner(lis: HtmlSnippetListenner) {
     // Guard
     if (_.isEmpty(lis.selector)) {
@@ -50,7 +47,7 @@
       }
     }
   }
-
+  //-----------------------------------------------------
   onMounted(() => {
     if (!$top.value) {
       log.warn('$top is Nil');
@@ -62,11 +59,13 @@
       }
     }
   });
+  //-----------------------------------------------------
 </script>
 <template>
   <div
     ref="$top"
     class="ti-html-snippet"
+    :class="TopClass"
     v-html="snippetInnerHtml"></div>
 </template>
 <style lang="scss">

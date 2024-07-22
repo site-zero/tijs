@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { Alert, Confirm, Prompt, openAppModal } from './_modal';
 
-console.log('ti lib index');
+// console.log('ti lib index');
 //
 // 为浏览器环境，做的引入索引
 //
