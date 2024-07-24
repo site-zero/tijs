@@ -22,7 +22,6 @@
     positionToTransName,
     watchAppResize,
   } from '../../lib';
-  import { O } from 'vitest/dist/reporters-5f784f42.js';
 
   const log = getLogger('TiAppModal');
 
@@ -103,7 +102,7 @@
 
   // 监控控件的事件以便更新 result
   const Listeners = computed(() =>
-    makeAppModelEventListeners('TiAppModal', model?.event, _result)
+    makeAppModelEventListeners('TiAppModal', _result, model?.event)
   );
 
   function onBlockEvent(event: BlockEvent) {

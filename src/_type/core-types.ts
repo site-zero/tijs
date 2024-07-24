@@ -188,6 +188,10 @@ export type TimeInfo = {
   milliseconds?: number;
 };
 
+export type TimeInput = number | string | Date | TimeInfo;
+
+export type TimeUpdateUnit = 'ms' | 's' | 'min' | 'hr';
+
 export type Limitation = {
   limit: number;
   skip: number;
@@ -1015,15 +1019,15 @@ export type AppModelBindingEvent =
  * 如何将模式框的 result 绑定到主控件上
  */
 export type AppModelBinding = {
-  data: AppModelBindingData;
-  event: AppModelBindingEvent;
+  data?: AppModelBindingData;
+  event?: AppModelBindingEvent;
 };
 
 export type AppModalProps = CommonProps &
   BlockInfoProps &
   ComRef &
   PopItemProps &
-  EmitAdaptorProps &
+  //EmitAdaptorProps &
   Partial<{
     type?: LogicType;
     iconOk?: IconInput;

@@ -12,7 +12,7 @@ const MODE_MAPPING = {
   'js': 'javascript',
   'htm': 'html',
   'json': 'json',
-  'json5': 'js',
+  'json5': 'javascript',
   'html': 'html',
   'xml': 'xml',
   'css': 'css',
@@ -20,7 +20,7 @@ const MODE_MAPPING = {
   'text/html': 'html',
   'text/css': 'css',
   'text/xml': 'xml',
-  'text/json5': 'js',
+  'text/json5': 'javascript',
   'text/markdown': 'markdown',
   'application/json': 'json',
 } as Vars;

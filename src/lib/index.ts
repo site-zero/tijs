@@ -3,7 +3,7 @@ import { Alert, Confirm, Prompt, openAppModal } from './_modal';
 
 // console.log('ti lib index');
 //
-// 为浏览器环境，做的引入索引
+// 为浏览器环境，做的全局对象
 //
 const G = globalThis as any;
 if (!G.Ti) {

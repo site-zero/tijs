@@ -1,7 +1,5 @@
 import _ from 'lodash';
-import { TimeInfo } from '../../_type';
-
-type TimeInput = number | string | Date | TimeInfo;
+import { TimeInfo, TimeInput, TimeUpdateUnit } from '../../_type';
 
 type TimeCache = {
   value?: number;
@@ -16,7 +14,7 @@ export class TiTime implements TimeInfo {
   __cached: TimeCache = {};
 
   //--------------------------------
-  constructor(input: TimeInput, unit?: string) {
+  constructor(input: TimeInput, unit?: TimeUpdateUnit) {
     this.update(input, unit);
   }
   //--------------------------------
@@ -52,7 +50,7 @@ export class TiTime implements TimeInfo {
     this.milliseconds = _.clamp(milliseconds ?? this.milliseconds, 0, 999);
   }
   //--------------------------------
-  update(input: TimeInput, unit = 'ms') {
+  update(input: TimeInput, unit: TimeUpdateUnit = 'ms') {
     this.__cached = {};
     // Date
     if (_.isDate(input)) {
@@ -75,9 +73,8 @@ export class TiTime implements TimeInfo {
         s: (v) => Math.round(v * 1000),
         min: (v) => Math.round(v * 1000 * 60),
         hr: (v) => Math.round(v * 1000 * 60 * 60),
-      } as {
-        [k: string]: { (v: number): number };
-      };
+      } as Record<TimeUpdateUnit, (v: number) => number>;
+
       let ms = FNS0[unit](input);
       ms = _.clamp(ms, 0, 86400000);
       let sec = Math.floor(ms / 1000);

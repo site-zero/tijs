@@ -27,7 +27,8 @@ body {
 * {
   box-sizing: border-box;
   scrollbar-width: thin;
-  scrollbar-color: var(--ti-color-mask-weak) var(--ti-color-border-shallow);
+  //scrollbar-color: var(--ti-color-mask-dark) var(--ti-color-border-shallow);
+  scrollbar-color: var(--ti-color-mask-thin) var(--ti-color-border-shallow);
 }
 
 input::placeholder {
@@ -43,7 +44,7 @@ input::placeholder {
   height: var(--ti-measure-scrollbar);
 }
 ::-webkit-scrollbar-track {
-  background-color: var(--ti-color-mask-weak);
+  background-color: var(--ti-color-border-shallow);
 }
 ::-webkit-scrollbar-thumb {
   background-color: var(--ti-color-mask-thin);

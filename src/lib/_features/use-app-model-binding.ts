@@ -62,8 +62,8 @@ export function makeAppModelDataProps(
  */
 export function makeAppModelEventListeners(
   COM_TYPE: string,
-  bindingEvent: AppModelBindingEvent,
-  result: Ref<any>
+  result: Ref<any>,
+  bindingEvent?: AppModelBindingEvent,
 ): Record<string, Callback1<any>> {
   console.log(COM_TYPE, bindingEvent, result);
   log.debug('listenResult:', COM_TYPE, bindingEvent, result);
@@ -134,7 +134,7 @@ export function makeAppModelEventListeners(
  * @return 监听事件名称的列表
  */
 export function getAppModelListenEvents(
-  bindingEvent: AppModelBindingEvent
+  bindingEvent?: AppModelBindingEvent
 ): string[] {
   // 1. `null` 不传递
   if (!bindingEvent) {

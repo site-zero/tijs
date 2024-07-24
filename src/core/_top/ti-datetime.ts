@@ -1,6 +1,11 @@
 import _ from 'lodash';
-import { I18n, Str, getEnv } from '../';
-import { DateFormatOptions, DateInput } from '../../_type';
+import { I18n, Str, TiTime, getEnv } from '../';
+import {
+  DateFormatOptions,
+  DateInput,
+  TimeInput,
+  TimeUpdateUnit,
+} from '../../_type';
 
 ///////////////////////////////////////////
 // const P_DATE = new RegExp(
@@ -508,6 +513,13 @@ export function createDate(d: Date, offset = 0) {
   let d2 = new Date(d);
   d2.setDate(d2.getDate() + offset);
   return d2;
+}
+
+export function parseTime(
+  input: TimeInput,
+  unit: TimeUpdateUnit = 'ms'
+): TiTime {
+  return new TiTime(input, unit);
 }
 
 const I_DAYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
