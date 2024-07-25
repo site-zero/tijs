@@ -1,16 +1,26 @@
 import _ from 'lodash';
-import { IconInput, LogicType, isIconObj } from '../../_type';
+import { IconInput, LogicType, Vars, isIconObj } from '../../_type';
 import { Dom, I18n, Icons } from '../../core';
 
-export function __get_msg_box_html(
-  msg: string,
-  type: LogicType,
-  bodyIcon: IconInput | undefined,
-  msgAsHtml: boolean,
-  mainSuffixHtml?: string
-) {
+export type MsgBoxHtmlOptions = {
+  msg: string;
+  type: LogicType;
+  bodyIcon: IconInput | undefined;
+  msgAsHtml: boolean;
+  mainSuffixHtml?: string;
+  vars?: Vars;
+};
+
+export function __get_msg_box_html(options: MsgBoxHtmlOptions) {
+  let { msg, type, bodyIcon, msgAsHtml, mainSuffixHtml, vars } = options;
+
   // Build html
-  let msgWithI18n = I18n.text(msg);
+  let msgWithI18n: string;
+  if (vars) {
+    msgWithI18n = I18n.textf(msg, vars);
+  } else {
+    msgWithI18n = I18n.text(msg);
+  }
 
   // --------------- msgIcon ---------
   let msgIcon;

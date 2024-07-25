@@ -1,11 +1,18 @@
 import _ from 'lodash';
 import { openAppModal } from '..';
-import { AppModalProps, IconInput, LogicType, PopItemProps } from '../../_type';
+import {
+  AppModalProps,
+  IconInput,
+  LogicType,
+  PopItemProps,
+  Vars,
+} from '../../_type';
 import { __get_msg_box_html } from './get-msg-box-html';
 
 export type AlertOptions = PopItemProps & {
   icon?: IconInput;
   title?: string;
+  vars?: Vars;
   type?: LogicType;
   iconOk?: IconInput;
   textOk?: string;
@@ -18,12 +25,13 @@ export async function Alert(
   options: AlertOptions = {}
 ): Promise<void> {
   // Build html
-  let html = __get_msg_box_html(
+  let html = __get_msg_box_html({
     msg,
-    options.type || 'info',
-    options.bodyIcon,
-    'html' == options.contentType
-  );
+    type: options.type || 'info',
+    bodyIcon: options.bodyIcon,
+    msgAsHtml: 'html' == options.contentType,
+    vars: options.vars,
+  });
   // Prepare dialog
   let dialog = {
     icon: 'zmdi-notifications',

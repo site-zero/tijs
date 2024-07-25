@@ -1,11 +1,18 @@
 import _ from 'lodash';
 import { HtmlSnippetListenner, openAppModal } from '../../lib';
-import { AppModalProps, IconInput, LogicType, PopItemProps } from '../../_type';
+import {
+  AppModalProps,
+  IconInput,
+  LogicType,
+  PopItemProps,
+  Vars,
+} from '../../_type';
 import { __get_msg_box_html } from './get-msg-box-html';
 
 export type PromptOptions = PopItemProps & {
   icon?: IconInput;
   title?: string;
+  vars?: Vars;
   type?: LogicType;
   iconOk?: IconInput;
   textOk?: string;
@@ -22,13 +29,14 @@ export async function Prompt(
   options: PromptOptions
 ): Promise<string> {
   // Build html
-  let html = __get_msg_box_html(
+  let html = __get_msg_box_html({
     msg,
-    options.type || 'info',
-    options.bodyIcon ?? 'zmdi-keyboard',
-    'html' == options.contentType,
-    `<div class="part-input" spellcheck="false"><input></div>`
-  );
+    type: options.type || 'info',
+    bodyIcon: options.bodyIcon ?? 'zmdi-keyboard',
+    msgAsHtml: 'html' == options.contentType,
+    mainSuffixHtml: `<div class="part-input" spellcheck="false"><input></div>`,
+    vars: options.vars,
+  });
   // Prepare dialog
   let dialog = {
     icon: 'zmdi-mouse',

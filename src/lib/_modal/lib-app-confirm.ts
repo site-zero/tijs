@@ -1,11 +1,19 @@
 import _ from 'lodash';
 import { openAppModal } from '..';
-import { AppModalProps, IconInput, LogicType, PopItemProps } from '../../_type';
+import {
+  AppModalProps,
+  IconInput,
+  LogicType,
+  PopItemProps,
+  Vars,
+} from '../../_type';
 import { __get_msg_box_html } from './get-msg-box-html';
+import { Tmpl } from '../../core';
 
 export type ConfirmOptions = PopItemProps & {
   icon?: IconInput;
   title?: string;
+  vars?: Vars;
   type?: LogicType;
   iconOk?: IconInput;
   textOk?: string;
@@ -20,12 +28,13 @@ export async function Confirm(
   options: ConfirmOptions = {}
 ): Promise<boolean> {
   // Build html
-  let html = __get_msg_box_html(
+  let html = __get_msg_box_html({
     msg,
-    options.type || 'info',
-    options.bodyIcon ?? 'zmdi-help',
-    'html' == options.contentType
-  );
+    type: options.type || 'info',
+    bodyIcon: options.bodyIcon ?? 'zmdi-help',
+    msgAsHtml: 'html' == options.contentType,
+    vars: options.vars,
+  });
   // Prepare dialog
   let dialog = {
     icon: 'zmdi-help',
