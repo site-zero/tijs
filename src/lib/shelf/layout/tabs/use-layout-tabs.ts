@@ -1,10 +1,11 @@
 import _ from 'lodash';
-import { KeepFeature, LayoutItem, TabsProps, useFieldCom } from '../../../';
+import { KeepFeature, LayoutItem } from '../../../';
 
 import { ComputedRef, Ref } from 'vue';
-import { IconInput, StrOptionItem, TiRawCom, Vars } from '../../../../_type';
-import { LayoutTabItem, LayoutTabsProps } from './ti-layout-tabs-types';
+import { StrOptionItem } from '../../../../_type';
 import { CssUtils } from '../../../../core';
+import { TabsProps } from '../../../action/tabs/ti-tabs-types';
+import { LayoutTabItem, LayoutTabsProps } from './ti-layout-tabs-types';
 
 export type TabMain = LayoutTabItem & {
   // uniqKey?: string;

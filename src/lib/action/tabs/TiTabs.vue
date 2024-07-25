@@ -1,42 +1,34 @@
 <script lang="ts" setup>
   import _ from 'lodash';
-  import { computed } from 'vue';
-  import { TabDisplayItem, TabsProps, TiIcon } from '../../';
-  import { CssUtils, I18n } from '../../../core';
-  import { CommonProps } from '../../../_type';
-
-  const props = withDefaults(defineProps<CommonProps & TabsProps>(), {
+  import { computed, onUnmounted, reactive, ref, watch } from 'vue';
+  import { TabDisplayItem, TiIcon } from '../../';
+  import { CssUtils } from '../../../core';
+  import { TabsEmitter, TabsProps } from './ti-tabs-types';
+  import { useTabsItem } from './use-tabs-item';
+  import { TabsOverflow, useTabsOverflowObserver } from './use-tabs-overflow';
+  //-------------------------------------------------------
+  const emit = defineEmits<TabsEmitter>();
+  //-------------------------------------------------------
+  const props = withDefaults(defineProps<TabsProps>(), {
     wrapTabs: false,
     tabItemSpace: 'm',
     tabsAt: 'top',
     tabsAlign: 'center',
   });
-
-  const TabItems = computed(() => {
-    let items = [] as TabDisplayItem[];
-    _.forEach(props.options, (it, index) => {
-      let item = {
-        className: {},
-        current: false,
-        index,
-        icon: it.icon,
-        value: it.value ?? index,
-      } as TabDisplayItem;
-
-      if (it.text) {
-        item.text = I18n.text(it.text);
-      }
-
-      if (_.isEqual(item.value, props.value)) {
-        item.current = true;
-        item.className['is-current'] = true;
-      }
-
-      items.push(item);
-    });
-    return items;
+  //-------------------------------------------------------
+  const $ul = ref<HTMLElement>();
+  const _overflow = reactive({
+    left: false,
+    right: false,
+  } as TabsOverflow);
+  //-------------------------------------------------------
+  const TabItems = computed(() => useTabsItem(props));
+  //-------------------------------------------------------
+  const TabOverflow = useTabsOverflowObserver({
+    ul: $ul,
+    overflow: _overflow,
   });
-
+  //-------------------------------------------------------
   const TopClass = computed(() =>
     CssUtils.mergeClassName(
       props.className,
@@ -48,24 +40,35 @@
       `tab-item-space-${props.tabItemSpace}`
     )
   );
-
-  const emit = defineEmits<{
-    (eventName: 'change', current: TabDisplayItem, old?: TabDisplayItem): void;
-  }>();
+  //-------------------------------------------------------
   function onClickItem(it: TabDisplayItem) {
     let old = _.cloneDeep(_.find(TabItems.value, (it) => it.current));
     let current = _.cloneDeep(it);
     emit('change', current, old);
   }
+  //-------------------------------------------------------
+  watch(
+    () => TabItems.value,
+    () => {
+      TabOverflow.reWatch();
+    }
+    //{ immediate: true }
+  );
+  //-------------------------------------------------------
+  onUnmounted(() => {
+    TabOverflow.depose();
+  });
+  //-------------------------------------------------------
 </script>
 <template>
   <div
     class="ti-tabs"
     :class="TopClass">
-    <ul>
+    <ul ref="$ul">
       <li
         v-for="it in TabItems"
         :class="it.className"
+        :style="it.style"
         @click="onClickItem(it)">
         <span
           class="as-icon"
@@ -79,9 +82,13 @@
         >
       </li>
     </ul>
+    <div class="scroller-con">
+      <a>{</a>
+      <a>}</a>
+    </div>
   </div>
 </template>
-<style lang="scss">
+<style lang="scss" scoped>
   @use '../../../assets/style/_all.scss' as *;
   @import './ti-tabs.scss';
 </style>

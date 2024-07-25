@@ -1,12 +1,15 @@
 .ti-tabs {
   font-size: var(--ti-fontsz-tabs);
+  overflow: hidden;
+  position: relative;
   //....................................
   > ul {
-    @include flex-align-nowrap;
+    @include flex-align-nowrap($ai: stretch);
     list-style: none;
     user-select: none;
     padding: 0;
     margin: 0;
+    //..................................
     li {
       @include flex-align-nowrap;
       cursor: pointer;
@@ -16,16 +19,36 @@
       > span {
         display: block;
         white-space: nowrap;
+        &.as-icon {
+          margin: 0 auto;
+        }
         &.as-text {
-          padding:0 .5em;
+          padding: 0 0.5em;
+        }
+      }
+      &.wrap-content {
+        flex-wrap: wrap;
+        > span {
+          white-space: break-spaces;
+          text-align: justify;
         }
       }
     }
+    //..................................
     li.is-current {
       background-color: var(--ti-color-menu);
       color: var(--ti-color-menu-r);
       border-color: var(--ti-color-border-shallow);
     }
+    //..................................
+  }
+  //....................................
+  > .scroller-con {
+    @include flex-align-nowrap($jc: space-between, $ai:stretch);
+    position: absolute;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.2);
+    pointer-events: none;
   }
   //....................................
   // Label space

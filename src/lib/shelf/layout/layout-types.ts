@@ -6,7 +6,6 @@ import {
   CssGridItem,
   CssGridLayout,
   EmitAdaptorProps,
-  OptionValueProps,
   PopItemProps,
   PopPosition,
   StrOptionItem,
@@ -77,18 +76,24 @@ export type TabsAspect = {
    */
   wrapTabs?: boolean;
 
+  /**
+   * 指定每个标签最大的宽度
+   */
+  tabMaxWidth?: string | number;
+
   tabItemSpace?: AspectSize;
 
   defaultTab?: string | number;
   keepTab?: KeepInfo;
 };
 
-export type TabsProps = OptionValueProps & TabsAspect;
 export type TabDisplayItem = StrOptionItem & {
   className: Vars;
+  style?: Vars;
   current: boolean;
   index: number;
 };
+
 //
 // Layout Adjust Bar
 //

@@ -103,6 +103,8 @@ export type OptionItem<V> = {
   icon?: IconInput;
   text?: string;
   tip?: string;
+  className?: any;
+  style?: Vars;
   value: V;
 };
 

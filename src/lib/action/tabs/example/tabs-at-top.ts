@@ -1,4 +1,4 @@
-import { TabsProps } from '../../..';
+import { TabsProps } from "../ti-tabs-types";
 
 export default {
   name: 'at-top',
