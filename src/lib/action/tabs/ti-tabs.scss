@@ -1,7 +1,7 @@
 .ti-tabs {
   font-size: var(--ti-fontsz-tabs);
-  overflow: hidden;
   position: relative;
+  
   //....................................
   > ul {
     @include flex-align-nowrap($ai: stretch);
@@ -9,6 +9,9 @@
     user-select: none;
     padding: 0;
     margin: 0;
+    width: 100%;
+    overflow: hidden;
+    scroll-behavior: smooth;
     //..................................
     li {
       @include flex-align-nowrap;
@@ -44,11 +47,35 @@
   }
   //....................................
   > .scroller-con {
-    @include flex-align-nowrap($jc: space-between, $ai:stretch);
+    @include flex-align-nowrap($jc: space-between, $ai: stretch);
     position: absolute;
     inset: 0;
-    background-color: rgba(0, 0, 0, 0.2);
+    //background-color: rgba(0, 0, 0, 0.2);
     pointer-events: none;
+    > a {
+      @include flex-center;
+      width: 24px;
+      font-size: 24px;
+      color: var(--ti-color-menu-f);
+      background-color: var(--ti-color-menu);
+      cursor: pointer;
+      pointer-events: all;
+      &:hover {
+        text-decoration: none;
+        color: var(--ti-color-primary);
+        background-color: var(--ti-color-primary-r);
+      }
+      &.to-left {
+        border-right: 1px solid var(--ti-color-border-shallow);
+        box-shadow: 3px 0px 3px var(--ti-color-mask-thin);
+        //border-radius: var(--ti-measure-r-m) 0 0 var(--ti-measure-r-m);
+      }
+      &.to-right {
+        border-left: 1px solid var(--ti-color-border-shallow);
+        box-shadow: -3px 0px 3px var(--ti-color-mask-thin);
+        //border-radius: 0 var(--ti-measure-r-m) var(--ti-measure-r-m) 0;
+      }
+    }
   }
   //....................................
   // Label space

@@ -276,6 +276,7 @@ export interface Rect extends Required<RectInfo> {
   hasPointX: (x?: number, border?: number) => boolean;
   hasPointY: (y?: number, border?: number) => boolean;
   isOverlap: (rect: Rect) => boolean;
+  getOverlapRatio: (rect: Rect) => number;
   area: () => number;
   clone: (border?: number) => Rect;
 }

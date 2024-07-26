@@ -121,6 +121,22 @@ class RectImpl implements Rect {
     return true;
   }
 
+  toString() {
+    return [
+      'Rect[',
+      `T=${this.top}`,
+      `L=${this.left}`,
+      `R=${this.right}`,
+      `W=${this.width}`,
+      `H=${this.height}`,
+      ']',
+    ].join();
+  }
+
+  valueOf() {
+    return this.toString();
+  }
+
   update(mode?: string): Rect {
     return this.updateBy(mode);
   }
@@ -818,7 +834,11 @@ class RectImpl implements Rect {
       this.right = Math.min(this.right, rect.right);
       this.bottom = Math.min(this.bottom, rect.bottom);
     }
-    return this.updateBy('tlbr');
+    this.updateBy('tlbr');
+    this.width = Math.max(0, this.width);
+    this.height = Math.max(0, this.height);
+    this.updateBy('xywh');
+    return this;
   }
 
   contains(rect: Rect, border = 0): boolean {
@@ -854,6 +874,21 @@ class RectImpl implements Rect {
     let w = r - l;
     let h = b - t;
     return w > 0 && h > 0;
+  }
+
+  //--------------------------------------
+  /**
+   * 判断两个矩形的重叠率。
+   * 就是用交叠部分面积除以自己的面积
+   *
+   * @param rect 另外一个矩形
+   * @return `0-1` 的数字
+   */
+  getOverlapRatio(rect: Rect): number {
+    let over = this.clone().overlap(rect);
+    let a = over.area();
+    let s = this.area();
+    return a / s;
   }
   //--------------------------------------
   /***

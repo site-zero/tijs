@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import _ from 'lodash';
-  import { computed, onUnmounted, reactive, ref, watch } from 'vue';
+  import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
   import { TabDisplayItem, TiIcon } from '../../';
   import { CssUtils } from '../../../core';
   import { TabsEmitter, TabsProps } from './ti-tabs-types';
@@ -16,6 +16,7 @@
     tabsAlign: 'center',
   });
   //-------------------------------------------------------
+  const $el = ref<HTMLElement>();
   const $ul = ref<HTMLElement>();
   const _overflow = reactive({
     left: false,
@@ -41,6 +42,27 @@
     )
   );
   //-------------------------------------------------------
+  /**
+   * @param dir 方向: -1: 向左;  1: 向右
+   */
+  function onClickScroller(dir: number) {
+    // 防守
+    if (!$ul.value) return;
+    let el = $ul.value;
+
+    // 滚动距离为自己的宽度
+    let W = el.getBoundingClientRect().width;
+    let R = 0.8;
+
+    let left = el.scrollLeft + W * dir * R;
+    el.scrollTo({ left });
+    console.log('==========>', left);
+
+    _.delay(() => {
+      TabOverflow.updateOverflow();
+    }, 800);
+  }
+  //-------------------------------------------------------
   function onClickItem(it: TabDisplayItem) {
     let old = _.cloneDeep(_.find(TabItems.value, (it) => it.current));
     let current = _.cloneDeep(it);
@@ -50,10 +72,15 @@
   watch(
     () => TabItems.value,
     () => {
-      TabOverflow.reWatch();
-    }
-    //{ immediate: true }
+      TabOverflow.tryWatch();
+      //TabOverflow.updateOverflow();
+    },
+    { immediate: true }
   );
+  //-------------------------------------------------------
+  onMounted(() => {
+    TabOverflow.tryWatch();
+  });
   //-------------------------------------------------------
   onUnmounted(() => {
     TabOverflow.depose();
@@ -63,12 +90,14 @@
 <template>
   <div
     class="ti-tabs"
-    :class="TopClass">
+    :class="TopClass"
+    ref="$el">
     <ul ref="$ul">
       <li
-        v-for="it in TabItems"
+        v-for="(it, index) in TabItems"
         :class="it.className"
         :style="it.style"
+        :data-index="index"
         @click="onClickItem(it)">
         <span
           class="as-icon"
@@ -82,9 +111,22 @@
         >
       </li>
     </ul>
-    <div class="scroller-con">
-      <a>{</a>
-      <a>}</a>
+    <div
+      class="scroller-con"
+      v-if="_overflow.left || _overflow.right">
+      <a
+        class="to-left"
+        v-if="_overflow.left"
+        @click="onClickScroller(-1)"
+        ><i class="zmdi zmdi-caret-left"></i
+      ></a>
+      <div class="sep"></div>
+      <a
+        class="to-right"
+        v-if="_overflow.right"
+        @click="onClickScroller(1)"
+        ><i class="zmdi zmdi-caret-right"></i
+      ></a>
     </div>
   </div>
 </template>
