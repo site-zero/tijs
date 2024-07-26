@@ -85,6 +85,7 @@ export function buildLayoutTabsConfig(
     tabsAt: props.tabsAt,
     tabsAlign: props.tabsAlign,
     tabItemSpace: props.tabItemSpace,
+    tabMaxWidth: props.tabMaxWidth,
   };
 }
 
