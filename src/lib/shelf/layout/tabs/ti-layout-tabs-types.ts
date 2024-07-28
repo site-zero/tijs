@@ -11,9 +11,7 @@ import {
 //
 export type LayoutTabsProps = LayoutProps & LayoutPanelProps & TabsAspect;
 
-export type LayoutTabItem = LayoutItem & {
-  current?: boolean;
-};
+export type LayoutTabItem = LayoutItem;
 
 export type TabChangeEvent = {
   to: TabDisplayItem;

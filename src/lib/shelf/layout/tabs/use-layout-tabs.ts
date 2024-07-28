@@ -17,9 +17,12 @@ export type TabMain = LayoutTabItem & {
   //tabInfo: LayoutTabItem;
 };
 
-export function buildMainTab(items: LayoutTabItem[]): TabMain | undefined {
+export function buildOneTab(items: LayoutTabItem[], tabKey?: string) {
+  if (_.isNil(tabKey)) {
+    return;
+  }
   for (let item of items) {
-    if (!item.current) {
+    if (item.uniqKey != tabKey) {
       continue;
     }
     let re = _.cloneDeep(item);
@@ -30,56 +33,22 @@ export function buildMainTab(items: LayoutTabItem[]): TabMain | undefined {
       'cover-parent': true,
     });
     return re;
-    //   const { getComType } = useFieldCom({
-    //     comType,
-    //     comConf,
-    //   });
-    //   return {
-    //     tabInfo: item,
-    //     uniqKey: item.uniqKey,
-    //     title: item?.title,
-    //     icon: item?.icon,
-    //     name: item.name,
-
-    //     com: getComType(),
-    //     config: comConf,
-    //   };
-    // }
   }
-}
-
-export function buildLayoutTabBlocks(
-  blocks: LayoutItem[],
-  currentTabKey?: string
-): LayoutTabItem[] {
-  let items = _.cloneDeep(blocks) as LayoutTabItem[];
-  for (let item of items) {
-    item.current = item.uniqKey == currentTabKey;
-  }
-  return items;
 }
 
 export function buildLayoutTabsConfig(
   props: LayoutTabsProps,
   blocks: LayoutTabItem[]
-): TabsProps {
-  let value = undefined;
+): Omit<TabsProps, 'value'> {
   let options = [] as StrOptionItem[];
   for (let block of blocks) {
-    if (block.current) {
-      value = block.uniqKey;
-    }
     options.push({
       icon: block.icon,
       text: block.title || block.name,
       value: block.uniqKey,
     });
   }
-  if (_.isNil(value) && blocks.length > 0) {
-    value = blocks[0].uniqKey;
-  }
   return {
-    value,
     options,
     wrapTabs: props.wrapTabs,
     tabsAt: props.tabsAt,

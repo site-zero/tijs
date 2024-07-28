@@ -3,10 +3,10 @@
   import {
     BlockEvent,
     TiBlock,
+    TiLayoutGrid,
     TiLayoutTabs,
     TiRoadblock,
     TiTabs,
-    TiLayoutGrid,
     getLayoutItem,
     useKeep,
   } from '../../../';
@@ -17,9 +17,8 @@
   import { LayoutTabsProps, TabChangeEvent } from './ti-layout-tabs-types';
   import {
     autoSetCurrentTablKey,
-    buildLayoutTabBlocks,
     buildLayoutTabsConfig,
-    buildMainTab,
+    buildOneTab,
   } from './use-layout-tabs';
   //-------------------------------------------------
   const COM_TYPE = COM_TYPES.LayoutTabs;
@@ -35,6 +34,7 @@
     tabItemSpace: 'm',
     tabsAt: 'top',
     tabsAlign: 'center',
+    defaultTab: 0,
   });
   //-------------------------------------------------
   const Keep = computed(() => useKeep(props.keepTab));
@@ -45,16 +45,12 @@
   //-------------------------------------------------
   const TopClass = computed(() => CssUtils.mergeClassName(props.className));
   //-------------------------------------------------
-  let TabDisplayBlocks = computed(() =>
-    buildLayoutTabBlocks(TabBlocks.value, _current_tab_key.value)
-  );
-  //-------------------------------------------------
   const TabsConfig = computed(() =>
-    buildLayoutTabsConfig(props, TabDisplayBlocks.value)
+    buildLayoutTabsConfig(props, TabBlocks.value)
   );
   //-------------------------------------------------
   let MainTab = computed(() => {
-    return buildMainTab(TabDisplayBlocks.value);
+    return buildOneTab(TabBlocks.value, _current_tab_key.value);
   });
   //-------------------------------------------------
   function OnBlockEventHappen(event: BlockEvent) {
@@ -62,24 +58,41 @@
   }
   //-------------------------------------------------
   function OnTabChange(item: TabDisplayItem, old?: TabDisplayItem) {
+    //console.log('onTabChange', item.value, old?.value);
     _current_tab_key.value = item.value;
     Keep.value.save(item.value);
-    emit('tab-change', {
-      to: item,
-      from: old,
-    });
+    // emit('tab-change', {
+    //   to: item,
+    //   from: old,
+    // });
   }
   //-------------------------------------------------
   watch(
     () => [Keep.value, TabBlocks.value, props.defaultTab],
     () => {
+      //console.log('autoSetCurrentTablKey');
       autoSetCurrentTablKey(
         _current_tab_key,
         TabBlocks,
         Keep,
         props.defaultTab
       );
-      if (MainTab.value) {
+      if (!MainTab.value) {
+        log.warn(
+          `Fail to evel MainTab: [${_current_tab_key.value}] defaultTab=${props.defaultTab}`
+        );
+      }
+    },
+    {
+      immediate: true,
+    }
+  );
+  //-------------------------------------------------
+  const _emitted_tab_key = ref<string | undefined>();
+  watch(
+    () => MainTab.value,
+    () => {
+      if (MainTab.value && _emitted_tab_key.value != MainTab.value.uniqKey) {
         emit('tab-change', {
           to: {
             className: MainTab.value.className,
@@ -90,14 +103,8 @@
             value: MainTab.value.uniqKey,
           },
         });
-      } else {
-        log.warn(
-          `Fail to evel MainTab: [${_current_tab_key.value}] defaultTab=${props.defaultTab}`
-        );
+        _emitted_tab_key.value = MainTab.value.uniqKey;
       }
-    },
-    {
-      immediate: true,
     }
   );
   //-------------------------------------------------
@@ -111,6 +118,7 @@
     <header>
       <TiTabs
         v-bind="TabsConfig"
+        :value="_current_tab_key"
         @change="OnTabChange" />
     </header>
     <!--======== Main Block =======-->

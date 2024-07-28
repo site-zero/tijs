@@ -71,13 +71,16 @@ export function useCodeAce(props: CodeEditorProps, emit: CodeEditorEmitter) {
   //-----------------------------------------------------
   const EditorMode = computed(() => {
     return (
-      MODE_MAPPING[props.mime ?? ''] || MODE_MAPPING[props.type ?? ''] || 'text'
+      MODE_MAPPING[props.mime ?? ''] ||
+      MODE_MAPPING[props.type ?? ''] ||
+      props.type ||
+      'text'
     );
   });
   //-----------------------------------------------------
   const EditorInputValue = computed(() => {
     let val = props.value;
-    
+
     if (val && !_.isString(val)) {
       val = JSON.stringify(val, null, '  ');
     }

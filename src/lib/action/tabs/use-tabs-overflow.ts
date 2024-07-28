@@ -27,7 +27,7 @@ export function useTabsOverflowObserver(options: TabsOverflowOptions) {
       setOverflow(false, false);
       return;
     }
-    console.log('updateOvflow', $lis);
+    //console.log('updateOvflow', $lis);
 
     let N = $lis;
     let $liL = _.first($lis);
@@ -39,9 +39,9 @@ export function useTabsOverflowObserver(options: TabsOverflowOptions) {
     let l_ratio = L.getOverlapRatio(V);
     let r_ratio = R.getOverlapRatio(V);
     let _tr = 0.9;
-    console.log(`L: ${L} => ${L.area()}`, l_ratio);
-    console.log(`V: ${V}`);
-    console.log(`O: ${L.overlap(V)} => ${L.overlap(V).area()}`);
+    // console.log(`L: ${L} => ${L.area()}`, l_ratio);
+    // console.log(`V: ${V}`);
+    // console.log(`O: ${L.overlap(V)} => ${L.overlap(V).area()}`);
 
     // 判断相交
     let left = l_ratio < _tr;
