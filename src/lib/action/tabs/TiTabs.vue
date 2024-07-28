@@ -92,8 +92,11 @@
     class="ti-tabs"
     :class="TopClass"
     ref="$el">
-    <ul ref="$ul">
-      <li
+    <div
+      class="tab-items-con"
+      ref="$ul">
+      <div
+        class="tab-item"
         v-for="(it, index) in TabItems"
         :class="it.className"
         :style="it.style"
@@ -109,8 +112,8 @@
           v-if="it.text"
           >{{ it.text }}</span
         >
-      </li>
-    </ul>
+      </div>
+    </div>
     <div
       class="scroller-con"
       v-if="_overflow.left || _overflow.right">

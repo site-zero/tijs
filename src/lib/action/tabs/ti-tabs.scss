@@ -1,9 +1,12 @@
 .ti-tabs {
   font-size: var(--ti-fontsz-tabs);
   position: relative;
-  
+  width: 100%;
+  // 两侧的滚动按钮宽度
+  $SCB: 24px;
+  $SCW: 24px;
   //....................................
-  > ul {
+  > .tab-items-con {
     @include flex-align-nowrap($ai: stretch);
     list-style: none;
     user-select: none;
@@ -13,7 +16,7 @@
     overflow: hidden;
     scroll-behavior: smooth;
     //..................................
-    li {
+    > .tab-item {
       @include flex-align-nowrap;
       cursor: pointer;
       margin: 0 4px;
@@ -38,7 +41,7 @@
       }
     }
     //..................................
-    li.is-current {
+    > .tab-item.is-current {
       background-color: var(--ti-color-menu);
       color: var(--ti-color-menu-r);
       border-color: var(--ti-color-border-shallow);
@@ -54,7 +57,7 @@
     pointer-events: none;
     > a {
       @include flex-center;
-      width: 24px;
+      width: $SCB;
       font-size: 24px;
       color: var(--ti-color-menu-f);
       background-color: var(--ti-color-menu);
@@ -79,44 +82,44 @@
   }
   //....................................
   // Label space
-  &.tab-item-space-h > ul > li {
+  &.tab-item-space-h > .tab-items-con > .tab-item {
     padding: 0.6em 1em 0.6em 1em;
     font-size: 1.5em;
   }
-  &.tab-item-space-b > ul > li {
+  &.tab-item-space-b > .tab-items-con > .tab-item {
     padding: 0.6em 1em 0.6em 1em;
     font-size: 1.2em;
   }
-  &.tab-item-space-m > ul > li {
+  &.tab-item-space-m > .tab-items-con > .tab-item {
     padding: 0.6em 1em 0.6em 1em;
     font-size: 1.1em;
   }
-  &.tab-item-space-s > ul > li {
+  &.tab-item-space-s > .tab-items-con > .tab-item {
     padding: 0.6em 1em 0.6em 1em;
     font-size: 1em;
   }
-  &.tab-item-space-t > ul > li {
+  &.tab-item-space-t > .tab-items-con > .tab-item {
     padding: 0.6em 1em 0.6em 1em;
     font-size: 0.8em;
   }
   //....................................
   // Horizontal alighment
-  &.tabs-align-left > ul {
+  &.tabs-align-left > .tab-items-con {
     justify-content: flex-start;
   }
-  &.tabs-align-center > ul {
+  &.tabs-align-center > .tab-items-con {
     justify-content: center;
   }
-  &.tabs-align-right > ul {
+  &.tabs-align-right > .tab-items-con {
     justify-content: flex-end;
   }
   //....................................
   // Vertical aliment, should tabs
   $R: var(--ti-measure-r-s);
   &.tabs-at-top {
-    padding: 1em 1em 0 1em;
+    padding: 1em $SCW 0 $SCW;
     border-bottom: 1px solid var(--ti-color-border-shallow);
-    > ul > li {
+    > .tab-items-con > .tab-item {
       border-top: $R solid transparent;
       border-bottom: 0;
       border-radius: $R $R 0 0;
@@ -128,9 +131,9 @@
     }
   }
   &.tabs-at-bottom {
-    padding: 0 1em 1em 1em;
+    padding: 0 $SCW 1em $SCW;
     border-top: 1px solid var(--ti-color-border-shallow);
-    > ul > li {
+    > .tab-items-con > .tab-item {
       border-bottom: $R solid transparent;
       border-top: 0;
       border-radius: 0 0 $R $R;
@@ -142,7 +145,7 @@
     }
   }
   //....................................
-  &.wrap-tabs > ul {
+  &.wrap-tabs > .tab-items-con {
     flex-wrap: wrap;
   }
   //....................................

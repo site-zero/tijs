@@ -57,14 +57,9 @@
     emit('block', event);
   }
   //-------------------------------------------------
-  function OnTabChange(item: TabDisplayItem, old?: TabDisplayItem) {
-    //console.log('onTabChange', item.value, old?.value);
+  function OnTabChange(item: TabDisplayItem) {
     _current_tab_key.value = item.value;
     Keep.value.save(item.value);
-    // emit('tab-change', {
-    //   to: item,
-    //   from: old,
-    // });
   }
   //-------------------------------------------------
   watch(

@@ -21,7 +21,7 @@ export function useTabsOverflowObserver(options: TabsOverflowOptions) {
   }
 
   function updateOverflow() {
-    let $lis = Dom.findAll(':scope > li', ul.value);
+    let $lis = Dom.findAll(':scope > .tab-item', ul.value);
     // 防守
     if ($lis.length == 0) {
       setOverflow(false, false);

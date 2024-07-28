@@ -65,7 +65,7 @@ export function makeAppModelEventListeners(
   result: Ref<any>,
   bindingEvent?: AppModelBindingEvent,
 ): Record<string, Callback1<any>> {
-  console.log(COM_TYPE, bindingEvent, result);
+  //console.log(COM_TYPE, bindingEvent, result);
   log.debug('listenResult:', COM_TYPE, bindingEvent, result);
   let listeners = {} as Record<string, Callback1<any>>;
   // 1. `null` 不传递
