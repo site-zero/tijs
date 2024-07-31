@@ -54,13 +54,14 @@
     let W = el.getBoundingClientRect().width;
     let R = 0.8;
 
+    //let old_left = el.scrollLeft;
     let left = el.scrollLeft + W * dir * R;
     el.scrollTo({ left });
-    console.log('==========>', left);
 
     _.delay(() => {
       TabOverflow.updateOverflow();
-    }, 800);
+      //console.log(`scrollFrom ${old_left} >> ${left} ==`, el.scrollLeft);
+    }, 500);
   }
   //-------------------------------------------------------
   function onClickItem(it: TabDisplayItem) {
@@ -95,23 +96,25 @@
     <div
       class="tab-items-con"
       ref="$ul">
-      <div
-        class="tab-item"
-        v-for="(it, index) in TabItems"
-        :class="it.className"
-        :style="it.style"
-        :data-index="index"
-        @click="onClickItem(it)">
-        <span
-          class="as-icon"
-          v-if="it.icon"
-          ><TiIcon :value="it.icon"
-        /></span>
-        <span
-          class="as-text"
-          v-if="it.text"
-          >{{ it.text }}</span
-        >
+      <div class="items-wrapper">
+        <div
+          class="tab-item"
+          v-for="(it, index) in TabItems"
+          :class="it.className"
+          :style="it.style"
+          :data-index="index"
+          @click="onClickItem(it)">
+          <span
+            class="as-icon"
+            v-if="it.icon"
+            ><TiIcon :value="it.icon"
+          /></span>
+          <span
+            class="as-text"
+            v-if="it.text"
+            >{{ it.text }}</span
+          >
+        </div>
       </div>
     </div>
     <div
