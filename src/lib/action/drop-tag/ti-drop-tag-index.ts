@@ -15,7 +15,7 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.DropTag;
 
 const TiDropTagInfo: TiComInfo = {
-  tags: ['ing'],
+  tags: ['scaffold'],
   icon: 'fas-tarp-droplet',
   race: TiComRace.ACTION,
   name: COM_TYPE,

@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { I18n, Str } from '../';
-import { TiCurrency } from '../../_type';
+import { HDirecton, TiCurrency } from '../../_type';
+import { PartitionOptions } from '../text/ti-str';
 
 ///////////////////////////////////////
 const CURRENCIES = {
@@ -362,40 +363,67 @@ export function toChineseText(cent = 0.0, capitalized = false): string {
   return re.join('');
 }
 
-//-----------------------------------
+/**
+ * 将输入的数字，分段显示。变成便于人类阅读的数字
+ *
+ * @param val 输入的值
+ * @param options 配置参数
+ *    - `options.width` : 每段有多长，默认 `3`
+ *    - `options.sep` : 分隔字符串，默认 `,`
+ *    - `options.to` : 分隔的方向。 'left|right'
+ *    - `options.to = 'left'` 【默认】从右向左分隔，通常用来格式化金额
+ *    - `options.to = 'right'` 从左至右分隔，通常用来格式化银行账号，或者软件激活码
+ *
+ * @returns 格式化后的字符串
+ *
+ * @see #ToBankTextOptions
+ */
 export function toBankText(
-  v: string,
-  { part = 3, sep = ',', to = 'left' } = {} as {
-    part?: number;
-    sep?: string;
-    to?: string;
-  }
+  val: string | number,
+  options: PartitionOptions = {}
 ): string {
-  if (_.isNil(v)) {
-    return v;
+  // 防空
+  if (_.isNil(val)) {
+    return val;
   }
-  let s = v + '';
+
+  // 处理参数
+  let { width = 3, sep = ',', to = 'left' } = options;
+
+  // 如果是字符串，则处理一下一些分隔符号
+  let str: string;
+  if (_.isNumber(val)) {
+    str = `${val}`;
+  } else {
+    str = _.trim(val);
+  }
+  // 先拿到前缀
+  let m = /^([+-])?(.+)$/.exec(str);
+  if (!m) {
+    throw `Impossiable '${val}'`;
+  }
+  let prefix = m[1] ?? '';
+  let s = m[2].replaceAll(/[^0-9.]/g, '');
+
+  // 分成两段，一个是整数部分+小数部分
   let pos = s.indexOf('.');
+  // 必然是 .xxx
+  if (pos == 0) {
+    return [prefix, '0', s].join('');
+  }
+  // 全为整数
   if (pos < 0) {
-    pos = s.length;
+    return [prefix, Str.partitions(s, { width, sep, to })].join('');
   }
-  let ns = s.split('');
-  if ('left' == to) {
-    for (let i = pos; i > 0; i -= part) {
-      if (i < pos) {
-        ns.splice(i, 0, sep);
-      }
-    }
-  } else if ('right' == to) {
-    let off = 0;
-    for (let i = 0; i < pos; i += part) {
-      if (i > 0) {
-        ns.splice(i + off, 0, sep);
-        off += sep.length;
-      }
-    }
-  }
-  return ns.join('');
+  // 是小数 xx.xxx
+  let _part_int = s.substring(0, pos).trim();
+  let _part_fraction = s.substring(pos + 1).trim();
+  return [
+    prefix,
+    Str.partitions(_part_int, { width, sep, to }),
+    '.',
+    _part_fraction,
+  ].join('');
 }
 
 //-----------------------------------

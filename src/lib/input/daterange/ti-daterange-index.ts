@@ -14,6 +14,7 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.InputDateRange;
 
 const TiInputDateRangeInfo: TiComInfo = {
+  tags: ['scaffold'],
   icon: 'fas-calendar-week',
   race: TiComRace.INPUT,
   name: COM_TYPE,

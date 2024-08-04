@@ -1,5 +1,6 @@
 import {
   AspectSize,
+  BlockAspectClass,
   BlockInfoProps,
   ComRef,
   CommonProps,
@@ -26,7 +27,7 @@ export type LayoutState = {
 };
 
 export type LayoutProps = CommonProps &
-  Pick<LayoutItem, 'name' | 'blocks' | 'itemStyle'> & {
+  Pick<LayoutBlock, 'name' | 'blocks' | 'itemStyle' | 'itemClass'> & {
     schema?: LayoutSchema;
   };
 
@@ -144,7 +145,7 @@ export type LayoutBar = {
 
 export type LayoutItemType = 'block' | 'grid' | 'tabs';
 export type LayoutBlock = TabsAspect &
-  Omit<BlockInfoProps, 'name'> & {
+  BlockInfoProps & {
     /**
      * 块的布局内唯一键，如果不指定，则会依次尝试：
      *
@@ -158,20 +159,35 @@ export type LayoutBlock = TabsAspect &
      * 对于 Grid 布局，就传递到 'KeepSizes'
      */
     keep?: KeepInfo;
-    /**
-     * 本布局项的名称，在事件传递中，会将自己名称叠加在事件名称前缀
-     * 譬如，如果 `name="foo"`，当收到任何一个总线消息，譬如"bar"，那么
-     * 会向父总线发送 "foo::bar" 这个消息。这样，在父总线，通过名称
-     * 就能区分出是哪个布局项下的控件发出的消息。
-     *
-     * 当然，如果你不声明这个属性，则不会改变消息的名称，因为毕竟有些消息
-     * 名称很特殊，没必要增加这个前缀。
-     */
-    name?: string;
 
-    className?: any;
-    grid?: CssGridItem;
+    /**
+     * 对应块的包裹元素的类选择器
+     */
+    conClass?: any;
     style?: Vars;
+    /**
+     * 统一为所有的布局项设置一个样式
+     */
+    itemStyle?: Vars;
+    /**
+     * 统一为所有的布局项设置对应部分的 class
+     */
+    itemClass?: BlockAspectClass;
+    /**
+     * 仅当 type=block 指定 TiBlock 本身的 className
+     */
+    bodyClass?: any;
+
+    grid?: CssGridItem;
+    /**
+     * 仅当 type=grid，指定 TiLayoutGrid 本身的 className
+     */
+    gridClass?: any;
+
+    /**
+     * 仅当 type=tabs 指定 TiLayoutTabs 本身的 className
+     */
+    tabsClass?: any;
 
     /**
      * 拖动控制条，这个只对 Grid 布局有效
@@ -219,11 +235,6 @@ export type LayoutBlock = TabsAspect &
      * 如果未指定，则会默认给一个 `1fr`
      */
     layout?: CssGridLayout;
-
-    /**
-     * 统一为所有的布局项设置一个样式
-     */
-    itemStyle?: Vars;
   };
 /**
  * 根据 `LayoutBlock` 解析出来的布局块显示项
@@ -233,7 +244,7 @@ export type LayoutItem = LayoutBlock & {
   index: number;
   conStyle?: Vars;
   //itemConfig?: Vars; zozoh: 废弃了，采用下面的三个属性分别设置三种块
-  propsForBlock?: BlockSchema;
+  propsForBlock?: BlockProps;
   propsForLayoutGrid?: LayoutGridProps;
   propsForLayoutTabs?: LayoutTabsProps;
 };

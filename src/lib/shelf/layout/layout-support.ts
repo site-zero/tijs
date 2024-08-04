@@ -1,5 +1,13 @@
 import _ from 'lodash';
-import { LayoutItem, LayoutProps, LayoutSchema, LayoutState } from '../../';
+import {
+  BlockProps,
+  LayoutGridProps,
+  LayoutItem,
+  LayoutProps,
+  LayoutSchema,
+  LayoutState,
+  LayoutTabsProps,
+} from '../../';
 import { CssUtils } from '../../../core';
 
 /**
@@ -35,9 +43,29 @@ export function autoSetLayoutItemType(it: LayoutItem) {
  * @param schema 布局项块的具体配置信息集合
  */
 export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
+  const __pick_props_for_block = (it: LayoutItem): BlockProps => {
+    return {
+      icon: it.icon,
+      title: it.title,
+      name: it.name,
+      actions: it.actions,
+      actionVars: it.actionVars,
+      actionClass: it.actionClass,
+      actionStyle: it.actionStyle,
+      headClass: it.headClass,
+      headStyle: it.headStyle,
+      mainClass: it.mainClass,
+      mainStyle: it.mainStyle,
+    };
+  };
   // 布局块
   if ('block' == it.type && !it.comType) {
-    it.propsForBlock = {};
+    it.propsForBlock = __pick_props_for_block(it);
+    // 特殊的属性
+    _.assign(it.propsForBlock, {
+      className: it.bodyClass,
+    } as BlockProps);
+    // 获取参考控件
     let refName = it.body || it.name;
     if (refName) {
       let ref = schema[refName];
@@ -56,7 +84,8 @@ export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
   }
   // 格子布局
   else if ('grid' == it.type) {
-    it.propsForLayoutGrid = _.pick(
+    // 获取格子布局的属性
+    let _layout_grid_props = _.pick(
       it,
       'name',
       'blocks',
@@ -70,6 +99,35 @@ export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
       'gridStyle',
       'resetLocalGridTracks'
     );
+
+    // 格子布局还需要套上一个TiBlock
+    if (it.title) {
+      it.propsForBlock = __pick_props_for_block(it);
+      // 特殊的属性
+      _.assign(it.propsForBlock, {
+        comType: 'TiLayoutGrid',
+        comConf: {
+          className: it.gridClass,
+          layout: it.layout,
+          schema: schema,
+          itemStyle: it.itemStyle,
+          itemClass: it.itemClass,
+          ..._layout_grid_props,
+          keepSizes: it.keep,
+        } as LayoutGridProps,
+      } as BlockProps);
+    }
+    // 纯格子布局
+    else {
+      it.propsForLayoutGrid = _layout_grid_props;
+      // 特殊的属性
+      _.assign(it.propsForLayoutGrid, {
+        className: it.gridClass,
+        itemStyle: it.itemStyle,
+        itemClass: it.itemClass,
+        keepSizes: it.keep,
+      } as LayoutGridProps);
+    }
   }
   // 标签布局
   else if ('tabs' == it.type) {
@@ -83,12 +141,18 @@ export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
       'defaultTab',
       'keepTab'
     );
+    // 特殊的属性
+    _.assign(it.propsForLayoutTabs, {
+      classNme: it.tabsClass,
+      itemStyle: it.itemStyle,
+      itemClass: it.itemClass,
+    } as LayoutTabsProps);
   }
 }
 
 export type LayoutItemsInput = Pick<
   LayoutProps,
-  'blocks' | 'schema' | 'itemStyle'
+  'blocks' | 'schema' | 'itemStyle' | 'itemClass'
 >;
 
 /**
@@ -99,19 +163,20 @@ export type LayoutItemsInput = Pick<
  * @returns 布局项块列表
  */
 export function getLayoutItem(state: LayoutState, props: LayoutItemsInput) {
-  let { blocks = [], schema = {}, itemStyle = {} } = props;
+  let { blocks = [], schema = {}, itemStyle = {}, itemClass } = props;
   let { shown } = state;
   let list = [] as LayoutItem[];
 
   for (let i = 0; i < blocks.length; i++) {
     let item = blocks[i];
+    //console.log(i, item.name)
     if (item.name && shown && false === shown[item.name]) {
       continue;
     }
 
     // 准备布局项目
     let it = _.cloneDeep(item) as LayoutItem;
-    //console.log(i, it);
+    _.defaults(it, itemClass);
     it.index = i;
     if (!it.uniqKey) {
       it.uniqKey = it.name ?? `B${i}`;
@@ -119,7 +184,7 @@ export function getLayoutItem(state: LayoutState, props: LayoutItemsInput) {
     autoSetLayoutItemType(it);
 
     // 布局项的 ClassName
-    it.className = CssUtils.mergeClassName(it.className, `as-${it.type}`, {
+    it.conClass = CssUtils.mergeClassName(it.conClass, `as-${it.type}`, {
       'cover-parent': 'cover' == it.blockFit,
       'fit-parent': 'fit' == it.blockFit,
     });

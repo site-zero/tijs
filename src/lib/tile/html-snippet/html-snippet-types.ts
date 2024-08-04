@@ -2,7 +2,7 @@ import { Callback2, CommonProps } from '../../../_type';
 
 export type HtmlSnippetEmitter = {
   (name: string, playload?: any): void;
-}
+};
 
 export type HtmlSnippetListenner = {
   // 对片段的什么元素?

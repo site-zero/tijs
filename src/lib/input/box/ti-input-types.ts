@@ -33,6 +33,7 @@ export type OptionPredicater = (item: Record<string, any>) => boolean;
 //              提示框相关属性
 //
 //--------------------------------------------------
+export type TipListProps = Omit<ListProps, 'data'>;
 export type TipBoxProps = {
   // 动态渲染的上下文
   boxVars?: Vars;
@@ -63,7 +64,7 @@ export type TipBoxProps = {
   /**
    * 提示列表的配置
    */
-  tipList?: Omit<ListProps, 'data'>;
+  tipList?: TipListProps;
 
   /**
    * 展出提示框宽度，如果不声明，则采用与 box 相同的宽度

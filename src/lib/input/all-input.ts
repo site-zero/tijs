@@ -1,6 +1,7 @@
 import { TiComSet } from '../../_type';
 import { TiInputInfo } from './box/ti-input-index';
 import { TiCheckInfo } from './check/ti-check-index';
+import { TiInputCodeInfo } from './code/ti-input-code-index';
 import { TiInputColorInfo } from './color/ti-input-color-index';
 import { TiComboFilterInfo } from './combo-filter/ti-combo-filter-index';
 import { TiInputCurrencyInfo } from './currency/ti-input-currency-index';
@@ -11,7 +12,9 @@ import { TiDroplistInfo } from './droplist/ti-droplist-index';
 import { TiFilterInfo } from './filter/ti-filter-index';
 import { TiInputGroupInfo } from './group/ti-input-group-index';
 import { TiInputIconInfo } from './icon/ti-input-icon-index';
+import { TiInputNumUnitInfo } from './num-unit/ti-input-num-unit-index';
 import { TiInputNumInfo } from './num/ti-input-num-index';
+import { TiInputPickerInfo } from './picker/ti-input-picker-index';
 import { TiScoreInfo } from './score/ti-score-index';
 import { TiSorterInfo } from './sorter/ti-sorter-index';
 import { TiSwitcherInfo } from './switcher/ti-switcher-index';
@@ -24,6 +27,7 @@ export default {
   TiInput: TiInputInfo,
   TiComboFilter: TiComboFilterInfo,
   TiCheck: TiCheckInfo,
+  TiInputCode: TiInputCodeInfo,
   TiFilter: TiFilterInfo,
   TiTransfer: TiTransferInfo,
   TiDroplist: TiDroplistInfo,
@@ -31,9 +35,11 @@ export default {
   TiInputColor: TiInputColorInfo,
   TiInputCurrency: TiInputCurrencyInfo,
   TiInputNum: TiInputNumInfo,
+  TiInputNumUnit: TiInputNumUnitInfo,
   TiInputDate: TiInputDateInfo,
   TiInputDatetime: TiInputDatetimeInfo,
   TiInputDateRange: TiInputDateRangeInfo,
+  TiInputPicker: TiInputPickerInfo,
   TiInputTime: TiInputTimeInfo,
   TiInputText: TiInputTextInfo,
   TiScore: TiScoreInfo,
@@ -45,6 +51,7 @@ export default {
 
 export * from './box/ti-input-index';
 export * from './check/ti-check-index';
+export * from './code/ti-input-code-index';
 export * from './color/ti-input-color-index';
 export * from './combo-filter/ti-combo-filter-index';
 export * from './currency/ti-input-currency-index';
@@ -55,7 +62,9 @@ export * from './droplist/ti-droplist-index';
 export * from './filter/ti-filter-index';
 export * from './group/ti-input-group-index';
 export * from './icon/ti-input-icon-index';
+export * from './num-unit/ti-input-num-unit-index';
 export * from './num/ti-input-num-index';
+export * from './picker/ti-input-picker-index';
 export * from './score/ti-score-index';
 export * from './sorter/ti-sorter-index';
 export * from './switcher/ti-switcher-index';

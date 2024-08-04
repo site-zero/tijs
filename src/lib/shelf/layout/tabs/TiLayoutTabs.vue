@@ -90,7 +90,7 @@
       if (MainTab.value && _emitted_tab_key.value != MainTab.value.uniqKey) {
         emit('tab-change', {
           to: {
-            className: MainTab.value.className,
+            className: MainTab.value.blockClass,
             current: true,
             index: MainTab.value.index || 0,
             icon: MainTab.value.icon,
@@ -125,7 +125,7 @@
             v-if="'block' == MainTab.type"
             block-fit="cover"
             v-bind="MainTab.propsForBlock"
-            :class-name="MainTab.className"
+            :class-name="MainTab.blockClass"
             :main-class="MainTab.mainClass"
             :main-style="MainTab.mainStyle"
             @happen="OnBlockEventHappen" />

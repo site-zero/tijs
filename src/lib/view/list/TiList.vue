@@ -6,7 +6,7 @@
   import { CssUtils } from '../../../core';
   import { ListEmitter, ListProps } from './ti-list-types';
   import { useList } from './use-list';
-
+  //-----------------------------------------------------
   const props = withDefaults(defineProps<ListProps>(), {
     data: () => [],
     size: 'm',
@@ -15,21 +15,24 @@
     allowUserSelect: false,
     autoI18n: true,
   });
-
+  //-----------------------------------------------------
   const emit = defineEmits<ListEmitter>();
+  //-----------------------------------------------------
   const selection = reactive({
     currentId: undefined,
     checkedIds: new Map<TableRowID, boolean>(),
     ids: [],
     lastSelectIndex: -1,
   } as SelectableState<TableRowID>);
+  //-----------------------------------------------------
   const List = computed(() => useList(props, emit));
-
+  //-----------------------------------------------------
   const roadblock = computed(() => List.value.getRoadblock());
   const Items = computed(() => List.value.buildOptionItems(selection));
   const NotItems = computed(() => _.isEmpty(Items.value));
   const isItemsHasIcon = computed(() => List.value.itemsHasIcon(Items.value));
   const isItemsHasTip = computed(() => List.value.itemsHasTip(Items.value));
+  //-----------------------------------------------------
   const TopClass = computed(() => {
     let names = [`size-${props.size ?? 'm'}`] as string[];
     if (props.borderStyle) {
@@ -45,6 +48,7 @@
       names
     );
   });
+  //-----------------------------------------------------
   const ListItemStyle = computed(() => {
     let cols = [];
     if (props.multi) {
@@ -61,7 +65,7 @@
       'grid-template-columns': cols.join(' '),
     };
   });
-
+  //-----------------------------------------------------
   watch(
     () => [props.currentId, props.checkedIds],
     () => {
@@ -76,6 +80,7 @@
       immediate: true,
     }
   );
+  //-----------------------------------------------------
 </script>
 <template>
   <div
@@ -122,7 +127,10 @@
         </div>
         <!--=Text=-->
         <div class="list-part as-text">
-          <div>{{ it.text }}</div>
+          <div
+            v-if="props.textAsHtml"
+            v-html="it.displayText"></div>
+          <div v-else>{{ it.displayText }}</div>
         </div>
         <!--=Tip=-->
         <div

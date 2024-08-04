@@ -50,6 +50,37 @@ test('splitQuote', () => {
   expect(ss[3]).eq(ll[3]);
 });
 
+test('partitions', function () {
+  // 测试默认行为
+  expect(Str.partitions('ABC')).toBe('ABC');
+  expect(Str.partitions('ABCDEF')).toBe('ABCD - EF');
+
+  // 测试指定宽度
+  expect(Str.partitions('12345678', { to: 'left', width: 3 })).toBe(
+    '12 - 345 - 678'
+  );
+
+  // 测试指定分隔符
+  expect(Str.partitions('ABCDEFGH', { sep: '-' })).toBe('ABCD-EFGH');
+
+  // 测试从右向左分隔
+  expect(Str.partitions('12345678', { to: 'left', width: 4 })).toBe(
+    '1234 - 5678'
+  );
+
+  // 测试从左向右分隔
+  expect(Str.partitions('12345678', { to: 'right', width: 3, sep: ',' })).toBe(
+    '123,456,78'
+  );
+
+  // 测试空字符串输入
+  expect(Str.partitions('')).toBe('');
+
+  // 测试无效输入
+  expect(Str.partitions(null)).toBe('');
+  expect(Str.partitions(undefined)).toBe('');
+});
+
 test('toJsValue', () => {
   // why change string to number？
   expect(Str.toJsValue('123')).toStrictEqual(123);

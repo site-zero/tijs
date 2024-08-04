@@ -96,6 +96,7 @@
       schema: props.schema,
       blocks: props.blocks,
       itemStyle: props.itemStyle,
+      itemClass: props.itemClass,
     })
   );
   //-------------------------------------------------
@@ -221,42 +222,27 @@
       <!-------- Block Container -------->
       <div
         class="grid-item-con"
-        :class="it.className"
+        :class="it.conClass"
         :style="it.conStyle">
         <slot :item="it">
           <!-- 布局块-->
+          <!-- 格子布局:带标题-->
           <TiBlock
-            v-if="'block' == it.type"
+            v-if="it.propsForBlock"
             v-bind="it.propsForBlock"
-            :class-name="it.className"
-            :icon="it.icon"
-            :title="it.title"
-            :name="it.name"
-            :actions="it.actions"
-            :action-vars="it.actionVars"
-            :action-class="it.actionClass"
-            :action-style="it.actionStyle"
-            :head-class="it.headClass"
-            :head-style="it.headStyle"
-            :main-class="it.mainClass"
-            :main-style="it.mainStyle"
             @happen="onBlockEventHappen" />
-          <!-- 格子布局-->
+          <!-- 格子布局:仅内容-->
           <TiLayoutGrid
-            v-else-if="'grid' == it.type"
+            v-else-if="it.propsForLayoutGrid"
             v-bind="it.propsForLayoutGrid"
             :schema="schema"
-            :class-name="it.className"
-            :item-style="it.itemStyle"
             @block="emit('block', $event)"
             @tab-change="onGridLayoutTabChange($event, it)" />
           <!-- 标签布局-->
           <TiLayoutTabs
-            v-else-if="'tabs' == it.type"
+            v-else-if="it.propsForLayoutTabs"
             v-bind="it.propsForLayoutTabs"
             :schema="schema"
-            :class-name="it.className"
-            :item-style="it.itemStyle"
             @block="emit('block', $event)"
             @tab-change="onGridItemTabChange($event, it)" />
           <!-- 未知布局-->
@@ -286,7 +272,7 @@
         <div
           v-if="pan.visible"
           class="layout-panel trans-mask"
-          :class="pan.className"
+          :class="pan.conClass"
           :panel-index="pan.index"
           :panel-ukey="pan.uniqKey"
           :style="pan.style"

@@ -35,8 +35,8 @@ export function getLayoutPanelItems(
     }
 
     // 布局项的 ClassName
-    it.className = CssUtils.mergeClassName(
-      it.className,
+    it.conClass = CssUtils.mergeClassName(
+      it.conClass,
       `as-${it.type}`,
       `at-${it.position || 'center'}`,
       'ti-trans',
@@ -47,7 +47,7 @@ export function getLayoutPanelItems(
       }
     );
     if (it.tranSpeed) {
-      it.className[`speed-${it.tranSpeed}`] = true;
+      it.conClass[`speed-${it.tranSpeed}`] = true;
     }
 
     let _out_style = {} as Vars;

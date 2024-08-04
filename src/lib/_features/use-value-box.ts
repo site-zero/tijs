@@ -76,6 +76,12 @@ export type ValueBoxProps<T extends any> = CommonProps &
      */
     autoPrefixIcon?: boolean;
 
+    /**
+     * 如果值是某个选项，默认的会在输入框显示选项的文字而不是值。
+     * 开启这个选项，则在输入框直接显示值而不是翻译后的文字
+     */
+    useRawValue?: boolean;
+
     // 输入框，是否允许用户输入
     canInput?: boolean;
 
@@ -208,12 +214,19 @@ export function useValueBox<T extends any>(
     if (focused && !props.readonly && props.canInput) {
       state.boxInputing = Str.anyToStr(val);
     }
-    // // 看看是否需要格式化
+    // 看看是否需要格式化
     else {
       let textOrItem = await translateValue(val);
       let text: string;
       if (textOrItem instanceof Dicts.DictItem) {
-        text = textOrItem.text || textOrItem.value;
+        // 强制指定采用选项的值来显示
+        if (props.useRawValue) {
+          text = textOrItem.value;
+        }
+        // 显示选项文字
+        else {
+          text = textOrItem.text || textOrItem.value;
+        }
         state.boxIcon = textOrItem.icon;
         state.boxTip = textOrItem.icon;
       } else {

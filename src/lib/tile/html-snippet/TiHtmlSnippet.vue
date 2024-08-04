@@ -1,14 +1,9 @@
 <script setup lang="ts">
-  import _ from 'lodash';
-  import { computed, onMounted, ref, watch } from 'vue';
-  import { CssUtils, Dom } from '../../../core';
+  import { computed, onMounted, ref } from 'vue';
+  import { CssUtils } from '../../../core';
   import { getLogger } from '../../../core/log/ti-log';
   import { COM_TYPES } from '../../lib-com-types';
-  import {
-    HtmlSnippetEmitter,
-    HtmlSnippetListenner,
-    HtmlSnippetProps,
-  } from './html-snippet-types';
+  import { HtmlSnippetEmitter, HtmlSnippetProps } from './html-snippet-types';
   import { useHtmlSnippetEventDelegate } from './use-html-snippet-events';
   //-----------------------------------------------------
   const COM_TYPE = COM_TYPES.HtmlSnippet;

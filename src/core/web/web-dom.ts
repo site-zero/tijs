@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { ref } from 'vue';
 import { CssUtils, Match, Rects, Str, Util } from '../';
 import {
   DockOptions,
@@ -20,7 +21,6 @@ import {
   Vars,
   WindowTheme,
 } from '../../_type';
-import { ref } from 'vue';
 
 /*-------------------------------------------
 
@@ -1466,17 +1466,35 @@ export function getDocumentTheme(doc = document): WindowTheme {
 
 //----------------------------------------------------
 export const RootThemeClass = ref<WindowTheme>('light');
-const _root_theme_observer = new MutationObserver((mutationsList) => {
-  for (var mutation of mutationsList) {
-    if (mutation.type === 'attributes' && mutation.attributeName === 'class') {
-      let html = mutation.target as HTMLElement;
-      console.log('<html> 标签的 class 属性发生变化:', html.className);
-      RootThemeClass.value = getDocumentTheme(html.ownerDocument);
-    }
+let _root_theme_observer: MutationObserver;
+function _get_root_theme_observer() {
+  if (!_root_theme_observer) {
+    _root_theme_observer = new MutationObserver((mutationsList) => {
+      for (var mutation of mutationsList) {
+        if (
+          mutation.type === 'attributes' &&
+          mutation.attributeName === 'class'
+        ) {
+          let html = mutation.target as HTMLElement;
+          console.log('<html> 标签的 class 属性发生变化:', html.className);
+          RootThemeClass.value = getDocumentTheme(html.ownerDocument);
+        }
+      }
+    });
   }
-});
-export function watchDocumentTheme(doc = document) {
-  _root_theme_observer.observe(doc.documentElement, {
+  return _root_theme_observer;
+}
+export function watchDocumentTheme(doc?: Document) {
+  // 保护一下，在 node 环境没有这个类
+  if ('undefined' == typeof MutationObserver) {
+    return;
+  }
+  // 获取观察者类
+  let ob = _get_root_theme_observer();
+  if (!doc) {
+    doc = document;
+  }
+  ob.observe(doc.documentElement, {
     attributes: true,
     attributeFilter: ['class'],
   });

@@ -26,9 +26,6 @@ export function buildOneTab(items: LayoutTabItem[], tabKey?: string) {
       continue;
     }
     let re = _.cloneDeep(item);
-    re.className = CssUtils.mergeClassName(item.className, {
-      'cover-parent': true,
-    });
     re.blockClass = CssUtils.mergeClassName(item.blockClass, {
       'cover-parent': true,
     });

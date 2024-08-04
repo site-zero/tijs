@@ -1,0 +1,22 @@
+.ti-input-num-unit {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto;
+  @include aspect_gap('&.gap');
+  //-----------------------------------------
+  .part-unit {
+    .ti-input-tip-wrapper {
+      .tip-con {
+        .ti-list .list-item {
+          code {
+            min-width: 3em;
+          }
+          em {
+            color: var(--ti-color-track);
+          }
+        }
+      }
+    }
+  }
+  //-----------------------------------------
+}

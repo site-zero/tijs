@@ -2,6 +2,7 @@ import JSON5 from 'json5';
 import _ from 'lodash';
 import { Tmpl, Util } from '../';
 import {
+  HDirecton,
   StrCaseFunc,
   StrCaseMode,
   StrConvertor,
@@ -160,6 +161,77 @@ export function splitQuote(str: string, options: SplitOptions = {}): string[] {
 
   // 搞定
   return list;
+}
+
+/*---------------------------------------------------
+
+                字符串分段显示
+
+---------------------------------------------------*/
+export type PartitionOptions = {
+  /**
+   * 每段有多长
+   */
+  width?: number;
+  /**
+   * 分隔字符串
+   */
+  sep?: string;
+  /**
+   * 分隔的方向：
+   *
+   * - `left` 从右向左分隔，通常用来格式化金额
+   * - `right` 从左至右分隔，通常用来格式化银行账号，或者软件激活码
+   */
+  to?: HDirecton;
+};
+
+/**
+ * 将输入的文本，分段显示。便于人类阅读。
+ *
+ * 譬如:
+ *
+ * ```js
+ * partitions('ABC') => 'ABC'
+ * partitions('ABCDEF') => 'ABCD,EF'
+ * partitions('12345678', {to:'left',width:3}) => '12,345,678'
+ * partitions('ABCDEFGH',{sep:'-'}) => 'ABCD-EFGH'
+ * ```
+ *
+ * @param val 输入的值
+ * @param options 配置参数
+ *    - `options.width` : 每段有多长，默认 `4`
+ *    - `options.sep` : 分隔字符串，默认 ` - `
+ *    - `options.to` : 分隔的方向。 'left|right', 默认 'right'
+ *    - `options.to = 'left'` 从右向左分隔，通常用来格式化金额
+ *    - `options.to = 'right'` 从左至右分隔，通常用来格式化银行账号，或者软件激活码
+ *
+ * @returns 格式化后的字符串
+ *
+ * @see #ToBankTextOptions
+ */
+export function partitions(input: any, options: PartitionOptions = {}): string {
+  const { width = 4, sep = ' - ', to = 'right' } = options;
+  // 判断输入是否为空或空字符串
+  if (_.isNil(input)) return '';
+
+  // 转换为字符串
+  let s = `${input}`;
+
+  // 将字符串按方向分隔成数组
+  let result = [];
+  if (to === 'left') {
+    for (let i = s.length; i > 0; i -= width) {
+      result.unshift(s.substring(Math.max(i - width, 0), i));
+    }
+  } else {
+    for (let i = 0; i < s.length; i += width) {
+      result.push(s.substring(i, i + width));
+    }
+  }
+
+  // 使用指定的分隔符将数组连接成字符串
+  return result.join(sep);
 }
 
 /*---------------------------------------------------

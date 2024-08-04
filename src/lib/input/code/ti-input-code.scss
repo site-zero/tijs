@@ -1,0 +1,40 @@
+.ti-input-code {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto;
+  @include aspect_gap('&.gap');
+  //-----------------------------------------
+  > .part-code {
+    width: 3em;
+  }
+  //-----------------------------------------
+  > .part-desc {
+    @include flex-align-nowrap($jc: stretch, $ai: stretch);
+    color: var(--ti-color-disable-r);
+    background-color: var(--ti-color-disable);
+    //---------------------------------------
+    input {
+      flex: 1 1 auto;
+      width: 10px;
+      font-size: inherit;
+      font-family: inherit;
+      outline: none;
+      border: 0;
+      padding: var(--ti-measure-box-pad);
+      color: inherit;
+      background-color: transparent;
+      font-size: var(--ti-fontsz-s);
+      &[readonly] {
+        //font-style: italic;
+        cursor: default;
+      }
+    }
+    //---------------------------------------
+    &.show-border {
+      border: 1px solid var(--ti-color-border-thin);
+      border-radius: var(--ti-measure-r-s);
+    }
+    //---------------------------------------
+  } // .part-desc {
+  //-----------------------------------------
+}

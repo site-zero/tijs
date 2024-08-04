@@ -957,7 +957,16 @@ export type ActionBarItem = VisibilityProps &
               模式框
 
 --------------------------------------------*/
-export type BlockInfoProps = {
+export type BlockAspectClass = {
+  blockClass?: any;
+  headClass?: any;
+  headStyle?: Vars;
+
+  mainClass?: any;
+  mainStyle?: Vars;
+};
+
+export type BlockInfoProps = BlockAspectClass & {
   // 声明标题栏，如果有 icon || title 就显示标题栏
   icon?: IconInput;
   title?: string;
@@ -979,16 +988,6 @@ export type BlockInfoProps = {
   actionVars?: Vars;
   actionClass?: any;
   actionStyle?: Vars;
-
-  //
-  // 外观样式
-  //
-  blockClass?: any;
-  headClass?: any;
-  headStyle?: Vars;
-
-  mainClass?: any;
-  mainStyle?: Vars;
 };
 /**
  * 对应到主控件的哪个 Key, 有下面几种绑定方法：
@@ -1097,3 +1096,4 @@ export type PopPosition =
 
 ---------------------------------------------------*/
 export type AspectSize = 't' | 's' | 'm' | 'b' | 'h';
+export type HDirecton = 'left' | 'right';

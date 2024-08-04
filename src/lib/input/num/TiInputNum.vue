@@ -16,8 +16,9 @@
   const props = withDefaults(defineProps<InputNumProps>(), {
     value: null,
     precision: 0,
-    partSep: '  ',
-    //partSize: 3,
+    partSep: ',',
+    partWidth: 3,
+    partTo: 'left',
   });
   //-----------------------------------------------------
   const InputValue = computed(() => {
@@ -27,16 +28,23 @@
     if (_.isBoolean(props.value)) {
       return props.value ? '1' : '0';
     }
-    return `${props.value}`;
+    let re = `${props.value}`;
+    // 移除分隔符号
+    if (props.partSep) {
+      re = re.replaceAll(props.partSep, '');
+    }
+    // 搞定
+    return re;
   });
   //-----------------------------------------------------
   const formatInputText = computed(() => {
-    let { partSize, partSep = ' ' } = props;
-    if (_.isNumber(partSize) && partSize > 0 && partSep) {
+    let { partWidth, partSep, partTo } = props;
+    if (_.isNumber(partWidth) && partWidth > 0 && partSep) {
       return (val: string) => {
         return Bank.toBankText(val, {
-          part: partSize,
+          width: partWidth,
           sep: partSep ?? ' ',
+          to: partTo,
         });
       };
     }

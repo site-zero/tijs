@@ -263,7 +263,7 @@
       tipUseHint: props.tipUseHint ?? false,
       tipTidyBy: props.tipTidyBy ?? ['main'],
       tidyValue: Box.value.tidyValue,
-      isVisible: predicate
+      isVisible: predicate,
     });
   }
   //-----------------------------------------------------
@@ -297,7 +297,7 @@
   //-----------------------------------------------------
   // 看看是否满足选项列表的打开条件
   watch(
-    () => props.format,
+    () => [props.format, props.useRawValue],
     () => {
       Box.value.doUpdateText();
     }

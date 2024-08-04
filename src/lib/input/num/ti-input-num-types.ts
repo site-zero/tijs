@@ -4,7 +4,7 @@ import {
   PrefixSuffixProps,
   ReadonlyProps,
 } from '../../';
-import { CommonProps, Vars } from '../../../_type';
+import { CommonProps, HDirecton, Vars } from '../../../_type';
 
 export type InputNumProps = CommonProps &
   PlaceholderProps &
@@ -27,12 +27,20 @@ export type InputNumProps = CommonProps &
     /**
      * 显示数字分段，一段有多长
      */
-    partSize?: number;
+    partWidth?: number;
 
     /**
      * 显示数字分段，段与段之间的分隔符
      */
     partSep?: string;
+
+    /**
+   * 分隔的方向：
+   *
+   * - `left` 从右向左分隔，通常用来格式化金额【默认】
+   * - `right` 从左至右分隔，通常用来格式化银行账号，或者软件激活码
+   */
+    partTo?:HDirecton;
 
     /**
      * 最小值（包含）
