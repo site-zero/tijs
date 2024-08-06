@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { AnyOptionItem, TableRowID, Vars } from '../../../_type';
-import { EventUtils, I18n, Str, Tmpl } from '../../../core';
+import { EventUtils, I18n, Tmpl, Util } from '../../../core';
 import { getLogger } from '../../../core/log/ti-log';
 import {
   SelectableState,
@@ -46,24 +46,35 @@ export function useList(props: ListProps, emit: ListEmitter) {
   //-----------------------------------------------------
   // 准备格式化文本函数
   //-----------------------------------------------------
-  let _format_display_text: (it: AnyOptionItem, raw: Vars) => string;
-  // 直接采用文本
-  if (!props.textFormat) {
-    _format_display_text = (it: AnyOptionItem, _raw: Vars): string => {
-      return it.text ?? Str.anyToStr(it.value);
+  let _gen_format_ctx = (it: AnyOptionItem, raw: Vars): Vars => {
+    let re = {
+      text: it.text,
+      tip: it.tip,
+      value: it.value,
+      raw,
     };
-  }
+    // 为了 HTML 需要逃逸一下
+    if (props.textAsHtml) {
+      re = Util.escapeAnyForHtml(re);
+    }
+    // 搞定
+    return re;
+  };
+  let _format_display_text: (it: AnyOptionItem, raw: Vars) => string;
+  // 默认的渲染方式用文本
+  let _text_format = props.textFormat ?? '<em>${text}</em><abbr>${tip}</abbr>';
+
   // 字符串格式化模板
-  else if (_.isString(props.textFormat)) {
-    const _tmpl = Tmpl.parse(props.textFormat);
+  if (_.isString(_text_format)) {
+    const _tmpl = Tmpl.parse(_text_format);
     _format_display_text = (it: AnyOptionItem, raw: Vars): string => {
-      let ctx = { ...it, raw };
+      let ctx = _gen_format_ctx(it, raw);
       return _tmpl.render(ctx);
     };
   }
   // 自定义格式化函数
   else {
-    _format_display_text = props.textFormat;
+    _format_display_text = _text_format;
   }
   //-----------------------------------------------------
   function buildOptionItems(

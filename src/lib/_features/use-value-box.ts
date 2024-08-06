@@ -82,6 +82,20 @@ export type ValueBoxProps<T extends any> = CommonProps &
      */
     useRawValue?: boolean;
 
+    /**
+     * 默认的，当输入框聚焦，且输入框不是只读还且是可输入的状态
+     * 输入框会自动将内容变成原始值。因为这个框本来就代表着原始值。
+     *
+     * 某些时候，你并不想要这种行为，则可以打开这个选项。
+     * 这意味着，即使聚焦的时候，可编辑的输入框也会显示翻译后的文本。
+     *
+     * 实用场景譬如： TiInputCode，处于 `[text][tip]` 模式下，我们总想
+     * 让输入框显示有意义的便于人类阅读的文字，因为我们可能用 text 表示
+     * 一个记录的唯一值，而真正存储是这个记录的UUID主键。我们当然不想
+     * 让用户聚焦输入框就显示可怕的 UUID，这会让很多初级用户产生不舒适甚至恐慌
+     */
+    useTextWhenFocus?: boolean;
+
     // 输入框，是否允许用户输入
     canInput?: boolean;
 
@@ -210,8 +224,14 @@ export function useValueBox<T extends any>(
     if ('2024-05-14 19:24:29.000' == val) {
       console.log('doUpdateText', val);
     }
-    // // 如果聚焦，则仅仅显示原始值，否则，看看是否需要格式化
-    if (focused && !props.readonly && props.canInput) {
+    // 如果聚焦，则仅仅显示原始值，否则，看看是否需要格式化
+    // 除非调用者明确禁止这种行为
+    if (
+      focused &&
+      !props.readonly &&
+      props.canInput &&
+      !props.useTextWhenFocus
+    ) {
       state.boxInputing = Str.anyToStr(val);
     }
     // 看看是否需要格式化

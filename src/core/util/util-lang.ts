@@ -354,3 +354,56 @@ export function isAsyncFunc(input?: any): boolean {
   let type = Object.prototype.toString.call(input);
   return '[object AsyncFunction]' == type;
 }
+
+/**
+ * 对于输入对象，尤其是`Array|Object|Map|List`，进行深层递归遍历，
+ * 处理所有值为字符串的值，调用 `_.escape` 来逃逸 HTML 的关键字
+ *
+ * @param input 任意的输入对象
+ */
+export function escapeAnyForHtml<T>(input: T): T {
+  function __escape_value(val: any): any {
+    // 处理空
+    if (!val) {
+      return val;
+    }
+    // 处理字符串
+    if (_.isString(val)) {
+      return _.escape(val);
+    }
+    // 处理数组
+    else if (Array.isArray(val)) {
+      return val.map(__escape_value);
+    }
+    // 处理对象
+    else if (_.isObject(val)) {
+      // Map 对象
+      if (val instanceof Map) {
+        const _re_map = new Map();
+        for (const [k, v] of val.entries()) {
+          _re_map.set(k, __escape_value(v));
+        }
+        return _re_map;
+      }
+      // 集合
+      else if (val instanceof Set) {
+        const escapedSet = new Set();
+        for (const v of val.values()) {
+          escapedSet.add(__escape_value(v));
+        }
+        return escapedSet;
+      }
+      // 普通对象
+      else {
+        const _re_obj: any = {};
+        for (const [k, v] of Object.entries(val)) {
+          _re_obj[k] = __escape_value(v);
+        }
+        return _re_obj;
+      }
+    }
+    return val;
+  }
+
+  return __escape_value(input) as T;
+}

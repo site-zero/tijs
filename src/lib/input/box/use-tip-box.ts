@@ -31,7 +31,7 @@ export function getTipWrapperStyle(
 ): Vars {
   return getDockingStyle(
     {
-      minWidth: `${_.get(box, 'width')}px`,
+      minWidth: props.tipListMinWidth ?? `${_.get(box, 'width')}px`,
       width: props.tipListWidth,
     },
     $el,

@@ -8,8 +8,9 @@
     useValueInput,
     useViewport,
   } from '../../';
-  import { CssUtils, Dicts } from '../../../core';
+  import { CssUtils, Dicts, Util } from '../../../core';
   import { InputCodeProps } from './ti-input-code-types';
+  import { ToStr } from '../../../_type';
   //-----------------------------------------------------
   const emit = defineEmits<{
     (event: 'change', payload: string): void;
@@ -81,11 +82,33 @@
     };
   });
   //-----------------------------------------------------
+  const GetDescription = computed((): ToStr<Dicts.DictItem<any>> => {
+    // 默认
+    if (!props.getDescription) {
+      // [val] [txt]
+      if (props.useRawValue) {
+        return (item: Dicts.DictItem<any>): string => {
+          return item.text ?? item.tip ?? item.value;
+        };
+      }
+      // [txt] [tip]
+      return (item: Dicts.DictItem<any>): string => {
+        return item.tip ?? item.text ?? item.value;
+      };
+    }
+    // 指定了键
+    if (_.isString(props.getDescription)) {
+      return Util.genObjGetter(props.getDescription);
+    }
+    // 完全定制
+    return props.getDescription;
+  });
+  //-----------------------------------------------------
   async function __update_desc_text(val = props.value) {
-    console.log('__update_desc_text')
+    console.log('__update_desc_text');
     let item = await _vals.value.translateValue(val);
     if (item instanceof Dicts.DictItem) {
-      _desc.value = item.text ?? item.tip ?? item.value;
+      _desc.value = GetDescription.value(item);
     }
     // 翻译失败
     else {
@@ -94,6 +117,7 @@
   }
   //-----------------------------------------------------
   async function onChange(val: string) {
+    console.log('onChange', val);
     __update_desc_text(val);
     emit('change', val);
   }

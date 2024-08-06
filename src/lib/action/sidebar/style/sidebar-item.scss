@@ -1,8 +1,8 @@
 dl.sidebar-item {
   margin: 0;
   &.at-top {
-    margin-block-start: SZ(6);
-    margin-block-end: 1.2em;
+    margin-block-start: 0.2em;
+    margin-block-end: 1em;
   }
   &.is-current {
     > dt,
@@ -19,7 +19,7 @@ dl.sidebar-item {
 
 dl.sidebar-item dt {
   @include flex-align-nowrap;
-  padding: var(--ti-measure-box-pad);
+  padding: .4em;
   cursor: pointer;
   > .as-indent-block {
     min-width: SZ(16);
@@ -34,7 +34,7 @@ dl.sidebar-item dt {
     transition: transform 0.5s;
   }
   > .as-title {
-    padding: 0 SZ(6);
+    padding: 0 .4em;
     white-space: nowrap;
   }
   &.at-top {
@@ -52,8 +52,8 @@ dl.sidebar-item dt {
     }
   }
   &:hover {
-    background-color: var(--ti-color-hightlight);
-    color: var(--ti-color-hightlight-f);
+    background-color: var(--ti-color-highlight);
+    color: var(--ti-color-highlight-f);
   }
 }
 

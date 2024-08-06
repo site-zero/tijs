@@ -79,7 +79,3 @@
     :suffixText="props.suffixText"
     @change="onChange" />
 </template>
-<style lang="scss" scoped>
-  @use '../../../assets/style/_all.scss' as *;
-  @import './ti-input-num.scss';
-</style>

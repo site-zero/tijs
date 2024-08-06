@@ -82,7 +82,7 @@
       {
         icon: 'zmdi-close',
         className: { 'hover-rotate': true, 'bg-transparent': true },
-        action: _do_close_modal,
+        action: () => _do_close_modal(false),
       },
     ];
     return conf;

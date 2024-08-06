@@ -15,9 +15,9 @@ export function _gen_item_loader(input: any): LoadDictItem<any, any> {
   }
   // 其他的变成匹配条件
   let am = Match.parse(input);
-  return (dict: IDict<any, any>, _val: any) =>
+  return (dict: IDict<any, any>, _val: any, signal?: AbortSignal) =>
     new Promise<any[]>(async (resolve) => {
-      let list = await dict.getData();
+      let list = await dict.getData(false, signal);
       let re: any;
       for (let li of list) {
         if (am.test(li)) {

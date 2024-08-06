@@ -29,7 +29,6 @@
       gap: 1px;
       //------------------------------
       > .list-part {
-        height: 2.4em;
         //----------------------------
         &.as-check {
           @include flex-center;
@@ -43,32 +42,19 @@
         }
         //----------------------------
         &.as-text {
-          @include flex-align-nowrap;
-          width: 100%;
-          > div {
-            @include flex-center($jc: flex-start);
-            width: 10px;
-            flex: 1 1 auto;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            padding: 0.2em 0.5em;
+          @include flex-align;
+          padding: 0.7em 0.5em;
+          line-height: 1.2em;
+          em {
+            font-style: normal;
           }
-        }
-        //----------------------------
-        &.as-tip {
-          @include flex-align-nowrap;
-          width: 100%;
-          color: var(--ti-color-track);
-          > div {
-            @include flex-center($jc: flex-start);
-            width: 10px;
-            flex: 1 1 auto;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            font-size: 0.8em;
-            padding: 0 0.62em;
+          abbr {
+            font-size: 0.9em;
+            opacity: 0.7;
+            margin-left: auto;
+          }
+          code {
+            color: var(--ti-color-info);
           }
         }
         //----------------------------
@@ -89,41 +75,11 @@
     font-size: var(--ti-fontsz-b);
   }
   //--------------------------------
-  &.tip-block > main {
-    > .list-item > .list-part.as-tip {
-      color: var(--ti-color-bar-f);
-      background-color: var(--ti-color-bar);
-    }
-    > .list-item:hover > .list-part.as-tip {
-      color: var(--ti-color-selected-f);
-      background-color: var(--ti-color-selected);
-    }
-    &.is-selectable {
-      > .list-item {
-        &.is-checked,
-        &.is-checked:hover {
-          > .list-part.as-tip {
-            color: var(--ti-color-selected-f);
-            background-color: var(--ti-color-mask-thin);
-          }
-        }
-      }
-    }
-  }
-  //--------------------------------
   &.is-hoverable {
-    &.tip-block > main > .list-item {
-      &:hover {
-        > .list-part.as-tip {
-          color: var(--ti-color-hightlight-f);
-          background-color: var(--ti-color-hightlight);
-        }
-      }
-    }
     > main > .list-item {
       &:hover {
-        color: var(--ti-color-hightlight-f);
-        background-color: var(--ti-color-hightlight);
+        color: var(--ti-color-highlight-f);
+        background-color: var(--ti-color-highlight);
       }
     }
   }

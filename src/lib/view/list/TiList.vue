@@ -14,6 +14,7 @@
     canHover: true,
     allowUserSelect: false,
     autoI18n: true,
+    textAsHtml: true,
   });
   //-----------------------------------------------------
   const emit = defineEmits<ListEmitter>();
@@ -31,7 +32,6 @@
   const Items = computed(() => List.value.buildOptionItems(selection));
   const NotItems = computed(() => _.isEmpty(Items.value));
   const isItemsHasIcon = computed(() => List.value.itemsHasIcon(Items.value));
-  const isItemsHasTip = computed(() => List.value.itemsHasTip(Items.value));
   //-----------------------------------------------------
   const TopClass = computed(() => {
     let names = [`size-${props.size ?? 'm'}`] as string[];
@@ -58,9 +58,6 @@
       cols.push('2em');
     }
     cols.push('1fr');
-    if (isItemsHasTip.value) {
-      cols.push(props.tipWidth ?? '1fr');
-    }
     return {
       'grid-template-columns': cols.join(' '),
     };
@@ -125,26 +122,32 @@
             v-if="it.icon"
             :value="it.icon" />
         </div>
-        <!--=Text=-->
-        <div class="list-part as-text">
-          <div
-            v-if="props.textAsHtml"
-            v-html="it.displayText"></div>
-          <div v-else>{{ it.displayText }}</div>
+        <!--=Text: AS HTML=-->
+        <div
+          v-if="props.textAsHtml"
+          class="list-part as-text"
+          v-html="it.displayText"></div>
+        <!--=Text: AS PureText=-->
+        <div
+          class="list-part as-text"
+          v-else>
+          {{ it.displayText }}
         </div>
         <!--=Tip=-->
-        <div
+        <!--
+        我看，不需要这个部分了，用自定义 textFormat as HTML 会更加灵活
+        div
           v-if="isItemsHasTip"
           class="list-part as-tip">
           <div v-if="it.tip">{{ it.tip }}</div>
-        </div>
+        </div-->
         <!--=Endl-->
       </div>
     </main>
     <slot name="tail"></slot>
   </div>
 </template>
-<style lang="scss" scoped>
+<style lang="scss">
   @use '../../../assets/style/_all.scss' as *;
   @import './ti-list.scss';
 </style>

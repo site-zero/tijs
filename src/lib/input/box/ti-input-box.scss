@@ -26,8 +26,8 @@ div.ti-input-box {
 
   &.is-focused {
     border-color: var(--ti-color-primary);
-    background-color: var(--ti-color-hightlight);
-    color: var(--ti-color-hightlight-f);
+    background-color: var(--ti-color-highlight);
+    color: var(--ti-color-highlight-f);
   }
   &.show-tip-list {
     position: relative;
