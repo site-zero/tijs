@@ -63,11 +63,12 @@ function __build_dict(props: OptionsProps): TiDict | undefined {
       }
       let key = _.get(dictVars, dictKey);
       if (!key) {
-        throw new Error(
-          `DynamicDict: "${JSON5.stringify(
-            dictName
-          )}" Fail to get key from dictVars: ${JSON5.stringify(dictVars)}`
-        );
+        return;
+        // throw new Error(
+        //   `DynamicDict: "${JSON5.stringify(
+        //     dictName
+        //   )}" Fail to get key from dictVars: ${JSON5.stringify(dictVars)}`
+        // );
       }
       return Dicts.checkDynamicDict(name, key, dictVars);
     }

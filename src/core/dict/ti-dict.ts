@@ -9,7 +9,7 @@ import {
   _gen_item_loader,
 } from './dict-options';
 import {
-  DFMaker,
+  DynDictMaker,
   DictName,
   DictOptions,
   DictSetup,
@@ -185,7 +185,7 @@ const DYN_DICTS = new DynDictFactoryImpl<any, any>();
  * @param name  动态字典名称
  */
 export function createDynamicDict(
-  creator: DFMaker<any, any>,
+  creator: DynDictMaker<any, any>,
   name: string
 ): void {
   DYN_DICTS.setCreator(name, creator);

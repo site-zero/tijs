@@ -6,6 +6,8 @@ export class DictFactoryImpl<T, V> implements DictFactory<T, V> {
 
   createDict(options: DictOptions<T, V>, name?: string): IDict<T, V> {
     let dict = new DictImpl<T, V>(options);
+    dict.__create_name = name;
+    dict.__create_options = options;
     if (name) {
       this._DICTS.set(name, dict);
     }

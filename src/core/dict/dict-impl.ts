@@ -37,6 +37,10 @@ export class DictImpl<T, V> extends AbstractDict<T, V> implements IDict<T, V> {
   _cache_data: T[] = [];
   _cache_item: Map<V, T> = new Map<V, T>();
 
+  /*DebugInfo*/
+  __create_name: any = undefined;
+  __create_options: any = undefined;
+
   constructor(info: DictOptions<T, V>) {
     super();
     this._data = info.data;
@@ -49,6 +53,8 @@ export class DictImpl<T, V> extends AbstractDict<T, V> implements IDict<T, V> {
     this._get_tip = info.getTip ?? dft_get_str('tip');
     this._get_icon = info.getIcon ?? dft_get_str('icon');
     this._is_matched = info.isMatched ?? dft_is_matched(this);
+
+    this.__create_options = info;
   }
 
   async getData(force = false, signal?: AbortSignal): Promise<T[]> {

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { Vars } from '../../_type';
-import { DFMaker, DynDictFactory, IDict } from './dict-types';
+import { DynDictMaker, DynDictFactory, IDict } from './dict-types';
 
 /**
  * 获取一个动态字典实例的键,这个键格式，类似：
@@ -42,9 +42,9 @@ export class DynDictFactoryImpl<T, V> implements DynDictFactory<T, V> {
    * }
    * ```
    */
-  private _creators: Map<string, DFMaker<T, V>> = new Map<
+  private _creators: Map<string, DynDictMaker<T, V>> = new Map<
     string,
-    DFMaker<T, V>
+    DynDictMaker<T, V>
   >();
   /**
    * 缓存已经生成的字典实例:
@@ -64,7 +64,7 @@ export class DynDictFactoryImpl<T, V> implements DynDictFactory<T, V> {
    */
   private _dicts: Map<string, IDict<T, V>> = new Map<string, IDict<T, V>>();
 
-  setCreator(name: string, creator: DFMaker<T, V>) {
+  setCreator(name: string, creator: DynDictMaker<T, V>) {
     this._creators.set(name, creator);
   }
 
@@ -82,6 +82,7 @@ export class DynDictFactoryImpl<T, V> implements DynDictFactory<T, V> {
         return;
       }
       dfa = creator(vars);
+      _.set(dfa, '__create_name', dkey);
       if (!dfa) {
         return;
       }

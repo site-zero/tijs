@@ -82,8 +82,10 @@ export function genObjGetter(
     let getter: AnyGetter;
     if (enableKeyPath) {
       getter = genObjPathGetter(key);
+      _.set(getter, '_gen_by', `genObjPathGetter(${key}) input='${input}'`);
     } else {
       getter = (obj) => obj[key];
+      _.set(getter, '_gen_by', `obj[${key}] input='${input}'`);
     }
     keyGetters.push(getter);
   }

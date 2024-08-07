@@ -67,6 +67,14 @@ export type TipBoxProps = {
   tipList?: TipListProps;
 
   /**
+   * 默认的，展示提示框的时候，会将对象根据配置转换为标准选项
+   * 开启这个选项后，将会维持原有对象。
+   * 这样你能得到更多的信息可以最大程度的定制列表的显示样式。
+   * 但是你可能需要做更多的配置，才能让列表显示正常。
+   */
+  tipItemKeepRaw?: boolean;
+
+  /**
    * 展出提示框宽度，如果不声明，则采用与 box 相同的宽度
    */
   tipListWidth?: string;

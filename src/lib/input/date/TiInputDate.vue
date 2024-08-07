@@ -53,6 +53,7 @@
     val = _.trim(val);
     if (!val) {
       emit('change', null);
+      return;
     }
     let format = props.valueFormat ?? _dft_prop('valueFormat', 'yyyy-MM-dd');
     let d = DateTime.parse(val);

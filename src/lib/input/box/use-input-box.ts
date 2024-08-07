@@ -1,5 +1,6 @@
+import _ from 'lodash';
 import { Ref } from 'vue';
-import { OptionItem, Vars } from '../../../_type';
+import { Vars } from '../../../_type';
 import { Dicts } from '../../../core';
 import { ValueInputTidyMode } from '../../_features';
 import {
@@ -16,6 +17,7 @@ export type LoadTipListOptions = {
   tipTidyBy: ValueInputTidyMode[];
   tidyValue: (val: any, mode?: ValueInputTidyMode[]) => Promise<any>;
   isVisible: OptionPredicater;
+  tipItemKeepRaw?: boolean;
 };
 
 export function resetTipList(
@@ -37,8 +39,16 @@ export async function updateTipList(
   tips: Ref<Vars[] | undefined>,
   options: LoadTipListOptions
 ) {
-  let { dict, box, tipShowTime, tipUseHint, tipTidyBy, tidyValue, isVisible } =
-    options;
+  let {
+    dict,
+    box,
+    tipShowTime,
+    tipUseHint,
+    tipTidyBy,
+    tidyValue,
+    isVisible,
+    tipItemKeepRaw,
+  } = options;
 
   let { boxValue, boxInputing, boxFocused, keyboard, lastUpdateAMS } = box;
 
@@ -88,7 +98,7 @@ export async function updateTipList(
     }
     // console.log(`dict.queryStdData('${hintVal}')`);
     dict.queryData(hintVal, box.lastAbort.signal).then((list) => {
-      __set_tip_list(tips, list, isVisible, dict!);
+      __set_tip_list(tips, list, isVisible, dict!, tipItemKeepRaw);
     });
   }
   // 全量查询
@@ -99,7 +109,7 @@ export async function updateTipList(
     }
     //console.log(`dict.queryStdData('${hintVal}')`);
     dict.queryData(box.lastAbort.signal).then((list) => {
-      __set_tip_list(tips, list, isVisible, dict!);
+      __set_tip_list(tips, list, isVisible, dict!, tipItemKeepRaw);
     });
   }
 }
@@ -108,13 +118,21 @@ function __set_tip_list(
   tips: Ref<Vars[] | undefined>,
   list: any[],
   isVisible: OptionPredicater,
-  dict: Dicts.TiDict
+  dict: Dicts.TiDict,
+  tipItemKeepRaw?: boolean
 ) {
-  let list2 = [] as OptionItem<any>[];
+  let list2 = [] as Vars[];
   for (let li of list) {
     if (isVisible(li)) {
-      let item = dict.toStdItem(li).toOptionItem();
-      list2.push(item);
+      // 维持原样
+      if (tipItemKeepRaw) {
+        list2.push(_.cloneDeep(li));
+      }
+      // 转换为标准对象
+      else {
+        let item = dict.toStdItem(li).toOptionItem();
+        list2.push(item);
+      }
     }
   }
   tips.value = list2;

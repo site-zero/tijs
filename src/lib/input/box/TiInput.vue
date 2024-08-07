@@ -264,6 +264,7 @@
       tipTidyBy: props.tipTidyBy ?? ['main'],
       tidyValue: Box.value.tidyValue,
       isVisible: predicate,
+      tipItemKeepRaw: props.tipItemKeepRaw,
     });
   }
   //-----------------------------------------------------

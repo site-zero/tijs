@@ -55,7 +55,7 @@ export type GridLayoutProps = {
   // 这里可以允许你根据轨道下标(0 base)指定每个轨道具体的宽度
   // > 仅当 `group` 有效
   // > 如果已经指定了 `layout.gridTemplateColumns` 则会无视
-  // 对于 `sting[]` 类型支持下面的格式:
+  // 对于 `string[]` 类型支持下面的格式:
   // - `['1fr']` : 所有的轨道都是 `1fr`
   // - `['20%,1fr']` : 第一个轨道是 20%，之后都是 1fr
   // - `['#3:100px,1fr,200px', '#2:1fr,200px']`

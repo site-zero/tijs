@@ -73,14 +73,14 @@ export function isDictDictName(it: any): it is DictName {
 }
 
 export interface DynDictFactory<T, V> {
-  setCreator(name: string, creator: DFMaker<T, V>): void;
+  setCreator(name: string, creator: DynDictMaker<T, V>): void;
 
   hasDict(name: string, key: any): boolean;
   getDict(name: string, key: any, vars: Vars): IDict<T, V> | undefined;
   checktDict(name: string, key: any, vars: Vars): IDict<T, V>;
 }
 
-export type DFMaker<T, V> = {
+export type DynDictMaker<T, V> = {
   (vars: Vars): IDict<T, V>;
 };
 
