@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { AnyGetter, OptionItem, ValGetter, Vars } from '../../_type';
+import { AnyGetter, IconInput, OptionItem, ValGetter, Vars } from '../../_type';
 
 export type DictSetup = {
   value?: string | AnyGetter;
@@ -173,56 +173,24 @@ export type DictOptions<T, V> = {
 };
 
 export class DictItem<V> {
-  _icon?: string;
-  _text: string;
-  _value?: V;
-  _tip?: string;
+  public icon?: IconInput;
+  public text: string;
+  public value?: V;
+  public tip?: string;
 
-  constructor(value: V, text: string, icon?: string, tip?: string) {
-    this._icon = icon;
-    this._text = text;
-    this._value = value;
-    this._tip = tip;
+  constructor(value: V, text: string, icon?: IconInput, tip?: string) {
+    this.icon = icon;
+    this.text = text;
+    this.value = value;
+    this.tip = tip;
   }
 
   toOptionItem(): OptionItem<V> {
     return {
-      icon: this._icon,
-      text: this._text,
-      tip: this._tip,
-      value: this._value!,
+      icon: this.icon,
+      text: this.text,
+      tip: this.tip,
+      value: this.value!,
     };
-  }
-
-  get icon(): string | undefined {
-    return this._icon;
-  }
-
-  set icon(icon: string) {
-    this._icon = icon;
-  }
-
-  get text(): string {
-    return this._text;
-  }
-
-  set text(text: string) {
-    this._text = text;
-  }
-
-  get value(): any {
-    return this._value;
-  }
-
-  set value(value: any) {
-    this._value = value;
-  }
-
-  get tip(): string | undefined {
-    return this._tip;
-  }
-
-  set tip(tip: string) {
-    this._tip = tip;
   }
 }

@@ -95,11 +95,18 @@
   });
   //-----------------------------------------------------
   const Box = computed(() =>
-    useValueBox(_box_state, props, {
-      emit,
-      getBoxElement: () => $el.value,
-      COM_TYPE,
-    })
+    useValueBox(
+      _box_state,
+      {
+        ...props,
+        getValueIcon: props.getValueIcon ?? props.tipList?.getIcon,
+      },
+      {
+        emit,
+        getBoxElement: () => $el.value,
+        COM_TYPE,
+      }
+    )
   );
   //-----------------------------------------------------
   const hasValue = computed(
@@ -200,13 +207,19 @@
   }
   //-----------------------------------------------------
   function when_bus_input_focus() {
-    resetTipList(_box_state, _tips);
+    resetTipList(
+      _box_state,
+      _tips,
+      `when_bus_input_focus: ${props.options ?? '-no-options-'}`
+    );
     OnInputBlur();
   }
   bus?.onName(BUS_EVENT_FOCUS, when_bus_input_focus);
   //-----------------------------------------------------
   function OnInputBlur() {
+    //console.log('OnInputBlur', props.options);
     if (!_tips.value) {
+      //console.log(' > OnInputBlur !_tips.value', props.options);
       _box_state.boxFocused = false;
       _box_state.keyboard = undefined;
       _box_state.altKey = false;
@@ -219,7 +232,11 @@
   function OnClickTipMask() {
     let checkValueWhenClose =
       props.checkValueWhenClose ?? props.canInput ?? false;
-    resetTipList(_box_state, _tips);
+    resetTipList(
+      _box_state,
+      _tips,
+      `OnClickTipMask: ${props.options ?? '-no-options-'}`
+    );
     if (checkValueWhenClose) {
       if (props.mustInOptions) {
         // 是不是清空了？
@@ -258,12 +275,20 @@
     }
     // 取消
     else if ('Escape' == event.key) {
-      resetTipList(_box_state, _tips);
+      resetTipList(
+        _box_state,
+        _tips,
+        `OnInputKeydown=Esc: ${props.options ?? '-no-options-'}`
+      );
       OnInputBlur();
     }
     // 确认
     else if ('Enter' == event.key) {
-      resetTipList(_box_state, _tips);
+      resetTipList(
+        _box_state,
+        _tips,
+        `OnInputKeydown=Enter: ${props.options ?? '-no-options-'}`
+      );
     }
   }
   //-----------------------------------------------------
@@ -288,14 +313,23 @@
     let val = _.isNumber(currentId) ? `${currentId}` : currentId;
     Box.value.doChangeValue(val ?? '');
     // TODO if multi 可能需要特别处理一下
-    resetTipList(_box_state, _tips);
+    resetTipList(
+      _box_state,
+      _tips,
+      `OnListSelect=>'${currentId}': ${props.options ?? '-no-options-'}`
+    );
     OnInputBlur();
   }
   //-----------------------------------------------------
+  // 关键属性变化，重置选项列表
   watch(
-    () => Box.value,
+    () => [props.value, props.options, props.optionFilter],
     () => {
-      resetTipList(_box_state, _tips);
+      resetTipList(
+        _box_state,
+        _tips,
+        `watch:props.value/options: ${props.options ?? '-no-options-'}`
+      );
       _box_state.boxFocused = false;
     }
   );
@@ -361,7 +395,6 @@
       _box_rect.value = undefined;
     }
   }
-
   //-----------------------------------------------------
   onMounted(() => {
     //console.log("TiInput mounted")

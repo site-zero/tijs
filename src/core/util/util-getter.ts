@@ -33,12 +33,12 @@ export function genObjPathGetter(input: string): AnyGetter {
     if (m) {
       let k = m[1];
       let I = parseInt(m[2]);
-      getters.push((obj) => obj[k]);
-      getters.push((obj) => obj[I]);
+      getters.push((obj) => (obj ? obj[k] : undefined));
+      getters.push((obj) => (obj ? obj[I] : undefined));
     }
     // 普通获取模式
     else {
-      getters.push((obj) => obj[key]);
+      getters.push((obj) => (obj ? obj[key] : undefined));
     }
   }
   return (obj) => {

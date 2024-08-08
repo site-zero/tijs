@@ -220,7 +220,7 @@ export function useValueBox<T extends any>(
   async function doUpdateText() {
     let focused = state.boxFocused;
     let val = state.boxValue;
-    console.log('state.boxValue', val);
+    //console.log('state.boxValue', val);
 
     // 如果聚焦，则仅仅显示原始值，否则，看看是否需要格式化
     // 除非调用者明确禁止这种行为
@@ -247,7 +247,7 @@ export function useValueBox<T extends any>(
           text = textOrItem.text || textOrItem.value;
         }
         state.boxIcon = textOrItem.icon;
-        state.boxTip = textOrItem.icon;
+        state.boxTip = textOrItem.tip;
         item = { ...textOrItem.toOptionItem() };
       } else {
         text = textOrItem;

@@ -22,8 +22,10 @@ export type LoadTipListOptions = {
 
 export function resetTipList(
   box: InputBoxState,
-  tips: Ref<Vars[] | undefined>
+  tips: Ref<Vars[] | undefined>,
+  _trace?: string
 ) {
+  //console.log('========= resetTipList:', trace);
   box.lastUpdateAMS = 0;
   if (box.lastAbort) {
     try {
@@ -60,18 +62,30 @@ export async function updateTipList(
   //console.log('  // 是否满足显示时机:', tipShowTime);
   // 是否满足显示时机
   if (!boxFocused) {
-    resetTipList(box, tips);
+    resetTipList(
+      box,
+      tips,
+      `use-inputbox.ts#updateTipList[hint=${hint}]: 1.!boxFocused`
+    );
     return;
   }
   if (tipShowTime == 'keyin') {
     if (!keyboard) {
-      resetTipList(box, tips);
+      resetTipList(
+        box,
+        tips,
+        `use-inputbox.ts#updateTipList[hint=${hint}]: tipShowTime == 'keyin'`
+      );
       return;
     }
   }
   if (tipShowTime == 'input') {
     if (!boxInputing || boxValue == boxInputing) {
-      resetTipList(box, tips);
+      resetTipList(
+        box,
+        tips,
+        `use-inputbox.ts#updateTipList[hint=${hint}]: tipShowTime == 'input'`
+      );
       return;
     }
   }

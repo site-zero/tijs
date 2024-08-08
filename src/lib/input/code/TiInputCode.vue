@@ -105,7 +105,6 @@
   });
   //-----------------------------------------------------
   async function __update_desc_text(val = props.value) {
-    console.log('__update_desc_text');
     let item = await _vals.value.translateValue(val);
     if (item instanceof Dicts.DictItem) {
       _desc.value = GetDescription.value(item);
@@ -117,7 +116,6 @@
   }
   //-----------------------------------------------------
   async function onChange(val: string) {
-    console.log('onChange', val);
     __update_desc_text(val);
     emit('change', val);
   }

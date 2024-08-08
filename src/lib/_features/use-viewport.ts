@@ -3,8 +3,11 @@ import { Callback, Rect, Size2D } from '../../_type';
 import { Rects } from '../../core';
 
 export type ViewportFeature = {
+  getViewElement: () => HTMLElement | undefined;
   size: Size2D;
   updateViewPortSize: () => void;
+  startWatch: () => void;
+  stopWatch: () => void;
 };
 
 export type ViewportOptions = {
@@ -40,22 +43,29 @@ export function useViewport(options: ViewportOptions): ViewportFeature {
     updateViewPortSize();
   });
 
+  function startWatch() {
+    if ($main.value) {
+      obResize.observe($main.value);
+    }
+  }
+
+  function stopWatch() {
+    obResize.disconnect();
+  }
+
   if (onMounted) {
-    onMounted(() => {
-      if ($main.value) {
-        obResize.observe($main.value);
-      }
-    });
+    onMounted(startWatch);
   }
 
   if (onUnmounted) {
-    onUnmounted(() => {
-      obResize.disconnect();
-    });
+    onUnmounted(stopWatch);
   }
 
   return {
+    getViewElement: () => $main.value,
     size: _viewport,
     updateViewPortSize,
+    startWatch,
+    stopWatch,
   };
 }

@@ -1,5 +1,12 @@
 import _ from 'lodash';
-import { AsyncFuncA1, FuncA1, StrCaseMode } from '../../_type';
+import {
+  AsyncFuncA1,
+  Convertor,
+  FuncA1,
+  IconInput,
+  StrCaseMode,
+  Vars,
+} from '../../_type';
 import { Dicts, Str, TiDict } from '../../core';
 import { wrapPromiseFunc } from '../../core/util/util-lang.ts';
 import { OptionsFeature, OptionsProps, useOptions } from './use-options.ts';
@@ -29,6 +36,17 @@ export type ValueInputProps = OptionsProps & {
    * 输入值后是否需要去掉前后空白
    */
   trimed?: boolean;
+
+  /**
+   * 指定值的Icon获取方式, 通常，对于带 options 的输入框。
+   * 如果打开了 autoPreifxIcon 选项，则会尝试从选项对象里获取 icon
+   * 如果标准选项里有了 icon 字段自然没有问题。
+   * 但是如果这个 icon 是从原生对象根据某些字段按照一定逻辑生成的
+   * 那么为了能同时表达道 valueBox 上，也需要声明这个属性。
+   *
+   * 默认的 ，对于 InputBox，它会用 tipList.getIcon 作为这个属性的默认值
+   */
+  getValueIcon?: string | Convertor<Vars, IconInput | undefined>;
 
   /**
    * 自定义任何其他值处理器，在内置处理器后执行
@@ -117,6 +135,19 @@ export function useValueInput(props: ValueInputProps): ValueInputFeature {
   // 准备处理器
   const processors = __build_process_pips(props, dict);
   //
+  // 准备值图标获取器
+  let _get_value_icon: Convertor<Vars, IconInput | undefined> | undefined =
+    undefined;
+  // 直接获取自路径
+  if (_.isString(props.getValueIcon)) {
+    _get_value_icon = (it: Vars): IconInput | undefined =>
+      _.get(it, props.getValueIcon as string) as IconInput;
+  }
+  // 定制
+  else if (props.getValueIcon) {
+    _get_value_icon = props.getValueIcon;
+  }
+  //
   // 导出
   return {
     dict,
@@ -185,7 +216,12 @@ export function useValueInput(props: ValueInputProps): ValueInputFeature {
     ): Promise<string | Dicts.DictItem<any>> {
       return new Promise<any>(async (resolve, _reject) => {
         if (dict) {
-          let it = await dict.getStdItem(val);
+          let rawIt = await dict.getItem(val);
+          let it = dict.toStdItem(rawIt);
+          if (_get_value_icon) {
+            let _icon = _get_value_icon(rawIt);
+            it.icon = _icon ?? it.icon;
+          }
           if (!it) {
             if (props.mustInOptions) {
               resolve(undefined);
