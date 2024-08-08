@@ -26,6 +26,7 @@
     getUnit: 'unit',
     unitSelectOnly: true,
     unitWidth: '3em',
+    valueInputAlign: 'right',
   });
   //-----------------------------------------------------
   const NU = computed(() => useNumUnit(props, emit));

@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { Str, Tmpl } from '../../core';
 import { Convertor, FuncA1, FuncA3, Render, Vars } from '../../_type';
+import { Str, Tmpl } from '../../core';
 
 export type FormatValueProps = {
   /**
@@ -25,9 +25,23 @@ export type FormatValueProps = {
   valueKeyOfVars?: string;
 
   /**
-   * 控件值格式化器
+   * 控件值格式化器。它的渲染上下文为:
+   *
+   * ```
+   * {[key]:val, ...vars}
+   *  - key: 上下文键，默认为 `val` 通过 `valueKeyOfVars` 来指定
+   *  - val: 输入框传入的值
+   *  - vars: 参加 `vars` 属性
+   * ```
+   *
+   * 它有下面两种形式：
+   *
+   * 1. string - 字符串模板, 渲染上下文为
+   * 2. `((input:any, item?:Vars)=>string)`  自定义格式函数
+   *    - input: 就是渲染上下文
+   *    - item: 如果输入框带选项，就会也传入进来
    */
-  format?: string | Render<any, string>;
+  format?: string | ((input: any, item?: Vars) => string);
 };
 
 /**
@@ -40,7 +54,9 @@ export type FormatValueProps = {
  * - `TILE`
  * - `EDIT`
  */
-export type FormatValueFeature = Convertor<any, string>;
+export type FormatValueFeature = {
+  (input: any, item?: Vars): string;
+};
 
 export type FormatValueOptions = {
   nilFormat: FuncA1<Vars, Convertor<any, string>>;
@@ -63,7 +79,7 @@ export function useFormatValue(
       },
   } as FormatValueOptions
 ): FormatValueFeature {
-  let __create_formatter = (): Convertor<any, string> => {
+  let __create_formatter = (): ((input: any, item?: Vars) => string) => {
     let { format, valueKeyOfVars, vars } = props;
     // 默认直接转字符串
     if (_.isNil(format)) {
@@ -76,17 +92,17 @@ export function useFormatValue(
     }
     // 直接就是函数
     let customized_formater: Render<any, string> = format;
-    return (input) => {
+    return (input, item) => {
       let c = _.cloneDeep(vars) ?? {};
       let k = valueKeyOfVars ?? 'val';
       c[k] = input;
-      return customized_formater(input, c);
+      return customized_formater(c, item);
     };
   };
 
   let formatter = __create_formatter();
 
-  return (input: any) => {
-    return formatter(input);
+  return (input: any, item?: Vars) => {
+    return formatter(input, item);
   };
 }

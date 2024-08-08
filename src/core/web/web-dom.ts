@@ -1476,7 +1476,7 @@ function _get_root_theme_observer() {
           mutation.attributeName === 'class'
         ) {
           let html = mutation.target as HTMLElement;
-          console.log('<html> 标签的 class 属性发生变化:', html.className);
+          // console.log('<html> 标签的 class 属性发生变化:', html.className);
           RootThemeClass.value = getDocumentTheme(html.ownerDocument);
         }
       }

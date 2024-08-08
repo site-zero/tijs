@@ -105,8 +105,10 @@
   const hasValue = computed(
     () => !_.isNil(_box_state.boxValue) && _box_state.boxValue
   );
+  //-----------------------------------------------------
   const showTipList = computed(() => (_tips.value ? true : false));
   const Placeholder = computed(() => usePlaceholder(props));
+  //-----------------------------------------------------
   const TopClass = computed(() =>
     CssUtils.mergeClassName(props.className, Box.value.getClass(), {
       'has-value': hasValue.value,
@@ -119,6 +121,7 @@
       'is-readonly': props.readonly,
     })
   );
+  //-----------------------------------------------------
   const TopStyle = computed((): Vars => {
     let css = CssUtils.toStyle(props.style);
     if (_box_rect.value) {
@@ -134,6 +137,16 @@
       width: CssUtils.toSize(props.width),
     });
   });
+  //-----------------------------------------------------
+  const ValueInputStyle = computed(() => {
+    return CssUtils.mergeStyles([
+      props.valueInputStyle,
+      {
+        textAlign: props.valueInputAlign,
+      },
+    ]);
+  });
+  //-----------------------------------------------------
   const BracingStyle = computed((): Vars => {
     if (_box_rect.value) {
       return {
@@ -144,6 +157,7 @@
     }
     return {};
   });
+  //-----------------------------------------------------
   const TipWrapperStyle = computed(() =>
     getTipWrapperStyle(props, $el.value, _box_rect.value)
   );
@@ -402,9 +416,12 @@
       </div>
     </slot>
     <!--====: part value :=======-->
-    <div class="part-value">
+    <div
+      class="part-value"
+      :style="props.valuePartStyle">
       <input
         ref="$input"
+        :style="ValueInputStyle"
         v-model="_box_state.boxInputing"
         spellcheck="false"
         :readonly="!props.canInput || props.readonly"

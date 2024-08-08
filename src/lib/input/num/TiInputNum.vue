@@ -2,6 +2,7 @@
   import _ from 'lodash';
   import { computed } from 'vue';
   import { TiInput } from '../../';
+  import { Vars } from '../../../_type';
   import { Bank, Num } from '../../../core';
   import { InputNumProps } from './ti-input-num-types';
   //-----------------------------------------------------
@@ -19,6 +20,7 @@
     partSep: ',',
     partWidth: 3,
     partTo: 'left',
+    valueInputAlign: 'right',
   });
   //-----------------------------------------------------
   const InputValue = computed(() => {
@@ -40,7 +42,8 @@
   const formatInputText = computed(() => {
     let { partWidth, partSep, partTo } = props;
     if (_.isNumber(partWidth) && partWidth > 0 && partSep) {
-      return (val: string) => {
+      return (vars: Vars) => {
+        let val = _.get(vars, 'val');
         return Bank.toBankText(val, {
           width: partWidth,
           sep: partSep ?? ' ',
@@ -71,6 +74,9 @@
     :placeholder="props.placeholder"
     :autoI18n="props.autoI18n"
     :value="InputValue"
+    :valueInputAlign="valueInputAlign"
+    :valueInputStyle="valueInputStyle"
+    :valuePartStyle="valuePartStyle"
     :format="formatInputText"
     :hideBorder="props.hideBorder"
     :boxFocused="props.boxFocused"

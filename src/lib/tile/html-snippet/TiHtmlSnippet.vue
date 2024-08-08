@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { computed, onMounted, ref } from 'vue';
+  import { computed, onMounted, ref, watch } from 'vue';
   import { CssUtils } from '../../../core';
   import { getLogger } from '../../../core/log/ti-log';
   import { COM_TYPES } from '../../lib-com-types';
@@ -14,14 +14,24 @@
   //-----------------------------------------------------
   const props = defineProps<HtmlSnippetProps>();
   //-----------------------------------------------------
-  const _event = useHtmlSnippetEventDelegate(props, $top, emit);
-  const eventBinding = computed(() => _event.buildEventBinding());
+  const _event = computed(() => useHtmlSnippetEventDelegate(props, $top, emit));
+  const eventBinding = computed(() => _event.value.buildEventBinding());
   //-----------------------------------------------------
   const snippetInnerHtml = computed(() => {
     return props.content ?? '<strong>HTML <em>snippet</em></strong>';
   });
   //-----------------------------------------------------
   const TopClass = computed(() => CssUtils.mergeClassName(props.className));
+  //-----------------------------------------------------
+  watch(
+    () => [snippetInnerHtml.value, _event.value, $top.value],
+    () => {
+      if ($top.value) {
+        _event.value.setupTriggers($top.value);
+      }
+    },
+    { immediate: true }
+  );
   //-----------------------------------------------------
   onMounted(() => {
     if (!$top.value) {

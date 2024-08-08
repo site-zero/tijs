@@ -86,7 +86,27 @@ export function useHtmlSnippetEventDelegate(
     return re;
   }
   //-----------------------------------------------------
+  function setupTriggers($el: HTMLElement) {
+    if (!props.listenners) {
+      return;
+    }
+    for (let li of props.listenners) {
+      if (!li.setup) {
+        continue;
+      }
+      let sels = _.concat(li.selector);
+      for (let sel of sels) {
+        let taElements = Dom.findAll(sel, $el);
+        if (taElements && taElements.length > 0) {
+          for (let $ta of taElements) {
+            li.setup($ta as HTMLElement);
+          }
+        }
+      }
+    }
+  }
+  //-----------------------------------------------------
   // 输出特性
   //-----------------------------------------------------
-  return { buildEventBinding, onEvent };
+  return { buildEventBinding, setupTriggers, onEvent };
 }

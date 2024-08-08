@@ -4,7 +4,7 @@ import {
   ValueBoxState,
   ValueInputTidyMode,
 } from '../../';
-import { Vars } from '../../../_type';
+import { CssAlignment, Vars } from '../../../_type';
 
 //--------------------------------------------------
 export type InputBoxState = ValueBoxState<any> & {
@@ -24,6 +24,20 @@ export type InputBoxAspect = {
   boxFocused?: boolean;
   width?: string;
   style?: Vars;
+  /**
+   * 为 <div class="part-value"><input></div> 元素直接指定的样式
+   */
+  valuePartStyle?: Vars;
+
+  /**
+   * 值的排列位置： 'left' | 'right' | 'center'
+   */
+  valueInputAlign?: CssAlignment;
+
+  /**
+   * 为 <input> 元素直接指定的样式
+   */
+  valueInputStyle?: Vars;
 };
 //--------------------------------------------------
 export type OptionPredicateMaker = (vars: Vars) => OptionPredicater;

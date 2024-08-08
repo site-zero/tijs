@@ -13,7 +13,7 @@ import {
   usePrefixSuffix,
   useValueInput,
 } from '..';
-import { CommonProps, IconInput } from '../../_type';
+import { CommonProps, IconInput, Vars } from '../../_type';
 import { Be, Dicts, Str, tiGetDefaultComPropValue } from '../../core';
 /*-------------------------------------------------------
 
@@ -220,7 +220,7 @@ export function useValueBox<T extends any>(
   async function doUpdateText() {
     let focused = state.boxFocused;
     let val = state.boxValue;
-    //console.log('state.boxValue', val);
+    console.log('state.boxValue', val);
 
     // 如果聚焦，则仅仅显示原始值，否则，看看是否需要格式化
     // 除非调用者明确禁止这种行为
@@ -236,6 +236,7 @@ export function useValueBox<T extends any>(
     else {
       let textOrItem = await translateValue(val);
       let text: string;
+      let item: Vars | undefined = undefined;
       if (textOrItem instanceof Dicts.DictItem) {
         // 强制指定采用选项的值来显示
         if (props.useRawValue) {
@@ -247,12 +248,13 @@ export function useValueBox<T extends any>(
         }
         state.boxIcon = textOrItem.icon;
         state.boxTip = textOrItem.icon;
+        item = { ...textOrItem.toOptionItem() };
       } else {
         text = textOrItem;
         state.boxIcon = undefined;
         state.boxTip = undefined;
       }
-      state.boxInputing = formatValue(text);
+      state.boxInputing = formatValue(text, item);
     }
   }
 
