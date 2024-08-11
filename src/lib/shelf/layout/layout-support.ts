@@ -59,17 +59,26 @@ export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
     };
   };
   // 布局块
-  if ('block' == it.type && !it.comType) {
+  if ('block' == it.type) {
     it.propsForBlock = __pick_props_for_block(it);
     // 特殊的属性
     _.assign(it.propsForBlock, {
       className: it.bodyClass,
     } as BlockProps);
+    // 直接指定了控件
+    if (it.comType) {
+      _.assign(it.propsForBlock, {
+        comType: it.comType,
+        comConf: it.comConf ?? {},
+      });
+    }
     // 获取参考控件
-    let refName = it.body || it.name;
-    if (refName) {
-      let ref = schema[refName];
-      _.assign(it.propsForBlock, ref);
+    else {
+      let refName = it.body || it.name;
+      if (refName) {
+        let ref = schema[refName];
+        _.assign(it.propsForBlock, ref);
+      }
     }
     // 设置默认
     if (!it.propsForBlock.comType) {

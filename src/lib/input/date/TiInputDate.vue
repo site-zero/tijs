@@ -40,12 +40,12 @@
   });
   //-----------------------------------------------------
   function formatValue(val: any): string {
-    if (!val) {
+    if (!val?.val) {
       return '';
     }
     let format = props.format ?? _dft_prop('format', 'yyyy-MM-dd');
-    //console.log('formatValue', format);
-    let d = DateTime.parse(val as DateInput);
+    let d = DateTime.parse(val.val as DateInput);
+    console.log('formatValue', format, d);
     return DateTime.format(d, { fmt: format, trimZero: false });
   }
   //-----------------------------------------------------

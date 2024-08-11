@@ -376,14 +376,14 @@ export function toChineseText(cent = 0.0, capitalized = false): string {
  *
  * @returns 格式化后的字符串
  *
- * @see #ToBankTextOptions
+ * @see #PartitionOptions
  */
 export function toBankText(
   val: string | number,
   options: PartitionOptions = {}
 ): string {
   // 防空
-  if (_.isNil(val)) {
+  if (_.isNil(val) || (_.isString(val) && Str.isBlank(val))) {
     return val;
   }
 
@@ -400,7 +400,7 @@ export function toBankText(
   // 先拿到前缀
   let m = /^([+-])?(.+)$/.exec(str);
   if (!m) {
-    throw `Impossiable '${val}'`;
+    throw `Impossiable toBankText '${val}'`;
   }
   let prefix = m[1] ?? '';
   let s = m[2].replaceAll(/[^0-9.]/g, '');

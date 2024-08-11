@@ -47,6 +47,7 @@ export type OptionPredicater = (item: Record<string, any>) => boolean;
 //              提示框相关属性
 //
 //--------------------------------------------------
+export type QuickTipFormat = 'T' | 'VT' | 'TV' | 'VTT' | 'TT';
 export type TipListProps = Omit<ListProps, 'data'>;
 export type TipBoxProps = {
   // 动态渲染的上下文
@@ -79,6 +80,19 @@ export type TipBoxProps = {
    * 提示列表的配置
    */
   tipList?: TipListProps;
+
+  /**
+   * 对于提示列表的快速格式模式，
+   *
+   * - `T`   : `<em>${text}</em>`
+   * - `VT`  : `<code>${value}</code><em>${text}</em>`
+   * - `TV`  : `<em>${text}</em><code>${value}</code>`
+   * - `TT`  : `<em>${text}</em><span>${tip}</span>`
+   * - `VTT` : `<code>${value}</code><em>${text}</em><span>${tip}</span>`
+   *
+   * 在没有声明  tipList.textFormat 的前提下，它可以为其快速设置格式化方式
+   */
+  tipFormat?: QuickTipFormat;
 
   /**
    * 默认的，展示提示框的时候，会将对象根据配置转换为标准选项

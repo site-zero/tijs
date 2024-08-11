@@ -4,7 +4,6 @@
   import {
     InputBoxProps,
     InputNumProps,
-    OptionsProps,
     TiInput,
     TiInputNum,
     useViewport,
@@ -79,21 +78,26 @@
     let re: InputBoxProps = _.pick(props, 'hideBorder');
     _.assign(
       re,
-      { mustInOptions: true, useRawValue: true } as InputBoxProps,
+      {
+        mustInOptions: true,
+        useRawValue: true,
+        valueInputAlign: 'left',
+        tipFormat: 'VT',
+      } as InputBoxProps,
       props.units
     );
     if (!re.tipListWidth) {
       re.tipListWidth = `${_viewport.size.width}px`;
     }
-    if (!re.tipList) {
-      let cw = props.unitWidth;
-      re.tipList = {
-        textAsHtml: true,
-        textFormat: `
-        <code style="min-width:${cw};">\${value}:</code>
-        <em>\${text}</em>`,
-      };
-    }
+    // if (!re.tipList) {
+    //   let cw = props.unitWidth;
+    //   re.tipList = {
+    //     textAsHtml: true,
+    //     textFormat: `
+    //     <code style="min-width:${cw};">\${value}:</code>
+    //     <em>\${text}</em>`,
+    //   };
+    // }
     if (props.unitSelectOnly) {
       re.suffixIcon = 'zmdi-caret-down';
       re.suffixIconStyle = { width: '16px' };

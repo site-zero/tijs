@@ -4,9 +4,8 @@
   import { BlockProps, TiActionBar, TiIcon, useEmitAdaptor } from '../../';
   import { EmitAdaptorPayload } from '../../../_type';
   import { COM_TYPES } from '../../lib-com-types';
-  import { BlockEvent } from './ti-block-types';
+  import { BlockEmitter } from './ti-block-types';
   import { useBlock } from './use-block';
-
   const COM_TYPE = COM_TYPES.Block;
 
   defineOptions({
@@ -18,9 +17,7 @@
   //  Features
   //
   const Block = computed(() => useBlock(props, {}));
-  let emit = defineEmits<{
-    (name: 'happen', payload: BlockEvent): void;
-  }>();
+  let emit = defineEmits<BlockEmitter>();
   const OnAllEvents = computed(() =>
     useEmitAdaptor(COM_TYPE, props, {
       handler: (payload: EmitAdaptorPayload) => {
@@ -69,7 +66,8 @@
         :items="Block.HeadActions"
         :vars="props.actionVars"
         :className="props.actionClass"
-        :style="props.actionStyle" />
+        :style="props.actionStyle"
+        @fire="emit('fire', $event)" />
     </header>
     <!--Block:Main-->
     <main

@@ -4,16 +4,4 @@
   grid-template-rows: auto;
   @include aspect_gap('&.gap');
   //-----------------------------------------
-  .part-unit {
-    .ti-input-tip-wrapper {
-      .tip-con {
-        .ti-list .list-item {
-          code {
-            min-width: 3em;
-          }
-        }
-      }
-    }
-  }
-  //-----------------------------------------
 }

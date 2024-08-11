@@ -234,7 +234,14 @@ export function useValueBox<T extends any>(
     }
     // 看看是否需要格式化
     else {
-      let textOrItem = await translateValue(val);
+      let textOrItem: string | Dicts.DictItem<any>;
+      try {
+        textOrItem = await translateValue(val);
+      } catch (e) {
+        console.trace(e);
+        console.warn(`Fail to translateValue(${Str.anyToStr(val)})`);
+        textOrItem = Str.anyToStr(val);
+      }
       let text: string;
       let item: Vars | undefined = undefined;
       if (textOrItem instanceof Dicts.DictItem) {
@@ -254,7 +261,13 @@ export function useValueBox<T extends any>(
         state.boxIcon = undefined;
         state.boxTip = undefined;
       }
-      state.boxInputing = formatValue(text, item);
+
+      try {
+        state.boxInputing = formatValue(text, item);
+      } catch (e) {
+        console.warn(`Fail to formatValue`, { text, item, val });
+        textOrItem = Str.anyToStr(val);
+      }
     }
   }
 

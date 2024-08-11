@@ -208,7 +208,7 @@ export type PartitionOptions = {
  *
  * @returns 格式化后的字符串
  *
- * @see #ToBankTextOptions
+ * @see #PartitionOptions
  */
 export function partitions(input: any, options: PartitionOptions = {}): string {
   const { width = 4, sep = ' - ', to = 'right' } = options;

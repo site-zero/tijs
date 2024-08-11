@@ -5,8 +5,6 @@ import {
   ActionBarItemInfo,
   AspectSize,
   CommonProps,
-  CssAlignment,
-  FlexAlignment,
   IconInput,
   TextContentType,
   TiAppBus,

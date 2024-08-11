@@ -76,5 +76,32 @@ div.ti-input-box {
       4px 4px 12px var(--ti-color-mask-thin);
     //box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     overflow: auto;
+    .ti-list {
+      .list-item > .list-part.as-text {
+        em {
+          font-style: normal;
+        }
+        abbr {
+          font-size: 0.9em;
+          opacity: 0.7;
+          margin-left: auto;
+        }
+        code {
+          color: var(--ti-color-info);
+          // 当 code 顶头 的时候，给定一个固定的最小宽度
+          &:first-child {
+            min-width: 2.5em;
+          }
+        }
+        code + em,
+        code + abbr {
+          margin-left: 0.5em;
+        }
+        em + code,
+        em + abbr {
+          margin-left: 0.5em;
+        }
+      }
+    }
   }
 }

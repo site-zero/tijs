@@ -804,6 +804,11 @@ export type EventInfo<T> = {
    * 事件数据参数
    */
   payload?: T;
+
+  /**
+   * 是否组要动态渲染事件的payload
+   */
+  dynamic?: boolean;
 };
 
 export function isEventInfo<T>(
@@ -1060,8 +1065,12 @@ export type TranName =
 export type PopItemProps = {
   position?: PopPosition;
   tranSpeed?: TranSpeed;
+
   showMask?: boolean;
+  showCloser?: boolean;
+  escToClose?: boolean;
   clickMaskToClose?: boolean;
+
   width?: string;
   height?: string;
   maxWidth?: string;

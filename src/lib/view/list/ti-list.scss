@@ -45,17 +45,6 @@
           @include flex-align;
           padding: 0.7em 0.5em;
           line-height: 1.2em;
-          em {
-            font-style: normal;
-          }
-          abbr {
-            font-size: 0.9em;
-            opacity: 0.7;
-            margin-left: auto;
-          }
-          code {
-            color: var(--ti-color-info);
-          }
         }
         //----------------------------
       } // > .list-part

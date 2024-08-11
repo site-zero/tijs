@@ -52,15 +52,19 @@
       'tipListWidth'
     );
     re.tipListWidth = props.tipListWidth ?? `${_viewport.size.width}px`;
+    if (!re.tipFormat) {
+      re.tipFormat = 'VT';
+    }
     return re;
   });
   //-----------------------------------------------------
   const TipListConfig = computed(() => {
     let cw = props.codeWidth;
-    let re: TipListProps = {
-      textAsHtml: true,
-      textFormat: `<code style="min-width:${cw};">\${value}:</code><em>\${text}</em>`,
-    };
+    // let re: TipListProps = {
+    //   textAsHtml: true,
+    //   textFormat: `<code style="min-width:${cw};">\${value}:</code><em>\${text}</em>`,
+    // };
+    let re = {};
     _.assign(re, props.tipList);
     return re;
   });

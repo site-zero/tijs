@@ -77,7 +77,9 @@
     autoSelect: true,
   });
   //-----------------------------------------------------
-  const TipListConfig = computed(() => getTipListConf(props.tipList));
+  const TipListConfig = computed(() =>
+    getTipListConf(props.tipList, props.tipFormat)
+  );
   //-----------------------------------------------------
   const $el = ref<HTMLElement>();
   //-------------------------------------------------
@@ -198,7 +200,7 @@
     if (props.readonly) {
       return;
     }
-    // console.log('OnInputFocused');
+    //console.log('OnInputFocused');
     bus?.emit(BUS_EVENT_FOCUS);
     _box_state.boxFocused = true;
     if (props.autoSelect) {
@@ -207,6 +209,7 @@
   }
   //-----------------------------------------------------
   function when_bus_input_focus() {
+    //console.log('when_bus_input_focus');
     resetTipList(
       _box_state,
       _tips,
@@ -323,14 +326,21 @@
   //-----------------------------------------------------
   // 关键属性变化，重置选项列表
   watch(
-    () => [props.value, props.options, props.optionFilter],
-    () => {
-      resetTipList(
-        _box_state,
-        _tips,
-        `watch:props.value/options: ${props.options ?? '-no-options-'}`
-      );
-      _box_state.boxFocused = false;
+    () => ({
+      value: props.value,
+      options: props.options,
+      optionFilter: props.optionFilter,
+    }),
+    (newv, oldv) => {
+      if (!_.isEqual(newv, oldv)) {
+        //console.log('value/options changed', newv, oldv);
+        resetTipList(
+          _box_state,
+          _tips,
+          `watch:props.value/options: ${props.options ?? '-no-options-'}`
+        );
+        _box_state.boxFocused = false;
+      }
     }
   );
   //-----------------------------------------------------
@@ -397,7 +407,7 @@
   }
   //-----------------------------------------------------
   onMounted(() => {
-    //console.log("TiInput mounted")
+    //console.log('TiInput mounted');
     OnInputBlur();
     _box_state.boxFocused = false;
     if (props.boxFocused) {
@@ -408,6 +418,7 @@
     Box.value.doUpdateText();
   });
   onUnmounted(() => {
+    //console.log('TiInput unmounted');
     obResize.disconnect();
     bus?.offName(BUS_EVENT_FOCUS, when_bus_input_focus);
   });
@@ -513,7 +524,7 @@
     </div>
   </div>
 </template>
-<style lang="scss" scoped>
+<style lang="scss">
   @use '../../../assets/style/_all.scss' as *;
   @import './ti-input-box.scss';
 </style>

@@ -6,7 +6,7 @@ import {
   LayoutState,
   positionToTransName,
 } from '../../';
-import { Vars } from '../../../_type';
+import { ActionBarItem, Vars } from '../../../_type';
 import { CssUtils } from '../../../core';
 
 import { autoSetLayoutItemType, setLayoutItemConfig } from './layout-support';
@@ -20,10 +20,10 @@ export function getLayoutPanelItems(
   let list = [] as LayoutPanelItem[];
 
   for (let i = 0; i < panels.length; i++) {
-    let item = panels[i];
+    let pan = panels[i];
 
     // 准备布局项目
-    let it = _.cloneDeep(item) as unknown as LayoutPanelItem;
+    let it = _.cloneDeep(pan) as unknown as LayoutPanelItem;
     it.index = i;
     if (!it.uniqKey) {
       it.uniqKey = it.name ?? `B${i}`;
@@ -53,7 +53,7 @@ export function getLayoutPanelItems(
     let _out_style = {} as Vars;
     let _con_style = {} as Vars;
 
-    //
+    // 位置
     let posKey = ['left', 'right', 'top', 'bottom'];
     let sizKey = [
       'overflow',
@@ -64,10 +64,10 @@ export function getLayoutPanelItems(
       'minWidth',
       'minHeight',
     ];
-    if ('free' == item.position) {
-      _con_style = _.pick(item, ...[...posKey, ...sizKey]);
+    if ('free' == pan.position) {
+      _con_style = _.pick(pan, ...[...posKey, ...sizKey]);
     } else {
-      _con_style = _.pick(item, sizKey);
+      _con_style = _.pick(pan, sizKey);
     }
 
     // 布局项的样式
@@ -78,6 +78,17 @@ export function getLayoutPanelItems(
       _con_style,
     ]);
     it.style = CssUtils.mergeStyles([_out_style]);
+
+    // 如果未定义 clickMaskToClose，那么总得有个关闭按钮
+    if (!it.clickMaskToClose || pan.showCloser) {
+      it.actions = it.actions || [];
+      it.actions.push({
+        icon: 'zmdi-close',
+        className: { 'hover-rotate': true, 'bg-transparent': true },
+        action: { name: '__close_panel', payload: it },
+      } as ActionBarItem);
+      console.log('auto actions', it.actions);
+    }
 
     // 设置布局项的属性
     setLayoutItemConfig(it, schema);

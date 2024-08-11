@@ -48,9 +48,13 @@ function makeItemAction(
     let ei = action;
     let eventName = ei.name;
     return (vars: Vars) => {
-      let payload = Util.explainObj(vars, ei.payload, {
-        evalFunc: false,
-      });
+      console.log('------------------------------');
+      let payload = ei.payload;
+      if (ei.dynamic) {
+        payload = Util.explainObj(vars, ei.payload, {
+          evalFunc: false,
+        });
+      }
       emit('fire', { name: eventName, payload });
     };
   }

@@ -2,10 +2,15 @@ import _ from 'lodash';
 import { Rect, Vars } from '../../../_type';
 import { CssUtils, Match, Util } from '../../../core';
 import { ListProps, getDockingStyle } from '../../../lib';
-import { OptionPredicateMaker, TipBoxProps } from './ti-input-types';
+import {
+  OptionPredicateMaker,
+  QuickTipFormat,
+  TipBoxProps,
+} from './ti-input-types';
 
-export function getTipListConf(props?: ListProps) {
-  let re = _.assign(
+export function getTipListConf(props?: ListProps, tipFormat?: QuickTipFormat) {
+  // 准列表
+  let re: ListProps = _.assign(
     {
       size: 's',
       canSelect: true,
@@ -15,12 +20,17 @@ export function getTipListConf(props?: ListProps) {
     } as ListProps,
     props
   );
-  re.className = CssUtils.mergeClassName(
-    {
-      'tip-block': true,
-    },
-    props?.className
-  );
+  // 设置快速格式化
+  if (!re.textFormat && tipFormat) {
+    re.textFormat = {
+      T: `<em>\${text}</em>`,
+      VT: `<code>\${value}:</code><em>\${text}</em>`,
+      TV: `<em>\${text}</em><code>:\${value}</code>`,
+      TT: `<em>\${text}</em><abbr>\${tip}</abbr>`,
+      VTT: `<code>\${value}:</code><em>\${text}</em><abbr>\${tip}</abbr>`,
+    }[tipFormat];
+  }
+
   return re;
 }
 

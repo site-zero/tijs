@@ -47,7 +47,7 @@ export function parse(d: DateInput): Date;
  * @returns  日期对象
  */
 export function parse(d: any): Date | undefined {
-  if (_.isNil(d)) {
+  if (_.isNil(d) || Str.isBlank(d)) {
     return;
   }
   //console.log("parseDate:", d)
@@ -134,7 +134,8 @@ export function parse(d: any): Date | undefined {
     }
   }
   // Invalid date
-  throw 'i18n:invalid-date';
+  console.trace()
+  throw `i18n:invalid-date: [${Str.anyToStr(d)}]`;
 }
 /**
  *

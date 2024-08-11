@@ -10,6 +10,8 @@
     watch,
   } from 'vue';
   import {
+    ActionBarEmitter,
+    ActionBarEvent,
     BlockEvent,
     TabChangeEvent,
     TiBlock,
@@ -49,12 +51,13 @@
     rows: [],
   }) as LayoutGridState;
   //-------------------------------------------------
-  let emit = defineEmits<{
+  type LayoutGridEmitter = ActionBarEmitter & {
     (event: 'show' | 'hide', name: string): void;
     (event: 'resize', payload: Rect): void;
     (event: 'block', payload: BlockEvent): void;
     (event: 'tab-change', payload: GridItemTabChangeEvent): void;
-  }>();
+  };
+  let emit = defineEmits<LayoutGridEmitter>();
   //-------------------------------------------------
   const _viewport = useViewport({
     el: $main,
@@ -106,14 +109,29 @@
   let Keep = computed(() => useKeepLayoutGrid(props));
   let release_resizing = ref<() => void>();
   //-------------------------------------------------
-  function OnClickPanelMask(pan: LayoutPanelItem): void {
+  function onClickPanelMask(pan: LayoutPanelItem): void {
     if (pan.clickMaskToClose) {
+      console.log('OnClickPanelMask', pan.clickMaskToClose, pan);
       emit('hide', pan.uniqKey);
     }
   }
   //-------------------------------------------------
-  function OnDblClickAdjustBar(_bar: LayoutBar) {
+  function onDblClickAdjustBar(_bar: LayoutBar) {
     resetSizeState(state, Keep.value);
+  }
+  //-------------------------------------------------
+  function onBlockActionFire(event: ActionBarEvent) {
+    // 直接关闭
+    if ('__close_panel' == event.name) {
+      let pan: LayoutPanelItem = event.payload;
+      if (pan?.uniqKey) {
+        emit('hide', pan.uniqKey);
+      }
+    }
+    // 否则通知出去
+    else {
+      //emit('fire', event);
+    }
   }
   //-------------------------------------------------
   function onBlockEventHappen(event: BlockEvent) {
@@ -121,7 +139,7 @@
   }
   //-------------------------------------------------
   function onGridItemTabChange(event: TabChangeEvent, item: LayoutGridItem) {
-    //console.log(event, item);
+    console.log(event, item);
     emit('tab-change', {
       ...event,
       items: [item],
@@ -170,9 +188,11 @@
   );
   watch(
     () => props.shown,
-    (shown: Vars) => {
-      console.log('props.show changed!!!!!');
-      state.shown = _.cloneDeep(shown);
+    (newShown: Vars, oldShown: Vars) => {
+      if (!_.isEqual(newShown, oldShown)) {
+        console.log('props.show changed!!!!!', newShown);
+        state.shown = _.cloneDeep(newShown);
+      }
     }
   );
   watch(
@@ -230,12 +250,14 @@
           <TiBlock
             v-if="it.propsForBlock"
             v-bind="it.propsForBlock"
+            @fire="emit('fire', $event)"
             @happen="onBlockEventHappen" />
           <!-- 格子布局:仅内容-->
           <TiLayoutGrid
             v-else-if="it.propsForLayoutGrid"
             v-bind="it.propsForLayoutGrid"
             :schema="schema"
+            @fire="emit('fire', $event)"
             @block="emit('block', $event)"
             @tab-change="onGridLayoutTabChange($event, it)" />
           <!-- 标签布局-->
@@ -259,7 +281,7 @@
           :bar-mode="bar.mode"
           :bar-adjust-index="bar.adjustIndex"
           :bar-position="bar.position"
-          @dblclick="OnDblClickAdjustBar(bar)"></div>
+          @dblclick="onDblClickAdjustBar(bar)"></div>
       </template>
     </div>
     <!-- 
@@ -276,7 +298,7 @@
           :panel-index="pan.index"
           :panel-ukey="pan.uniqKey"
           :style="pan.style"
-          @click="OnClickPanelMask(pan)">
+          @click="onClickPanelMask(pan)">
           <div
             class="layout-panel-con trans-box"
             :style="pan.conStyle"
@@ -290,12 +312,14 @@
                 :title="pan.title"
                 :icon="pan.icon"
                 v-bind="pan.propsForBlock"
+                @fire="onBlockActionFire"
                 @happen="onBlockEventHappen" />
               <!-- 格子布局-->
               <TiLayoutGrid
                 v-else-if="'grid' == pan.type"
                 v-bind="pan.propsForLayoutGrid"
                 :schema="schema"
+                @fire="emit('fire', $event)"
                 @block="emit('block', $event)" />
               <!-- 标签布局-->
               <TiLayoutTabs
