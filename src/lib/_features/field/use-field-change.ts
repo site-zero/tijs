@@ -316,7 +316,7 @@ export function useFieldChange<T extends AbstractField>(
     change: FieldValueChange,
     options: HandleValueChangeOptions
   ) {
-    //console.log('handleValueChange');
+    console.log('handleValueChange', change);
     await tidyValueChange(change, options, (data, changes) => {
       let { emit } = options;
       emit('change', data);

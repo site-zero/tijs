@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { App, DefineComponent, InjectionKey } from 'vue';
+import { BlockOverflowMode } from '../lib';
 
 /*---------------------------------------------------`
 
@@ -969,6 +970,11 @@ export type BlockAspectClass = {
 
   mainClass?: any;
   mainStyle?: Vars;
+
+  /**
+   * 对于溢出内容的处理模式
+   */
+  overflowMode?: BlockOverflowMode;
 };
 
 export type BlockInfoProps = BlockAspectClass & {

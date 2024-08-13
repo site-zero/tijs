@@ -24,7 +24,6 @@
   const LayoutHint = computed(() => (props.fields ? props.fields.length : 0));
 
   function onValueChange(change: Vars) {
-    console.log('change', change);
     let old = _.cloneDeep(props.value);
     let val = _.assign(old, change);
     if (props.ignoreNil) {
@@ -36,29 +35,15 @@
       });
       val = v2;
     }
+    //console.log('onValueChange', val);
     emit('change', val);
   }
 </script>
 <template>
   <TiGridFields
     v-bind="FormProps"
-    class="ti-input-group"
+    class="ti-input-group no-body-padding"
     :data="props.value"
     :layout-hint="LayoutHint"
     @change="onValueChange" />
 </template>
-<style lang="scss">
-  @use '../../../assets/style/_all.scss' as *;
-  .ti-input-group.ti-grid-fields {
-    padding: 0;
-    &.body-gap-t,
-    &.body-gap-s,
-    &.body-gap-m,
-    &.body-gap-b,
-    &.body-gap-h {
-      > .part-body {
-        padding: 0;
-      }
-    }
-  }
-</style>

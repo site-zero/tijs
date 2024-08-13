@@ -249,6 +249,14 @@ export type LayoutItem = LayoutBlock & {
   propsForLayoutTabs?: LayoutTabsProps;
 };
 
+/**
+ * 块的主体区域，对于溢出内容，有两种处理模式:
+ *
+ * - cover: 内容将严格按照块的区域（通常由grid布局来决定），如果超过，则会自动滚动
+ * - auto: 内容将会把 块的内容撑开
+ */
+export type BlockOverflowMode = 'cover' | 'auto';
+
 export type BlockProps = CommonProps &
   CssGridItem &
   BlockInfoProps &

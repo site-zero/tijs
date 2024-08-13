@@ -11,8 +11,8 @@
   } from '../../';
   import { Vars } from '../../../_type';
   import { CssUtils, Dom } from '../../../core/';
-  import { FormTabProps } from './ti-form-tab-types';
-  import { getCurrentFormProps, getFormTabItems } from './use-form-tab';
+  import { TabsFormProps } from './ti-tabs-form-types';
+  import { getCurrentFormProps, getTabsFormItems } from './use-tabs-form';
   //-------------------------------------------------
   defineOptions({
     inheritAttrs: false,
@@ -20,7 +20,7 @@
   const emit = defineEmits<GridFieldsEmitter>();
   const _current_tab = ref<string>();
   //-------------------------------------------------
-  const props = withDefaults(defineProps<FormTabProps>(), {
+  const props = withDefaults(defineProps<TabsFormProps>(), {
     tabsAt: 'top',
     tabsAlign: 'center',
     wrapTabs: false,
@@ -28,9 +28,9 @@
     changeMode: 'diff',
   });
   //-------------------------------------------------
-  const Keep = computed(() => useKeep(props));
+  const Keep = computed(() => useKeep(props.keepTab));
   //-------------------------------------------------
-  const TabItems = computed(() => getFormTabItems(props));
+  const TabItems = computed(() => getTabsFormItems(props));
   if (!_.isEmpty(TabItems.value)) {
     _current_tab.value = _.first(TabItems.value)?.value;
   }
@@ -52,7 +52,7 @@
     CssUtils.mergeClassName(
       {},
       props.className,
-      'ti-form-tab',
+      'ti-tabs-form',
       'title-sticky',
       `tabs-at-${props.tabsAt}`
     )
@@ -135,7 +135,7 @@
 </template>
 <style lang="scss">
   @use '../../../assets/style/_all.scss' as *;
-  .ti-form-tab {
+  .ti-tabs-form {
     // 如果标签之上还有标题，去掉这个分割线
     &.tabs-at-top {
       > .part-title {

@@ -23,12 +23,14 @@
         margin: 0 4px;
         color: var(--ti-color-track);
         border: 1px solid transparent;
+        padding: 0.6em 1em 0.6em 1em;
         > span {
           display: block;
           white-space: nowrap;
           line-height: 1em;
           &.as-icon {
             margin: 0 auto;
+            font-size: 16px;
           }
           &.as-text {
             padding: 0 0.5em;
@@ -89,25 +91,26 @@
   }
   //....................................
   // Label space
-  &.tab-item-space-h > .tab-items-con > .items-wrapper > .tab-item {
-    padding: 0.6em 1em 0.6em 1em;
+  &.tab-item-space-h {
     font-size: 1.5em;
   }
-  &.tab-item-space-b > .tab-items-con > .items-wrapper > .tab-item {
-    padding: 0.6em 1em 0.6em 1em;
+  &.tab-item-space-b {
     font-size: 1.2em;
   }
-  &.tab-item-space-m > .tab-items-con > .items-wrapper > .tab-item {
-    padding: 0.6em 1em 0.6em 1em;
-    font-size: 1.1em;
-  }
-  &.tab-item-space-s > .tab-items-con > .items-wrapper > .tab-item {
-    padding: 0.6em 1em 0.6em 1em;
+  &.tab-item-space-m {
     font-size: 1em;
   }
-  &.tab-item-space-t > .tab-items-con > .items-wrapper > .tab-item {
-    padding: 0.6em 1em 0.6em 1em;
+  &.tab-item-space-s {
     font-size: 0.8em;
+    .tab-item {
+      font-size: 10px;
+    }
+  }
+  &.tab-item-space-t {
+    font-size: 0.6em;
+    .tab-item {
+      font-size: 9px;
+    }
   }
   //....................................
   // Horizontal alighment
@@ -124,7 +127,7 @@
   // Vertical aliment, should tabs
   $R: var(--ti-measure-r-s);
   &.tabs-at-top {
-    padding: 1em $SCW 0 $SCW;
+    padding: 0.6em $SCW 0 $SCW;
     border-bottom: 1px solid var(--ti-color-border-shallow);
     > .tab-items-con > .items-wrapper > .tab-item {
       border-top: $R solid transparent;
@@ -138,7 +141,7 @@
     }
   }
   &.tabs-at-bottom {
-    padding: 0 $SCW 1em $SCW;
+    padding: 0 $SCW 0.6em $SCW;
     border-top: 1px solid var(--ti-color-border-shallow);
     > .tab-items-con > .items-wrapper > .tab-item {
       border-bottom: $R solid transparent;

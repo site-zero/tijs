@@ -43,10 +43,6 @@ export class ConsoleLogger implements Logger {
         }
       }
       let callAt = callAts.join(':');
-      // let an = document.createElement('a') as HTMLAnchorElement
-      // an.setAttribute('href',source||'#')
-      // an.textContent = `${fileName}:${line}`
-
       // console.log(`${fileName}:${line}: ${source}`);
       if (reqLvl == LogLevel.ERROR) {
         //console.error(`>>>`, caller.source);

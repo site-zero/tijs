@@ -56,11 +56,12 @@ export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
       headStyle: it.headStyle,
       mainClass: it.mainClass,
       mainStyle: it.mainStyle,
+      overflowMode: it.overflowMode,
     };
   };
   // 布局块
   if ('block' == it.type) {
-    it.propsForBlock = __pick_props_for_block(it);
+    it.propsForBlock = _.cloneDeep(it);
     // 特殊的属性
     _.assign(it.propsForBlock, {
       className: it.bodyClass,
@@ -147,6 +148,8 @@ export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
       'tabsAt',
       'tabsAlign',
       'wrapTabs',
+      'tabMaxWidth',
+      'tabItemSpace',
       'defaultTab',
       'keepTab'
     );
@@ -159,10 +162,10 @@ export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
   }
 }
 
-export type LayoutItemsInput = Pick<
-  LayoutProps,
-  'blocks' | 'schema' | 'itemStyle' | 'itemClass'
->;
+// export type LayoutItemsInput = Pick<
+//   LayoutProps,
+//   'blocks' | 'schema' | 'itemStyle' | 'itemClass'
+// >;
 
 /**
  * 根据布局属性，生成布局项块列表
@@ -171,7 +174,7 @@ export type LayoutItemsInput = Pick<
  * @param props 布局的输入属性
  * @returns 布局项块列表
  */
-export function getLayoutItem(state: LayoutState, props: LayoutItemsInput) {
+export function getLayoutItem(state: LayoutState, props: LayoutProps) {
   let { blocks = [], schema = {}, itemStyle = {}, itemClass } = props;
   let { shown } = state;
   let list = [] as LayoutItem[];

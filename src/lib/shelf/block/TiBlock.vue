@@ -70,16 +70,19 @@
         @fire="emit('fire', $event)" />
     </header>
     <!--Block:Main-->
-    <main
-      :class="Block.MainClass"
-      :style="Block.MainStyle">
-      <slot>
-        <component
-          :is="Block.BlockComType"
-          v-bind="Block.BlockComConf"
-          v-on="OnAllEvents" />
-      </slot>
-    </main>
+    <div class="block-main-body-wrapper">
+      <main
+        :class="Block.MainClass"
+        :style="Block.MainStyle">
+        <slot>
+          <component
+            :is="Block.BlockComType"
+            v-bind="Block.BlockComConf"
+            @block="emit('happen', $event)"
+            v-on="OnAllEvents" />
+        </slot>
+      </main>
+    </div>
   </div>
 </template>
 

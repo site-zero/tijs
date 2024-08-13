@@ -1,9 +1,9 @@
 import { ComPropExample } from '../../../../_type';
-import { FormTabProps } from '../ti-form-tab-types';
+import { TabsFormProps } from '../ti-tabs-form-index';
 
 export default {
-  name: 'simple',
-  text: 'i18n:simple',
+  name: 'tabs',
+  text: 'i18n:ti-tabs-form-example-tabs',
   comConf: {
     data: {
       species: 'Tiger',
@@ -107,5 +107,5 @@ export default {
         ],
       },
     ],
-  } as FormTabProps,
+  } as TabsFormProps,
 } as ComPropExample;

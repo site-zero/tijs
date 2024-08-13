@@ -87,7 +87,7 @@ export function getLayoutPanelItems(
         className: { 'hover-rotate': true, 'bg-transparent': true },
         action: { name: '__close_panel', payload: it },
       } as ActionBarItem);
-      console.log('auto actions', it.actions);
+      //console.log('auto actions', it.actions);
     }
 
     // 设置布局项的属性

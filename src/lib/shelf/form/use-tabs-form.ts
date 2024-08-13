@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import { StrOptionItem, makeFieldUniqKey } from '../../../_type';
-import { GridFieldsProps } from '../all-shelf';
-import { FormTabProps } from './ti-form-tab-types';
 import { Util } from '../../../core';
+import { GridFieldsProps } from '../all-shelf';
+import { TabsFormProps } from './ti-tabs-form-types';
 
 export type TabItem = StrOptionItem;
 
-export function getFormTabItems(props: FormTabProps) {
+export function getTabsFormItems(props: TabsFormProps) {
   // 获取标签列表： 第一层
   let tabItems = [] as TabItem[];
 
@@ -56,7 +56,7 @@ const GKEYS = [
 ];
 
 export function getCurrentFormProps(
-  props: FormTabProps,
+  props: TabsFormProps,
   tabKey?: string
 ): GridFieldsProps {
   let re: GridFieldsProps = {};

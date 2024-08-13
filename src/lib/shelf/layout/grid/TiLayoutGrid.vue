@@ -100,6 +100,7 @@
       blocks: props.blocks,
       itemStyle: props.itemStyle,
       itemClass: props.itemClass,
+      blockOverflowMode: props.blockOverflowMode,
     })
   );
   //-------------------------------------------------
@@ -135,6 +136,7 @@
   }
   //-------------------------------------------------
   function onBlockEventHappen(event: BlockEvent) {
+    //console.log('onBlockEventHappen', event);
     emit('block', event);
   }
   //-------------------------------------------------
@@ -258,7 +260,7 @@
             v-bind="it.propsForLayoutGrid"
             :schema="schema"
             @fire="emit('fire', $event)"
-            @block="emit('block', $event)"
+            @block="onBlockEventHappen"
             @tab-change="onGridLayoutTabChange($event, it)" />
           <!-- 标签布局-->
           <TiLayoutTabs
@@ -320,13 +322,13 @@
                 v-bind="pan.propsForLayoutGrid"
                 :schema="schema"
                 @fire="emit('fire', $event)"
-                @block="emit('block', $event)" />
+                @block="onBlockEventHappen" />
               <!-- 标签布局-->
               <TiLayoutTabs
                 v-else-if="'tabs' == pan.type"
                 v-bind="pan.propsForLayoutTabs"
                 :schema="schema"
-                @block="emit('block', $event)" />
+                @block="onBlockEventHappen" />
               <!-- 未知布局-->
               <div v-else>
                 Unknown layout item type: <code>{{ pan.type }}</code>

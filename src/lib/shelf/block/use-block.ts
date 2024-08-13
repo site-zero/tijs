@@ -56,7 +56,10 @@ export function useBlock(props: BlockProps, _options: BlockOptions) {
     gridStyle.gridTemplateRows = '1fr';
   }
 
-  const TopClass = CssUtils.mergeClassName(props.className);
+  const TopClass = CssUtils.mergeClassName(
+    props.className,
+    `overflow-${props.overflowMode ?? 'auto'}`
+  );
   const TopStyle = CssUtils.mergeStyles(
     gridStyle,
     CssUtils.pickGridItemStyle(props)

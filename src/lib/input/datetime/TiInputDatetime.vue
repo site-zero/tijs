@@ -43,11 +43,11 @@
   });
   //-----------------------------------------------------
   function formatValue(val: any): string {
-    if (!val) {
+    if (!val?.val) {
       return '';
     }
     let format = props.format ?? _dft_prop('format', 'yyyy-MM-dd HH:mm:ss');
-    let d = DateTime.parse(val as DateInput);
+    let d = DateTime.parse(val.val as DateInput);
     if (isNaN(d.getTime())) {
       throw 'Invalid Date: ' + val;
     }
