@@ -45,6 +45,7 @@
     fieldLayoutMode: 'h-title-icon-suffix',
     maxFieldNameWidth: '6em',
     changeMode: 'diff',
+    allowUndefinedFields: true,
     data: () => ({}),
   });
   //const _viewport_width = ref(0);
@@ -104,13 +105,7 @@
   provide(FIELD_STATUS_KEY, _field_status);
   //-------------------------------------------------
   const Change = computed(() =>
-    useFieldChange<GridFieldsStrictField>(
-      {
-        changeMode: props.changeMode,
-        linkFields: props.linkFields,
-      },
-      Grid.value.fieldItems
-    )
+    useFieldChange<GridFieldsStrictField>(props, Grid.value.fieldItems)
   );
   //-------------------------------------------------
   const GridText = computed(() =>

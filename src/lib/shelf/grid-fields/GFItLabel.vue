@@ -2,6 +2,7 @@
   import _ from 'lodash';
   import { computed } from 'vue';
   import { TextSnippet } from '../../';
+  import { CssUtils } from '../../../core';
   import { GridFieldsStrictLabel } from './ti-grid-fields-types';
   import { getFieldTextInfo, getGridItemStyle } from './use-field-style';
 
@@ -10,6 +11,17 @@
   });
 
   const props = defineProps<GridFieldsStrictLabel>();
+  const TopClass = computed(() => {
+    let _is_empty =
+      !props.title && !props.comType && !props.tip && !props.tipBy;
+    return CssUtils.mergeClassName(
+      {
+        'as-info-box': !_is_empty,
+        'as-sep-line': _is_empty,
+      },
+      props.className
+    );
+  });
   const TopStyle = computed(() => {
     let css_1 = getGridItemStyle(props);
     return _.assign({}, props.style, css_1);
@@ -20,7 +32,7 @@
 <template>
   <div
     class="ti-grid-fiels-item part-label"
-    :class="props.className"
+    :class="TopClass"
     :style="TopStyle">
     <!--===: 标题 :===-->
     <TextSnippet

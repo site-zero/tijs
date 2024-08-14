@@ -248,6 +248,28 @@ export function getFieldConvertor(type: FieldValueType): FieldConvertor {
   return FIELD_CONVERTERS[type];
 }
 
+export function getFieldTypeByValue(input?: any): FieldValueType {
+  if (_.isUndefined(input) || _.isString(input)) {
+    return 'String';
+  }
+  if (_.isNumber(input)) {
+    if (Number.isInteger(input)) {
+      return 'Integer';
+    }
+    return 'Number';
+  }
+  if (_.isBoolean(input)) {
+    return 'Boolean';
+  }
+  if (_.isArray(input)) {
+    return 'Array';
+  }
+  if (_.isNull(input) || _.isPlainObject(input)) {
+    return 'Object';
+  }
+  return 'String';
+}
+
 export function parseFieldConverter(
   type: FieldValueType,
   mode: keyof FieldConvertor,

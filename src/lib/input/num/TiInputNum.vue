@@ -54,7 +54,7 @@
   });
   //-----------------------------------------------------
   function onChange(str: string) {
-    //console.log('num:change', str)
+    console.log('num:change', str)
     let v = (str as any) * 1;
     let v2 = Num.round(v, props.precision ?? 1);
     if (!_.isNil(props.maxValue) && v2 > props.maxValue) {

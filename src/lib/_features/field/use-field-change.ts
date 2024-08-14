@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { computed } from 'vue';
 import {
   AbstractField,
   FieldChange,
@@ -6,6 +7,7 @@ import {
   LinkFieldChange,
   ValidateResult,
   Vars,
+  getFieldTypeByValue,
   getFieldUniqKey,
   makeFieldUniqKey,
   mergeFieldChanges,
@@ -37,6 +39,18 @@ export type FieldChangeEmitter = {
 export type FieldChangeProps<T extends AbstractField> = {
   // 通知模式
   changeMode?: DataChangeMode;
+
+  // 检查字段的时候，如果字段未定义，则无视，全当 OK
+  allowUndefinedFields?: boolean;
+
+  /**
+   * 在 applyFieldChange 的时候，总是需要一个字段定义的
+   * 如果，未能找到某个字段定义，那么可以通过这个方法临时生成一个虚拟的字段
+   * 如果没有提供这个函数，在没有找到字段定义的时候，则会抛错
+   *
+   * 如果仅仅设置为 true，则会自动创建一个默认的虚拟字段
+   */
+  makeVirtualField?: true | ((change: FieldValueChange) => T);
 
   // 数据联动
   // [uniqKey] : callback
@@ -105,6 +119,9 @@ export function useFieldChange<T extends AbstractField>(
 
     // 防守: 字段未定义
     if (!field) {
+      if (props.allowUndefinedFields) {
+        return { type: 'OK' };
+      }
       return { type: 'FIELD_UNDEFINED' };
     }
 
@@ -137,20 +154,48 @@ export function useFieldChange<T extends AbstractField>(
   }
 
   //...................................................
+  const MakeVirtualField = computed(() => {
+    let re: ((change: FieldValueChange) => T) | undefined;
+    if (true === props.makeVirtualField) {
+      re = (change: FieldValueChange) => {
+        return {
+          name: change.uniqKey,
+          type: getFieldTypeByValue(change.value),
+        } as T;
+      };
+    } else if (props.makeVirtualField) {
+      re = props.makeVirtualField;
+    }
+
+    return re;
+  });
+
+  //...................................................
   async function applyFieldChange(
     change: FieldValueChange,
     data: Vars
   ): Promise<FieldChange[]> {
     let { uniqKey, value, oldVal } = change;
-    //console.log(uniqKey, value, oldVal);
+    console.log(
+      '>>>>>>>>>>>>>>>>>>>>>>applyFieldChange',
+      uniqKey,
+      value,
+      oldVal
+    );
 
     // 得到字段
     let field = getField(uniqKey);
 
     // 防守: 字段未定义
     if (!field) {
-      Alert(`Field '${uniqKey}' is undefined`, { type: 'danger' });
-      return [];
+      if (MakeVirtualField.value) {
+        field = MakeVirtualField.value(change);
+      }
+      // 那么就警告并退出处理
+      else {
+        Alert(`Field '${uniqKey}' is undefined`, { type: 'danger' });
+        return [];
+      }
     }
 
     // 准备返回值
@@ -169,14 +214,34 @@ export function useFieldChange<T extends AbstractField>(
             uniqKey: morUniqKey,
           } as FieldChange;
           let moreField = fieldMapping.get(morUniqKey);
+
+          // 检查一下字段
           if (!moreField) {
-            log.warn(`Fail to found field defination [${morUniqKey}]`, more);
-            continue;
+            if (MakeVirtualField.value) {
+              moreField = MakeVirtualField.value(morFld);
+            }
+            if (!props.allowUndefinedFields) {
+              log.trace(`Fail to found field defination [${morUniqKey}]`, more);
+              continue;
+            }
           }
-          reChanges.push(__gen_change(morFld, moreField));
+
+          // 推入修改
+          reChanges.push(
+            __gen_change(
+              morFld,
+              moreField ??
+                ({
+                  uniqKey: morUniqKey,
+                  name: morFld.name,
+                } as AbstractField)
+            )
+          );
         }
       }
     }
+    console.log('<<<<<<<<<<<<<<<<<< applyFieldChange', reChanges);
+
     // 默认就是原始修改
     return reChanges;
   }

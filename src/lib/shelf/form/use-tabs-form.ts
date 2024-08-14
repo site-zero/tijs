@@ -35,7 +35,7 @@ export function getTabsFormItems(props: TabsFormProps) {
   return tabItems;
 }
 
-const GKEYS = [
+const GKEYS: (keyof GridFieldsProps)[] = [
   'layout',
   'layoutHint',
   'layoutGridTracks',
@@ -43,11 +43,13 @@ const GKEYS = [
   'defaultComConf',
   'bodyPartGap',
   'fieldLayoutMode',
-  'fieldTitleStyle',
+  'fieldTitleBy',
+  'fieldTitleAlign',
   'fieldValueStyle',
-  'fieldTipStyle',
+  'fieldLayoutMode',
   'maxFieldNameWidth',
   'groupAspect',
+  'linkFields',
   'bodyPartStyle',
   'bodyPartDense',
   'bodyPartFontSize',
@@ -67,31 +69,17 @@ export function getCurrentFormProps(
       let field = props.fields[i];
       let uniqKey = makeFieldUniqKey([i], field.name, field.uniqKey);
       if (tabKey == uniqKey) {
-        re = _.cloneDeep(_.pick(field, ...GKEYS));
+        re = _.cloneDeep(
+          _.omitBy(field, (_v, k) => {
+            return /^(title|tip)/.test(k);
+          })
+        );
         re.fields = field.fields;
       }
     }
   }
   // 填充默认值
-  let dfts = _.cloneDeep(
-    _.pick(
-      props,
-      'title',
-      'titleType',
-      'titleIcon',
-      'titleStyle',
-      'titleAlign',
-      'titleClass',
-      'tip',
-      'tipType',
-      'tipBy',
-      'tipStyle',
-      'tipAlign',
-      'tipIcon',
-      'tipClass',
-      ...GKEYS
-    )
-  );
+  let dfts = _.cloneDeep(_.omitBy(props, (_v, k) => /^tab/.test(k)));
   _.defaults(re, dfts);
 
   // 搞定

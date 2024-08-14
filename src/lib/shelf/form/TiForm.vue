@@ -7,6 +7,8 @@
   const emit = defineEmits<GridFieldsEmitter>();
   const props = withDefaults(defineProps<FormProps>(), {
     changeMode: 'diff',
+    allowUndefinedFields: true,
+    makeVirtualField: true,
   });
 </script>
 <template>

@@ -9,7 +9,7 @@ export function getLayoutGridItems(
 ): LayoutGridItem[] {
   let items = getLayoutItem(state, props) as LayoutGridItem[];
   for (let item of items) {
-    if ('B0' == item.uniqKey) console.log('item-', item.uniqKey, item);
+    //if ('B0' == item.uniqKey) console.log('item-', item.uniqKey, item);
     // 确保这个模式要传递下去
     if (item.propsForBlock) {
       _.defaults(item.propsForBlock, {

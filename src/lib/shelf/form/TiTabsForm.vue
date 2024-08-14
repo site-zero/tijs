@@ -9,7 +9,7 @@
     TiTabs,
     useKeep,
   } from '../../';
-  import { Vars } from '../../../_type';
+  import { FieldChange, Vars } from '../../../_type';
   import { CssUtils, Dom } from '../../../core/';
   import { TabsFormProps } from './ti-tabs-form-types';
   import { getCurrentFormProps, getTabsFormItems } from './use-tabs-form';
@@ -26,6 +26,8 @@
     wrapTabs: false,
     tabItemSpace: 'm',
     changeMode: 'diff',
+    allowUndefinedFields: true,
+    makeVirtualField: true,
   });
   //-------------------------------------------------
   const Keep = computed(() => useKeep(props.keepTab));
@@ -89,6 +91,16 @@
     _mea.footHeight = $foot?.getBoundingClientRect().height ?? 0;
   }
   //-------------------------------------------------
+  function onFormChange(data: Vars) {
+    console.log('onFormChange', data);
+    emit('change', data);
+  }
+  //-------------------------------------------------
+  function onFieldChange(changes: FieldChange[]) {
+    console.log('onFieldChange', changes);
+    emit('change-fields', changes);
+  }
+  //-------------------------------------------------
 </script>
 <template>
   <TiGridFields
@@ -97,8 +109,8 @@
     :style="props.style"
     :vars="props.vars"
     :data="props.data"
-    @change="emit('change', $event)"
-    @change-fields="emit('change-fields', $event)"
+    @change="onFormChange"
+    @change-fields="onFieldChange"
     @name-change="emit('name-change', $event)"
     @dom-ready="onDomReady">
     <!--=======: 头部标签 :=======-->
