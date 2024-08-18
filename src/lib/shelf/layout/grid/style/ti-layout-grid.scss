@@ -38,6 +38,7 @@
     > .grid-item > .grid-item-con {
       background-color: var(--ti-color-card);
       overflow: hidden;
+      box-shadow: 1px 1px 3px var(--ti-color-mask-weak);
     }
 
     &.with-shadown {

@@ -71,11 +71,11 @@ export type SideBarItem = {
 
 ---------------------------------------------------*/
 export type Pager = {
-  // ShortNamePager
-  pn?: number; //"pageNumber",
-  pgsz?: number; //"pageSize",
-  pgc?: number; //"pageCount",
-  sum?: number; //"totalCount",
+  // // ShortNamePager
+  // pn?: number; //"pageNumber",
+  // pgsz?: number; //"pageSize",
+  // pgc?: number; //"pageCount",
+  // sum?: number; //"totalCount",
   // LongNamePager
   pageNumber?: number;
   pageSize?: number;
@@ -83,6 +83,6 @@ export type Pager = {
   totalCount?: number;
   count?: number; //"count",
   // Suammary
-  skip?: number; //"skip",
-  limit?: number; //"limit"
+  // skip?: number; //"skip",
+  // limit?: number; //"limit"
 };

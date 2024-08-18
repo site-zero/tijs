@@ -58,6 +58,9 @@
   }
   //-------------------------------------------------
   function OnTabChange(item: TabDisplayItem) {
+    // if ('Bunya-GUI-layout-EdiViewer-Tabs' == props.keepTab) {
+    //   console.log('OnTabChange', item);
+    // }
     _current_tab_key.value = item.value;
     Keep.value.save(item.value);
   }
@@ -87,7 +90,13 @@
   watch(
     () => MainTab.value,
     () => {
+      // if ('Bunya-GUI-layout-EdiViewer-Tabs' == props.keepTab) {
+      //   console.log('MainTabChanged', MainTab.value);
+      // }
       if (MainTab.value && _emitted_tab_key.value != MainTab.value.uniqKey) {
+        // if ('Bunya-GUI-layout-EdiViewer-Tabs' == props.keepTab) {
+        //   console.log('emit MainTabChange', MainTab.value);
+        // }
         emit('tab-change', {
           to: {
             className: MainTab.value.blockClass,
@@ -100,7 +109,8 @@
         });
         _emitted_tab_key.value = MainTab.value.uniqKey;
       }
-    }
+    },
+    { immediate: true }
   );
   //-------------------------------------------------
 </script>
