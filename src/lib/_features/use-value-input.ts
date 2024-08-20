@@ -8,8 +8,8 @@ import {
   Vars,
 } from '../../_type';
 import { Dicts, Str, TiDict } from '../../core';
-import { wrapPromiseFunc } from '../../core/util/util-lang.ts';
-import { OptionsFeature, OptionsProps, useOptions } from './use-options.ts';
+import { wrapPromiseFunc } from '../../core/util/util-lang';
+import { OptionsFeature, OptionsProps, useOptions } from './use-options';
 /*-------------------------------------------------------
 
                         Types

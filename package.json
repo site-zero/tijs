@@ -1,6 +1,6 @@
 {
   "name": "@site0/tijs",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Web UI Libraray base on Vue",
   "repository": {
     "type": "git",
@@ -39,7 +39,7 @@
     "./scss": "./src/assets/style/_all.scss"
   },
   "scripts": {
-    "build": "vue-tsc && vite build",
+    "build": "vue-tsc && vite build && tsc --emitDeclarationOnly",
     "preview": "vite preview",
     "test": "vitest --silent=false",
     "docs:dev": "vuepress dev docs",

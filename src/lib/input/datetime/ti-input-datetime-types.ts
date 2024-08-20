@@ -1,8 +1,4 @@
-import {
-  PlaceholderProps,
-  PrefixSuffixProps,
-  ReadonlyProps,
-} from '../../';
+import { PlaceholderProps, PrefixSuffixProps, ReadonlyProps } from '../../';
 import { CommonProps } from '../../../_type';
 
 export type InputDatetimeProps = CommonProps &
@@ -19,7 +15,7 @@ export type InputDatetimeProps = CommonProps &
      * 默认为 yyyy-MM-dd HH:mm:ss
      */
     valueFormat?: string;
-    
+
     autoSelect?: boolean;
     // 前缀按钮用来删除
     prefixIconForClean?: boolean;

@@ -15,6 +15,7 @@
     allowUserSelect: false,
     autoI18n: true,
     textAsHtml: true,
+    highlightChecked: true,
   });
   //-----------------------------------------------------
   const emit = defineEmits<ListEmitter>();
@@ -43,6 +44,8 @@
       {
         'is-hoverable': props.canHover,
         'is-selectable': props.canSelect || props.canCheck,
+        'is-highlight-checked': props.highlightChecked,
+
         'none-user-select': !props.allowUserSelect,
       },
       names

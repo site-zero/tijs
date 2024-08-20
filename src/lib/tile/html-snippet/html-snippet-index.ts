@@ -1,8 +1,8 @@
 import { App } from 'vue';
-import { COM_TYPES } from '../../lib-com-types';
 import { TiComInfo, TiComRace } from '../../../_type';
+import { COM_TYPES } from '../../lib-com-types';
 import TiHtmlSnippet from './TiHtmlSnippet.vue';
-import { simple } from './example/index.ts';
+import { simple } from './example/index';
 
 let en = {
   'com-name': 'HTML Snippet',
@@ -32,5 +32,5 @@ const TiHtmlSnippetInfo: TiComInfo = {
   exampleProps: [simple],
 };
 
+export * from './html-snippet-types';
 export { TiHtmlSnippet, TiHtmlSnippetInfo };
-export * from './html-snippet-types.ts';

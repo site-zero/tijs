@@ -236,6 +236,7 @@ export function useTable(props: TableProps, emit: TableEmitter): TableFeature {
     },
 
     OnRowSelect(selection: TableSelection, rowEvent: TableEventPayload) {
+      console.log('OnRowSelect', rowEvent);
       selection.columnIndex = -1;
       // Guard actived
       if (selection.currentId == rowEvent.row.id) {
@@ -296,13 +297,13 @@ export function useTable(props: TableProps, emit: TableEmitter): TableFeature {
       columns: TableStrictColumn[]
     ) {
       let { row, colIndex } = rowEvent;
-      // console.log(
-      //   'OnCellSelect',
-      //   rowEvent.rowIndex,
-      //   colIndex,
-      //   'cols：',
-      //   columns.length
-      // );
+      console.log(
+        'OnCellSelect',
+        rowEvent.rowIndex,
+        colIndex,
+        'cols：',
+        columns.length
+      );
       selection.columnIndex = colIndex ?? -1;
       //if (!selection.checkedIds.get(row.id)) {
       if (selection.currentId != row.id) {

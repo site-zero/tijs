@@ -124,7 +124,7 @@ export function useTransfer(
         if (fv) {
           let text = li.text?.toUpperCase();
           let vals = `${li.value}`.toUpperCase();
-          console.log(fv, text, vals);
+          //console.log(fv, text, vals);
           if (
             (text && text.indexOf(fv) >= 0) ||
             (vals && vals.indexOf(fv) >= 0)

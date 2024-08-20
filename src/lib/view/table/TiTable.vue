@@ -53,18 +53,19 @@
   let emit = defineEmits<TableEmitter>();
   //-------------------------------------------------------
   let props = withDefaults(defineProps<TableProps>(), {
-    getId: 'id',
+    showRowIndex: true,
     showHeader: true,
     columnResizable: true,
-    columnResizeInTime: 50,
-    rowMinHeight: 32,
-    showRowIndex: true,
-    rowGap: 1,
-    colGap: 1,
+    multi: true,
     showCheckbox: true,
     canHover: true,
     canSelect: true,
     canCheck: true,
+    getId: 'id',
+    columnResizeInTime: 50,
+    rowMinHeight: 32,
+    rowGap: 1,
+    colGap: 1,
     changeMode: 'diff',
     data: () => [],
     emptyRoadblock: () => ({

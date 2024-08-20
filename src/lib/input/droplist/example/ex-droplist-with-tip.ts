@@ -1,5 +1,5 @@
 import { ComPropExample } from '../../../../_type';
-import { DropListProps } from '../ti-droplist-types';
+import { DroplistProps } from '../ti-droplist-types';
 
 export default {
   name: 'with_tip',
@@ -118,5 +118,5 @@ export default {
         tip: 'Cats are independent animals',
       },
     ],
-  } as DropListProps,
+  } as DroplistProps,
 } as ComPropExample;

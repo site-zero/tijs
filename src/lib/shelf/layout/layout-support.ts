@@ -120,6 +120,7 @@ export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
           className: it.gridClass,
           layout: it.layout,
           schema: schema,
+          subLayout: true,
           itemStyle: it.itemStyle,
           itemClass: it.itemClass,
           ..._layout_grid_props,

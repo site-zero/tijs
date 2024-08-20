@@ -4,7 +4,7 @@
   import { BlockProps, TiActionBar, TiIcon, useEmitAdaptor } from '../../';
   import { EmitAdaptorPayload } from '../../../_type';
   import { COM_TYPES } from '../../lib-com-types';
-  import { BlockEmitter } from './ti-block-types';
+  import { BlockEmitter, BlockEvent } from './ti-block-types';
   import { useBlock } from './use-block';
   const COM_TYPE = COM_TYPES.Block;
 
@@ -21,7 +21,7 @@
   const OnAllEvents = computed(() =>
     useEmitAdaptor(COM_TYPE, props, {
       handler: (payload: EmitAdaptorPayload) => {
-        // console.log('OnAllEvents.handler', payload);
+        console.log('OnAllEvents.handler', payload);
         emit('happen', {
           ...payload,
           block: _.pick(props, 'title', 'name'),
@@ -29,6 +29,10 @@
       },
     })
   );
+
+  function onBlock(event: BlockEvent) {
+    emit('happen', event);
+  }
 
   //
   // Life Hooks
@@ -78,7 +82,7 @@
           <component
             :is="Block.BlockComType"
             v-bind="Block.BlockComConf"
-            @block="emit('happen', $event)"
+            @_sub_block="onBlock"
             v-on="OnAllEvents" />
         </slot>
       </main>

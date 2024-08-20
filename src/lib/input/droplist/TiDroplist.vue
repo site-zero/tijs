@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { computed } from 'vue';
   import { TiInput } from '../../';
-  import { DropListProps } from './ti-droplist-types';
+  import { DroplistProps } from './ti-droplist-types';
   import _ from 'lodash';
   //-----------------------------------------------------
   defineOptions({
@@ -13,7 +13,7 @@
     (event: 'change', payload: string): void;
   }>();
   //-----------------------------------------------------
-  let props = withDefaults(defineProps<DropListProps>(), {
+  let props = withDefaults(defineProps<DroplistProps>(), {
     autoI18n: true,
     tipShowTime: 'focus',
     tipUseHint: false,

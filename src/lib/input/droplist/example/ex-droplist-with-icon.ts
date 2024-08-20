@@ -1,5 +1,5 @@
 import { ComPropExample } from '../../../../_type';
-import { DropListProps } from '../ti-droplist-types';
+import { DroplistProps } from '../ti-droplist-types';
 
 export default {
   name: 'with_icon',
@@ -27,5 +27,5 @@ export default {
       { value: 'horse', text: 'Horse', icon: 'fas-horse' },
       { value: 'cat', text: 'Cat', icon: 'fas-cat' },
     ],
-  } as DropListProps,
+  } as DroplistProps,
 } as ComPropExample;

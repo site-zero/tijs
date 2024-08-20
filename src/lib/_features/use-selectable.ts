@@ -490,7 +490,12 @@ export function useSelectable<ID extends string | number>(
     }
     // 只能选择的话，优先用 toggle
     else if (!props.canSelect && props.canCheck) {
-      toggleId(selection, rowId);
+      // 除非按下了 ctrl，就变成单选模式·
+      if (se.ctrlKey) {
+        selectId(selection, rowId);
+      } else {
+        toggleId(selection, rowId);
+      }
     }
     // Toggle Mode
     else if (se.ctrlKey || se.metaKey) {
@@ -508,8 +513,12 @@ export function useSelectable<ID extends string | number>(
 
   function selectId(selection: SelectableState<ID>, id: ID) {
     selection.checkedIds.clear();
-    selection.currentId = id;
-    selection.checkedIds.clear();
+    if (props.canSelect) {
+      selection.currentId = id;
+    } else {
+      selection.currentId = undefined;
+    }
+
     selection.checkedIds.set(id, true);
     selection.lastSelectId = id;
     clampSelect(selection);

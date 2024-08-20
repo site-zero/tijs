@@ -1,4 +1,4 @@
-import { DropListProps } from '../../../input/all-input';
+import { DroplistProps } from '../../../input/all-input';
 import { ComPropExample } from '../../../../_type';
 import { FormProps } from '../ti-form-types';
 
@@ -35,7 +35,7 @@ export default {
             { value: 'locust', text: 'Locust', icon: 'fas-locust' },
             { value: 'dove', text: 'Dove', icon: 'fas-dove' },
           ],
-        } as DropListProps,
+        } as DroplistProps,
       },
       {
         title: [

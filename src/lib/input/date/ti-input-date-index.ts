@@ -6,9 +6,11 @@ import example from './example';
 
 const en_us = {
   'com-name': 'InputDate',
+  'example-quickinput': 'Quick Input',
 };
 const zh_cn = {
   'com-name': '日期选择',
+  'example-quickinput': '快速输入模式',
 };
 
 const COM_TYPE = COM_TYPES.InputDate;
@@ -34,7 +36,7 @@ const TiInputDateInfo: TiComInfo = {
     app.component(COM_TYPE, TiInputDate);
   },
   defaultProps: 'simple',
-  exampleProps: [example.simple],
+  exampleProps: [example.simple, example.quickinput],
 };
 
 export { TiInputDate, TiInputDateInfo };

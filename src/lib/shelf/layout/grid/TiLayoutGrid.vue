@@ -27,7 +27,7 @@
     resetSizeState,
     useKeepLayoutGrid,
   } from '../grid/use-grid-keep';
-  import { useGridResizing } from '../grid/use-grid-resizing.ts';
+  import { useGridResizing } from '../grid/use-grid-resizing';
   import { getLayoutPanelItems } from '../layout-panel';
   import { LayoutBar, LayoutPanelItem } from '../layout-types';
   import {
@@ -37,7 +37,7 @@
     LayoutGridState,
   } from './ti-layout-grid-types';
   import { getLayoutGridItems, isLayoutAdjustable } from './use-grid-items';
-  import { getTopStyle } from './use-grid-util.ts';
+  import { getTopStyle } from './use-grid-util';
   //-------------------------------------------------
   const props = withDefaults(defineProps<LayoutGridProps>(), {
     shown: () => ({}),
@@ -55,6 +55,7 @@
     (event: 'show' | 'hide', name: string): void;
     (event: 'resize', payload: Rect): void;
     (event: 'block', payload: BlockEvent): void;
+    (event: '_sub_block', payload: BlockEvent): void;
     (event: 'tab-change', payload: GridItemTabChangeEvent): void;
   };
   let emit = defineEmits<LayoutGridEmitter>();
@@ -135,9 +136,15 @@
     }
   }
   //-------------------------------------------------
-  function onBlockEventHappen(event: BlockEvent) {
-    //console.log('onBlockEventHappen', event);
-    emit('block', event);
+  function OnBlockEventHappen(event: BlockEvent) {
+    console.log('OnBlockEventHappen', event);
+    if (props.subLayout) {
+      console.log('> subblock');
+      emit('_sub_block', event);
+    } else {
+      console.log('> block');
+      emit('block', event);
+    }
   }
   //-------------------------------------------------
   function onGridItemTabChange(event: TabChangeEvent, item: LayoutGridItem) {
@@ -253,21 +260,23 @@
             v-if="it.propsForBlock"
             v-bind="it.propsForBlock"
             @fire="emit('fire', $event)"
-            @happen="onBlockEventHappen" />
+            @happen="OnBlockEventHappen" />
           <!-- 格子布局:仅内容-->
           <TiLayoutGrid
             v-else-if="it.propsForLayoutGrid"
             v-bind="it.propsForLayoutGrid"
             :schema="schema"
+            :sub-layout="true"
             @fire="emit('fire', $event)"
-            @block="onBlockEventHappen"
+            @_sub_block="OnBlockEventHappen"
             @tab-change="onGridLayoutTabChange($event, it)" />
           <!-- 标签布局-->
           <TiLayoutTabs
             v-else-if="it.propsForLayoutTabs"
             v-bind="it.propsForLayoutTabs"
             :schema="schema"
-            @block="emit('block', $event)"
+            :sub-layout="true"
+            @_sub_block="OnBlockEventHappen"
             @tab-change="onGridItemTabChange($event, it)" />
           <!-- 未知布局-->
           <div v-else>
@@ -315,20 +324,22 @@
                 :icon="pan.icon"
                 v-bind="pan.propsForBlock"
                 @fire="onBlockActionFire"
-                @happen="onBlockEventHappen" />
+                @happen="OnBlockEventHappen" />
               <!-- 格子布局-->
               <TiLayoutGrid
                 v-else-if="'grid' == pan.type"
                 v-bind="pan.propsForLayoutGrid"
                 :schema="schema"
+                :sub-layout="true"
                 @fire="emit('fire', $event)"
-                @block="onBlockEventHappen" />
+                @_sub_block="OnBlockEventHappen" />
               <!-- 标签布局-->
               <TiLayoutTabs
                 v-else-if="'tabs' == pan.type"
                 v-bind="pan.propsForLayoutTabs"
                 :schema="schema"
-                @block="onBlockEventHappen" />
+                :sub-layout="true"
+                @_sub_block="OnBlockEventHappen" />
               <!-- 未知布局-->
               <div v-else>
                 Unknown layout item type: <code>{{ pan.type }}</code>

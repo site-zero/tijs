@@ -27,6 +27,7 @@
   const emit = defineEmits<{
     (eventName: 'tab-change', payload: TabChangeEvent): void;
     (event: 'block', payload: BlockEvent): void;
+    (event: '_sub_block', payload: BlockEvent): void;
   }>();
   //-------------------------------------------------
   const props = withDefaults(defineProps<LayoutTabsProps>(), {
@@ -54,7 +55,12 @@
   });
   //-------------------------------------------------
   function OnBlockEventHappen(event: BlockEvent) {
-    emit('block', event);
+    //console.log('OnBlockEventHappen', event);
+    if (props.subLayout) {
+      emit('_sub_block', event);
+    } else {
+      emit('block', event);
+    }
   }
   //-------------------------------------------------
   function OnTabChange(item: TabDisplayItem) {
@@ -134,6 +140,7 @@
           <TiBlock
             v-if="'block' == MainTab.type"
             block-fit="cover"
+            overflow-mode="cover"
             v-bind="MainTab.propsForBlock"
             :class-name="MainTab.blockClass"
             :main-class="MainTab.mainClass"
@@ -143,14 +150,16 @@
           <TiLayoutGrid
             v-else-if="'grid' == MainTab.type"
             v-bind="MainTab.propsForLayoutGrid"
+            :sub-layout="true"
             :schema="schema"
-            @block="emit('block', $event)" />
+            @_sub_block="emit('block', $event)" />
           <!-- 标签布局-->
           <TiLayoutTabs
             v-else-if="'tabs' == MainTab.type"
             v-bind="MainTab.propsForLayoutTabs"
+            :sub-layout="true"
             :schema="schema"
-            @block="emit('block', $event)" />
+            @_sub_block="emit('block', $event)" />
           <!-- 未知布局-->
           <div v-else>
             Unknown layout item type:

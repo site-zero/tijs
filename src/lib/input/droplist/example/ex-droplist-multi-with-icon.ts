@@ -1,5 +1,5 @@
 import { ComPropExample } from '../../../../_type';
-import { DropListProps } from '../ti-droplist-types';
+import { DroplistProps } from '../ti-droplist-types';
 
 export default {
   name: 'multi_with_icon',
@@ -13,5 +13,5 @@ export default {
        
       ],
     },
-  } as DropListProps,
+  } as DroplistProps,
 } as ComPropExample;

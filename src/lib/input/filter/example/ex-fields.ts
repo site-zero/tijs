@@ -1,4 +1,4 @@
-import { DropListProps, GridFieldsInput } from '../../../';
+import { DroplistProps, GridFieldsInput } from '../../../';
 
 export function getFilterExampleFields(): GridFieldsInput[] {
   return [
@@ -23,7 +23,7 @@ export function getFilterExampleFields(): GridFieldsInput[] {
           { value: 'feather', text: 'Feather', icon: 'fas-feather' },
           { value: 'fish', text: 'Fish', icon: 'fas-fish' },
         ],
-      } as DropListProps,
+      } as DroplistProps,
     },
     {
       title: 'Hippo Name',

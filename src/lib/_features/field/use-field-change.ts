@@ -176,12 +176,12 @@ export function useFieldChange<T extends AbstractField>(
     data: Vars
   ): Promise<FieldChange[]> {
     let { uniqKey, value, oldVal } = change;
-    console.log(
-      '>>>>>>>>>>>>>>>>>>>>>>applyFieldChange',
-      uniqKey,
-      value,
-      oldVal
-    );
+    // console.log(
+    //   '>>>>>>>>>>>>>>>>>>>>>>applyFieldChange',
+    //   uniqKey,
+    //   value,
+    //   oldVal
+    // );
 
     // 得到字段
     let field = getField(uniqKey);
@@ -240,7 +240,7 @@ export function useFieldChange<T extends AbstractField>(
         }
       }
     }
-    console.log('<<<<<<<<<<<<<<<<<< applyFieldChange', reChanges);
+    //console.log('<<<<<<<<<<<<<<<<<< applyFieldChange', reChanges);
 
     // 默认就是原始修改
     return reChanges;
@@ -381,7 +381,7 @@ export function useFieldChange<T extends AbstractField>(
     change: FieldValueChange,
     options: HandleValueChangeOptions
   ) {
-    console.log('handleValueChange', change);
+    //console.log('handleValueChange', change);
     await tidyValueChange(change, options, (data, changes) => {
       let { emit } = options;
       emit('change', data);

@@ -78,16 +78,25 @@
     > .list-item {
       border-left: 3px solid transparent;
       //----------------------------
+      &.is-current {
+        border-left-color: var(--ti-color-primary);
+      }
+      //----------------------------
+    }
+  }
+
+  //--------------------------------
+  &.is-highlight-checked > main {
+    > .list-item {
+      //----------------------------
       &.is-checked,
       &.is-checked:hover {
         color: var(--ti-color-selected-f);
         background-color: var(--ti-color-selected);
       }
-      //----------------------------
-      &.is-current {
-        border-left-color: var(--ti-color-primary);
+      &.is-checked + .list-item.is-checked {
+        border-top-color: var(--ti-color-primary);
       }
-      //----------------------------
     }
   }
 
@@ -100,14 +109,14 @@
   }
   //--------------------------------
   &.border-dashed > main > .list-item {
-    border-top: 1px dashed var(--ti-color-border-shallow);
+    border-top: 1px dashed var(--ti-color-border-thin);
     &:first-child {
       border-top: 0;
     }
   }
   //--------------------------------
   &.border-dotted > main > .list-item {
-    border-top: 1px dotted var(--ti-color-border-shallow);
+    border-top: 1px dotted var(--ti-color-border-thin);
     &:first-child {
       border-top: 0;
     }

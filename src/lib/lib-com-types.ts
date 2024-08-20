@@ -20,6 +20,7 @@ export const COM_TYPES = {
   Unknown: 'TiUnknown',
   //------------------- INPUT
   Check: 'TiCheck',
+  CheckList: 'TiCheckList',
   ComboFilter: 'TiComboFilter',
   Droplist: 'TiDroplist',
   Filter: 'TiFilter',

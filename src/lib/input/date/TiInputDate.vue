@@ -85,6 +85,7 @@
   <TiInput
     v-bind="InputProps"
     :value="InputValue"
+    :auto-select="true"
     :format="formatValue"
     @click-suffix-icon="onClickSuffixIcon"
     @change="onValueChange" />

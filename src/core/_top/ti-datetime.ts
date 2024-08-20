@@ -134,9 +134,44 @@ export function parse(d: any): Date | undefined {
     }
   }
   // Invalid date
-  console.trace()
+  console.trace();
   throw `i18n:invalid-date: [${Str.anyToStr(d)}]`;
 }
+
+export type DateTimeQuickParseOptions = {
+  /**
+   * 假设今年是 2024 年
+   *
+   * 模式: ymd
+   * [yy?yy] [mm] [dd]
+   *  - 2408 -> 2024-08-01
+   *  - 240806 -> 2024-08-06
+   *  - 20240806 -> 2024-08-06
+   *
+   * 模式: dmy
+   * [dd] [mm] [yy?yy]
+   *  - 1908 -> 2024-08-19
+   *  - 190828 -> 2028-08-19
+   *  - 19082028 -> 2028-08-19
+   */
+  mode?: 'ymd' | 'dmy';
+};
+
+/**
+ * 根据一个简洁的输入，解析出一个日期对象
+ *
+ * @param input 简洁的日期输入
+ * @return  日期对象
+ */
+export function quickParse(
+  _input: string,
+  options: DateTimeQuickParseOptions = {}
+): Date | undefined {
+  let s = _.trim(_input);
+  if (!s) return;
+  let { mode = 'dmy' } = options;
+}
+
 /**
  *
  * @param date  日期值
