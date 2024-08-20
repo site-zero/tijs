@@ -263,7 +263,11 @@ export function useValueBox<T extends any>(
       }
 
       try {
+        // console.log(`state.boxInputing = formatValue:`, text, item, formatValue(text, item));
         state.boxInputing = formatValue(text, item);
+        // if (state.boxInputing.length == 0) {
+        //   console.trace(`doUpdateText=>state.boxInputing ${props.value}`);
+        // }
       } catch (e) {
         console.warn(`Fail to formatValue`, { text, item, val });
         textOrItem = Str.anyToStr(val);

@@ -45,7 +45,7 @@
     }
     let format = props.format ?? _dft_prop('format', 'yyyy-MM-dd');
     let d = DateTime.parse(val.val as DateInput);
-    console.log('formatValue', format, d);
+    // console.log('formatValue', format, d);
     return DateTime.format(d, { fmt: format, trimZero: false });
   }
   //-----------------------------------------------------

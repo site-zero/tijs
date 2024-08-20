@@ -21,6 +21,7 @@
   import { CssUtils, Rects } from '../../../core';
   import { COM_TYPES } from '../../lib-com-types';
   import { InputBoxProps, InputBoxState } from './ti-input-types';
+  import { useInputAutoSelect } from './use-input-auto-select';
   import { resetTipList, updateTipList } from './use-input-box';
   import {
     getTipListConf,
@@ -60,6 +61,8 @@
     lastUpdateAMS: 0,
   });
   const _box_rect = ref<Rect>();
+  const $el = ref<HTMLElement>();
+  const $input = ref<HTMLInputElement>();
   //-----------------------------------------------------
   const _tips = ref<Vars[]>();
   //-----------------------------------------------------
@@ -80,8 +83,6 @@
   const TipListConfig = computed(() =>
     getTipListConf(props.tipList, props.tipFormat)
   );
-  //-----------------------------------------------------
-  const $el = ref<HTMLElement>();
   //-------------------------------------------------
   let el_parent_area_hint = 0;
   const obResize = new ResizeObserver((_entries) => {
@@ -109,6 +110,10 @@
         COM_TYPE,
       }
     )
+  );
+  //-----------------------------------------------------
+  const AutoSelect = computed(() =>
+    useInputAutoSelect(props, $input, _box_state)
   );
   //-----------------------------------------------------
   const hasValue = computed(
@@ -187,8 +192,6 @@
     return _tips.value;
   });
   //-----------------------------------------------------
-  const $input = ref<any>(null);
-  //-----------------------------------------------------
   function OnInputMousedown() {
     if (props.readonly) {
       return;
@@ -200,12 +203,9 @@
     if (props.readonly) {
       return;
     }
-    //console.log('OnInputFocused');
     bus?.emit(BUS_EVENT_FOCUS);
     _box_state.boxFocused = true;
-    if (props.autoSelect) {
-      $input.value.select();
-    }
+    AutoSelect.value();
   }
   //-----------------------------------------------------
   function when_bus_input_focus() {
@@ -339,19 +339,20 @@
           _tips,
           `watch:props.value/options: ${props.options ?? '-no-options-'}`
         );
-        _box_state.boxFocused = false;
+        //_box_state.boxFocused = false;
       }
     }
   );
   //-----------------------------------------------------
   // 看看是否满足选项列表的打开条件
   watch(
-    () => [_box_state.boxValue, _box_state.boxFocused, props.value],
+    () => [_box_state.boxValue, _box_state.boxFocused],
     //() => [_box_state.boxValue],
     () => {
       Box.value.doUpdateText();
       doUpdateTipList();
-    }
+    },
+    { immediate: true }
   );
   //-----------------------------------------------------
   // 看看是否满足选项列表的打开条件
@@ -367,6 +368,15 @@
     () => _box_state.boxInputing,
     () => {
       doUpdateTipList();
+
+      // console.log(
+      //   'watch boxInputing',
+      //   props.value,
+      //   `[${_box_state.boxInputing}]:${_box_state.boxInputing.length}`
+      // );
+      // if (_box_state.boxInputing.length == 0) {
+      //   console.trace(`empty boxInputing ${props.value}`);
+      // }
     }
   );
   //-----------------------------------------------------
@@ -410,12 +420,10 @@
     //console.log('TiInput mounted');
     OnInputBlur();
     _box_state.boxFocused = false;
-    if (props.boxFocused) {
-      _box_state.boxFocused = true;
-      $input.value.select();
-      //console.log($input)
+    if (props.boxFocused && $input.value) {
+      $input.value.focus();
     }
-    Box.value.doUpdateText();
+    //Box.value.doUpdateText();
   });
   onUnmounted(() => {
     //console.log('TiInput unmounted');
