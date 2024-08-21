@@ -1,6 +1,75 @@
 import _ from 'lodash';
-import { expect, test } from 'vitest';
+import { assert, expect, test } from 'vitest';
 import { DateTime, setEnv } from '../../core';
+
+test('quickParse with ymd mode', () => {
+  const cases = [
+    ['2408', '2024-08-01 00:00:00'],
+    ['240906', '2024-09-06 00:00:00'],
+    ['20241006', '2024-10-06 00:00:00'],
+    ['2403 11', '2024-03-01 11:00:00'],
+    ['2404 1102', '2024-04-01 11:02:00'],
+    ['2405 110235', '2024-05-01 11:02:35'],
+    ['240623 11:02:35', '2024-06-23 11:02:35'],
+  ];
+
+  cases.forEach(([input, expected]) => {
+    const result = DateTime.quickParse(input, { mode: 'ymd' });
+    assert(result, `Date '${input}' Fail to convert to Date`);
+    const d_str = DateTime.format(result, { fmt: 'yyyy-MM-dd HH:mm:ss' });
+    expect(d_str).eq(expected);
+  });
+});
+
+test('quickParse with dmy mode', () => {
+  let toyear = new Date().getFullYear();
+  let yy = Math.floor(toyear / 100);
+  const cases = [
+    ['0108', `${toyear}-08-01 00:00:00`],
+    ['060919', `${yy}19-09-06 00:00:00`],
+    ['06102028', `2028-10-06 00:00:00`],
+    ['0103 11', `${toyear}-03-01 11:00:00`],
+    ['0104 1102', `${toyear}-04-01 11:02:00`],
+    ['1705 110235', '2024-05-17 11:02:35'],
+    ['23061999 11:02:35', '1999-06-23 11:02:35'],
+  ];
+
+  cases.forEach(([input, expected]) => {
+    const result = DateTime.quickParse(input, { mode: 'dmy' });
+    assert(result, `Date '${input}' Fail to convert to Date`);
+    const d_str = DateTime.format(result, { fmt: 'yyyy-MM-dd HH:mm:ss' });
+    expect(d_str).eq(expected);
+  });
+});
+
+test('quickParse with mdy mode', () => {
+  let toyear = new Date().getFullYear();
+  let yy = Math.floor(toyear / 100);
+  const cases = [
+    ['0801', `${toyear}-08-01 00:00:00`],
+    // ['090619', `${yy}19-09-06 00:00:00`],
+    // ['10062028', `2028-10-06 00:00:00`],
+    // ['0301 11', `${toyear}-03-01 11:00:00`],
+    // ['0401 1102', `${toyear}-04-01 11:02:00`],
+    // ['0517 110235', '2024-05-17 11:02:35'],
+    // ['06231999 11:02:35', '1999-06-23 11:02:35'],
+  ];
+
+  cases.forEach(([input, expected]) => {
+    const result = DateTime.quickParse(input, { mode: 'mdy' });
+    assert(result, `Date '${input}' Fail to convert to Date`);
+    const d_str = DateTime.format(result, { fmt: 'yyyy-MM-dd HH:mm:ss' });
+    expect(d_str).eq(expected);
+  });
+});
+
+test('parse_time', () => {
+  expect(`${DateTime.parseTime('0821')}`).eq('08:21');
+  expect(`${DateTime.parseTime('082114')}`).eq('08:21:14');
+  expect(`${DateTime.parseTime('1800')}`).eq('18:00');
+  expect(`${DateTime.parseTime('17')}`).eq('17:00');
+  expect(`${DateTime.parseTime('37')}`).eq('03:07');
+});
 
 test('parse_format', () => {
   let d = DateTime.parse('2021-12-23T13:14:27.981');

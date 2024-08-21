@@ -87,6 +87,15 @@ export class TiTime implements TimeInfo {
     }
     // String
     else if (_.isString(input)) {
+      // 两位整数，表示小时
+      if (/^([01][0-9]|2[0-3])$/.test(input)) {
+        this.hours = parseInt(input);
+        this.minutes = 0;
+        this.seconds = 0;
+        this.milliseconds = 0;
+        return this;
+      }
+
       // ISO 8601 Time
       let m = /^PT((\d+)H)?((\d+)M)?((\d+)S)?$/.exec(input);
       if (m) {
@@ -152,6 +161,13 @@ export class TiTime implements TimeInfo {
       this.__cached.valueInMilliseconds = val;
     }
     return this.__cached.valueInMilliseconds;
+  }
+  //--------------------------------
+  updateDate(d: Date) {
+    d.setHours(this.hours);
+    d.setMinutes(this.minutes);
+    d.setSeconds(this.seconds);
+    d.setMilliseconds(this.milliseconds);
   }
   //--------------------------------
   toString(fmt = 'auto') {

@@ -3,6 +3,7 @@ import { ref } from 'vue';
 import { CssUtils, Match, Rects, Str, Util } from '../';
 import {
   DockOptions,
+  DocumentIconType,
   DomQueryContext,
   DomSelector,
   EleFilter,
@@ -1443,6 +1444,65 @@ export function scrollIntoView(
 
     let off = offset();
     $view.scrollTop += off;
+  }
+}
+//----------------------------------------------------
+export function setDocumentTitle(title: string) {
+  if (typeof document === 'undefined') {
+    console.warn('setFavicon was called in a non-browser environment');
+    return;
+  }
+  // 更新文档标题
+  document.title = title;
+
+  // 可选：更新 Open Graph 标题标签（如果存在）
+  const ogTitleElement = document.querySelector('meta[property="og:title"]');
+  if (ogTitleElement instanceof HTMLMetaElement) {
+    ogTitleElement.content = title;
+  }
+}
+
+export function setDocumentIcon(
+  icon: string,
+  type: DocumentIconType = 'image/x-icon'
+) {
+  if (typeof document === 'undefined') {
+    console.warn('setFavicon was called in a non-browser environment');
+    return;
+  }
+
+  // 查找现有的favicon链接元素
+  let link: HTMLLinkElement | null =
+    document.querySelector("link[rel*='icon']");
+
+  // 如果没有找到，创建一个新的链接元素
+  if (!link) {
+    link = document.createElement('link');
+    link.type = type;
+    link.rel = 'shortcut icon';
+    document.getElementsByTagName('head')[0].appendChild(link);
+  }
+
+  // 处理 Emoji
+  if ('emoji' == type) {
+    const canvas = document.createElement('canvas');
+    canvas.height = 32;
+    canvas.width = 32;
+    const ctx = canvas.getContext('2d');
+    if (ctx) {
+      ctx.font = '28px serif';
+      ctx.fillText(icon, 0, 24);
+      link.type = 'image/x-icon';
+      link.rel = 'shortcut icon';
+      link.href = canvas.toDataURL('image/x-icon');
+      document.head.appendChild(link);
+    }
+  }
+  // 其他的 ICON 就是外部资源了
+  else {
+    // 更新链接元素的属性
+    link.href = icon;
+    link.type = type;
   }
 }
 //----------------------------------------------------

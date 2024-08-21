@@ -20,6 +20,7 @@
     suffixIcon: 'fas-calendar-days',
     suffixIconClickable: true,
     prefixIconForClean: false,
+    autoSelect: true,
   });
   //-----------------------------------------------------
   const InputValue = computed(() => {
@@ -56,22 +57,36 @@
       return;
     }
     let format = props.valueFormat ?? _dft_prop('valueFormat', 'yyyy-MM-dd');
-    let d = DateTime.parse(val);
+    let quickMode = props.quickInputMode ?? _dft_prop('quickInputMode', '');
+
+    let d: Date | undefined;
+    if (DateTime.isDateTimeQuickParseMode(quickMode)) {
+      d = DateTime.quickParse(val, { mode: quickMode });
+    } else {
+      d = DateTime.parse(val);
+    }
+
+    // 判断日期对象是否有效
     if (!d || isNaN(d.getTime())) {
       Alert('Invalid Date Format: ' + val, {
         type: 'warn',
         bodyIcon: 'fas-calendar-xmark',
       });
+      return;
     }
 
+    // 仅仅是时间戳
     if ('timestamp' == props.valueType) {
       emit('change', d.getTime());
     }
-    let str = DateTime.format(d, {
-      fmt: format,
-      trimZero: false,
-    });
-    emit('change', str);
+    // 默认采用时间字符串
+    else {
+      let str = DateTime.format(d, {
+        fmt: format,
+        trimZero: false,
+      });
+      emit('change', str);
+    }
   }
   //-----------------------------------------------------
   function onClickSuffixIcon() {
@@ -85,7 +100,6 @@
   <TiInput
     v-bind="InputProps"
     :value="InputValue"
-    :auto-select="true"
     :format="formatValue"
     @click-suffix-icon="onClickSuffixIcon"
     @change="onValueChange" />

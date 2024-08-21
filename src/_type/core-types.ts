@@ -1112,3 +1112,51 @@ export type PopPosition =
 ---------------------------------------------------*/
 export type AspectSize = 't' | 's' | 'm' | 'b' | 'h';
 export type HDirecton = 'left' | 'right';
+
+export type DateTimeQuickParserSet = {
+  /**
+   * 假设今年是 2024 年
+   *
+   * [yy?yy] [mm] [dd] HHmmdd
+   *  - 2408 -> 2024-08-01 00:00:00
+   *  - 240806 -> 2024-08-06 00:00:00
+   *  - 20240806 -> 2024-08-06 00:00:00
+   *
+   * @return Date 即解析成功的日期对象， undefined 则表示不能接受的字符串
+   */
+  ymd: (s: string) => Date | undefined;
+  /**
+   * 假设今年是 2024 年
+   *
+   * [dd] [mm] [yy?yy]
+   *  - 1908 -> 2024-08-19 00:00:00
+   *  - 190828 -> 2028-08-19 00:00:00
+   *  - 19082028 -> 2028-08-19 00:00:00
+   *
+   * > 如果并未指明年份，则用今年来表示
+   *
+   * @return Date 即解析成功的日期对象， undefined 则表示不能接受的字符串
+   */
+  dmy: (s: string) => Date | undefined;
+
+  /**
+   * 假设今年是 2024 年
+   *
+   * [dd] [mm] [yy?yy]
+   *  - 0819 -> 2024-08-19 00:00:00
+   *  - 0819 -> 2028-08-19 00:00:00
+   *  - 08192028 -> 2028-08-19 00:00:00
+   *
+   * > 如果并未指明年份，则用今年来表示
+   *
+   * @return Date 即解析成功的日期对象， undefined 则表示不能接受的字符串
+   */
+  mdy: (s: string) => Date | undefined;
+};
+
+export type DateTimeQuickParseMode = keyof DateTimeQuickParserSet;
+export type DateTimeQuickParseOptions = {
+  mode?: DateTimeQuickParseMode;
+};
+
+export type DocumentIconType = 'emoji' | 'image/png' | 'image/x-icon';

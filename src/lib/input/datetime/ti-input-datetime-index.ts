@@ -6,9 +6,11 @@ import example from './example';
 
 const en_us = {
   'com-name': 'Datetime',
+  'example-quickinput': 'Quick Input',
 };
 const zh_cn = {
   'com-name': '日期时间框',
+  'example-quickinput': '快速输入模式',
 };
 
 const COM_TYPE = COM_TYPES.InputDatetime;
@@ -34,7 +36,7 @@ const TiInputDatetimeInfo: TiComInfo = {
     app.component(COM_TYPE, TiInputDatetime);
   },
   defaultProps: 'simple',
-  exampleProps: [example.simple],
+  exampleProps: [example.simple, example.quickinput],
 };
 
 export * from './ti-input-datetime-types';

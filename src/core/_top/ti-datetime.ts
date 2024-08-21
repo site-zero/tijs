@@ -3,6 +3,9 @@ import { I18n, Str, TiTime, getEnv } from '../';
 import {
   DateFormatOptions,
   DateInput,
+  DateTimeQuickParseMode,
+  DateTimeQuickParseOptions,
+  DateTimeQuickParserSet,
   TimeInput,
   TimeUpdateUnit,
 } from '../../_type';
@@ -138,29 +141,150 @@ export function parse(d: any): Date | undefined {
   throw `i18n:invalid-date: [${Str.anyToStr(d)}]`;
 }
 
-export type DateTimeQuickParseOptions = {
+export function isDateTimeQuickParseMode(
+  input: any
+): input is DateTimeQuickParseMode {
+  if (_quick_parsers[input as DateTimeQuickParseMode]) {
+    return true;
+  }
+  return false;
+}
+
+const _quick_parsers: DateTimeQuickParserSet = {
+  /**
+   *
+   * [yy?yy] [mm] [dd] HHmmdd
+   *  - 2408 -> 2024-08-01 00:00:00
+   *  - 240806 -> 2024-08-06 00:00:00
+   *  - 20240806 -> 2024-08-06 00:00:00
+   *  - 2408 11 -> 2024-08-01 11:00:00
+   */
+  ymd: (s: string): Date | undefined => {
+    const toyear = new Date().getFullYear();
+    let year: number, month: number, day: number;
+
+    // 移除所有非数字字符
+    const _str = s.trim().replace(/\D/g, '');
+
+    // 格式: YYMM
+    if (_str.length === 4) {
+      year = parseInt(_str.slice(0, 2));
+      month = parseInt(_str.slice(2, 4)) - 1;
+      day = 1;
+      year += Math.floor(toyear / 100) * 100;
+    }
+    // 格式: YYMMDD
+    else if (_str.length === 6) {
+      year = parseInt(_str.slice(0, 2));
+      month = parseInt(_str.slice(2, 4)) - 1;
+      day = parseInt(_str.slice(4, 6));
+      year += Math.floor(toyear / 100) * 100;
+    }
+    // 格式: YYYYMMDD
+    else if (_str.length === 8) {
+      year = parseInt(_str.slice(0, 4));
+      month = parseInt(_str.slice(4, 6)) - 1;
+      day = parseInt(_str.slice(6, 8));
+    }
+    // 不能接受的格式
+    else {
+      return;
+    }
+    // 返回日期对象
+    return new Date(year, month, day);
+  },
   /**
    * 假设今年是 2024 年
    *
-   * 模式: ymd
-   * [yy?yy] [mm] [dd]
-   *  - 2408 -> 2024-08-01
-   *  - 240806 -> 2024-08-06
-   *  - 20240806 -> 2024-08-06
-   *
-   * 模式: dmy
    * [dd] [mm] [yy?yy]
    *  - 1908 -> 2024-08-19
    *  - 190828 -> 2028-08-19
    *  - 19082028 -> 2028-08-19
    */
-  mode?: 'ymd' | 'dmy';
+  dmy: (s: string): Date | undefined => {
+    const toyear = new Date().getFullYear();
+    let day: number, month: number, year: number;
+
+    // 移除所有非数字字符
+    const _str = s.trim().replace(/\D/g, '');
+
+    // 格式: DDMM
+    if (_str.length === 4) {
+      day = parseInt(_str.slice(0, 2));
+      month = parseInt(_str.slice(2, 4)) - 1;
+      year = toyear;
+    }
+    // 格式: DDMMYY
+    else if (_str.length === 6) {
+      day = parseInt(_str.slice(0, 2));
+      month = parseInt(_str.slice(2, 4)) - 1;
+      year = parseInt(_str.slice(4, 6));
+      year += Math.floor(toyear / 100) * 100;
+    }
+    // 格式: DDMMYYYY
+    else if (_str.length === 8) {
+      day = parseInt(_str.slice(0, 2));
+      month = parseInt(_str.slice(2, 4)) - 1;
+      year = parseInt(_str.slice(4, 8));
+    }
+    // 不能接受的格式
+    else {
+      return undefined;
+    }
+
+    // 返回日期对象
+    return new Date(year, month, day);
+  },
+  /**
+   * 假设今年是 2024 年
+   *
+   * [dd] [mm] [yy?yy]
+   *  - 0819 -> 2024-08-19
+   *  - 081928 -> 2028-08-19
+   *  - 08192028 -> 2028-08-19
+   */
+  mdy: (s: string): Date | undefined => {
+    const toyear = new Date().getFullYear();
+    let day: number, month: number, year: number;
+
+    // 移除所有非数字字符
+    const _str = s.trim().replace(/\D/g, '');
+
+    // 格式: MMDD
+    if (_str.length === 4) {
+      month = parseInt(_str.slice(0, 2)) - 1;
+      day = parseInt(_str.slice(2, 4));
+      year = toyear;
+    }
+    // 格式: MMDDYY
+    else if (_str.length === 6) {
+      month = parseInt(_str.slice(0, 2)) - 1;
+      day = parseInt(_str.slice(2, 4));
+      year = parseInt(_str.slice(4, 6));
+      year += Math.floor(toyear / 100) * 100;
+    }
+    // 格式: MMDDYYYY
+    else if (_str.length === 8) {
+      month = parseInt(_str.slice(0, 2)) - 1;
+      day = parseInt(_str.slice(2, 4));
+      year = parseInt(_str.slice(4, 8));
+    }
+    // 不能接受的格式
+    else {
+      return undefined;
+    }
+
+    // 返回日期对象
+    return new Date(year, month, day);
+  },
 };
 
 /**
- * 根据一个简洁的输入，解析出一个日期对象
+ * 根据一个简洁的输入，解析出一个日期对象。 如果不能通过快速模式解析，
+ * 那么就会回退到普通解析模式
  *
  * @param input 简洁的日期输入
+ * @param options  快速输入模式的解析
  * @return  日期对象
  */
 export function quickParse(
@@ -170,6 +294,32 @@ export function quickParse(
   let s = _.trim(_input);
   if (!s) return;
   let { mode = 'dmy' } = options;
+  let parser = _quick_parsers[mode];
+
+  // 获取日期部分和时间部分
+  let m = /^([^\s]+)(\s+([^\s]+))?$/.exec(_input);
+  if (m) {
+    let s_date = m[1];
+    let s_time = m[3] ?? '';
+
+    // 尝试解析日期
+    let d = parser(s_date);
+
+    // 解析失败
+    if (!d) {
+      return parse(_input);
+    }
+
+    // 解析时间
+    let _t = new TiTime(s_time);
+    _t.updateDate(d);
+
+    // 搞定
+    return d;
+  }
+
+  // 采用普通的解析方式
+  return parse(_input);
 }
 
 /**
