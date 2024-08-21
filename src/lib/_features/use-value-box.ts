@@ -262,8 +262,13 @@ export function useValueBox<T extends any>(
         state.boxTip = undefined;
       }
 
+      // 未翻译成功
+      if(!text && !props.mustInOptions){
+        text = Str.anyToStr(val);
+      }
+
       try {
-        // console.log(`state.boxInputing = formatValue:`, text, item, formatValue(text, item));
+        //console.log(`state.boxInputing = formatValue:`, text, item, formatValue(text, item));
         state.boxInputing = formatValue(text, item);
         // if (state.boxInputing.length == 0) {
         //   console.trace(`doUpdateText=>state.boxInputing ${props.value}`);

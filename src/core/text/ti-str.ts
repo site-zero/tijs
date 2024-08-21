@@ -65,14 +65,18 @@ export function sBlank(str: string, dft: string): string {
  */
 export function splitIgnoreBlank(
   input: string,
-  sep: string | RegExp = ','
+  sep: string | RegExp = ',',
+  trimLine = true
 ): string[] {
   if (!input) {
     return [];
   }
   let list = input.split(sep);
   let l2 = _.filter(list, (li) => !isBlank(li));
-  return _.map(l2, (li) => _.trim(li));
+  if (trimLine) {
+    return _.map(l2, (li) => _.trim(li));
+  }
+  return l2;
 }
 
 export type SplitOptions = {

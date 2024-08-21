@@ -35,7 +35,7 @@
       });
       val = v2;
     }
-    //console.log('onValueChange', val);
+    console.log('onValueChange', change, val);
     emit('change', val);
   }
 </script>
@@ -44,6 +44,7 @@
     v-bind="FormProps"
     class="ti-input-group no-body-padding"
     :data="props.value"
+    change-mode="all"
     :layout-hint="LayoutHint"
     @change="onValueChange" />
 </template>
