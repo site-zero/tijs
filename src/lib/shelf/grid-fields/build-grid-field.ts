@@ -1,8 +1,13 @@
 import _ from 'lodash';
-import { Vars, makeFieldUniqKey, parseFieldConverter } from '../../../_type';
+import { makeFieldUniqKey, parseFieldConverter, Vars } from '../../../_type';
 import { CssUtils, Match } from '../../../core';
-import { useVisibility } from '../../_features';
 import {
+  buildFieldValidate,
+  TiObjFieldsFeature,
+  useVisibility,
+} from '../../_features';
+import {
+  FieldRefer,
   GridFieldsInput,
   GridFieldsProps,
   GridFieldsStrictAbstractItem,
@@ -12,10 +17,13 @@ import {
 } from './ti-grid-fields-types';
 
 export function buildOneGridField(
+  fieldSet: TiObjFieldsFeature,
   indexes: number[],
-  field: GridFieldsInput,
+  fr: FieldRefer,
   dft: GridFieldsProps
 ): GridFieldsStrictItem {
+  let field: GridFieldsInput = fieldSet.getFieldBy(fr);
+
   let uniqKey = makeFieldUniqKey(indexes, field.name, field.uniqKey);
   // 可见性
   let visiblity = useVisibility(field, uniqKey);
@@ -96,6 +104,11 @@ export function buildOneGridField(
     fld.defaultAs = field.defaultAs ?? null;
     fld.changeEventName = field.changeEventName ?? 'change';
 
+    fld.validate = field.validate;
+    if (!fld.validate && field.valueChecker) {
+      fld.validate = buildFieldValidate(field.valueChecker);
+    }
+
     fld.transformer = parseFieldConverter(
       fld.type,
       'transform',
@@ -144,7 +157,12 @@ export function buildOneGridField(
     grp.defaultComConf = field.defaultComConf ?? dft.defaultComConf;
 
     // 递归构建嵌套子项目
-    grp.fields = buildGridFields(indexes, field.fields, grp as GridFieldsInput);
+    grp.fields = buildGridFields(
+      fieldSet,
+      indexes,
+      field.fields,
+      grp as GridFieldsInput
+    );
   }
   // ---------------: 标签 :---------------
   else {
@@ -155,15 +173,16 @@ export function buildOneGridField(
 }
 
 export function buildGridFields(
+  fieldSet: TiObjFieldsFeature,
   indexes: number[],
-  fields: GridFieldsInput[],
+  fields: FieldRefer[],
   dft: GridFieldsInput
 ): GridFieldsStrictItem[] {
   let items: GridFieldsStrictItem[] = [];
   for (let i = 0; i < fields.length; i++) {
     let is = _.concat(indexes, i);
     let field = fields[i];
-    let it = buildOneGridField(is, field, dft);
+    let it = buildOneGridField(fieldSet, is, field, dft);
     // console.log(it.uniqKey, `[${it.title}]`);
     items.push(it);
   }

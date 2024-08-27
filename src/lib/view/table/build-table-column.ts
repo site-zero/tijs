@@ -1,15 +1,17 @@
 import _ from 'lodash';
-import { TableProps, TableStrictColumn } from '../../';
+import { TableProps, TableStrictColumn, useObjColumns } from '../../';
 import { makeFieldUniqKey, parseFieldConverter } from '../../../_type';
 import { I18n, Util } from '../../../core';
 
 export function buildTableColumns(props: TableProps) {
   //console.log('buildTableColumns', props.columns.length);
+  let _ocs = useObjColumns();
   let reColumns = [] as TableStrictColumn[];
   if (props.columns) {
     let dragIndex = 0;
     for (let i = 0; i < props.columns.length; i++) {
-      let col = props.columns[i];
+      let ref = props.columns[i];
+      let col = _ocs.getColumnBy(ref);
       // if (col.candidate) {
       //   continue;
       // }

@@ -1,9 +1,9 @@
 import JSON5 from 'json5';
 import _ from 'lodash';
-import { DateTime, ENV_KEYS, Str, Util, getEnv } from '../core';
-import { FieldComProps } from '../lib';
+import { DateTime, ENV_KEYS, getEnv, Str, Util } from '../core';
 import {
   CommonProps,
+  ComRef,
   Convertor,
   DateInput,
   FieldChange,
@@ -94,6 +94,12 @@ export type AbstractField = Field & {
   validate?: FieldValidator;
 
   /**
+   * 指定了快捷的验证字段值的方法，在 `validate`属性未定义时，
+   * 将采用这个值
+   */
+  valueChecker?: FieldValidateInput;
+
+  /**
    * 异步检查字段值的合法性
    */
   asyncValidate?: AsyncFieldValidator;
@@ -166,6 +172,21 @@ export type FieldValidator = (
   field: AbstractField,
   data: Vars
 ) => ValidateResult | undefined;
+
+export type FieldValidateMatcher = {
+  not?: boolean;
+  test: any;
+  message: string;
+};
+
+/**
+ * 根据这个输入能生成一个 FieldValidator
+ */
+export type FieldValidateInput =
+  | RegExp
+  | string
+  | FieldValidateMatcher
+  | FieldValidator;
 
 /**
  * 异步检查字段值的回调函数
@@ -467,3 +488,70 @@ function toDatetimeText(input: any) {
   }
   return input;
 }
+
+/*-------------------------------------------------------
+
+                     Props
+
+-------------------------------------------------------*/
+export type FieldComProps = ComRef & {
+  /**
+   * 指定了控件的那个属性用来接收“值”。
+   * 如果未指定，则相当于 `value`。
+   * 如果指定为 `null` 则表示不要为控件自动设置值。
+   *
+   * @default `"value"`
+   */
+  autoValue?: string | null;
+
+  /**
+   * 动态解释字段
+   */
+  dynamic?: boolean;
+
+  /**
+   * 动态解释字段时，默认上下文就是 data
+   * 这里可以额外补充一个 vars
+   *
+   * ```
+   * {
+   *   value : any   // 字段值
+   *   data  : {..}  // 对象
+   *   vars  : {..}  // 额外补充变量
+   * }
+   * ```
+   */
+  vars?: Vars;
+
+  /**
+   * 只读模式时的显示控件。如果未指定，则采用 `TiLabel`
+   * 不过会自动为 `comConf` 附加 `readonly` 属性
+   *
+   * @default `TiLabel`
+   */
+  readonlyComType?: string | null;
+  /**
+   * 只读模式时的控件属性，默认的，会自动分析 `comType/comConf`
+   * 提取必要的属性
+   */
+  readonlyComConf?: Vars;
+
+  /**
+   * 激活式时的显示控件。如果未指定，则采用 `TiInput`
+   *
+   * @default `TiLabel`
+   */
+  activatedComType?: string | null;
+  /**
+   * 激活模式时的控件属性，如果未指定，则默认采用 `comConf`
+   */
+  activatedComConf?: Vars;
+
+  /**
+   * 捕获字段控件修改事件的名称，默认的，如果你声明了 `activatedComType`
+   * 那么这个属性就是 "change"，否则将不会捕获子控件的修改事件。
+   * 当然，像 TiForm 这样的控件会有自己的定制，它无论是否有 `activatedComType`
+   * 都会捕获 "change" 事件
+   */
+  changeEventName?: string;
+};

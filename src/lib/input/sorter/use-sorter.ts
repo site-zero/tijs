@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { computed, ref } from 'vue';
 import { AnyOptionItem, PickRequired } from '../../../_type';
-import { TagItem, openAppModal, useOptions } from '../../../lib';
+import { TagItem, TransferProps, openAppModal, useOptions } from '../../../lib';
 import { SorterProps, SorterValue } from './ti-sorter-types';
 
 // export type SorterItem = {
@@ -93,8 +93,9 @@ export function useSorter(props: SorterProps) {
       result: vals,
       comType: 'TiTransfer',
       comConf: {
+        className: 'cover-parent',
         options: options.value,
-      },
+      } as TransferProps,
     });
     // 用户取消
     if (!re) {

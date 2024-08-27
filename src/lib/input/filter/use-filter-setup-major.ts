@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { openAppModal } from '../../';
+import { openAppModal, TiObjFieldsFeature, TransferProps } from '../../';
 import { StrOptionItem } from '../../../_type';
 import { FilterProps } from './ti-filter-types';
 import { FilterEmitter } from './use-filter';
@@ -7,10 +7,11 @@ import { joinFieldsTitle, makeFieldsMap } from './use-filter-fields';
 
 export async function useSetupMajorFields(
   props: FilterProps,
+  fieldSet: TiObjFieldsFeature,
   emit: FilterEmitter
 ) {
   // 准备字段选项
-  let fieldMap = makeFieldsMap(props.fields);
+  let fieldMap = makeFieldsMap(fieldSet, props.fields);
   let options = [] as StrOptionItem[];
   for (let [uniqKey, fields] of fieldMap) {
     options.push({
@@ -42,8 +43,9 @@ export async function useSetupMajorFields(
     result: props.majorFields ?? [],
     comType: 'TiTransfer',
     comConf: {
+      className: 'cover-parent',
       options,
-    },
+    } as TransferProps,
   });
 
   // 用户取消

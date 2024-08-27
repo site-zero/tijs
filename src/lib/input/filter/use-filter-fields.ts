@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { GridFieldsInput } from '../../';
+import { FieldRefer, GridFieldsInput, TiObjFieldsFeature } from '../../';
 import { getFieldUniqKey } from '../../../_type';
 import { I18n, Util } from '../../../core';
 
@@ -18,9 +18,13 @@ export function getFieldsNames(fields: GridFieldsInput[] = []) {
   return [...re];
 }
 
-export function makeFieldsMap(flds?: GridFieldsInput[]) {
+export function makeFieldsMap(
+  fieldSet: TiObjFieldsFeature,
+  flds?: FieldRefer[]
+) {
   let map = new Map<string, GridFieldsInput[]>();
-  function __add_to_map(key: string, fld: GridFieldsInput) {
+  function __add_to_map(key: string, ref: FieldRefer) {
+    let fld = fieldSet.getFieldBy(ref);
     let flds = map.get(key);
     if (flds && flds.length > 0) {
       flds.push(fld);
@@ -29,9 +33,10 @@ export function makeFieldsMap(flds?: GridFieldsInput[]) {
     }
   }
 
-  function ___join_field(flds?: GridFieldsInput[]) {
-    if (flds) {
-      for (let fld of flds) {
+  function ___join_field(refs?: FieldRefer[]) {
+    if (refs) {
+      for (let ref of refs) {
+        let fld = fieldSet.getFieldBy(ref);
         // self
         if (fld.name) {
           let uniqKey = fld.uniqKey ?? getFieldUniqKey(fld.name!);
@@ -49,16 +54,18 @@ export function makeFieldsMap(flds?: GridFieldsInput[]) {
 }
 
 export function joinFieldsList(
-  flds: GridFieldsInput[],
+  fieldSet: TiObjFieldsFeature,
+  fields: FieldRefer[],
   list: GridFieldsInput[] = []
 ): GridFieldsInput[] {
-  if (flds) {
-    for (let fld of flds) {
+  if (fields) {
+    for (let ref of fields) {
+      let fld = fieldSet.getFieldBy(ref);
       if (fld.name) {
         list.push(fld);
       }
       if (fld.fields) {
-        joinFieldsList(fld.fields, list);
+        joinFieldsList(fieldSet, fld.fields, list);
       }
     }
   }

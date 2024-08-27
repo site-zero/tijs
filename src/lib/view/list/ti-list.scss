@@ -45,6 +45,9 @@
           @include flex-align;
           padding: 0.7em 0.5em;
           line-height: 1.2em;
+          em {
+            font-style: normal;
+          }
         }
         //----------------------------
       } // > .list-part

@@ -1,6 +1,5 @@
 import {
   FieldChangeProps,
-  FieldComProps,
   KeepInfo,
   RoadblockProps,
   SelectEmitInfo,
@@ -11,14 +10,14 @@ import {
 import {
   AbstractField,
   Callback2,
+  ColumnRefer,
   CommonProps,
-  CssTextAlign,
   FieldChange,
+  FieldComProps,
   FieldName,
-  IconInput,
-  InvokePartial,
+  TableColumnAspect,
+  TableInputColumn,
   TableRowID,
-  TextContentType,
   Vars,
 } from '../../../_type';
 
@@ -104,13 +103,21 @@ export type TableKeepProps = {
   keepColumns?: KeepInfo;
 };
 
+export type TableStrictColumn = CommonProps &
+  FieldComProps &
+  AbstractField &
+  TableColumnAspect & {
+    index: number;
+    dragIndex: number;
+  };
+
 export type TableSelectEmitInfo = SelectEmitInfo<TableRowID> & {
   colIndex?: number;
   column?: TableStrictColumn;
 };
 
 export type TableBehaviorsProps = {
-  columns: TableInputColumn[];
+  columns: ColumnRefer[];
   /**
    * 传入的上下文变量字段
    */
@@ -211,51 +218,6 @@ export type TableProps = CommonProps &
      * 空白数据，显示的样式
      */
     emptyRoadblock?: RoadblockProps;
-  };
-
-type TableColumnAspect = {
-  //------------------------------------
-  // 显示
-  //------------------------------------
-  title: string;
-  titleType?: TextContentType; // 默认 text
-  titleIcon?: IconInput;
-  titleStyle?: Vars;
-  titleAlign?: CssTextAlign;
-  tip?: string;
-  tipType?: TextContentType; // 默认 text
-  tipBy?: FieldComProps;
-  tipStyle?: Vars;
-  tipAlign?: CssTextAlign;
-  tipIcon?: IconInput;
-
-  // 本字段，是否为候选字段
-  candidate: boolean;
-};
-
-export type TableInputColumn = CommonProps &
-  FieldComProps &
-  Partial<Omit<AbstractField, 'transformer' | 'serializer'>> &
-  Partial<TableColumnAspect> & {
-    name: FieldName;
-    // 读取字段值后，经过一个定制转换，再传递给字段
-    // data[name] ===(transformer) ==> FieldCom
-    transformer?: string | Function;
-    transArgs?: any[];
-    transPartial?: InvokePartial;
-    // 字段值修改后，经过一个定制转换，再向外抛出消息
-    // FieldCom.change ===(serializer) ==> emit('change')
-    serializer?: string | Function;
-    serialArgs?: any[];
-    serialPartial?: InvokePartial;
-  };
-
-export type TableStrictColumn = CommonProps &
-  FieldComProps &
-  AbstractField &
-  TableColumnAspect & {
-    index: number;
-    dragIndex: number;
   };
 
 export type TableRowProps = CommonProps &

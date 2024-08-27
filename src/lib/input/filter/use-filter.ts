@@ -1,6 +1,11 @@
 import _ from 'lodash';
 import { computed, ref } from 'vue';
-import { GridFieldsInput, useValueTranslator, useVisibility } from '../../';
+import {
+  GridFieldsInput,
+  useObjFields,
+  useValueTranslator,
+  useVisibility,
+} from '../../';
 import { Vars, makeFieldUniqKey } from '../../../_type';
 import { Util } from '../../../core';
 import {
@@ -91,8 +96,13 @@ export function useFilter(
     return false;
   });
   //-----------------------------------------------------
-  const AllFieldMap = computed(() => makeFieldsMap(props.fields));
-  const AllFields = computed(() => joinFieldsList(props.fields ?? []));
+  const FieldSet = computed(() => useObjFields(props.fieldSetName));
+  const AllFieldMap = computed(() =>
+    makeFieldsMap(FieldSet.value, props.fields)
+  );
+  const AllFields = computed(() =>
+    joinFieldsList(FieldSet.value, props.fields ?? [])
+  );
   //-----------------------------------------------------
   /**
    * 去掉主字段，还剩下哪些值
@@ -217,12 +227,13 @@ export function useFilter(
 
     MajorData,
     MoreData,
+    FieldSet,
 
     useDiffData,
     loadMoreItems,
 
     setupMajorFields: async () => {
-      await useSetupMajorFields(props, emit);
+      await useSetupMajorFields(props, FieldSet.value, emit);
     },
     openAdvanceSettings: async () => {
       await openAdvanceForm(props, emit);

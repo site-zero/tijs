@@ -1,9 +1,15 @@
 import _, { kebabCase } from 'lodash';
 import { SetupContext, VNode, h } from 'vue';
 import { TiIcon } from '../';
-import { IconInput, TextContentType, ValueChange, Vars } from '../../_type';
+import {
+  FieldComProps,
+  IconInput,
+  TextContentType,
+  ValueChange,
+  Vars,
+} from '../../_type';
 import { CssUtils, I18n } from '../../core';
-import { FieldComProps, useFieldCom } from '../_features';
+import { useFieldCom } from '../_features';
 
 export type TextSnippetEmitter = {
   (evetName: 'change', payload: ValueChange<string>): void;

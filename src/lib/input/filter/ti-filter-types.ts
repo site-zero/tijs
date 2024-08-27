@@ -1,5 +1,10 @@
 import { ComputedRef, Ref } from 'vue';
-import { GridFieldsInput, ValueTranslatorProps } from '../../';
+import {
+  FieldRefer,
+  GridFieldsInput,
+  TiObjFieldsFeature,
+  ValueTranslatorProps,
+} from '../../';
 import {
   ActionBarItem,
   AppModalProps,
@@ -103,7 +108,14 @@ export type FilterProps = CommonProps &
      * 如果你不定义它，它会被自动添加在所有字段末尾
      * 默认的，它会用 TiTags 来表达这个字段的值
      */
-    fields?: GridFieldsInput[];
+    fields?: FieldRefer[];
+
+    /**
+     * 采用快捷字段定义的字段集合名称
+     * @see #use-obj-field
+     */
+    fieldSetName?: string;
+
     /**
      * 指定要显示的字段的键
      */
@@ -189,6 +201,7 @@ export type FilterFeature = {
 
   MajorData: ComputedRef<Vars>;
   MoreData: ComputedRef<Vars>;
+  FieldSet: ComputedRef<TiObjFieldsFeature>;
 
   useDiffData: (diff: Vars) => Vars;
   loadMoreItems: () => Promise<void>;

@@ -5,6 +5,7 @@ import {
   CommonProps,
   CssTextAlign,
   FieldChange,
+  FieldComProps,
   FieldStatus,
   FieldStatusIcons,
   FieldStatusInfo,
@@ -22,22 +23,21 @@ import { RoadblockProps } from '../../../lib';
 import {
   FieldChangeEmitter,
   FieldChangeProps,
-  FieldComProps,
   ReadonlyProps,
   VisibilityFeature,
 } from '../../../lib/_features';
-
+//-----------------------------------------------
 export type GridFieldsDomReadyInfo = {
   el: HTMLElement;
   main?: HTMLElement;
 };
-
+//-----------------------------------------------
 export const FIELD_STATUS_KEY: InjectionKey<
   ComputedRef<Map<string, FieldStatusInfo>>
 > = Symbol('FIELD_STATUS_KEY');
-
+//-----------------------------------------------
 export type TextArm = SelectValueArm<string, any>;
-
+//-----------------------------------------------
 export type GridFieldsFeature = {
   strictItems: GridFieldsStrictItem[];
   fieldItems: GridFieldsStrictField[];
@@ -51,18 +51,18 @@ export type GridFieldsFeature = {
   tipType: TextContentType;
   tipIcon: IconInput;
 };
-
+//-----------------------------------------------
 export type GridFieldsEmitter = FieldChangeEmitter & {
   (eventName: 'name-change', payload: ValueChange<string>): void;
   (eventName: 'dom-ready', payload: GridFieldsDomReadyInfo): void;
 };
-
+//-----------------------------------------------
 export type GridItemEmitter = {
   (eventName: 'name-change', payload: ValueChange<string>): void;
   (eventName: 'value-change', payload: FieldChange): void;
   (eventName: 'field-active', payload: string): void;
 };
-
+//-----------------------------------------------
 export type GridFieldsProps = Omit<
   GridFieldsInput,
   | 'rowStart'
@@ -90,6 +90,12 @@ export type GridFieldsProps = Omit<
     emptyRoadblock?: RoadblockProps;
 
     /**
+     * 采用快捷字段定义的字段集合名称
+     * @see #use-obj-field
+     */
+    fieldSetName?: string;
+
+    /**
      *
      * @param fieldItems
      * @returns
@@ -106,7 +112,7 @@ export type GridFieldsProps = Omit<
      */
     fieldStatusIcons?: FieldStatusIcons;
   };
-
+//-----------------------------------------------
 /*
 栅格字段组，是一个支持无穷嵌套的字段组合，依靠 CSS Grid 布局。
 每一层嵌套支持下面三种类型:
@@ -118,6 +124,11 @@ export type GridFieldsProps = Omit<
 因此一个 `TiGridFields` 可以看作一个 `group`
 */
 export type GridFieldsItemRace = 'field' | 'group' | 'label';
+//-----------------------------------------------
+export type FieldInfo = [string, Partial<GridFieldsInput>];
+//-----------------------------------------------
+export type FieldRefer = GridFieldsInput | FieldInfo | string;
+//-----------------------------------------------
 export type GridFieldsInput = CommonProps &
   Partial<Omit<AbstractField, 'required'>> &
   FieldComProps &
@@ -188,7 +199,7 @@ export type GridFieldsInput = CommonProps &
     //------------------------------------
     // 字段组专有属性
     //------------------------------------
-    fields?: GridFieldsInput[];
+    fields?: FieldRefer[];
 
     // 这个属性从顶层一直可以继承下去
     groupAspect?: GroupAspect;
@@ -206,7 +217,7 @@ export type GridFieldsInput = CommonProps &
     defaultComType?: string;
     defaultComConf?: Vars;
   };
-
+//-----------------------------------------------
 /*
   下面定义了几种组的显示模式：
 
@@ -234,7 +245,7 @@ export type GridFieldsInput = CommonProps &
   
   */
 export type GroupAspect = 'legend' | 'bottom-line' | 'bar';
-
+//-----------------------------------------------
 /**
  * 一个普通字段的 DOM 有下面的结构:
  * ```
@@ -271,7 +282,7 @@ export type GridFieldLayoutMode =
   | 'v-title-icon-suffix'
   | 'v-value-icon-prefix'
   | 'v-value-icon-suffix';
-
+//-----------------------------------------------
 /**
  * 编译后的严格属性字段
  */
@@ -305,6 +316,7 @@ export type GridFieldsStrictAbstractItem = FieldComProps &
     colStart?: number; // 指定格子的列起始轨道，比 style.gridColumnStart 优先
     colSpan?: number; // 指定格子的列跨度，比 style.gridColumnEnd 优先
   };
+//-----------------------------------------------
 export type GridFieldsStrictGroup = GridFieldsStrictAbstractItem &
   GridLayoutProps & {
     race: 'group';
@@ -329,8 +341,9 @@ export type GridFieldsStrictGroup = GridFieldsStrictAbstractItem &
     defaultComType?: string;
     defaultComConf?: Vars;
   };
+//-----------------------------------------------
 export type GridFieldsStrictField = GridFieldsStrictAbstractItem &
-  AbstractField & {
+  Omit<AbstractField, 'valueChecker'> & {
     race: 'field';
 
     checkEquals: boolean;
@@ -344,10 +357,11 @@ export type GridFieldsStrictField = GridFieldsStrictAbstractItem &
     tipTextStyle?: Vars;
     tipIcon: IconInput;
   };
+//-----------------------------------------------
 export type GridFieldsStrictLabel = GridFieldsStrictAbstractItem & {
   race: 'label';
 };
-
+//-----------------------------------------------
 export type GridFieldsStrictItem =
   | GridFieldsStrictGroup
   | GridFieldsStrictField

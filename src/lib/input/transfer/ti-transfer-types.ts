@@ -1,11 +1,13 @@
-import { StdOptionItem, TableRowID } from '../../../_type';
+import { CommonProps, StdOptionItem, TableRowID } from '../../../_type';
 import { ReadonlyProps, StdListItemProps } from '../../_features';
 import { OptionsProps } from '../../_features/use-options';
 
-export type TransferProps = ReadonlyProps &
+export type TransferProps = CommonProps &
+  ReadonlyProps &
   OptionsProps &
   StdListItemProps & {
     value?: TableRowID[];
+    fitMode?: 'cover' | 'fit';
   };
 
 export type TransferState = {

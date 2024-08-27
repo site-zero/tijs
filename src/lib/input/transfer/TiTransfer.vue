@@ -9,7 +9,7 @@
     TiList,
   } from '../../';
   import { StdOptionItem, TableRowID } from '../../../_type';
-  import { I18n, Util } from '../../../core';
+  import { CssUtils, I18n, Util } from '../../../core';
   import { TransferProps, TransferState } from './ti-transfer-types';
   import { TransferEmitter, useTransfer } from './use-transfer';
   //-----------------------------------------------------
@@ -39,6 +39,13 @@
   }));
   //-----------------------------------------------------
   const SelMenuActionItems = computed(() => _tran.value.getSelMenuItems());
+  //-----------------------------------------------------
+  const TopClass = computed(() =>
+    CssUtils.mergeClassName(props.className, {
+      'cover-parent': 'cover' == props.fitMode,
+      'fit-parent': 'fit' == props.fitMode,
+    })
+  );
   //-----------------------------------------------------
   const AssignButtonClass = computed(() => ({
     'is-enabled': ActionStatus.value.hasCanChecked,
@@ -111,7 +118,9 @@
   //-----------------------------------------------------
 </script>
 <template>
-  <div class="ti-transfer">
+  <div
+    class="ti-transfer"
+    :class="TopClass">
     <slot name="head"></slot>
     <main>
       <!--========: Can List :====== -->
