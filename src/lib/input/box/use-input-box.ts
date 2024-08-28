@@ -18,6 +18,8 @@ export type LoadTipListOptions = {
   tidyValue: (val: any, mode?: ValueInputTidyMode[]) => Promise<any>;
   isVisible: OptionPredicater;
   tipItemKeepRaw?: boolean;
+  renderHint?: (vars: Vars) => string;
+  prepareHintVars: (hint: string) => Vars;
 };
 
 export function resetTipList(
@@ -50,6 +52,8 @@ export async function updateTipList(
     tidyValue,
     isVisible,
     tipItemKeepRaw,
+    renderHint,
+    prepareHintVars,
   } = options;
 
   let { boxValue, boxInputing, boxFocused, keyboard, lastUpdateAMS } = box;
@@ -107,8 +111,14 @@ export async function updateTipList(
   // 经过检查满足时机了，需要加载
   if (tipUseHint && dict) {
     let hintVal = hint;
+    // 前置处理数据
     if (tipTidyBy) {
       hintVal = await tidyValue(hint, tipTidyBy);
+    }
+    // 再次整理 hint
+    if (renderHint) {
+      let hvars = prepareHintVars(hintVal);
+      hintVal = renderHint(hvars) ?? hintVal;
     }
     // console.log(`dict.queryStdData('${hintVal}')`);
     dict.queryData(hintVal, box.lastAbort.signal).then((list) => {

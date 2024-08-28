@@ -15,23 +15,24 @@
     getFieldTitleStyle,
     getFieldTopStyle,
   } from './use-field-style';
-
+  //-------------------------------------------------
   defineOptions({
     inheritAttrs: false,
   });
-
+  //-------------------------------------------------
   const emit = defineEmits<GridItemEmitter>();
   const props = defineProps<
     GridFieldsStrictField & {
       isActived?: boolean;
     }
   >();
-
+  //-------------------------------------------------
   const hasTitle = computed(() =>
     props.title || props.fieldTitleBy ? true : false
   );
+  //-------------------------------------------------
   const hasTip = computed(() => (props.tip || props.tipBy ? true : false));
-
+  //-------------------------------------------------
   const TopClass = computed(() => {
     return CssUtils.mergeClassName(props.className, props.fieldLayoutMode, {
       'with-title': hasTitle.value,
@@ -41,23 +42,27 @@
       'is-disabled': props.isDisabled(props.data),
     });
   });
-
+  //-------------------------------------------------
   const TopStyle = computed(() =>
     getFieldTopStyle(props, {
       hasTitle: hasTitle.value,
       hasTip: hasTip.value,
     })
   );
+  //-------------------------------------------------
   const AllFieldStatus = inject(FIELD_STATUS_KEY);
   const FieldStatus = computed(() => AllFieldStatus?.value.get(props.uniqKey));
   const FieldTitleStyle = computed(() =>
     getFieldTitleStyle(props, FieldStatus.value)
   );
+  //-------------------------------------------------
   const TitleAlign = computed(() => getFieldTitleAlign(props));
+  //-------------------------------------------------
   const FieldText = computed(() => getFieldTextInfo(props, props.vars));
   const FieldIcon = computed(() =>
     getFieldIcon(props, hasTitle.value, hasTip.value, FieldStatus.value)
   );
+  //-------------------------------------------------
   const FieldValue = computed(() => {
     let val = getFieldValue(props.name, props.data);
     //console.log(props.name, val);
@@ -66,6 +71,7 @@
     }
     return val;
   });
+  //-------------------------------------------------
   const FieldTitleVars = computed(() => {
     let required = false;
     if (props.required) {
@@ -82,7 +88,7 @@
       readonly: props.readonly,
     };
   });
-
+  //-------------------------------------------------
   const FieldCom = computed(() => {
     let com = useFieldCom(props);
     return com.autoGetCom(
@@ -91,7 +97,7 @@
       FieldValue.value
     );
   });
-
+  //-------------------------------------------------
   const ListenValueChange = computed(() => {
     let key = props.changeEventName ?? 'change';
     return {
@@ -106,7 +112,7 @@
       },
     };
   });
-
+  //-------------------------------------------------
   function onTitleChange(payload: ValueChange<string>) {
     console.log('onTitleChange', payload);
     emit('name-change', {
@@ -114,10 +120,11 @@
       oldVal: props.uniqKey,
     });
   }
-
+  //-------------------------------------------------
   function onFieldMouseDown() {
     emit('field-active', props.uniqKey);
   }
+  //-------------------------------------------------
 </script>
 <template>
   <div

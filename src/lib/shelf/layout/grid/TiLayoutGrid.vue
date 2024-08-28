@@ -137,12 +137,12 @@
   }
   //-------------------------------------------------
   function OnBlockEventHappen(event: BlockEvent) {
-    console.log('OnBlockEventHappen', event);
+    //console.log('OnBlockEventHappen', event);
     if (props.subLayout) {
-      console.log('> subblock');
+      //console.log('> subblock');
       emit('_sub_block', event);
     } else {
-      console.log('> block');
+      //console.log('> block');
       emit('block', event);
     }
   }

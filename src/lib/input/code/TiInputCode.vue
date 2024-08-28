@@ -1,16 +1,10 @@
 <script lang="ts" setup>
   import _ from 'lodash';
-  import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
-  import {
-    InputBoxProps,
-    TiInput,
-    TipListProps,
-    useValueInput,
-    useViewport,
-  } from '../../';
-  import { CssUtils, Dicts, Util } from '../../../core';
+  import { computed, onMounted, onUnmounted, ref } from 'vue';
+  import { InputBoxProps, TiInput, useValueInput, useViewport } from '../../';
+  import { AnyOptionItem, ToStr } from '../../../_type';
+  import { CssUtils, Util } from '../../../core';
   import { InputCodeProps } from './ti-input-code-types';
-  import { ToStr } from '../../../_type';
   //-----------------------------------------------------
   const emit = defineEmits<{
     (event: 'change', payload: string): void;
@@ -86,17 +80,17 @@
     };
   });
   //-----------------------------------------------------
-  const GetDescription = computed((): ToStr<Dicts.DictItem<any>> => {
+  const GetDescription = computed((): ToStr<AnyOptionItem> => {
     // 默认
     if (!props.getDescription) {
       // [val] [txt]
       if (props.useRawValue) {
-        return (item: Dicts.DictItem<any>): string => {
+        return (item: AnyOptionItem): string => {
           return item.text ?? item.tip ?? item.value;
         };
       }
       // [txt] [tip]
-      return (item: Dicts.DictItem<any>): string => {
+      return (item: AnyOptionItem): string => {
         return item.tip ?? item.text ?? item.value;
       };
     }
@@ -108,29 +102,17 @@
     return props.getDescription;
   });
   //-----------------------------------------------------
-  async function __update_desc_text(val = props.value) {
-    let item = await _vals.value.translateValue(val);
-    if (item instanceof Dicts.DictItem) {
-      _desc.value = GetDescription.value(item);
-    }
-    // 翻译失败
-    else {
-      _desc.value = item;
+  function onBoxItemChange(it?: AnyOptionItem) {
+    if (_.isNil(it)) {
+      _desc.value = '';
+    } else {
+      _desc.value = GetDescription.value(it);
     }
   }
   //-----------------------------------------------------
   async function onChange(val: string) {
-    __update_desc_text(val);
     emit('change', val);
   }
-  //-----------------------------------------------------
-  watch(
-    () => [props.value, props.options, props.useRawValue],
-    () => {
-      __update_desc_text(props.value);
-    },
-    { immediate: true }
-  );
   //-----------------------------------------------------
 </script>
 <template>
@@ -146,7 +128,8 @@
       <TiInput
         v-bind="InputConfig"
         :tip-list="TipListConfig"
-        @change="onChange" />
+        @change="onChange"
+        @box-item-change="onBoxItemChange" />
     </div>
     <!--描述-->
     <div

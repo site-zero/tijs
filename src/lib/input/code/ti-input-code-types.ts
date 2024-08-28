@@ -1,10 +1,9 @@
 import { InputBoxProps } from '../../';
-import { AspectSize, Vars } from '../../../_type';
-import { Dicts } from '../../../core';
+import { AnyOptionItem, AspectSize, Vars } from '../../../_type';
 
 export type InputCodeProps = InputBoxProps & {
   codeWidth?: string | number;
   gap?: AspectSize;
   style?: Vars;
-  getDescription?: string | ((item: Dicts.DictItem<any>) => string);
+  getDescription?: string | ((item: AnyOptionItem) => string);
 };

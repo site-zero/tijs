@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { computed, ComputedRef } from 'vue';
 import {
   FormatValueProps,
   PlaceholderProps,
@@ -7,14 +8,14 @@ import {
   PrefixSuffixProps,
   PrefixSuffixState,
   ReadonlyProps,
-  ValueInputFeature,
-  ValueInputProps,
   useFormatValue,
   usePrefixSuffix,
   useValueInput,
+  ValueInputFeature,
+  ValueInputProps,
 } from '..';
 import { CommonProps, IconInput, Vars } from '../../_type';
-import { Be, Dicts, Str, tiGetDefaultComPropValue } from '../../core';
+import { Be, Dicts, Str, tiGetDefaultComPropValue, Tmpl } from '../../core';
 /*-------------------------------------------------------
 
                      Emit 
@@ -39,6 +40,9 @@ export type ValueBoxState<T extends any> = PrefixSuffixState & {
   // - 要求，设置了字典，且 mustInOptions
   boxIcon?: IconInput;
   boxTip?: string;
+
+  // 存储翻译出来的对象
+  boxItem?: any;
 
   // 双向绑定输入框的真实值
   boxInputing: string;
@@ -103,6 +107,27 @@ export type ValueBoxProps<T extends any> = CommonProps &
      * 是否要在选项的首部，增加一个【清除】 的选项
      */
     showCleanOption?: boolean;
+
+    // 动态渲染的上下文
+    boxVars?: Vars;
+
+    /**
+     * 有时候，我们不想让用户输入的字符串简单的传递给 dict.query 去查询。
+     * 我们需要给 hint 字符串编制更多的信息。
+     *
+     * 譬如一个选择框，输入省份的 code 进行查询，但是我们还想加入国家这个约束条件。
+     * 我们可以通过 boxVars 接受国家的代码，譬如 `{country:'CN'}`，
+     * 当我们输入 G 的时候，我们希望传递给后端 `G:CN` 这样的字符串。
+     *
+     * 因此我们就要用到这个配置，将其设置为 '${hint}:${country}' 就能在每次查询
+     * 的时候根据这个字符串模板进行渲染。
+     * 它的上下文，永远是 `{...boxVars, hint:'你输入的内容'}`。
+     *
+     * > ！因此不要为 boxVars 设置 'hint' 这个名称的变量，因为会被你输入的内容重载掉。
+     *
+     * 如果你指定的是一个自定义函数，那你就能做的更加细腻
+     */
+    renderHint?: string | ((vars: Vars) => string);
   };
 /*-------------------------------------------------------
 
@@ -114,6 +139,8 @@ export type ValueBoxFeature = PrefixSuffixFeature &
     //
     // 数值处理函数
     //
+    renderHint: ((vars: Vars) => string) | undefined;
+    prepareHintVars: (hint: string) => Vars;
     /**
      * 当输入框初值改变时，需要主动调用这个函数,
      * 本函数会更新 `state.boxVal`
@@ -181,7 +208,25 @@ export function useValueBox<T extends any>(
 ): ValueBoxFeature {
   //console.log('useValueBox');
   let { emit, getBoxElement, COM_TYPE } = options;
-
+  //................................................
+  const RenderHint = computed(() => {
+    if (props.renderHint) {
+      if (_.isString(props.renderHint)) {
+        let t = Tmpl.parse(props.renderHint);
+        return (vars: Vars) => {
+          return t.render(vars);
+        };
+      }
+      return props.renderHint;
+    }
+  });
+  //................................................
+  function prepareHintVars(hint: string): Vars {
+    let re = _.cloneDeep(props.boxVars ?? {});
+    re.hint = hint;
+    return re;
+  }
+  //................................................
   let boxProps = _.cloneDeep(props);
   if (_.isUndefined(boxProps.value)) {
     boxProps.value = tiGetDefaultComPropValue(COM_TYPE, 'value');
@@ -236,7 +281,17 @@ export function useValueBox<T extends any>(
     else {
       let textOrItem: string | Dicts.DictItem<any>;
       try {
+        // 再次整理 hint
+        if (RenderHint.value) {
+          let v_in_str = `${val}`;
+          let hvars = prepareHintVars(v_in_str);
+          val = (RenderHint.value(hvars) ?? val) as T;
+          console.log(`await translateValue(${val});`);
+        }
         textOrItem = await translateValue(val);
+        if (RenderHint.value) {
+          console.log(textOrItem);
+        }
       } catch (e) {
         console.trace(e);
         console.warn(`Fail to translateValue(${Str.anyToStr(val)})`);
@@ -255,15 +310,17 @@ export function useValueBox<T extends any>(
         }
         state.boxIcon = textOrItem.icon;
         state.boxTip = textOrItem.tip;
+        state.boxItem = textOrItem.toOptionItem();
         item = { ...textOrItem.toOptionItem() };
       } else {
         text = textOrItem;
         state.boxIcon = undefined;
         state.boxTip = undefined;
+        state.boxItem = undefined;
       }
 
       // 未翻译成功
-      if(!text && !props.mustInOptions){
+      if (!text && !props.mustInOptions) {
         text = Str.anyToStr(val);
       }
 
@@ -337,6 +394,10 @@ export function useValueBox<T extends any>(
     tidyValue,
     translateValue,
     ..._box,
+
+    renderHint: RenderHint.value,
+    prepareHintVars,
+
     doUpdateValue,
     doChangeValue,
     doUpdateText,

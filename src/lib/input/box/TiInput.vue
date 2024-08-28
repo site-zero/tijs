@@ -17,8 +17,8 @@
     usePlaceholder,
     useValueBox,
   } from '../../';
-  import { BUS_KEY, Rect, Vars } from '../../../_type';
-  import { CssUtils, Rects } from '../../../core';
+  import { AnyOptionItem, BUS_KEY, Rect, Vars } from '../../../_type';
+  import { CssUtils, Rects, Tmpl } from '../../../core';
   import { COM_TYPES } from '../../lib-com-types';
   import { InputBoxProps, InputBoxState } from './ti-input-types';
   import { useInputAutoSelect } from './use-input-auto-select';
@@ -39,6 +39,7 @@
   let emit = defineEmits<{
     (event: PrefixSuffixEvents): void;
     (event: 'change', payload: string): void;
+    (event: 'box-item-change', payload: AnyOptionItem | undefined): void;
   }>();
   //-----------------------------------------------------
   const _box_state: InputBoxState = reactive({
@@ -53,6 +54,7 @@
     boxErrMsg: '',
     boxIcon: undefined,
     boxTip: undefined,
+    boxItem: undefined,
     prefixIconHovered: false,
     prefixTextHovered: false,
     suffixIconHovered: false,
@@ -60,6 +62,15 @@
 
     lastUpdateAMS: 0,
   });
+  //-----------------------------------------------------
+  watch(
+    () => _box_state.boxItem,
+    () => {
+      emit('box-item-change', _box_state.boxItem);
+    },
+    { immediate: true }
+  );
+  //-----------------------------------------------------
   const _box_rect = ref<Rect>();
   const $el = ref<HTMLElement>();
   const $input = ref<HTMLInputElement>();
@@ -295,6 +306,18 @@
     }
   }
   //-----------------------------------------------------
+  const RenderHint = computed(() => {
+    if (props.renderHint) {
+      if (_.isString(props.renderHint)) {
+        let t = Tmpl.parse(props.renderHint);
+        return (vars: Vars) => {
+          return t.render(vars);
+        };
+      }
+      return props.renderHint;
+    }
+  });
+  //-----------------------------------------------------
   function doUpdateTipList() {
     const prediMaker = makeOptionPredicate(props);
     const predicate = prediMaker(props.boxVars ?? {});
@@ -307,6 +330,8 @@
       tidyValue: Box.value.tidyValue,
       isVisible: predicate,
       tipItemKeepRaw: props.tipItemKeepRaw,
+      renderHint: Box.value.renderHint,
+      prepareHintVars: Box.value.prepareHintVars,
     });
   }
   //-----------------------------------------------------
