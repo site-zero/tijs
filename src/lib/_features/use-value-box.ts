@@ -286,12 +286,12 @@ export function useValueBox<T extends any>(
           let v_in_str = `${val}`;
           let hvars = prepareHintVars(v_in_str);
           val = (RenderHint.value(hvars) ?? val) as T;
-          console.log(`await translateValue(${val});`);
+          //console.log(`await translateValue(${val});`);
         }
         textOrItem = await translateValue(val);
-        if (RenderHint.value) {
-          console.log(textOrItem);
-        }
+        // if (RenderHint.value) {
+        //   console.log(textOrItem);
+        // }
       } catch (e) {
         console.trace(e);
         console.warn(`Fail to translateValue(${Str.anyToStr(val)})`);
