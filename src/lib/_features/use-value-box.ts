@@ -185,9 +185,7 @@ export function useValueBox(
   props: ValueBoxProps<string>,
   options: ValueBoxOptions
 ): ValueBoxFeature {
-  //console.log('useValueBox');
   let { emit, getBoxElement, COM_TYPE } = options;
-
   //................................................
   let boxProps = _.cloneDeep(props);
   if (_.isUndefined(boxProps.value)) {
@@ -228,7 +226,7 @@ export function useValueBox(
   async function doUpdateText() {
     let focused = state.boxFocused;
     let val = state.boxValue;
-    console.log('doUpdateText::state.boxValue', `[${val}]`);
+    //console.log('doUpdateText::state.boxValue', `[${val}]`);
 
     // 如果聚焦，则仅仅显示原始值，否则，看看是否需要格式化
     // 除非调用者明确禁止这种行为
@@ -299,7 +297,7 @@ export function useValueBox(
       return;
     }
     let v = await tidyValue(val);
-    console.log('doChangeValue', val, v);
+    // console.log('doChangeValue', val, v);
     emit('change', v);
   }
   //

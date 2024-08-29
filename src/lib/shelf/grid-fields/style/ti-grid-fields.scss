@@ -18,8 +18,8 @@
     font-size: 1.4em;
     padding: 0.6em 0;
     border-bottom: 1px solid var(--ti-color-border-shallow);
-    > .as-snippet-text {
-      margin: 0 0.5em;
+    > .ti-icon + .as-snippet-text {
+      margin-left: 0.5em;
     }
   }
   //-------------------------------------------------------------

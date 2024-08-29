@@ -42,11 +42,23 @@ export function makeDictOptions(
   }
 
   // 处理静态方法
-
-  re.getValue = _gen_dict_opt_getter(setup.value || 'value');
   re.getText = _gen_dict_opt_getter(setup.text || 'text');
   re.getIcon = _gen_dict_opt_getter(setup.icon || 'icon');
   re.getTip = _gen_dict_opt_getter(setup.tip || 'tip');
+
+  if (_.isFunction(setup.value)) {
+    re.getValue = setup.value;
+  } else {
+    let valueKey = setup.value ?? 'value';
+    re.getValue = (item: any, index: number): any => {
+      //console.log('dict.getValue', item, valueKey, index);
+      let v = _.get(item, valueKey);
+      if (_.isNil(v) && index >= 0) {
+        return `row-${index}`;
+      }
+      return v;
+    };
+  }
 
   return re;
 }

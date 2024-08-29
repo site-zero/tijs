@@ -16,8 +16,9 @@ export function dft_get_item<T, V>(): LoadDictItem<T, V> {
       dict
         .getData(false, signal)
         .then((list) => {
-          for (let li of list) {
-            let v = dict.getItemValue(li);
+          for (let i = 0; i < list.length; i++) {
+            let li = list[i];
+            let v = dict.getItemValue(li, i);
             if (_.isEqual(v, val)) {
               resolve(li);
               return;

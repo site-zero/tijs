@@ -61,7 +61,7 @@ export class DictImpl<T, V> extends AbstractDict<T, V> implements IDict<T, V> {
     if (_.isEmpty(this._cache_data) || force) {
       this._cache_data = await this._data(signal);
       for (let it of this._cache_data) {
-        let v = this._get_value(it);
+        let v = this._get_value(it, -1);
         this._cache_item.set(v, it);
       }
     }
@@ -116,7 +116,7 @@ export class DictImpl<T, V> extends AbstractDict<T, V> implements IDict<T, V> {
   }
 
   getItemValue(it: T): V {
-    return this._get_value(it);
+    return this._get_value(it, -1);
   }
 
   getItemText(it: T): string {

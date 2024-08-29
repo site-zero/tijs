@@ -42,17 +42,6 @@ export type ValueInputProps = OptionsProps & {
   trimed?: boolean;
 
   /**
-   * 指定值的Icon获取方式, 通常，对于带 options 的输入框。
-   * 如果打开了 autoPreifxIcon 选项，则会尝试从选项对象里获取 icon
-   * 如果标准选项里有了 icon 字段自然没有问题。
-   * 但是如果这个 icon 是从原生对象根据某些字段按照一定逻辑生成的
-   * 那么为了能同时表达道 valueBox 上，也需要声明这个属性。
-   *
-   * 默认的 ，对于 InputBox，它会用 tipList.getIcon 作为这个属性的默认值
-   */
-  getValueIcon?: string | Convertor<Vars, IconInput | undefined>;
-
-  /**
    * 自定义任何其他值处理器，在内置处理器后执行
    */
   beforeValueProcessors?: FuncA1<any, string> | FuncA1<any, string>[];
@@ -224,13 +213,13 @@ export function useValueInput(props: ValueInputProps): ValueInputFeature {
     undefined;
 
   // 直接获取自路径
-  if (_.isString(props.getValueIcon)) {
+  if (_.isString(props.getOptionIcon)) {
     _get_value_icon = (it: Vars): IconInput | undefined =>
-      _.get(it, props.getValueIcon as string) as IconInput;
+      _.get(it, props.getOptionIcon as string) as IconInput;
   }
   // 定制
-  else if (props.getValueIcon) {
-    _get_value_icon = props.getValueIcon;
+  else if (props.getOptionIcon) {
+    _get_value_icon = props.getOptionIcon;
   }
 
   //................................................

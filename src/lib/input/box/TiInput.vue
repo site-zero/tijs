@@ -94,7 +94,16 @@
   });
   //-----------------------------------------------------
   const TipListConfig = computed(() =>
-    getTipListConf(props.tipList, props.tipFormat)
+    getTipListConf(
+      {
+        getIcon: props.getOptionIcon,
+        getText: props.getOptionText,
+        getTip: props.getOptionTip,
+        getValue: props.getOptionValue,
+      },
+      props.tipList,
+      props.tipFormat
+    )
   );
   //-------------------------------------------------
   let el_parent_area_hint = 0;
@@ -115,7 +124,13 @@
       _box_state,
       {
         ...props,
-        getValueIcon: props.getValueIcon ?? props.tipList?.getIcon,
+        getOptionIcon: props.getOptionIcon ?? props.tipList?.getIcon,
+        getOptionText: props.getOptionText ?? props.tipList?.getText,
+        getOptionValue:
+          props.getOptionValue ??
+          props.tipList?.getId ??
+          props.tipList?.getValue,
+        getOptionTip: props.getOptionTip ?? props.tipList?.getTip,
       },
       {
         emit,
@@ -262,7 +277,6 @@
           _box_state.boxInputing
         );
         let val = _box_state.boxInputing;
-        console.log('OnClickTipMask', val);
         Box.value.doChangeValue(val ?? '');
       }
       // 自由输入模式
@@ -276,7 +290,7 @@
   //-----------------------------------------------------
   function OnListSelect(payload: ListSelectEmitInfo) {
     let { currentId } = payload;
-    console.log('OnListSelect', currentId);
+    // console.log('OnListSelect', currentId);
     let val = _.isNumber(currentId) ? `${currentId}` : currentId;
     _box_state.boxValue = val;
     Box.value.doChangeValue(val ?? '');

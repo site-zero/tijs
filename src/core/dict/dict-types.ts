@@ -2,10 +2,10 @@ import _ from 'lodash';
 import { AnyGetter, IconInput, OptionItem, ValGetter, Vars } from '../../_type';
 
 export type DictSetup = {
-  value?: string | AnyGetter;
-  text?: string | ValGetter<any, string>;
-  icon?: string | ValGetter<any, string>;
-  tip?: string | ValGetter<any, string>;
+  value?: string | ((item: Vars, index: number) => any);
+  text?: string | ValGetter<any, string | undefined>;
+  icon?: string | ValGetter<any, IconInput | undefined>;
+  tip?: string | ValGetter<any, string | undefined>;
 
   data: any;
   query?: any;
@@ -154,7 +154,7 @@ export type LoadText<V> = (input: V, signal?: AbortSignal) => Promise<string>;
 
 export type GetItemText<T> = (item: T) => string;
 
-export type GetItemValue<T, V> = (item: T) => V;
+export type GetItemValue<T, V> = (item: T, index: number) => V;
 
 export type IsMatched<T, V> = (item: T, val: V) => boolean;
 

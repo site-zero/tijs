@@ -1,14 +1,18 @@
 import _ from 'lodash';
 import { Rect, Vars } from '../../../_type';
 import { CssUtils, Match, Util } from '../../../core';
-import { ListProps, getDockingStyle } from '../../../lib';
+import { ListProps, StdListItemProps, getDockingStyle } from '../../../lib';
 import {
   OptionPredicateMaker,
   QuickTipFormat,
   TipBoxProps,
 } from './ti-input-types';
 
-export function getTipListConf(props?: ListProps, tipFormat?: QuickTipFormat) {
+export function getTipListConf(
+  dftOptions: StdListItemProps,
+  props?: ListProps,
+  tipFormat?: QuickTipFormat
+) {
   // 准列表
   let re: ListProps = _.assign(
     {
@@ -20,6 +24,11 @@ export function getTipListConf(props?: ListProps, tipFormat?: QuickTipFormat) {
     } as ListProps,
     props
   );
+
+  re.getIcon = re.getIcon ?? dftOptions.getIcon;
+  re.getText = re.getText ?? dftOptions.getText;
+  re.getValue = re.getValue ?? dftOptions.getValue;
+  re.getTip = re.getTip ?? dftOptions.getTip;
   // 设置快速格式化
   if (!re.textFormat && tipFormat) {
     re.textFormat = {

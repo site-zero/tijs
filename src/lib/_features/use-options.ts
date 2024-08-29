@@ -1,6 +1,6 @@
 import JSON5 from 'json5';
 import _ from 'lodash';
-import { Vars } from '../../_type';
+import { Convertor, IconInput, Vars } from '../../_type';
 import { DictName, DictSetup, Dicts, TiDict, isDictSetup } from '../../core';
 
 export type OptionsInput = string | DictName | DictSetup | Vars[];
@@ -20,6 +20,20 @@ export type OptionsProps = {
    * 值必须在字典中
    */
   mustInOptions?: boolean;
+
+  /**
+   * 指定值的Icon获取方式, 通常，对于带 options 的输入框。
+   * 如果打开了 autoPreifxIcon 选项，则会尝试从选项对象里获取 icon
+   * 如果标准选项里有了 icon 字段自然没有问题。
+   * 但是如果这个 icon 是从原生对象根据某些字段按照一定逻辑生成的
+   * 那么为了能同时表达道 valueBox 上，也需要声明这个属性。
+   *
+   * 默认的 ，对于 InputBox，它会用 tipList.getIcon 作为这个属性的默认值
+   */
+  getOptionIcon?: string | Convertor<Vars, IconInput | undefined>;
+  getOptionText?: string | Convertor<Vars, string | undefined>;
+  getOptionTip?: string | Convertor<Vars, string | undefined>;
+  getOptionValue?: string | ((item: Vars, index: number) => any);
 };
 
 export type OptionsFeature = {
@@ -34,7 +48,13 @@ function __build_dict(props: OptionsProps): TiDict | undefined {
   if (options) {
     // 选项数据
     if (_.isArray(options)) {
-      let dictOptions = Dicts.makeDictOptions({ data: options });
+      let dictOptions = Dicts.makeDictOptions({
+        data: options,
+        icon: props.getOptionIcon,
+        text: props.getOptionText,
+        tip: props.getOptionTip,
+        value: props.getOptionValue,
+      });
       return Dicts.createDict(dictOptions);
     }
 
