@@ -137,6 +137,7 @@
    * @param change 修改的值
    */
   async function onValueChange(change: FieldChange) {
+    console.log('Form.onValueChange', change)
     Change.value.handleValueChange(change, {
       emit,
       data: props.data || {},

@@ -8,6 +8,7 @@
     reactive,
     ref,
     watch,
+    nextTick,
   } from 'vue';
   import {
     ListSelectEmitInfo,
@@ -28,6 +29,7 @@
     getTipWrapperStyle,
     makeOptionPredicate,
   } from './use-tip-box';
+  import {} from 'process';
   //-----------------------------------------------------
   defineOptions({
     inheritAttrs: false,
@@ -246,6 +248,7 @@
   function OnClickTipMask() {
     let checkValueWhenClose =
       props.checkValueWhenClose ?? props.canInput ?? false;
+    console.log('onClickTipMask');
     resetTipList(
       _box_state,
       _tips,
@@ -254,7 +257,10 @@
     if (checkValueWhenClose) {
       if (props.mustInOptions) {
         // 是不是清空了？
-        console.log(_box_state.boxInputing);
+        console.log(
+          'OnClickTipMask->checkValueWhenClose',
+          _box_state.boxInputing
+        );
         let val = _box_state.boxInputing;
         console.log('OnClickTipMask', val);
         Box.value.doChangeValue(val ?? '');
@@ -265,6 +271,21 @@
         Box.value.doChangeValue(val);
       }
     }
+    OnInputBlur();
+  }
+  //-----------------------------------------------------
+  function OnListSelect(payload: ListSelectEmitInfo) {
+    let { currentId } = payload;
+    console.log('OnListSelect', currentId);
+    let val = _.isNumber(currentId) ? `${currentId}` : currentId;
+    _box_state.boxValue = val;
+    Box.value.doChangeValue(val ?? '');
+    // TODO if multi 可能需要特别处理一下
+    resetTipList(
+      _box_state,
+      _tips,
+      `OnListSelect=>'${currentId}': ${props.options ?? '-no-options-'}`
+    );
     OnInputBlur();
   }
   //-----------------------------------------------------
@@ -285,10 +306,11 @@
     // 选择高亮项目
     if (/^Arrow(Up|Down)$/.test(event.key)) {
       // 这个需要让 TiList 提供一个回调函数
-      // 可以回来注册一个 API 提供 上下移动的能力
+      // 可以注册一个 API 提供 上下移动的能力
     }
     // 取消
     else if ('Escape' == event.key) {
+      _box_state.boxValue = props.value;
       resetTipList(
         _box_state,
         _tips,
@@ -298,6 +320,7 @@
     }
     // 确认
     else if ('Enter' == event.key) {
+      _box_state.boxValue = _box_state.boxInputing;
       resetTipList(
         _box_state,
         _tips,
@@ -305,18 +328,6 @@
       );
     }
   }
-  //-----------------------------------------------------
-  const RenderHint = computed(() => {
-    if (props.renderHint) {
-      if (_.isString(props.renderHint)) {
-        let t = Tmpl.parse(props.renderHint);
-        return (vars: Vars) => {
-          return t.render(vars);
-        };
-      }
-      return props.renderHint;
-    }
-  });
   //-----------------------------------------------------
   function doUpdateTipList() {
     const prediMaker = makeOptionPredicate(props);
@@ -330,23 +341,8 @@
       tidyValue: Box.value.tidyValue,
       isVisible: predicate,
       tipItemKeepRaw: props.tipItemKeepRaw,
-      renderHint: Box.value.renderHint,
-      prepareHintVars: Box.value.prepareHintVars,
+      cookValHint: Box.value.cookValHint,
     });
-  }
-  //-----------------------------------------------------
-  function OnListSelect(payload: ListSelectEmitInfo) {
-    let { currentId } = payload;
-    //console.log('OnListSelect', currentId);
-    let val = _.isNumber(currentId) ? `${currentId}` : currentId;
-    Box.value.doChangeValue(val ?? '');
-    // TODO if multi 可能需要特别处理一下
-    resetTipList(
-      _box_state,
-      _tips,
-      `OnListSelect=>'${currentId}': ${props.options ?? '-no-options-'}`
-    );
-    OnInputBlur();
   }
   //-----------------------------------------------------
   // 关键属性变化，重置选项列表
@@ -445,6 +441,9 @@
     //console.log('TiInput mounted');
     OnInputBlur();
     _box_state.boxFocused = false;
+    nextTick(() => {
+      _box_state.boxValue = props.value;
+    });
     if (props.boxFocused && $input.value) {
       $input.value.focus();
     }

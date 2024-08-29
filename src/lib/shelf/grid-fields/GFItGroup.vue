@@ -78,6 +78,7 @@
       v-if="props.title || props.comType"
       className="as-group-title"
       :text="GroupText.title"
+      :prefixIcon="props.titleIcon"
       :textType="GroupText.titleType"
       :comType="props.comType"
       :comConf="props.comConf"

@@ -7,6 +7,7 @@ export type QuickFieldInfo = {
   _key: string;
   name?: string | string[];
   title?: string;
+  disabled?: boolean;
   required?: boolean;
   readonly?: boolean;
   colStart?: number;
@@ -77,6 +78,10 @@ function defineObjFields(featureName: string): TiObjFieldsFeature {
     if (finfo.required) {
       re.required = true;
     }
+    if (finfo.disabled) {
+      re.disabled = true;
+    }
+
     re.name = finfo.name ?? re.name ?? finfo._key;
     if ('-SEP-' == re.name) {
       re.name = undefined;
@@ -219,6 +224,9 @@ export function useObjFields(name = '_DEFAULT_FIELD_SET'): TiObjFieldsFeature {
  *
  * uniqKey = '!type:1/2:3'
  * > {name:'type', comConf: {readonly:true}}
+ *
+ * uniqKey = '~!type:1/2:3'
+ * > {name:'type', disabled:true, comConf: {readonly:true}}
  * ```
  *
  * @param key 字段键
@@ -228,12 +236,16 @@ export function parseNameForObjField(key: string) {
   let cols: string;
   let rows: string;
 
-  let m = /^([!*]+)(.+)$/.exec(key);
+  let m = /^([!*~]+)(.+)$/.exec(key);
   let required = false;
   let readonly = false;
+  let disabled = undefined;
   if (m) {
     required = m[1].indexOf('*') >= 0;
     readonly = m[1].indexOf('!') >= 0;
+    if (m[1].indexOf('~') >= 0) {
+      disabled = true;
+    }
     key = m[2].trim();
   }
 
@@ -241,7 +253,7 @@ export function parseNameForObjField(key: string) {
   let name = parts[0];
   cols = _.nth(parts, 1) ?? '';
   rows = _.nth(parts, 2) ?? '';
-  re = { _key: name, required, readonly };
+  re = { _key: name, required, readonly, disabled };
 
   // name/title
   m = /^([^=]+)(=(.+))?/.exec(name);

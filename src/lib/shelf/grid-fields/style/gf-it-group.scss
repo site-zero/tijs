@@ -1,4 +1,13 @@
 .ti-grid-fiels-item.part-group {
+  > .as-group-title {
+    @include flex-align-nowrap;
+    > .ti-icon + .as-snippet-text {
+      margin-left: 0.4em;
+    }
+    > .ti-icon {
+      font-size: 1.2em;
+    }
+  }
   //------------------------------------------
   > .as-group-body {
     display: grid;
@@ -64,11 +73,11 @@
       font-size: var(--ti-fontsz-#{$sz});
     }
   }
-  @include __aspect_fontsz("t");
-  @include __aspect_fontsz("s");
-  @include __aspect_fontsz("m");
-  @include __aspect_fontsz("b");
-  @include __aspect_fontsz("h");
+  @include __aspect_fontsz('t');
+  @include __aspect_fontsz('s');
+  @include __aspect_fontsz('m');
+  @include __aspect_fontsz('b');
+  @include __aspect_fontsz('h');
 
   //-------------------------------------------------------------
   @mixin __aspect_body_gap($sz) {
@@ -84,10 +93,10 @@
       }
     }
   }
-  @include __aspect_body_gap("t");
-  @include __aspect_body_gap("s");
-  @include __aspect_body_gap("m");
-  @include __aspect_body_gap("b");
-  @include __aspect_body_gap("h");
+  @include __aspect_body_gap('t');
+  @include __aspect_body_gap('s');
+  @include __aspect_body_gap('m');
+  @include __aspect_body_gap('b');
+  @include __aspect_body_gap('h');
   //------------------------------------------
 }
