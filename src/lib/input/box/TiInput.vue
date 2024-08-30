@@ -381,10 +381,22 @@
   //-----------------------------------------------------
   watch(
     () => props.value,
-    () => {
-      Box.value.doUpdateText();
+    async () => {
+      _box_state.boxValue = props.value;
+      // if ("#SubDivisions"==props.options) {
+      //   console.log(
+      //     `before: props.value=> ${props.value} : ${_box_state.boxValue} : ${_box_state.boxInputing}`
+      //   );
+      // }
+      await Box.value.doUpdateText();
+      // if ("#SubDivisions"==props.options) {
+      //   console.log(
+      //     `after : ${props.value} : ${_box_state.boxValue} : ${_box_state.boxInputing}`
+      //   );
+      // }
       doUpdateTipList();
-    }
+    },
+    { immediate: true }
   );
   //-----------------------------------------------------
   // 看看是否满足选项列表的打开条件
@@ -463,9 +475,9 @@
     //console.log('TiInput mounted');
     OnInputBlur();
     _box_state.boxFocused = false;
-    nextTick(() => {
-      _box_state.boxValue = props.value;
-    });
+    // nextTick(() => {
+    //   _box_state.boxValue = props.value;
+    // });
     if (props.boxFocused && $input.value) {
       $input.value.focus();
     }

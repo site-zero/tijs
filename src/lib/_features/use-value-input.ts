@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { computed, ref, Ref } from 'vue';
 import {
   AsyncFuncA1,
   Convertor,
@@ -10,8 +11,6 @@ import {
 import { Dicts, Str, TiDict, Tmpl } from '../../core';
 import { wrapPromiseFunc } from '../../core/util/util-lang';
 import { OptionsFeature, OptionsProps, useOptions } from './use-options';
-import { computed, ref, Ref } from 'vue';
-import { abort } from 'process';
 /*-------------------------------------------------------
 
                         Types
@@ -135,7 +134,9 @@ function __build_process_pips(
       if (ctrlAbort.value) {
         try {
           ctrlAbort.value.abort('Cancel Last Query in use-value-input.ts');
-        } catch (_err) {}
+        } catch (_err) {
+          console.warn('abort!', _err);
+        }
       }
       ctrlAbort.value = new AbortController();
       let it = await dict.getStdItem(v, ctrlAbort.value.signal);

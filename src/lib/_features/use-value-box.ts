@@ -138,7 +138,7 @@ export type ValueBoxFeature = PrefixSuffixFeature &
      * 本函数会根据 `state.boxVal` 修改 `state.boxText`。
      * `doUpdateValue` 也会在内部调用这个函数
      */
-    doUpdateText: () => void;
+    doUpdateText: () => Promise<void>;
 
     //
     // 界面绑定函数
