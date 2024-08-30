@@ -58,6 +58,7 @@
     }
     let format = props.valueFormat ?? _dft_prop('valueFormat', 'yyyy-MM-dd');
     let quickMode = props.quickInputMode ?? _dft_prop('quickInputMode', '');
+    console.log('quickInputMode', quickMode);
 
     let d: Date | undefined;
     if (DateTime.isDateTimeQuickParseMode(quickMode)) {

@@ -302,6 +302,11 @@ export function quickParse(
     let s_date = m[1];
     let s_time = m[3] ?? '';
 
+    // 如果日期部分包括特殊字符，就一定不是快速模式
+    if (!/^[0-9]+$/.test(s_date)) {
+      return parse(_input);
+    }
+
     // 尝试解析日期
     let d = parser(s_date);
 

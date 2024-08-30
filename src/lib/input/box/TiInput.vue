@@ -379,6 +379,14 @@
     }
   );
   //-----------------------------------------------------
+  watch(
+    () => props.value,
+    () => {
+      Box.value.doUpdateText();
+      doUpdateTipList();
+    }
+  );
+  //-----------------------------------------------------
   // 看看是否满足选项列表的打开条件
   watch(
     () => [_box_state.boxValue, _box_state.boxFocused],
