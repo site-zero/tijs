@@ -77,7 +77,7 @@ export class DictFactoryWrapper<T, V>
   }
 
   getItemValue(it: T): V {
-    return this._dict.getItemValue(it);
+    return this._dict.getItemValue(it, -1);
   }
 
   getItemText(it: T): string {
