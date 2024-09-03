@@ -139,7 +139,7 @@ function __build_process_pips(
         }
       }
       ctrlAbort.value = new AbortController();
-      let it = await dict.getStdItem(v, ctrlAbort.value.signal);
+      let it = await dict?.getStdItem(v, ctrlAbort.value.signal);
       if (cookValHint) {
         console.log(`await dict.getStdItem(${v}) => `, it);
       }
