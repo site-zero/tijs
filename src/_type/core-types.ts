@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { App, DefineComponent, InjectionKey } from 'vue';
-import { BlockOverflowMode } from '../lib';
+import { ActionBarProps, BlockOverflowMode } from '../lib';
 
 /*---------------------------------------------------`
 
@@ -997,6 +997,7 @@ export type BlockInfoProps = BlockAspectClass & {
   //
   actions?: ActionBarItem[];
   actionVars?: Vars;
+  actionBar?: ActionBarProps;
   actionClass?: any;
   actionStyle?: Vars;
 };

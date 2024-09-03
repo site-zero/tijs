@@ -1,12 +1,12 @@
 .ti-actionbar.top-as-button {
-  padding: var(--ti-measure-box-pad);
+  //--------------------------------------
   .bar-item[aspect='top'] {
     > .bar-item-info {
-      @include flex-center($wp: nowrap);
-      padding: 0.3em 0.7em;
-      min-width: 6em;
-      margin: SZ(2) 0;
-      border: 1px solid var(--ti-color-border-weak);
+      @include flex-align-nowrap($ai: stretch);
+      padding: 0;
+      border: 1px solid var(--item-color);
+      min-width: 5em;
+      text-align: center;
       //------------------------------------
       .item-icon {
         @include flex-center;
@@ -14,8 +14,13 @@
       }
       //------------------------------------
       .item-text {
-        padding: 0;
-        flex: 0 0 auto;
+        padding: 0.2em 0.5em;
+        flex: 1 1 auto;
+      }
+      //------------------------------------
+      .item-suffix {
+        margin: 0;
+        padding: 0 0.36em;
       }
       //------------------------------------
       &[bar-layout-mode='V'] {
@@ -25,11 +30,15 @@
         }
       }
       //------------------------------------
-      &:hover {
-        box-shadow: 3px 4px 6px -3px var(--ti-color-mask-thin);
-        border-color: var(--ti-color-secondary);
-      }
+      // &:hover {
+      //   //box-shadow: 3px 3px 6px var(--ti-color-mask-thin);
+      // }
       //------------------------------------
     } // > .bar-item-head {
   } // > .bar-item[item-depth="0"] {
+  //--------------------------------------
+  .bar-item[aspect='top'] + .bar-item[aspect='top'] {
+    margin-left: 0.5em;
+  }
+  //--------------------------------------
 }

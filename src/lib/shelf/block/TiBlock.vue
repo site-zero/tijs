@@ -67,6 +67,7 @@
       <!--------ActionBar--------->
       <TiActionBar
         v-if="!_.isEmpty(Block.HeadActions)"
+        v-bind="props.actionBar"
         :items="Block.HeadActions"
         :vars="props.actionVars"
         :className="props.actionClass"

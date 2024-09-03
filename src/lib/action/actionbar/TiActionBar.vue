@@ -54,6 +54,7 @@
     barPad: 's',
     itemSize: 's',
     itemRadius: 's',
+    itemAlign: 'left',
   });
   //-------------------------------------------------------
   watch(
@@ -132,36 +133,40 @@
       v-if="HasOpenedGroup"
       @click.left="OnClickMask"></div>
     <!--===: Show Bar Items :===-->
-    <template
-      v-for="it in UsedBarItems"
-      :key="it.uniqKey">
-      <template v-if="!it.hidden">
-        <!--......|< Action >|......-->
-        <ItemAsAction
-          v-if="'action' == it.type"
-          v-bind="it" />
-        <!--......|< Group >|......-->
-        <ItemAsFolderGroup
-          v-else-if="'group' == it.type"
-          v-bind="it" />
-        <!--......|< Sep >|......-->
-        <div
-          v-else-if="'sep' == it.type"
-          class="bar-sep"
-          :aspect="it.aspect"
-          :item-depth="it.depth"
-          :item-index="it.index"></div>
-        <!--......|< Unknown >|......-->
-        <div
-          v-else
-          class="bar-unknwon"
-          :aspect="it.aspect"
-          :item-depth="it.depth"
-          :item-index="it.index">
-          {{ it.uniqKey }}
-        </div>
+    <div
+      class="bar-item-wrapper"
+      :item-align="props.itemAlign">
+      <template
+        v-for="it in UsedBarItems"
+        :key="it.uniqKey">
+        <template v-if="!it.hidden">
+          <!--......|< Action >|......-->
+          <ItemAsAction
+            v-if="'action' == it.type"
+            v-bind="it" />
+          <!--......|< Group >|......-->
+          <ItemAsFolderGroup
+            v-else-if="'group' == it.type"
+            v-bind="it" />
+          <!--......|< Sep >|......-->
+          <div
+            v-else-if="'sep' == it.type"
+            class="bar-sep"
+            :aspect="it.aspect"
+            :item-depth="it.depth"
+            :item-index="it.index"></div>
+          <!--......|< Unknown >|......-->
+          <div
+            v-else
+            class="bar-unknwon"
+            :aspect="it.aspect"
+            :item-depth="it.depth"
+            :item-index="it.index">
+            {{ it.uniqKey }}
+          </div>
+        </template>
       </template>
-    </template>
+    </div>
     <!-- // end v-for -->
     <!--===: Bar Tail :===-->
     <slot name="tail">

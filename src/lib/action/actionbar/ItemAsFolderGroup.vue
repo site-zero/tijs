@@ -1,8 +1,8 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed, inject, ref, watch } from 'vue';
+  import { BUS_KEY, DockMode, Point2D } from '../../../_type';
   import { Dom } from '../../../core';
-  import { DockMode, Point2D } from '../../../_type';
   import BarItemTmpl from './BarItemTmpl.vue';
   import ItemAsAction from './ItemAsAction.vue';
   import { ABAR_STATE, ABarUsedItem } from './ti-action-bar-types';
@@ -13,6 +13,7 @@
   });
   //-------------------------------------------------------
   const state = inject(ABAR_STATE);
+  const bus = inject(BUS_KEY);
   //-------------------------------------------------------
   const props = defineProps<ABarUsedItem>();
   //-------------------------------------------------------
@@ -33,6 +34,17 @@
   });
   //-------------------------------------------------------
   function OnClickHead() {
+    // 指定了动作
+    if (_.isFunction(props.action)) {
+      props.action(state?.vars || {}, bus);
+    }
+    // 否则就相当于 ClickSuffix
+    else {
+      OnClickSuffix();
+    }
+  }
+  //-------------------------------------------------------
+  function OnClickSuffix() {
     let st = OpenStatus.value ?? 'closed';
     //console.log('OnClickHead', st);
     if (state && /^(closed)$/.test(st)) {
@@ -77,10 +89,19 @@
     v-bind="props"
     @click="OnClickHead">
     <template v-slot:suffix>
+      <!-- 显示向右展开的指示按钮-->
       <div
         v-if="props.depth > 0 || 'V' == props.layoutMode"
-        class="item-suffix as-icon">
+        class="item-suffix as-icon"
+        @click.stop="OnClickSuffix">
         <i class="zmdi zmdi-chevron-right"></i>
+      </div>
+      <!-- 显示下拉指示按钮-->
+      <div
+        v-else
+        class="item-suffix as-icon"
+        @click.stop="OnClickSuffix">
+        <i class="zmdi zmdi-chevron-down"></i>
       </div>
     </template>
     <!--++++++: Children :+++++++-->

@@ -1,7 +1,7 @@
 .ti-actionbar {
   user-select: none;
-  @include aspect_pad("&.bar-pad");
-  @include aspect_fontsize("&.item-size");
+  @include aspect_pad('&.bar-pad');
+  @include aspect_fontsize('&.item-size');
   $BR: var(--ti-measure-r-s);
   // 菜单项
   .bar-item {
@@ -13,7 +13,7 @@
       opacity: 0.4;
       filter: grayscale(100%);
     }
-    &[aspect="sub"] {
+    &[aspect='sub'] {
       &:first-child {
         border-radius: $BR $BR 0 0;
       }
@@ -24,9 +24,29 @@
   } // .bar-item
   &.layout-mode-H {
     @include flex-align-nowrap($ai: stretch);
+    > .bar-head {
+      @include flex-align-nowrap($ai: center);
+      font-weight: bold;
+      padding: 0 0.6em;
+    }
+    > .bar-item-wrapper {
+      @include flex-align-nowrap($ai: stretch);
+      flex: 1 1 auto;
+      &[item-align='left'] {
+        justify-content: flex-start;
+      }
+      &[item-align='center'] {
+        justify-content: center;
+      }
+      &[item-align='right'] {
+        justify-content: flex-end;
+      }
+    }
   }
   &.layout-mode-V {
-    @include flex-align-v-nowrap($ai: stretch);
+    > .bar-item-wrapper {
+      @include flex-align-v-nowrap($ai: stretch);
+    }
   }
 } // .ti-actionbar {
 

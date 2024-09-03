@@ -5,6 +5,7 @@ import {
   ActionBarItemInfo,
   AspectSize,
   CommonProps,
+  CssAlignment,
   IconInput,
   TextContentType,
   TiAppBus,
@@ -77,6 +78,11 @@ export type ActionBarProps = CommonProps & {
    * 选项字体大小
    */
   itemSize?: AspectSize;
+
+  /**
+   * 顶级菜单项目的排列
+   */
+  itemAlign?: CssAlignment;
 
   /**
    * 选项圆角

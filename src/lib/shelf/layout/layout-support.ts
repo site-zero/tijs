@@ -51,6 +51,7 @@ export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
       actions: it.actions,
       actionVars: it.actionVars,
       actionClass: it.actionClass,
+      actionBar: it.actionBar,
       actionStyle: it.actionStyle,
       headClass: it.headClass,
       headStyle: it.headStyle,

@@ -35,6 +35,7 @@ export function buildOneTab(items: LayoutTabItem[], tabKey?: string) {
         'actions',
         'actionVars',
         'actionClass',
+        'actionBar',
         'actionStyle'
       );
     }

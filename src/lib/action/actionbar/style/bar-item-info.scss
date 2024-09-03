@@ -2,29 +2,42 @@
   display: grid;
   grid-auto-columns: auto;
   grid-auto-flow: column;
-  gap: 0.5em;
+  gap: 0;
   line-height: var(--ti-measure-menu-lineheight);
-  padding: 0.3em 0.6em;
+  //padding: 0.26em 0.6em;
+  padding: 0;
+  overflow: hidden;
+  //-----------------------------------------------------
+  --item-color: var(--ti-color-border-shallow);
   //-----------------------------------------------------
   .item-icon {
     @include flex-center;
     font-size: var(--ti-measure-menu-iconsz);
     width: var(--ti-measure-menu-iconsz);
+    margin-left: .42em;
   }
   //-----------------------------------------------------
   .item-text {
     white-space: nowrap;
+    padding: 0.2em 0.5em;
   }
   //-----------------------------------------------------
   .item-suffix {
     @include font-fixed;
-    color: var(--ti-color-track);
-    padding: 0 0 0 1em;
+    opacity: 0.7;
     &.as-icon {
+      @include flex-center;
+      border-left: 1px solid var(--item-color);
+      padding: 0 0.36em;
       font-size: 1.3em;
     }
     &.as-tip {
       font-size: 0.8em;
+    }
+    &:hover {
+      opacity: 1;
+      background-color: var(--item-color);
+      color: var(--item-color-r);
     }
   }
   //-----------------------------------------------------
@@ -35,18 +48,15 @@
     &.is-highlight {
       color: var(--ti-color-secondary-r);
       background-color: var(--ti-color-secondary);
-      .item-suffix {
-        color: inherit;
-      }
     }
   }
   //-----------------------------------------------------
-  &[aspect="top"] {
-    @include aspect_radius("&.item-r");
+  &[aspect='top'] {
+    @include aspect_radius('&.item-r');
   }
   //-----------------------------------------------------
-  &[aspect="sub"],
-  &[bar-layout-mode="V"] {
+  &[aspect='sub'],
+  &[bar-layout-mode='V'] {
     grid-template-columns: auto 1fr;
   }
   //-----------------------------------------------------
@@ -65,6 +75,8 @@
   //-----------------------------------------------------
   @mixin __bar_item_color_by_name($name) {
     &.is-enabled.is-#{$name} {
+      --item-color: var(--ti-color-#{$name}-r);
+      --item-color-r: var(--ti-color-#{$name});
       color: var(--ti-color-#{$name}-r);
       background-color: var(--ti-color-#{$name});
       &:hover {
@@ -73,9 +85,13 @@
     }
 
     &.is-enabled.is-#{$name}-r {
+      --item-color: var(--ti-color-#{$name}-r);
+      --item-color-r: var(--ti-color-#{$name});
       color: var(--ti-color-#{$name}-r);
       background-color: var(--ti-color-#{$name});
       &:hover {
+        --item-color: var(--ti-color-#{$name});
+        --item-color-r: var(--ti-color-#{$name}-r);
         color: var(--ti-color-#{$name});
         background-color: var(--ti-color-#{$name}-r);
       }
