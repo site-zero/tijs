@@ -87,10 +87,11 @@ div.ti-input-box {
           margin-left: auto;
         }
         code {
-          color: var(--ti-color-info);
+          color: var(--ti-color-primary);
           // 当 code 顶头 的时候，给定一个固定的最小宽度
           &:first-child {
-            min-width: 2.5em;
+            @include font-fixed;
+            min-width: 4em;
           }
         }
         code + em,

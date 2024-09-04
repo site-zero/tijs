@@ -5,10 +5,14 @@
   }
   > main {
     flex: 1 1 auto;
-    position: relative;
+    > .tabs-main-block-con {
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
   }
 
-  &[tabs-at="bottom"] {
+  &[tabs-at='bottom'] {
     > header {
       order: 2;
     }

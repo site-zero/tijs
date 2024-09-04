@@ -1,3 +1,4 @@
+import { Vars } from '../../../../_type';
 import {
   LayoutItem,
   LayoutPanelProps,
@@ -9,7 +10,12 @@ import {
 //
 // Tab Layout
 //
-export type LayoutTabsProps = LayoutProps & LayoutPanelProps & TabsAspect;
+export type LayoutTabsProps = LayoutProps &
+  LayoutPanelProps &
+  TabsAspect & {
+    mainStyle?: Vars;
+    mainClass?: any;
+  };
 
 export type LayoutTabItem = LayoutItem;
 

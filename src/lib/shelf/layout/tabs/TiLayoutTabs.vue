@@ -45,6 +45,7 @@
   const _current_tab_key = ref<string | undefined>();
   //-------------------------------------------------
   const TopClass = computed(() => CssUtils.mergeClassName(props.className));
+  const MainClass = computed(() => CssUtils.mergeClassName(props.mainClass));
   //-------------------------------------------------
   const TabsConfig = computed(() =>
     buildLayoutTabsConfig(props, TabBlocks.value)
@@ -133,46 +134,48 @@
         @change="OnTabChange" />
     </header>
     <!--======== Main Block =======-->
-    <main>
-      <!----------------------------->
-      <template v-if="MainTab">
-        <slot :main="MainTab">
-          <TiBlock
-            v-if="'block' == MainTab.type"
-            block-fit="cover"
-            overflow-mode="cover"
-            v-bind="MainTab.propsForBlock"
-            :class-name="MainTab.blockClass"
-            :main-class="MainTab.mainClass"
-            :main-style="MainTab.mainStyle"
-            @happen="OnBlockEventHappen" />
-          <!-- 格子布局-->
-          <TiLayoutGrid
-            v-else-if="'grid' == MainTab.type"
-            v-bind="MainTab.propsForLayoutGrid"
-            :sub-layout="true"
-            :schema="schema"
-            @_sub_block="emit('block', $event)" />
-          <!-- 标签布局-->
-          <TiLayoutTabs
-            v-else-if="'tabs' == MainTab.type"
-            v-bind="MainTab.propsForLayoutTabs"
-            :sub-layout="true"
-            :schema="schema"
-            @_sub_block="emit('block', $event)" />
-          <!-- 未知布局-->
-          <div v-else>
-            Unknown layout item type:
-            <pre>{{ MainTab }}</pre>
-          </div>
-        </slot>
-      </template>
-      <!----------------------------->
-      <TiRoadblock
-        v-else
-        mode="fit"
-        icon="fas-pen-ruler"
-        text="No GUI" />
+    <main :style="props.mainStyle" :class="MainClass">
+      <div class="tabs-main-block-con">
+        <!----------------------------->
+        <template v-if="MainTab">
+          <slot :main="MainTab">
+            <TiBlock
+              v-if="'block' == MainTab.type"
+              block-fit="cover"
+              overflow-mode="cover"
+              v-bind="MainTab.propsForBlock"
+              :class-name="MainTab.blockClass"
+              :main-class="MainTab.mainClass"
+              :main-style="MainTab.mainStyle"
+              @happen="OnBlockEventHappen" />
+            <!-- 格子布局-->
+            <TiLayoutGrid
+              v-else-if="'grid' == MainTab.type"
+              v-bind="MainTab.propsForLayoutGrid"
+              :sub-layout="true"
+              :schema="schema"
+              @_sub_block="emit('block', $event)" />
+            <!-- 标签布局-->
+            <TiLayoutTabs
+              v-else-if="'tabs' == MainTab.type"
+              v-bind="MainTab.propsForLayoutTabs"
+              :sub-layout="true"
+              :schema="schema"
+              @_sub_block="emit('block', $event)" />
+            <!-- 未知布局-->
+            <div v-else>
+              Unknown layout item type:
+              <pre>{{ MainTab }}</pre>
+            </div>
+          </slot>
+        </template>
+        <!----------------------------->
+        <TiRoadblock
+          v-else
+          mode="fit"
+          icon="fas-pen-ruler"
+          text="No GUI" />
+      </div>
     </main>
   </div>
 </template>
@@ -180,4 +183,3 @@
   @use '../../../../assets/style/_all.scss' as *;
   @import './ti-layout-tabs.scss';
 </style>
-./ti-layout-tabs-types../layout-types
