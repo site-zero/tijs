@@ -10,13 +10,13 @@
     position: relative;
     margin: auto;
     background-color: var(--ti-color-card);
-    border: 1px solid var(--ti-color-card-f);
+    border: 1px solid var(--ti-color-border-dark);
   }
   //-----------------------------------------------
   // 进度指示器
   //-----------------------------------------------
   .bar-indicator {
-    background-color: var(--ti-color-card-f);
+    background-color: var(--ti-color-success);
     position: absolute;
     inset: 0;
   }
