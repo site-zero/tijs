@@ -8,7 +8,6 @@
     reactive,
     ref,
     watch,
-    nextTick,
   } from 'vue';
   import {
     ListSelectEmitInfo,
@@ -19,7 +18,7 @@
     useValueBox,
   } from '../../';
   import { AnyOptionItem, BUS_KEY, Rect, Vars } from '../../../_type';
-  import { CssUtils, Rects, Tmpl } from '../../../core';
+  import { CssUtils, Rects } from '../../../core';
   import { COM_TYPES } from '../../lib-com-types';
   import { InputBoxProps, InputBoxState } from './ti-input-types';
   import { useInputAutoSelect } from './use-input-auto-select';
@@ -29,7 +28,6 @@
     getTipWrapperStyle,
     makeOptionPredicate,
   } from './use-tip-box';
-  import {} from 'process';
   //-----------------------------------------------------
   defineOptions({
     inheritAttrs: false,

@@ -1,0 +1,67 @@
+.ti-progress-bar {
+  @include flex-align-nowrap($ai: stretch);
+  width: 100%;
+  height: 100%;
+  position: relative;
+  //-----------------------------------------------
+  // 轨道
+  //-----------------------------------------------
+  .bar-track {
+    position: relative;
+    margin: auto;
+    background-color: var(--ti-color-card);
+    border: 1px solid var(--ti-color-border-dark);
+  }
+  //-----------------------------------------------
+  // 进度指示器
+  //-----------------------------------------------
+  .bar-indicator {
+    background-color: var(--ti-color-success);
+    position: absolute;
+    inset: 0;
+  }
+  //-----------------------------------------------
+  // 水平进度条
+  //-----------------------------------------------
+  &[bar-mode='H'] {
+    .bar-indicator {
+      right: unset;
+      transition: width 0.6s;
+    }
+  } // &[bar-mode='H']
+
+  //-----------------------------------------------
+  // 垂直进度条
+  //-----------------------------------------------
+  &[bar-mode='V'] {
+    .bar-indicator {
+      top: unset;
+      transition: height 0.6s;
+    }
+  } //  &[bar-mode='V']
+
+  //-----------------------------------------------
+  // 主题颜色
+  //-----------------------------------------------
+  @mixin __color($name) {
+    &.is-#{$name} {
+      --text-color: var(--ti-color-#{$name}-r);
+      .bar-track {
+        border-color: var(--ti-color-#{$name});
+      }
+      .bar-indicator {
+        background-color: var(--ti-color-#{$name});
+      }
+    }
+  }
+  @include __color(primary);
+  @include __color(secondary);
+  @include __color(success);
+  @include __color(warn);
+  @include __color(info);
+  @include __color(danger);
+  @include __color(track);
+  @include __color(disable);
+  @include __color(text);
+  @include __color(number);
+}
