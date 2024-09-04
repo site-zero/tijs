@@ -1,26 +1,27 @@
+import { App } from 'vue';
 import { TiComInfo, TiComRace } from '../../../_type';
 import { COM_TYPES } from '../../lib-com-types';
-import { App } from 'vue';
-import TiLoading from './TiLoading.vue';
+import TiProgressBar from './TiProgressBar.vue';
+import { ProgressBarProps } from './ti-progress-bar-types';
 
 const en_us = {
-  'com-name': 'Loading',
-  'example-simple-loading': 'Simple Loading',
-  'example-color-loading': 'Color Loading',
+  'com-name': 'Progress Bar',
+  'example-horizontal': 'Horizontal',
+  'example-vertical': 'Vertical',
 };
 const zh_cn = {
-  'com-name': '加载标牌',
-  'example-simple-loading': '简单加载标牌',
-  'example-color-loading': '彩色加载标牌',
+  'com-name': '进度条',
+  'example-horizontal': '水平',
+  'example-vertical': '垂直',
 };
 
-const COM_TYPE = COM_TYPES.Loading;
+const COM_TYPE = COM_TYPES.ProgressBar;
 
-const TiLoadingInfo: TiComInfo = {
-  icon: 'fas-hourglass-half',
+const TiProgressBarInfo: TiComInfo = {
+  icon: 'fas-wine-glass',
   race: TiComRace.TILE,
   name: COM_TYPE,
-  text: 'i18n:ti-loading-com-name',
+  text: 'i18n:ti-progress-bar-com-name',
   i18n: {
     en_us: en_us,
     en_uk: en_us,
@@ -30,19 +31,32 @@ const TiLoadingInfo: TiComInfo = {
   liveStyle: {
     width: '100%',
     height: '100%',
+    maxWidth: '200px',
+    maxHeight: '200px',
+    margin: 'auto auto',
   },
-  com: TiLoading,
+  com: TiProgressBar,
   install: (app: App) => {
-    app.component(COM_TYPE, TiLoading);
+    app.component(COM_TYPE, TiProgressBar);
   },
-  defaultProps: 'simple-loading',
+  defaultProps: 'horizontal',
   exampleProps: [
     {
-      name: 'simple-loading',
-      text: 'i18n:ti-loading-example-simple-loading',
-      comConf: {},
+      name: 'horizontal',
+      text: 'i18n:ti-progress-bar-example-horizontal',
+      comConf: {
+        value: 0.4,
+      } as ProgressBarProps,
+    },
+    {
+      name: 'vertical',
+      text: 'i18n:ti-progress-bar-example-vertical',
+      comConf: {
+        mode: 'V',
+        value: 0.8,
+      } as ProgressBarProps,
     },
   ],
 };
 
-export { TiLoading, TiLoadingInfo };
+export { TiProgressBar, TiProgressBarInfo };

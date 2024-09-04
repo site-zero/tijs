@@ -350,7 +350,7 @@ $BARLINE: 1px;
   }
 }
 //-------------------------------------------------------------
-@mixin aspect_color($prefix: '&.is') {
+@mixin aspect_color($prefix: '&.is', $color: __color) {
   @include __color(success, $prefix);
   @include __color(warn, $prefix);
   @include __color(info, $prefix);

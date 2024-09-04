@@ -49,7 +49,7 @@ export type ProgressBarProps = CommonProps & {
    *        +-------------------+-----+
    *                <remark>
    * ```
-   * 
+   *
    * ```
    * # FOR MODE V
    *                 <head>
@@ -86,4 +86,7 @@ export type ProgressBarProps = CommonProps & {
   style?: Vars;
   trackStyle?: Vars;
   indicatorStyle?: Vars;
+
+  trackClass?: any;
+  indicatorClass?: any;
 };

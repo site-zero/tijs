@@ -14,6 +14,7 @@ export const COM_TYPES = {
   Icon: 'TiIcon',
   Label: 'TiLabel',
   Loading: 'TiLoading',
+  ProgressBar: 'TiProgressBar',
   Roadblock: 'TiRoadblock',
   Tags: 'TiTags',
   Thumb: 'TiThumb',
