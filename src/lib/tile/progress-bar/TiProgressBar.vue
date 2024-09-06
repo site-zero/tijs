@@ -33,6 +33,7 @@
   const IndicatorClass = computed(() =>
     CssUtils.mergeClassName(props.indicatorClass)
   );
+  const TipClass = computed(() => CssUtils.mergeClassName(props.tipClass));
   //-----------------------------------------------------
   const TrackStyle = computed(() => {
     return CssUtils.mergeStyles([
@@ -83,17 +84,27 @@
     :class="TopClass"
     :style="props.style"
     :data-bar-tip="BarTipText"
-    :tip-at="props.tipAt ?? 'center'"
+    :tip-at="props.tipAt"
     :bar-mode="props.mode ?? 'H'">
     <div
       class="bar-track"
       :class="TrackClass"
       :style="TrackStyle">
-      <div
-        class="bar-indicator"
-        :class="IndicatorClass"
-        :style="IndicatorStyle"
-        :data-bar-tip="BarTipText"></div>
+      <div class="track-con">
+        <div
+          class="bar-indicator"
+          :class="IndicatorClass"
+          :style="IndicatorStyle"
+          :data-bar-tip="BarTipText"></div>
+      </div>
+    </div>
+    <div
+      v-if="props.tipAt && 'none' != props.tipAt"
+      class="bar-tip"
+      :class="TipClass"
+      :style="props.tipStyle"
+      :tip-at="props.tipAt">
+      <span>{{ BarTipText }}</span>
     </div>
   </div>
 </template>
