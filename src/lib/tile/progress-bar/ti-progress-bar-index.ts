@@ -8,11 +8,13 @@ const en_us = {
   'com-name': 'Progress Bar',
   'example-horizontal': 'Horizontal',
   'example-vertical': 'Vertical',
+  'example-colorized': 'Colorized',
 };
 const zh_cn = {
   'com-name': '进度条',
   'example-horizontal': '水平',
   'example-vertical': '垂直',
+  'example-colorized': '彩色的',
 };
 
 const COM_TYPE = COM_TYPES.ProgressBar;
@@ -54,6 +56,15 @@ const TiProgressBarInfo: TiComInfo = {
       comConf: {
         mode: 'V',
         value: 0.8,
+        tipAt:'bottom'
+      } as ProgressBarProps,
+    },
+    {
+      name: 'colorized',
+      text: 'i18n:ti-progress-bar-example-colorized',
+      comConf: {
+        value: 0.334,
+        type: 'danger',
       } as ProgressBarProps,
     },
   ],

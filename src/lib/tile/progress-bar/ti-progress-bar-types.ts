@@ -2,13 +2,11 @@ import { CommonProps, LogicType, Vars } from '../../../_type';
 
 export type ProgressBarTipPosition =
   | 'none'
-  | 'head-inner'
-  | 'tail-inner'
-  | 'head'
-  | 'tail'
-  | 'center'
-  | 'captioin'
-  | 'remark';
+  | 'top'
+  | 'bottom'
+  | 'left'
+  | 'right'
+  | 'center';
 
 export type ProgressBarMode = 'H' | 'V';
 
@@ -86,7 +84,8 @@ export type ProgressBarProps = CommonProps & {
   style?: Vars;
   trackStyle?: Vars;
   indicatorStyle?: Vars;
-
+  tipStyle?: Vars;
   trackClass?: any;
   indicatorClass?: any;
+  tipClass?: any;
 };
