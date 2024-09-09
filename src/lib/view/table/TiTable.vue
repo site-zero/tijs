@@ -356,11 +356,12 @@
           <div
             v-if="!col.candidate"
             class="table-cell as-head"
-            :class="Table.getTableHeadClass(selection, i)"
+            :class="Table.getTableHeadClass(selection, col)"
             :col-index="i"
             :drag-index="col.dragIndex"
             :cols-count="TableColumns.length"
-            :col-key="col.uniqKey">
+            :col-key="col.uniqKey"
+            :title="col.tip">
             <div class="head-cell-con">
               <!-- 调整列宽的控制柄 -->
               <div class="column-resize-hdl for-prev"></div>

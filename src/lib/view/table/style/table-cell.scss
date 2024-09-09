@@ -18,7 +18,7 @@
   // 表头固定
   //
   &.as-head {
-    @include flex-align-nowrap($ai: stretch);
+    //@include flex-align-nowrap($ai: stretch);
     user-select: none;
     position: sticky;
     top: 0;
@@ -26,12 +26,16 @@
     height: 2em;
     background-color: var(--ti-color-bar);
     //---------------------------------
+    // 带有标记的列头，鼠标指针换成问号
+    &.has-tip {
+      cursor: help;
+    }
+    //---------------------------------
     // 固定指示块
     &.as-marker {
       left: 0;
       z-index: $z-above + 1;
       border-right: 1px solid var(--ti-color-card);
-      position: relative;
       overflow: hidden;
     } // &.as-marker {
     //---------------------------------

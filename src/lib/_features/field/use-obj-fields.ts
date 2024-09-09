@@ -115,6 +115,12 @@ function defineObjFields(featureName: string): TiObjFieldsFeature {
     // 带定制
     if (_.isArray(fld)) {
       let [key, info] = fld;
+      // 完全定制
+      if (_.isFunction(info)) {
+        let re = getField(key);
+        return info(re) ?? re;
+      }
+      // 仅仅覆盖固定属性
       let override = _.defaults({}, info, over);
       return getField(key, override);
     }

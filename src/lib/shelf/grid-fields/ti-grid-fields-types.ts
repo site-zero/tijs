@@ -125,7 +125,13 @@ export type GridFieldsProps = Omit<
 */
 export type GridFieldsItemRace = 'field' | 'group' | 'label';
 //-----------------------------------------------
-export type FieldInfo = [string, Partial<GridFieldsInput>];
+export type FieldInfo = [
+  string,
+  (
+    | Partial<GridFieldsInput>
+    | ((field: GridFieldsInput) => GridFieldsInput | void)
+  )
+];
 //-----------------------------------------------
 export type FieldRefer = GridFieldsInput | FieldInfo | string;
 //-----------------------------------------------

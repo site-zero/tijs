@@ -28,7 +28,7 @@ const log = getLogger('TiTable.use-table');
 export type TableFeature = {
   selectable: SelectableFeature<TableRowID>;
   getRowIds: (data: Vars[]) => TableRowID[];
-  getTableHeadClass: (selection: TableSelection, colIndex: number) => Vars;
+  getTableHeadClass: (selection: TableSelection, col: TableStrictColumn) => Vars;
   getTableData: () => TableRowData[];
   bindTableResizing: (
     $main: HTMLElement,
@@ -161,9 +161,10 @@ export function useTable(props: TableProps, emit: TableEmitter): TableFeature {
 
   return {
     selectable,
-    getTableHeadClass: (selection: TableSelection, colIndex: number) => {
+    getTableHeadClass: (selection: TableSelection, col: TableStrictColumn) => {
       return {
-        'is-actived-column': selection.columnIndex == colIndex,
+        'is-actived-column': selection.columnIndex == col.index,
+        'has-tip': col.tip ? true : false,
       };
     },
     getTableData: () => {
