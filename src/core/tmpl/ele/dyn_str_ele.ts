@@ -6,6 +6,7 @@ import { DynEle } from './abstract_dyn_ele';
 import { str_format } from './str/str_format';
 import { str_mapping } from './str/str_mapping';
 import { str_replace } from './str/str_replace';
+import { str_sub } from './str/str_sub';
 import { str_trim } from './str/str_trim';
 
 export class DynStrEle extends DynEle {
@@ -21,6 +22,10 @@ export class DynStrEle extends DynEle {
       // 截取空白
       if ('@trim' == s) {
         this._convertors.push(str_trim);
+      }
+      // 建材字符串
+      else if (s.startsWith('@sub=')) {
+        this._convertors.push(str_sub(s.substring(5).trim()));
       }
       // 字符串替换:
       // ${path<string:@trim;@replace'/','-';@replace'~'>}

@@ -153,6 +153,14 @@ test('string_replace', () => {
   ).eq('-a-b-c');
 });
 
+test('string_sub', () => {
+  expect(
+    Tmpl.exec('${path<:@trim;@sub=2/5>}', {
+      path: '  ~/a/b/c  ',
+    })
+  ).eq('a/b');
+});
+
 test('EL', () => {
   expect(Tmpl.exec('${=a.length}', { a: ['A', 'B'] })).eq('2');
 });

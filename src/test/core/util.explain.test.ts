@@ -17,6 +17,18 @@ test('BaseExplain', () => {
   );
 });
 
+test('CutString', () => {
+  let context = {
+    name: 'xiao bai',
+  } as Vars;
+
+  expect({ a: 'xiao' }).toStrictEqual(
+    Util.explainObj(context, {
+      a: '->${name<:@sub=4>}',
+    })
+  );
+});
+
 test('InvokeExplain', () => {
   let context = {
     name: 'xiao bai',
