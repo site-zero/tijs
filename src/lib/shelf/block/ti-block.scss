@@ -46,10 +46,10 @@
 }
 
 //-------------------------------------------------------------
-@mixin __color_by_name($name) {
+@mixin __color_by_name($name, $r: 'r') {
   &.is-#{$name} {
     > header {
-      color: var(--ti-color-#{$name}-r);
+      color: var(--ti-color-#{$name}-#{$r});
       background-color: var(--ti-color-#{$name});
 
       // 标题菜单组，顶级项目反色
@@ -60,7 +60,7 @@
           transition: background-color 0.5s, color 0.3s;
           &:hover {
             color: var(--ti-color-#{$name});
-            background-color: var(--ti-color-#{$name}-r);
+            background-color: var(--ti-color-#{$name}-#{$r});
           }
         }
       }
@@ -77,4 +77,6 @@
   @include __color_by_name(disable);
   @include __color_by_name(text);
   @include __color_by_name(number);
+  @include __color_by_name(primary);
+  @include __color_by_name(secondary);
 }
