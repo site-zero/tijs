@@ -81,3 +81,5 @@ export type CssTextAlign =
   | 'justify';
 
 export type CssBorderStyle = 'solid' | 'dashed' | 'dotted';
+
+export type CssObjectFit = 'fill' | 'contain' | 'cover' | 'none' | 'scale-down';

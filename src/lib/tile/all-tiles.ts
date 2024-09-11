@@ -8,6 +8,7 @@ import { TiProgressBarInfo } from './progress-bar/ti-progress-bar-index';
 import { TiRoadblockInfo } from './roadblock/ti-roadblock-index';
 import { TiTagsInfo } from './tags/ti-tags-index';
 import { TiThumbInfo } from './thumb/ti-thumb-index';
+import { TiImageInfo } from './image/ti-image-index';
 
 export default {
   TiIcon: TiIconInfo,
@@ -16,6 +17,7 @@ export default {
   TiRoadblock: TiRoadblockInfo,
   TiLoading: TiLoadingInfo,
   TiHtmlSnippet: TiHtmlSnippetInfo,
+  TiImage: TiImageInfo,
   TiTags: TiTagsInfo,
   TiThumb: TiThumbInfo,
   TiProgressBar: TiProgressBarInfo,
@@ -30,3 +32,4 @@ export * from './progress-bar/ti-progress-bar-index';
 export * from './roadblock/ti-roadblock-index';
 export * from './tags/ti-tags-index';
 export * from './thumb/ti-thumb-index';
+export * from './image/ti-image-index';

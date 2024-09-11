@@ -1,5 +1,13 @@
 import _ from 'lodash';
-import { Iconable, IconInput, IconObj, MessageMap } from '../../_type';
+import {
+  Iconable,
+  IconInput,
+  IconObj,
+  isIconObj,
+  MessageMap,
+  Vars,
+} from '../../_type';
+import { CssUtils } from '../web/';
 
 //-----------------------------------
 const TYPES = {
@@ -177,10 +185,15 @@ export function toIconObj(val?: string | IconObj): IconObj {
   return val;
 }
 
-export function parseIcon(val: string, dft?: string | IconObj): IconObj {
+export function parseIcon(val: IconInput, dft?: string | IconObj): IconObj {
   if (!val) {
     return toIconObj(dft);
   }
+
+  if (isIconObj(val)) {
+    return val;
+  }
+
   let icon = { type: 'font' } as IconObj;
 
   // String as emoji
@@ -217,5 +230,23 @@ export function parseIcon(val: string, dft?: string | IconObj): IconObj {
 
 export function fontIconHtml(val: string | IconObj, dft?: string | IconObj) {
   let icon = _.isString(val) ? parseIcon(val, dft) : val;
+  return `<i class="${icon.className}"></i>`;
+}
+
+/**
+ * 为给定的图标生成带有样式的 HTML 字符串。
+ *
+ * @param val - 字符串或图标对象，表示要生成的图标。
+ * @param dft - 可选参数，字符串或图标对象，表示默认图标。
+ * @returns 生成的带有样式的 HTML 字符串。
+ */
+export function fontIconHtmlWithStyle(val: string | IconObj, style?: Vars) {
+  let icon = _.isString(val) ? parseIcon(val) : val;
+  if (style) {
+    let css = CssUtils.toStyle(style);
+    let stystr = CssUtils.renderCssRule(css);
+    return `<i class="${icon.className}" style="${stystr}"></i>`;
+  }
+
   return `<i class="${icon.className}"></i>`;
 }
