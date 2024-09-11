@@ -18,6 +18,7 @@ export const COM_TYPES = {
   Roadblock: 'TiRoadblock',
   Tags: 'TiTags',
   Thumb: 'TiThumb',
+  Image: 'TiImage',
   Unknown: 'TiUnknown',
   //------------------- INPUT
   Check: 'TiCheck',
