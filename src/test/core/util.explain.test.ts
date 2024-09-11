@@ -93,6 +93,22 @@ test('ArrayExplain', () => {
   ).toStrictEqual(['abc', { b: 'xx' }, 12]);
 });
 
+test('ArrayMapping', () => {
+  let context = {
+    pets: [
+      { name: 'red', age: 12 },
+      { name: 'green', age: 14 },
+      { name: 'blue', age: 30 },
+    ],
+  } as Vars;
+
+  expect(Util.explainObj(context, ['=pets', { nm: '=name' }])).toStrictEqual([
+    { nm: 'red' },
+    { nm: 'green' },
+    { nm: 'blue' },
+  ]);
+});
+
 test('WholeContextExplain', () => {
   let context = {
     name: 'abc',

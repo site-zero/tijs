@@ -1,6 +1,20 @@
 import _ from 'lodash';
 
 export function filterRecordNilValue(val: any): any {
+  // 保持简单的值
+  if (
+    !val ||
+    _.isNumber(val) ||
+    _.isString(val) ||
+    _.isBoolean(val) ||
+    _.isDate(val) ||
+    _.isRegExp(val) ||
+    _.isFunction(val)
+  ) {
+    return val;
+  }
+
+  // 递归处理
   let re = {} as any;
   let ks = _.keys(val);
   for (let k of ks) {
