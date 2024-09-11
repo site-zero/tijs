@@ -32,6 +32,26 @@ async function renderHtmlToBase64(html: string): Promise<HTMLCanvasElement> {
   return canvas;
 }
 //---------------------------------------------------
+async function convertFileToBase64(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      if (reader.result) {
+        resolve(reader.result.toString());
+      } else {
+        reject(new Error('无法读取文件'));
+      }
+    };
+
+    reader.onerror = () => {
+      reject(new Error('文件读取出错'));
+    };
+
+    reader.readAsDataURL(file);
+  });
+}
+//---------------------------------------------------
 export type ImageState = {
   /**
    * 图像的源，直接在<img>里使用
@@ -40,6 +60,8 @@ export type ImageState = {
   mode: ImageMode;
   iconHtml?: string;
   loading?: boolean;
+
+  _local_file?: File;
 };
 //---------------------------------------------------
 /**
@@ -53,6 +75,7 @@ export function useImage(props: ImageProps, state: ImageState) {
   //-------------------------------------------------
   const Src = computed(
     () =>
+      state._local_file ??
       props.src ??
       props.dftSrc ??
       ({ type: 'font', value: 'zmdi-image-o' } as IconObj)
@@ -67,6 +90,8 @@ export function useImage(props: ImageProps, state: ImageState) {
     // 本地文件/图像
     if (Src.value instanceof File) {
       state.mode = 'file';
+      // 如果是本地图片，那么读取内容
+      state.imgSrc = await convertFileToBase64(Src.value);
     }
     // 图标的话，会更细腻一点判断，如果
     // 图片图标的话，依然会加载图像

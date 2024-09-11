@@ -1,16 +1,41 @@
 .ti-image {
-  @include flex-center;
   //-----------------------------------------------
   &.is-loading {
-    background-color: var(--ti-color-track);
+    background-color: var(--ti-color-tab);
   }
   //-----------------------------------------------
   &.drag-enter {
+    .image-con {
+      &::before {
+        display: block;
+        content: '';
+        position: absolute;
+        inset: -10px;
+        border: 3px dashed var(--ti-color-secondary);
+        pointer-events: none;
+      }
+    }
+  }
+  //-----------------------------------------------
+  .image-con {
+    position: relative;
+    width: 100%;
+    height: 100%;
   }
   //-----------------------------------------------
   img {
     width: 100%;
     height: 100%;
+  }
+  //-----------------------------------------------
+  aside {
+    position: absolute;
+    inset: 0;
+    @include flex-center;
+    .loading-icon {
+      font-size: 24px;
+      color: var(--ti-color-mask-thin);
+    }
   }
   //-----------------------------------------------
 }

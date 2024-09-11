@@ -11,37 +11,41 @@ export function useDropping(options: DropFileOptions) {
   let { enter, leave, drop } = options;
   let dropZone = options.target?.value;
 
-  function onEnter(e: Event) {
-    e.stopPropagation();
+  function preventDefaults(e: Event) {
     e.preventDefault();
+    e.stopPropagation();
+  }
 
+  function onEnter(e: Event) {
     if (enter && dropZone) {
       enter(dropZone, e.target as HTMLElement);
     }
   }
 
   function onLeave(e: Event) {
-    e.stopPropagation();
-    e.preventDefault();
-
     if (leave && dropZone) {
       leave(dropZone, e.target as HTMLElement);
     }
   }
 
   function onDrop(e: DragEvent) {
-    e.stopPropagation();
-    e.preventDefault();
-
     if (drop && dropZone) {
       const dt = e.dataTransfer;
       const files = dt?.files;
       drop(files);
     }
+    onLeave(e);
   }
 
   return () => {
     if (dropZone) {
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(
+        (eventName: string) => {
+          dropZone.removeEventListener(eventName, preventDefaults);
+          dropZone.addEventListener(eventName, preventDefaults);
+        }
+      );
+
       dropZone.removeEventListener('dragenter', onEnter);
       if (enter) {
         dropZone.addEventListener('dragenter', onEnter);
@@ -54,6 +58,7 @@ export function useDropping(options: DropFileOptions) {
 
       dropZone.removeEventListener('drop', onDrop);
       if (drop) {
+        console.log('listen drop');
         dropZone.addEventListener('drop', onDrop);
       }
     }

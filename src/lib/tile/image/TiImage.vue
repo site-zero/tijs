@@ -1,9 +1,10 @@
 <script lang="ts" setup>
   import { computed, reactive, ref, useTemplateRef, watch } from 'vue';
-  import { CssUtils, Dom } from '../../../';
+  import { CssUtils } from '../../../';
   import { ImageProps } from './ti-image-types';
   import { useDropping } from './use-dropping';
   import { ImageState, useImage } from './use-image';
+  import _ from 'lodash';
 
   //-----------------------------------------------------
   defineOptions({
@@ -16,10 +17,11 @@
     imgSrc: '',
     mode: 'img',
     iconHtml: undefined,
+    loading: false,
   });
   //-----------------------------------------------------
   const Img = useImage(props, _img);
-  const _drag_enter = ref(true);
+  const _drag_enter = ref(false);
   //-----------------------------------------------------
   const TopClass = computed(() =>
     CssUtils.mergeClassName(props.className, {
@@ -55,6 +57,8 @@
       },
       drop: (files) => {
         console.log(files);
+        let f = _.first(files);
+        _img._local_file = f ?? undefined;
       },
     })
   );
@@ -82,10 +86,15 @@
     class="ti-image"
     ref="img"
     :img-mode="_img.mode">
-    <img
-      :style="ImageStyle"
-      :src="_img.imgSrc"
-      @load="_img.loading = false" />
+    <div class="image-con">
+      <aside v-if="_img.loading">
+        <i class="fas fa-cog fa-spin loading-icon"></i>
+      </aside>
+      <img
+        :style="ImageStyle"
+        :src="_img.imgSrc"
+        @load="_img.loading = false" />
+    </div>
   </div>
 </template>
 <style lang="scss" scoped>
