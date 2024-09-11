@@ -5,6 +5,7 @@ type QuickColumnInfo = {
   _key: string;
   name?: string;
   title?: string;
+  tip?: string;
   candidate?: boolean;
   readonly?: boolean;
 };
@@ -69,6 +70,7 @@ function defineObjColumns(featureName: string): ObjColumnsFeature {
     // 字段的名称和标题
     re.name = col_info.name ?? re.name ?? col_info._key;
     re.title = col_info.title ?? re.title;
+    re.tip = col_info.tip ?? re.tip;
 
     return re;
   }
@@ -183,10 +185,11 @@ function parseNameColumn(key: string): QuickColumnInfo {
     let title = m[3];
     re.title = title;
     if (title) {
-      let m2 = /^([^/]+)(\/(.+))?/.exec(title);
+      let m2 = /^([^/]+)(\/([^>]+)(>(.+))?)?/.exec(title);
       if (m2) {
         re.name = m2[1];
         re.title = m2[3];
+        re.tip = m2[5];
       }
     }
   }
