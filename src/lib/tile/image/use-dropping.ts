@@ -1,7 +1,7 @@
 import { Ref } from 'vue';
 
 export type DropFileOptions = {
-  target: Ref<HTMLElement | null>;
+  target: () => HTMLElement | null;
   enter?: (el: HTMLElement, src: HTMLElement) => void;
   leave?: (el: HTMLElement, src: HTMLElement) => void;
   drop?: (files?: FileList) => void;
@@ -9,7 +9,7 @@ export type DropFileOptions = {
 
 export function useDropping(options: DropFileOptions) {
   let { enter, leave, drop } = options;
-  let dropZone = options.target?.value;
+  let dropZone = options.target();
 
   function preventDefaults(e: Event) {
     e.preventDefault();

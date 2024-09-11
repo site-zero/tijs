@@ -48,7 +48,7 @@
   const $img = useTemplateRef('img');
   const dropping = computed(() =>
     useDropping({
-      target: $img,
+      target: () => $img.value as unknown as HTMLElement,
       enter: () => {
         _drag_enter.value = true;
       },
