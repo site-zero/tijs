@@ -10,15 +10,21 @@ export class ArrayExplainer implements Explainer {
 
   // 构造函数，进行编译
   constructor(input: any[]) {
-    let items: Explainer[] = [];
-    for (let obj of input) {
-      let it = buildExplainer(obj);
-      items.push(it);
+    if (
+      input.length === 2 &&
+      _.isString(input[0]) &&
+      input[0].startsWith(':scope=')
+    ) {
+      this.scope = buildExplainer(input[0].substring(6).trim());
+      this.mapper = buildExplainer(input[1]);
     }
-    if (items.length === 2) {
-      this.scope = items[0];
-      this.mapper = items[1];
-    } else {
+    // 挑选 scope
+    else {
+      let items: Explainer[] = [];
+      for (let obj of input) {
+        let it = buildExplainer(obj);
+        items.push(it);
+      }
       this.items = items;
     }
   }

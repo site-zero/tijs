@@ -102,7 +102,7 @@ test('ArrayMapping', () => {
     ],
   } as Vars;
 
-  expect(Util.explainObj(context, ['=pets', { nm: '=name' }])).toStrictEqual([
+  expect(Util.explainObj(context, [':scope=pets', { nm: '=name' }])).toStrictEqual([
     { nm: 'red' },
     { nm: 'green' },
     { nm: 'blue' },
