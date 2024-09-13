@@ -5,13 +5,18 @@
   import { useDropping } from './use-dropping';
   import { ImageState, useImage } from './use-image';
   import _ from 'lodash';
-
   //-----------------------------------------------------
   defineOptions({
     inheritAttrs: false,
   });
   //-----------------------------------------------------
-  const props = defineProps<ImageProps>();
+  const emit = defineEmits<{
+    (event: 'change', payload: File): void;
+  }>();
+  //-----------------------------------------------------
+  const props = withDefaults(defineProps<ImageProps>(), {
+    canDropFile: true,
+  });
   //const $draw = useTemplateRef<HTMLDivElement>('draw');
   const _img: ImageState = reactive({
     imgSrc: '',
@@ -56,16 +61,30 @@
         _drag_enter.value = false;
       },
       drop: (files) => {
-        console.log(files);
+        //console.log(files);
         let f = _.first(files);
-        _img._local_file = f ?? undefined;
+        _img.local_file = f ?? undefined;
+        if (f) {
+          emit('change', f);
+        }
       },
     })
   );
+  //-----------------------------------------------------
   watch(
-    () => $img.value,
+    () => [$img.value, props.canDropFile],
     () => {
-      dropping.value();
+      if (props.canDropFile) {
+        dropping.value();
+      }
+    },
+    { immediate: true }
+  );
+  //-----------------------------------------------------
+  watch(
+    () => props.src,
+    () => {
+      _img.local_file = undefined;
     },
     { immediate: true }
   );

@@ -3,14 +3,13 @@ import { TiComInfo, TiComRace } from '../../../_type';
 import { COM_TYPES } from '../../lib-com-types';
 import TiImage from './TiImage.vue';
 import example from './example';
+import { eventNames } from 'process';
 
 const en_us = {
   'com-name': 'Image',
   'example-svg': 'SVG',
   'example-icon': 'Icon Font',
   'example-any': 'Any File',
-  'example-local-image': 'Local Image',
-  'example-local-svg': 'Local SVG',
   'example-local-any': 'Local Any',
 };
 const zh_cn = {
@@ -18,9 +17,7 @@ const zh_cn = {
   'example-svg': 'SVG',
   'example-icon': '字体图标',
   'example-any': '任意文件',
-  'example-local-image': '本地图像',
-  'example-local-svg': '本地SVG',
-  'example-local-any': '本地任意文件',
+  'example-local-any': '本地文件',
 };
 
 const COM_TYPE = COM_TYPES.Image;
@@ -41,14 +38,15 @@ const TiImageInfo: TiComInfo = {
   install: (app: App) => {
     app.component(COM_TYPE, TiImage);
   },
+  exampleModel: {
+    change: '',
+  },
   defaultProps: 'simple',
   exampleProps: [
     example.simple,
     example.svg,
     example.icon,
     example.any,
-    example.local_image,
-    example.local_svg,
     example.local_any,
   ],
 };
