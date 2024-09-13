@@ -1,7 +1,7 @@
 import html2canvas from 'html2canvas';
 import _ from 'lodash';
 import { computed } from 'vue';
-import { IconObj, Icons } from '../../..';
+import { IconInput, IconObj, Icons, Util, Vars } from '../../..';
 import { ImageProps } from './ti-image-types';
 //---------------------------------------------------
 type ImageMode = 'img' | 'icon' | 'file';
@@ -24,7 +24,7 @@ async function renderHtmlToBase64(html: string): Promise<HTMLCanvasElement> {
     useCORS: true,
   });
   // 删除临时容器
-  document.body.removeChild(div);
+  // document.body.removeChild(div);
 
   // 将 canvas 转换为 base64 编码
   //return canvas.toDataURL('image/png'); // 返回 PNG 格式的 Base64 编码
@@ -61,7 +61,7 @@ export type ImageState = {
   iconHtml?: string;
   loading?: boolean;
 
-  _local_file?: File;
+  local_file?: File;
 };
 //---------------------------------------------------
 /**
@@ -75,12 +75,45 @@ export function useImage(props: ImageProps, state: ImageState) {
   //-------------------------------------------------
   const Src = computed(
     () =>
-      state._local_file ??
+      state.local_file ??
       props.src ??
       props.dftSrc ??
-      ({ type: 'font', value: 'zmdi-image-o' } as IconObj)
+      ({
+        type: 'font',
+        value: 'zmdi-image-o',
+        style: {
+          fontSize: '64px',
+          color: 'var(--ti-color-mask-thin)',
+        },
+      } as IconObj)
   );
-
+  //---------------------------------------------------
+  async function applyIcon(input: IconInput, style?: Vars) {
+    let icon = Icons.toIconObj(input);
+    // 确认是图标
+    if (/^(font|emoji)$/.test(icon.type)) {
+      state.mode = 'icon';
+      state.iconHtml = Icons.fontIconHtmlWithStyle(
+        icon.value ?? 'zmdi-cake',
+        icon.style ?? style
+      );
+      //console.log('before render');
+      let canvas = await renderHtmlToBase64(state.iconHtml);
+      // if ($draw) {
+      //   $draw.innerHTML = '';
+      //   Dom.appendTo(canvas, $draw);
+      // }
+      //console.log('before base64');
+      state.mode = 'icon';
+      state.imgSrc = canvas.toDataURL('image/png');
+      //console.log('done Base64');
+    }
+    // 确认是图像
+    else if ('image' == icon.type) {
+      state.mode = 'img';
+      state.imgSrc = icon.value ?? '';
+    }
+  }
   //---------------------------------------------------
   async function loadImageSrc() {
     console.log('loadImageSrc', Src.value);
@@ -90,41 +123,33 @@ export function useImage(props: ImageProps, state: ImageState) {
     // 本地文件/图像
     if (Src.value instanceof File) {
       state.mode = 'file';
+
+      let file = Src.value;
       // 如果是本地图片，那么读取内容
-      state.imgSrc = await convertFileToBase64(Src.value);
+      if (/^image\//.test(file.type)) {
+        state.imgSrc = await convertFileToBase64(Src.value);
+      }
+      // 否则的话，就用对应的图标来代替
+      else {
+        let fileIcon = Icons.getIcon(
+          {
+            race: 'FILE',
+            type: Util.getSuffixName(file.name),
+            mime: file.type,
+          },
+          'zmdi-cake'
+        );
+        applyIcon(fileIcon, { fontSize: '64px' });
+      }
     }
     // 图标的话，会更细腻一点判断，如果
     // 图片图标的话，依然会加载图像
     else if (
       Src.value &&
       !_.isString(Src.value) &&
-      _.isPlainObject(Src.value) &&
-      /^(font|image|emoji)$/.test(Src.value?.type)
+      _.isPlainObject(Src.value)
     ) {
-      let icon = Src.value;
-      // 确认是图标
-      if (/^(font|emoji)$/.test(icon.type)) {
-        state.mode = 'icon';
-        state.iconHtml = Icons.fontIconHtmlWithStyle(
-          icon.value ?? 'zmdi-cake',
-          icon.style
-        );
-        console.log('before render');
-        let canvas = await renderHtmlToBase64(state.iconHtml);
-        // if ($draw) {
-        //   $draw.innerHTML = '';
-        //   Dom.appendTo(canvas, $draw);
-        // }
-        console.log('before base64');
-        state.mode = 'icon';
-        state.imgSrc = canvas.toDataURL('image/png');
-        console.log('done Base64');
-      }
-      // 确认是图像
-      else if ('image' == icon.type) {
-        state.mode = 'img';
-        state.imgSrc = icon.value ?? '';
-      }
+      applyIcon(Src.value);
     }
     // 默认采用 Image
     else {

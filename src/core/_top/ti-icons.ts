@@ -19,7 +19,7 @@ const TYPES = {
   'doc': 'far-file-word',
   'docx': 'fas-file-word',
   'dmg': 'fab-apple',
-  'exe': 'im-windows-o',
+  'exe': 'zmdi-windows',
   'gz': 'fas-file-archive',
   'hmaker_site': 'zmdi-globe-alt',
   'html': 'fab-html5',
@@ -40,7 +40,7 @@ const TYPES = {
   'sass': 'fab-first-order',
   'tar': 'far-file-archive',
   'tgz': 'fas-file-archive',
-  'comt': 'im-flask',
+  'comt': 'fas-flask',
   'wnml': 'fas-file-code',
   'xls': 'far-file-excel',
   'xlsx': 'fas-file-excel',
@@ -56,10 +56,13 @@ const MIMES = {
   'image': 'far-file-image',
   'text': 'far-file-alt',
   'video': 'far-file-video',
+  'application': 'fas-window-maximize',
   'text/css': 'fab-css3',
   'text/html': 'fab-html5',
   'application/x-zip-compressed': 'fas-file-archive',
   'application/x-javascript': 'fab-js-square',
+  'application/vnd.ms-excel': 'fas-file-excel',
+  'application/json': 'far-file-code',
   'text/javascript': 'fab-js-square',
 } as MessageMap;
 //-----------------------------------
@@ -170,7 +173,7 @@ export function getIcon(
   );
 }
 
-export function toIconObj(val?: string | IconObj): IconObj {
+export function toIconObj(val?: IconInput): IconObj {
   if (!val) {
     return _DFT_FONT_ICON_OBJ;
   }
@@ -180,6 +183,7 @@ export function toIconObj(val?: string | IconObj): IconObj {
   if ('font' == val.type && val.value) {
     let icon = parseIcon(val.value);
     icon.topClass = val.className;
+    icon.style = val.style;
     return icon;
   }
   return val;
@@ -205,9 +209,11 @@ export function parseIcon(val: IconInput, dft?: string | IconObj): IconObj {
   else if (/\.(png|gif|jpe?g|webp|svg)$/i.test(val)) {
     icon.type = 'image';
     icon.src = val;
+    icon.value = val;
   }
   // String as Font
   else {
+    icon.value = val;
     let m = /^([a-z]+)-(.+)$/.exec(val as string);
     if (m) {
       // fontawsome
@@ -240,7 +246,7 @@ export function fontIconHtml(val: string | IconObj, dft?: string | IconObj) {
  * @param dft - 可选参数，字符串或图标对象，表示默认图标。
  * @returns 生成的带有样式的 HTML 字符串。
  */
-export function fontIconHtmlWithStyle(val: string | IconObj, style?: Vars) {
+export function fontIconHtmlWithStyle(val: IconInput, style?: Vars) {
   let icon = _.isString(val) ? parseIcon(val) : val;
   if (style) {
     let css = CssUtils.toStyle(style);

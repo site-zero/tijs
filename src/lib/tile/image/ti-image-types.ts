@@ -9,6 +9,12 @@ export type ImageProps = CommonProps & {
   src?: ImageSrcInput;
 
   /**
+   * 是否支持拖拽本地文件显示
+   * 默认为 true
+   */
+  canDropFile?:boolean;
+
+  /**
    * 未指定 src 时，显示什么
    */
   dftSrc?: string | IconObj;
