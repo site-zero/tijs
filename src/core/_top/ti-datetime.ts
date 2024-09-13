@@ -137,8 +137,8 @@ export function parse(d: any): Date | undefined {
     }
   }
   // Invalid date
-  console.trace();
-  throw `i18n:invalid-date: [${Str.anyToStr(d)}]`;
+  console.trace('Invalid Date:', d);
+  return;
 }
 
 export function isDateTimeQuickParseMode(
