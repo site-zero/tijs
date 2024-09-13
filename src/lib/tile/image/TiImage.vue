@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { computed, reactive, ref, useTemplateRef, watch } from 'vue';
-  import { CssUtils } from '../../../';
+  import { CssUtils, IconObj } from '../../../';
   import { ImageProps } from './ti-image-types';
   import { useDropping } from './use-dropping';
   import { ImageState, useImage } from './use-image';
@@ -16,6 +16,15 @@
   //-----------------------------------------------------
   const props = withDefaults(defineProps<ImageProps>(), {
     canDropFile: true,
+    dftSrc: () =>
+      ({
+        type: 'font',
+        value: 'far-image',
+        style: {
+          fontSize: '64px',
+          color: 'var(--ti-color-mask-thin)',
+        },
+      } as IconObj),
   });
   //const $draw = useTemplateRef<HTMLDivElement>('draw');
   const _img: ImageState = reactive({

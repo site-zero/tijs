@@ -24,7 +24,7 @@ async function renderHtmlToBase64(html: string): Promise<HTMLCanvasElement> {
     useCORS: true,
   });
   // 删除临时容器
- // document.body.removeChild(div);
+  // document.body.removeChild(div);
 
   // 将 canvas 转换为 base64 编码
   //return canvas.toDataURL('image/png'); // 返回 PNG 格式的 Base64 编码
@@ -78,10 +78,17 @@ export function useImage(props: ImageProps, state: ImageState) {
       state.local_file ??
       props.src ??
       props.dftSrc ??
-      ({ type: 'font', value: 'zmdi-image-o' } as IconObj)
+      ({
+        type: 'font',
+        value: 'zmdi-image-o',
+        style: {
+          fontSize: '64px',
+          color: 'var(--ti-color-mask-thin)',
+        },
+      } as IconObj)
   );
   //---------------------------------------------------
-  async function applyIcon(input: IconInput, style?:Vars) {
+  async function applyIcon(input: IconInput, style?: Vars) {
     let icon = Icons.toIconObj(input);
     // 确认是图标
     if (/^(font|emoji)$/.test(icon.type)) {
@@ -90,16 +97,16 @@ export function useImage(props: ImageProps, state: ImageState) {
         icon.value ?? 'zmdi-cake',
         icon.style ?? style
       );
-      console.log('before render');
+      //console.log('before render');
       let canvas = await renderHtmlToBase64(state.iconHtml);
       // if ($draw) {
       //   $draw.innerHTML = '';
       //   Dom.appendTo(canvas, $draw);
       // }
-      console.log('before base64');
+      //console.log('before base64');
       state.mode = 'icon';
       state.imgSrc = canvas.toDataURL('image/png');
-      console.log('done Base64');
+      //console.log('done Base64');
     }
     // 确认是图像
     else if ('image' == icon.type) {
@@ -132,7 +139,7 @@ export function useImage(props: ImageProps, state: ImageState) {
           },
           'zmdi-cake'
         );
-        applyIcon(fileIcon, {fontSize:'64px'});
+        applyIcon(fileIcon, { fontSize: '64px' });
       }
     }
     // 图标的话，会更细腻一点判断，如果
