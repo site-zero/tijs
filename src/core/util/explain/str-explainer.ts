@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Str, Util } from '../../';
+import { Str, Tmpl, Util } from '../../';
 import { ExplainOptions, Explainer, InvokePartial, Vars } from '../../../_type';
 
 type ValueGetter = (context: Vars, options: ExplainOptions) => any;
@@ -89,8 +89,9 @@ function __get_call(path: string, partial: InvokePartial) {
 
 // 模板
 function __get_tmpl(str: string) {
-  return (context: Vars, _options: ExplainOptions) => {
-    return Str.renderTmpl(str, context);
+  let tmpl = Tmpl.parse(str);
+  return (context: Vars, options: ExplainOptions) => {
+    return tmpl.render(context, options.showTmplKey);
   };
 }
 

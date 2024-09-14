@@ -27,6 +27,21 @@ test('CutString', () => {
       a: '->${name<:@sub=4>}',
     })
   );
+  expect({ a: 'ia' }).toStrictEqual(
+    Util.explainObj(context, {
+      a: '->${name<:@sub=1/3>}',
+    })
+  );
+  expect({ a: 'bai' }).toStrictEqual(
+    Util.explainObj(context, {
+      a: '->${name<:@sub=5/>}',
+    })
+  );
+  expect({ a: 'xi' }).toStrictEqual(
+    Util.explainObj(context, {
+      a: '->${name<:@sub=/2>}',
+    })
+  );
 });
 
 test('InvokeExplain', () => {

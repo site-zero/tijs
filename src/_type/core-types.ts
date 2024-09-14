@@ -558,6 +558,7 @@ export interface ExplainOptions {
   evalFunc?: boolean;
   iteratee?: { (it: any): any };
   jsValue?: ToJsValueOptions;
+  showTmplKey?: boolean;
 }
 
 export interface Explainer {
