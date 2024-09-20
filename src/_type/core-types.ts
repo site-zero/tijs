@@ -339,7 +339,9 @@ export type LogicType =
   | 'track'
   | 'disable'
   | 'text'
-  | 'number';
+  | 'number'
+  | 'primary'
+  | 'secondary';
 
 export type ObjDataStatus = 'loading' | 'saving' | 'ready' | 'empty';
 /*---------------------------------------------------

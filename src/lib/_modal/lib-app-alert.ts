@@ -27,7 +27,7 @@ export async function Alert(
   // Build html
   let html = __get_msg_box_html({
     msg,
-    type: options.type || 'info',
+    type: options.type || 'primary',
     bodyIcon: options.bodyIcon,
     msgAsHtml: 'html' == options.contentType,
     vars: options.vars,
@@ -36,7 +36,7 @@ export async function Alert(
   let dialog = {
     icon: 'zmdi-notifications',
     title: 'i18n:info',
-    type: 'info',
+    type: 'primary',
     textOk: 'i18n:ok',
     textCancel: null,
     position: 'center',

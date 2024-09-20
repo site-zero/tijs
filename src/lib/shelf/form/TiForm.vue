@@ -17,7 +17,11 @@
     @change="emit('change', $event)"
     @change-fields="emit('change-fields', $event)"
     @name-change="emit('name-change', $event)"
-    @dom-ready="emit('dom-ready', $event)" />
+    @dom-ready="emit('dom-ready', $event)">
+    <template v-slot:head>
+      <slot name="head"></slot>
+    </template>
+  </TiGridFields>
 </template>
 <style lang="scss" scoped>
   @use '../../../assets/style/_all.scss' as *;

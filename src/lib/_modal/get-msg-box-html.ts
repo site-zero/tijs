@@ -38,6 +38,8 @@ export function __get_msg_box_html(options: MsgBoxHtmlOptions) {
       disable: 'zmdi-alert-octagon',
       text: 'zmdi-info-outline',
       number: 'zmdi-n-1-square',
+      primary: 'zmdi-info-outline',
+      secondary: 'zmdi-info-outline',
     }[type];
     msgIcon = Icons.parseIcon(icon_str);
   }
