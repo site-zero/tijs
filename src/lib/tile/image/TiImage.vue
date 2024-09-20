@@ -46,9 +46,9 @@
   //-----------------------------------------------------
   const TopStyle = computed(() => {
     return CssUtils.toStyle({
-      ...(props.style ?? {}),
       width: props.width,
       height: props.height,
+      ...(props.style ?? {}),
     });
   });
   //-----------------------------------------------------

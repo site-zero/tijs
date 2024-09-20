@@ -3,7 +3,6 @@ import { TiComInfo, TiComRace } from '../../../_type';
 import { COM_TYPES } from '../../lib-com-types';
 import TiImage from './TiImage.vue';
 import example from './example';
-import { eventNames } from 'process';
 
 const en_us = {
   'com-name': 'Image',
@@ -24,7 +23,6 @@ const COM_TYPE = COM_TYPES.Image;
 
 const TiImageInfo: TiComInfo = {
   icon: 'zmdi-image',
-  tags: ['ing'],
   race: TiComRace.TILE,
   name: COM_TYPE,
   text: 'i18n:ti-image-com-name',
