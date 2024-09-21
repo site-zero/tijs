@@ -56,7 +56,7 @@ const TiProgressBarInfo: TiComInfo = {
       comConf: {
         mode: 'V',
         value: 0.8,
-        tipAt:'bottom'
+        tipAt: 'bottom',
       } as ProgressBarProps,
     },
     {
@@ -71,3 +71,4 @@ const TiProgressBarInfo: TiComInfo = {
 };
 
 export { TiProgressBar, TiProgressBarInfo };
+export * from './ti-progress-bar-types';
