@@ -60,4 +60,5 @@ export const COM_TYPES = {
   List: 'TiList',
   Table: 'TiTable',
   Wall: 'TiWall',
+  Process: 'TiProcess',
 };

@@ -1,3 +1,4 @@
+import JSON5 from 'json5';
 import _ from 'lodash';
 import { computed, ref } from 'vue';
 import { Vars, WindowTheme } from '../../../_type';
@@ -83,6 +84,18 @@ export function useCodeAce(props: CodeEditorProps, emit: CodeEditorEmitter) {
 
     if (val && !_.isString(val)) {
       val = JSON.stringify(val, null, '  ');
+    }
+
+    if (props.format) {
+      if ('JSON' == props.format) {
+        let obj = JSON5.parse(val);
+        val = JSON.stringify(obj, null, '  ');
+      } else if ('JSON5' == props.format) {
+        let obj = JSON5.parse(val);
+        val = JSON5.stringify(obj, null, '  ');
+      } else if (_.isFunction(props.format)) {
+        val = props.format(val);
+      }
     }
 
     return val || '';
