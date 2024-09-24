@@ -5,6 +5,10 @@
   import { TiProgressBar } from '../../tile/progress-bar/ti-progress-bar-index';
   import { ProcessProps } from './ti-process-types';
   //-------------------------------------------------------
+  defineOptions({
+    inheritAttrs: true,
+  });
+  //-------------------------------------------------------
   const $logs = useTemplateRef<HTMLElement>('logs');
   //-------------------------------------------------------
   const props = defineProps<ProcessProps>();
@@ -49,7 +53,7 @@
   //-------------------------------------------------------
 </script>
 <template>
-  <div class="ti-process">
+  <div class="ti-process cover-parent">
     <TextSnippet
       v-if="ProcessTitle"
       class="part-title"

@@ -1,6 +1,6 @@
+import { TextSnippetProps } from '../../../';
 import { CommonProps } from '../../../_type';
 import { ProgressBarProps } from '../../tile/all-tiles';
-import { TextSnippetProps } from 'index';
 
 export type ProcessProps = CommonProps & {
   title?: string | TextSnippetProps;
