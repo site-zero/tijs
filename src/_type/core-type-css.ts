@@ -56,15 +56,15 @@ export type CssGridItem = Partial<{
   // <grid-column-start> <grid-column-end>
   gridColumn: string;
   // <number> | <name> | span <number> | auto
-  gridColumnStart: string;
+  gridColumnStart: string | number;
   // <number> | <name> | span <number> | auto
-  gridColumnEnd: string;
+  gridColumnEnd: string | number;
   // <grid-row-start> <grid-row-end>
   gridRow: string;
   // <number> | <name> | span <number> | auto
-  gridRowStart: string;
+  gridRowStart: string | number;
   // <number> | <name> | span <number> | auto
-  gridRowEnd: string;
+  gridRowEnd: string | number;
   // <name> | <row-start> / <column-start> / <row-end> / <column-end>
   gridArea: string;
   justifySelf: CssItemAlignment;

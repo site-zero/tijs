@@ -448,7 +448,9 @@
 <style lang="scss">
   @use '../../../assets/style/_all.scss' as *;
   @import './style/ti-table.scss';
+  @import './style/table-row.scss';
   @import './style/table-cell.scss';
   @import './style/table-resize.scss';
+  @import './style/table-color.scss';
   @import './style/table-debug.scss';
 </style>

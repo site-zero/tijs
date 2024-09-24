@@ -15,9 +15,10 @@ import {
   FieldChange,
   FieldComProps,
   FieldName,
+  LogicType,
   TableColumnAspect,
-  TableInputColumn,
   TableRowID,
+  TiMatch,
   Vars,
 } from '../../../_type';
 
@@ -28,6 +29,7 @@ export type TableRowData = {
   id: TableRowID;
   // activated: boolean;
   // checked: boolean;
+  type?: LogicType;
   indent: number;
   rawData: Vars;
 };
@@ -124,6 +126,11 @@ export type TableBehaviorsProps = {
   vars?: Vars;
 
   /**
+   * 获取一个行的逻辑类型
+   */
+  getRowType?: GetTableRowLogicTypeInput;
+
+  /**
    * 一个缩进块的缩进尺寸，数字表示 px，也可以是 css 的尺寸
    * 会变成 calc($indentSize * $indent)
    */
@@ -133,6 +140,20 @@ export type TableBehaviorsProps = {
   showRowIndex?: boolean;
 
   canHover?: boolean;
+};
+
+export type GetTableRowLogicTypeMatcher = {
+  test?: any;
+  type: LogicType;
+};
+
+export type GetTableRowLogicTypeInput =
+  | ((row: TableRowData) => LogicType|undefined)
+  | GetTableRowLogicTypeMatcher[];
+
+export type GetTableRowLogicType = {
+  test: TiMatch;
+  type: LogicType;
 };
 
 export type TableProps = CommonProps &

@@ -29,7 +29,7 @@
   //-------------------------------------------------------
   // 是否显示行前的空白标记单元格
   const ShowIndentor = computed(() => (props.indent ?? 0) > 0);
-
+  //-------------------------------------------------------
   const RowIndentStyle = computed(() => {
     if (props.indent && props.indent > 0) {
       let indent;
@@ -56,6 +56,7 @@
       'is-checked': props.checked,
       'has-actived-com': col?.activatedComType ? true : false,
       'can-hover': props.canHover,
+      [`is-${props.row.type ?? ''}`]: props.row.type ? true : false,
     });
   }
   //-------------------------------------------------------
@@ -166,8 +167,3 @@
     </div>
   </template>
 </template>
-<style lang="scss">
-  @use '../../../assets/style/_all.scss' as *;
-  @import './style/table-row.scss';
-</style>
-./ti-table-types

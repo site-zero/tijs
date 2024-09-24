@@ -242,7 +242,7 @@
 
   function onAfterAppear() {
     if (props.appear) {
-      console.log('ModalApi.value', ModalApi.value);
+      //console.log('ModalApi.value', ModalApi.value);
       props.appear(ModalApi.value);
     }
   }
