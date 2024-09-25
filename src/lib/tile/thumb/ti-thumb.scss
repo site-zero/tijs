@@ -1,2 +1,45 @@
 .ti-thumb {
+  @mixin thumb_text_size($prefix, $sz) {
+    &[#{$prefix}-size='#{$sz}'] > .part-#{$prefix} {
+      font-size: var(--ti-fontsz-#{$sz});
+    }
+  }
+  @mixin thumb_text_align($prefix, $align) {
+    &[#{$prefix}-align='#{$align}'] > .part-#{$prefix} {
+      text-align: $align;
+    }
+  }
+  @mixin thumb_text_padding($prefix, $padding) {
+    &[#{$prefix}-padding='#{$padding}'] > .part-#{$prefix} {
+      padding: var(--ti-gap-#{$padding});
+    }
+  }
+  @include thumb_text_size(text, t);
+  @include thumb_text_size(text, s);
+  @include thumb_text_size(text, m);
+  @include thumb_text_size(text, b);
+  @include thumb_text_size(text, h);
+  @include thumb_text_size(more, t);
+  @include thumb_text_size(more, s);
+  @include thumb_text_size(more, m);
+  @include thumb_text_size(more, b);
+  @include thumb_text_size(more, h);
+
+  @include thumb_text_align(text, left);
+  @include thumb_text_align(text, center);
+  @include thumb_text_align(text, right);
+  @include thumb_text_align(more, left);
+  @include thumb_text_align(more, center);
+  @include thumb_text_align(more, right);
+
+  @include thumb_text_padding(text, t);
+  @include thumb_text_padding(text, s);
+  @include thumb_text_padding(text, m);
+  @include thumb_text_padding(text, b);
+  @include thumb_text_padding(text, h);
+  @include thumb_text_padding(more, t);
+  @include thumb_text_padding(more, s);
+  @include thumb_text_padding(more, m);
+  @include thumb_text_padding(more, b);
+  @include thumb_text_padding(more, h);
 }

@@ -48,6 +48,11 @@ function concludeIndicator(
   }
 }
 
+export type IndicatorSet = {
+  position: ThumbIndicatorPosition;
+  items: TextSnippetProps[];
+};
+
 export function useThumb(props: ThumbProps) {
   // 构建主要显示文本
   const Text = computed(() => buildText(props.text));
@@ -63,7 +68,15 @@ export function useThumb(props: ThumbProps) {
         concludeIndicator(map, it);
       }
     }
-    return map;
+    let re = [] as IndicatorSet[];
+    for (let en of map.entries()) {
+      let [position, items] = en;
+      re.push({
+        position,
+        items,
+      });
+    }
+    return re;
   });
 
   // 返回特性

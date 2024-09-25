@@ -1,5 +1,12 @@
 import { ImageProps, ProgressBarProps, TextSnippetProps } from '../../';
-import { CommonProps, IconInput, LogicType, Vars } from '../../../_type';
+import {
+  AspectSize,
+  CommonProps,
+  CssAlignment,
+  IconInput,
+  LogicType,
+  Vars,
+} from '../../../_type';
 
 export type ThumbIndicatorPosition =
   | 'left-top'
@@ -39,4 +46,16 @@ export type ThumbProps = CommonProps & {
   text?: string | TextSnippetProps;
   more?: string | TextSnippetProps;
   indicators?: ThumbIndicator[];
+
+  width?: string | number;
+  height?: string | number;
+  style?: Vars;
+
+  textSize?: AspectSize;
+  textPadding?: AspectSize;
+  textAlign?: CssAlignment;
+
+  moreSize?: AspectSize;
+  morePadding?: AspectSize;
+  moreAlign?: CssAlignment;
 };

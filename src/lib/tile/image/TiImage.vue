@@ -7,7 +7,7 @@
   import _ from 'lodash';
   //-----------------------------------------------------
   defineOptions({
-    inheritAttrs: false,
+    inheritAttrs: true,
   });
   //-----------------------------------------------------
   const emit = defineEmits<{
