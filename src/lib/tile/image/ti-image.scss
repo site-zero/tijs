@@ -1,6 +1,6 @@
 .ti-image {
-  @include aspect_radius('&.r');
   overflow: hidden;
+  @include aspect_radius('&.r');
   //-----------------------------------------------
   &.is-loading {
     background-color: var(--ti-color-tab);

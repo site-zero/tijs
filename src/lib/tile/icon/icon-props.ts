@@ -27,6 +27,7 @@ export interface IconProps extends CommonProps {
   // image only
   objectFit?: 'contain' | 'cover' | 'fill' | 'scale-down';
   // Free Style
+  style?: Vars;
   imgStyle?: Vars;
   fontStyle?: Vars;
 }

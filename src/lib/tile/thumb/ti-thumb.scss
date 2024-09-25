@@ -1,4 +1,6 @@
 .ti-thumb {
+  position: relative;
+  @include flex-align-v-nowrap;
   @mixin thumb_text_size($prefix, $sz) {
     &[#{$prefix}-size='#{$sz}'] > .part-#{$prefix} {
       font-size: var(--ti-fontsz-#{$sz});
@@ -43,8 +45,6 @@
   @include thumb_text_padding(more, b);
   @include thumb_text_padding(more, h);
 
-  @include flex-align-v-nowrap;
-
   &.flex-grow-text > .part-text {
     flex: 1 1 auto;
   }
@@ -53,7 +53,6 @@
     flex: 1 1 auto;
   }
 
-  position: relative;
   .thumb-indicators {
     position: absolute;
     padding: var(--ti-gap-t);

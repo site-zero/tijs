@@ -27,11 +27,15 @@
     })
   );
   const TopStyle = computed(() =>
-    CssUtils.toStyle({
-      width: props.width,
-      height: props.height,
-      opacity: props.opacity,
-    })
+    CssUtils.mergeStyles([
+      {},
+      props.style,
+      CssUtils.toStyle({
+        width: props.width,
+        height: props.height,
+        opacity: props.opacity,
+      }),
+    ])
   );
   const IconStyle = computed(() => getIconStyle(props, Icon));
 </script>

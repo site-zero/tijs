@@ -96,4 +96,17 @@
     }
     //---------------------------------
   } // &.as-head {
+
+  //
+  // 单元格包裹
+  //
+  > .table-cell-wrapper {
+    @include flex-align-nowrap($ai: stretch);
+    > .ti-input-box {
+      flex: 1 1 auto;
+    }
+    > .ti-icon {
+      margin: auto;
+    }
+  }
 } // >.table-cell
