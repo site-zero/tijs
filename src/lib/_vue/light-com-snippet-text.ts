@@ -91,16 +91,18 @@ export function TextSnippet(
   }
 
   // 文字内容
-  let textProps = {
-    class: 'as-snippet-text',
-    style: props.textStyle,
-  } as Vars;
-  if ('html' == props.textType) {
-    textProps.innerHTML = text;
-  } else {
-    textProps.innerText = text;
+  if (text) {
+    let textProps = {
+      class: 'as-snippet-text',
+      style: props.textStyle,
+    } as Vars;
+    if ('html' == props.textType) {
+      textProps.innerHTML = text;
+    } else {
+      textProps.innerText = text;
+    }
+    children.push(h('div', textProps));
   }
-  children.push(h('div', textProps));
 
   // 后缀图标
   if (props.suffixIcon) {

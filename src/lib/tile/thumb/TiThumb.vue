@@ -13,11 +13,17 @@
     moreAlign: 'center',
     moreSize: 's',
     morePadding: 's',
+    flexGrow: 'text',
   });
   //-----------------------------------------------------
   const Thumb = useThumb(props);
   //-----------------------------------------------------
-  const TopClass = computed(() => CssUtils.mergeClassName(props.className));
+  const TopClass = computed(() =>
+    CssUtils.mergeClassName(
+      props.className,
+      props.flexGrow ? `flex-grow-${props.flexGrow}` : ''
+    )
+  );
   //-----------------------------------------------------
   const TopStyle = computed(() => {
     return CssUtils.mergeStyles([

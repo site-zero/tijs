@@ -42,4 +42,71 @@
   @include thumb_text_padding(more, m);
   @include thumb_text_padding(more, b);
   @include thumb_text_padding(more, h);
+
+  @include flex-align-v-nowrap;
+
+  &.flex-grow-text > .part-text {
+    flex: 1 1 auto;
+  }
+
+  &.flex-grow-more > .part-more {
+    flex: 1 1 auto;
+  }
+
+  position: relative;
+  .thumb-indicators {
+    position: absolute;
+    padding: var(--ti-gap-t);
+    font-size: 10px;
+    @include flex-align;
+
+    &[at='left-top'] {
+      left: 0;
+      top: 0;
+    }
+
+    &[at='right-top'] {
+      right: 0;
+      top: 0;
+    }
+
+    &[at='bottom-left'] {
+      left: 0;
+      bottom: 0;
+    }
+
+    &[at='bottom-right'] {
+      right: 0;
+      bottom: 0;
+    }
+
+    &[at='center'] {
+      inset: 0;
+      justify-content: center;
+      align-items: center;
+      align-content: center;
+      font-size: 32px;
+    }
+
+    @mixin __color($name) {
+      &.is-#{$name} {
+        color: var(--ti-color-#{$name});
+      }
+    }
+
+    .thumb-indicator-item {
+      @include flex-align;
+      line-height: 1.2em;
+      @include __color(success);
+      @include __color(warn);
+      @include __color(info);
+      @include __color(danger);
+      @include __color(track);
+      @include __color(disable);
+      @include __color(text);
+      @include __color(number);
+      @include __color(primary);
+      @include __color(secondary);
+    }
+  }
 }

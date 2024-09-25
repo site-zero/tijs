@@ -58,4 +58,6 @@ export type ThumbProps = CommonProps & {
   moreSize?: AspectSize;
   morePadding?: AspectSize;
   moreAlign?: CssAlignment;
+
+  flexGrow?: 'text' | 'more' | 'none';
 };

@@ -1,11 +1,12 @@
+import _ from 'lodash';
 import { computed } from 'vue';
+import { TextSnippetProps } from '../../';
+import { CssUtils } from '../../../core';
 import {
   ThumbIndicator,
   ThumbIndicatorPosition,
   ThumbProps,
 } from './ti-thumb-types';
-import { TextSnippetProps } from '../../';
-import _ from 'lodash';
 
 function buildText(
   text?: string | TextSnippetProps
@@ -22,10 +23,7 @@ function concludeIndicator(
   ind: ThumbIndicator
 ) {
   // 准备一个值
-  let ts = buildText(ind.text);
-  if (!ts) {
-    return;
-  }
+  let ts = buildText(ind.text) ?? ({} as TextSnippetProps);
 
   // 根据位置，自动设置图标
   // at left 用 prefixIcon
@@ -36,6 +34,22 @@ function concludeIndicator(
     } else {
       ts.suffixIcon = ind.icon;
     }
+  }
+
+  // 防空
+  if (_.isEmpty(ts)) {
+    return;
+  }
+
+  // 逻辑类型
+  ts.className = CssUtils.mergeClassName(
+    ind.className,
+    ind.type ? `is-${ind.type}` : ''
+  );
+
+  // 自定义样式
+  if (ind.style) {
+    ts.style = ind.style;
   }
 
   // 加入到集合
@@ -65,9 +79,11 @@ export function useThumb(props: ThumbProps) {
     let map = new Map<ThumbIndicatorPosition, TextSnippetProps[]>();
     if (props.indicators) {
       for (let it of props.indicators) {
+        console.log('for', it);
         concludeIndicator(map, it);
       }
     }
+    console.log('indicator map', map);
     let re = [] as IndicatorSet[];
     for (let en of map.entries()) {
       let [position, items] = en;

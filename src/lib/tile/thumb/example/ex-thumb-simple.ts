@@ -6,19 +6,14 @@ export default {
   text: 'i18n:simple',
   comConf: {
     width: 100,
-    height: 200,
+    //height: 200,
+    style: {
+      background: 'var(--ti-color-mask-weak)',
+    },
     preview: {
-      src: {
-        type: 'font',
-        value: 'zmdi-card-giftcard',
-        style: {
-          fontSize: '64px',
-        },
-      },
-      objectFit: 'contain',
-      imgStyle: {
-        height: 100,
-      },
+      src: 'https://picsum.photos/500',
+      objectFit: 'cover',
+      height: 100,
     },
     text: 'Gift For You',
   } as ThumbProps,
