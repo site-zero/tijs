@@ -1,4 +1,4 @@
-import { CommonProps, CssObjectFit, IconObj, Vars } from '../../../_type';
+import { AspectSize, CommonProps, CssObjectFit, IconObj, Vars } from '../../../_type';
 
 export type ImageSrcInput = string | File | IconObj;
 
@@ -12,7 +12,7 @@ export type ImageProps = CommonProps & {
    * 是否支持拖拽本地文件显示
    * 默认为 true
    */
-  canDropFile?:boolean;
+  canDropFile?: boolean;
 
   /**
    * 未指定 src 时，显示什么
@@ -22,6 +22,7 @@ export type ImageProps = CommonProps & {
   width?: number | string;
   height?: number | string;
   objectFit?: CssObjectFit;
+  borderRadius?: AspectSize;
 
   style?: Vars;
   imgStyle?: Vars;

@@ -38,10 +38,14 @@
   const _drag_enter = ref(false);
   //-----------------------------------------------------
   const TopClass = computed(() =>
-    CssUtils.mergeClassName(props.className, {
-      'drag-enter': _drag_enter.value,
-      'is-loading': _img.loading,
-    })
+    CssUtils.mergeClassName(
+      props.className,
+      {
+        'drag-enter': _drag_enter.value,
+        'is-loading': _img.loading,
+      },
+      props.borderRadius ? `r-${props.borderRadius}` : undefined
+    )
   );
   //-----------------------------------------------------
   const TopStyle = computed(() => {

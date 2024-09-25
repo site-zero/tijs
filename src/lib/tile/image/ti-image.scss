@@ -1,4 +1,6 @@
 .ti-image {
+  @include aspect_radius('&.r');
+  overflow: hidden;
   //-----------------------------------------------
   &.is-loading {
     background-color: var(--ti-color-tab);
@@ -26,6 +28,7 @@
   img {
     width: 100%;
     height: 100%;
+    display: block;
   }
   //-----------------------------------------------
   aside {
