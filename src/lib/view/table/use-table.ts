@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { computed, ComputedRef, Ref } from 'vue';
-import { SelectableFeature, useSelectable } from '../../';
+import { ComputedRef, Ref } from 'vue';
+import { SelectableFeature, useDataLogicType, useSelectable } from '../../';
 import {
   Callback,
   Callback1,
@@ -8,10 +8,9 @@ import {
   TableRowID,
   Vars,
 } from '../../../_type';
-import { EventUtils, Match } from '../../../core';
+import { EventUtils } from '../../../core';
 import { getLogger } from '../../../core/log/ti-log';
 import {
-  GetTableRowLogicType,
   TableEmitter,
   TableEventPayload,
   TableProps,
@@ -63,7 +62,7 @@ export type ColResizingState = {
 function _get_table_data(
   selectable: SelectableFeature<TableRowID>,
   data: Vars[],
-  getRowType?: (row: TableRowData) => LogicType | undefined
+  getRowType?: (data: Vars) => LogicType | undefined
 ): TableRowData[] {
   // 启用特性
   let { getRowId: getDataId } = selectable;
@@ -81,7 +80,7 @@ function _get_table_data(
       rawData,
     };
     if (getRowType) {
-      row.type = getRowType(row);
+      row.type = getRowType(rawData);
     }
     list.push(row);
   }
@@ -122,28 +121,7 @@ export function useTable(props: TableProps, emit: TableEmitter) {
     return checked;
   }
 
-  const getRowType = computed(() => {
-    if (props.getRowType) {
-      // 直接指定了定制方法
-      if (_.isFunction(props.getRowType)) {
-        return props.getRowType;
-      }
-      // 采用了配置
-      const cans = [] as GetTableRowLogicType[];
-      for (let tester of props.getRowType) {
-        let { test, type } = tester;
-        let am = Match.parse(test, true);
-        cans.push({ test: am, type });
-      }
-      return (row: TableRowData) => {
-        for (let { test, type } of cans) {
-          if (test.test(row.rawData)) {
-            return type;
-          }
-        }
-      };
-    }
-  });
+  const getRowType = useDataLogicType(props.getRowType);
 
   return {
     selectable,
@@ -154,7 +132,7 @@ export function useTable(props: TableProps, emit: TableEmitter) {
       };
     },
     getTableData: () => {
-      return _get_table_data(selectable, props.data, getRowType.value);
+      return _get_table_data(selectable, props.data, getRowType);
     },
     bindTableResizing: (
       $main: HTMLElement,

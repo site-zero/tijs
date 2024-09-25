@@ -1,5 +1,6 @@
 import {
   FieldChangeProps,
+  GetDataLogicTypeOptions,
   KeepInfo,
   RoadblockProps,
   SelectEmitInfo,
@@ -128,7 +129,7 @@ export type TableBehaviorsProps = {
   /**
    * 获取一个行的逻辑类型
    */
-  getRowType?: GetTableRowLogicTypeInput;
+  getRowType?: GetDataLogicTypeOptions;
 
   /**
    * 一个缩进块的缩进尺寸，数字表示 px，也可以是 css 的尺寸
@@ -140,20 +141,6 @@ export type TableBehaviorsProps = {
   showRowIndex?: boolean;
 
   canHover?: boolean;
-};
-
-export type GetTableRowLogicTypeMatcher = {
-  test?: any;
-  type: LogicType;
-};
-
-export type GetTableRowLogicTypeInput =
-  | ((row: TableRowData) => LogicType|undefined)
-  | GetTableRowLogicTypeMatcher[];
-
-export type GetTableRowLogicType = {
-  test: TiMatch;
-  type: LogicType;
 };
 
 export type TableProps = CommonProps &
