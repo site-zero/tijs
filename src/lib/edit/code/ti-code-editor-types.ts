@@ -17,6 +17,8 @@ export type CodeEditorProps = CommonProps & {
   mime?: string;
   readonly?: boolean;
 
+  format?: 'JSON' | 'JSON5' | ((str: string) => string);
+
   /**
    * 空白数据，显示的样式
    */

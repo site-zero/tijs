@@ -1,12 +1,15 @@
 <script setup lang="ts">
   import _ from 'lodash';
-  import { computed, onUnmounted, provide, ref } from 'vue';
+  import { computed, onUnmounted, provide, ref, watch } from 'vue';
   import {
     ActionBarItem,
     AppModalInitProps,
+    AppModelApi,
     AppModelBinding,
     BUS_KEY,
+    Callback,
     EmitAdaptor,
+    Vars,
   } from '../../_type';
   import { CssUtils } from '../../core';
   import { getLogger } from '../../core/log/ti-log';
@@ -48,6 +51,36 @@
 
   const _result = ref<any>(props.result);
   const _isdead = ref(false);
+  const _app_body_com_conf = ref<Vars>({});
+  const _close_callback = [] as Callback[];
+
+  function prepareComConf() {
+    let comConf = _.cloneDeep(props.comConf ?? {});
+    // 绑定输入数据
+    if (model.data) {
+      _.assign(
+        comConf,
+        makeAppModelDataProps(model.data, () => _result.value)
+      );
+    }
+    _app_body_com_conf.value = comConf;
+  }
+  watch(() => props.comConf, prepareComConf, {
+    immediate: true,
+    deep: props.watchDeep,
+  });
+
+  const ModalApi = computed((): AppModelApi => {
+    return {
+      getComConf: () => _app_body_com_conf,
+      onClose: (callback: Callback) => {
+        if (_close_callback.indexOf(callback) < 0) {
+          _close_callback.push(callback);
+        }
+      },
+      close: _do_close_modal,
+    };
+  });
 
   const TransName = computed(() => {
     let pos = props.position || 'center';
@@ -86,18 +119,6 @@
       },
     ];
     return conf;
-  });
-
-  const BlockComConf = computed(() => {
-    let comConf = _.cloneDeep(props.comConf);
-    // 绑定输入数据
-    if (model.data) {
-      _.assign(
-        comConf,
-        makeAppModelDataProps(model.data, () => _result.value)
-      );
-    }
-    return comConf;
   });
 
   // 监控控件的事件以便更新 result
@@ -194,7 +215,7 @@
     return CssUtils.toStyle(style);
   });
 
-  function _do_close_modal(withResult: boolean) {
+  function _do_close_modal(withResult?: boolean) {
     if (log.isDebugEnabled()) {
       log.debug(
         `_do_close_modal(withResult=${withResult})`,
@@ -218,10 +239,25 @@
       _do_close_modal(false);
     }
   }
+
+  function onAfterAppear() {
+    if (props.appear) {
+      //console.log('ModalApi.value', ModalApi.value);
+      props.appear(ModalApi.value);
+    }
+  }
+
+  function onAfterLeave() {
+    if (props.leave) {
+      props.leave();
+    }
+  }
 </script>
 <template>
   <Transition
     :name="TransName"
+    @after-leave="onAfterLeave"
+    @after-appear="onAfterAppear"
     appear>
     <div
       class="app-modal-mask trans-mask ti-trans"
@@ -239,7 +275,7 @@
         <!------------------------------>
         <TiBlock
           v-bind="BlockConfig"
-          :com-conf="BlockComConf"
+          :com-conf="_app_body_com_conf"
           :events="BlockEmitAdaptors"
           @happen="onBlockEvent" />
         <!------------------------------>

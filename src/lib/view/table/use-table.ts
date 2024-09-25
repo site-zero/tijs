@@ -1,13 +1,13 @@
 import _ from 'lodash';
 import { ComputedRef, Ref } from 'vue';
+import { SelectableFeature, useDataLogicType, useSelectable } from '../../';
 import {
-  CheckStatus,
-  CheckedIds,
-  SelectableFeature,
-  SelectableState,
-  useSelectable,
-} from '../../';
-import { Callback, Callback1, TableRowID, Vars } from '../../../_type';
+  Callback,
+  Callback1,
+  LogicType,
+  TableRowID,
+  Vars,
+} from '../../../_type';
 import { EventUtils } from '../../../core';
 import { getLogger } from '../../../core/log/ti-log';
 import {
@@ -25,50 +25,7 @@ import { useTableResizing } from './use-table-resizing';
 
 const log = getLogger('TiTable.use-table');
 
-export type TableFeature = {
-  selectable: SelectableFeature<TableRowID>;
-  getRowIds: (data: Vars[]) => TableRowID[];
-  getTableHeadClass: (selection: TableSelection, col: TableStrictColumn) => Vars;
-  getTableData: () => TableRowData[];
-  bindTableResizing: (
-    $main: HTMLElement,
-    colResizing: ColResizingState,
-    columnSizes: Ref<number[]>,
-    showRowMarker: boolean,
-    onDestroy: Callback1<Callback>,
-    Keep: ComputedRef<TableKeepFeature>
-  ) => void;
-  getCheckStatus(selection: TableSelection): CheckStatus;
-  getCurrentRow: (
-    selection: TableSelection,
-    rows: TableRowData[]
-  ) => TableRowData | undefined;
-  getCheckedRows: (
-    selection: TableSelection,
-    rows: TableRowData[]
-  ) => TableRowData[];
-  // OnTableHeadCheckerClick: (
-  //   selection: TableSelection,
-  //   status: CheckStatus
-  // ) => void;
-  checkAll: (selection: TableSelection) => void;
-  selectNone: (selection: TableSelection) => void;
-  OnRowSelect: (selection: TableSelection, rowEvent: TableEventPayload) => void;
-  OnRowCheck: (selection: TableSelection, rowEvent: TableEventPayload) => void;
-  OnCellSelect: (
-    selection: TableSelection,
-    rowEvent: TableEventPayload,
-    columns: TableStrictColumn[]
-  ) => void;
-  updateSelection: (
-    selection: SelectableState<TableRowID>,
-    data: Vars[],
-    currentId?: TableRowID | null,
-    checkedIds?: CheckedIds<TableRowID>
-  ) => void;
-  OnRowOpen: (_selection: TableSelection, rowEvent: TableEventPayload) => void;
-  OnCellOpen: (_selection: TableSelection, rowEvent: TableEventPayload) => void;
-};
+export type TableFeature = ReturnType<typeof useTable>;
 
 /**
  * 拖动时的状态
@@ -104,23 +61,28 @@ export type ColResizingState = {
  */
 function _get_table_data(
   selectable: SelectableFeature<TableRowID>,
-  data: Vars[]
+  data: Vars[],
+  getRowType?: (data: Vars) => LogicType | undefined
 ): TableRowData[] {
   // 启用特性
   let { getRowId: getDataId } = selectable;
 
   // 处理数据
-  let list = [] as TableRowData[];
+  let list: TableRowData[] = [];
   let N = data.length;
   for (let index = 0; index < N; index++) {
     let rawData = data[index];
     let id = getDataId(rawData, index);
-    list.push({
+    let row: TableRowData = {
       id: id ?? `row-${index}`,
       index,
       indent: 0,
       rawData,
-    });
+    };
+    if (getRowType) {
+      row.type = getRowType(rawData);
+    }
+    list.push(row);
   }
   return list;
 }
@@ -130,7 +92,7 @@ function _get_table_data(
                    Use Feature
                 
 -----------------------------------------------------*/
-export function useTable(props: TableProps, emit: TableEmitter): TableFeature {
+export function useTable(props: TableProps, emit: TableEmitter) {
   // 启用特性
   let selectable = useSelectable<TableRowID>(props);
 
@@ -159,6 +121,8 @@ export function useTable(props: TableProps, emit: TableEmitter): TableFeature {
     return checked;
   }
 
+  const getRowType = useDataLogicType(props.getRowType);
+
   return {
     selectable,
     getTableHeadClass: (selection: TableSelection, col: TableStrictColumn) => {
@@ -168,7 +132,7 @@ export function useTable(props: TableProps, emit: TableEmitter): TableFeature {
       };
     },
     getTableData: () => {
-      return _get_table_data(selectable, props.data);
+      return _get_table_data(selectable, props.data, getRowType);
     },
     bindTableResizing: (
       $main: HTMLElement,

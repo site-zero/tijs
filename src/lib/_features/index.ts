@@ -1,6 +1,7 @@
 export * from './_com_props';
 export * from './field/';
 export * from './use-app-bus';
+export * from './use-data-logic-type';
 export * from './use-docking';
 export * from './use-dragging';
 export * from './use-grid-layout';
@@ -29,3 +30,4 @@ export * from './use-class-style';
 export * from './use-emit-adaptor';
 export * from './use-icon-text';
 export * from './use-value-box';
+

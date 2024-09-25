@@ -4,6 +4,7 @@ import { EventUtils, I18n, Tmpl, Util } from '../../../core';
 import { getLogger } from '../../../core/log/ti-log';
 import {
   SelectableState,
+  useDataLogicType,
   useSelectable,
   useStdListItem,
 } from '../../_features';
@@ -21,6 +22,7 @@ const log = getLogger('TiList.use-list');
 export function useList(props: ListProps, emit: ListEmitter) {
   // 启用特性
   let selectable = useSelectable<TableRowID>(props);
+  const getRowType = useDataLogicType(props.getRowType);
   //-----------------------------------------------------
   // 标准列表
   let { getItemValue, getItemIcon, getItemText, getItemTip } = useStdListItem({
@@ -92,6 +94,10 @@ export function useList(props: ListProps, emit: ListEmitter) {
         'is-current': is_current,
         'is-checked': is_checked,
       };
+      let type = getRowType ? getRowType(li) : undefined;
+      if (type) {
+        className[`is-${type}`] = true;
+      }
       // 选项信息
       let value = getItemValue(li, index);
       let icon = getItemIcon(li);

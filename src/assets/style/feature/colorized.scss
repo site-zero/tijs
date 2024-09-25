@@ -16,6 +16,12 @@
 .color-as-disable {
   color: var(--ti-color-disable);
 }
+.color-as-primary {
+  color: var(--ti-color-primary);
+}
+.color-as-secondary {
+  color: var(--ti-color-secondary);
+}
 
 .box-as-success {
   @include color-box-r(success);
@@ -51,5 +57,17 @@
   @include color-box-r(disable);
   &.active-reverse:active {
     @include color-box(disable);
+  }
+}
+.box-as-primary {
+  @include color-box-r(primary);
+  &.active-reverse:active {
+    @include color-box(primary);
+  }
+}
+.box-as-secondary {
+  @include color-box-r(secondary);
+  &.active-reverse:active {
+    @include color-box(secondary);
   }
 }

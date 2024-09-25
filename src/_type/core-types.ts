@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { App, DefineComponent, InjectionKey } from 'vue';
+import { App, DefineComponent, InjectionKey, Ref } from 'vue';
 import { ActionBarProps, BlockOverflowMode } from '../lib';
 
 /*---------------------------------------------------`
@@ -1040,24 +1040,62 @@ export type AppModelBinding = {
   event?: AppModelBindingEvent;
 };
 
+/**
+ * 提供模式框打开后的具体操作接口
+ */
+export type AppModelApi = {
+  /**
+   * @return 一个响应式对象，表示主控件的配置信息，可以直接用于主控件的配置
+   */
+  getComConf: () => Ref<Vars>;
+
+  /**
+   * 可以注册多个关闭时回调事件
+   *
+   * @param callback 关闭时回调
+   */
+  onClose: (callback: Callback) => void;
+
+  /**
+   * 关闭模式框
+   */
+  close: (withResult?: boolean) => void;
+};
+
 export type AppModalProps = CommonProps &
   BlockInfoProps &
   ComRef &
-  PopItemProps &
-  //EmitAdaptorProps &
-  Partial<{
+  PopItemProps & {
     type?: LogicType;
     iconOk?: IconInput;
     textOk?: string | null;
-    ok: (re: any) => Promise<boolean>;
+    ok?: (re: any) => Promise<boolean>;
     iconCancel?: IconInput;
     textCancel?: string | null;
-    cancel: (re: any) => Promise<boolean>;
-    actions: ActionBarItem[];
+    cancel?: (re: any) => Promise<boolean>;
+    actions?: ActionBarItem[];
     result?: any;
     // 默认 {data:"value",event:"change"}
     model?: AppModelBinding;
-  }>;
+    /**
+     * 是否深度监控 comConf 的属性变化
+     */
+    watchDeep?: boolean;
+
+    /**
+     * 本回调在对话框资源准备完毕后调用，用来获取更多的延迟动态效果
+     * 例如：动态设置焦点，动态设置滚动条位置，动态更新数据等
+     * 本回调会传递一个 api 对象，用来操作模式框
+     *
+     * @param api 提供操作模式框的 api
+     */
+    appear?: (api: AppModelApi) => void;
+
+    /**
+     * 本对话框销毁后（消失动画完成后）
+     */
+    leave?: () => void;
+  };
 
 export type AppModalInitProps = AppModalProps & {
   returnValue: (re: any) => void;

@@ -1,0 +1,29 @@
+@mixin __table_color($prefix, $name) {
+  #{$prefix}.is-#{$name} {
+    color: var(--ti-color-#{$name});
+
+    &.is-checked {
+      color: var(--ti-color-#{$name}-r);
+      background-color: var(--ti-color-#{$name});
+    }
+  }
+}
+
+@mixin __table_colorized($prefix) {
+  @include __table_color($prefix, success);
+  @include __table_color($prefix, warn);
+  @include __table_color($prefix, info);
+  @include __table_color($prefix, danger);
+  @include __table_color($prefix, track);
+  @include __table_color($prefix, disable);
+  @include __table_color($prefix, text);
+  @include __table_color($prefix, number);
+  @include __table_color($prefix, primary);
+  @include __table_color($prefix, secondary);
+}
+
+// 表格头
+@include __table_colorized('.table-row-marker');
+
+// 表格·单元格
+@include __table_colorized('.ti-table > main > .table-cell');

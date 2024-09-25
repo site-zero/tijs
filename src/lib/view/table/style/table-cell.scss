@@ -1,9 +1,6 @@
 .ti-table > main > .table-cell {
-  @include colorized;
-  & {
-    display: grid;
-    background-color: var(--ti-color-card);
-  }
+  display: grid;
+  background-color: var(--ti-color-card);
   //background-color: blue;
   &.is-checked {
     color: var(--ti-color-selected-r);

@@ -1,4 +1,4 @@
-import { RoadblockProps, StdListItemProps } from '../../';
+import { GetDataLogicTypeOptions, RoadblockProps, StdListItemProps } from '../../';
 import {
   AnyOptionItem,
   AspectSize,
@@ -28,6 +28,11 @@ export type ListAspect = {
    * 如果开启了这个选项，那么显示的文本被认为是一个 HTML
    */
   textAsHtml?: boolean;
+
+   /**
+   * 获取一个行的逻辑类型
+   */
+   getRowType?: GetDataLogicTypeOptions;
 
   /**
    *  指明如果带上 tip ， tip 栏的宽度，默认为 1fr

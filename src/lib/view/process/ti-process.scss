@@ -1,0 +1,38 @@
+.ti-process {
+  @include flex-align-v-nowrap($jc: center);
+  //-------------------------------------------------------
+  > .part-title {
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: var(--ti-gap-m);
+  }
+  //-------------------------------------------------------
+  > .part-progress {
+    flex: 0 0 auto;
+    padding: 2em 1em;
+    .ti-progress-bar {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+  }
+  //-------------------------------------------------------
+  > .part-logs {
+    @include font-fixed;
+    border-top: 1px dashed var(--ti-color-border-weak);
+    flex: 1 1 auto;
+    height: 100%;
+    scroll-behavior: smooth;
+    padding: var(--ti-gap-m);
+    font-size: var(--ti-fontsz-s);
+    line-height: 1.5em;
+    overflow: auto;
+    .log-line {
+      &.as-process {
+        opacity: 0.6;
+        color: var(--ti-color-primary);
+      }
+    }
+  }
+  //-------------------------------------------------------
+}

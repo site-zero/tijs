@@ -1,5 +1,6 @@
 import {
   FieldChangeProps,
+  GetDataLogicTypeOptions,
   KeepInfo,
   RoadblockProps,
   SelectEmitInfo,
@@ -15,9 +16,10 @@ import {
   FieldChange,
   FieldComProps,
   FieldName,
+  LogicType,
   TableColumnAspect,
-  TableInputColumn,
   TableRowID,
+  TiMatch,
   Vars,
 } from '../../../_type';
 
@@ -28,6 +30,7 @@ export type TableRowData = {
   id: TableRowID;
   // activated: boolean;
   // checked: boolean;
+  type?: LogicType;
   indent: number;
   rawData: Vars;
 };
@@ -122,6 +125,11 @@ export type TableBehaviorsProps = {
    * 传入的上下文变量字段
    */
   vars?: Vars;
+
+  /**
+   * 获取一个行的逻辑类型
+   */
+  getRowType?: GetDataLogicTypeOptions;
 
   /**
    * 一个缩进块的缩进尺寸，数字表示 px，也可以是 css 的尺寸
