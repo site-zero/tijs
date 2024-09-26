@@ -21,7 +21,6 @@ const COM_TYPE = COM_TYPES.Thumb;
 
 const TiThumbInfo: TiComInfo = {
   icon: 'zmdi-pin-assistant',
-  tags: ['ing'],
   race: TiComRace.TILE,
   name: COM_TYPE,
   text: 'i18n:ti-thumb-com-name',

@@ -6,10 +6,6 @@ export default {
   text: 'i18n:simple',
   comConf: {
     width: 100,
-    //height: 200,
-    style: {
-      background: 'var(--ti-color-mask-weak)',
-    },
     preview: {
       src: 'https://picsum.photos/500',
       objectFit: 'cover',
