@@ -108,4 +108,12 @@
       @include __color(secondary);
     }
   }
+
+  .part-progress {
+    position: absolute;
+    inset: 0;
+    padding: .5em;
+    background-color: var(--ti-color-mask-thin);
+    @include flex-center;
+  }
 }
