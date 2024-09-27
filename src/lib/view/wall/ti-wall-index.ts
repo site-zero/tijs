@@ -14,7 +14,7 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.Wall;
 
 const TiWallInfo: TiComInfo = {
-  tags: ['scaffold'],
+  tags: ['ing'],
   icon: 'zmdi-view-module',
   //icon: '🚜',
   race: TiComRace.VIEW,

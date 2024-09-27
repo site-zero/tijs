@@ -27,6 +27,7 @@ export type WallProps = CommonProps &
      */
     style?: Vars;
     layout?: CssGridLayout;
+    conStyle?: Vars;
 
     /**
      * 每个项目的样式

@@ -364,7 +364,7 @@ export function genFormatContext(date: any) {
 
   let Mmm = MONTH_ABBR[m_i];
   let MMM = Mmm.toUpperCase();
-  let MMMM = I18n.get(`month-${Mmm}`);
+  let MMMM = I18n ? I18n.get(`month-${Mmm}`) : MONTH_NAME[m_i];
 
   let day = date.getDay();
   let dayK0 = _.upperFirst(I_DAYS[day]);
@@ -754,6 +754,21 @@ const MONTH_ABBR = [
   'Oct',
   'Nov',
   'Dec',
+];
+
+const MONTH_NAME = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
 ];
 
 ///////////////////////////////////////////

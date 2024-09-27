@@ -14,12 +14,24 @@ export function useWall(props: WallProps) {
     getItemClass,
     getItemLogicType,
   } = props;
-
+  //-----------------------------------------------------
+  const TopClass = computed(() => {
+    return CssUtils.mergeClassName(props.className);
+  });
+  //-----------------------------------------------------
+  const TopStyle = computed(() => {
+    return CssUtils.toStyle(props.style);
+  });
+  //-----------------------------------------------------
+  const ConStyle = computed(() => {
+    return CssUtils.mergeStyles([props.conStyle, props.layout]);
+  });
   //-----------------------------------------------------
   // 逐个处理 Wall 项目
-  const WallItems = computed(() => {
+  const Items = computed(() => {
     let re = [] as WallItem[];
-    for (let i = 0; i < data.length; i++) {
+    let N = props.data?.length ?? 0;
+    for (let i = 0; i < N; i++) {
       let item = data[i];
 
       let itVars = { ...vars, item };
@@ -31,11 +43,25 @@ export function useWall(props: WallProps) {
       let style = CssUtils.mergeStyles([itemStyle, getItemStyle?.(item, i)]);
 
       // 类
-      let className = getItemClass?.(item, i) ?? {};
+      let className = CssUtils.mergeClassName(
+        {},
+        {
+          [`is-${type}`]: type ? true : false,
+        },
+        getItemClass?.(item, i)
+      );
 
       // 处理控件
-      let comType = Util.explainObj(itVars, props.comType) as string;
-      let comConf = Util.explainObj(itVars, props.comConf) as Vars;
+      let comType = Util.explainObj(
+        itVars,
+        props.comType ?? 'TiThumb'
+      ) as string;
+      let comConf = Util.explainObj(
+        itVars,
+        props.comConf ?? {
+          width: '100%',
+        }
+      ) as Vars;
 
       re.push({
         index: i,
@@ -55,6 +81,9 @@ export function useWall(props: WallProps) {
   // 返回特性
   //-----------------------------------------------------
   return {
-    WallItems,
+    TopClass,
+    TopStyle,
+    ConStyle,
+    Items,
   };
 }

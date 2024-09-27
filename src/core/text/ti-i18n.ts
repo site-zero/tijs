@@ -2,10 +2,21 @@ import _ from 'lodash';
 import { Str } from '../';
 import { I18nLang, I18nSet, MessageMap, Vars } from '../../_type';
 
-const I18N = {} as MessageMap;
-function __MSG(key: string): string {
-  let k2 = key.replace(/\./g, '-');
-  return I18N[k2];
+function _I18N_SET() {
+  let re = (globalThis as any).TI_I18N_SET;
+  if (!re) {
+    re = {} as MessageMap;
+    (globalThis as any).TI_I18N_SET = re;
+  }
+  return re;
+}
+
+function __MSG(key: string): string | undefined {
+  let I18N = _I18N_SET();
+  if (I18N) {
+    let k2 = key.replace(/\./g, '-');
+    return I18N[k2];
+  }
 }
 
 export function createEmptyI18nSet(): I18nSet {
@@ -18,9 +29,10 @@ export function createEmptyI18nSet(): I18nSet {
 }
 
 export function all() {
-  return I18N;
+  return _I18N_SET();
 }
 export function putAll(msgs: MessageMap) {
+  let I18N = _I18N_SET();
   _.assign(I18N, msgs);
 }
 
