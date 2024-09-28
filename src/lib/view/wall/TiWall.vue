@@ -13,7 +13,7 @@
     :class="Wall.TopClass.value"
     :style="Wall.TopStyle.value">
     <div
-      class="wall-con"
+      class="wall-con fit-parent"
       :style="Wall.ConStyle.value">
       <div
         v-for="wit in Wall.Items.value"

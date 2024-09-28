@@ -5,7 +5,7 @@ export function mockWallData(n = 10): Vars[] {
   let re = [] as Vars[];
   for (let i = 0; i < n; i++) {
     let u = {
-      name: generateText(),
+      name: generateText(3),
     } as Vars;
     u.icon = generateIcon();
     re.push(u);

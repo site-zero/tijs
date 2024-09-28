@@ -1,10 +1,10 @@
 <script lang="ts" setup>
+  import _ from 'lodash';
   import { computed, reactive, ref, useTemplateRef, watch } from 'vue';
   import { CssUtils, IconObj } from '../../../';
   import { ImageProps } from './ti-image-types';
   import { useDropping } from './use-dropping';
   import { ImageState, useImage } from './use-image';
-  import _ from 'lodash';
   //-----------------------------------------------------
   defineOptions({
     inheritAttrs: true,
@@ -15,7 +15,7 @@
   }>();
   //-----------------------------------------------------
   const props = withDefaults(defineProps<ImageProps>(), {
-    canDropFile: true,
+    canDropFile: false,
     dftSrc: () =>
       ({
         type: 'font',
@@ -70,6 +70,9 @@
       enter: () => {
         _drag_enter.value = true;
       },
+      over: () => {
+        _drag_enter.value = true;
+      },
       leave: () => {
         _drag_enter.value = false;
       },
@@ -122,7 +125,12 @@
       <aside v-if="_img.loading">
         <i class="fas fa-cog fa-spin loading-icon"></i>
       </aside>
+      <div
+        class="as-icon"
+        v-if="_img.iconHtml"
+        v-html="_img.iconHtml"></div>
       <img
+        v-else
         :style="ImageStyle"
         :src="_img.imgSrc"
         @load="_img.loading = false" />

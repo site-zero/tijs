@@ -1,14 +1,13 @@
-import { Ref } from 'vue';
-
 export type DropFileOptions = {
   target: () => HTMLElement | null;
   enter?: (el: HTMLElement, src: HTMLElement) => void;
+  over?: (el: HTMLElement, src: HTMLElement) => void;
   leave?: (el: HTMLElement, src: HTMLElement) => void;
   drop?: (files?: FileList) => void;
 };
 
 export function useDropping(options: DropFileOptions) {
-  let { enter, leave, drop } = options;
+  let { enter, leave, over, drop } = options;
   let dropZone = options.target();
 
   function preventDefaults(e: Event) {
@@ -49,6 +48,11 @@ export function useDropping(options: DropFileOptions) {
       dropZone.removeEventListener('dragenter', onEnter);
       if (enter) {
         dropZone.addEventListener('dragenter', onEnter);
+      }
+
+      dropZone.removeEventListener('dragover', onLeave);
+      if (over) {
+        dropZone.addEventListener('dragover', onLeave);
       }
 
       dropZone.removeEventListener('dragleave', onLeave);

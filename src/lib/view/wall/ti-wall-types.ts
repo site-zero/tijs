@@ -3,6 +3,7 @@ import {
   ComRef,
   CssGridLayout,
   LogicType,
+  TiRawCom,
   Vars,
 } from '../../../_type';
 
@@ -46,6 +47,6 @@ export type WallItem = {
   style: Vars;
   className: Vars;
 
-  comType: string;
+  comType: TiRawCom;
   comConf: Vars;
 };

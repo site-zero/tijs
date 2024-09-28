@@ -5,10 +5,13 @@ export default {
   name: 'local-any',
   text: 'i18n:ti-image-example-local-any',
   comConf: {
+    canDropFile: true,
     objectFit: 'contain',
     style: {
       width: '100px',
       height: '100px',
+    },
+    imgStyle: {
       backgroundColor: '#c0c0c0',
       objectPosition: 'center',
     },

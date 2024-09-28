@@ -8,6 +8,7 @@ export default {
     src: 'https://picsum.photos/200',
     width: 200,
     height: 120,
-    objectFit:'cover'
+    objectFit:'cover',
+    borderRadius: 'b',
   } as ImageProps,
 } as ComPropExample;

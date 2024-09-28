@@ -1,6 +1,6 @@
 import { computed } from 'vue';
-import { Vars } from '../../..';
-import { CssUtils, Util } from '../../../core';
+import { TiRoadblock, Vars } from '../../..';
+import { CssUtils, tiGetComponent, Util } from '../../../core';
 import { WallItem, WallProps } from './ti-wall-types';
 
 export type WallFeature = ReturnType<typeof useWall>;
@@ -69,7 +69,7 @@ export function useWall(props: WallProps) {
         type,
         style,
         className,
-        comType,
+        comType: tiGetComponent(comType)?.com ?? TiRoadblock,
         comConf,
       });
     }

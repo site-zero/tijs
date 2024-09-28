@@ -97,15 +97,15 @@ export function useImage(props: ImageProps, state: ImageState) {
         icon.value ?? 'zmdi-cake',
         icon.style ?? style
       );
-      //console.log('before render');
-      let canvas = await renderHtmlToBase64(state.iconHtml);
-      // if ($draw) {
-      //   $draw.innerHTML = '';
-      //   Dom.appendTo(canvas, $draw);
-      // }
-      //console.log('before base64');
-      state.mode = 'icon';
-      state.imgSrc = canvas.toDataURL('image/png');
+      // //console.log('before render');
+      // let canvas = await renderHtmlToBase64(state.iconHtml);
+      // // if ($draw) {
+      // //   $draw.innerHTML = '';
+      // //   Dom.appendTo(canvas, $draw);
+      // // }
+      // //console.log('before base64');
+      // state.mode = 'icon';
+      // state.imgSrc = canvas.toDataURL('image/png');
       //console.log('done Base64');
     }
     // 确认是图像
@@ -118,7 +118,7 @@ export function useImage(props: ImageProps, state: ImageState) {
   async function loadImageSrc() {
     console.log('loadImageSrc', Src.value);
     state.iconHtml = undefined;
-    state.loading = true;
+    state.loading = false;
     state.imgSrc = '';
     // 本地文件/图像
     if (Src.value instanceof File) {
@@ -127,6 +127,7 @@ export function useImage(props: ImageProps, state: ImageState) {
       let file = Src.value;
       // 如果是本地图片，那么读取内容
       if (/^image\//.test(file.type)) {
+        state.loading = true;
         state.imgSrc = await convertFileToBase64(Src.value);
       }
       // 否则的话，就用对应的图标来代替
@@ -153,6 +154,7 @@ export function useImage(props: ImageProps, state: ImageState) {
     }
     // 默认采用 Image
     else {
+      state.loading = true;
       state.mode = 'img';
       state.imgSrc = Src.value as string;
     }

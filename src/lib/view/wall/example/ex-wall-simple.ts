@@ -7,19 +7,28 @@ export default {
   name: 'simple',
   text: 'i18n:simple',
   comConf: {
-    data: mockWallData(20),
+    style: {
+      padding: 'var(--ti-gap-h)',
+    },
+    layout: {
+      gridTemplateColumns: 'repeat(4, 1fr)',
+      gap: 'var(--ti-gap-h)',
+    },
     comConf: {
       preview: {
-        value: {
-          src: {
-            type: 'font',
-            value: '=item.icon',
-          } as IconObj,
-        } as ImageProps,
-      },
+        src: {
+          type: 'font',
+          value: '=item.icon',
+          style: {
+            fontSize: '64px',
+          },
+        } as IconObj,
+        height: '64px'
+      } as ImageProps,
       text: {
         text: '=item.name',
       },
     } as ThumbProps,
+    data: mockWallData(20),
   } as WallProps,
 } as ComPropExample;

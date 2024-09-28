@@ -712,7 +712,7 @@ export interface ComPropExample {
 
 export type ComInfoFilter = (info: TiComInfo) => boolean;
 
-export type TiRawCom = DefineComponent<{}, {}, any>;
+export type TiRawCom = DefineComponent<any, any, any>;
 
 export type TiComExampleModelTarget =
   | string

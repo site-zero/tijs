@@ -1,8 +1,7 @@
 import { Chance } from 'chance';
+import _ from 'lodash';
 import { Vars } from '../../../../_type';
 import * as DateTime from '../../../../core/_top/ti-datetime';
-import { Icons } from '../../../../core';
-import _ from 'lodash';
 
 // 创建一个 Chance 实例
 const chance = new Chance();
@@ -35,12 +34,14 @@ export function generateIcon(): string {
   ];
   let r = _.random(true);
   let i = Math.round(icons.length * r);
-  let index = _.clamp(i, 0, 1);
+  let index = _.clamp(i, 0, icons.length - 1);
   return icons[index];
 }
 
-export function generateText(){
-  return chance.sentence()
+export function generateText(n?: number) {
+  return chance.sentence({
+    words: n,
+  });
 }
 
 // 生成用户的函数
