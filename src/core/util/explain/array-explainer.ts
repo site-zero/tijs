@@ -9,7 +9,8 @@ export class ArrayExplainer implements Explainer {
   private items: Explainer[] = [];
 
   // 构造函数，进行编译
-  constructor(input: any[]) {
+  constructor(input: any[], scope?: string) {
+    // 明确指定挑选 scope
     if (
       input.length === 2 &&
       _.isString(input[0]) &&
@@ -18,7 +19,12 @@ export class ArrayExplainer implements Explainer {
       this.scope = buildExplainer(input[0].substring(6).trim());
       this.mapper = buildExplainer(input[1]);
     }
-    // 挑选 scope
+    // 默认的 scope，就是在 map 里直接指定一个1元素的对象数组
+    else if (scope && input.length === 1 && _.isPlainObject(input[0])) {
+      this.scope = buildExplainer(scope);
+      this.mapper = buildExplainer(input[0]);
+    }
+    // 自由挑选数组元素
     else {
       let items: Explainer[] = [];
       for (let obj of input) {

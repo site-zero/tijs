@@ -5,7 +5,7 @@ export class RawExplainer implements Explainer {
   private re: any;
 
   // 构造函数，进行编译
-  constructor(input: object) {
+  constructor(input: any) {
     this.re = input;
   }
 

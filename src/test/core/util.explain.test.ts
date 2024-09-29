@@ -98,14 +98,67 @@ test('ArrayExplain', () => {
   let context = {
     name: 'abc',
     age: 12,
-    pet: {
-      name: 'xx',
-    },
+    pet: { name: 'xx' },
   } as Vars;
 
   expect(
     Util.explainObj(context, ['=name', { b: '=pet.name' }, '=age'])
   ).toStrictEqual(['abc', { b: 'xx' }, 12]);
+});
+
+test('ArrayScopeExplain', () => {
+  let context = {
+    list: [
+      { name: 'abc', age: 12 },
+      { name: 'def', age: 14 },
+      { name: 'ghi', age: 30 },
+    ],
+  } as Vars;
+
+  expect(
+    Util.explainObj(context, {
+      list: [
+        {
+          a: '=name',
+          b: '=age',
+        },
+      ],
+    })
+  ).toStrictEqual({
+    list: [
+      { a: 'abc', b: 12 },
+      { a: 'def', b: 14 },
+      { a: 'ghi', b: 30 },
+    ],
+  });
+});
+
+test('ArrayScopeExplain2', () => {
+  let context = {
+    list: [
+      { name: 'abc', age: 12 },
+      { name: 'def', age: 14 },
+      { name: 'ghi', age: 30 },
+    ],
+  } as Vars;
+
+  expect(
+    Util.explainObj(context, {
+      xyz: [
+        ':scope=list',
+        {
+          a: '=name',
+          b: '=age',
+        },
+      ],
+    })
+  ).toStrictEqual({
+    xyz: [
+      { a: 'abc', b: 12 },
+      { a: 'def', b: 14 },
+      { a: 'ghi', b: 30 },
+    ],
+  });
 });
 
 test('ArrayMapping', () => {
@@ -117,11 +170,9 @@ test('ArrayMapping', () => {
     ],
   } as Vars;
 
-  expect(Util.explainObj(context, [':scope=pets', { nm: '=name' }])).toStrictEqual([
-    { nm: 'red' },
-    { nm: 'green' },
-    { nm: 'blue' },
-  ]);
+  expect(
+    Util.explainObj(context, [':scope=pets', { nm: '=name' }])
+  ).toStrictEqual([{ nm: 'red' }, { nm: 'green' }, { nm: 'blue' }]);
 });
 
 test('WholeContextExplain', () => {

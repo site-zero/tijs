@@ -1,8 +1,9 @@
 import _ from 'lodash';
 import { ExplainOptions, Explainer, Vars } from '../../../_type';
 import { buildExplainer } from '../util-explain';
+import { ArrayExplainer } from './array-explainer';
 
-type Field = {
+type MapExplainField = {
   // "..." 开头的键，表示解构，一个对象可以有 "...","...1", "...2" 多个解构键
   decon?: boolean;
   name: string;
@@ -11,17 +12,30 @@ type Field = {
 
 export class MapExplainer implements Explainer {
   // 解析后的处理函数
-  private fields: Field[];
+  private fields: MapExplainField[];
 
   // 构造函数，进行编译
   constructor(input: object) {
     this.fields = [];
+    let fld: MapExplainField;
     _.forEach(input, (v, name) => {
-      let fld = {
-        decon: /^\.{3,}/.test(name),
-        name,
-        value: buildExplainer(v),
-      };
+      let decon = /^\.{3,}/.test(name);
+      if (!decon && _.isArray(v)) {
+        fld = {
+          decon: false,
+          name,
+          value: new ArrayExplainer(v, `=${name}`),
+        };
+      }
+      // 其他采用通用的解析
+      else {
+        fld = {
+          decon,
+          name,
+          value: buildExplainer(v),
+        };
+      }
+      // 计入字段列表
       this.fields.push(fld);
     });
   }
