@@ -20,6 +20,7 @@ export class MapExplainer implements Explainer {
     let fld: MapExplainField;
     _.forEach(input, (v, name) => {
       let decon = /^\.{3,}/.test(name);
+      // 采用数组的特殊处理方式
       if (!decon && _.isArray(v)) {
         fld = {
           decon: false,
