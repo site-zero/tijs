@@ -3,11 +3,35 @@
   height: 100%;
   overflow: auto;
   //-----------------------------------------------------
+  &.can-select,
+  &.can-check {
+    user-select: none;
+  }
+  //-----------------------------------------------------
   > .wall-con {
     display: grid;
     grid-auto-columns: 1fr;
     grid-auto-rows: auto;
-
+    //---------------------------------------------------
+    > .wall-item {
+      //-------------------------------------------------
+      > .wall-item-con {
+        width: 100%;
+        height: 100%;
+        border: 1px dotted transparent;
+      }
+      //-------------------------------------------------
+      &.is-current > .wall-item-con {
+        border-color: var(--ti-color-highlight-f);
+      }
+      //-------------------------------------------------
+      &.is-checked > .wall-item-con {
+        background-color: var(--ti-color-highlight);
+        color: var(--ti-color-highlight-f);
+      }
+      //-------------------------------------------------
+    }
+    //---------------------------------------------------
   }
   //-----------------------------------------------------
 }

@@ -2,7 +2,7 @@
   import { computed, onMounted, onUnmounted, ref } from 'vue';
   import {
     TextSnippet,
-    useGridLayout,
+    useGridLayoutTrack,
     useGridLayoutStyle,
     useViewport,
   } from '../../';
@@ -40,7 +40,7 @@
     onUnmounted,
   });
   //-------------------------------------------------
-  let GridLayout = computed(() => useGridLayout(props));
+  let GridLayout = computed(() => useGridLayoutTrack(props));
   let GridLayoutStyle = computed(() =>
     useGridLayoutStyle(GridLayout.value, _viewport.size.width)
   );

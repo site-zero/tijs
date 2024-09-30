@@ -16,7 +16,7 @@
     TabChangeEvent,
     TiBlock,
     TiLayoutTabs,
-    useGridLayout,
+    useGridLayoutTrack,
     useGridLayoutStyle,
     useViewport,
   } from '../../../';
@@ -68,7 +68,7 @@
   });
   //-------------------------------------------------
   let GridLayout = computed(() =>
-    useGridLayout({
+    useGridLayoutTrack({
       layout: props.layout,
       layoutHint: props.layoutHint,
       layoutGridTracks: props.layoutGridTracks,

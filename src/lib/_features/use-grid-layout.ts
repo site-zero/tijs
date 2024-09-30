@@ -53,6 +53,15 @@ function parseGridLayout(
   let input: GridLayoutHint = layoutHint;
   //  如果是字符串，那么就假设它是对的
   if (_.isString(input)) {
+    // 如果字符串格式为 '<500>' 表示每个轨道宽度为 500px，
+    // 根据视口的宽度，自动计算轨道数量
+    let m = /^<([0-9]+)>$/.exec(input);
+    if (m) {
+      let tkWidth = parseInt(m[1]);
+      return (_w: number) => Math.floor(_w / tkWidth);
+    }
+    // 否则则必须可以被 JSON 解析为 GridHintItem[]
+    // 否则会发生不可预知的错误
     input = JSON.parse(input);
   }
 
@@ -151,12 +160,8 @@ function buildGridFieldsLayoutStyle(
   };
 }
 
-export type GridLayoutFeature = {
-  getTrackCount: (viewWidth: number) => number;
-  getLayoutCss: (_track_count: number) => Vars;
-};
-
-export function useGridLayout(props: GridLayoutProps): GridLayoutFeature {
+export type GridLayoutTrackFeature = ReturnType<typeof useGridLayoutTrack>;
+export function useGridLayoutTrack(props: GridLayoutProps) {
   const getTrackCount = parseGridLayout(props.layoutHint);
   const getLayoutCss = buildGridFieldsLayoutStyle(props);
 
@@ -166,16 +171,27 @@ export function useGridLayout(props: GridLayoutProps): GridLayoutFeature {
   };
 }
 
-export type GridLayoutStyleFeature = {
-  trackCount: number;
-  layoutCss: Vars;
-  mergetStyle: (css: Vars) => Vars;
-};
-
+export type GridLayoutStyleFeature = ReturnType<typeof useGridLayoutStyle>;
 export function useGridLayoutStyle(
-  grid: GridLayoutFeature,
+  grid: GridLayoutTrackFeature,
   _viewport_width: number
-): GridLayoutStyleFeature {
+) {
+  const trackCount = grid.getTrackCount(_viewport_width);
+  const layoutCss = grid.getLayoutCss(trackCount);
+  return {
+    trackCount,
+    layoutCss,
+    mergetStyle: (css: Vars) => {
+      let re = _.cloneDeep(layoutCss);
+      _.assign(re, css);
+      return re;
+    },
+  };
+}
+
+export type GridLayoutFeature = ReturnType<typeof useGridLayout>;
+export function useGridLayout(props: GridLayoutProps, _viewport_width: number) {
+  let grid = useGridLayoutTrack(props);
   const trackCount = grid.getTrackCount(_viewport_width);
   const layoutCss = grid.getLayoutCss(trackCount);
   return {

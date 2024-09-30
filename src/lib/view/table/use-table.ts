@@ -65,7 +65,7 @@ function _get_table_data(
   getRowType?: (data: Vars) => LogicType | undefined
 ): TableRowData[] {
   // 启用特性
-  let { getRowId: getDataId } = selectable;
+  let { getDataId } = selectable;
 
   // 处理数据
   let list: TableRowData[] = [];
@@ -161,7 +161,7 @@ export function useTable(props: TableProps, emit: TableEmitter) {
       }
     },
 
-    getRowIds: selectable.getRowIds,
+    getRowIds: selectable.getDataIds,
 
     getCheckStatus(selection: TableSelection) {
       return selectable.getCheckStatus(selection);

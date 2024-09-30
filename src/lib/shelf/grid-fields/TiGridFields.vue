@@ -7,7 +7,6 @@
     TiRoadblock,
     useFieldChange,
     useGridLayout,
-    useGridLayoutStyle,
     useViewport,
   } from '../../';
   import { FieldChange } from '../../../_type';
@@ -77,9 +76,12 @@
     ) as RoadblockProps;
   });
   //-------------------------------------------------
-  let GridLayout = computed(() => useGridLayout(props));
+  // let GridLayout = computed(() => useGridLayoutTrack(props));
+  // let GridLayoutStyle = computed(() =>
+  //   useGridLayoutStyle(GridLayout.value, _viewport.size.width)
+  // );
   let GridLayoutStyle = computed(() =>
-    useGridLayoutStyle(GridLayout.value, _viewport.size.width)
+    useGridLayout(props, _viewport.size.width)
   );
   //-------------------------------------------------
   const TopClass = computed(() =>

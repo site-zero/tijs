@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { KeyboardStatus, Vars } from '../../_type';
+import { KeyboardStatus, TableRowID, Vars } from '../../_type';
 import { Util } from '../../core';
 // -----------------------------------------------------
 //  Types
@@ -41,6 +41,15 @@ export type SelectableProps<ID extends string | number> = {
   getId?: string | ((it: Vars, index: number) => ID);
 
   /**
+   * 如果未能取到 ID 则会默认用 index 拼合 ID，
+   * 这时就会用到本属性，譬如， index=3, dftIdPrefix='row'
+   * 那么 id 就是 `row-3`
+   *
+   * 默认本属性值为 "row"
+   */
+  dftIdPrefix?: string;
+
+  /**
    * 是否支持多重选择
    */
   multi?: boolean;
@@ -65,86 +74,34 @@ export type SelectableProps<ID extends string | number> = {
 };
 
 // -----------------------------------------------------
-export type SelectableFeature<ID extends string | number> = {
-  //createSelection: () => SelectableState<ID>;
-
-  getRowIds: (data: Vars[]) => ID[];
-
-  getRowId: (data: Vars, index: number) => ID;
-  getRowIndex: (selection: SelectableState<ID>, id: ID) => number;
-  isIDChecked: (selection: SelectableState<ID>, id?: ID) => boolean;
-  isDataChecked: (
-    selection: SelectableState<ID>,
-    index: number,
-    data?: Vars
-  ) => boolean;
-  isDataActived: (
-    selection: SelectableState<ID>,
-    index: number,
-    data?: Vars
-  ) => boolean;
-
-  getCheckedData: (list: Vars[], selection: SelectableState<ID>) => Vars[];
-  getCurrentData: (
-    list: Vars[],
-    selection: SelectableState<ID>
-  ) => Vars | undefined;
-  getSelectionEmitInfo: (
-    selection: SelectableState<ID>,
-    list: Vars[],
-    oldCheckedIds: Map<ID, boolean>,
-    oldCurrentId?: ID | null
-  ) => SelectEmitInfo<ID>;
-
-  getCheckStatus: (selection: SelectableState<ID>) => CheckStatus;
-
-  updateSelection: (
-    selection: SelectableState<ID>,
-    data: Vars[],
-    currentId?: ID | null,
-    checkedIds?: CheckedIds<ID>
-  ) => void;
-
-  checkAll: (selection: SelectableState<ID>) => void;
-  selectNone: (selection: SelectableState<ID>) => void;
-
-  select: (
-    selection: SelectableState<ID>,
-    rowId: ID,
-    keyboard: KeyboardStatus
-  ) => void;
-  selectId: (state: SelectableState<ID>, id: ID) => void;
-  toggleId: (state: SelectableState<ID>, id: ID) => void;
-  selectRange: (
-    state: SelectableState<ID>,
-    ids: ID[],
-    range: [ID, ID | undefined | null]
-  ) => void;
-};
+export type SelectableFeature<ID extends TableRowID> = ReturnType<
+  typeof useSelectable<ID>
+>;
 // -----------------------------------------------------
 //
 // Use Feature
 //
-export function useSelectable<ID extends string | number>(
+export function useSelectable<ID extends TableRowID>(
   props: SelectableProps<ID>
-): SelectableFeature<ID> {
+) {
   let { getId = (data) => data.id ?? data.value } = props;
   //console.log('use selectable', props.currentId, props.checkedIds);
   /**
    * 获取数据的 ID
    */
-  function getRowId(it: Vars, index: number): ID {
+  function getDataId(it: Vars, index: number): ID {
+    let prefix = props.dftIdPrefix ?? 'row';
     if (getId) {
       if (_.isString(getId)) {
-        return _.get(it, getId) ?? (`row-${index}` as ID);
+        return _.get(it, getId) ?? (`${prefix}-${index}` as ID);
       }
       //console.log('getRowId',  getId(it, index))
-      return getId(it, index);
+      return getId(it, index) ?? (`${prefix}-${index}` as ID);
     }
-    return `row-${index}` as ID;
+    return `${prefix}-${index}` as ID;
   }
 
-  function getRowIndex(selection: SelectableState<ID>, id?: ID) {
+  function getDataIndex(selection: SelectableState<ID>, id?: ID) {
     if (!_.isNil(id)) {
       for (let i = 0; i < selection.ids.length; i++) {
         if (selection.ids[i] == id) {
@@ -186,7 +143,7 @@ export function useSelectable<ID extends string | number>(
     if (!data) {
       return false;
     }
-    let id = getRowId(data, index);
+    let id = getDataId(data, index);
     return isIDChecked(selection, id);
   }
 
@@ -205,7 +162,7 @@ export function useSelectable<ID extends string | number>(
     if (!data) {
       return false;
     }
-    let id = getRowId(data, index);
+    let id = getDataId(data, index);
     return id == selection.currentId;
   }
 
@@ -264,7 +221,7 @@ export function useSelectable<ID extends string | number>(
     currentId?: ID | null,
     checkedIds?: CheckedIds<ID>
   ) {
-    selection.ids = getRowIds(data);
+    selection.ids = getDataIds(data);
     let ids = new Map<ID, boolean>();
     //console.log(selection.ids);
 
@@ -335,7 +292,7 @@ export function useSelectable<ID extends string | number>(
     selection.currentId = currentId;
     if (!_.isNil(currentId)) {
       selection.lastSelectId = currentId;
-      selection.lastSelectIndex = getRowIndex(selection, currentId);
+      selection.lastSelectIndex = getDataIndex(selection, currentId);
     }
   }
 
@@ -344,18 +301,25 @@ export function useSelectable<ID extends string | number>(
                        State
                 
   -----------------------------------------------------*/
-  function getRowIds(data: Vars[]): ID[] {
+  function getDataIds(data: Vars[]): ID[] {
     let ids = [] as ID[];
     if (data) {
       for (let i = 0; i < data.length; i++) {
         let it = data[i];
-        let id = getRowId(it, i);
+        let id = getDataId(it, i);
         if (!_.isUndefined(id)) {
           ids.push(id);
         }
       }
     }
     return ids;
+  }
+
+  function resetSelection(selection: SelectableState<ID>, data?: Vars[]) {
+    selection.currentId = undefined;
+    selection.checkedIds.clear();
+    selection.ids = getDataIds(data ?? []);
+    selection.lastSelectId = undefined;
   }
 
   // function createSelection(): SelectableState<ID> {
@@ -454,7 +418,7 @@ export function useSelectable<ID extends string | number>(
       }
     }
     // 更新一下下标
-    selection.lastSelectIndex = getRowIndex(selection, lastId);
+    selection.lastSelectIndex = getDataIndex(selection, lastId);
   }
 
   function checkAll(selection: SelectableState<ID>) {
@@ -618,11 +582,11 @@ export function useSelectable<ID extends string | number>(
   }
 
   return {
-    getRowIds,
+    getDataIds,
     ////createSelection,
 
-    getRowId,
-    getRowIndex,
+    getDataId,
+    getDataIndex,
     isIDChecked,
     isDataChecked,
     isDataActived,
@@ -634,6 +598,7 @@ export function useSelectable<ID extends string | number>(
     getCheckStatus,
 
     updateSelection,
+    resetSelection,
 
     checkAll,
     selectNone,

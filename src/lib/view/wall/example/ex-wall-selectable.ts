@@ -4,14 +4,17 @@ import { WallProps } from '../ti-wall-types';
 import { mockWallData } from './mock-wall-data';
 
 export default {
-  name: 'simple',
-  text: 'i18n:simple',
+  name: 'selectable',
+  text: 'i18n:ti-wall-example-selectable',
   comConf: {
+    canSelect: true,
+    canCheck: true,
+    multi: true,
     style: {
       padding: 'var(--ti-gap-b)',
     },
     itemConStyle: {
-      padding: 'var(--ti-gap-b)'
+      padding: 'var(--ti-gap-b)',
     },
     layoutHint: '<120>',
     layout: {
@@ -32,6 +35,6 @@ export default {
         text: '=item.name',
       },
     } as ThumbProps,
-    data: mockWallData(17),
+    data: mockWallData(30),
   } as WallProps,
 } as ComPropExample;
