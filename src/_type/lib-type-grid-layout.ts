@@ -28,7 +28,10 @@ export type GridLayoutHintItem = number | [number, number];
  *
  * ### String
  *
- * 如果传入的是字符串，则必须可以被 JSON 解析为 GridHintItem[]
+ * 如果字符串格式为 '<500>' 表示每个轨道宽度为 500px，
+ * 根据视口的宽度，自动计算轨道数量
+ * 
+ * 否则则必须可以被 JSON 解析为 GridHintItem[]
  * 否则会发生不可预知的错误
  *
  * ### Number

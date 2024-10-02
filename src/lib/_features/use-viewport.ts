@@ -3,7 +3,7 @@ import { Callback, Rect, Size2D } from '../../_type';
 import { Rects } from '../../core';
 
 export type ViewportFeature = {
-  getViewElement: () => HTMLElement | undefined;
+  getViewElement: () => HTMLElement | undefined | null;
   size: Size2D;
   updateViewPortSize: () => void;
   startWatch: () => void;
@@ -11,7 +11,7 @@ export type ViewportFeature = {
 };
 
 export type ViewportOptions = {
-  el: Ref<HTMLElement | undefined>;
+  el: Ref<HTMLElement | undefined | null>;
   emit?: (event: 'resize', rect: Rect) => void;
   onMounted?: (callback: Callback) => void;
   onUnmounted?: (callback: Callback) => void;

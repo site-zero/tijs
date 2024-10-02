@@ -6,15 +6,16 @@ import example from './example';
 
 const en_us = {
   'com-name': 'Wall',
+  'example-selectable': 'Selectable',
 };
 const zh_cn = {
   'com-name': '墙贴',
+  'example-selectable': '可选择',
 };
 
 const COM_TYPE = COM_TYPES.Wall;
 
 const TiWallInfo: TiComInfo = {
-  tags: ['ing'],
   icon: 'zmdi-view-module',
   //icon: '🚜',
   race: TiComRace.VIEW,
@@ -31,7 +32,7 @@ const TiWallInfo: TiComInfo = {
     app.component(COM_TYPE, TiWall);
   },
   defaultProps: 'simple',
-  exampleProps: [example.simple],
+  exampleProps: [example.simple, example.selectable],
 };
 
 export * from './ti-wall-types';

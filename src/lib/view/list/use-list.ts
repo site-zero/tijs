@@ -28,7 +28,7 @@ export function useList(props: ListProps, emit: ListEmitter) {
   let { getItemValue, getItemIcon, getItemText, getItemTip } = useStdListItem({
     ...props,
     getValue: (it: Vars, index: number) => {
-      return selectable.getRowId(it, index);
+      return selectable.getDataId(it, index);
     },
   });
   //-----------------------------------------------------

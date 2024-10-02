@@ -83,7 +83,7 @@ export function useThumb(props: ThumbProps) {
         concludeIndicator(map, it);
       }
     }
-    console.log('indicator map', map);
+    //console.log('indicator map', map);
     let re = [] as IndicatorSet[];
     for (let en of map.entries()) {
       let [position, items] = en;

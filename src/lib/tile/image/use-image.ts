@@ -69,7 +69,6 @@ export type ImageState = {
  * @returns 控件的逻辑特性
  */
 export function useImage(props: ImageProps, state: ImageState) {
-  console.log('useImage');
   //----------------------------  ---------------------
   // 计算属性
   //-------------------------------------------------
@@ -116,7 +115,7 @@ export function useImage(props: ImageProps, state: ImageState) {
   }
   //---------------------------------------------------
   async function loadImageSrc() {
-    console.log('loadImageSrc', Src.value);
+    //console.log('loadImageSrc', Src.value);
     state.iconHtml = undefined;
     state.loading = false;
     state.imgSrc = '';

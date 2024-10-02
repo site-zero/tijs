@@ -1,14 +1,18 @@
+import { SelectableProps, SelectEmitInfo } from '../../';
 import {
   CommonProps,
   ComRef,
-  CssGridLayout,
+  GridLayoutProps,
   LogicType,
+  TableRowID,
   TiRawCom,
   Vars,
 } from '../../../_type';
 
 export type WallProps = CommonProps &
-  ComRef & {
+  ComRef &
+  SelectableProps<TableRowID> &
+  GridLayoutProps & {
     /**
      * 传入的数据对象
      */
@@ -24,29 +28,50 @@ export type WallProps = CommonProps &
     vars?: Vars;
 
     /**
+     * 是否支持多选
+     */
+    multi?: boolean;
+
+    /**
      * 墙贴的顶级样式
      */
     style?: Vars;
-    layout?: CssGridLayout;
     conStyle?: Vars;
 
     /**
      * 每个项目的样式
      */
     itemStyle?: Vars;
+    itemConStyle?: Vars;
     getItemStyle?: (item: Vars, index: number) => Vars;
+    getItemConStyle?: (item: Vars, index: number) => Vars;
     getItemClass?: (item: Vars, index: number) => Vars;
+    getItemConClass?: (item: Vars, index: number) => Vars;
     getItemLogicType?: (item: Vars, index: number) => LogicType | undefined;
   };
 
 export type WallItem = {
   index: number;
-  // 对应的数据项目
-  item: Vars;
+  id: TableRowID;
   type?: LogicType;
   style: Vars;
   className: Vars;
+  conStyle?: Vars;
+  conClass?: Vars;
+  // 对应的数据项目
+  rawData: Vars;
 
   comType: TiRawCom;
   comConf: Vars;
+};
+
+export type WallEvent = {
+  event: Event;
+  item: WallItem;
+};
+
+export type WallSelectEmitInfo = SelectEmitInfo<TableRowID>;
+export type WallEmitter = {
+  (event: 'select', payload: WallSelectEmitInfo): void;
+  (event: 'open', payload: WallItem): void;
 };

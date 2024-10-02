@@ -1,31 +1,25 @@
 import { computed } from 'vue';
 import { TiRoadblock, Vars } from '../../..';
 import { CssUtils, tiGetComponent, Util } from '../../../core';
-import { WallItem, WallProps } from './ti-wall-types';
+import { WallEmitter, WallItem, WallProps } from './ti-wall-types';
+import { useWallSelect } from './use-wall-select';
 
 export type WallFeature = ReturnType<typeof useWall>;
 
-export function useWall(props: WallProps) {
+export function useWall(props: WallProps, emit: WallEmitter) {
+  let _wall_select = useWallSelect(props, emit);
+  //-----------------------------------------------------
   let {
     data = [],
     vars = {},
     itemStyle = {},
+    itemConStyle = {},
     getItemStyle,
+    getItemConStyle,
     getItemClass,
+    getItemConClass,
     getItemLogicType,
   } = props;
-  //-----------------------------------------------------
-  const TopClass = computed(() => {
-    return CssUtils.mergeClassName(props.className);
-  });
-  //-----------------------------------------------------
-  const TopStyle = computed(() => {
-    return CssUtils.toStyle(props.style);
-  });
-  //-----------------------------------------------------
-  const ConStyle = computed(() => {
-    return CssUtils.mergeStyles([props.conStyle, props.layout]);
-  });
   //-----------------------------------------------------
   // 逐个处理 Wall 项目
   const Items = computed(() => {
@@ -41,6 +35,10 @@ export function useWall(props: WallProps) {
 
       // 样式
       let style = CssUtils.mergeStyles([itemStyle, getItemStyle?.(item, i)]);
+      let conStyle = CssUtils.mergeStyles([
+        itemConStyle,
+        getItemConStyle?.(item, i),
+      ]);
 
       // 类
       let className = CssUtils.mergeClassName(
@@ -49,6 +47,14 @@ export function useWall(props: WallProps) {
           [`is-${type}`]: type ? true : false,
         },
         getItemClass?.(item, i)
+      );
+
+      let conClass = CssUtils.mergeClassName(
+        {},
+        {
+          [`is-${type}`]: type ? true : false,
+        },
+        getItemConClass?.(item, i)
       );
 
       // 处理控件
@@ -65,10 +71,13 @@ export function useWall(props: WallProps) {
 
       re.push({
         index: i,
-        item,
+        id: _wall_select.getItemId(item, i),
+        rawData: item,
         type,
         style,
         className,
+        conStyle,
+        conClass,
         comType: tiGetComponent(comType)?.com ?? TiRoadblock,
         comConf,
       });
@@ -81,9 +90,7 @@ export function useWall(props: WallProps) {
   // 返回特性
   //-----------------------------------------------------
   return {
-    TopClass,
-    TopStyle,
-    ConStyle,
     Items,
+    ..._wall_select,
   };
 }
