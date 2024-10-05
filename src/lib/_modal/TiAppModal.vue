@@ -4,6 +4,7 @@
   import {
     ActionBarItem,
     AppModalInitProps,
+    AppModelActionHandler,
     AppModelApi,
     AppModelBinding,
     BUS_KEY,
@@ -14,6 +15,8 @@
   import { CssUtils } from '../../core';
   import { getLogger } from '../../core/log/ti-log';
   import {
+    ActionBarEvent,
+    Alert,
     BlockEvent,
     BlockProps,
     TiActionBar,
@@ -72,6 +75,7 @@
 
   const ModalApi = computed((): AppModelApi => {
     return {
+      result: _result,
       getComConf: () => _app_body_com_conf,
       onClose: (callback: Callback) => {
         if (_close_callback.indexOf(callback) < 0) {
@@ -154,15 +158,7 @@
         icon: props.iconOk,
         text: props.textOk,
         className,
-        action: async () => {
-          if (props.ok) {
-            let continue_to_close = await props.ok(_result.value);
-            if (!continue_to_close) {
-              return;
-            }
-          }
-          _do_close_modal(true);
-        },
+        action: 'ok',
       });
     }
     if (props.textCancel) {
@@ -170,15 +166,7 @@
         icon: props.iconCancel,
         text: props.textCancel,
         className,
-        action: async () => {
-          if (props.cancel) {
-            let continue_to_close = await props.cancel(_result.value);
-            if (!continue_to_close) {
-              return;
-            }
-          }
-          _do_close_modal(false);
-        },
+        action: 'cancel',
       });
     }
     return list;
@@ -234,6 +222,42 @@
     }, 500);
   }
 
+  function onActionFire(event: ActionBarEvent) {
+    let { name, payload } = event;
+    let actions: Record<string, AppModelActionHandler> = _.assign(
+      {
+        ok: async (api: AppModelApi) => {
+          if (props.ok) {
+            let continue_to_close = await props.ok(api.result.value);
+            if (!continue_to_close) {
+              return;
+            }
+          }
+          _do_close_modal(true);
+        },
+        cancel: async (api: AppModelApi) => {
+          if (props.cancel) {
+            let continue_to_close = await props.cancel(api.result.value);
+            if (!continue_to_close) {
+              return;
+            }
+          }
+          _do_close_modal(false);
+        },
+      },
+      props.handleActions
+    );
+
+    let handler = actions[name];
+    if (_.isFunction(handler)) {
+      handler(ModalApi.value, payload);
+    }
+    // 警告一下
+    else {
+      Alert(`Fail to handle action [${name}]`, { type: 'warn' });
+    }
+  }
+
   function onClickMask() {
     if (props.clickMaskToClose) {
       _do_close_modal(false);
@@ -285,14 +309,16 @@
             v-if="hasModalLeftActions && props.actions">
             <TiActionBar
               :items="props.actions"
-              top-item-aspect-mode="button" />
+              top-item-aspect-mode="button"
+              @fire="onActionFire" />
           </div>
           <div
             class="at-right"
             v-if="hasModalRightActions">
             <TiActionBar
               :items="ModalRightActions"
-              top-item-aspect-mode="button" />
+              top-item-aspect-mode="button"
+              @fire="onActionFire" />
           </div>
         </footer>
         <!------------------------------>
