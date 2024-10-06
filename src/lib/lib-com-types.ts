@@ -11,6 +11,7 @@ export const COM_TYPES = {
   PairEditor: 'TiPairEditor',
   //------------------- TILE
   HtmlSnippet: 'TiHtmlSnippet',
+  HtmlPage: 'TiHtmlPage',
   Icon: 'TiIcon',
   Label: 'TiLabel',
   Loading: 'TiLoading',
