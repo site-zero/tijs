@@ -19,7 +19,7 @@
     dftIdPrefix: 'item',
   });
   //-------------------------------------------------
-  const $el = useTemplateRef('$el');
+  const $el = useTemplateRef<HTMLElement>('$el');
   const _viewport = useViewport({
     el: $el,
     onMounted,

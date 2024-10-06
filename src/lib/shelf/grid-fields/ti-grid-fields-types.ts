@@ -150,12 +150,14 @@ export type GridFieldsInput = CommonProps &
     titleStyle?: Vars;
     titleAlign?: CssTextAlign;
     titleClass?: any;
+    titleTextStyle?: Vars;
     tip?: string;
     tipType?: TextContentType; // 默认 text
     tipBy?: FieldComProps;
     tipStyle?: Vars;
     tipAlign?: CssTextAlign;
     tipClass?: any;
+    tipTextStyle?: Vars;
 
     // 仅仅当 tipMode = 'xxx-prefix|suffix-icon' 时生效
     // 默认为 'zmdi-help-outline'
@@ -168,9 +170,7 @@ export type GridFieldsInput = CommonProps &
     // 普通字段的布局模式
     // 仅仅当 `race=field` 时有效
     fieldLayoutMode?: GridFieldLayoutMode;
-    titleTextStyle?: Vars;
     fieldValueStyle?: Vars;
-    tipTextStyle?: Vars;
     //------------------------------------
     // 约束
     //------------------------------------

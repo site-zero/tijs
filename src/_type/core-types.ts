@@ -1044,6 +1044,8 @@ export type AppModelBinding = {
  * 提供模式框打开后的具体操作接口
  */
 export type AppModelApi = {
+  result: Ref<any>;
+
   /**
    * @return 一个响应式对象，表示主控件的配置信息，可以直接用于主控件的配置
    */
@@ -1062,6 +1064,11 @@ export type AppModelApi = {
   close: (withResult?: boolean) => void;
 };
 
+export type AppModelActionHandler = (
+  api: AppModelApi,
+  payload?: any
+) => Promise<void>;
+
 export type AppModalProps = CommonProps &
   BlockInfoProps &
   ComRef &
@@ -1074,6 +1081,7 @@ export type AppModalProps = CommonProps &
     textCancel?: string | null;
     cancel?: (re: any) => Promise<boolean>;
     actions?: ActionBarItem[];
+    handleActions?: Record<string, AppModelActionHandler>;
     result?: any;
     // 默认 {data:"value",event:"change"}
     model?: AppModelBinding;

@@ -1,4 +1,12 @@
-import { FieldRefer, GridFieldsInput, Str } from '@site0/tijs';
+import {
+  DateTime,
+  ENV_KEYS,
+  FieldRefer,
+  getEnv,
+  GridFieldsInput,
+  LabelProps,
+  Str,
+} from '@site0/tijs';
 import _ from 'lodash';
 
 //const log = getLogger('wn.obj-fields');
@@ -17,26 +25,12 @@ export type QuickFieldInfo = {
 };
 
 //-----------------------------------------------
-export type TiObjFieldsFeature = {
-  getName: () => string;
-  getField: (uniqKey: string, field?: GridFieldsInput) => GridFieldsInput;
-  getFieldBy: (fld: FieldRefer, field?: GridFieldsInput) => GridFieldsInput;
-  getFieldList: (
-    keys: FieldRefer[],
-    fld?: GridFieldsInput
-  ) => GridFieldsInput[];
-  getFieldGroup: (
-    title: string,
-    keys: FieldRefer[],
-    groupSetup?: GridFieldsInput
-  ) => GridFieldsInput;
-  setField: (uniqKey: string, field: GridFieldsInput) => void;
-};
+export type TiObjFieldsFeature = ReturnType<typeof defineObjFields>;
 //-----------------------------------------------
 /**
  * 定义表单管理特性
  */
-function defineObjFields(featureName: string): TiObjFieldsFeature {
+function defineObjFields(featureName: string) {
   /**
    * 准备一个表单字段的集合
    */
@@ -182,6 +176,23 @@ function defineObjFields(featureName: string): TiObjFieldsFeature {
     _FIELDS.set(uniqKey, field);
   }
   //---------------------------------------------
+  function setTimeLabelField(uniqKey: string, title: string) {
+    const timeTransformer = (ct: number) => {
+      let fmt = getEnv(ENV_KEYS.DFT_DATETIME_FORMAT, 'yyyy-MM-dd HH:mm');
+      return DateTime.format(ct, { fmt });
+    };
+    setField(uniqKey, {
+      name: uniqKey,
+      title,
+      type: 'AMS',
+      transformer: timeTransformer,
+      comType: 'TiLabel',
+      comConf: {
+        placeholder: 'i18n:unknown',
+      } as LabelProps,
+    });
+  }
+  //---------------------------------------------
   // 输出特性
   //---------------------------------------------
   return {
@@ -191,6 +202,7 @@ function defineObjFields(featureName: string): TiObjFieldsFeature {
     getFieldList,
     getFieldGroup,
     setField,
+    setTimeLabelField,
   };
 }
 //-----------------------------------------------

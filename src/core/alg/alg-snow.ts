@@ -1,4 +1,4 @@
-import { DateTime, getRandomStr } from '../';
+import { DateTime, getRandomS36 } from '../';
 
 export function genSnowQ(n: number = 4, prefix?: string) {
   let sb = [] as string[];
@@ -10,7 +10,7 @@ export function genSnowQ(n: number = 4, prefix?: string) {
   sb.push(ams.toString(36));
 
   // 生成随机数
-  sb.push(getRandomStr(n));
+  sb.push(getRandomS36(n));
 
   // 返回
   return sb.join('');
@@ -29,7 +29,7 @@ export function genSnowQD(n: number = 4, prefix?: string) {
   sb.push(ds);
 
   // 生成随机数
-  sb.push(getRandomStr(n));
+  sb.push(getRandomS36(n));
 
   // 返回
   return sb.join('');
