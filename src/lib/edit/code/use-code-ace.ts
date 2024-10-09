@@ -139,6 +139,9 @@ export function useCodeAce(props: CodeEditorProps, emit: CodeEditorEmitter) {
   }
   //-----------------------------------------------------
   function updateEditorValue() {
+    // 防守
+    if(!_editor.value) return;
+
     // 获取当前光标位置
     let cursorPosition = _editor.value.getCursorPosition();
 
