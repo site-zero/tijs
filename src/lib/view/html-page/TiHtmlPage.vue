@@ -8,7 +8,6 @@
   //-----------------------------------------------------
   const TopClass = CssUtils.mergeClassName(props.className);
   const TopStyle = CssUtils.toStyle(props.style);
-
   //-----------------------------------------------------
 </script>
 <template>
