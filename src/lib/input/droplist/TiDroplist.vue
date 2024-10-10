@@ -1,8 +1,8 @@
 <script lang="ts" setup>
+  import _ from 'lodash';
   import { computed } from 'vue';
   import { TiInput } from '../../';
   import { DroplistProps } from './ti-droplist-types';
-  import _ from 'lodash';
   //-----------------------------------------------------
   defineOptions({
     inheritAttrs: false,
@@ -47,6 +47,11 @@
     return re;
   });
   //-----------------------------------------------------
+  function onInputChange(val: any) {
+    console.log('onInputChange', val);
+    emit('change', val);
+  }
+  //-----------------------------------------------------
 </script>
 <template>
   <TiInput
@@ -57,7 +62,7 @@
     :checkValueWhenClose="false"
     :prefixIconForClean="Cleans.prefixIconForClean"
     :showCleanOption="Cleans.showCleanOption"
-    @change="emit('change', $event)"
+    @change="onInputChange"
     @click-prefix-text="emit('click-prefix-text')"
     @click-suffix-text="emit('click-suffix-text')" />
 </template>
