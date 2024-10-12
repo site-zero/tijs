@@ -143,7 +143,7 @@ export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
   }
   // 标签布局
   else if ('tabs' == it.type) {
-    it.propsForLayoutTabs = _.pick(
+    let _layout_tabs_props = _.pick(
       it,
       'name',
       'blocks',
@@ -155,12 +155,31 @@ export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
       'defaultTab',
       'keepTab'
     );
-    // 特殊的属性
-    _.assign(it.propsForLayoutTabs, {
-      classNme: it.tabsClass,
-      itemStyle: it.itemStyle,
-      itemClass: it.itemClass,
-    } as LayoutTabsProps);
+    // 格子布局还需要套上一个TiBlock
+    if (it.title) {
+      it.propsForBlock = __pick_props_for_block(it);
+      // 特殊的属性
+      _.assign(it.propsForBlock, {
+        objectFit: 'cover',
+        comType: 'TiLayoutTabs',
+        comConf: {
+          className: CssUtils.mergeClassName(it.tabsClass, 'cover-parent'),
+          schema: schema,
+          subLayout: true,
+          itemStyle: it.itemStyle,
+          itemClass: it.itemClass,
+          ..._layout_tabs_props,
+        } as LayoutGridProps,
+      } as BlockProps);
+    }
+    // 纯标签布局
+    else {
+      it.propsForLayoutTabs = _.assign(_layout_tabs_props, {
+        classNme: it.tabsClass,
+        itemStyle: it.itemStyle,
+        itemClass: it.itemClass,
+      } as LayoutTabsProps);
+    }
   }
 }
 
