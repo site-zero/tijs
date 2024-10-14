@@ -183,12 +183,18 @@
       }
     }
     //console.log("re-computed MainStyle", cols.join(" "))
-    return _.assign({}, props.mainStyle, {
+    let re = _.assign({}, props.mainStyle, {
       'grid-template-columns': cols.join(' '),
       'grid-auto-rows': `minmax(${props.rowMinHeight - props.rowGap}px, auto)`,
       'row-gap': `${props.rowGap}px`,
       'column-gap': `${props.colGap}px`,
     });
+
+    if (props.columnResizable || !_.isNil(props.rightPadding)) {
+      re.paddingRight = CssUtils.toSize(props.rightPadding ?? '100px');
+    }
+
+    return re;
   });
   //-------------------------------------------------------
   //                 虚拟占位行
