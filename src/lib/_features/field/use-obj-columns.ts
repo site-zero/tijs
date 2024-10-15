@@ -8,6 +8,7 @@ type QuickColumnInfo = {
   tip?: string;
   candidate?: boolean;
   readonly?: boolean;
+  disable?: boolean;
 };
 
 //-----------------------------------------------
@@ -60,6 +61,10 @@ function defineObjColumns(featureName: string): ObjColumnsFeature {
     if (col_info.readonly || !editable) {
       re.activatedComType = undefined;
       re.activatedComConf = undefined;
+    }
+
+    if (col_info.disable) {
+      re.comConf.disable = true;
     }
 
     // 候选字段
@@ -160,7 +165,10 @@ export function useObjColumns(name = '_DEFAULT_COLUMN_SET'): ObjColumnsFeature {
  * > {name:'type', candidate:true}
  *
  * uniqKey = '~type:!read'
- * > {name:'type', candidate:true}
+ * > {name:'type', readonly:true}
+ *
+ * uniqKey = '~type:!read!disable'
+ * > {name:'type', readonly:true, disable:true}
  *
  * ```
  *
@@ -176,7 +184,10 @@ function parseNameColumn(key: string): QuickColumnInfo {
   let parts = key.split(':');
   let name = parts[0];
   let re = { candidate } as QuickColumnInfo;
-  re.readonly = '!read' == parts[1];
+  if (parts[1]) {
+    re.readonly = parts[1].indexOf('read') >= 0;
+    re.disable = parts[1].indexOf('disable') >= 0;
+  }
 
   // name/title
   let m = /^([^=]+)(=(.+))?/.exec(name);
