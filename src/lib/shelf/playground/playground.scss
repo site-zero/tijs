@@ -1,3 +1,5 @@
+@use '@ti-sass/_all.scss' as *;
+
 .ti-playground {
   @include flex-align-v-nowrap;
   width: 100%;

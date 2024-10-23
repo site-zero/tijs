@@ -67,6 +67,5 @@
     @click-suffix-text="emit('click-suffix-text')" />
 </template>
 <style lang="scss" scoped>
-  @use '../../../assets/style/_all.scss' as *;
-  @import './ti-droplist.scss';
+  @use './ti-droplist.scss';
 </style>
