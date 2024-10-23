@@ -229,6 +229,13 @@ export function mergeFieldChanges(changes: FieldChange[], data?: Vars): Vars {
   return meta;
 }
 
+export function convertChangesToMeta(changed: Vars | FieldChange[]): Vars {
+  if (_.isArray(changed)) {
+    return mergeFieldChanges(changed);
+  }
+  return changed ?? {};
+}
+
 export function useFieldChangeDiff(
   changes: FieldChange[] | Vars,
   data: Vars = {}

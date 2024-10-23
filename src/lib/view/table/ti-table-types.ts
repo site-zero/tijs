@@ -204,6 +204,12 @@ export type TableProps = CommonProps &
     
     ......................................*/
     mainStyle?: Vars;
+
+    /**
+     * 右侧指定一个空白，以便最后一列有可被拖动的空间
+     * 默认，如果指定了 columnResizable 时为100px
+     */
+    rightPadding?: number | string;
     /**
      * 行间距，即水平表格线的尺寸
      *

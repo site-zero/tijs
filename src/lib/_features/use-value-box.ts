@@ -14,7 +14,7 @@ import {
   ValueInputProps,
 } from '..';
 import { CommonProps, IconInput, Vars } from '../../_type';
-import { Be, Dicts, Str, tiGetDefaultComPropValue } from '../../core';
+import { Be, Dicts, Str, tiGetDefaultComPropValue, Util } from '../../core';
 /*-------------------------------------------------------
 
                      Emit 
@@ -84,6 +84,17 @@ export type ValueBoxProps<T extends any> = CommonProps &
      * 开启这个选项，则在输入框直接显示值而不是翻译后的文字
      */
     useRawValue?: boolean;
+
+    /**
+     * 如果声明了字典， box 显示字典项时默认会采用 item.text
+     * 你可以通过这个选项，指定显示的字段
+     *
+     * 如果指定了 useRawValue，那么这个选项无效
+     *
+     * - 指定一个或几个键：text|value|tip|icon 以便 fallback
+     * - 或者一个函数，返回一个字符串
+     */
+    getDisplayText?: string | ((item: Vars) => string);
 
     /**
      * 默认的，当输入框聚焦，且输入框不是只读还且是可输入的状态
@@ -256,6 +267,18 @@ export function useValueBox(
         // 强制指定采用选项的值来显示
         if (props.useRawValue) {
           text = textOrItem.value;
+        }
+        // 指定显示文字的方法
+        else if (props.getDisplayText) {
+          let disItem = textOrItem.toOptionItem();
+          // 指定了定制化的显示文字
+          if (_.isFunction(props.getDisplayText)) {
+            text = props.getDisplayText(disItem);
+          }
+          // 采用对象的健
+          else {
+            text = Util.getOrPick(disItem, props.getDisplayText, disItem.text);
+          }
         }
         // 显示选项文字
         else {

@@ -103,17 +103,22 @@ export type TabDisplayItem = StrOptionItem & {
   index: number;
 };
 
+/**
+ * 拖动条模式：
+ *
+ * - `column` 调整列宽，因此是一个竖条
+ * - `row` 调整行高，因此是一个横条
+ */
+export type LayoutBarMode = 'column' | 'row';
+
 //
 // Layout Adjust Bar
 //
 export type LayoutBar = {
   /**
    * 拖动条模式：
-   *
-   * - `column` 调整列宽，因此是一个竖条
-   * - `row` 调整行高，因此是一个横条
    */
-  mode: 'column' | 'row';
+  mode: LayoutBarMode;
 
   /**
    * 拖动将调整哪个行/列（0 Base下标）。
