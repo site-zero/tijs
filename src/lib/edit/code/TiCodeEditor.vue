@@ -138,6 +138,5 @@
   </div>
 </template>
 <style lang="scss" scoped>
-  @use '../../../assets/style/_all.scss' as *;
-  @import './ti-code-editor.scss';
+  @use './ti-code-editor.scss';
 </style>

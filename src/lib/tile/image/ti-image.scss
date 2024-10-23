@@ -1,3 +1,5 @@
+@use '@site0/tijs/sass/_all.scss' as *;
+
 .ti-image {
   @include aspect_radius('&.r', '.image-con > img');
   //-----------------------------------------------

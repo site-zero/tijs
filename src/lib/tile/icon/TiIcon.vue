@@ -68,10 +68,5 @@
   </div>
 </template>
 <style lang="scss">
-  @use '../../../assets/style/_all.scss' as *;
-
-  // @import '../../../assets/zmdi/css/material-design-iconic-font.css';
-  // @import '../../../assets/fontawesome/6.4.2-web/css/all.css';
-
-  @import './ti-icon.scss';
+  @use './ti-icon.scss';
 </style>

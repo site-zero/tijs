@@ -50,6 +50,5 @@
     v-on="eventBinding"></div>
 </template>
 <style lang="scss">
-  @use '../../../assets/style/_all.scss' as *;
-  @import './msg-box.scss';
+  @use './msg-box.scss';
 </style>

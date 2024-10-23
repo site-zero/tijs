@@ -1,3 +1,5 @@
+@use '@site0/tijs/sass/_all.scss' as *;
+
 .ti-grid-fiels-item.part-field {
   @include colorized;
   & {

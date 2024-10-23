@@ -109,6 +109,5 @@
   </div>
 </template>
 <style lang="scss" scoped>
-  @use '../../../assets/style/_all.scss' as *;
-  @import './progress-bar.scss';
+  @use './progress-bar.scss';
 </style>

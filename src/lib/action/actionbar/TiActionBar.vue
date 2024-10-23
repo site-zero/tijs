@@ -184,11 +184,10 @@
   </div>
 </template>
 <style lang="scss">
-  @use '../../../assets/style/_all.scss' as *;
-  @import './style/bar.scss';
-  @import './style/bar-sep.scss';
-  @import './style/bar-item-info.scss';
-  @import './style/bar-item-con.scss';
-  @import './style/bar-effect.scss';
-  @import './style/top-as-button.scss';
+  @use './style/bar.scss';
+  @use './style/bar-sep.scss';
+  @use './style/bar-item-info.scss';
+  @use './style/bar-item-con.scss';
+  @use './style/bar-effect.scss';
+  @use './style/top-as-button.scss';
 </style>

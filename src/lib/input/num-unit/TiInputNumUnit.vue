@@ -141,6 +141,5 @@
   </div>
 </template>
 <style lang="scss">
-  @use '../../../assets/style/_all.scss' as *;
-  @import './ti-input-num-unit.scss';
+  @use './ti-input-num-unit.scss';
 </style>

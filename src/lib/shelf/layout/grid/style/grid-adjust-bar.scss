@@ -1,4 +1,6 @@
-.adjust-bar {
+@use '@site0/tijs/sass/_all.scss' as *;
+
+.ti-layout-grid > .grid-item .adjust-bar {
   @include flex-center;
   user-select: none;
   position: absolute;
@@ -9,7 +11,7 @@
 
   &::before {
     display: block;
-    content: "";
+    content: '';
     overflow: hidden;
     opacity: 0.4;
     //background-color: var(--ti-color-mask-thin);
@@ -17,7 +19,7 @@
   &:hover {
     opacity: 1;
   }
-  &[bar-mode="column"] {
+  &[bar-mode='column'] {
     top: 0;
     bottom: 0;
     width: $BARSZ * 2;
@@ -27,14 +29,14 @@
       width: 0px;
       border-left: $BARLINE dashed var(--ti-color-secondary);
     }
-    &[bar-position="prev"] {
+    &[bar-position='prev'] {
       left: $BARSZ * -2;
     }
-    &[bar-position="next"] {
+    &[bar-position='next'] {
       right: $BARSZ * -2;
     }
   }
-  &[bar-mode="row"] {
+  &[bar-mode='row'] {
     left: 0;
     right: 0;
     height: $BARSZ * 2;
@@ -44,10 +46,10 @@
       height: 0px;
       border-bottom: $BARLINE dashed var(--ti-color-secondary);
     }
-    &[bar-position="prev"] {
+    &[bar-position='prev'] {
       top: $BARSZ * -1;
     }
-    &[bar-position="next"] {
+    &[bar-position='next'] {
       bottom: $BARSZ * -1;
     }
   }

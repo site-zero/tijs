@@ -78,6 +78,5 @@
   </dl>
 </template>
 <style lang="scss">
-  @use '../../../assets/style/_all.scss' as *;
-  @import './style/sidebar-item.scss';
+  @use './style/sidebar-item.scss';
 </style>

@@ -1,3 +1,5 @@
+@use '@site0/tijs/sass/_all.scss' as *;
+
 .ti-layout-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -29,8 +31,6 @@
       //   inset: 0;
       // }
     }
-
-    @import './grid-adjust-bar';
   } // > .grid-item {
 
   &.as-card {

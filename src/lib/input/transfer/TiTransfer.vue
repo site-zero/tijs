@@ -193,6 +193,5 @@
   </div>
 </template>
 <style lang="scss" scoped>
-  @use '../../../assets/style/_all.scss' as *;
-  @import './ti-transfer.scss';
+  @use './ti-transfer.scss';
 </style>

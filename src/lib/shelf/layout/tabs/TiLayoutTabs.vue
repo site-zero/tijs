@@ -180,6 +180,5 @@
   </div>
 </template>
 <style lang="scss" scoped>
-  @use '../../../../assets/style/_all.scss' as *;
-  @import './ti-layout-tabs.scss';
+  @use './ti-layout-tabs.scss';
 </style>

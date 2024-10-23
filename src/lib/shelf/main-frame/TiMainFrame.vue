@@ -106,6 +106,5 @@
   </div>
 </template>
 <style lang="scss" scoped>
-  @use '../../../assets/style/_all.scss' as *;
-  @import './ti-main-frame.scss';
+  @use './ti-main-frame.scss';
 </style>

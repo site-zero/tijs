@@ -1,3 +1,5 @@
+@use '@site0/tijs/sass/_all.scss' as *;
+
 .ti-filter {
   @include flex-align-nowrap($ai: stretch);
   //---------------------------------------

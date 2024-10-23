@@ -169,6 +169,5 @@
   </div>
 </template>
 <style lang="scss" scoped>
-  @use '../../../assets/style/_all.scss' as *;
-  @import './ti-label.scss';
+  @use './ti-label.scss';
 </style>

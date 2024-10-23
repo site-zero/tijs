@@ -68,6 +68,5 @@
   </div>
 </template>
 <style lang="scss">
-  @use '../../../assets/style/_all.scss' as *;
-  @import './style/gf-it-label.scss';
+  @use './style/gf-it-label.scss';
 </style>

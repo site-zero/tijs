@@ -151,6 +151,5 @@
   </div>
 </template>
 <style lang="scss">
-  @use '../../../assets/style/_all.scss' as *;
-  @import './ti-list.scss';
+  @use './ti-list.scss';
 </style>

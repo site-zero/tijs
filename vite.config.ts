@@ -8,18 +8,19 @@ export default defineConfig({
   resolve: {
     alias: {
       'vue': 'vue/dist/vue.esm-bundler.js',
-      '@ti-sass': path.resolve(__dirname, 'src/assets/style'),
+      '@site0/tijs/sass': path.resolve(__dirname, 'src/assets/style'),
     },
   },
-  // css: {
-  //   preprocessorOptions: {
-  //     scss: {
-  //       additionalData: `
-  //         @use "src/assets/style/_all.scss" as *;
-  //       `
-  //     }
-  //   }
-  // },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        api: 'modern-compiler', // or "modern"
+      },
+    },
+  },
+  optimizeDeps: {
+    exclude: ['vitest'],
+  },
   build: {
     // 单位是 KB
     chunkSizeWarningLimit: 800,

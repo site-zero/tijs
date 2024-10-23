@@ -1,3 +1,5 @@
+@use '@site0/tijs/sass/_all.scss' as *;
+
 // body 下面的包裹插槽，虽然在根节点外面，但是因为 css 不是 scoped，
 // 因此这里定义的样式还是能对其起作用的
 .app-modal-wrapper {

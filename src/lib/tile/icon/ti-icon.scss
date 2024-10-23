@@ -1,3 +1,5 @@
+@use '@site0/tijs/sass/_all.scss' as *;
+
 .ti-icon {
   @include flex-center;
   width: SZ(16);

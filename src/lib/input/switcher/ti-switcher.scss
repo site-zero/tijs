@@ -1,3 +1,5 @@
+@use '@site0/tijs/sass/_all.scss' as *;
+
 .ti-switcher {
   user-select: none;
   @include flex-align($ai: center, $ac: center);

@@ -292,6 +292,5 @@
   </div>
 </template>
 <style lang="scss">
-  @use '../../../assets/style/_all.scss' as *;
-  @import './style/ti-grid-fields.scss';
+  @use './style/ti-grid-fields.scss';
 </style>

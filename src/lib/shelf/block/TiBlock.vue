@@ -92,6 +92,5 @@
 </template>
 
 <style lang="scss">
-  @use '../../../assets/style/_all.scss' as *;
-  @import './ti-block.scss';
+  @use './ti-block.scss';
 </style>

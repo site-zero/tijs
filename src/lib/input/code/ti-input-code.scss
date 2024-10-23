@@ -1,3 +1,5 @@
+@use '@site0/tijs/sass/_all.scss' as *;
+
 .ti-input-code {
   display: grid;
   grid-template-columns: auto 1fr;

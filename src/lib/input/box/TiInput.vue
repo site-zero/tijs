@@ -589,6 +589,5 @@
   </div>
 </template>
 <style lang="scss">
-  @use '../../../assets/style/_all.scss' as *;
-  @import './ti-input-box.scss';
+  @use './ti-input-box.scss';
 </style>

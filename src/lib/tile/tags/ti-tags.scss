@@ -1,3 +1,5 @@
+@use '@site0/tijs/sass/_all.scss' as *;
+
 .ti-tags {
   @include flex-align($ai: center, $ac: center);
   &[nowrap] {

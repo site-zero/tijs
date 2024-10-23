@@ -1,3 +1,5 @@
+@use '@site0/tijs/sass/_all.scss' as *;
+
 .layout-panel {
   @include flex-center;
   @include pos-abs(0, 0, 100%, 100%);

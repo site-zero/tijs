@@ -352,8 +352,7 @@
   </div>
 </template>
 <style lang="scss" scoped>
-  @use '../../../../assets/style/_all.scss' as *;
-  @import 'style/ti-layout-grid';
-  @import '../layout-panel';
+  @use './style/ti-layout-grid';
+  @use './style/grid-adjust-bar';
+  @use '../layout-panel';
 </style>
-../layout-types.ts

@@ -192,6 +192,5 @@
   </div>
 </template>
 <style lang="scss" scoped>
-  @use '../../../assets/style/_all.scss' as *;
-  @import './ti-pager.scss';
+  @use './ti-pager.scss';
 </style>

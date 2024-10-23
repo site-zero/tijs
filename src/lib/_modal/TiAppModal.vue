@@ -328,8 +328,7 @@
   </Transition>
 </template>
 <style lang="scss">
-  @use '../../assets/style/_all.scss' as *;
-  @import './app-modal.scss';
-  @import './app-modal-mask.scss';
-  @import './app-modal-radius.scss';
+  @use './app-modal.scss';
+  @use './app-modal-mask.scss';
+  @use './app-modal-radius.scss';
 </style>

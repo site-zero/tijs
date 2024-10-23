@@ -1,3 +1,5 @@
+@use '@site0/tijs/sass/_all.scss' as *;
+
 .ti-app-modal {
   background-color: var(--ti-color-card);
   box-shadow: SZ(5) SZ(5) SZ(20) var(--ti-color-mask-bushy);

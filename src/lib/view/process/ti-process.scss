@@ -1,3 +1,5 @@
+@use '@site0/tijs/sass/_all.scss' as *;
+
 .ti-process {
   @include flex-align-v-nowrap($jc: center);
   //-------------------------------------------------------

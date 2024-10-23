@@ -80,6 +80,5 @@
   </div>
 </template>
 <style lang="scss">
-  @use '../../../assets/style/_all.scss' as *;
-  @import './ti-sorter.scss';
+  @use './ti-sorter.scss';
 </style>

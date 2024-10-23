@@ -79,6 +79,5 @@
   </div>
 </template>
 <style lang="scss">
-  @use '../../../assets/style/_all.scss' as *;
-  @import './ti-process.scss';
+  @use './ti-process.scss';
 </style>

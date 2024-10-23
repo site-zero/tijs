@@ -13,8 +13,33 @@
   @include use_measure_comfy;
 }
 
+:root {
+  color-scheme: light dark;
+  color: var(--ti-color-body-f);
+  background-color: var(--ti-color-body);
+
+  //font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  @include font-nice;
+  line-height: 1.5em;
+  font-weight: normal;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+
+  --bunya-grid-gap: 10px;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
 html,
-body {
+body,
+#app {
   width: 100%;
   height: 100%;
 }
@@ -22,6 +47,7 @@ body {
 body {
   margin: 0;
   background-color: var(--ti-color-bg-body);
+  font-size: var(--ti-fontsz-page);
 }
 
 * {

@@ -135,6 +135,5 @@
   </div>
 </template>
 <style lang="scss" scoped>
-  @use '../../../assets/style/_all.scss' as *;
-  @import './ti-filter.scss';
+  @use './ti-filter.scss';
 </style>
