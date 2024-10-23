@@ -1,4 +1,5 @@
-@import './assets/style/app.scss';
+@use './assets/style/_all.scss' as *;
+@use './assets/style/app.scss';
 
 :root {
   color-scheme: light dark;

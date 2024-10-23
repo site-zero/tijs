@@ -446,11 +446,10 @@
   </div>
 </template>
 <style lang="scss">
-  @use '../../../assets/style/_all.scss' as *;
-  @import './style/ti-table.scss';
-  @import './style/table-row.scss';
-  @import './style/table-cell.scss';
-  @import './style/table-resize.scss';
-  @import './style/table-color.scss';
-  @import './style/table-debug.scss';
+  @use './style/ti-table.scss';
+  @use './style/table-row.scss';
+  @use './style/table-cell.scss';
+  @use './style/table-resize.scss';
+  @use './style/table-color.scss';
+  @use './style/table-debug.scss';
 </style>

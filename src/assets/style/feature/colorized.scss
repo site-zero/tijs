@@ -1,3 +1,5 @@
+@use '../_all.scss' as *;
+
 .color-as-success {
   color: var(--ti-color-success);
 }

@@ -1,3 +1,5 @@
+@use '../../../../assets/style/_all.scss' as *;
+
 .table-row-marker {
   @include flex-align-nowrap($ai: stretch);
   border-right: 1px solid var(--ti-color-card);

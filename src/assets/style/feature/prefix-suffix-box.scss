@@ -1,3 +1,5 @@
+@use '../_all.scss' as *;
+
 .prefix-suffix-box {
   display: grid;
   grid-template-rows: auto;

@@ -1,12 +1,12 @@
-@import './_mixins.scss';
-@import './color/light';
-@import './color/dark';
-@import './measure/comfy';
-@import './measure/tight';
-@import './feature/prefix-suffix-box';
-@import './feature/roadblock.scss';
-@import './feature/transition.scss';
-@import './feature/colorized.scss';
+@use './_all.scss' as *;
+@use './color/light' as *;
+@use './color/dark' as *;
+@use './measure/comfy' as *;
+@use './measure/tight' as *;
+@use './feature/prefix-suffix-box';
+@use './feature/roadblock.scss';
+@use './feature/transition.scss';
+@use './feature/colorized.scss';
 
 :root {
   @include use_color_theme_light;

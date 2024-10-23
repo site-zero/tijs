@@ -1,3 +1,5 @@
+@use '../../../../assets/style/_all.scss' as *;
+
 .ti-table > .table-debug-info {
   @include pos-abs($b: 8px, $l: 60px, $r: 10px);
   @include font-fixed($sz: 10px);

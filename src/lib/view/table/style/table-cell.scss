@@ -1,3 +1,5 @@
+@use '../../../../assets/style/_all.scss' as *;
+
 .ti-table > main > .table-cell {
   display: grid;
   background-color: var(--ti-color-card);
