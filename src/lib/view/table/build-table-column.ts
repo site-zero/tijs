@@ -50,6 +50,7 @@ export function buildTableColumns(props: TableProps) {
         dragIndex: candidate ? -1 : dragIndex++,
 
         // 表格默认控件
+        dynamic: col.dynamic,
         comType: col.comType ?? props.defaultCellComType ?? 'TiLabel',
         comConf: col.comConf ??
           props.defaultCellComConf ?? {

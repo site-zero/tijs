@@ -26,13 +26,16 @@
   });
   //-------------------------------------------------------
   const Cell = computed(() => useFieldCom(props));
-  const CellCom = computed(() =>
-    Cell.value.autoGetCom(
+  const CellCom = computed(() => {
+    return Cell.value.autoGetCom(
       { actived: props.activated },
-      props.vars ?? {},
+      {
+        ...props.vars,
+        data: props.data,
+      },
       CellValue.value
-    )
-  );
+    );
+  });
   //-------------------------------------------------------
   const CellListeners = computed(() => {
     let listen = {} as Record<string, Function>;
