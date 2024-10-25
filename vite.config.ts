@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [vue()],
   resolve: {
     alias: {
-      'vue': 'vue/dist/vue.esm-bundler.js',
+      //'vue': 'vue/dist/vue.esm-bundler.js',
       '@site0/tijs/sass': path.resolve(__dirname, 'src/assets/style'),
     },
   },
@@ -19,6 +19,10 @@ export default defineConfig({
     },
   },
   optimizeDeps: {
+    include: [
+      '@vue/compiler-dom',
+      '@vue/server-renderer'
+    ],
     exclude: ['vitest'],
   },
   build: {
