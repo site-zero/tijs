@@ -25,6 +25,12 @@ export type InputNumProps = CommonProps &
     precision?: number;
 
     /**
+     * 显示到小数点后几位，默认的则是自动不补零
+     * 如果指定了这个位数，后面需要补零
+     */
+    decimalPlaces?:number;
+
+    /**
      * 显示数字分段，一段有多长
      */
     partWidth?: number;

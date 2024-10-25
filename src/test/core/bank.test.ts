@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import { ToBankTextOptions } from 'src/core/_top/ti-bank';
 import { expect, test } from 'vitest';
 import { Bank } from '../../core';
 
@@ -11,7 +11,7 @@ test('exchange', function () {
       exrs: {
         USD_RMB: 7.2,
       },
-    }),
+    })
   ).eq(72);
 
   expect(
@@ -21,7 +21,7 @@ test('exchange', function () {
       exrs: {
         RMB_USD: 0.15,
       },
-    }),
+    })
   ).eq(80);
 
   expect(
@@ -33,7 +33,7 @@ test('exchange', function () {
         USD_EUR: 1.2,
         EUR_RMB: 6,
       },
-    }),
+    })
   ).eq(72);
 
   expect(
@@ -45,7 +45,7 @@ test('exchange', function () {
         USD_EUR: 1.2,
         EUR_RMB: 6,
       },
-    }),
+    })
   ).eq(7200);
 
   expect(
@@ -55,7 +55,7 @@ test('exchange', function () {
       exrs: {
         USD_RMB: 7.2,
       },
-    }),
+    })
   ).eq(undefined);
 });
 
@@ -155,7 +155,7 @@ test('parseCurrency', function () {
 
   // 测试对象
   expect(
-    Bank.parseCurrency({ value: 12, currency: 'USD' }, { unit: 10 }),
+    Bank.parseCurrency({ value: 12, currency: 'USD' }, { unit: 10 })
   ).toStrictEqual({
     cent: 120,
     yuan: 1.2,
@@ -169,7 +169,7 @@ test('parseCurrency', function () {
   });
 
   expect(
-    Bank.parseCurrency({ value: 12, currency: 'RMB' }, { unit: 10 }),
+    Bank.parseCurrency({ value: 12, currency: 'RMB' }, { unit: 10 })
   ).toStrictEqual({
     cent: 120,
     yuan: 1.2,
@@ -178,26 +178,22 @@ test('parseCurrency', function () {
 });
 
 test('autoYuanTokenText', function () {
-  expect(Bank.autoYuanTokenText()).eq('¥0');
-  expect(
-    Bank.autoYuanTokenText(0, {
-      auto: false,
-    }),
-  ).eq('¥0.00');
+  expect(Bank.autoYuanTokenText()).eq('¥0.00');
+  expect(Bank.autoYuanTokenText(0)).eq('¥0.00');
 
   expect(
     Bank.autoYuanTokenText(321, {
       currency: 'USD',
-      precision: 3,
-      auto: false,
-    }),
+      precision: 1000,
+      decimalPlaces: 3,
+    })
   ).eq('$3.210');
 
   expect(
     Bank.autoYuanTokenText(325, {
-      precision: 1,
-      auto: false,
-    }),
+      precision: 10,
+      decimalPlaces: 1,
+    })
   ).eq('¥3.3');
 });
 
@@ -212,43 +208,43 @@ test('toYuanTokenText', function () {
   expect(Bank.toYuanTokenText(105)).eq('¥1.05');
   expect(Bank.toYuanTokenText(105, 'USD')).eq('$1.05');
   expect(Bank.toYuanTokenText(-5, 'USD')).eq('-$0.05');
-  expect(Bank.toYuanTokenText(6122, 'EUR', 1)).eq('€61.2');
+  expect(Bank.toYuanTokenText(6122, 'EUR', 10)).eq('€61.20');
 });
 
 test('toYuanTokenText2', function () {
   expect(Bank.toYuanTokenText2(105)).eq('¥1.05RMB');
   expect(Bank.toYuanTokenText2(105, 'USD')).eq('$1.05USD');
-  expect(Bank.toYuanTokenText2(6122, 'EUR', 1)).eq('€61.2EUR');
+  expect(Bank.toYuanTokenText2(6122, 'EUR', 10)).eq('€61.20EUR');
 });
 
 test('toZeroText', function () {
-  expect(Bank.toZeroText(0)).eq('---');
-  expect(Bank.toZeroText(0, { placeholder: '--' })).eq('--');
+  expect(Bank.toZeroText(0)).eq('--');
+  expect(Bank.toZeroText(0, { placeholder: '***' })).eq('***');
   expect(Bank.toZeroText(-5)).eq('-¥0.05');
   expect(Bank.toZeroText(105)).eq('¥1.05');
 });
 
 test('toZeroTokenText', function () {
-  expect(Bank.toZeroTokenText(0)).eq('---');
+  expect(Bank.toZeroTokenText(0)).eq('--');
   expect(Bank.toZeroTokenText(0, { placeholder: '**' })).eq('**');
   expect(Bank.toZeroTokenText(-5)).eq('-¥0.05');
   expect(Bank.toZeroTokenText(105)).eq('¥1.05');
   expect(Bank.toZeroTokenText(-5, { currency: 'USD' })).eq('-$0.05');
   expect(Bank.toZeroTokenText(105, { currency: 'EUR' })).eq('€1.05');
-  expect(Bank.toZeroTokenText(105, { currency: 'EUR', precision: 1 })).eq(
-    '€1.1',
+  expect(Bank.toZeroTokenText(105, { currency: 'EUR', precision: 10, decimalPlaces:1 })).eq(
+    '€1.1'
   );
 });
 
 test('toZeroTokenText2', function () {
-  expect(Bank.toZeroTokenText2(0)).eq('---');
-  expect(Bank.toZeroTokenText2(0, { placeholder: '**' })).eq('**');
+  expect(Bank.toZeroTokenText2(0)).eq('--');
+  expect(Bank.toZeroTokenText2(0, { placeholder: '**(--)**' })).eq('**(--)**');
   expect(Bank.toZeroTokenText2(-5)).eq('-¥0.05RMB');
   expect(Bank.toZeroTokenText2(105)).eq('¥1.05RMB');
   expect(Bank.toZeroTokenText2(-5, { currency: 'USD' })).eq('-$0.05USD');
   expect(Bank.toZeroTokenText2(105, { currency: 'EUR' })).eq('€1.05EUR');
-  expect(Bank.toZeroTokenText2(105, { currency: 'EUR', precision: 1 })).eq(
-    '€1.1EUR',
+  expect(Bank.toZeroTokenText2(105, { currency: 'EUR', precision: 10, decimalPlaces:1 })).eq(
+    '€1.1EUR'
   );
 });
 
@@ -260,12 +256,23 @@ test('toChineseText', function () {
 });
 
 test('toBankText', function () {
-  expect(Bank.toBankText('10')).eq('10');
-  expect(Bank.toBankText('1001')).eq('1,001');
+  let opt: ToBankTextOptions = { decimalPlaces: 0 };
+  expect(Bank.toBankText('10', opt)).eq('10');
+  expect(Bank.toBankText('1001', opt)).eq('1,001');
+  expect(Bank.toBankText('1001.12345', opt)).eq('1,001.12345');
+  expect(Bank.toBankText('821034121001.5', opt)).eq('821,034,121,001.5');
+  expect(Bank.toBankText('1001', { to: 'right', ...opt })).eq('100,1');
+  expect(Bank.toBankText('1001.1315', { to: 'right', ...opt })).eq(
+    '100,1.1315'
+  );
+});
+
+test('toBankText_dft', function () {
+  expect(Bank.toBankText('10')).eq('10.00');
+  expect(Bank.toBankText('1001')).eq('1,001.00');
   expect(Bank.toBankText('1001.12345')).eq('1,001.12345');
-  expect(Bank.toBankText('821034121001.5')).eq('821,034,121,001.5');
-  expect(Bank.toBankText('1001', { to: 'right' })).eq('100,1');
-  expect(Bank.toBankText('1001.1315', { to: 'right' })).eq('100,1.1315');
+  expect(Bank.toBankText('821034121001.5')).eq('821,034,121,001.50');
+  expect(Bank.toBankText('1001.15', { to: 'right' })).eq('100,1.15');
 });
 
 test('isValidPayType', function () {

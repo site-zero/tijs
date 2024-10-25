@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { I18n, Str } from '../';
-import { HDirecton, TiCurrency } from '../../_type';
+import { TiCurrency } from '../../_type';
 import { PartitionOptions } from '../text/ti-str';
 
 ///////////////////////////////////////
@@ -218,41 +218,64 @@ export function parseCurrency(
   return { cent, yuan, currency };
 }
 
+export type AutoYuanTokenTextOptions = ToBankTextOptions & {
+  currency?: string;
+  precision?: number;
+  showHeadToken?: boolean;
+  showTailUnit?: boolean;
+};
+
 //-----------------------------------
 export function autoYuanTokenText(
   cent: number = 0.0,
-  { currency = 'RMB', precision = 2, auto = true } = {} as {
-    currency?: string;
-    precision?: number;
-    auto?: boolean;
-  }
+  options: AutoYuanTokenTextOptions = {}
 ): string {
+  let {
+    currency = 'RMB',
+    precision = 100,
+    decimalPlaces = 2,
+    width = 3,
+    sep = ',',
+    to = 'left',
+    showHeadToken: showPrefixToken = true,
+    showTailUnit: showSuffixUnit = false,
+  } = options;
+
   cent = Math.round(cent);
   let neg = cent < 0 ? '-' : '';
   cent = Math.abs(cent);
-  let t = getCurrencyToken(currency) || '';
+  let head = showPrefixToken ? getCurrencyToken(currency) || '' : '';
+  let tail = showSuffixUnit ? currency : '';
 
-  let n = _.round(cent / 100, precision);
-
-  // 组装 "金额文字"
-  let s = `${n}`;
-  if (precision > 0 && !auto) {
-    let pos = s.lastIndexOf('.');
-    if (pos < 0) {
-      s = s + '.' + _.repeat('0', precision);
-    }
-    // 补零
-    else {
-      let sub = s.substring(pos + 1);
-      if (sub.length < precision) {
-        sub = _.padEnd(sub, precision, '0');
-        s = s.substring(0, pos + 1) + sub;
-      }
-    }
+  let n = cent / 100;
+  if (precision > 0) {
+    n = Math.round(n * precision) / precision;
   }
 
-  s = toBankText(s);
-  return `${neg}${t}${s}`;
+  // 组装 "金额文字"
+  // let s = `${n}`;
+  // if (precision > 0 && !auto) {
+  //   let pos = s.lastIndexOf('.');
+  //   if (pos < 0) {
+  //     s = s + '.' + _.repeat('0', precision);
+  //   }
+  //   // 补零
+  //   else {
+  //     let sub = s.substring(pos + 1);
+  //     if (sub.length < precision) {
+  //       sub = _.padEnd(sub, precision, '0');
+  //       s = s.substring(0, pos + 1) + sub;
+  //     }
+  //   }
+  // }
+
+  let s = toBankText(n, {
+    decimalPlaces,
+    width,
+    sep,
+    to,
+  });
+  return `${neg}${head}${s}${tail}`;
 }
 
 //-----------------------------------
@@ -263,73 +286,72 @@ export function autoYuanTokenText(
  * @param precise 精度，默认两位小数
  * @returns 元的金额
  */
-export function toYuanText(cent = 0.0, precision = 2): string {
+export function toYuanText(cent = 0.0, precision = 100): string {
   return autoYuanTokenText(cent, {
     currency: undefined,
     precision,
-    auto: true,
   });
 }
 //-----------------------------------
 export function toYuanTokenText(
   cent = 0.0,
   currency = 'RMB',
-  precision = 2
+  precision = 100
 ): string {
-  return autoYuanTokenText(cent, { currency, precision, auto: true });
+  return autoYuanTokenText(cent, { currency, precision });
 }
 //-----------------------------------
 export function toYuanTokenText2(
   cent = 0.0,
   currency = 'RMB',
-  precision = 2
+  precision = 100
 ): string {
   let s = toYuanTokenText(cent, currency, precision);
   return `${s}${currency}`;
 }
 
 //-----------------------------------
+export type ToZeroTextOptions = AutoYuanTokenTextOptions & {
+  placeholder?: string;
+};
+//-----------------------------------
 export function toZeroText(
   cent: number = 0.0,
-  { precision = 2, placeholder = '---' } = {} as {
-    precision?: number;
-    placeholder?: string;
-  }
+  options: ToZeroTextOptions = {}
 ) {
   if (!cent) {
-    return placeholder;
+    return options.placeholder ?? '--';
   }
-  return toYuanText(cent, precision);
+  return autoYuanTokenText(cent, options);
 }
 
 //-----------------------------------
 export function toZeroTokenText(
   cent = 0.0,
-  { currency = 'RMB', precision = 2, placeholder = '---' } = {} as {
-    currency?: string;
-    precision?: number;
-    placeholder?: string;
-  }
+  options: ToZeroTextOptions = {}
 ): string {
   if (!cent) {
-    return placeholder;
+    return options.placeholder ?? '--';
   }
-  return toYuanTokenText(cent, currency, precision);
+  return autoYuanTokenText(cent, {
+    currency: 'RMB',
+    showHeadToken: true,
+    showTailUnit: false,
+    ...options,
+  });
 }
 
 //-----------------------------------
-export function toZeroTokenText2(
-  cent = 0.0,
-  { currency = 'RMB', precision = 2, placeholder = '---' } = {} as {
-    currency?: string;
-    precision?: number;
-    placeholder?: string;
-  }
-) {
+export function toZeroTokenText2(cent = 0.0, options: ToZeroTextOptions = {}) {
   if (!cent) {
-    return placeholder;
+    return options.placeholder ?? '--';
   }
-  return toYuanTokenText2(cent, currency, precision);
+  return autoYuanTokenText(cent, {
+    currency: 'RMB',
+    showHeadToken: true,
+    showTailUnit: true,
+    ...options,
+  });
 }
 
 //-----------------------------------
@@ -363,6 +385,14 @@ export function toChineseText(cent = 0.0, capitalized = false): string {
   return re.join('');
 }
 
+export type ToBankTextOptions = PartitionOptions & {
+  /**
+   * 显示到小数点后几位，默认的则是自动不补零
+   * 如果指定了这个位数，后面需要补零
+   */
+  decimalPlaces?: number;
+};
+
 /**
  * 将输入的数字，分段显示。变成便于人类阅读的数字
  *
@@ -373,6 +403,7 @@ export function toChineseText(cent = 0.0, capitalized = false): string {
  *    - `options.to` : 分隔的方向。 'left|right'
  *    - `options.to = 'left'` 【默认】从右向左分隔，通常用来格式化金额
  *    - `options.to = 'right'` 从左至右分隔，通常用来格式化银行账号，或者软件激活码
+ *    - `options.decimalPlaces` : 显示到小数点后几位，默认的则是自动不补零
  *
  * @returns 格式化后的字符串
  *
@@ -380,7 +411,7 @@ export function toChineseText(cent = 0.0, capitalized = false): string {
  */
 export function toBankText(
   val: string | number,
-  options: PartitionOptions = {}
+  options: ToBankTextOptions = {}
 ): string {
   // 防空
   if (_.isNil(val) || (_.isString(val) && Str.isBlank(val))) {
@@ -388,7 +419,7 @@ export function toBankText(
   }
 
   // 处理参数
-  let { width = 3, sep = ',', to = 'left' } = options;
+  let { width = 3, sep = ',', to = 'left', decimalPlaces = 2 } = options;
 
   // 如果是字符串，则处理一下一些分隔符号
   let str: string;
@@ -406,24 +437,38 @@ export function toBankText(
   let s = m[2].replaceAll(/[^0-9.]/g, '');
 
   // 分成两段，一个是整数部分+小数部分
+  let part_int: string = '';
+  let part_fra: string = '';
   let pos = s.indexOf('.');
   // 必然是 .xxx
   if (pos == 0) {
-    return [prefix, '0', s].join('');
+    part_int = '0';
+    part_fra = s.substring(1).trim();
   }
   // 全为整数
-  if (pos < 0) {
-    return [prefix, Str.partitions(s, { width, sep, to })].join('');
+  else if (pos < 0) {
+    part_int = s;
   }
   // 是小数 xx.xxx
-  let _part_int = s.substring(0, pos).trim();
-  let _part_fraction = s.substring(pos + 1).trim();
-  return [
-    prefix,
-    Str.partitions(_part_int, { width, sep, to }),
-    '.',
-    _part_fraction,
-  ].join('');
+  else {
+    part_int = s.substring(0, pos).trim();
+    part_fra = s.substring(pos + 1).trim();
+  }
+
+  let parts = [prefix];
+  // 对于整数部分分段处理
+  parts[0] += Str.partitions(part_int, { width, sep, to });
+  // 对于小数部分，对齐精度
+  if (decimalPlaces > 0) {
+    parts.push(_.padEnd(part_fra, decimalPlaces, '0'));
+  }
+  // 如果不需要强制精度，则有值就显示
+  else if (part_fra) {
+    parts.push(part_fra);
+  }
+
+  // 返回
+  return parts.join('.');
 }
 
 //-----------------------------------
