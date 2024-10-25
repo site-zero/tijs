@@ -19,6 +19,7 @@
   //-----------------------------------------------------
   const props = withDefaults(defineProps<InputNumUnitProps>(), {
     precision: 0,
+    decimalPlaces: 0,
     partSep: ',',
     partWidth: 3,
     getNumber: 'number',
