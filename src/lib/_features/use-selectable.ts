@@ -24,7 +24,8 @@ export type SelectEmitInfo<ID> = {
 // -----------------------------------------------------
 export type CheckedIds<ID extends string | number> =
   | Record<ID, boolean>
-  | Map<ID, boolean>;
+  | Map<ID, boolean>
+  | ID[];
 // -----------------------------------------------------
 export type SelectableProps<ID extends string | number> = {
   /**
@@ -233,14 +234,21 @@ export function useSelectable<ID extends TableRowID>(
 
       let _is_checked = (_id: ID) => false;
       if (checkedIds) {
+        let idMap: Map<ID, boolean>;
+        // Use Array
+        if (_.isArray(checkedIds)) {
+          idMap = Util.arrayToMap(checkedIds);
+        }
         // Use Map
-        if (checkedIds instanceof Map) {
-          _is_checked = (id: ID) => (checkedIds.get(id) ? true : false);
+        else if (checkedIds instanceof Map) {
+          idMap = checkedIds;
         }
         // Use Record
         else {
-          _is_checked = (id: ID) => (checkedIds[id] ? true : false);
+          idMap = Util.objToMap(checkedIds);
         }
+        // 准备判断函数
+        _is_checked = (id: ID) => idMap.get(id) ?? false;
       }
 
       for (let id of selection.ids) {
@@ -259,8 +267,14 @@ export function useSelectable<ID extends TableRowID>(
       //..........................................
       // use checkedIds
       else {
+        // Use Array
+        if (_.isArray(checkedIds)) {
+          if (checkedIds.length > 0) {
+            ids.set(checkedIds[0], true);
+          }
+        }
         // Use Map
-        if (checkedIds instanceof Map) {
+        else if (checkedIds instanceof Map) {
           if (checkedIds.size > 0) {
             for (let k of checkedIds.keys()) {
               currentId = k;
