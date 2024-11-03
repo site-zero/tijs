@@ -13,6 +13,7 @@ export type InputNumProps = CommonProps &
   Pick<PrefixSuffixProps, 'prefixText' | 'suffixText'> & {
     value?: number | string | boolean | null;
     style?: Vars;
+    autoSelect?: boolean;
     /**
      * 整数，精确度：
      * - 100 : 精确到小数点后两位

@@ -74,6 +74,7 @@
     :style="props.style"
     :readonly="props.readonly"
     :placeholder="props.placeholder"
+    :auto-select="props.autoSelect"
     :autoI18n="props.autoI18n"
     :value="InputValue"
     :valueInputAlign="valueInputAlign"
