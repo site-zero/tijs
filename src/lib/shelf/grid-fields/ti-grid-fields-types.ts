@@ -219,6 +219,8 @@ export type GridFieldsInput = CommonProps &
     defaultFieldTitleBy?: FieldComProps;
     defaultFieldTipBy?: FieldComProps;
     defaultFieldType?: FieldValueType;
+    defaultFieldTypeTransformOptions?: Vars;
+    defaultFieldTypeSerializeOptions?: Vars;
 
     defaultComType?: string;
     defaultComConf?: Vars;
@@ -343,6 +345,8 @@ export type GridFieldsStrictGroup = GridFieldsStrictAbstractItem &
     defaultFieldTitleBy?: FieldComProps;
     defaultFieldTipBy?: FieldComProps;
     defaultFieldType?: FieldValueType;
+    defaultFieldTypeTransformOptions?: Vars;
+    defaultFieldTypeSerializeOptions?: Vars;
 
     defaultComType?: string;
     defaultComConf?: Vars;

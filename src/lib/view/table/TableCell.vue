@@ -15,6 +15,7 @@
     checkEquals: true,
     rowIndex: 0,
     colIndex: 0,
+    editable: true,
   });
   //-------------------------------------------------------
   const CellValue = computed(() => {
@@ -28,7 +29,7 @@
   const Cell = computed(() => useFieldCom(props));
   const CellCom = computed(() => {
     return Cell.value.autoGetCom(
-      { actived: props.activated },
+      { actived: props.activated && props.editable },
       {
         ...props.vars,
         data: props.data,

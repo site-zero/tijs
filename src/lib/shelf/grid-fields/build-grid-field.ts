@@ -88,6 +88,10 @@ export function buildOneGridField(
 
     fld.name = field.name;
     fld.type = field.type ?? dft.defaultFieldType ?? 'String';
+    fld.typeTransformOptions =
+      fld.typeTransformOptions ?? dft.defaultFieldTypeTransformOptions;
+    fld.typeSerializeOptions =
+      fld.typeSerializeOptions ?? dft.defaultFieldTypeSerializeOptions;
     fld.fieldTitleBy = field.fieldTitleBy ?? dft.defaultFieldTitleBy;
     fld.tipBy = field.tipBy ?? dft.defaultFieldTipBy;
 
@@ -112,6 +116,7 @@ export function buildOneGridField(
     fld.transformer = parseFieldConverter(
       fld.type,
       'transform',
+      fld.typeTransformOptions,
       dft.vars || {},
       field.transformer,
       field.transArgs,
@@ -120,6 +125,7 @@ export function buildOneGridField(
     fld.serializer = parseFieldConverter(
       fld.type,
       'serialize',
+      fld.typeSerializeOptions,
       dft.vars || {},
       field.serializer,
       field.serialArgs,
@@ -153,6 +159,12 @@ export function buildOneGridField(
     grp.bodyPartStyle = field.bodyPartStyle;
     grp.bodyPartGap = field.bodyPartGap ?? dft.bodyPartGap;
     grp.defaultFieldType = field.defaultFieldType ?? dft.defaultFieldType;
+    grp.defaultFieldTypeTransformOptions =
+      field.defaultFieldTypeTransformOptions ??
+      dft.defaultFieldTypeTransformOptions;
+    grp.defaultFieldTypeSerializeOptions =
+      field.defaultFieldTypeSerializeOptions ??
+      dft.defaultFieldTypeSerializeOptions;
     grp.defaultComType = field.defaultComType ?? dft.defaultComType;
     grp.defaultComConf = field.defaultComConf ?? dft.defaultComConf;
 

@@ -61,6 +61,7 @@
     canHover: true,
     canSelect: true,
     canCheck: true,
+    editable: true,
     getId: 'id',
     columnResizeInTime: 50,
     rowMinHeight: 32,
@@ -402,6 +403,7 @@
           :activated="row.id == selection.currentId"
           :checked="Table.selectable.isIDChecked(selection, row.id)"
           :indent="row.indent"
+          :editable="props.editable"
           :activedColIndex="getRowActivedColIndex(selection, row)"
           :updateRowHeight="updateRowHeight"
           @row-select="Table.OnRowSelect(selection, $event)"

@@ -20,6 +20,7 @@
     showRowMarker: true,
     showCheckbox: true,
     showRowIndex: true,
+    editable: true,
     // canHover: true,
     // canCheck: true,
     // canSelect: true,
@@ -163,6 +164,7 @@
         :data="props.row.rawData"
         :vars="props.vars"
         :activated="props.activated && i == props.activedColIndex"
+        :editable="props.editable"
         @cell-change="emit('cell-change', $event)" />
     </div>
   </template>

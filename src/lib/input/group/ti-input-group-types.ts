@@ -11,6 +11,8 @@ export type InputGroupProps = CommonProps &
     | 'bodyPartGap'
     | 'layoutGridTracks'
     | 'defaultFieldType'
+    | 'defaultFieldTypeTransformOptions'
+    | 'defaultFieldTypeSerializeOptions'
     | 'defaultComType'
     | 'defaultComConf'
     | 'maxFieldNameWidth'

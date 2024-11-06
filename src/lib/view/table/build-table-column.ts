@@ -72,6 +72,7 @@ export function buildTableColumns(props: TableProps) {
         transformer: parseFieldConverter(
           col.type ?? 'String',
           'transform',
+          col.typeTransformOptions,
           props.vars || {},
           col.transformer,
           col.transArgs,
@@ -80,6 +81,7 @@ export function buildTableColumns(props: TableProps) {
         serializer: parseFieldConverter(
           col.type ?? 'String',
           'serialize',
+          col.typeSerializeOptions,
           props.vars || {},
           col.serializer,
           col.serialArgs,

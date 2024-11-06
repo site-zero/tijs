@@ -19,7 +19,6 @@ import {
   LogicType,
   TableColumnAspect,
   TableRowID,
-  TiMatch,
   Vars,
 } from '../../../_type';
 
@@ -141,6 +140,11 @@ export type TableBehaviorsProps = {
   showRowIndex?: boolean;
 
   canHover?: boolean;
+
+  /**
+   * 如果设置为 false， 则会将 activedCom 全都取消
+   */
+  editable?: boolean;
 };
 
 export type TableProps = CommonProps &
@@ -278,6 +282,7 @@ export type TableCellProps = Omit<
 > & {
   disabled?: boolean;
   activated?: boolean;
+  editable?: boolean;
 
   /**
    * 行下标： 0 BASE

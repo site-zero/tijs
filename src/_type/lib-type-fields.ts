@@ -29,6 +29,13 @@ export type Field = {
    * @default `String`
    */
   type: FieldValueType;
+
+  /**
+   * 如果做类型转换，那么可以指定转换的参数
+   * 对应到 getFieldConvertor 函数用到 toXXX 有的函数可以接受参数
+   */
+  typeTransformOptions?: Vars;
+  typeSerializeOptions?: Vars;
   /**
    * 字段默认值
    */
@@ -106,8 +113,8 @@ export type AbstractField = Field & {
 };
 
 export type FieldConvertor = {
-  transform: Convertor<any, any>;
-  serialize: Convertor<any, any>;
+  transform: (val: any, options?: Vars) => any;
+  serialize: (val: any, options?: Vars) => any;
 };
 
 export type FieldPair = NameValue<FieldName, any>;
@@ -301,6 +308,7 @@ export function getFieldTypeByValue(input?: any): FieldValueType {
 export function parseFieldConverter(
   type: FieldValueType,
   mode: keyof FieldConvertor,
+  typeOptions: Vars | undefined,
   context: Vars,
   converter?: string | Function,
   args?: any[],
@@ -317,7 +325,13 @@ export function parseFieldConverter(
   }
   // 默认类型转换器
   let cov = getFieldConvertor(type);
-  return cov[mode];
+  let covFn = cov[mode];
+  if (typeOptions) {
+    return (val: any) => {
+      return covFn(val, typeOptions);
+    };
+  }
+  return covFn;
 }
 
 function toStr(input: any) {
@@ -394,7 +408,7 @@ const INT_CONVERTERS = {
 
 type IntConverterName = keyof typeof INT_CONVERTERS;
 
-type ToIntegerOptions = {
+export type ToIntegerOptions = {
   mode?: IntConverterName;
   dft?: number;
   range?: [number, number];
@@ -435,13 +449,14 @@ function toInteger(input: any, options: ToIntegerOptions = {}) {
   // Return Directly
   return n;
 }
-function toFloat(
-  input: any,
-  { precision = 2, dft = NaN } = {} as {
-    precision: number;
-    dft: number;
-  }
-) {
+
+export type ToFloatOptions = {
+  precision?: number;
+  dft?: number;
+};
+
+function toFloat(input: any, options: ToFloatOptions = {}) {
+  let { precision = 2, dft = NaN } = options;
   //console.log("toFloat", val, precision, dft)
   if (_.isNil(input)) {
     return dft;
