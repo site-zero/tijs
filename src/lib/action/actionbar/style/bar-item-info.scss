@@ -22,6 +22,7 @@
   .item-text {
     white-space: nowrap;
     padding: 0.2em 0.5em;
+    @include flex-align-nowrap($ai: center);
   }
   //-----------------------------------------------------
   .item-suffix {

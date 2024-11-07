@@ -21,6 +21,7 @@ export const COM_TYPES = {
   Thumb: 'TiThumb',
   Image: 'TiImage',
   Unknown: 'TiUnknown',
+  UploadBar: 'TiUploadBar',
   //------------------- INPUT
   Check: 'TiCheck',
   CheckList: 'TiCheckList',

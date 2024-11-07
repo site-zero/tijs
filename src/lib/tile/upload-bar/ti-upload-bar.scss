@@ -1,0 +1,78 @@
+@use '@site0/tijs/sass/_all.scss' as *;
+
+.ti-upload-bar {
+  //-----------------------------------------------
+  > .bar-con {
+    @include flex-align-nowrap($ai: stretch);
+    min-width: 20em;
+    border: 1px solid var(--ti-color-border-thin);
+    position: relative;
+    //-----------------------------------------------
+    > .part-icon {
+      @include flex-center;
+      flex: 0 0 auto;
+      font-size: 1.3em;
+      background-color: var(--ti-color-border-shallow);
+      padding: 0 4px;
+    }
+    //-----------------------------------------------
+    > .part-text {
+      @include flex-align-nowrap($ai: center);
+      flex: 1 1 auto;
+      > .as-snippet-text {
+        width: 50px;
+        flex: 1 1 auto;
+        padding: 0 0 0 0.5em;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+    //-----------------------------------------------
+    > .part-actions.ti-actionbar {
+      font-size: 10px;
+      padding-left: 0;
+      flex: 0 0 auto;
+    }
+    //-----------------------------------------------
+    > .part-progress {
+      position: absolute;
+      inset: 0;
+      padding: 0 1em;
+      background-color: var(--ti-color-mask-thin);
+    }
+    //-----------------------------------------------
+    @include aspect_pad('&.bar-pad', '> .part-text');
+    @include aspect_fontsize('&.text-size');
+    @include aspect_radius('&.bar-radius');
+    //-----------------------------------------------
+    &.text-align-center {
+      > .part-text {
+        text-align: center;
+      }
+    }
+    //-----------------------------------------------
+    &.text-align-right {
+      > .part-text {
+        text-align: right;
+      }
+    }
+  } // > .bar-con {
+  //-----------------------------------------------
+  &.drag-enter {
+    > .bar-con::after {
+      pointer-events: none;
+      content: '';
+      display: block;
+      position: absolute;
+      inset: -10px;
+      border-color: var(--ti-color-secondary);
+      border-style: dashed;
+      border-width: 3px;
+    }
+    // > .bar-con {
+    //   border-color: var(--ti-color-secondary);
+    // }
+  }
+  //-----------------------------------------------
+}
