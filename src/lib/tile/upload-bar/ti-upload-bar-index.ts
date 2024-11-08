@@ -7,10 +7,14 @@ import example from './example';
 const en_us = {
   'com-name': 'Upload Bar',
   'example-in-progress': 'In Progress',
+  'upload': 'Upload',
+  'clean': 'Clean',
 };
 const zh_cn = {
   'com-name': '上传条',
   'example-in-progress': '带进度条',
+  'upload': '上传',
+  'clean': '清除',
 };
 
 const COM_TYPE = COM_TYPES.UploadBar;

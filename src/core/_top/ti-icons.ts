@@ -78,6 +78,7 @@ const NAMES = {
   download: 'zmdi-download',
   edit: 'zmdi-edit',
   error: 'zmdi-alert-octagon',
+  danger: 'zmdi-alert-octagon',
   forward: 'zmdi-chevron-right',
   help: 'zmdi-help-outline',
   info: 'zmdi-info-outline',

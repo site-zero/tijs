@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed, onMounted, ref, useTemplateRef } from 'vue';
-  import { TiActionBar } from '../../';
+  import { ActionBarEvent, TiActionBar } from '../../';
   import { CssUtils } from '../../../core';
   import { TextSnippet, TiImage, TiProgressBar } from '../../../lib';
   import { useDropping } from '../image/use-dropping';
@@ -10,6 +10,7 @@
   //-----------------------------------------------------
   const emit = defineEmits<{
     (event: 'upload', payload: File): void;
+    (event: 'clear'): void;
   }>();
   //-----------------------------------------------------
   const props = withDefaults(defineProps<UploadBarProps>(), {
@@ -17,6 +18,10 @@
     textPadding: 's',
     textAlign: 'center',
     boxRadius: 's',
+    uploadButton: true,
+    clearButton: true,
+    // tip: '点击或拖拽文件到此处上传',
+    // type: 'danger',
   });
   //-----------------------------------------------------
   const Bar = useUploadBar(props);
@@ -24,6 +29,7 @@
   const TopClass = computed(() =>
     CssUtils.mergeClassName(props.className, {
       'drag-enter': _drag_enter.value,
+      [`is-${props.type}`]: !!props.type,
     })
   );
   //-----------------------------------------------------
@@ -46,6 +52,34 @@
       props.style,
     ]);
   });
+  //-----------------------------------------------------
+  let $file = useTemplateRef('file');
+  function onActionFire(event: ActionBarEvent) {
+    console.log(event);
+    let fn = {
+      'choose-file': () => {
+        if ($file.value) {
+          $file.value.click();
+        }
+      },
+      'clear': () => {
+        emit('clear');
+      },
+    }[event.name];
+    if (fn) {
+      fn();
+    }
+  }
+  //-----------------------------------------------------
+  function onSelectLocalFilesToUpload(event: Event) {
+    let files = (event.target as HTMLInputElement).files;
+    if (files) {
+      let f = _.first(files);
+      if (f) {
+        emit('upload', f);
+      }
+    }
+  }
   //-----------------------------------------------------
   const _drag_enter = ref(false);
   const $bar = useTemplateRef('bar');
@@ -81,13 +115,23 @@
     class="ti-upload-bar"
     :class="TopClass"
     :style="TopStyle">
+    <!--
+    Hidden input file to choose files
+  -->
+    <input
+      type="file"
+      ref="file"
+      style="display: none"
+      @change="onSelectLocalFilesToUpload" />
     <div
       class="bar-con"
       :class="ConClass"
       :style="ConStyle"
       ref="bar">
       <!--============= Preview =============-->
-      <div class="part-icon">
+      <div
+        class="part-icon"
+        :title="props.tip">
         <TiImage v-bind="Bar.Preview.value" />
       </div>
       <!--============= Text =============-->
@@ -96,11 +140,12 @@
         v-bind="Bar.Text.value" />
       <!--============= Actions =============-->
       <TiActionBar
-        v-if="props.actions"
+        v-if="Bar.ActionBar.value"
         item-size="t"
         bar-pad="s"
-        v-bind="props.actions"
-        class="part-actions" />
+        v-bind="Bar.ActionBar.value"
+        class="part-actions"
+        @fire="onActionFire" />
       <!--============= Processor =============-->
       <div
         class="part-progress"

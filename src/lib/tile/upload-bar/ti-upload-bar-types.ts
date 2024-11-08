@@ -4,7 +4,14 @@ import {
   ProgressBarProps,
   TextSnippetProps,
 } from '../../';
-import { AspectSize, CommonProps, CssAlignment, Vars } from '../../../_type';
+import {
+  ActionBarItemInfo,
+  AspectSize,
+  CommonProps,
+  CssAlignment,
+  LogicType,
+  Vars,
+} from '../../../_type';
 
 /**
  * 一个缩略图的结构承载了下面结构的 DOM:
@@ -22,12 +29,19 @@ export type UploadBarProps = CommonProps & {
   preview?: ImageProps;
   progress?: ProgressBarProps;
   text?: string | TextSnippetProps;
+  tip?: string;
 
+  //-----------------------------------------------------
+  // Behaviors
+  //-----------------------------------------------------
+  uploadButton?: ActionBarItemInfo | boolean;
+  clearButton?: ActionBarItemInfo | boolean;
   actions?: ActionBarProps;
-
+  placeholder?: string;
   //-----------------------------------------------------
   // Aspect
   //-----------------------------------------------------
+  type?: LogicType;
   width?: string | number;
   height?: string | number;
   style?: Vars;

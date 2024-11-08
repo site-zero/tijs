@@ -1,7 +1,27 @@
 import _ from 'lodash';
 import { computed } from 'vue';
+import { ActionBarItem, ActionBarItemInfo } from '../../../_type';
+import { I18n, Icons } from '../../../core';
+import { ActionBarProps } from '../../../lib/';
 import { ImageProps } from '../all-tiles';
 import { UploadBarProps } from './ti-upload-bar-types';
+
+function _join_action(
+  items: ActionBarItem[],
+  at: ActionBarItemInfo | boolean | undefined,
+  dftItem: ActionBarItem
+) {
+  if (at) {
+    // 默认值
+    if (_.isBoolean(at)) {
+      items.push({ ...dftItem });
+    }
+    // 自定义值
+    else {
+      items.push({ ...dftItem, ...at });
+    }
+  }
+}
 
 export function useUploadBar(props: UploadBarProps) {
   // 构建主要显示文本
@@ -11,24 +31,50 @@ export function useUploadBar(props: UploadBarProps) {
     } else if (props.text) {
       return props.text;
     }
-    return { text: 'i18n:nil' };
+    return { text: I18n.text(props.placeholder ?? 'i18n:nil-obj') };
   });
 
   // 构建预览
   const Preview = computed(() => {
-    return {
+    let dftIcon = Icons.getIcon(props.type, 'far-file');
+    // console.log('dftIcon', dftIcon);
+    let preview = {
       width: '100%',
       height: '100%',
-      dftSrc: {
-        type: 'font',
-        value: 'far-file',
-        style: {
-          fontSize: '1em',
-          color: 'var(--ti-color-mask-thin)',
-        },
-      },
+      dftSrc: Icons.parseIcon(dftIcon),
       ...props.preview,
     } as ImageProps;
+
+    return preview;
+  });
+
+  // 构建操作按钮
+  const ActionBar = computed(() => {
+    let actions: ActionBarItem[] = [];
+    _join_action(actions, props.uploadButton, {
+      icon: 'fas-upload',
+      tip: 'i18n:ti-upload-bar-upload',
+      className: `is-${props.type ?? 'primary'}-r`,
+      action: 'choose-file',
+    });
+    _join_action(actions, props.clearButton, {
+      icon: 'far-trash-can',
+      tip: 'i18n:ti-upload-bar-clean ',
+      className: `is-${props.type ?? 'primary'}-r`,
+      action: 'clear',
+    });
+    // 定制化的操作按钮
+    if (props.actions && props.actions.items) {
+      actions.push(...props.actions.items);
+    }
+
+    if (actions.length > 0) {
+      return {
+        className: 'top-as-button',
+        ...props.actions,
+        items: actions,
+      } as ActionBarProps;
+    }
   });
 
   //-------------------------------------------------
@@ -37,5 +83,6 @@ export function useUploadBar(props: UploadBarProps) {
   return {
     Preview,
     Text,
+    ActionBar,
   };
 }

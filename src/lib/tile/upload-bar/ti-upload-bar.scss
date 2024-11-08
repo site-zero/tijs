@@ -1,20 +1,24 @@
 @use '@site0/tijs/sass/_all.scss' as *;
 
 .ti-upload-bar {
+  position: relative;
+  @include flex-align-nowrap($ai: stretch);
+  width: 100%;
+  background-color: var(--ti-color-box);
   //-----------------------------------------------
   > .bar-con {
     @include flex-align-nowrap($ai: stretch);
-    min-width: 20em;
+    flex: 1 1 auto;
+    height: 3em;
     border: 1px solid var(--ti-color-border-thin);
-    position: relative;
+    overflow: hidden;
     //-----------------------------------------------
     > .part-icon {
       @include flex-center;
       flex: 0 0 auto;
       font-size: 1.3em;
       background-color: var(--ti-color-border-shallow);
-      padding: 0 4px;
-      min-width: 1.8em;
+      width: 2em;
     }
     //-----------------------------------------------
     > .part-text {
@@ -23,17 +27,20 @@
       > .as-snippet-text {
         width: 50px;
         flex: 1 1 auto;
-        padding: 0 0 0 0.5em;
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
+        border-radius: 0;
       }
     }
     //-----------------------------------------------
-    > .part-actions.ti-actionbar {
-      font-size: 10px;
-      padding-left: 0;
+    > .part-actions {
+      background-color: var(--ti-color-border-shallow);
+      font-size: var(--ti-fontsz-s);
       flex: 0 0 auto;
+      .bar-item-info .item-icon {
+        font-size: inherit;
+      }
     }
     //-----------------------------------------------
     > .part-progress {
@@ -75,5 +82,30 @@
     //   border-color: var(--ti-color-secondary);
     // }
   }
+  //-----------------------------------------------
+  @mixin __color($name) {
+    &.is-#{$name} > .bar-con {
+      color: var(--ti-color-#{$name});
+      border-color: var(--ti-color-#{$name});
+      > .part-icon {
+        color:inherit;
+        background-color: var(--ti-color-#{$name}-r);
+      }
+      > .part-actions {
+        background-color: var(--ti-color-#{$name}-r);
+      }
+    }
+  }
+  //-----------------------------------------------
+  @include __color(success);
+  @include __color(warn);
+  @include __color(info);
+  @include __color(danger);
+  @include __color(track);
+  @include __color(disable);
+  @include __color(text);
+  @include __color(number);
+  @include __color(primary);
+  @include __color(secondary);
   //-----------------------------------------------
 }

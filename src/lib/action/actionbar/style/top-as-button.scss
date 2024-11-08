@@ -7,7 +7,7 @@
       @include flex-align-nowrap($ai: stretch);
       padding: 0;
       border: 1px solid var(--item-color);
-      min-width: 5em;
+      min-width: 1em;
       text-align: center;
       //------------------------------------
       .item-icon {
@@ -16,8 +16,9 @@
       }
       //------------------------------------
       .item-text {
-        padding: 0.2em 0.5em;
+        //padding: 0.2em 0.5em;
         flex: 1 1 auto;
+        justify-content: center;
       }
       //------------------------------------
       .item-suffix {
@@ -40,7 +41,7 @@
   } // > .bar-item[item-depth="0"] {
   //--------------------------------------
   .bar-item[aspect='top'] + .bar-item[aspect='top'] {
-    margin-left: 0.5em;
+    margin-left: 0.1em;
   }
   //--------------------------------------
 }
