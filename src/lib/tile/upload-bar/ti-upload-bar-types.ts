@@ -1,6 +1,10 @@
-import { ActionBarProps, ProgressBarProps, TextSnippetProps } from '../../';
+import {
+  ActionBarProps,
+  ImageProps,
+  ProgressBarProps,
+  TextSnippetProps,
+} from '../../';
 import { AspectSize, CommonProps, CssAlignment, Vars } from '../../../_type';
-import { IconProps } from '../icon/icon-props';
 
 /**
  * 一个缩略图的结构承载了下面结构的 DOM:
@@ -15,7 +19,7 @@ export type UploadBarProps = CommonProps & {
   //-----------------------------------------------------
   // Data
   //-----------------------------------------------------
-  icon?: IconProps;
+  preview?: ImageProps;
   progress?: ProgressBarProps;
   text?: string | TextSnippetProps;
 

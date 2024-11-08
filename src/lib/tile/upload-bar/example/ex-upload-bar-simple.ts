@@ -5,7 +5,7 @@ export default {
   name: 'simple',
   text: 'i18n:simple',
   comConf: {
-    icon: { value: 'fas-briefcase' },
+    preview: { src: { type: 'font', value: 'fas-briefcase' } },
     text: 'Gift For You',
     actions: {
       className: 'top-as-button',

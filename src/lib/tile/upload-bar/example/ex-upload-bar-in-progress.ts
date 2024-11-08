@@ -5,7 +5,7 @@ export default {
   name: 'in-progress',
   text: 'i18n:ti-thumb-example-in-progress',
   comConf: {
-    icon: { value: 'far-file-zipper' },
+    preview: { src: { type: 'font', value: 'far-file-zipper' } },
     text: 'Hello My Document',
     progress: {
       value: 0.64,

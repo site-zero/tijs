@@ -3,8 +3,7 @@
   import { computed, onMounted, ref, useTemplateRef } from 'vue';
   import { TiActionBar } from '../../';
   import { CssUtils } from '../../../core';
-  import { TextSnippet } from '../../../lib';
-  import { TiIcon } from '../all-tiles';
+  import { TextSnippet, TiImage, TiProgressBar } from '../../../lib';
   import { useDropping } from '../image/use-dropping';
   import { UploadBarProps } from './ti-upload-bar-types';
   import { useUploadBar } from './use-upload-bar';
@@ -89,7 +88,7 @@
       ref="bar">
       <!--============= Preview =============-->
       <div class="part-icon">
-        <TiIcon v-bind="props.icon" />
+        <TiImage v-bind="Bar.Preview.value" />
       </div>
       <!--============= Text =============-->
       <TextSnippet
