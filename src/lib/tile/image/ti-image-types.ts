@@ -1,4 +1,10 @@
-import { AspectSize, CommonProps, CssObjectFit, IconObj, Vars } from '../../../_type';
+import {
+  AspectSize,
+  CommonProps,
+  CssObjectFit,
+  IconObj,
+  Vars,
+} from '../../../_type';
 
 export type ImageSrcInput = string | File | IconObj;
 
@@ -21,6 +27,7 @@ export type ImageProps = CommonProps & {
 
   width?: number | string;
   height?: number | string;
+  iconFontSize?: string;
   objectFit?: CssObjectFit;
   borderRadius?: AspectSize;
 

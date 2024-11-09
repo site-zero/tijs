@@ -55,7 +55,8 @@
     @include flex-center;
     text-shadow: -1px -1px 0 $tsw, 1px -1px 0 $tsw, -1px 1px 0 $tsw,
       1px 1px 0 $tsw; 
-    font-size: 14px;
+    font-size: 1em;
+    font-weight: bold;
     //---------------------------------------------
     &[tip-at='top'] {
       order: -1;

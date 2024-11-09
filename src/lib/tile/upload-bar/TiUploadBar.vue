@@ -17,7 +17,7 @@
     textAlign: 'center',
     boxRadius: 's',
     uploadButton: true,
-    clearButton: true,
+    clearButton: false,
     // tip: '点击或拖拽文件到此处上传',
     // type: 'danger',
   });
@@ -27,6 +27,7 @@
   const TopClass = computed(() =>
     CssUtils.mergeClassName(props.className, {
       'drag-enter': _drag_enter.value,
+      'nil-value': props.nilValue,
       [`is-${props.type}`]: !!props.type,
     })
   );
@@ -41,6 +42,7 @@
     if (props.type) {
       colorTheme = {
         '--bar-c0': `var(--ti-color-${props.type})`,
+        '--bar-c1': `var(--ti-color-${props.type})`,
         '--bar-bg': `var(--ti-color-${props.type}-r)`,
         '--bar-action': `var(--ti-color-${props.type})`,
         '--bar-action-r': `var(--ti-color-${props.type}-r)`,
@@ -70,7 +72,6 @@
   //-----------------------------------------------------
   let $file = useTemplateRef('file');
   function onActionFire(event: ActionBarEvent) {
-    console.log(event);
     let fn = {
       'choose-file': () => {
         if ($file.value) {
@@ -150,7 +151,10 @@
         class="part-icon"
         :title="props.tip">
         <TiImage v-bind="Bar.Preview.value" />
-        <div class="prefix-cleaner">
+        <div
+          v-if="Bar.isPrefixForClean.value && !props.nilValue"
+          class="prefix-cleaner"
+          @click.left="emit('clear')">
           <i class="zmdi zmdi-close"></i>
         </div>
       </div>

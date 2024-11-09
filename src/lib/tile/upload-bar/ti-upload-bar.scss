@@ -18,7 +18,7 @@
       flex: 0 0 auto;
       font-size: 1.3em;
       background-color: var(--bar-bg);
-      color: var(--bar-c0);
+      color: var(--bar-c1);
       width: 2em;
       position: relative;
       .prefix-cleaner {
@@ -26,8 +26,8 @@
         position: absolute;
         inset: 0;
         background-color: var(--bar-action);
-        color: var(--ti-bar-action-r);
-        opacity: 1;
+        color: var(--bar-action-r);
+        opacity: 0;
         transition: opacity 0.3s;
         cursor: pointer;
         > i {
@@ -38,7 +38,7 @@
           opacity: 1;
           > i {
             opacity: 1;
-            transform: rotate(180deg) scale(1.3);
+            transform: rotate(360deg) scale(1.3);
           }
         }
       }
@@ -89,6 +89,14 @@
       }
     }
   } // > .bar-con {
+  //-----------------------------------------------
+  &.nil-value {
+    user-select: none;
+    color: var(--ti-color-track);
+    > .bar-con > .part-text .as-snippet-text{
+      font-style: italic;
+    }
+  }
   //-----------------------------------------------
   &.drag-enter {
     > .bar-con::after {

@@ -7,7 +7,6 @@ export default {
   comConf: {
     preview: { src: { type: 'font', value: 'fas-briefcase' } },
     text: 'Gift For You',
-    type: 'info',
     actions: [
       {
         text: 'i18n:open',

@@ -46,7 +46,7 @@ export type UploadBarProps = CommonProps & {
   /**
    * 默认的，如果不指定 clearButton，那么控件默认会开启
    * 前缀清除的属性
-   * 
+   *
    * 有些时候，用户会在 actions 里指定 clear 命令，因为
    * 他想任意指定按钮的排布，这时配合这个属性才能禁止掉
    * 前缀清除的特性。又或者，用户不想提供删除的按钮也可以
@@ -60,6 +60,7 @@ export type UploadBarProps = CommonProps & {
   // Aspect
   //-----------------------------------------------------
   type?: LogicType;
+  nilValue?: boolean;
   width?: string | number;
   height?: string | number;
   style?: Vars;

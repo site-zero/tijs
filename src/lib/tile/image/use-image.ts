@@ -72,29 +72,29 @@ export function useImage(props: ImageProps, state: ImageState) {
   //----------------------------  ---------------------
   // 计算属性
   //-------------------------------------------------
-  const Src = computed(
-    () =>
+  const Src = computed(() => {
+    return (
       state.local_file ??
       props.src ??
       props.dftSrc ??
       ({
         type: 'font',
         value: 'zmdi-image-o',
-        style: {
-          fontSize: '64px',
-          color: 'var(--ti-color-mask-thin)',
-        },
       } as IconObj)
-  );
+    );
+  });
   //---------------------------------------------------
-  async function applyIcon(input: IconInput, style?: Vars) {
+  async function applyIcon(
+    input: IconInput,
+    dftIconStyle: Vars = { fontSize: props.iconFontSize ?? '64px' }
+  ) {
     let icon = Icons.toIconObj(input);
     // 确认是图标
     if (/^(font|emoji)$/.test(icon.type)) {
       state.mode = 'icon';
       state.iconHtml = Icons.fontIconHtmlWithStyle(
         icon.value ?? 'zmdi-cake',
-        icon.style ?? style
+        icon.style ?? dftIconStyle
       );
       // //console.log('before render');
       // let canvas = await renderHtmlToBase64(state.iconHtml);
@@ -139,7 +139,7 @@ export function useImage(props: ImageProps, state: ImageState) {
           },
           'zmdi-cake'
         );
-        applyIcon(fileIcon, { fontSize: '64px' });
+        applyIcon(fileIcon);
       }
     }
     // 图标的话，会更细腻一点判断，如果

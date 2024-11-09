@@ -50,6 +50,7 @@ export function useUploadBar(props: UploadBarProps) {
       width: '100%',
       height: '100%',
       dftSrc: Icons.parseIcon(dftIcon),
+      iconFontSize: 'var(--ti-fontsz-b)',
       ...props.preview,
     } as ImageProps;
 
@@ -74,6 +75,7 @@ export function useUploadBar(props: UploadBarProps) {
     // 定制化的操作按钮
     if (props.actions) {
       _.forEach(props.actions, (at) => {
+        at = _.cloneDeep(at);
         if (_.isUndefined(at.className)) {
           at.className = `is-${props.type ?? 'primary'}-r`;
         }
@@ -81,6 +83,7 @@ export function useUploadBar(props: UploadBarProps) {
       });
     }
 
+    // 生成操作栏配置属性
     if (actions.length > 0) {
       return {
         className: 'top-as-button',

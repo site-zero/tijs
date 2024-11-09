@@ -7,12 +7,14 @@ import example from './example';
 const en_us = {
   'com-name': 'Upload Bar',
   'example-in-progress': 'In Progress',
+  'example-nil': 'Nil Value',
   'upload': 'Upload',
   'clean': 'Clean',
 };
 const zh_cn = {
   'com-name': '上传条',
   'example-in-progress': '带进度条',
+  'example-nil': '空值',
   'upload': '上传',
   'clean': '清除',
 };
@@ -38,7 +40,7 @@ const TiUploadBarInfo: TiComInfo = {
     width: '380px',
   },
   defaultProps: 'simple',
-  exampleProps: [example.simple, example.inProgress],
+  exampleProps: [example.simple, example.inProgress, example.nil],
 };
 
 export * from './ti-upload-bar-types';
