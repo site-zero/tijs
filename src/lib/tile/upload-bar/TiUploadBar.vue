@@ -2,16 +2,14 @@
   import _ from 'lodash';
   import { computed, onMounted, ref, useTemplateRef } from 'vue';
   import { ActionBarEvent, TiActionBar } from '../../';
+  import { Vars } from '../../../_type';
   import { CssUtils } from '../../../core';
   import { TextSnippet, TiImage, TiProgressBar } from '../../../lib';
   import { useDropping } from '../image/use-dropping';
-  import { UploadBarProps } from './ti-upload-bar-types';
+  import { UploadBarEmitter, UploadBarProps } from './ti-upload-bar-types';
   import { useUploadBar } from './use-upload-bar';
   //-----------------------------------------------------
-  const emit = defineEmits<{
-    (event: 'upload', payload: File): void;
-    (event: 'clear'): void;
-  }>();
+  const emit = defineEmits<UploadBarEmitter>();
   //-----------------------------------------------------
   const props = withDefaults(defineProps<UploadBarProps>(), {
     textSize: 's',
@@ -34,11 +32,28 @@
   );
   //-----------------------------------------------------
   const TopStyle = computed(() => {
-    return CssUtils.toStyle(props.style);
+    let colorTheme: Vars = {
+      '--bar-c0': 'var(--ti-color-border-thin)',
+      '--bar-bg': 'var(--ti-color-border-shallow)',
+      '--bar-action': 'var(--ti-color-primary)',
+      '--bar-action-r': 'var(--ti-color-primary-r)',
+    };
+    if (props.type) {
+      colorTheme = {
+        '--bar-c0': `var(--ti-color-${props.type})`,
+        '--bar-bg': `var(--ti-color-${props.type}-r)`,
+        '--bar-action': `var(--ti-color-${props.type})`,
+        '--bar-action-r': `var(--ti-color-${props.type}-r)`,
+      };
+    }
+    return CssUtils.mergeStyles([colorTheme, props.style]);
   });
   //-----------------------------------------------------
   const ConClass = computed(() =>
     CssUtils.mergeClassName(
+      {
+        'hover-prefix-for-clear': Bar.isPrefixForClean.value,
+      },
       `bar-pad-${props.textPadding}`,
       `text-size-${props.textSize}`,
       `text-align-${props.textAlign}`,
@@ -49,7 +64,7 @@
   const ConStyle = computed(() => {
     return CssUtils.mergeStyles([
       CssUtils.toStyle({ width: props.width, height: props.height }),
-      props.style,
+      props.conStyle,
     ]);
   });
   //-----------------------------------------------------
@@ -68,6 +83,8 @@
     }[event.name];
     if (fn) {
       fn();
+    } else {
+      emit('fire', event.payload);
     }
   }
   //-----------------------------------------------------
@@ -117,7 +134,7 @@
     :style="TopStyle">
     <!--
     Hidden input file to choose files
-  -->
+    -->
     <input
       type="file"
       ref="file"
@@ -133,6 +150,9 @@
         class="part-icon"
         :title="props.tip">
         <TiImage v-bind="Bar.Preview.value" />
+        <div class="prefix-cleaner">
+          <i class="zmdi zmdi-close"></i>
+        </div>
       </div>
       <!--============= Text =============-->
       <TextSnippet
@@ -150,7 +170,9 @@
       <div
         class="part-progress"
         v-if="props.progress">
-        <TiProgressBar v-bind="props.progress" />
+        <TiProgressBar
+          v-bind="props.progress"
+          :type="props.type" />
       </div>
     </div>
   </div>

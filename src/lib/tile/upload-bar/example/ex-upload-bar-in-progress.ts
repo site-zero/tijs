@@ -10,14 +10,5 @@ export default {
     progress: {
       value: 0.64,
     },
-    actions: {
-      className: 'top-as-button',
-      items: [
-        {
-          text: 'i18n:upload',
-          icon: 'fas-upload',
-        },
-      ],
-    },
   } as UploadBarProps,
 } as ComPropExample;

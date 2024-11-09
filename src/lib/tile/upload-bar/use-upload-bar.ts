@@ -34,6 +34,14 @@ export function useUploadBar(props: UploadBarProps) {
     return { text: I18n.text(props.placeholder ?? 'i18n:nil-obj') };
   });
 
+  // 是否开启前缀清除的特性
+  const isPrefixForClean = computed(() => {
+    if (_.isNil(props.prefixForClean)) {
+      return !props.clearButton;
+    }
+    return 'yes' == props.prefixForClean;
+  });
+
   // 构建预览
   const Preview = computed(() => {
     let dftIcon = Icons.getIcon(props.type, 'far-file');
@@ -64,15 +72,20 @@ export function useUploadBar(props: UploadBarProps) {
       action: 'clear',
     });
     // 定制化的操作按钮
-    if (props.actions && props.actions.items) {
-      actions.push(...props.actions.items);
+    if (props.actions) {
+      _.forEach(props.actions, (at) => {
+        if (_.isUndefined(at.className)) {
+          at.className = `is-${props.type ?? 'primary'}-r`;
+        }
+        actions.push(at);
+      });
     }
 
     if (actions.length > 0) {
       return {
         className: 'top-as-button',
-        ...props.actions,
         items: actions,
+        ...(props.actionBar ?? {}),
       } as ActionBarProps;
     }
   });
@@ -81,6 +94,7 @@ export function useUploadBar(props: UploadBarProps) {
   // 输出特性
   //-------------------------------------------------
   return {
+    isPrefixForClean,
     Preview,
     Text,
     ActionBar,

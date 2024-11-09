@@ -34,6 +34,9 @@ const TiUploadBarInfo: TiComInfo = {
   install: (app: App) => {
     app.component(COM_TYPE, TiUploadBar);
   },
+  liveStyle: {
+    width: '380px',
+  },
   defaultProps: 'simple',
   exampleProps: [example.simple, example.inProgress],
 };

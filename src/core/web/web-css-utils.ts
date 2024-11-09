@@ -234,7 +234,7 @@ export function mergeStyles(
   let fn = Str.getCaseFunc(caseMode);
   for (let style of styleList) {
     _.forEach(style, (v, k) => {
-      let name = fn(k);
+      let name = k.startsWith('--') ? k : fn(k);
       if (!filter || filter(k, v)) {
         re[name] = v;
       }

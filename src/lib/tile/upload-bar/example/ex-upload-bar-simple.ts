@@ -7,14 +7,12 @@ export default {
   comConf: {
     preview: { src: { type: 'font', value: 'fas-briefcase' } },
     text: 'Gift For You',
-    actions: {
-      className: 'top-as-button',
-      items: [
-        {
-          text: 'i18n:upload',
-          icon: 'fas-upload',
-        },
-      ],
-    },
+    type: 'info',
+    actions: [
+      {
+        text: 'i18n:open',
+        action: 'open',
+      },
+    ],
   } as UploadBarProps,
 } as ComPropExample;
