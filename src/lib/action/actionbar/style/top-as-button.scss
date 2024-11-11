@@ -7,7 +7,6 @@
       @include flex-align-nowrap($ai: stretch);
       padding: 0;
       border: 1px solid var(--item-color);
-      min-width: 1em;
       text-align: center;
       //------------------------------------
       .item-icon {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import _ from 'lodash';
-  import { computed, onUnmounted, provide, ref, watch } from 'vue';
+  import { computed, onUnmounted, provide, ref } from 'vue';
   import {
     ActionBarItem,
     AppModalInitProps,
@@ -10,7 +10,6 @@
     BUS_KEY,
     Callback,
     EmitAdaptor,
-    Vars,
   } from '../../_type';
   import { CssUtils } from '../../core';
   import { getLogger } from '../../core/log/ti-log';
@@ -54,10 +53,9 @@
 
   const _result = ref<any>(props.result);
   const _isdead = ref(false);
-  const _app_body_com_conf = ref<Vars>({});
   const _close_callback = [] as Callback[];
 
-  function prepareComConf() {
+  const BodyComConf = computed(() => {
     let comConf = _.cloneDeep(props.comConf ?? {});
     // 绑定输入数据
     if (model.data) {
@@ -66,17 +64,13 @@
         makeAppModelDataProps(model.data, () => _result.value)
       );
     }
-    _app_body_com_conf.value = comConf;
-  }
-  watch(() => props.comConf, prepareComConf, {
-    immediate: true,
-    deep: props.watchDeep,
+    return comConf;
   });
 
   const ModalApi = computed((): AppModelApi => {
     return {
       result: _result,
-      getComConf: () => _app_body_com_conf,
+      getComConf: () => BodyComConf.value,
       onClose: (callback: Callback) => {
         if (_close_callback.indexOf(callback) < 0) {
           _close_callback.push(callback);
@@ -127,11 +121,21 @@
 
   // 监控控件的事件以便更新 result
   const Listeners = computed(() =>
-    makeAppModelEventListeners('TiAppModal', _result, model?.event)
+    makeAppModelEventListeners({
+      COM_TYPE: 'TiAppModal',
+      bindingEvent: model?.event,
+      setResult: (result: any) => {
+        _result.value = result;
+      },
+      assignResult: (meta: any) => {
+        _.assign(_result.value, meta);
+      },
+    })
   );
 
   function onBlockEvent(event: BlockEvent) {
     let { eventName, data } = event;
+    console.log('onBlockEvent', eventName, data);
     let handler = Listeners.value[eventName];
     if (handler) {
       handler(data);
@@ -151,7 +155,7 @@
     let list = [] as ActionBarItem[];
     let className: string | undefined = undefined;
     if (props.type) {
-      className = `is-${props.type}`;
+      className = `is-${props.type}-r`;
     }
     if (props.textOk) {
       list.push({
@@ -299,7 +303,7 @@
         <!------------------------------>
         <TiBlock
           v-bind="BlockConfig"
-          :com-conf="_app_body_com_conf"
+          :com-conf="BodyComConf"
           :events="BlockEmitAdaptors"
           @happen="onBlockEvent" />
         <!------------------------------>
@@ -318,6 +322,8 @@
             <TiActionBar
               :items="ModalRightActions"
               top-item-aspect-mode="button"
+              top-item-min-width="6em"
+              item-size="m"
               @fire="onActionFire" />
           </div>
         </footer>

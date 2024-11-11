@@ -65,6 +65,10 @@ export type ActionBarProps = CommonProps & {
   style?: Vars;
   layoutMode?: ActionBarLayoutMode;
   topItemAspectMode?: BarTopItemAspectMode;
+  /**
+   * 顶级按钮最小宽度
+   */
+  topItemMinWidth?: string;
 
   head?: ActionBarText;
   tail?: ActionBarText;

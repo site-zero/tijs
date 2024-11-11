@@ -39,6 +39,7 @@
       height: unset;
       &.is-type-font {
         width: var(--ti-measure-box-icon);
+        font-size: var(--ti-measure-menu-iconsz);
       }
       &.is-type-image {
         width: var(--ti-measure-box-height);

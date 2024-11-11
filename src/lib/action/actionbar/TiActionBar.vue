@@ -9,7 +9,7 @@
     ref,
     watch,
   } from 'vue';
-  import { BusMsg, AppEvents, BUS_KEY, Vars } from '../../../_type';
+  import { AppEvents, BUS_KEY, BusMsg, Vars } from '../../../_type';
   import { CssUtils } from '../../../core';
   import { TextSnippet } from '../../../lib';
   import ItemAsAction from './ItemAsAction.vue';
@@ -94,6 +94,15 @@
     )
   );
   //-------------------------------------------------------
+  const TopStyle = computed(() => {
+    return CssUtils.mergeStyles([
+      props.style,
+      {
+        '--top-item-min-width': props.topItemMinWidth ?? null,
+      },
+    ]);
+  });
+  //-------------------------------------------------------
   // Methods
   //-------------------------------------------------------
   function OnClickMask() {
@@ -112,7 +121,7 @@
   <div
     class="ti-actionbar"
     :class="TopClass"
-    :style="props.style"
+    :style="TopStyle"
     ref="$root">
     <!--===: Bar Head :===-->
     <slot name="head">

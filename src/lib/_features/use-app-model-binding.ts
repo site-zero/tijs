@@ -1,10 +1,10 @@
 import _ from 'lodash';
-import { Ref } from 'vue';
 import {
   AppModelBindingData,
   AppModelBindingEvent,
   Callback1,
   isArray,
+  Vars,
 } from '../../_type';
 import { getLogger } from '../../core/log/ti-log';
 
@@ -52,6 +52,13 @@ export function makeAppModelDataProps(
   return props;
 }
 
+export type MakeAppModelEventListenerOption = {
+  COM_TYPE: string;
+  setResult: (result: any) => void;
+  assignResult: (meta: any) => void;
+  bindingEvent?: AppModelBindingEvent;
+};
+
 /**
  * 通常这个函数会被用到计算属性里。 它会生产一个动态事件监听记录表
  * 调用者可以直接将这个监听表设置到 `v-on` 属性里，
@@ -61,12 +68,11 @@ export function makeAppModelDataProps(
  * @param result 结果对象的引用对象（响应式）
  */
 export function makeAppModelEventListeners(
-  COM_TYPE: string,
-  result: Ref<any>,
-  bindingEvent?: AppModelBindingEvent,
+  options: MakeAppModelEventListenerOption
 ): Record<string, Callback1<any>> {
+  let { COM_TYPE, setResult, assignResult, bindingEvent } = options;
   //console.log(COM_TYPE, bindingEvent, result);
-  log.debug('listenResult:', COM_TYPE, bindingEvent, result);
+  log.debug('listenResult:', COM_TYPE, bindingEvent, setResult);
   let listeners = {} as Record<string, Callback1<any>>;
   // 1. `null` 不传递
   if (!bindingEvent) {
@@ -77,7 +83,7 @@ export function makeAppModelEventListeners(
     log.debug(`'${bindingEvent}' => result`);
     listeners[bindingEvent] = (payload: any) => {
       log.debug(`🎃<${COM_TYPE}>`, bindingEvent, '=', payload);
-      result.value = payload;
+      setResult(payload);
     };
   }
   // 动态多重监听
@@ -98,7 +104,7 @@ export function makeAppModelEventListeners(
             payload
           );
           let meta = _.pick(payload, ...asKeys);
-          _.assign(result.value, meta);
+          assignResult(meta);
         };
       }
       // 4. `{change:{a:"x",b:"y"}}`
@@ -107,6 +113,7 @@ export function makeAppModelEventListeners(
         log.debug(`{change:{a:"x",b:"y"}}`);
         let asMapping = handler as Record<string, string>;
         listeners[eventName] = (payload: any) => {
+          let meta: Vars = {};
           log.debug(
             `🎃<${COM_TYPE}>`,
             eventName,
@@ -117,8 +124,9 @@ export function makeAppModelEventListeners(
           for (let fromKey of _.keys(asMapping)) {
             let toKey = asMapping[fromKey];
             let val = _.get(payload, fromKey);
-            _.set(result.value, toKey, val);
+            _.set(meta, toKey, val);
           }
+          assignResult(meta);
         };
       }
     }

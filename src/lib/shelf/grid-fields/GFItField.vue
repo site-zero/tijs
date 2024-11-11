@@ -64,7 +64,7 @@
   );
   //-------------------------------------------------
   const FieldValue = computed(() => {
-    let val = getFieldValue(props.name, props.data);
+    let val = getFieldValue(props.name, props.data) ?? props.defaultAs;
     if (props.transformer) {
       return props.transformer(val, props.data, props.name);
     }

@@ -51,11 +51,13 @@
     &.is-highlight {
       color: var(--ti-color-secondary-r);
       background-color: var(--ti-color-secondary);
+      text-shadow: 1px 1px 3px var(--ti-color-mask-thin);
     }
   }
   //-----------------------------------------------------
   &[aspect='top'] {
     @include aspect_radius('&.item-r');
+    min-width: var(--top-item-min-width);
   }
   //-----------------------------------------------------
   &[aspect='sub'],
