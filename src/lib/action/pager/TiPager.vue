@@ -8,6 +8,7 @@
 
   const props = withDefaults(defineProps<PagerProps>(), {
     brief: true,
+    showText: true,
   });
   const Page = computed(() => usePager(props, { emit }));
   const TopClass = computed(() =>
@@ -22,12 +23,17 @@
     next: 'zmdi zmdi-chevron-right',
     tail: 'zmdi zmdi-skip-next',
   };
-  const Text = {
-    head: I18n.get('paging-first'),
-    prev: I18n.get('paging-prev'),
-    next: I18n.get('paging-next'),
-    tail: I18n.get('paging-last'),
-  };
+  const Text = computed(() => {
+    if (props.showText) {
+      return {
+        head: I18n.get('paging-first'),
+        prev: I18n.get('paging-prev'),
+        next: I18n.get('paging-next'),
+        tail: I18n.get('paging-last'),
+      };
+    }
+    return {};
+  });
 </script>
 <template>
   <div

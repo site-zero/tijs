@@ -41,6 +41,7 @@
       :style="TopStyle"
       :text="LabelText.title"
       :textType="LabelText.titleType"
+      :dynamic="props.dynamic"
       :comType="props.comType"
       :comConf="props.comConf"
       :autoValue="props.autoValue"

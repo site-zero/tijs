@@ -24,6 +24,11 @@ export type PagerProps = CommonProps &
     mode?: PagerMode;
 
     /**
+     * 显示按钮文字
+     */
+    showText?: boolean;
+
+    /**
      * 是否显示翻页信息摘要
      * 默认的格式为： "i18n:paging-brief"
      * > `共${pageCount}页${totalCount}条记录，当前${count}/${pageSize}`

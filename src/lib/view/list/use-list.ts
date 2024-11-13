@@ -115,19 +115,24 @@ export function useList(props: ListProps, emit: ListEmitter) {
       }
 
       // 准备列表项
-      let it: AnyOptionItem = { className, value, icon, text, tip };
+      let it: ListItem = {
+        className,
+        value,
+        icon,
+        text,
+        tip,
 
-      // 生成显示文字内容
-      let displayText = _format_display_text(it, li);
-
-      // 记入列表
-      items.push({
         index,
         current: is_current,
         checked: is_checked,
-        displayText,
-        ...it,
-      } as ListItem);
+        displayText: text ?? '',
+      };
+
+      // 生成显示文字内容
+      it.displayText = _format_display_text(it, li);
+
+      // 记入列表
+      items.push(it);
 
       // 计数
       index++;
