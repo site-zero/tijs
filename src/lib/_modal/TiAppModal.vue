@@ -10,6 +10,7 @@
     BUS_KEY,
     Callback,
     EmitAdaptor,
+    Vars,
   } from '../../_type';
   import { CssUtils } from '../../core';
   import { getLogger } from '../../core/log/ti-log';
@@ -54,9 +55,15 @@
   const _result = ref<any>(props.result);
   const _isdead = ref(false);
   const _close_callback = [] as Callback[];
+  /**
+   * 通过 ModalApi 暴露出去后，可以通过 updateComConf 来设置
+   * 以便动态更新控件
+   */
+  const _cus_com_conf = ref<Vars>({});
 
   const BodyComConf = computed(() => {
     let comConf = _.cloneDeep(props.comConf ?? {});
+    _.assign(comConf, _cus_com_conf.value);
     // 绑定输入数据
     if (model.data) {
       _.assign(
@@ -71,6 +78,12 @@
     return {
       result: _result,
       getComConf: () => BodyComConf.value,
+      assignComConf: (conf: Vars) => {
+        _.assign(_cus_com_conf.value, conf);
+      },
+      mergeComConf: (conf: Vars) => {
+        _.merge(_cus_com_conf.value, conf);
+      },
       onClose: (callback: Callback) => {
         if (_close_callback.indexOf(callback) < 0) {
           _close_callback.push(callback);

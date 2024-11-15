@@ -1047,9 +1047,12 @@ export type AppModelApi = {
   result: Ref<any>;
 
   /**
-   * @return 一个响应式对象，表示主控件的配置信息，可以直接用于主控件的配置
+   * @return 查看当前主控件的配置信息
    */
   getComConf: () => Vars;
+
+  assignComConf: (comConf: Vars) => void;
+  mergeComConf: (comConf: Vars) => void;
 
   /**
    * 可以注册多个关闭时回调事件
