@@ -23,6 +23,7 @@
     useRawValue: true,
     valueCase: 'upperAll',
     codeWidth: '3em',
+    hideDescription: false,
   });
   //-------------------------------------------------
   const $el = ref<HTMLElement>();
@@ -133,6 +134,7 @@
     </div>
     <!--描述-->
     <div
+      v-if="!props.hideDescription"
       class="part-desc"
       :class="PartDescClass">
       <input

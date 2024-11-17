@@ -28,3 +28,19 @@ export function getRecordDiff(
   }
   return diff;
 }
+
+export function setRecordEmptyToNull(obj: Vars) {
+  _.forEach(obj, (v, k) => {
+    if (_.isEmpty(v)) {
+      obj[k] = null;
+    }
+  });
+}
+
+export function setMapEmptyToNull(map: Map<string, any>) {
+  for (let [k, v] of map) {
+    if (_.isEmpty(v)) {
+      map.set(k, null);
+    }
+  }
+}
