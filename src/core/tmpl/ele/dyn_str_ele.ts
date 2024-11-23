@@ -3,6 +3,7 @@ import { Str } from '../../';
 import { StrCaseMode, StrConvertor, Vars } from '../../../_type';
 import { DynElInfo } from '../ti-tmpl';
 import { DynEle } from './abstract_dyn_ele';
+import { str_float_substr } from './str/str_float_substr';
 import { str_format } from './str/str_format';
 import { str_mapping } from './str/str_mapping';
 import { str_replace } from './str/str_replace';
@@ -32,6 +33,16 @@ export class DynStrEle extends DynEle {
       else if (s.startsWith('@replace')) {
         let is = s.substring(8);
         this._convertors.push(str_replace(is));
+      }
+      // 限制长度和精度的浮点数 ${w<:@fs=7.2>} 表示最多7长度，小数点后最多两位
+      // 12345678.45 => 1234567
+      // 1234567.85 => 1234567
+      // 123456.85 => 123456
+      // 12348.45342 => 12348.4
+      // 0.00000001 => 0.01
+      else if (s.startsWith('@fs=')) {
+        let is = s.substring('@fs='.length);
+        this._convertors.push(str_float_substr(is));
       }
       // 字符串映射
       // ${fruit(string::A=Apple,B=Banana,C=Cherry)}

@@ -2,6 +2,24 @@ import { expect, test } from 'vitest';
 import { Vars } from '../../_type';
 import { DateTime, Tmpl } from '../../core/';
 
+test('float_str', () => {
+  let tmpl = Tmpl.parse('${w<:@fs=7.2>}');
+  expect(tmpl.render({ w: '12345678.45' })).eq('1234567');
+  expect(tmpl.render({ w: 12345678.45 })).eq('1234567');
+
+  expect(tmpl.render({ w: '1234567.85' })).eq('1234567');
+  expect(tmpl.render({ w: 1234567.85 })).eq('1234567');
+
+  expect(tmpl.render({ w: '123456.85' })).eq('123456');
+  expect(tmpl.render({ w: 123456.85 })).eq('123456');
+
+  expect(tmpl.render({ w: '12348.45342' })).eq('12348.4');
+  expect(tmpl.render({ w: 12348.45342 })).eq('12348.4');
+
+  expect(tmpl.render({ w: '0.00001' })).eq('0.01');
+  expect(tmpl.render({ w: 0.00001 })).eq('0.01');
+});
+
 test('list_index', () => {
   let vars = {
     index: 0,
