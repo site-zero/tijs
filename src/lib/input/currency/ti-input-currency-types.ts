@@ -13,7 +13,7 @@ export type InputCurrencyProps = CommonProps &
     autoSelect?: boolean;
 
     numAsStr?: boolean;
-    defaultCurrency?: string;
+    defaultCurrency?: string | null;
 
     currencyWidth?: number | string;
 
