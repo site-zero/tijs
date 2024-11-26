@@ -291,7 +291,7 @@
     // console.log('OnListSelect', currentId);
     let val = _.isNumber(currentId) ? `${currentId}` : currentId;
     _box_state.boxValue = val;
-    Box.value.doChangeValue(val ?? '');
+    Box.value.doChangeValue(val ?? '', ['dict']);
     // TODO if multi 可能需要特别处理一下
     resetTipList(
       _box_state,

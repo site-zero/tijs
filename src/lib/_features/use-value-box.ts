@@ -12,6 +12,7 @@ import {
   useValueInput,
   ValueInputFeature,
   ValueInputProps,
+  ValueInputTidyMode,
 } from '..';
 import { CommonProps, IconInput, Vars } from '../../_type';
 import { Be, Dicts, Str, tiGetDefaultComPropValue, Util } from '../../core';
@@ -143,7 +144,7 @@ export type ValueBoxFeature = PrefixSuffixFeature &
      * 2. 通知外部改动
      * 你可以通过 `ValueBoxOptions.valueChangeMode` 改变这个默认行为
      */
-    doChangeValue: (val: string) => void;
+    doChangeValue: (val: string, tidyModes?: ValueInputTidyMode[]) => void;
 
     /**
      * 本函数会根据 `state.boxVal` 修改 `state.boxText`。
@@ -315,11 +316,13 @@ export function useValueBox(
 
   // 方法: 值发生了改变
   //
-  async function doChangeValue(val: string) {
+  async function doChangeValue(val: string, tidyModes?: ValueInputTidyMode[]) {
     if (props.readonly) {
       return;
     }
-    let v = await tidyValue(val);
+    let v = val;
+    v = await tidyValue(val, tidyModes);
+
     // console.log('doChangeValue', val, v);
     emit('change', v);
   }
