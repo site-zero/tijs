@@ -1,6 +1,12 @@
 import _ from 'lodash';
 
 export function filterRecordNilValue(val: any): any {
+  // 特殊值，有些时候需要保留 null 以便数据库判断 IS NULL 条件
+  // 我们用特殊的  '<NULL>' 来表示，一边区分原生的 null，因为原生的 null
+  // 主要意思是这个条件无视
+  if (val === '<NULL>') {
+    return null;
+  }
   // 保持简单的值
   if (
     !val ||

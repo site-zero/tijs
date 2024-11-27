@@ -63,7 +63,7 @@
           }
           .as-index {
             color: var(--ti-color-track);
-            margin-right: .5em;
+            margin-right: 0.5em;
             font-size: 0.8em;
           }
           .as-tag {
@@ -71,6 +71,7 @@
             display: block;
             padding: 0 0.5em;
             line-height: 1.5em;
+            margin: 0 1px;
             background-color: var(--ti-color-mask-thin);
             border-radius: var(--ti-measure-r-s);
           }
