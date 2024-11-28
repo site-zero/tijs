@@ -22,5 +22,6 @@ export * as I18n from './text/ti-i18n';
 export * as Str from './text/ti-str';
 export * as Tmpl from './tmpl/ti-tmpl';
 export * as Util from './util';
+export * from './util';
 export * from './web';
 export * as Be from './web/behaviors';
