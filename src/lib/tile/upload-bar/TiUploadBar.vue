@@ -70,7 +70,7 @@
     ]);
   });
   //-----------------------------------------------------
-  let $file = useTemplateRef('file');
+  let $file = useTemplateRef<HTMLInputElement>('file');
   function onActionFire(event: ActionBarEvent) {
     let fn = {
       'choose-file': () => {
