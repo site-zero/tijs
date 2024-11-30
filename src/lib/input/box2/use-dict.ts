@@ -9,7 +9,7 @@ export type DictSetup = {
   /**
    * 可以获取一个`IDict`实例
    */
-  options?: DictInput;
+  dictSrc?: DictInput;
 
   /**
    * 动态字典需要这个属性作为变量上下文
