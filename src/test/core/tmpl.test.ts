@@ -171,6 +171,12 @@ test('string_replace', () => {
   ).eq('-a-b-c');
 });
 
+test('string_sub2', () => {
+  let context = { addr: '8 Jessie Riley Avenue' };
+  expect(Tmpl.exec('${addr<:@sub=50>}', context)).eq('8 Jessie Riley Avenue');
+  expect(Tmpl.exec('${addr<:@sub=50/100>}', context)).eq('');
+});
+
 test('string_sub', () => {
   expect(
     Tmpl.exec('${path<:@trim;@sub=2/5>}', {
