@@ -35,7 +35,7 @@ export type ValuePipeProps = {
   /**
    * 自定义的处理器: `{ $NAME: ()=>{...} }`
    */
-  pipeProcessers: Record<string, ValueProcesser>;
+  pipeProcessers?: Record<string, ValueProcesser>;
 };
 
 export function useValuePipe(props: ValuePipeProps) {

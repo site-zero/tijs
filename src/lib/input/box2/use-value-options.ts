@@ -5,25 +5,12 @@ import { Match, Num, TiDict, Util } from '../../../core';
 import { ItemLookupProps, useItemLookup } from './use-item-lookup';
 import { ValueHintCooking } from './use-value-hint-cooking';
 //--------------------------------------------------
-export type ValueOptionsFeature = ReturnType<typeof useValueOptions>;
+export type ValueOptions = ReturnType<typeof useValueOptions>;
 //--------------------------------------------------
 export type OptionFilter = (item: Record<string, any>) => boolean;
 export type OptionFilterMaker = (vars: Vars) => OptionFilter;
 //--------------------------------------------------
 export type ValueOptionsProps = ItemLookupProps & {
-  /**
-   * 准备好的字典实例
-   */
-  dict: TiDict;
-  /**
-   * 要处理的选项数据列表
-   */
-  _options_data: Ref<Vars[] | undefined>;
-
-  /**
-   * 对于搜索提示信息进行预处理
-   */
-  cookHint?: ValueHintCooking;
   /**
    * 值必须在字典中
    */
@@ -50,8 +37,28 @@ export type ValueOptionsProps = ItemLookupProps & {
   optionKeepRaw?: boolean;
 };
 //--------------------------------------------------
-export function useValueOptions(props: ValueOptionsProps) {
-  let { dict, _options_data, optionKeepRaw = false } = props;
+export type ValueOptionsInput = {
+  /**
+   * 准备好的字典实例
+   */
+  dict: TiDict;
+  /**
+   * 要处理的选项数据列表
+   */
+  _options_data: Ref<Vars[] | undefined>;
+
+  /**
+   * 对于搜索提示信息进行预处理
+   */
+  cookHint?: ValueHintCooking;
+};
+//--------------------------------------------------
+export function useValueOptions(
+  input: ValueOptionsInput,
+  props: ValueOptionsProps
+) {
+  let { dict, _options_data, cookHint } = input;
+  let { optionKeepRaw = false } = props;
   //------------------------------------------------
   const _lookup_for_hint = computed(() => useItemLookup(props));
   //------------------------------------------------
@@ -77,45 +84,55 @@ export function useValueOptions(props: ValueOptionsProps) {
   });
   //------------------------------------------------
   let lastAbort: AbortController | null = null;
+  const ABORT_REASON = 'abort-value-options-reload';
   //------------------------------------------------
   async function reloadOptioinsData(hint?: string) {
-    let { cookHint } = props;
     // 取消重入
     if (lastAbort) {
-      lastAbort.abort();
+      lastAbort.abort({ abort: true, reason: ABORT_REASON });
       lastAbort = new AbortController();
     }
     // 准备查询结果列表
-    let re: Vars[];
-    // 采用关键词查询
-    if (hint) {
-      // 预处理搜索条件
-      if (cookHint) {
-        hint = cookHint(hint);
-      }
-      re = await dict.queryData(hint, lastAbort?.signal);
-    }
-    // 默认全量查询
-    else {
-      re = await dict.getData(false, lastAbort?.signal);
-    }
-
-    // 对值进行过滤
-    let _data: Vars[] = [];
-    for (let it of re) {
-      if (_options_filter.value(it)) {
-        if (optionKeepRaw) {
-          _data.push(it);
+    try {
+      let re: Vars[];
+      // 采用关键词查询
+      if (hint) {
+        // 预处理搜索条件
+        if (cookHint) {
+          hint = cookHint(hint);
         }
-        // 转换为标准对象
-        else {
-          _data.push(dict.toStdItem(it).toOptionItem());
+        re = await dict.queryData(hint, lastAbort?.signal);
+      }
+      // 默认全量查询
+      else {
+        re = await dict.getData(false, lastAbort?.signal);
+      }
+
+      // 对值进行过滤
+      let _data: Vars[] = [];
+      for (let it of re) {
+        if (_options_filter.value(it)) {
+          if (optionKeepRaw) {
+            _data.push(it);
+          }
+          // 转换为标准对象
+          else {
+            _data.push(dict.toStdItem(it).toOptionItem());
+          }
         }
       }
-    }
 
-    // 计入返回结果集
-    _options_data.value = _data;
+      // 计入返回结果集
+      _options_data.value = _data;
+    }
+    // 对于主动 abort 的操作，忍受异常
+    catch (_e) {
+      let err = _e as any;
+      if (err.abort && err.reason == ABORT_REASON) {
+        return;
+      }
+      throw err;
+    }
   }
   //------------------------------------------------
   function getOptionItemIndex(value: any): number {
@@ -144,7 +161,7 @@ export function useValueOptions(props: ValueOptionsProps) {
     return -1;
   }
   //------------------------------------------------
-  function getOptionItemValue(index: number, offset: number = 0): any {
+  function getOptionItemAt(index: number, offset: number = 0): AnyOptionItem | undefined {
     // 防空
     if (
       index < 0 ||
@@ -162,9 +179,9 @@ export function useValueOptions(props: ValueOptionsProps) {
     }
     let it = _options_data.value[I];
     if (isAnyOptionItem(it)) {
-      return it.value;
+      return it;
     }
-    return dict.getItemValue(it, I);
+    return dict.toStdItem(it).toOptionItem();
   }
   //------------------------------------------------
   function getOptionItem(value: any): AnyOptionItem | undefined {
@@ -209,7 +226,7 @@ export function useValueOptions(props: ValueOptionsProps) {
   return {
     getOptionItem,
     getOptionItemIndex,
-    getOptionItemValue,
+    getOptionItemAt,
     lookupOptionItem,
     reloadOptioinsData,
   };

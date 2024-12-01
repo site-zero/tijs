@@ -2,15 +2,11 @@ import JSON5 from 'json5';
 import _ from 'lodash';
 import { Convertor, IconInput, Vars } from '../../../_type';
 import { DictName, Dicts, isDictSetup } from '../../../core';
+import { computed } from 'vue';
 
-export type DictInput = string | DictName | DictSetup | Vars[];
+export type DictInput = string | DictName | DictProps | Vars[];
 
-export type DictSetup = {
-  /**
-   * 可以获取一个`IDict`实例
-   */
-  dictSrc?: DictInput;
-
+export type DictProps = {
   /**
    * 动态字典需要这个属性作为变量上下文
    */
@@ -31,14 +27,14 @@ export type DictSetup = {
   getValue?: string | ((item: Vars, index: number) => any);
 };
 
-export function useDict(options: DictInput, setup: DictSetup) {
+export function useDict(_dict_input: DictInput|undefined, setup: DictProps) {
   let { dictVars = {}, getIcon, getText, getTip, getValue } = setup;
-  return () => {
-    if (options) {
+  return computed(() => {
+    if (_dict_input) {
       // 选项数据
-      if (_.isArray(options)) {
+      if (_.isArray(_dict_input)) {
         let dictOptions = Dicts.makeDictOptions({
-          data: options,
+          data: _dict_input,
           icon: getIcon,
           text: getText,
           tip: getTip,
@@ -48,18 +44,18 @@ export function useDict(options: DictInput, setup: DictSetup) {
       }
 
       // 直接就是选项
-      if (isDictSetup(options)) {
-        let dictOptions = Dicts.makeDictOptions(options);
+      if (isDictSetup(_dict_input)) {
+        let dictOptions = Dicts.makeDictOptions(_dict_input);
         return Dicts.createDict(dictOptions);
       }
 
       // 分析字典名称
       let dictName: DictName;
-      if (_.isString(options)) {
-        let referName = Dicts.dictReferName(options);
+      if (_.isString(_dict_input)) {
+        let referName = Dicts.dictReferName(_dict_input);
         dictName = Dicts.explainDictName(referName);
       } else {
-        dictName = options as DictName;
+        dictName = _dict_input as DictName;
       }
 
       // 获取字典: 动态
@@ -85,5 +81,5 @@ export function useDict(options: DictInput, setup: DictSetup) {
       // 获取字典: 静态
       return Dicts.checkDict(name);
     }
-  };
+  });
 }

@@ -6,7 +6,6 @@ export default {
   text: 'i18n:ti-input-example-formated',
   comConf: {
     //className: "",
-    format: '【${val}】',
     value: 'HELLO',
     valueCase: 'upper',
     trimed: true,
