@@ -114,6 +114,18 @@ export type NumOptionItem = OptionItem<number>;
 export type AnyOptionItem = OptionItem<any>;
 export type StdOptionItem = OptionItem<TableRowID>;
 
+export function isAnyOptionItem(item: any): item is AnyOptionItem {
+  if (!_.isNil(item.value)) {
+    for (let key of _.keys(item)) {
+      if (!/^(icon|text|tip|className|value|style)$/.test(key)) {
+        return false;
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
 export type OptionValueProps = {
   value: any;
   options: AnyOptionItem[];

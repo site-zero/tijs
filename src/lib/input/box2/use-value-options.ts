@@ -1,7 +1,8 @@
 import _ from 'lodash';
 import { computed, Ref } from 'vue';
-import { Vars } from '../../../_type';
-import { Match, TiDict, Util } from '../../../core';
+import { AnyOptionItem, isAnyOptionItem, Vars } from '../../../_type';
+import { Match, Num, TiDict, Util } from '../../../core';
+import { ItemLookupProps, useItemLookup } from './use-item-lookup';
 import { ValueHintCooking } from './use-value-hint-cooking';
 //--------------------------------------------------
 export type ValueOptionsFeature = ReturnType<typeof useValueOptions>;
@@ -9,7 +10,7 @@ export type ValueOptionsFeature = ReturnType<typeof useValueOptions>;
 export type OptionFilter = (item: Record<string, any>) => boolean;
 export type OptionFilterMaker = (vars: Vars) => OptionFilter;
 //--------------------------------------------------
-export type ValueOptionsProps = {
+export type ValueOptionsProps = ItemLookupProps & {
   /**
    * 准备好的字典实例
    */
@@ -19,6 +20,9 @@ export type ValueOptionsProps = {
    */
   _options_data: Ref<Vars[] | undefined>;
 
+  /**
+   * 对于搜索提示信息进行预处理
+   */
   cookHint?: ValueHintCooking;
   /**
    * 值必须在字典中
@@ -34,12 +38,22 @@ export type ValueOptionsProps = {
     | Record<string, any>[]
     | OptionFilterMaker;
 
+  /**
+   * 生成 optionFilter 的上下文，
+   * - 如果 optionFilter 是对象，那么就是 explain 的上下文
+   * - 如果是 OptionFilterMaker，那么就是函数的参数
+   */
   optionFilterVars?: Vars;
-
+  /**
+   * 获取的的 option 结果集，菜蔬原生数据还是转换为标准数据
+   */
   optionKeepRaw?: boolean;
 };
 //--------------------------------------------------
 export function useValueOptions(props: ValueOptionsProps) {
+  let { dict, _options_data, optionKeepRaw = false } = props;
+  //------------------------------------------------
+  const _lookup_for_hint = computed(() => useItemLookup(props));
   //------------------------------------------------
   const _options_filter = computed(() => {
     if (props.optionFilter) {
@@ -65,7 +79,7 @@ export function useValueOptions(props: ValueOptionsProps) {
   let lastAbort: AbortController | null = null;
   //------------------------------------------------
   async function reloadOptioinsData(hint?: string) {
-    let { dict, cookHint, optionKeepRaw=false } = props;
+    let { cookHint } = props;
     // 取消重入
     if (lastAbort) {
       lastAbort.abort();
@@ -83,17 +97,120 @@ export function useValueOptions(props: ValueOptionsProps) {
     }
     // 默认全量查询
     else {
-      re = await dict.getData();
+      re = await dict.getData(false, lastAbort?.signal);
     }
 
     // 对值进行过滤
     let _data: Vars[] = [];
     for (let it of re) {
       if (_options_filter.value(it)) {
-        if (!optionKeepRaw) {
+        if (optionKeepRaw) {
+          _data.push(it);
         }
+        // 转换为标准对象
+        else {
+          _data.push(dict.toStdItem(it).toOptionItem());
+        }
+      }
+    }
+
+    // 计入返回结果集
+    _options_data.value = _data;
+  }
+  //------------------------------------------------
+  function getOptionItemIndex(value: any): number {
+    if (
+      _.isNil(value) ||
+      !_options_data.value ||
+      _.isEmpty(_options_data.value)
+    ) {
+      return -1;
+    }
+    // 逐个寻找选项对象
+    let N = _options_data.value.length;
+    for (let i = 0; i < N; i++) {
+      let it = _options_data.value[i];
+      let it_val: any;
+      if (isAnyOptionItem(it)) {
+        it_val = it.value;
+      } else {
+        it_val = dict.getItemValue(it, i);
+      }
+      if (value == it_val) {
+        return i;
+      }
+    }
+
+    return -1;
+  }
+  //------------------------------------------------
+  function getOptionItemValue(index: number, offset: number = 0): any {
+    // 防空
+    if (
+      index < 0 ||
+      !_options_data.value ||
+      index >= _options_data.value.length
+    ) {
+      return undefined;
+    }
+
+    // 获取对象
+    let N = _options_data.value.length;
+    let I = index;
+    if (offset != 0) {
+      I = Num.scrollIndex(index + offset, N);
+    }
+    let it = _options_data.value[I];
+    if (isAnyOptionItem(it)) {
+      return it.value;
+    }
+    return dict.getItemValue(it, I);
+  }
+  //------------------------------------------------
+  function getOptionItem(value: any): AnyOptionItem | undefined {
+    if (
+      _.isNil(value) ||
+      !_options_data.value ||
+      _.isEmpty(_options_data.value)
+    ) {
+      return;
+    }
+    // 逐个寻找选项对象
+    for (let it of _options_data.value) {
+      let stdItem: AnyOptionItem;
+      if (isAnyOptionItem(it)) {
+        stdItem = it;
+      } else {
+        stdItem = dict.toStdItem(it).toOptionItem();
+      }
+      if (value == stdItem.value) {
+        return stdItem;
       }
     }
   }
   //------------------------------------------------
+  function lookupOptionItem(hint: string): AnyOptionItem | undefined {
+    if (!hint || !_options_data.value || _.isEmpty(_options_data.value)) {
+      return;
+    }
+    // 逐个寻找选项对象
+    for (let it of _options_data.value) {
+      if (_lookup_for_hint.value(it, hint)) {
+        if (isAnyOptionItem(it)) {
+          return it;
+        }
+        return dict.toStdItem(it).toOptionItem();
+      }
+    }
+  }
+  //------------------------------------------------
+  // 返回特性
+  //------------------------------------------------
+  return {
+    getOptionItem,
+    getOptionItemIndex,
+    getOptionItemValue,
+    lookupOptionItem,
+    reloadOptioinsData,
+  };
 }
