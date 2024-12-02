@@ -7,7 +7,6 @@ import {
 } from '../../../_type';
 import { PlaceholderProps } from '../../_features';
 import { ListProps } from '../../view/all-views';
-import { BoxTipsProps } from './use-box-tips';
 import { DictInput, DictProps } from './use-dict';
 import { ItemLookupProps } from './use-item-lookup';
 import { ValueHintCookingProps } from './use-value-hint-cooking';
@@ -26,7 +25,6 @@ export type InputBox2Props = CommonProps &
   ValueOptionsProps &
   ValueHintCookingProps &
   ItemLookupProps &
-  Omit<BoxTipsProps, 'getElement' | 'tipBoxVisible' | 'hideBoxTip'> &
   PlaceholderProps & {
     /**
      * 输入值
@@ -67,6 +65,16 @@ export type InputBox2Props = CommonProps &
      * 提示列表的配置
      */
     tipList?: Omit<ListProps, 'data'>;
+
+    /**
+     * 展出提示框宽度，如果不声明，则采用与 box 相同的宽度
+     */
+    tipListWidth?: string;
+
+    /**
+     * 展出提示框最小宽度，如果不声明，则采用与 box 相同的宽度
+     */
+    tipListMinWidth?: string;
 
     /**
      * 当 focus 自动聚焦 Input 框

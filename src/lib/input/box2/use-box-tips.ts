@@ -1,30 +1,19 @@
 import _ from 'lodash';
-import { computed, ComputedRef, ref, watch } from 'vue';
+import { computed, ref } from 'vue';
 import { Rect } from '../../../_type';
 import { CssUtils, Rects } from '../../../core';
-import { getDockingStyle } from '../../_features';
+import { DockProps, getDockingStyle } from '../../_features';
 //--------------------------------------------------
 export type BoxTipsFeature = ReturnType<typeof useBoxTips>;
 //--------------------------------------------------
 export type BoxTipsProps = {
   getElement: () => HTMLElement | null;
-  tipBoxVisible: ComputedRef<boolean>;
   hideBoxTip: () => void;
-  // onMounted?: Callback;
-  // onUnmounted?: Callback;
-  /**
-   * 展出提示框宽度，如果不声明，则采用与 box 相同的宽度
-   */
-  tipListWidth?: string;
-
-  /**
-   * 展出提示框最小宽度，如果不声明，则采用与 box 相同的宽度
-   */
-  tipListMinWidth?: string;
+  getTipBoxDockStyle: (box: Rect) => DockProps;
 };
 //--------------------------------------------------
 export function useBoxTips(props: BoxTipsProps) {
-  let { tipBoxVisible: _tip_box_visible } = props;
+  let { getElement, hideBoxTip, getTipBoxDockStyle } = props;
   //------------------------------------------------
   const _box_rect = ref<Rect>();
   let _parent_origin_area = 0;
@@ -64,34 +53,53 @@ export function useBoxTips(props: BoxTipsProps) {
    * 否则，用户频繁缩放页面，会导致提示框错位
    */
   const obResize = new ResizeObserver(() => {
-    let $el = props.getElement();
+    let $el = getElement();
     let $pel = $el?.parentElement;
-    if (_tip_box_visible.value && $pel) {
+    if ($pel) {
       let _p_rect = Rects.createBy($pel.parentElement!);
       let _p_area = _p_rect.area();
       if (Math.abs(_parent_origin_area - _p_area) > 10) {
-        props.hideBoxTip();
+        hideBoxTip();
       }
     }
   });
   //------------------------------------------------
-  watch(
-    () => _tip_box_visible.value,
-    (visible) => {
-      if (visible) {
-        let { $pel } = updateBoxRect();
-        if ($pel) {
-          obResize.observe($pel);
-        }
-      }
-      // 如果隐藏了，就清除 box 尺寸就好了
-      else {
-        obResize.disconnect();
-        _box_rect.value = undefined;
-        _parent_origin_area = 0;
-      }
+  function whenTipBoxVisibleChange(visible: boolean) {
+    if (visible) {
+      console.trace('whenTipBoxVisibleChange', visible);
     }
-  );
+    if (visible) {
+      let { $pel } = updateBoxRect();
+      // if ($pel) {
+      //   obResize.observe($pel);
+      // }
+    }
+    // 如果隐藏了，就清除 box 尺寸就好了
+    else {
+      obResize.disconnect();
+      _box_rect.value = undefined;
+      _parent_origin_area = 0;
+    }
+  }
+  //------------------------------------------------
+  // watch(
+  //   () => _tip_box_visible.value,
+  //   (visible) => {
+  //     console.log('tipBoxVisible', visible);
+  //     if (visible) {
+  //       let { $pel } = updateBoxRect();
+  //       if ($pel) {
+  //         obResize.observe($pel);
+  //       }
+  //     }
+  //     // 如果隐藏了，就清除 box 尺寸就好了
+  //     else {
+  //       obResize.disconnect();
+  //       _box_rect.value = undefined;
+  //       _parent_origin_area = 0;
+  //     }
+  //   }
+  // );
   //------------------------------------------------
   const TipWrapperStyle = computed(() => {
     let $el = props.getElement();
@@ -99,15 +107,7 @@ export function useBoxTips(props: BoxTipsProps) {
     if (!$el || !box) {
       return {};
     }
-
-    return getDockingStyle(
-      {
-        minWidth: props.tipListMinWidth ?? `${_.get(box, 'width')}px`,
-        width: props.tipListWidth,
-      },
-      $el,
-      box
-    );
+    return getDockingStyle(getTipBoxDockStyle(box), $el, box);
   });
   //------------------------------------------------
   const TipBoxStyleReady = computed(() => {
@@ -116,7 +116,10 @@ export function useBoxTips(props: BoxTipsProps) {
   //------------------------------------------------
   const BoxMainStyle = computed(() => {
     if (TipBoxStyleReady.value && _box_rect.value) {
-      return _box_rect.value.toCss();
+      return CssUtils.toStyle({
+        width: _box_rect.value.width,
+        height: _box_rect.value.height,
+      });
     }
     return {};
   });
@@ -138,5 +141,6 @@ export function useBoxTips(props: BoxTipsProps) {
     BoxMainStyle,
     BoxBraceStyle,
     TipWrapperStyle,
+    whenTipBoxVisibleChange,
   };
 }

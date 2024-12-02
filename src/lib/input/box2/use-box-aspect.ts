@@ -14,6 +14,7 @@ export function useBoxAspect(
   const TopClass = computed(() =>
     CssUtils.mergeClassName(props.className, {
       'is-focused': _box.isFocused.value,
+      'show-tips': _tips.TipBoxStyleReady.value,
       [`align-${props.align}`]: props.align ? true : false,
     })
   );

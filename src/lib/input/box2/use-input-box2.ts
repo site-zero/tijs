@@ -5,7 +5,6 @@ import { I18n } from '../../../core';
 import { anyToStr } from '../../../core/text/ti-str';
 import { usePlaceholder } from '../../_features';
 import { InputBox2Emitter, InputBox2Props } from './ti-input-box2-types';
-import { useBoxTips } from './use-box-tips';
 import { useDict } from './use-dict';
 import { useValueHintCooking } from './use-value-hint-cooking';
 import { useValueOptions, ValueOptions } from './use-value-options';
@@ -62,21 +61,9 @@ export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
     }
   });
   //------------------------------------------------
-  const _tipbox = computed(() =>
-    useBoxTips({
-      getElement,
-      tipBoxVisible: computed(() => (_options_data.value ? true : false)),
-      hideBoxTip: () => {
-        _options_data.value = undefined;
-      },
-      tipListWidth: props.tipListWidth,
-      tipListMinWidth: props.tipListMinWidth,
-    })
-  );
-  //------------------------------------------------
   // 计算属性
   //------------------------------------------------
-  const hasTips = computed(() => _tipbox.value.TipBoxStyleReady.value);
+  const hasTips = computed(() => (_options_data.value ? true : false));
   //------------------------------------------------
   const InputText = computed(() => {
     let { usr_text, box_value, box_text } = _box_state;
@@ -96,7 +83,11 @@ export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
     _.assign(_box_state, amend);
   }
   //------------------------------------------------
-  function setValueByItem(item: AnyOptionItem) {
+  function setValueByItem(_item: Vars) {
+    let item = _options.value?.toOptionItem(_item);
+    if (!item) {
+      return;
+    }
     let usr_text = item.text ?? null;
     if (props.useRawValue) {
       usr_text = item.value;
@@ -111,7 +102,7 @@ export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
     __amend_box_state(amend);
   }
   //------------------------------------------------
-  async function onValueUpate(text0: string) {
+  async function onInputUpate(text0: string) {
     let { reloadOptioinsData, lookupOptionItem, getOptionItem } =
       _options.value ?? {};
     let text1 = _pipe.value(text0);
@@ -147,7 +138,7 @@ export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
 
     // 如果没有则尝试模拟查找
     if (!item && lookupOptionItem) {
-      let item = lookupOptionItem(text1);
+      item = lookupOptionItem(text1);
     }
 
     if (item) {
@@ -224,6 +215,7 @@ export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
     // 确保展示了选项列表
     if (!hasTips.value) {
       await reloadOptioinsData();
+      offset = 0;
     }
 
     let amend: InputBoxState = {
@@ -281,7 +273,8 @@ export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
   }
   //------------------------------------------------
   function clearOptionsData() {
-    _options_data.value = [];
+    console.trace('clearOptionsData');
+    _options_data.value = undefined;
   }
   //------------------------------------------------
   function emitIfChanged() {
@@ -302,10 +295,10 @@ export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
     hasTips,
     InputText,
     isFocused: computed(() => _focused.value),
-    OptionsData: _options.value?.OptionsData,
+    OptionsData: computed(() => _options.value?.OptionsData.value ?? []),
     setValueByItem,
     setFocused,
-    onValueUpate,
+    onInputUpate,
     onPropsValueChange,
     onKeyUpOrDown,
     clearOptionsData,

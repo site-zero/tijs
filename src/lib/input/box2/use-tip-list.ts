@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { ListProps } from 'src/lib/view/list/ti-list-types';
+import { ListProps } from '../../view/list/ti-list-types';
 import { computed, Ref } from 'vue';
 import { Vars } from '../../../_type';
 import { InputBox2Props } from './ti-input-box2-types';

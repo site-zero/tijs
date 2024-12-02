@@ -13,6 +13,7 @@ export default {
     prefixIconForClean: true,
     suffixIconForCopy: true,
     mustInOptions: true,
+    lookup: ['*~text'],
     options: [
       { value: 'A', text: '甲' },
       { value: 'B', text: '乙' },

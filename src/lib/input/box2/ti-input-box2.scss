@@ -1,16 +1,19 @@
 @use '@site0/tijs/sass/_all.scss' as *;
 
 .ti-input {
+  //-----------------------------------------------------
   > aside {
     @include font-fixed;
     font-size: 10px;
     line-height: 1.1em;
   }
+  //-----------------------------------------------------
   > .part-main {
     overflow: hidden;
     border: 1px solid #ccc;
     @include flex-align-nowrap;
     font-size: 18px;
+    //---------------------------------------------------
     > input {
       flex: 1 1 auto;
       padding: 0.6em;
@@ -18,6 +21,73 @@
       border: 0;
       font-size: inherit;
       font-family: inherit;
+      background-color: transparent;
+      &[readonly] {
+        cursor: default;
+      }
     }
+    //---------------------------------------------------
+    &.show-tips {
+      position: absolute;
+      z-index: $z-mask + 1;
+    }
+    //---------------------------------------------------
+    &.is-focused {
+      border-color: var(--ti-color-primary);
+      background-color: var(--ti-color-highlight);
+      color: var(--ti-color-highlight-f);
+    }
+    //---------------------------------------------------
+  } // > .part-main {
+  //-----------------------------------------------------
+  > .part-mask {
+    position: fixed;
+    z-index: $z-mask;
+    inset: 0;
   }
+  //-----------------------------------------------------
+  > .part-options {
+    position: fixed;
+    z-index: $z-mask + 2;
+    padding: SZ(2) 0;
+    > .part-options-con {
+      flex: 1 1 auto;
+      background-color: var(--ti-color-card);
+      border: 1px solid var(--ti-color-primary);
+      border-radius: var(--ti-measure-r-s);
+      box-shadow: -1px -1px var(--ti-color-light), 1px 1px var(--ti-color-dark),
+        4px 4px 12px var(--ti-color-mask-thin);
+      //box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      overflow: auto;
+      .ti-list {
+        .list-item > .list-part.as-text {
+          em {
+            font-style: normal;
+          }
+          abbr {
+            font-size: 0.9em;
+            opacity: 0.7;
+            margin-left: auto;
+          }
+          code {
+            color: var(--ti-color-primary);
+            // 当 code 顶头 的时候，给定一个固定的最小宽度
+            &:first-child {
+              @include font-fixed;
+              min-width: 4em;
+            }
+          }
+          code + em,
+          code + abbr {
+            margin-left: 0.5em;
+          }
+          em + code,
+          em + abbr {
+            margin-left: 0.5em;
+          }
+        }
+      }
+    }  // > .part-options-con {
+  }
+  //-----------------------------------------------------
 }

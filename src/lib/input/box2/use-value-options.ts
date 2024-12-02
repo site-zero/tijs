@@ -171,6 +171,13 @@ export function useValueOptions(
     return -1;
   }
   //------------------------------------------------
+  function toOptionItem(it: Vars): AnyOptionItem {
+    if (isAnyOptionItem(it)) {
+      return it;
+    }
+    return dict.toStdItem(it).toOptionItem();
+  }
+  //------------------------------------------------
   function getOptionItemAt(
     index: number,
     offset: number = 0
@@ -191,10 +198,7 @@ export function useValueOptions(
       I = Num.scrollIndex(index + offset, N);
     }
     let it = _options_data.value[I];
-    if (isAnyOptionItem(it)) {
-      return it;
-    }
-    return dict.toStdItem(it).toOptionItem();
+    return toOptionItem(it);
   }
   //------------------------------------------------
   function getOptionItem(value: any): AnyOptionItem | undefined {
@@ -226,10 +230,7 @@ export function useValueOptions(
     // 逐个寻找选项对象
     for (let it of _options_data.value) {
       if (_lookup_for_hint.value(it, hint)) {
-        if (isAnyOptionItem(it)) {
-          return it;
-        }
-        return dict.toStdItem(it).toOptionItem();
+        return toOptionItem(it);
       }
     }
   }
@@ -241,6 +242,7 @@ export function useValueOptions(
     getOptionItem,
     getOptionItemIndex,
     getOptionItemAt,
+    toOptionItem,
     lookupOptionItem,
     reloadOptioinsData,
   };

@@ -1,16 +1,18 @@
 <script setup lang="ts">
-  import { computed, reactive, useTemplateRef, watch } from 'vue';
-  import { TiList } from '../../';
-  import { ListSelectEmitInfo } from '../../../lib';
-  import { InputBox2Emitter, InputBox2Props } from './ti-input-box2-types';
-  import { useBoxAspect } from './use-box-aspect';
-  import { useBoxTips } from './use-box-tips';
-  import { InputBoxState, useInputBox2 } from './use-input-box2';
-  import { useInputComposition } from './use-input-composition';
-  import { useTipList } from './use-tip-list';
+  import _ from 'lodash';
+import { computed, reactive, useTemplateRef, watch } from 'vue';
+import { TiList } from '../../';
+import { Rect } from '../../../_type';
+import { ListSelectEmitInfo } from '../../../lib';
+import { InputBox2Emitter, InputBox2Props } from './ti-input-box2-types';
+import { useBoxAspect } from './use-box-aspect';
+import { useBoxTips } from './use-box-tips';
+import { InputBoxState, useInputBox2 } from './use-input-box2';
+import { useInputComposition } from './use-input-composition';
+import { useTipList } from './use-tip-list';
   //-----------------------------------------------------
   const emit = defineEmits<InputBox2Emitter>();
-  const $el = useTemplateRef<HTMLElement>('el ');
+  const $el = useTemplateRef<HTMLElement>('el');
   const $input = useTemplateRef<HTMLInputElement>('input');
   //-----------------------------------------------------
   const _box_state = reactive({
@@ -44,10 +46,13 @@
   const _tip_box = computed(() =>
     useBoxTips({
       getElement: () => $el.value,
-      tipBoxVisible: _box.value.hasTips,
       hideBoxTip: () => _box.value.clearOptionsData(),
-      tipListMinWidth: props.tipListMinWidth,
-      tipListWidth: props.tipListWidth,
+      getTipBoxDockStyle: (box: Rect) => {
+        return {
+          minWidth: props.tipListMinWidth ?? `${box.width}px`,
+          width: props.tipListWidth,
+        };
+      },
     })
   );
   const _aspect = computed(() =>
@@ -56,23 +61,31 @@
   //-----------------------------------------------------
   const _comp = useInputComposition({
     onChange: (val) => {
-      _box.value.onValueUpate(val);
+      _box.value.onInputUpate(val);
     },
   });
   //-----------------------------------------------------
   function onKeyDown(event: KeyboardEvent) {
+    console.log('onKeyDown', event.key);
+    _comp.onKeyPress(event);
     // 选择高亮项目
-    if (/^Arrow(Up|Down)$/.test(event.key)) {
-      // 这个需要让 TiList 提供一个回调函数
-      // 可以注册一个 API 提供 上下移动的能力
+    if ('ArrowUp' == event.key) {
+      event.preventDefault();
+      _box.value.onKeyUpOrDown(-1);
+    } else if ('ArrowDown' == event.key) {
+      event.preventDefault();
+      _box.value.onKeyUpOrDown(1);
     }
     // 取消
     else if ('Escape' == event.key) {
       _box.value.onPropsValueChange();
+      _box.value.clearOptionsData();
     }
     // 确认
     else if ('Enter' == event.key) {
+      event.preventDefault();
       _box.value.emitIfChanged();
+      _box.value.clearOptionsData();
     }
   }
   //-----------------------------------------------------
@@ -83,13 +96,25 @@
   function onInputBlur() {
     _box.value.setFocused(false);
     _box.value.emitIfChanged();
-    _box.value.clearOptionsData();
+    _.delay(()=>{
+      _box.value.clearOptionsData();
+    }, 200)
   }
   //-----------------------------------------------------
-  function onOptionSelect(paylod: ListSelectEmitInfo) {
-    console.log(paylod);
+  function onOptionSelect(payload: ListSelectEmitInfo) {
+    let item = payload.current;
+    if (item) {
+      _box.value.setValueByItem(item);
+    }
+    _box.value.emitIfChanged();
+    // 由于 emit 了 change, 如果 value 更新，会导致 userInputBox2 重新计算
+    // 因此 options_data 会被清空，hasTips 会变成 false
   }
   //-----------------------------------------------------
+  // 这个监控器，监控 value 的改动，如果 value 变化
+  // 会导致 useInputBox2 重新计算，因此其内部 _focused 状态会变成 false
+  // 而 _options_data 会立刻被变成 undefined
+  // 因此也导致 hasTips 变成 false
   watch(
     () => props.value,
     () => {
@@ -98,10 +123,18 @@
     { immediate: true }
   );
   //-----------------------------------------------------
+  watch(
+    () => _box.value.hasTips.value,
+    (visible) => {
+      _tip_box.value.whenTipBoxVisibleChange(visible);
+    }
+  );
+  //-----------------------------------------------------
 </script>
 <template>
   <div class="ti-input">
     <aside>
+      [{{ _box.OptionsData.value.length }}]
       {{ _box_state }}
       {{ _box.isFocused.value ? '[F]' : '---' }}
       {{ _box.hasTips.value ? 'Tip' : '---' }}
@@ -144,11 +177,13 @@
       <div
         class="part-options"
         :style="_tip_box.TipWrapperStyle.value">
-        <TiList
-          v-bind="_tip_list.TipListConfig.value"
-          :currentId="_box_state.box_value"
-          :data="_box.OptionsData?.value"
-          @select="onOptionSelect" />
+        <div class="part-options-con">
+          <TiList
+            v-bind="_tip_list.TipListConfig.value"
+            :currentId="_box_state.box_value"
+            :data="_box.OptionsData?.value"
+            @select="onOptionSelect" />
+        </div>
       </div>
     </template>
   </div>
