@@ -133,13 +133,13 @@ import { useTipList } from './use-tip-list';
 </script>
 <template>
   <div class="ti-input">
-    <aside>
+    <!--aside>
       [{{ _box.OptionsData.value.length }}]
       {{ _box_state }}
       {{ _box.isFocused.value ? '[F]' : '---' }}
       {{ _box.hasTips.value ? 'Tip' : '---' }}
       {{ _tip_box.DumpInfo.value }}
-    </aside>
+    </aside-->
     <!--主体框-->
     <div
       class="part-main"
