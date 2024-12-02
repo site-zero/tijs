@@ -6,10 +6,11 @@ export default {
   text: 'i18n:ti-input-example-options',
   comConf: {
     value: 'A',
-    valueCase: 'upper',
+    valueCase: 'upperAll',
     trimed: true,
     placeholder: 'Choose one options',
-    //prefixIconForClean: true,
+
+    prefixIconForClean: true,
     suffixIconForCopy: true,
     mustInOptions: true,
     options: [

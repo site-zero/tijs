@@ -118,10 +118,9 @@ export type InputBox2Props = CommonProps &
  * 提示框的显示时机
  *
  * - focus : 聚焦就显示
- * - keyin : 按任何键就显示
- * - input : 只有实质上输入内容了，才显示
+ * - auto  : 只有需要才显示
  */
-export type TipShowTime = 'focus' | 'keyin' | 'input';
+export type TipShowTime = 'focus' | 'auto';
 /**
  * 对于提示列表的快速格式模式，
  *
@@ -133,4 +132,4 @@ export type TipShowTime = 'focus' | 'keyin' | 'input';
  *
  * 在没有声明  tipList.textFormat 的前提下，它可以为其快速设置格式化方式
  */
-export type TipOptionFormat = 'T' | 'VT' | 'TV' | 'VTt' | 'Tt';
+export type TipOptionFormat = 'T' | 'VT' | 'TV' | 'VTT' | 'TT';

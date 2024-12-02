@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import { computed, useTemplateRef, watch } from 'vue';
+  import { computed, reactive, useTemplateRef, watch } from 'vue';
   import { InputBox2Emitter, InputBox2Props } from './ti-input-box2-types';
   import { useBoxAspect } from './use-box-aspect';
-  import { useInputBox2 } from './use-input-box2';
+  import { InputBoxState, useInputBox2 } from './use-input-box2';
   import { useInputComposition } from './use-input-composition';
   //-----------------------------------------------------
   const emit = defineEmits<InputBox2Emitter>();
@@ -21,8 +21,17 @@
   //-----------------------------------------------------
   const _aspect = computed(() => useBoxAspect(props));
   //-----------------------------------------------------
+  const _box_state = reactive({
+    usr_text: null,
+    box_value: null,
+    box_icon: null,
+    box_text: null,
+    box_tip: null,
+    focused: false,
+  } as InputBoxState);
   const _box = computed(() =>
     useInputBox2(props, {
+      _box_state,
       getElement: () => $el.value,
       getInputElement: () => $input.value,
       emit,
@@ -60,9 +69,13 @@
     _box.value.emitIfChanged();
   }
   //-----------------------------------------------------
-  watch(()=>props.value, () => {
-    _box.value.onPropsValueChange();
-  }, {immediate: true});
+  watch(
+    () => props.value,
+    () => {
+      _box.value.onPropsValueChange();
+    },
+    { immediate: true }
+  );
   //-----------------------------------------------------
 </script>
 <template>

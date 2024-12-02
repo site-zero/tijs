@@ -27,24 +27,15 @@ export type InputBoxState = {
 };
 //--------------------------------------------------
 export type InputBoxSetup = {
+  _box_state: InputBoxState;
   getElement: () => HTMLElement | null;
   getInputElement: () => HTMLInputElement | null;
   emit: InputBox2Emitter;
 };
 //--------------------------------------------------
 export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
-  let { getElement, getInputElement, emit } = setup;
-  //------------------------------------------------
-  // 定义数据模型
-  //------------------------------------------------
-  const _box_state = reactive({
-    usr_text: null,
-    box_value: null,
-    box_icon: null,
-    box_text: null,
-    box_tip: null,
-    focused: false,
-  } as InputBoxState);
+  let { _box_state,getElement, getInputElement, emit } = setup;
+  console.log('useInputBox2', props.value);
   //------------------------------------------------
   const _options_data = ref<Vars[]>();
   const _focused = ref(false);
@@ -119,7 +110,8 @@ export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
   }
   //------------------------------------------------
   async function onValueUpate(text0: string) {
-    let { reloadOptioinsData, lookupOptionItem } = _options.value ?? {};
+    let { reloadOptioinsData, lookupOptionItem, getOptionItem } =
+      _options.value ?? {};
     let text1 = _pipe.value(text0);
     let amend: InputBoxState = {
       usr_text: text1,
@@ -145,15 +137,22 @@ export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
       await _options.value?.reloadOptioinsData(text1);
     }
 
-    // 尝试查找 box 的 value
-    if (lookupOptionItem) {
+    // 首先尝试精确查找
+    let item: AnyOptionItem | undefined = undefined;
+    if (getOptionItem) {
+      item = getOptionItem(text1);
+    }
+
+    // 如果没有则尝试模拟查找
+    if (!item && lookupOptionItem) {
       let item = lookupOptionItem(text1);
-      if (item) {
-        amend.box_value = item.value;
-        amend.box_icon = item.icon ?? null;
-        amend.box_text = item.text ?? null;
-        amend.box_tip = item.tip ?? null;
-      }
+    }
+
+    if (item) {
+      amend.box_value = item.value;
+      amend.box_icon = item.icon ?? null;
+      amend.box_text = item.text ?? null;
+      amend.box_tip = item.tip ?? null;
     }
 
     // 更新状态
@@ -185,6 +184,7 @@ export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
         amend.box_tip = item.tip ?? null;
       }
     }
+    console.log('onPropsValueChange', amend);
 
     // 更新状态
     __amend_box_state(amend);
@@ -270,6 +270,11 @@ export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
           $input.select();
         }
       });
+    }
+    // 如果需要展示选项
+    if (props.tipShowTime == 'focus' && _options.value) {
+      let { reloadOptioinsData } = _options.value;
+      reloadOptioinsData();
     }
   }
   //------------------------------------------------

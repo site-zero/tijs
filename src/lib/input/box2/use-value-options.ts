@@ -83,6 +83,19 @@ export function useValueOptions(
     return () => true;
   });
   //------------------------------------------------
+  // 计算属性
+  //------------------------------------------------
+  const OptionsData = computed(() => {
+    let list: Vars[] = [];
+    for (let it of _options_data.value ?? []) {
+      if (_options_filter.value(it)) {
+        // 我只是想要一个副本，或许能规避一些潜在的副作用
+        list.push(_.cloneDeep(it));
+      }
+    }
+    return list;
+  });
+  //------------------------------------------------
   let lastAbort: AbortController | null = null;
   const ABORT_REASON = 'abort-value-options-reload';
   //------------------------------------------------
@@ -111,22 +124,19 @@ export function useValueOptions(
       // 对值进行过滤
       let _data: Vars[] = [];
       for (let it of re) {
-        if (_options_filter.value(it)) {
-          if (optionKeepRaw) {
-            _data.push(it);
-          }
-          // 转换为标准对象
-          else {
-            _data.push(dict.toStdItem(it).toOptionItem());
-          }
+        if (optionKeepRaw) {
+          _data.push(it);
+        }
+        // 转换为标准对象
+        else {
+          _data.push(dict.toStdItem(it).toOptionItem());
         }
       }
 
       // 计入返回结果集
       _options_data.value = _data;
-    }
-    // 对于主动 abort 的操作，忍受异常
-    catch (_e) {
+    } catch (_e) {
+      // 对于主动 abort 的操作，忍受异常
       let err = _e as any;
       if (err.abort && err.reason == ABORT_REASON) {
         return;
@@ -161,7 +171,10 @@ export function useValueOptions(
     return -1;
   }
   //------------------------------------------------
-  function getOptionItemAt(index: number, offset: number = 0): AnyOptionItem | undefined {
+  function getOptionItemAt(
+    index: number,
+    offset: number = 0
+  ): AnyOptionItem | undefined {
     // 防空
     if (
       index < 0 ||
@@ -224,6 +237,7 @@ export function useValueOptions(
   // 返回特性
   //------------------------------------------------
   return {
+    OptionsData,
     getOptionItem,
     getOptionItemIndex,
     getOptionItemAt,
