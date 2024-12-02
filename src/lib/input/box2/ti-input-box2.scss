@@ -1,16 +1,23 @@
 @use '@site0/tijs/sass/_all.scss' as *;
 
-div.ti-input {
-  overflow: hidden;
-  border: 1px solid #ccc;
-  @include flex-align-nowrap;
-  font-size: 18px;
-  > input {
-    flex: 1 1 auto;
-    padding: 0.6em;
-    outline: none;
-    border: 0;
-    font-size: inherit;
-    font-family: inherit;
+.ti-input {
+  > aside {
+    @include font-fixed;
+    font-size: 10px;
+    line-height: 1.1em;
+  }
+  > .part-main {
+    overflow: hidden;
+    border: 1px solid #ccc;
+    @include flex-align-nowrap;
+    font-size: 18px;
+    > input {
+      flex: 1 1 auto;
+      padding: 0.6em;
+      outline: none;
+      border: 0;
+      font-size: inherit;
+      font-family: inherit;
+    }
   }
 }

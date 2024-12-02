@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { computed, nextTick, reactive, ref } from 'vue';
+import { computed, nextTick, ref } from 'vue';
 import { AnyOptionItem, IconInput, Vars } from '../../../_type';
 import { I18n } from '../../../core';
 import { anyToStr } from '../../../core/text/ti-str';
@@ -10,6 +10,8 @@ import { useDict } from './use-dict';
 import { useValueHintCooking } from './use-value-hint-cooking';
 import { useValueOptions, ValueOptions } from './use-value-options';
 import { useValuePipe } from './use-value-pipe';
+//--------------------------------------------------
+export type InputBox2Feature = ReturnType<typeof useInputBox2>;
 //--------------------------------------------------
 export type InputBoxState = {
   /**
@@ -34,7 +36,7 @@ export type InputBoxSetup = {
 };
 //--------------------------------------------------
 export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
-  let { _box_state,getElement, getInputElement, emit } = setup;
+  let { _box_state, getElement, getInputElement, emit } = setup;
   console.log('useInputBox2', props.value);
   //------------------------------------------------
   const _options_data = ref<Vars[]>();
@@ -160,7 +162,7 @@ export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
   }
   //------------------------------------------------
   async function onPropsValueChange() {
-    console.log('onPropsValueChange', props.value);
+    //console.log('onPropsValueChange', props.value);
     let val = anyToStr(props.value);
     let amend: InputBoxState = {
       usr_text: val ?? '',
@@ -184,7 +186,6 @@ export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
         amend.box_tip = item.tip ?? null;
       }
     }
-    console.log('onPropsValueChange', amend);
 
     // 更新状态
     __amend_box_state(amend);
@@ -270,12 +271,17 @@ export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
           $input.select();
         }
       });
+
+      // 如果需要展示选项
+      if (props.tipShowTime == 'focus' && _options.value) {
+        let { reloadOptioinsData } = _options.value;
+        reloadOptioinsData();
+      }
     }
-    // 如果需要展示选项
-    if (props.tipShowTime == 'focus' && _options.value) {
-      let { reloadOptioinsData } = _options.value;
-      reloadOptioinsData();
-    }
+  }
+  //------------------------------------------------
+  function clearOptionsData() {
+    _options_data.value = [];
   }
   //------------------------------------------------
   function emitIfChanged() {
@@ -295,11 +301,14 @@ export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
     _focused,
     hasTips,
     InputText,
+    isFocused: computed(() => _focused.value),
+    OptionsData: _options.value?.OptionsData,
     setValueByItem,
     setFocused,
     onValueUpate,
     onPropsValueChange,
     onKeyUpOrDown,
+    clearOptionsData,
     emitIfChanged,
     Placeholder: computed(() => usePlaceholder(props)),
   };

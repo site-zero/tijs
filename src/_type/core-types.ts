@@ -259,6 +259,8 @@ export type RectCentreToOptions = {
 
 export interface Rect extends Required<RectInfo> {
   __I_am_rect: () => boolean;
+  toString: () => string;
+  valueOf: () => string;
   update: (mode?: string) => Rect;
   toSize2D: () => Size2D;
   updateBy: (mode?: string) => Rect;

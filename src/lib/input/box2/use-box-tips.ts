@@ -1,8 +1,10 @@
 import _ from 'lodash';
 import { computed, ComputedRef, ref, watch } from 'vue';
 import { Rect } from '../../../_type';
-import { Rects } from '../../../core';
+import { CssUtils, Rects } from '../../../core';
 import { getDockingStyle } from '../../_features';
+//--------------------------------------------------
+export type BoxTipsFeature = ReturnType<typeof useBoxTips>;
 //--------------------------------------------------
 export type BoxTipsProps = {
   getElement: () => HTMLElement | null;
@@ -21,12 +23,21 @@ export type BoxTipsProps = {
   tipListMinWidth?: string;
 };
 //--------------------------------------------------
-//--------------------------------------------------
 export function useBoxTips(props: BoxTipsProps) {
   let { tipBoxVisible: _tip_box_visible } = props;
   //------------------------------------------------
   const _box_rect = ref<Rect>();
   let _parent_origin_area = 0;
+  //------------------------------------------------
+  const DumpInfo = computed(() => {
+    let re = [`P:${_parent_origin_area}`];
+    if (_box_rect.value) {
+      re.push(_box_rect.value.toString());
+    } else {
+      re.push('~~Rect~~');
+    }
+    return re.join(':');
+  });
   //------------------------------------------------
   function updateBoxRect() {
     let $el = props.getElement();
@@ -103,10 +114,29 @@ export function useBoxTips(props: BoxTipsProps) {
     return !_.isEmpty(TipWrapperStyle.value);
   });
   //------------------------------------------------
+  const BoxMainStyle = computed(() => {
+    if (TipBoxStyleReady.value && _box_rect.value) {
+      return _box_rect.value.toCss();
+    }
+    return {};
+  });
+  //------------------------------------------------
+  const BoxBraceStyle = computed(() => {
+    if (_box_rect.value) {
+      return CssUtils.toStyle({
+        width: _box_rect.value.width,
+        height: _box_rect.value.height,
+      });
+    }
+  });
+  //------------------------------------------------
   // 返回特性
   //------------------------------------------------
   return {
-    TipWrapperStyle,
+    DumpInfo,
     TipBoxStyleReady,
+    BoxMainStyle,
+    BoxBraceStyle,
+    TipWrapperStyle,
   };
 }
