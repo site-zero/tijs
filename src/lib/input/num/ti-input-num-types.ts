@@ -12,6 +12,7 @@ export type InputNumProps = CommonProps &
     value?: number | string | boolean | null;
     style?: Vars;
     autoSelect?: boolean;
+    autoFocus?: boolean;
     /**
      * 整数，精确度：
      * - 100 : 精确到小数点后两位

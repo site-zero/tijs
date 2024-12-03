@@ -70,3 +70,12 @@
       v-on="CellListeners" />
   </div>
 </template>
+<style lang="scss">
+  @use '@site0/tijs/sass/_all.scss' as *;
+  .table-cell-wrapper {
+    @include flex-align-nowrap($jc: stretch, $ai: stretch);
+    > * {
+      flex: 1 1 auto;
+    }
+  }
+</style>

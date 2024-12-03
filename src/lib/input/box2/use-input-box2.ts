@@ -5,9 +5,9 @@ import { Dicts, I18n } from '../../../core';
 import { anyToStr } from '../../../core/text/ti-str';
 import { usePlaceholder, useReadonly } from '../../_features';
 import { InputBoxEmitter, InputBoxProps } from './ti-input-box2-types';
+import { useBoxDisplayText } from './use-box-display-text';
 import { ValueOptions } from './use-value-options';
 import { ValuePipeFeature } from './use-value-pipe';
-import { useBoxDisplayText } from './use-box-display-text';
 //--------------------------------------------------
 export type InputBoxState = {
   /**
@@ -384,6 +384,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     setFocused,
     onInputUpate,
     debouncePropsValueChange,
+    onPropsValueChange,
     onKeyUpOrDown,
     clearOptionsData,
     getItemByValue,

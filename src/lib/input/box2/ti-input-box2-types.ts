@@ -102,6 +102,11 @@ export type InputBoxProps = CommonProps &
     autoSelect?: boolean;
 
     /**
+     * 当创建的时候，自动 focus 控件
+     */
+    autoFocus?: boolean;
+
+    /**
      * 如果值是某个选项，默认的会在输入框显示选项的文字而不是值。
      * 开启这个选项，则在输入框直接显示值而不是翻译后的文字
      */

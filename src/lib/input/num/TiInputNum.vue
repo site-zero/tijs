@@ -89,6 +89,7 @@
     :readonly="props.readonly"
     :placeholder="props.placeholder"
     :auto-select="props.autoSelect"
+    :auto-focus="props.autoFocus"
     :autoI18n="props.autoI18n"
     :value="_input_val"
     :hideBorder="props.hideBorder"

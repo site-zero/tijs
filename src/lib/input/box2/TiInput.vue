@@ -22,6 +22,7 @@
   import { useValueHintCooking } from './use-value-hint-cooking';
   import { useValueOptions, ValueOptions } from './use-value-options';
   import { useValuePipe } from './use-value-pipe';
+  import _ from 'lodash';
   //-----------------------------------------------------
   const emit = defineEmits<InputBoxEmitter>();
   const $el = useTemplateRef<HTMLElement>('el');
@@ -125,8 +126,8 @@
   );
   //-----------------------------------------------------
   function onKeyDown(event: KeyboardEvent) {
-    if(_box.value.isReadonly.value){
-      return 
+    if (_box.value.isReadonly.value) {
+      return;
     }
     //console.log('onKeyDown', event.key);
     _comp.onKeyPress(event);
@@ -158,8 +159,8 @@
   });
   //-----------------------------------------------------
   function onInputFocused() {
-    if(_box.value.isReadonly.value){
-      return 
+    if (_box.value.isReadonly.value) {
+      return;
     }
     bus?.emit(BUS_EVENT_FOCUS);
     _box.value.setFocused(true);
@@ -180,8 +181,8 @@
   }
   //-----------------------------------------------------
   function onOptionSelect(payload: ListSelectEmitInfo) {
-    if(_box.value.isReadonly.value){
-      return 
+    if (_box.value.isReadonly.value) {
+      return;
     }
     //console.log('onOptionSelect', payload);
     _box.value.setValueByItem(payload.current || null);
@@ -198,7 +199,11 @@
   watch(
     () => props.value,
     () => {
-      _box.value.debouncePropsValueChange();
+      if (props.options) {
+        _box.value.debouncePropsValueChange();
+      } else {
+        _box.value.onPropsValueChange();
+      }
     },
     { immediate: true }
   );
@@ -209,6 +214,16 @@
       _tip_box.value.whenTipBoxVisibleChange(visible);
     }
   );
+  //-----------------------------------------------------
+  onMounted(() => {
+    if (props.autoFocus) {
+      _.delay(() => {
+        if ($input.value) {
+          $input.value.focus();
+        }
+      }, 100);
+    }
+  });
   //-----------------------------------------------------
 </script>
 <template>

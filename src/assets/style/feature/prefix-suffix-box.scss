@@ -94,8 +94,8 @@
 
 @mixin __color_box($name) {
   &.is-#{$name} {
-    color: var(--ti-color-#{$name}-r);
-    background-color: var(--ti-color-#{$name});
+    color: var(--ti-color-#{$name});
+    background-color: var(--ti-color-#{$name}-r);
     &.show-border {
       border-color: var(--ti-color-#{$name});
     }
