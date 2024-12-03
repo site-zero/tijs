@@ -1,8 +1,5 @@
 import { CommonProps } from '../../../_type';
-import { InputBoxProps } from '../box/ti-input-types';
+import { InputBox2Props } from '../all-input';
 
 export type DroplistProps = CommonProps &
-  Omit<
-    InputBoxProps,
-    'canInput' | 'trimed' | 'mustInOptions' | 'checkValueWhenClose'
-  >;
+  Omit<InputBox2Props, 'canInput' | 'trimed' | 'mustInOptions'>;

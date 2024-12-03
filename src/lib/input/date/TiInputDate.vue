@@ -3,7 +3,7 @@
   import { computed } from 'vue';
   import { DateInput } from '../../../_type';
   import { DateTime, tiGetDefaultComPropValue } from '../../../core';
-  import { Alert, InputDatetimeProps, TiInput } from '../../../lib';
+  import { Alert, InputDatetimeProps, TiInput2 } from '../../../lib';
   import { COM_TYPES } from '../../lib-com-types';
   //-----------------------------------------------------
   let emit = defineEmits<{
@@ -18,8 +18,6 @@
   //-----------------------------------------------------
   const props = withDefaults(defineProps<InputDatetimeProps>(), {
     suffixIcon: 'fas-calendar-days',
-    suffixIconClickable: true,
-    prefixIconForClean: false,
     autoSelect: true,
   });
   //-----------------------------------------------------
@@ -35,9 +33,14 @@
   });
   //-----------------------------------------------------
   const InputProps = computed(() => {
-    return _.pickBy(props, (_v, k) => {
+    let re = _.pickBy(props, (_v, k) => {
       return /^(readonly|placeholder|autoSelect|(prefix|suffix))/.test(k);
     });
+    if (props.prefixIconForClean) {
+      delete re.prefixIconForClean;
+      re.prefixIconFor = 'clear';
+    }
+    return re;
   });
   //-----------------------------------------------------
   function formatValue(val: any): string {
@@ -98,7 +101,7 @@
   //-----------------------------------------------------
 </script>
 <template>
-  <TiInput
+  <TiInput2
     v-bind="InputProps"
     :value="InputValue"
     :format="formatValue"

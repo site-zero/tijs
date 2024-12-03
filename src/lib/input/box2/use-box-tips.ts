@@ -65,9 +65,9 @@ export function useBoxTips(props: BoxTipsProps) {
   });
   //------------------------------------------------
   function whenTipBoxVisibleChange(visible: boolean) {
-    if (visible) {
-      console.trace('whenTipBoxVisibleChange', visible);
-    }
+    // if (visible) {
+    //   console.trace('whenTipBoxVisibleChange', visible);
+    // }
     if (visible) {
       let { $pel } = updateBoxRect();
       // if ($pel) {

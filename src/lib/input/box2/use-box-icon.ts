@@ -9,12 +9,14 @@ export type BoxIconOptions = {
   icon?: IconInput;
   hoverIcon?: IconInput;
   iconFor?: BoxIconFor;
+  autoIcon?: IconInput;
 };
 
 export function useBoxIcon(options: BoxIconOptions) {
-  const { _box, icon, hoverIcon, iconFor } = options;
+  const { _box, icon, hoverIcon, iconFor, autoIcon } = options;
   //--------------------------------------------------
   const _icon = computed(() => {
+    if (autoIcon) return autoIcon;
     if (icon) return icon;
     if (iconFor) {
       return {
@@ -26,16 +28,24 @@ export function useBoxIcon(options: BoxIconOptions) {
   });
   //--------------------------------------------------
   const _hover_icon = computed(() => {
-    if (!icon) return;
+    if (!_icon.value) return;
     if (hoverIcon) return hoverIcon;
-    if ('clear' === iconFor) return 'zmdi-close';
+    if (iconFor) {
+      return {
+        'clear': 'zmdi-close',
+        'copy': 'zmdi-copy',
+        'load-options': 'zmdi-caret-down',
+      }[iconFor];
+    }
   });
   //--------------------------------------------------
   const hasIcon = computed(() => (_icon.value ? true : false));
   //--------------------------------------------------
   const IconPartClass = computed(() => {
+    //console.log("IconPartClass", iconFor, 'clear' == iconFor)
     return {
       'can-hover': iconFor ? true : false,
+      'can-rotate': 'clear' == iconFor,
     };
   });
   //--------------------------------------------------

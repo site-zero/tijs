@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed } from 'vue';
-  import { Alert, TiInput } from '../../';
+  import { Alert, TiInput2 } from '../../';
   import { DateInput } from '../../../_type';
   import { DateTime, tiGetDefaultComPropValue } from '../../../core';
   import { COM_TYPES } from '../../lib-com-types';
@@ -38,9 +38,14 @@
   });
   //-----------------------------------------------------
   const InputProps = computed(() => {
-    return _.pickBy(props, (_v, k) => {
+    let re = _.pickBy(props, (_v, k) => {
       return /^(readonly|placeholder|autoSelect|(prefix|suffix))/.test(k);
     });
+    if (props.prefixIconForClean) {
+      delete re.prefixIconForClean;
+      re.prefixIconFor = 'clear';
+    }
+    return re;
   });
   //-----------------------------------------------------
   function formatValue(val: any): string {
@@ -103,7 +108,7 @@
   //-----------------------------------------------------
 </script>
 <template>
-  <TiInput
+  <TiInput2
     v-bind="InputProps"
     :value="InputValue"
     :format="formatValue"

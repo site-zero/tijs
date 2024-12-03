@@ -1,16 +1,14 @@
-import {
-  InputBoxAspect,
-  PlaceholderProps,
-  PrefixSuffixProps,
-  ReadonlyProps,
-} from '../../';
+import { InputBox2Aspect, InputBox2Props, PlaceholderProps, ReadonlyProps } from '../../';
 import { CommonProps, HDirecton, Vars } from '../../../_type';
 
 export type InputNumProps = CommonProps &
   PlaceholderProps &
   ReadonlyProps &
-  InputBoxAspect &
-  Pick<PrefixSuffixProps, 'prefixText' | 'suffixText'> & {
+  InputBox2Aspect &
+  Pick<
+    InputBox2Props,
+    'prefixIcon' | 'prefixHoverIcon' | 'suffixIcon' | 'suffixHoverIcon'
+  > & {
     value?: number | string | boolean | null;
     style?: Vars;
     autoSelect?: boolean;
@@ -29,7 +27,7 @@ export type InputNumProps = CommonProps &
      * 显示到小数点后几位，默认的则是自动不补零
      * 如果指定了这个位数，后面需要补零
      */
-    decimalPlaces?:number;
+    decimalPlaces?: number;
 
     /**
      * 显示数字分段，一段有多长
@@ -42,12 +40,12 @@ export type InputNumProps = CommonProps &
     partSep?: string;
 
     /**
-   * 分隔的方向：
-   *
-   * - `left` 从右向左分隔，通常用来格式化金额【默认】
-   * - `right` 从左至右分隔，通常用来格式化银行账号，或者软件激活码
-   */
-    partTo?:HDirecton;
+     * 分隔的方向：
+     *
+     * - `left` 从右向左分隔，通常用来格式化金额【默认】
+     * - `right` 从左至右分隔，通常用来格式化银行账号，或者软件激活码
+     */
+    partTo?: HDirecton;
 
     /**
      * 最小值（包含）

@@ -1,7 +1,6 @@
 <script lang="ts" setup>
-  import _ from 'lodash';
   import { computed } from 'vue';
-  import { TiInput } from '../../';
+  import { InputBox2Props, TiInput2 } from '../../';
   import { DroplistProps } from './ti-droplist-types';
   //-----------------------------------------------------
   defineOptions({
@@ -18,30 +17,17 @@
     tipShowTime: 'focus',
     tipUseHint: false,
     tipTidyBy: () => ['main'],
-    prefixIconForClean: false,
-    prefixHoverIcon: 'zmdi-close',
-    suffixIcon: 'zmdi-caret-down',
-    suffixIconClickable: false,
-    mustInOptions: true,
+    suffixIconFor: 'load-options',
     autoPrefixIcon: true,
   });
   //-----------------------------------------------------
-  type CleansSetup = {
-    prefixIconForClean: boolean;
-    showCleanOption: boolean;
-  };
+  type CleansSetup = Pick<InputBox2Props, 'prefixIconFor' | 'showCleanOption'>;
   const Cleans = computed((): CleansSetup => {
     let re = {
-      prefixIconForClean: false,
-      showCleanOption: false,
+      prefixIconFor: props.prefixIconFor,
+      showCleanOption: props.showCleanOption,
     } as CleansSetup;
-    if (_.isBoolean(props.prefixIconForClean)) {
-      re.prefixIconForClean = props.prefixIconForClean;
-    }
-    if (_.isBoolean(props.showCleanOption)) {
-      re.showCleanOption = props.showCleanOption;
-    }
-    if (_.isNil(props.prefixIconForClean) && _.isNil(props.showCleanOption)) {
+    if ('clear' != re.prefixIconFor && !re.showCleanOption) {
       re.showCleanOption = true;
     }
     return re;
@@ -54,13 +40,12 @@
   //-----------------------------------------------------
 </script>
 <template>
-  <TiInput
+  <TiInput2
     v-bind="props"
     :canInput="false"
     :trimed="false"
     :mustInOptions="true"
-    :checkValueWhenClose="false"
-    :prefixIconForClean="Cleans.prefixIconForClean"
+    :prefixIconFor="Cleans.prefixIconFor"
     :showCleanOption="Cleans.showCleanOption"
     @change="onInputChange"
     @click-prefix-text="emit('click-prefix-text')"

@@ -7,7 +7,7 @@ export default {
   comConf: {
     value: 'otter',
     placeholder: 'Choose one Animal',
-    prefixIconForClean: true,
+    prefixIconFor: 'clear',
     options: [
       {
         value: 'hippo',

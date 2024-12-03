@@ -3,7 +3,7 @@ import { computed, nextTick, ref } from 'vue';
 import { AnyOptionItem, IconInput, Vars } from '../../../_type';
 import { I18n } from '../../../core';
 import { anyToStr } from '../../../core/text/ti-str';
-import { usePlaceholder } from '../../_features';
+import { usePlaceholder, useReadonly } from '../../_features';
 import { InputBox2Emitter, InputBox2Props } from './ti-input-box2-types';
 import { useDict } from './use-dict';
 import { useValueHintCooking } from './use-value-hint-cooking';
@@ -61,6 +61,8 @@ export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
     }
   });
   //------------------------------------------------
+  const _readonly = computed(() => useReadonly(props));
+  //------------------------------------------------
   // 计算属性
   //------------------------------------------------
   const hasTips = computed(() => (_options_data.value ? true : false));
@@ -72,6 +74,24 @@ export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
       return box_value ?? dft_text;
     }
     return box_text ?? dft_text;
+  });
+  const isReadonly = computed(() => _readonly.value.isReadonly());
+  const isInputReadonly = computed(() => isReadonly.value || !props.canInput);
+  //------------------------------------------------
+  const OptionsData = computed(() => {
+    let re: Vars[] = [];
+    // 显示清除选项
+    if (props.showCleanOption) {
+      re.push({
+        text: I18n.text('i18n:clear'),
+        value: null,
+      });
+    }
+    if (_options.value) {
+      re.push(..._options.value?.OptionsData.value);
+    }
+
+    return re;
   });
   //------------------------------------------------
   // 操作方法
@@ -261,12 +281,14 @@ export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
     _focused.value = focused;
     // 下一个时间片，Vue 会自动更新 Input.value
     if (focused) {
-      nextTick(() => {
-        let $input = getInputElement();
-        if ($input && _focused.value) {
-          $input.select();
-        }
-      });
+      if (props.autoSelect && !isInputReadonly.value) {
+        nextTick(() => {
+          let $input = getInputElement();
+          if ($input && _focused.value) {
+            $input.select();
+          }
+        });
+      }
 
       // 如果需要展示选项
       if (props.tipShowTime == 'focus' && _options.value) {
@@ -277,7 +299,7 @@ export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
   }
   //------------------------------------------------
   function clearOptionsData() {
-    console.trace('clearOptionsData');
+    //console.trace('clearOptionsData');
     _options_data.value = undefined;
   }
   //------------------------------------------------
@@ -289,6 +311,7 @@ export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
       emit('box-item-change', item);
     }
   }
+
   //------------------------------------------------
   // 返回特性
   //------------------------------------------------
@@ -301,7 +324,9 @@ export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
     hasTips,
     InputText,
     isFocused: computed(() => _focused.value),
-    OptionsData: computed(() => _options.value?.OptionsData.value ?? []),
+    isReadonly,
+    isInputReadonly,
+    OptionsData,
     updateBoxState,
     setValueByItem,
     setFocused,

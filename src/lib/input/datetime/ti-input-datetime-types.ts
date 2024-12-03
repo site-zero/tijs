@@ -1,10 +1,18 @@
-import { PlaceholderProps, PrefixSuffixProps, ReadonlyProps } from '../../';
+import {
+  InputBox2Props,
+  PlaceholderProps,
+  PrefixSuffixProps,
+  ReadonlyProps,
+} from '../../';
 import { CommonProps, DateTimeQuickParseMode } from '../../../_type';
 
 export type InputDatetimeProps = CommonProps &
   ReadonlyProps &
   PlaceholderProps &
-  PrefixSuffixProps & {
+  Pick<
+    InputBox2Props,
+    'prefixIcon' | 'prefixHoverIcon' | 'suffixIcon' | 'suffixHoverIcon'
+  > & {
     value?: number | Date | string;
     /**
      * - string 用字符串格式

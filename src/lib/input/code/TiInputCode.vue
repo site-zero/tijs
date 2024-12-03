@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed, onMounted, onUnmounted, ref } from 'vue';
-  import { InputBoxProps, TiInput, useValueInput, useViewport } from '../../';
+  import { InputBox2Props, TiInput2, useValueInput, useViewport } from '../../';
   import { AnyOptionItem, ToStr } from '../../../_type';
   import { CssUtils, Util } from '../../../core';
   import { InputCodeProps } from './ti-input-code-types';
@@ -39,7 +39,7 @@
   const _vals = computed(() => useValueInput(props));
   //-----------------------------------------------------
   const InputConfig = computed(() => {
-    let re: InputBoxProps = _.omit(
+    let re: InputBox2Props = _.omit(
       props,
       'style',
       'className',

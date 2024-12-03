@@ -9,9 +9,8 @@ export default {
     valueCase: 'upperAll',
     trimed: true,
     placeholder: 'Choose one options',
-
-    prefixIconForClean: true,
-    suffixIconForCopy: true,
+    prefixIconFor: 'clear',
+    suffixIconFor: 'load-options',
     mustInOptions: true,
     lookup: ['*~text'],
     options: [

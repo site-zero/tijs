@@ -1,8 +1,6 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed } from 'vue';
-  import { TiInput } from '../../';
-  import { Vars } from '../../../_type';
   import { Bank, Num } from '../../../core';
   import { InputNumProps } from './ti-input-num-types';
   //-----------------------------------------------------
@@ -21,7 +19,7 @@
     partSep: ',',
     partWidth: 3,
     partTo: 'left',
-    valueInputAlign: 'right',
+    align: 'right',
   });
   //-----------------------------------------------------
   const InputValue = computed(() => {
@@ -36,23 +34,18 @@
     if (props.partSep) {
       re = re.replaceAll(props.partSep, '');
     }
-    // 搞定
-    return re;
-  });
-  //-----------------------------------------------------
-  const formatInputText = computed(() => {
+    // 格式化
     let { partWidth, partSep, partTo } = props;
     if (_.isNumber(partWidth) && partWidth > 0 && partSep) {
-      return (vars: Vars) => {
-        let val = _.get(vars, 'val');
-        return Bank.toBankText(val, {
-          width: partWidth,
-          sep: partSep ?? ' ',
-          to: partTo,
-          decimalPlaces: props.decimalPlaces,
-        });
-      };
+      return Bank.toBankText(re, {
+        width: partWidth,
+        sep: partSep ?? ' ',
+        to: partTo,
+        decimalPlaces: props.decimalPlaces,
+      });
     }
+    // 搞定
+    return re;
   });
   //-----------------------------------------------------
   function onChange(str: string) {
@@ -77,14 +70,13 @@
     :auto-select="props.autoSelect"
     :autoI18n="props.autoI18n"
     :value="InputValue"
-    :valueInputAlign="valueInputAlign"
-    :valueInputStyle="valueInputStyle"
-    :valuePartStyle="valuePartStyle"
-    :format="formatInputText"
     :hideBorder="props.hideBorder"
-    :boxFocused="props.boxFocused"
+    :inputStyle="props.inputStyle"
+    :align="align"
+    :boxFontSize="boxFontSize"
+    :boxPadding="boxPadding"
+    :boxRadius="boxRadius"
+    :type="type"
     :width="props.width"
-    :prefixText="props.prefixText"
-    :suffixText="props.suffixText"
     @change="onChange" />
 </template>

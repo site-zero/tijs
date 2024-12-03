@@ -7,7 +7,7 @@ import {
   LogicType,
   Vars,
 } from '../../../_type';
-import { PlaceholderProps } from '../../_features';
+import { PlaceholderProps, ReadonlyProps } from '../../_features';
 import { ListProps } from '../../view/all-views';
 import { DictInput, DictProps } from './use-dict';
 import { ItemLookupProps } from './use-item-lookup';
@@ -21,13 +21,31 @@ export type InputBox2Emitter = {
   (event: 'box-item-change', payload: AnyOptionItem | undefined): void;
 };
 //--------------------------------------------------
+export type InputBox2Aspect = {
+  /**
+   * 隐藏输入框边框
+   */
+  hideBorder?: boolean;
+
+  style?: Vars;
+  inputStyle?: Vars;
+  align?: CssAlignment;
+  boxFontSize?: AspectSize;
+  boxPadding?: AspectSize;
+  boxRadius?: AspectSize | 'none';
+  type?: LogicType;
+  width?: string;
+};
+//--------------------------------------------------
 export type InputBox2Props = CommonProps &
   ValuePipeProps &
   DictProps &
   ValueOptionsProps &
   ValueHintCookingProps &
   ItemLookupProps &
-  PlaceholderProps & {
+  PlaceholderProps &
+  InputBox2Aspect &
+  ReadonlyProps & {
     /**
      * 输入值
      */
@@ -36,19 +54,6 @@ export type InputBox2Props = CommonProps &
     options?: DictInput;
 
     autoI18n?: boolean;
-
-    /**
-     * 隐藏输入框边框
-     */
-    hideBorder?: boolean;
-
-    style?: Vars;
-    inputStyle?: Vars;
-    align?: CssAlignment;
-    boxFontSize?: AspectSize;
-    boxPadding?: AspectSize;
-    boxRadius?: AspectSize | 'none';
-    logicType?: LogicType;
 
     /**
      * 提示列表的配置

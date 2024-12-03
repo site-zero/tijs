@@ -6,11 +6,11 @@
   import { ListSelectEmitInfo } from '../../../lib';
   import { InputBox2Emitter, InputBox2Props } from './ti-input-box2-types';
   import { useBoxAspect } from './use-box-aspect';
+  import { useBoxIcon } from './use-box-icon';
   import { useBoxTips } from './use-box-tips';
   import { InputBoxState, useInputBox2 } from './use-input-box2';
   import { useInputComposition } from './use-input-composition';
   import { useTipList } from './use-tip-list';
-  import { useBoxIcon } from './use-box-icon';
   //-----------------------------------------------------
   const emit = defineEmits<InputBox2Emitter>();
   const $el = useTemplateRef<HTMLElement>('el');
@@ -76,6 +76,7 @@
       icon: props.prefixIcon,
       hoverIcon: props.prefixHoverIcon,
       iconFor: props.prefixIconFor,
+      autoIcon: _box_state.box_icon ?? undefined,
     })
   );
   //-----------------------------------------------------
@@ -89,7 +90,7 @@
   );
   //-----------------------------------------------------
   function onKeyDown(event: KeyboardEvent) {
-    console.log('onKeyDown', event.key);
+    //console.log('onKeyDown', event.key);
     _comp.onKeyPress(event);
     // 选择高亮项目
     if ('ArrowUp' == event.key) {
@@ -118,13 +119,20 @@
   //-----------------------------------------------------
   function onInputBlur() {
     _box.value.setFocused(false);
-    _box.value.emitIfChanged();
-    _.delay(() => {
-      _box.value.clearOptionsData();
-    }, 200);
+    if (!_box.value.hasTips.value) {
+      _box.value.emitIfChanged();
+    }
+  }
+  //-----------------------------------------------------
+  function onClickMask() {
+    _box.value.clearOptionsData();
+    if (_box_state.box_value != props.value) {
+      _box.value.onPropsValueChange();
+    }
   }
   //-----------------------------------------------------
   function onOptionSelect(payload: ListSelectEmitInfo) {
+    console.log('onOptionSelect', payload);
     let item = payload.current;
     if (item) {
       _box.value.setValueByItem(item);
@@ -163,33 +171,47 @@
       {{ _box.hasTips.value ? 'Tip' : '---' }}
       {{ _tip_box.DumpInfo.value }}
     </aside-->
-    <!--主体框-->
-    <main
-      ref="el"
-      :class="_aspect.TopClass.value"
-      :style="_aspect.TopStyle.value">
-      <slot name="head">
+    <div class="part-main">
+      <slot name="head"> </slot>
+      <!--主体框-->
+      <main
+        ref="el"
+        class="is-focused"
+        :class="_aspect.TopClass.value"
+        :style="_aspect.TopStyle.value">
+        <!--====================================-->
         <div
           v-if="_prefix.hasIcon.value"
           class="icon-part at-prefix"
           :class="_prefix.IconPartClass.value"
           v-html="_prefix.IconPartHtml.value"
           @click.left.stop="_prefix.onClick"></div>
-      </slot>
-      <input
-        ref="input"
-        :style="_aspect.InputStyle.value"
-        :placeholder="_box.Placeholder.value"
-        :value="_box.InputText.value"
-        @keydown="onKeyDown"
-        @keyup="_comp.onKeyUp"
-        @compositionstart="_comp.onStart"
-        @compositionend="_comp.onEnd"
-        @focus.stop="onInputFocused"
-        @blur.stop="onInputBlur"
-        @dblclick.stop />
+        <!--====================================-->
+        <input
+          ref="input"
+          :style="_aspect.InputStyle.value"
+          :placeholder="_box.Placeholder.value"
+          :value="_box.InputText.value"
+          :readonly="_box.isInputReadonly.value"
+          spellcheck="false"
+          @keydown="onKeyDown"
+          @keyup="_comp.onKeyUp"
+          @compositionstart="_comp.onStart"
+          @compositionend="_comp.onEnd"
+          @focus.stop="onInputFocused"
+          @blur.stop="onInputBlur"
+          @dblclick.stop />
+        <!--====================================-->
+        <div
+          v-if="_suffix.hasIcon.value"
+          class="icon-part at-prefix"
+          :class="_suffix.IconPartClass.value"
+          v-html="_suffix.IconPartHtml.value"
+          @click.left.stop="_suffix.onClick"></div>
+        <!--====================================-->
+      </main>
       <slot name="tail"> </slot>
-    </main>
+    </div>
     <template v-if="_tip_box.TipBoxStyleReady.value">
       <!--
       占位支撑框。 当展开选项时，主体框会浮动到最顶层
@@ -201,7 +223,9 @@
         <!--纯占位而已，似乎不需要内容-->
       </div>
       <!--遮罩层：展开选项后，会用这个来捕获全局 click-->
-      <div class="part-mask"></div>
+      <div
+        class="part-mask"
+        @click.left.stop="onClickMask"></div>
       <!--选项层：展开的选项存放的地方-->
       <div
         class="part-options"

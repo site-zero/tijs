@@ -1,7 +1,7 @@
-import { InputBoxProps } from '../../';
+import { InputBox2Props } from '../../';
 import { AnyOptionItem, AspectSize, Vars } from '../../../_type';
 
-export type InputCodeProps = InputBoxProps & {
+export type InputCodeProps = InputBox2Props & {
   codeWidth?: string | number;
   gap?: AspectSize;
   style?: Vars;

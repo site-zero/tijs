@@ -1,6 +1,12 @@
 @use '@site0/tijs/sass/_all.scss' as *;
 
 .ti-input {
+  --box-color-border: var(--ti-color-border-dark);
+  --box-color-text: var(--ti-color-box-f);
+  --box-color-bg: var(--ti-color-box);
+  --box-color-focus-border: var(--ti-color-primary);
+  --box-color-focus-text: var(--ti-color-highlight-f);
+  --box-color-focus-bg: var(--ti-color-highlight);
   //-----------------------------------------------------
   > aside {
     @include font-fixed;
@@ -10,19 +16,24 @@
   //-----------------------------------------------------
   > main {
     overflow: hidden;
-    border: 1px solid #ccc;
+    border: 1px solid var(--box-color-border);
+    background-color: var(--box-color-bg);
+    color: var(--box-color-text);
     @include flex-align-nowrap($ai: stretch);
     font-size: var(--box-fontsz);
     border-radius: var(--box-radius);
+    user-select: none;
     //---------------------------------------------------
     > input {
       flex: 1 1 auto;
       padding: var(--box-padding);
+      width:80%;
       outline: none;
       border: 0;
       font-size: inherit;
       font-family: inherit;
       background-color: transparent;
+      color: inherit;
       &[readonly] {
         cursor: default;
       }
@@ -34,13 +45,14 @@
     }
     //---------------------------------------------------
     &.is-focused {
-      border-color: var(--ti-color-primary);
-      background-color: var(--ti-color-highlight);
-      color: var(--ti-color-highlight-f);
+      border-color: var(--box-color-focus-border);
+      background-color: var(--box-color-focus-bg);
+      color: var(--box-color-focus-text);
     }
     //---------------------------------------------------
     > .icon-part {
-      width: calc(var(--box-fontsz) * 1.6);
+      flex: 0 0 auto;
+      width: calc(var(--box-fontsz) * 1.8);
       position: relative;
       i {
         @include flex-center;
@@ -59,14 +71,17 @@
           opacity: 0;
         }
         &:hover {
+          color: var(--box-color-bg);
+          background-color: var(--box-color-focus-border);
           i:first-child {
             opacity: 0;
-            transform: rotate(360deg);
           }
           i:last-child {
             opacity: 1;
-            transform: rotate(360deg);
           }
+        }
+        &.can-rotate:hover i {
+          transform: rotate(360deg);
         }
       }
     }
@@ -80,6 +95,7 @@
   }
   //-----------------------------------------------------
   > .part-options {
+    @include flex-align-v-nowrap;
     position: fixed;
     z-index: $z-mask + 2;
     padding: SZ(2) 0;

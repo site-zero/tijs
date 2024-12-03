@@ -21,6 +21,9 @@ export function useBoxAspect(
   //--------------------------------------------------
   const TopStyle = computed(() => {
     let re = _.assign({}, props.style, _tips.BoxMainStyle.value);
+    if (props.width) {
+      re.width = props.width;
+    }
     if (props.hideBorder) {
       re.border = '0px';
     }
@@ -33,12 +36,15 @@ export function useBoxAspect(
     if (props.boxRadius) {
       re['--box-radius'] = `var(--ti-measure-r-${props.boxRadius})`;
     }
-    if(props.logicType){
+    if (props.type) {
       _.assign(re, {
-        '--box-color-border': `var(--ti-color-${props.logicType})`,
-        '--box-color-text': `var(--ti-color-${props.logicType})`,
-        '--box-color-bg': `var(--ti-color-${props.logicType})`,
-      })
+        '--box-color-border': `var(--ti-color-${props.type}-b)`,
+        '--box-color-text': `var(--ti-color-${props.type})`,
+        //'--box-color-bg': `var(--ti-color-${props.type}-r)`,
+        '--box-color-focus-border': `var(--ti-color-${props.type})`,
+        '--box-color-focus-text': `var(--ti-color-${props.type})`,
+        '--box-color-focus-bg': `var(--ti-color-${props.type}-r)`,
+      });
     }
     return re;
   });

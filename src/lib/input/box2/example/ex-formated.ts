@@ -10,7 +10,7 @@ export default {
     valueCase: 'upper',
     trimed: true,
     placeholder: 'Choose one options',
-    prefixIconForClean: true,
-    suffixIconForCopy: true,
+    prefixIconFor: 'clear',
+    suffixIconFor: 'copy',
   } as InputBox2Props,
 } as ComPropExample;
