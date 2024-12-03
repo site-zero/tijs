@@ -60,6 +60,14 @@ export type InputBoxProps = CommonProps &
     exportApi?: (box: InputBoxApi) => void;
 
     /**
+     * 指定输入框显示文字的获取方式
+     * 默认为 'text|value'
+     * 如果指定了 useRawValue 相当于 'value'
+     * 也可以指定为 'tip|value|text'等
+     */
+    getDisplayText?: string;
+
+    /**
      * 提示列表的配置
      */
     tipShowTime?: TipShowTime;

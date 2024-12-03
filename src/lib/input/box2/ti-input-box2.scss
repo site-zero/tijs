@@ -43,6 +43,16 @@
       color: var(--box-color-focus-text);
     }
     //---------------------------------------------------
+    &.is-readonly {
+      opacity: 0.7;
+      --box-color-border: var(--ti-color-border-weak);
+      --box-color-text: var(--ti-color-disable);
+      --box-color-bg: var(--ti-color-disable-r);
+      // --box-color-focus-border: var(--ti-color-primary);
+      // --box-color-focus-text: var(--ti-color-highlight-f);
+      // --box-color-focus-bg: var(--ti-color-highlight);
+    }
+    //---------------------------------------------------
   }
   //-----------------------------------------------------
   > .part-main > .main-body {

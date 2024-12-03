@@ -85,6 +85,7 @@
         valueInputAlign: 'left',
         tipFormat: 'VT',
         suffixIconFor: 'load-options',
+        suffixIcon: null,
       } as InputBoxProps,
       props.units
     );
@@ -102,7 +103,6 @@
     // }
     if (props.unitSelectOnly) {
       //re.suffixIcon = 'zmdi-caret-down';
-      re.suffixIcon = null;
       re.canInput = false;
     }
     return re;

@@ -135,7 +135,7 @@
 <style lang="scss">
   .box-part.as-code-text {
     align-content: center;
-    border: 1px solid var(--box-color-border);
+    border: 1px solid var(--ti-color-border-weak);
     background-color: var(--ti-color-disable-r);
     color: var(--ti-color-disable);
     font-size: calc(var(--box-fontsz) * 0.8);

@@ -20,6 +20,7 @@ export function useBoxAspect(
     return {
       'is-focused': _box.isFocused.value,
       'show-tips': _tips.TipBoxStyleReady.value,
+      'is-readonly': _box.isReadonly.value,
     };
   });
   //--------------------------------------------------

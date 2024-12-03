@@ -125,6 +125,9 @@
   );
   //-----------------------------------------------------
   function onKeyDown(event: KeyboardEvent) {
+    if(_box.value.isReadonly.value){
+      return 
+    }
     //console.log('onKeyDown', event.key);
     _comp.onKeyPress(event);
     // 选择高亮项目
@@ -155,6 +158,9 @@
   });
   //-----------------------------------------------------
   function onInputFocused() {
+    if(_box.value.isReadonly.value){
+      return 
+    }
     bus?.emit(BUS_EVENT_FOCUS);
     _box.value.setFocused(true);
   }
@@ -174,6 +180,9 @@
   }
   //-----------------------------------------------------
   function onOptionSelect(payload: ListSelectEmitInfo) {
+    if(_box.value.isReadonly.value){
+      return 
+    }
     //console.log('onOptionSelect', payload);
     _box.value.setValueByItem(payload.current || null);
     _box.value.emitIfChanged();

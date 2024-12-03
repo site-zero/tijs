@@ -7,6 +7,7 @@ import { usePlaceholder, useReadonly } from '../../_features';
 import { InputBoxEmitter, InputBoxProps } from './ti-input-box2-types';
 import { ValueOptions } from './use-value-options';
 import { ValuePipeFeature } from './use-value-pipe';
+import { useBoxDisplayText } from './use-box-display-text';
 //--------------------------------------------------
 export type InputBoxState = {
   /**
@@ -55,13 +56,18 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
   //------------------------------------------------
   const hasTips = computed(() => (_options_data.value ? true : false));
   //------------------------------------------------
+  const _display = computed(() => useBoxDisplayText(props));
+  //------------------------------------------------
   const InputText = computed(() => {
-    let { usr_text, box_value, box_text } = _box_state;
-    let dft_text = _focused.value ? usr_text || '' : box_value;
-    if (props.useRawValue) {
-      return box_value ?? dft_text;
-    }
-    return box_text ?? dft_text;
+    let {
+      usr_text,
+      box_value: value,
+      box_text: text,
+      box_tip: tip,
+      box_icon: icon,
+    } = _box_state;
+    let dft_text = _focused.value ? usr_text || '' : value;
+    return _display.value({ text, tip, icon, value }) ?? dft_text;
   });
   const isReadonly = computed(() => _readonly.value.isReadonly());
   const isInputReadonly = computed(() => isReadonly.value || !props.canInput);
