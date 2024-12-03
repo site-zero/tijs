@@ -20,7 +20,13 @@ export function useBoxAspect(
   );
   //--------------------------------------------------
   const TopStyle = computed(() => {
-    let re = _.assign({}, props.style, _tips.BoxMainStyle.value);
+    return CssUtils.toStyle(
+      CssUtils.mergeStyles([{}, props.style, _tips.BoxMainStyle.value])
+    );
+  });
+  //--------------------------------------------------
+  const PartMainStyle = computed(() => {
+    let re = CssUtils.toStyle(props.partMainStyle);
     if (props.width) {
       re.width = props.width;
     }
@@ -49,6 +55,11 @@ export function useBoxAspect(
     return re;
   });
   //--------------------------------------------------
+  const MainBodyStyle = computed(() => {
+    return CssUtils.toStyle(props.mainBodyStyle);
+  });
+  //--------------------------------------------------
+  //--------------------------------------------------
   const InputStyle = computed(() => {
     return CssUtils.toStyle(props.inputStyle);
   });
@@ -58,6 +69,8 @@ export function useBoxAspect(
   return {
     TopClass,
     TopStyle,
+    PartMainStyle,
+    MainBodyStyle,
     InputStyle,
   };
 }

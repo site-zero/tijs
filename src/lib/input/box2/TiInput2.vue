@@ -163,7 +163,9 @@
   //-----------------------------------------------------
 </script>
 <template>
-  <div class="ti-input">
+  <div
+    class="ti-input"
+    :style="_aspect.TopStyle.value">
     <!--aside>
       [{{ _box.OptionsData.value.length }}]
       {{ _box_state }}
@@ -171,14 +173,16 @@
       {{ _box.hasTips.value ? 'Tip' : '---' }}
       {{ _tip_box.DumpInfo.value }}
     </aside-->
-    <div class="part-main">
+    <div
+      ref="el"
+      class="part-main"
+      :style="_aspect.PartMainStyle.value">
       <slot name="head"> </slot>
       <!--主体框-->
-      <main
-        ref="el"
-        class="is-focused"
+      <div
+        class="main-body"
         :class="_aspect.TopClass.value"
-        :style="_aspect.TopStyle.value">
+        :style="_aspect.MainBodyStyle.value">
         <!--====================================-->
         <div
           v-if="_prefix.hasIcon.value"
@@ -209,7 +213,7 @@
           v-html="_suffix.IconPartHtml.value"
           @click.left.stop="_suffix.onClick"></div>
         <!--====================================-->
-      </main>
+      </div>
       <slot name="tail"> </slot>
     </div>
     <template v-if="_tip_box.TipBoxStyleReady.value">

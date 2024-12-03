@@ -8,7 +8,6 @@
   });
   //-----------------------------------------------------
   let emit = defineEmits<{
-    (event: 'click-prefix-text' | 'click-suffix-text'): void;
     (event: 'change', payload: string): void;
   }>();
   //-----------------------------------------------------
@@ -47,9 +46,7 @@
     :mustInOptions="true"
     :prefixIconFor="Cleans.prefixIconFor"
     :showCleanOption="Cleans.showCleanOption"
-    @change="onInputChange"
-    @click-prefix-text="emit('click-prefix-text')"
-    @click-suffix-text="emit('click-suffix-text')" />
+    @change="onInputChange" />
 </template>
 <style lang="scss" scoped>
   @use './ti-droplist.scss';

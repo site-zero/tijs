@@ -28,6 +28,8 @@ export type InputBoxAspect = {
 
   style?: Vars;
   inputStyle?: Vars;
+  partMainStyle?: Vars;
+  mainBodyStyle?: Vars;
   align?: CssAlignment;
   boxFontSize?: AspectSize;
   boxPadding?: AspectSize;

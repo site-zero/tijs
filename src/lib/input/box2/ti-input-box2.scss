@@ -16,17 +16,22 @@
   //-----------------------------------------------------
   > .part-main {
     @include flex-align-nowrap($ai: stretch);
+    //---------------------------------------------------
+    > .box-part {
+      border: 1px solid var(--box-color-border);
+      flex: 1 1 auto;
+      border: 1px solid var(--box-color-border);
+      background-color: var(--box-color-bg);
+      color: var(--box-color-text);
+      font-size: var(--box-fontsz);
+      border-radius: var(--box-radius);
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    //---------------------------------------------------
   }
   //-----------------------------------------------------
-  > .part-head {
-    border: 1px solid var(--box-color-border);
-  }
-  //-----------------------------------------------------
-  > .part-tail {
-    border: 1px solid var(--box-color-border);
-  }
-  //-----------------------------------------------------
-  > .part-main > main {
+  > .part-main > .main-body {
     flex: 1 1 auto;
     @include flex-align-nowrap($ai: stretch);
     overflow: hidden;

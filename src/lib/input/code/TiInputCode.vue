@@ -52,6 +52,9 @@
     if (!re.tipFormat) {
       re.tipFormat = 'VT';
     }
+    if(props.codeWidth){
+      
+    }
     return re;
   });
   //-----------------------------------------------------
@@ -100,7 +103,7 @@
     if (!_item.value) {
       return '';
     }
-    GetDescription.value(_item.value);
+    return GetDescription.value(_item.value);
   });
   //-----------------------------------------------------
   function onBoxItemChange(it: AnyOptionItem | null) {
@@ -114,8 +117,14 @@
     v-bind="InputConfig"
     :emit-type="'std-item'"
     :value="InputValue"
-    @change="onBoxItemChange" />
+    @change="onBoxItemChange">
+    <template v-slot:tail>
+      <div class="box-part">
+        {{ InputText }}
+      </div>
+    </template>
+  </TiInput>
 </template>
-<style lang="scss" scoped>
+<style lang="scss">
   @use './ti-input-code.scss';
 </style>
