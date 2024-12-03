@@ -1,6 +1,7 @@
 @use '@site0/tijs/sass/_all.scss' as *;
 
 .ti-list {
+  font-size: var(--ti-fontsz-m);
   //--------------------------------
   &.none-user-select {
     user-select: none;
@@ -80,18 +81,6 @@
       } // > .list-part
       //------------------------------
     } // > .list-item
-  }
-  //--------------------------------
-  &.size-s {
-    font-size: var(--ti-fontsz-s);
-  }
-  //--------------------------------
-  &.size-m {
-    font-size: var(--ti-fontsz-m);
-  }
-  //--------------------------------
-  &.size-b {
-    font-size: var(--ti-fontsz-b);
   }
   //--------------------------------
   &.is-hoverable {

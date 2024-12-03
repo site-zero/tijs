@@ -4,6 +4,7 @@
   --ti-measure-r-m: 8px;
   --ti-measure-r-s: 4px;
   --ti-measure-r-t: 2px;
+  --ti-measure-r-none: 0;
 
   --ti-measure-box-pad: 6px;
   --ti-measure-box-height: 32px;
@@ -26,10 +27,10 @@
   --ti-gap-h: 16px; // hug
 
   --ti-box-pad-t: 0.1em; // tiny
-  --ti-box-pad-s: 0.2em; // small
-  --ti-box-pad-m: 0.4em; // middle
-  --ti-box-pad-b: 0.8em; // big
-  --ti-box-pad-h: 1.5em; // hug
+  --ti-box-pad-s: 0.3em; // small
+  --ti-box-pad-m: 0.5em; // middle
+  --ti-box-pad-b: 0.7em; // big
+  --ti-box-pad-h: 1.2em; // hug
 
   --ti-fontsz-page: 14px;
   --ti-fontsz-box: 12px;
@@ -43,5 +44,5 @@
   --ti-fontsz-s: 12px; // small
   --ti-fontsz-m: 14px; // middle
   --ti-fontsz-b: 16px; // big
-  --ti-fontsz-h: 18px; // hug
+  --ti-fontsz-h: 20px; // hug
 }

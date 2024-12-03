@@ -1,4 +1,8 @@
-import { GetDataLogicTypeOptions, RoadblockProps, StdListItemProps } from '../../';
+import {
+  GetDataLogicTypeOptions,
+  RoadblockProps,
+  StdListItemProps,
+} from '../../';
 import {
   AnyOptionItem,
   AspectSize,
@@ -13,6 +17,7 @@ import {
 } from '../../../lib/_features/use-selectable';
 
 export type ListAspect = {
+  style?: Vars;
   /**
    * 列表显示文字如何格式化:
    *
@@ -29,10 +34,10 @@ export type ListAspect = {
    */
   textAsHtml?: boolean;
 
-   /**
+  /**
    * 获取一个行的逻辑类型
    */
-   getRowType?: GetDataLogicTypeOptions;
+  getRowType?: GetDataLogicTypeOptions;
 
   /**
    *  指明如果带上 tip ， tip 栏的宽度，默认为 1fr

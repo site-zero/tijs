@@ -24,14 +24,21 @@ export function useBoxAspect(
     if (props.hideBorder) {
       re.border = '0px';
     }
-    if (props.boxSize) {
-      re['--box-size'] = `var(--ti-fontsz-${props.boxSize})`;
+    if (props.boxFontSize) {
+      re['--box-fontsz'] = `var(--ti-fontsz-${props.boxFontSize})`;
     }
     if (props.boxPadding) {
-      re['--box-padding'] = `var(--ti-bpx-pad-${props.boxPadding})`;
+      re['--box-padding'] = `var(--ti-box-pad-${props.boxPadding})`;
     }
     if (props.boxRadius) {
-      re['--box-radius'] = `var(--ti-measure-r-${props.boxSize})`;
+      re['--box-radius'] = `var(--ti-measure-r-${props.boxRadius})`;
+    }
+    if(props.logicType){
+      _.assign(re, {
+        '--box-color-border': `var(--ti-color-${props.logicType})`,
+        '--box-color-text': `var(--ti-color-${props.logicType})`,
+        '--box-color-bg': `var(--ti-color-${props.logicType})`,
+      })
     }
     return re;
   });

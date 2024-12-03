@@ -1,15 +1,16 @@
 <script setup lang="ts">
   import _ from 'lodash';
-import { computed, reactive, useTemplateRef, watch } from 'vue';
-import { TiList } from '../../';
-import { Rect } from '../../../_type';
-import { ListSelectEmitInfo } from '../../../lib';
-import { InputBox2Emitter, InputBox2Props } from './ti-input-box2-types';
-import { useBoxAspect } from './use-box-aspect';
-import { useBoxTips } from './use-box-tips';
-import { InputBoxState, useInputBox2 } from './use-input-box2';
-import { useInputComposition } from './use-input-composition';
-import { useTipList } from './use-tip-list';
+  import { computed, reactive, useTemplateRef, watch } from 'vue';
+  import { TiList } from '../../';
+  import { Rect } from '../../../_type';
+  import { ListSelectEmitInfo } from '../../../lib';
+  import { InputBox2Emitter, InputBox2Props } from './ti-input-box2-types';
+  import { useBoxAspect } from './use-box-aspect';
+  import { useBoxTips } from './use-box-tips';
+  import { InputBoxState, useInputBox2 } from './use-input-box2';
+  import { useInputComposition } from './use-input-composition';
+  import { useTipList } from './use-tip-list';
+  import { useBoxIcon } from './use-box-icon';
   //-----------------------------------------------------
   const emit = defineEmits<InputBox2Emitter>();
   const $el = useTemplateRef<HTMLElement>('el');
@@ -31,6 +32,9 @@ import { useTipList } from './use-tip-list';
     canInput: true,
     trimed: true,
     autoSelect: true,
+    boxFontSize: 'm',
+    boxPadding: 'm',
+    boxRadius: 's',
   });
   //-----------------------------------------------------
   const _box = computed(() =>
@@ -55,6 +59,7 @@ import { useTipList } from './use-tip-list';
       },
     })
   );
+  //-----------------------------------------------------
   const _aspect = computed(() =>
     useBoxAspect(props, _box.value, _tip_box.value)
   );
@@ -64,6 +69,24 @@ import { useTipList } from './use-tip-list';
       _box.value.onInputUpate(val);
     },
   });
+  //-----------------------------------------------------
+  const _prefix = computed(() =>
+    useBoxIcon({
+      _box: _box.value,
+      icon: props.prefixIcon,
+      hoverIcon: props.prefixHoverIcon,
+      iconFor: props.prefixIconFor,
+    })
+  );
+  //-----------------------------------------------------
+  const _suffix = computed(() =>
+    useBoxIcon({
+      _box: _box.value,
+      icon: props.suffixIcon,
+      hoverIcon: props.suffixHoverIcon,
+      iconFor: props.suffixIconFor,
+    })
+  );
   //-----------------------------------------------------
   function onKeyDown(event: KeyboardEvent) {
     console.log('onKeyDown', event.key);
@@ -96,9 +119,9 @@ import { useTipList } from './use-tip-list';
   function onInputBlur() {
     _box.value.setFocused(false);
     _box.value.emitIfChanged();
-    _.delay(()=>{
+    _.delay(() => {
       _box.value.clearOptionsData();
-    }, 200)
+    }, 200);
   }
   //-----------------------------------------------------
   function onOptionSelect(payload: ListSelectEmitInfo) {
@@ -141,12 +164,18 @@ import { useTipList } from './use-tip-list';
       {{ _tip_box.DumpInfo.value }}
     </aside-->
     <!--主体框-->
-    <div
-      class="part-main"
+    <main
       ref="el"
       :class="_aspect.TopClass.value"
       :style="_aspect.TopStyle.value">
-      <slot name="head"> </slot>
+      <slot name="head">
+        <div
+          v-if="_prefix.hasIcon.value"
+          class="icon-part at-prefix"
+          :class="_prefix.IconPartClass.value"
+          v-html="_prefix.IconPartHtml.value"
+          @click.left.stop="_prefix.onClick"></div>
+      </slot>
       <input
         ref="input"
         :style="_aspect.InputStyle.value"
@@ -160,7 +189,7 @@ import { useTipList } from './use-tip-list';
         @blur.stop="onInputBlur"
         @dblclick.stop />
       <slot name="tail"> </slot>
-    </div>
+    </main>
     <template v-if="_tip_box.TipBoxStyleReady.value">
       <!--
       占位支撑框。 当展开选项时，主体框会浮动到最顶层

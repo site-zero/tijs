@@ -3,6 +3,8 @@ import {
   AspectSize,
   CommonProps,
   CssAlignment,
+  IconInput,
+  LogicType,
   Vars,
 } from '../../../_type';
 import { PlaceholderProps } from '../../_features';
@@ -43,9 +45,10 @@ export type InputBox2Props = CommonProps &
     style?: Vars;
     inputStyle?: Vars;
     align?: CssAlignment;
-    boxSize?: AspectSize;
+    boxFontSize?: AspectSize;
     boxPadding?: AspectSize;
-    boxRadius?: AspectSize;
+    boxRadius?: AspectSize | 'none';
+    logicType?: LogicType;
 
     /**
      * 提示列表的配置
@@ -82,12 +85,6 @@ export type InputBox2Props = CommonProps &
     autoSelect?: boolean;
 
     /**
-     * 如果开启这个开关, 只要定义了字典，且 mustInOptions
-     * 那么将自动根据选项设置前缀图标
-     */
-    autoPrefixIcon?: boolean;
-
-    /**
      * 如果值是某个选项，默认的会在输入框显示选项的文字而不是值。
      * 开启这个选项，则在输入框直接显示值而不是翻译后的文字
      */
@@ -104,6 +101,8 @@ export type InputBox2Props = CommonProps &
      * 让输入框显示有意义的便于人类阅读的文字，因为我们可能用 text 表示
      * 一个记录的唯一值，而真正存储是这个记录的UUID主键。我们当然不想
      * 让用户聚焦输入框就显示可怕的 UUID，这会让很多初级用户产生不舒适甚至恐慌
+     *
+     * TODO 似乎没用了，可以删除
      */
     useTextWhenFocus?: boolean;
 
@@ -115,12 +114,33 @@ export type InputBox2Props = CommonProps &
      */
     showCleanOption?: boolean;
 
-    // 前缀按钮用来删除
-    prefixIconForClean?: boolean;
+    /**
+     * 前缀图标
+     */
+    prefixIcon?: IconInput;
+    prefixHoverIcon?: IconInput;
+    /**
+     * 声明了这个动作，则表示这个图标可以点击
+     */
+    prefixIconFor?: BoxIconFor;
+    /**
+     * 如果开启这个开关, 只要定义了字典，且 mustInOptions
+     * 那么将自动根据选项设置前缀图标
+     */
+    autoPrefixIcon?: boolean;
 
-    // 后缀按钮用来复制
-    suffixIconForCopy?: boolean;
+    /**
+     * 后缀图标
+     */
+    suffixIcon?: IconInput;
+    suffixHoverIcon?: IconInput;
+    /**
+     * 声明了这个动作，则表示这个图标可以点击
+     */
+    suffixIconFor?: BoxIconFor;
   };
+//--------------------------------------------------
+export type BoxIconFor = 'copy' | 'load-options' | 'clear';
 //--------------------------------------------------
 /**
  * 提示框的显示时机

@@ -83,6 +83,10 @@ export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
     _.assign(_box_state, amend);
   }
   //------------------------------------------------
+  function updateBoxState(amend: Partial<InputBoxState>) {
+    __amend_box_state(amend);
+  }
+  //------------------------------------------------
   function setValueByItem(_item: Vars) {
     let item = _options.value?.toOptionItem(_item);
     if (!item) {
@@ -292,16 +296,24 @@ export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
     _box_state,
     _options_data,
     _focused,
+    getElement,
+    getInputElement,
     hasTips,
     InputText,
     isFocused: computed(() => _focused.value),
     OptionsData: computed(() => _options.value?.OptionsData.value ?? []),
+    updateBoxState,
     setValueByItem,
     setFocused,
     onInputUpate,
     onPropsValueChange,
     onKeyUpOrDown,
     clearOptionsData,
+    showOptions: async () => {
+      if (!hasTips.value) {
+        await _options.value?.reloadOptioinsData();
+      }
+    },
     emitIfChanged,
     Placeholder: computed(() => usePlaceholder(props)),
   };

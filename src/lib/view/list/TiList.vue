@@ -35,7 +35,7 @@
   const isItemsHasIcon = computed(() => List.value.itemsHasIcon(Items.value));
   //-----------------------------------------------------
   const TopClass = computed(() => {
-    let names = [`size-${props.size ?? 'm'}`] as string[];
+    let names: string[] = [];
     if (props.borderStyle) {
       names.push(`border-${props.borderStyle}`);
     }
@@ -45,10 +45,20 @@
         'is-hoverable': props.canHover,
         'is-selectable': props.canSelect || props.canCheck,
         'is-highlight-checked': props.highlightChecked,
-
         'none-user-select': !props.allowUserSelect,
       },
       names
+    );
+  });
+  //-----------------------------------------------------
+  const TopStyle = computed(() => {
+    return CssUtils.toStyle(
+      CssUtils.mergeStyles(
+        {
+          'font-size': `var(--ti-fontsz-${props.size ?? 'm'})`,
+        },
+        props.style
+      )
     );
   });
   //-----------------------------------------------------
@@ -85,7 +95,8 @@
 <template>
   <div
     class="ti-list"
-    :class="TopClass">
+    :class="TopClass"
+    :style="TopStyle">
     <slot name="head"></slot>
     <!--------------Empty Items------------------>
     <div

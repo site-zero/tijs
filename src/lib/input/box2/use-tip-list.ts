@@ -15,7 +15,7 @@ export function useTipList(props: InputBox2Props) {
   const TipListConfig = computed(() => {
     let re: ListProps = _.assign(
       {
-        size: 's',
+        size: props.boxFontSize,
         canSelect: true,
         canHover: true,
         allowUserSelect: false,
