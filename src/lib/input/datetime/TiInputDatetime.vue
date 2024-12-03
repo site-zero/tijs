@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed } from 'vue';
-  import { Alert, TiInput2 } from '../../';
+  import { Alert, TiInput } from '../../';
   import { DateInput } from '../../../_type';
   import { DateTime, tiGetDefaultComPropValue } from '../../../core';
   import { COM_TYPES } from '../../lib-com-types';
@@ -108,7 +108,7 @@
   //-----------------------------------------------------
 </script>
 <template>
-  <TiInput2
+  <TiInput
     v-bind="InputProps"
     :value="InputValue"
     :format="formatValue"

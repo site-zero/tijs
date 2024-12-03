@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import { computed } from 'vue';
 import { CssUtils } from '../../../';
-import { InputBox2Props } from './ti-input-box2-types';
+import { InputBoxProps } from './ti-input-box2-types';
 import { BoxTipsFeature } from './use-box-tips';
 import { InputBox2Feature } from './use-input-box2';
 
 export function useBoxAspect(
-  props: InputBox2Props,
+  props: InputBoxProps,
   _box: InputBox2Feature,
   _tips: BoxTipsFeature
 ) {

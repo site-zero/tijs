@@ -16,12 +16,11 @@ import { ValueOptionsProps } from './use-value-options';
 import { ValuePipeProps } from './use-value-pipe';
 
 //--------------------------------------------------
-export type InputBox2Emitter = {
+export type InputBoxEmitter = {
   (event: 'change', value: any): void;
-  (event: 'box-item-change', payload: AnyOptionItem | undefined): void;
 };
 //--------------------------------------------------
-export type InputBox2Aspect = {
+export type InputBoxAspect = {
   /**
    * 隐藏输入框边框
    */
@@ -37,14 +36,14 @@ export type InputBox2Aspect = {
   width?: string;
 };
 //--------------------------------------------------
-export type InputBox2Props = CommonProps &
+export type InputBoxProps = CommonProps &
   ValuePipeProps &
   DictProps &
   ValueOptionsProps &
   ValueHintCookingProps &
   ItemLookupProps &
   PlaceholderProps &
-  InputBox2Aspect &
+  InputBoxAspect &
   ReadonlyProps & {
     /**
      * 输入值
@@ -54,6 +53,8 @@ export type InputBox2Props = CommonProps &
     options?: DictInput;
 
     autoI18n?: boolean;
+
+    emitType?: BoxEmitType;
 
     /**
      * 提示列表的配置
@@ -144,6 +145,8 @@ export type InputBox2Props = CommonProps &
      */
     suffixIconFor?: BoxIconFor;
   };
+//--------------------------------------------------
+export type BoxEmitType = 'value' | 'std-item' | 'raw-item';
 //--------------------------------------------------
 export type BoxIconFor = 'copy' | 'load-options' | 'clear';
 //--------------------------------------------------

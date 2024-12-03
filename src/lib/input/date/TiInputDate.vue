@@ -3,7 +3,7 @@
   import { computed } from 'vue';
   import { DateInput } from '../../../_type';
   import { DateTime, tiGetDefaultComPropValue } from '../../../core';
-  import { Alert, InputDatetimeProps, TiInput2 } from '../../../lib';
+  import { Alert, InputDatetimeProps, TiInput } from '../../../lib';
   import { COM_TYPES } from '../../lib-com-types';
   //-----------------------------------------------------
   let emit = defineEmits<{
@@ -101,7 +101,7 @@
   //-----------------------------------------------------
 </script>
 <template>
-  <TiInput2
+  <TiInput
     v-bind="InputProps"
     :value="InputValue"
     :format="formatValue"

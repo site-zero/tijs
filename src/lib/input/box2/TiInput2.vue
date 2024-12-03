@@ -4,7 +4,7 @@
   import { TiList } from '../../';
   import { Rect } from '../../../_type';
   import { ListSelectEmitInfo } from '../../../lib';
-  import { InputBox2Emitter, InputBox2Props } from './ti-input-box2-types';
+  import { InputBoxEmitter, InputBoxProps } from './ti-input-box2-types';
   import { useBoxAspect } from './use-box-aspect';
   import { useBoxIcon } from './use-box-icon';
   import { useBoxTips } from './use-box-tips';
@@ -12,7 +12,7 @@
   import { useInputComposition } from './use-input-composition';
   import { useTipList } from './use-tip-list';
   //-----------------------------------------------------
-  const emit = defineEmits<InputBox2Emitter>();
+  const emit = defineEmits<InputBoxEmitter>();
   const $el = useTemplateRef<HTMLElement>('el');
   const $input = useTemplateRef<HTMLInputElement>('input');
   //-----------------------------------------------------
@@ -24,7 +24,7 @@
     box_tip: null,
   } as InputBoxState);
   //-----------------------------------------------------
-  const props = withDefaults(defineProps<InputBox2Props>(), {
+  const props = withDefaults(defineProps<InputBoxProps>(), {
     value: '',
     autoI18n: true,
     tipShowTime: 'focus',

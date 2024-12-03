@@ -14,12 +14,25 @@
     line-height: 1.1em;
   }
   //-----------------------------------------------------
-  > main {
+  > .part-main {
+    @include flex-align-nowrap($ai: stretch);
+  }
+  //-----------------------------------------------------
+  > .part-head {
+    border: 1px solid var(--box-color-border);
+  }
+  //-----------------------------------------------------
+  > .part-tail {
+    border: 1px solid var(--box-color-border);
+  }
+  //-----------------------------------------------------
+  > .part-main > main {
+    flex: 1 1 auto;
+    @include flex-align-nowrap($ai: stretch);
     overflow: hidden;
     border: 1px solid var(--box-color-border);
     background-color: var(--box-color-bg);
     color: var(--box-color-text);
-    @include flex-align-nowrap($ai: stretch);
     font-size: var(--box-fontsz);
     border-radius: var(--box-radius);
     user-select: none;
@@ -27,7 +40,7 @@
     > input {
       flex: 1 1 auto;
       padding: var(--box-padding);
-      width:80%;
+      width: 80%;
       outline: none;
       border: 0;
       font-size: inherit;

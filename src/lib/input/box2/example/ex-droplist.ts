@@ -1,5 +1,5 @@
 import { ComPropExample } from '../../../../_type';
-import { InputBox2Props } from '../ti-input-box2-types';
+import { InputBoxProps } from '../ti-input-box2-types';
 
 export default {
   name: 'droplist',
@@ -35,5 +35,5 @@ export default {
       { value: 'horse', text: 'Horse', icon: 'fas-horse' },
       { value: 'cat', text: 'Cat', icon: 'fas-cat' },
     ],
-  } as InputBox2Props,
+  } as InputBoxProps,
 } as ComPropExample;

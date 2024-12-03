@@ -1,5 +1,5 @@
 import { ComPropExample } from '../../../../_type';
-import { InputBox2Props } from '../ti-input-box2-types';
+import { InputBoxProps } from '../ti-input-box2-types';
 
 export default {
   name: 'formated',
@@ -7,10 +7,10 @@ export default {
   comConf: {
     //className: "",
     value: 'HELLO',
-    valueCase: 'upper',
+    valueCase: 'upperAll',
     trimed: true,
     placeholder: 'Choose one options',
     prefixIconFor: 'clear',
     suffixIconFor: 'copy',
-  } as InputBox2Props,
+  } as InputBoxProps,
 } as ComPropExample;

@@ -4,7 +4,7 @@ import { AnyOptionItem, IconInput, Vars } from '../../../_type';
 import { I18n } from '../../../core';
 import { anyToStr } from '../../../core/text/ti-str';
 import { usePlaceholder, useReadonly } from '../../_features';
-import { InputBox2Emitter, InputBox2Props } from './ti-input-box2-types';
+import { InputBoxEmitter, InputBoxProps } from './ti-input-box2-types';
 import { useDict } from './use-dict';
 import { useValueHintCooking } from './use-value-hint-cooking';
 import { useValueOptions, ValueOptions } from './use-value-options';
@@ -31,10 +31,10 @@ export type InputBoxSetup = {
   _box_state: InputBoxState;
   getElement: () => HTMLElement | null;
   getInputElement: () => HTMLInputElement | null;
-  emit: InputBox2Emitter;
+  emit: InputBoxEmitter;
 };
 //--------------------------------------------------
-export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
+export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
   let { _box_state, getElement, getInputElement, emit } = setup;
   console.log('useInputBox2', props.value);
   //------------------------------------------------
@@ -305,10 +305,22 @@ export function useInputBox2(props: InputBox2Props, setup: InputBoxSetup) {
   //------------------------------------------------
   function emitIfChanged() {
     let val = _box_state.box_value;
+    let emitType = props.emitType || 'value';
     if (!_.isEqual(val, props.value)) {
-      emit('change', val);
-      let item = _options.value?.getOptionItem(val);
-      emit('box-item-change', item);
+      // 原始对象
+      if ('raw-item' == emitType) {
+        let item = _options.value?.getRawItem(val);
+        emit('change', item ?? null);
+      }
+      // 对象
+      else if ('std-item' == emitType) {
+        let item = _options.value?.getOptionItem(val);
+        emit('change', item ?? null);
+      }
+      // 采用值
+      else {
+        emit('change', val);
+      }
     }
   }
 

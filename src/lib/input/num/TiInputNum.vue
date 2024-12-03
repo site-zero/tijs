@@ -3,6 +3,7 @@
   import { computed } from 'vue';
   import { Bank, Num } from '../../../core';
   import { InputNumProps } from './ti-input-num-types';
+  import { TiInput } from '../../';
   //-----------------------------------------------------
   defineOptions({
     inheritAttrs: false,

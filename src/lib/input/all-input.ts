@@ -1,5 +1,5 @@
 import { TiComSet } from '../../_type';
-import { TiInput2Info } from './box2/ti-input-box2-index';
+import { TiInputInfo } from './box2/ti-input-box2-index';
 import { TiCheckInfo } from './check/ti-check-index';
 import { TiCheckListInfo } from './checklist/ti-check-list-index';
 import { TiInputCodeInfo } from './code/ti-input-code-index';
@@ -25,7 +25,7 @@ import { TiToggleInfo } from './toggle/ti-toggle-index';
 import { TiTransferInfo } from './transfer/ti-transfer-index';
 
 export default {
-  TiInput2: TiInput2Info,
+  TiInput: TiInputInfo,
   TiComboFilter: TiComboFilterInfo,
   TiCheck: TiCheckInfo,
   TiInputCode: TiInputCodeInfo,

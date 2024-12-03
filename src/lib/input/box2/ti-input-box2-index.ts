@@ -1,7 +1,6 @@
 import { App } from 'vue';
 import { TiComInfo, TiComRace } from '../../../_type';
-import { COM_TYPES } from '../../lib-com-types';
-import TiInput2 from './TiInput2.vue';
+import TiInput from './TiInput2.vue';
 import example from './example';
 
 const en_us = {
@@ -15,28 +14,28 @@ const zh_cn = {
   'example-droplist': '只读下拉',
 };
 
-const COM_TYPE = 'TiInput2';
+const COM_TYPE = 'TiInput';
 
-const TiInput2Info: TiComInfo = {
+const TiInputInfo: TiComInfo = {
   tags: ['ing'],
   icon: 'fas-i-cursor',
   race: TiComRace.INPUT,
   name: COM_TYPE,
-  text: 'i18n:ti-input-2-com-name',
+  text: 'i18n:ti-input-com-name',
   i18n: {
     en_us: en_us,
     en_uk: en_us,
     zh_cn: zh_cn,
     zh_hk: zh_cn,
   },
-  com: TiInput2,
+  com: TiInput,
   liveStyle: {
     width: '80%',
     minWidth: '120px',
     maxWidth: '300px',
   },
   install: (app: App) => {
-    app.component(COM_TYPE, TiInput2);
+    app.component(COM_TYPE, TiInput);
   },
   defaultProps: 'simple',
   exampleProps: [
@@ -48,5 +47,5 @@ const TiInput2Info: TiComInfo = {
   ],
 };
 
-export { TiInput2, TiInput2Info };
 export * from './ti-input-box2-types';
+export { TiInput, TiInputInfo };

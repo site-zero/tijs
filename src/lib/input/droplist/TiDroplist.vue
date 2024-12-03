@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { computed } from 'vue';
-  import { InputBox2Props, TiInput2 } from '../../';
+  import { InputBoxProps, TiInput } from '../../';
   import { DroplistProps } from './ti-droplist-types';
   //-----------------------------------------------------
   defineOptions({
@@ -21,7 +21,7 @@
     autoPrefixIcon: true,
   });
   //-----------------------------------------------------
-  type CleansSetup = Pick<InputBox2Props, 'prefixIconFor' | 'showCleanOption'>;
+  type CleansSetup = Pick<InputBoxProps, 'prefixIconFor' | 'showCleanOption'>;
   const Cleans = computed((): CleansSetup => {
     let re = {
       prefixIconFor: props.prefixIconFor,
@@ -40,7 +40,7 @@
   //-----------------------------------------------------
 </script>
 <template>
-  <TiInput2
+  <TiInput
     v-bind="props"
     :canInput="false"
     :trimed="false"

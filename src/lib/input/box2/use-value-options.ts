@@ -223,6 +223,28 @@ export function useValueOptions(
     }
   }
   //------------------------------------------------
+  function getRawItem(value: any): Vars | undefined {
+    if (
+      _.isNil(value) ||
+      !_options_data.value ||
+      _.isEmpty(_options_data.value)
+    ) {
+      return;
+    }
+    // 逐个寻找选项对象
+    for (let it of _options_data.value) {
+      let itVal: any;
+      if (isAnyOptionItem(it)) {
+        itVal = it.value;
+      } else {
+        itVal = dict.getItemValue(it, -1);
+      }
+      if (value == itVal) {
+        return it;
+      }
+    }
+  }
+  //------------------------------------------------
   function lookupOptionItem(hint: string): AnyOptionItem | undefined {
     if (!hint || !_options_data.value || _.isEmpty(_options_data.value)) {
       return;
@@ -242,6 +264,7 @@ export function useValueOptions(
     getOptionItem,
     getOptionItemIndex,
     getOptionItemAt,
+    getRawItem,
     toOptionItem,
     lookupOptionItem,
     reloadOptioinsData,

@@ -1,5 +1,5 @@
 import {
-  InputBox2Props,
+  InputBoxProps,
   PlaceholderProps,
   PrefixSuffixProps,
   ReadonlyProps,
@@ -10,7 +10,7 @@ export type InputDatetimeProps = CommonProps &
   ReadonlyProps &
   PlaceholderProps &
   Pick<
-    InputBox2Props,
+    InputBoxProps,
     'prefixIcon' | 'prefixHoverIcon' | 'suffixIcon' | 'suffixHoverIcon'
   > & {
     value?: number | Date | string;

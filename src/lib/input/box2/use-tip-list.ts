@@ -2,13 +2,13 @@ import _ from 'lodash';
 import { ListProps } from '../../view/list/ti-list-types';
 import { computed, Ref } from 'vue';
 import { Vars } from '../../../_type';
-import { InputBox2Props } from './ti-input-box2-types';
+import { InputBoxProps } from './ti-input-box2-types';
 
 export type TipListSetup = {
   _options_data: Ref<Vars[] | undefined>;
 };
 
-export function useTipList(props: InputBox2Props) {
+export function useTipList(props: InputBoxProps) {
   /**
    * 提示列表的配置信息
    */

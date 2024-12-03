@@ -84,6 +84,7 @@
         useRawValue: true,
         valueInputAlign: 'left',
         tipFormat: 'VT',
+        suffixIconFor: 'load-options',
       } as InputBoxProps,
       props.units
     );
@@ -101,8 +102,6 @@
     // }
     if (props.unitSelectOnly) {
       re.suffixIcon = 'zmdi-caret-down';
-      re.suffixIconStyle = { width: '16px' };
-      re.suffixIconClickable = false;
       re.canInput = false;
     }
     return re;

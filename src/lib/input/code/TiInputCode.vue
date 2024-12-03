@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed, onMounted, onUnmounted, ref } from 'vue';
-  import { InputBox2Props, TiInput2, useValueInput, useViewport } from '../../';
+  import { InputBoxProps, TiInput, useViewport } from '../../';
   import { AnyOptionItem, ToStr } from '../../../_type';
   import { CssUtils, Util } from '../../../core';
   import { InputCodeProps } from './ti-input-code-types';
@@ -34,15 +34,17 @@
     onUnmounted,
   });
   //-----------------------------------------------------
-  const _desc = ref('');
-  //-----------------------------------------------------
-  const _vals = computed(() => useValueInput(props));
+  const _item = ref<AnyOptionItem>();
   //-----------------------------------------------------
   const InputConfig = computed(() => {
-    let re: InputBox2Props = _.omit(
+    let re: InputBoxProps = _.omit(
       props,
       'style',
       'className',
+      'codeWidth',
+      'gap',
+      'getDescription',
+      'hideDescription',
       'tipList',
       'tipListWidth'
     );
@@ -50,17 +52,6 @@
     if (!re.tipFormat) {
       re.tipFormat = 'VT';
     }
-    return re;
-  });
-  //-----------------------------------------------------
-  const TipListConfig = computed(() => {
-    let cw = props.codeWidth;
-    // let re: TipListProps = {
-    //   textAsHtml: true,
-    //   textFormat: `<code style="min-width:${cw};">\${value}:</code><em>\${text}</em>`,
-    // };
-    let re = {};
-    _.assign(re, props.tipList);
     return re;
   });
   //-----------------------------------------------------
@@ -103,46 +94,27 @@
     return props.getDescription;
   });
   //-----------------------------------------------------
-  function onBoxItemChange(it?: AnyOptionItem) {
-    if (_.isNil(it)) {
-      _desc.value = '';
-    } else {
-      _desc.value = GetDescription.value(it);
-    }
-  }
+  const InputValue = computed(() => _item.value?.value);
   //-----------------------------------------------------
-  async function onChange(val: string) {
-    emit('change', val);
+  const InputText = computed(() => {
+    if (!_item.value) {
+      return '';
+    }
+    GetDescription.value(_item.value);
+  });
+  //-----------------------------------------------------
+  function onBoxItemChange(it: AnyOptionItem | null) {
+    _item.value = it ?? undefined;
+    emit('change', it?.value || null);
   }
   //-----------------------------------------------------
 </script>
 <template>
-  <div
-    ref="$el"
-    class="ti-input-code"
-    :class="TopClass"
-    :style="TopStyle">
-    <!--代码-->
-    <div
-      class="part-code"
-      :style="PartCodeStyle">
-      <TiInput
-        v-bind="InputConfig"
-        :tip-list="TipListConfig"
-        @change="onChange"
-        @box-item-change="onBoxItemChange" />
-    </div>
-    <!--描述-->
-    <div
-      v-if="!props.hideDescription"
-      class="part-desc"
-      :class="PartDescClass">
-      <input
-        :value="_desc"
-        readonly
-        spellcheck="false" />
-    </div>
-  </div>
+  <TiInput
+    v-bind="InputConfig"
+    :emit-type="'std-item'"
+    :value="InputValue"
+    @change="onBoxItemChange" />
 </template>
 <style lang="scss" scoped>
   @use './ti-input-code.scss';

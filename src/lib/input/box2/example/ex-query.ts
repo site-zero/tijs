@@ -1,5 +1,5 @@
 import { ComPropExample } from '../../../../_type';
-import { InputBox2Props } from '../ti-input-box2-types';
+import { InputBoxProps } from '../ti-input-box2-types';
 
 export default {
   name: 'query',
@@ -16,5 +16,5 @@ export default {
     tipUseHint: true,
     options: "#hello100",
     lookup: ['*~text'],
-  } as InputBox2Props,
+  } as InputBoxProps,
 } as ComPropExample;
