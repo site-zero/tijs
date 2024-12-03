@@ -1,16 +1,12 @@
 import _ from 'lodash';
-import { computed, nextTick, ref } from 'vue';
+import { computed, nextTick, Ref, ref } from 'vue';
 import { AnyOptionItem, IconInput, Vars } from '../../../_type';
-import { I18n } from '../../../core';
+import { Dicts, I18n } from '../../../core';
 import { anyToStr } from '../../../core/text/ti-str';
 import { usePlaceholder, useReadonly } from '../../_features';
 import { InputBoxEmitter, InputBoxProps } from './ti-input-box2-types';
-import { useDict } from './use-dict';
-import { useValueHintCooking } from './use-value-hint-cooking';
-import { useValueOptions, ValueOptions } from './use-value-options';
-import { useValuePipe } from './use-value-pipe';
-//--------------------------------------------------
-export type InputBox2Feature = ReturnType<typeof useInputBox2>;
+import { ValueOptions } from './use-value-options';
+import { ValuePipeFeature } from './use-value-pipe';
 //--------------------------------------------------
 export type InputBoxState = {
   /**
@@ -29,41 +25,33 @@ export type InputBoxState = {
 //--------------------------------------------------
 export type InputBoxSetup = {
   _box_state: InputBoxState;
+  _options_data: Ref<Vars[] | undefined>;
+  _pipe: ValuePipeFeature;
+  _dict: Dicts.TiDict | undefined;
+  _options: ValueOptions | undefined;
   getElement: () => HTMLElement | null;
   getInputElement: () => HTMLInputElement | null;
   emit: InputBoxEmitter;
 };
 //--------------------------------------------------
 export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
-  let { _box_state, getElement, getInputElement, emit } = setup;
-  console.log('useInputBox2', props.value);
   //------------------------------------------------
-  const _options_data = ref<Vars[]>();
+  let {
+    _box_state,
+    _options_data,
+    _pipe,
+    _dict,
+    _options,
+    getElement,
+    getInputElement,
+    emit,
+  } = setup;
+  //------------------------------------------------
   const _focused = ref(false);
   //------------------------------------------------
-  // 组合内部行为
-  //------------------------------------------------
-  const _pipe = computed(() => useValuePipe(props));
-  const _dict = useDict(props.options, props);
-  const _cook_hint = computed(() => useValueHintCooking(props));
-  //------------------------------------------------
-  // 组合出对选项的操作
-  const _options = computed((): ValueOptions | undefined => {
-    if (_dict.value) {
-      return useValueOptions(
-        {
-          dict: _dict.value,
-          cookHint: _cook_hint.value,
-          _options_data,
-        },
-        props
-      );
-    }
-  });
+  // 计算属性
   //------------------------------------------------
   const _readonly = computed(() => useReadonly(props));
-  //------------------------------------------------
-  // 计算属性
   //------------------------------------------------
   const hasTips = computed(() => (_options_data.value ? true : false));
   //------------------------------------------------
@@ -87,8 +75,8 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
         value: null,
       });
     }
-    if (_options.value) {
-      re.push(..._options.value?.OptionsData.value);
+    if (_options) {
+      re.push(..._options.OptionsData.value);
     }
 
     return re;
@@ -100,6 +88,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     if (amend.box_text && props.autoI18n) {
       amend.box_text = I18n.text(amend.box_text);
     }
+    //console.trace('!!!!!!!!!!!__amend_box_state', amend.box_value, props.value);
     _.assign(_box_state, amend);
   }
   //------------------------------------------------
@@ -107,29 +96,37 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     __amend_box_state(amend);
   }
   //------------------------------------------------
-  function setValueByItem(_item: Vars) {
-    let item = _options.value?.toOptionItem(_item);
-    if (!item) {
-      return;
-    }
-    let usr_text = item.text ?? null;
-    if (props.useRawValue) {
-      usr_text = item.value;
-    }
+  function setValueByItem(item: Vars | null) {
     let amend: InputBoxState = {
-      usr_text,
-      box_value: item.value,
-      box_icon: item.icon ?? null,
-      box_text: item.text ?? null,
-      box_tip: item.tip ?? null,
+      usr_text: null,
+      box_value: null,
+      box_icon: null,
+      box_text: null,
+      box_tip: null,
     };
+    if (item) {
+      let stdItem = _options?.toOptionItem(item);
+      if (stdItem) {
+        let usr_text = stdItem.text ?? null;
+        if (props.useRawValue) {
+          usr_text = stdItem.value ?? null;
+        }
+        _.assign(amend, {
+          usr_text,
+          box_value: stdItem.value ?? null,
+          box_icon: stdItem.icon ?? null,
+          box_text: stdItem.text ?? null,
+          box_tip: stdItem.tip ?? null,
+        });
+      }
+    }
     __amend_box_state(amend);
   }
   //------------------------------------------------
   async function onInputUpate(text0: string) {
     let { reloadOptioinsData, lookupOptionItem, getOptionItem } =
-      _options.value ?? {};
-    let text1 = _pipe.value(text0);
+      _options ?? {};
+    let text1 = _pipe(text0);
     let amend: InputBoxState = {
       usr_text: text1,
       box_value: null,
@@ -151,7 +148,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     }
     // query hint
     else if (props.tipUseHint) {
-      await _options.value?.reloadOptioinsData(text1);
+      await _options?.reloadOptioinsData(text1);
     }
 
     // 首先尝试精确查找
@@ -177,7 +174,6 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
   }
   //------------------------------------------------
   async function onPropsValueChange() {
-    //console.log('onPropsValueChange', props.value);
     let val = anyToStr(props.value);
     let amend: InputBoxState = {
       usr_text: val ?? '',
@@ -192,8 +188,8 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     }
 
     // 尝试查询一下
-    if (_dict.value) {
-      let item = await _dict.value.getStdItem(val);
+    if (_dict) {
+      let item = await _dict.getStdItem(val);
       if (item) {
         amend.box_value = item.value;
         amend.box_icon = item.icon ?? null;
@@ -204,6 +200,38 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
 
     // 更新状态
     __amend_box_state(amend);
+  }
+  //------------------------------------------------
+  /**
+   * 非常无奈，我发现某些很复杂的场景，譬如一个 GUI 里面嵌套 TabForms
+   * 而 form 里还有 InputGroup，进行Tab切换的时候，正好 Vue 认为
+   * 两个 Tab 的某个 Input 不需要重新创建。
+   *
+   * 然后我就会在一个 watch props.value 里调用两遍 onPropsValueChange
+   * 的情况，通常是在 2ms 内的，苦思不得其解。
+   *
+   * 于是我干脆用一个反弹跳来解决这个问题。无论怎样，在300内只会有一次调用
+   * 应该就能解决这个问题了
+   */
+  const debouncePropsValueChange = _.debounce(
+    () => {
+      onPropsValueChange();
+    },
+    300,
+    {
+      leading: false,
+      trailing: true,
+    }
+  );
+
+  //------------------------------------------------
+  async function getItemByValue(val: any): Promise<AnyOptionItem | undefined> {
+    if (_dict) {
+      let re = await _dict.getStdItem(val);
+      if (re) {
+        return re.toOptionItem();
+      }
+    }
   }
   //------------------------------------------------
   /**
@@ -230,11 +258,10 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     if (offset == 0) {
       return;
     }
-    if (!_options.value) {
+    if (!_options) {
       return;
     }
-    let { reloadOptioinsData, getOptionItemIndex, getOptionItemAt } =
-      _options.value;
+    let { reloadOptioinsData, getOptionItemIndex, getOptionItemAt } = _options;
 
     // 确保展示了选项列表
     if (!hasTips.value) {
@@ -291,8 +318,8 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
       }
 
       // 如果需要展示选项
-      if (props.tipShowTime == 'focus' && _options.value) {
-        let { reloadOptioinsData } = _options.value;
+      if (props.tipShowTime == 'focus' && _options) {
+        let { reloadOptioinsData } = _options;
         reloadOptioinsData();
       }
     }
@@ -309,12 +336,12 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     if (!_.isEqual(val, props.value)) {
       // 原始对象
       if ('raw-item' == emitType) {
-        let item = _options.value?.getRawItem(val);
+        let item = _options?.getRawItem(val);
         emit('change', item ?? null);
       }
       // 对象
       else if ('std-item' == emitType) {
-        let item = _options.value?.getOptionItem(val);
+        let item = _options?.getOptionItem(val);
         emit('change', item ?? null);
       }
       // 采用值
@@ -323,18 +350,25 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
       }
     }
   }
-
+  //------------------------------------------------
+  // 重置 _options_data
+  //------------------------------------------------
+  clearOptionsData();
+  // if(props.value && props.value !== _box_state.box_value) {
+  //   onPropsValueChange();
+  // }
   //------------------------------------------------
   // 返回特性
   //------------------------------------------------
-  return {
-    _box_state,
-    _options_data,
-    _focused,
+  let api = {
+    // _box_state,
+    // _options_data,
+    // _focused,
     getElement,
     getInputElement,
     hasTips,
-    InputText,
+    Text: InputText,
+    Value: computed(() => _box_state.box_value),
     isFocused: computed(() => _focused.value),
     isReadonly,
     isInputReadonly,
@@ -343,15 +377,20 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     setValueByItem,
     setFocused,
     onInputUpate,
-    onPropsValueChange,
+    debouncePropsValueChange,
     onKeyUpOrDown,
     clearOptionsData,
+    getItemByValue,
     showOptions: async () => {
       if (!hasTips.value) {
-        await _options.value?.reloadOptioinsData();
+        await _options?.reloadOptioinsData();
       }
     },
     emitIfChanged,
     Placeholder: computed(() => usePlaceholder(props)),
   };
+  if (props.exportApi) {
+    props.exportApi(api);
+  }
+  return api;
 }

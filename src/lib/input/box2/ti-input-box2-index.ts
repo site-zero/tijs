@@ -1,6 +1,6 @@
 import { App } from 'vue';
 import { TiComInfo, TiComRace } from '../../../_type';
-import TiInput from './TiInput2.vue';
+import TiInput from './TiInput.vue';
 import example from './example';
 
 const en_us = {

@@ -1,12 +1,14 @@
 import JSON5 from 'json5';
 import _ from 'lodash';
+import { computed } from 'vue';
 import { Convertor, IconInput, Vars } from '../../../_type';
 import { DictName, Dicts, isDictSetup } from '../../../core';
-import { computed } from 'vue';
 
+export type BoxDictFeature = ReturnType<typeof useDict>;
 export type DictInput = string | DictName | DictProps | Vars[];
 
 export type DictProps = {
+  options?: DictInput;
   /**
    * 动态字典需要这个属性作为变量上下文
    */
@@ -27,59 +29,68 @@ export type DictProps = {
   getValue?: string | ((item: Vars, index: number) => any);
 };
 
-export function useDict(_dict_input: DictInput|undefined, setup: DictProps) {
-  let { dictVars = {}, getIcon, getText, getTip, getValue } = setup;
-  return computed(() => {
-    if (_dict_input) {
-      // 选项数据
-      if (_.isArray(_dict_input)) {
-        let dictOptions = Dicts.makeDictOptions({
-          data: _dict_input,
-          icon: getIcon,
-          text: getText,
-          tip: getTip,
-          value: getValue,
-        });
-        return Dicts.createDict(dictOptions);
-      }
+export function useDict(props: DictProps) {
+  // let val = _.get(props, 'value');
+  // console.trace('useDict', val);
 
-      // 直接就是选项
-      if (isDictSetup(_dict_input)) {
-        let dictOptions = Dicts.makeDictOptions(_dict_input);
-        return Dicts.createDict(dictOptions);
-      }
+  let {
+    options: _dict_input,
+    dictVars = {},
+    getIcon,
+    getText,
+    getTip,
+    getValue,
+  } = props;
 
-      // 分析字典名称
-      let dictName: DictName;
-      if (_.isString(_dict_input)) {
-        let referName = Dicts.dictReferName(_dict_input);
-        dictName = Dicts.explainDictName(referName);
-      } else {
-        dictName = _dict_input as DictName;
-      }
-
-      // 获取字典: 动态
-      let { name, dynamic, dictKey } = dictName;
-      if (dynamic) {
-        if (!dictKey) {
-          throw new Error(
-            `DynamicDict: "${JSON5.stringify(dictName)}" without {dictKey}`
-          );
-        }
-        let key = _.get(dictVars, dictKey);
-        if (!key) {
-          return;
-          // throw new Error(
-          //   `DynamicDict: "${JSON5.stringify(
-          //     dictName
-          //   )}" Fail to get key from dictVars: ${JSON5.stringify(dictVars)}`
-          // );
-        }
-        return Dicts.checkDynamicDict(name, key, dictVars);
-      }
-
-      // 获取字典: 静态
-      return Dicts.checkDict(name);
+  if (_dict_input) {
+    // 选项数据
+    if (_.isArray(_dict_input)) {
+      let dictOptions = Dicts.makeDictOptions({
+        data: _dict_input,
+        icon: getIcon,
+        text: getText,
+        tip: getTip,
+        value: getValue,
+      });
+      return Dicts.createDict(dictOptions);
     }
-  });
+
+    // 直接就是选项
+    if (isDictSetup(_dict_input)) {
+      let dictOptions = Dicts.makeDictOptions(_dict_input);
+      return Dicts.createDict(dictOptions);
+    }
+
+    // 分析字典名称
+    let dictName: DictName;
+    if (_.isString(_dict_input)) {
+      let referName = Dicts.dictReferName(_dict_input);
+      dictName = Dicts.explainDictName(referName);
+    } else {
+      dictName = _dict_input as DictName;
+    }
+
+    // 获取字典: 动态
+    let { name, dynamic, dictKey } = dictName;
+    if (dynamic) {
+      if (!dictKey) {
+        throw new Error(
+          `DynamicDict: "${JSON5.stringify(dictName)}" without {dictKey}`
+        );
+      }
+      let key = _.get(dictVars, dictKey);
+      if (!key) {
+        return;
+        // throw new Error(
+        //   `DynamicDict: "${JSON5.stringify(
+        //     dictName
+        //   )}" Fail to get key from dictVars: ${JSON5.stringify(dictVars)}`
+        // );
+      }
+      return Dicts.checkDynamicDict(name, key, dictVars);
+    }
+
+    // 获取字典: 静态
+    return Dicts.checkDict(name);
+  }
 }

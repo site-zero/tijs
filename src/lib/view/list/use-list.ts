@@ -25,7 +25,7 @@ export function useList(props: ListProps, emit: ListEmitter) {
   const getRowType = useDataLogicType(props.getRowType);
   //-----------------------------------------------------
   // 标准列表
-  let { getItemValue, getItemIcon, getItemText, getItemTip } = useStdListItem({
+  let { toStdItem } = useStdListItem({
     ...props,
     getValue: (it: Vars, index: number) => {
       return selectable.getDataId(it, index);
@@ -99,10 +99,8 @@ export function useList(props: ListProps, emit: ListEmitter) {
         className[`is-${type}`] = true;
       }
       // 选项信息
-      let value = getItemValue(li, index);
-      let icon = getItemIcon(li);
-      let text = getItemText(li);
-      let tip = getItemTip(li);
+      let stdItem = toStdItem(li, index);
+      let { value, icon, text, tip } = stdItem;
 
       // 翻译多国语音
       if (props.autoI18n) {
@@ -200,10 +198,6 @@ export function useList(props: ListProps, emit: ListEmitter) {
   // 输出特性
   //-----------------------------------------------------
   return {
-    getItemValue,
-    getItemIcon,
-    getItemText,
-    getItemTip,
     getRoadblock,
     buildOptionItems,
     itemsHasIcon,

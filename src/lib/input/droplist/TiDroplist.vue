@@ -20,17 +20,17 @@
     autoPrefixIcon: true,
   });
   //-----------------------------------------------------
-  type CleansSetup = Pick<InputBoxProps, 'prefixIconFor' | 'showCleanOption'>;
-  const Cleans = computed((): CleansSetup => {
-    let re = {
-      prefixIconFor: props.prefixIconFor,
-      showCleanOption: props.showCleanOption,
-    } as CleansSetup;
-    if ('clear' != re.prefixIconFor && !re.showCleanOption) {
-      re.showCleanOption = true;
-    }
-    return re;
-  });
+  // type CleansSetup = Pick<InputBoxProps, 'prefixIconFor' | 'showCleanOption'>;
+  // const Cleans = computed((): CleansSetup => {
+  //   let re = {
+  //     prefixIconFor: props.prefixIconFor,
+  //     showCleanOption: props.showCleanOption,
+  //   } as CleansSetup;
+  //   if ('clear' != re.prefixIconFor && !re.showCleanOption) {
+  //     re.showCleanOption = true;
+  //   }
+  //   return re;
+  // });
   //-----------------------------------------------------
   function onInputChange(val: any) {
     console.log('onInputChange', val);
@@ -44,8 +44,6 @@
     :canInput="false"
     :trimed="false"
     :mustInOptions="true"
-    :prefixIconFor="Cleans.prefixIconFor"
-    :showCleanOption="Cleans.showCleanOption"
     @change="onInputChange" />
 </template>
 <style lang="scss" scoped>

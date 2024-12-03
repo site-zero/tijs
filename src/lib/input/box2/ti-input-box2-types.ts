@@ -1,5 +1,4 @@
 import {
-  AnyOptionItem,
   AspectSize,
   CommonProps,
   CssAlignment,
@@ -10,11 +9,11 @@ import {
 import { PlaceholderProps, ReadonlyProps } from '../../_features';
 import { ListProps } from '../../view/all-views';
 import { DictInput, DictProps } from './use-dict';
+import { useInputBox2 } from './use-input-box2';
 import { ItemLookupProps } from './use-item-lookup';
 import { ValueHintCookingProps } from './use-value-hint-cooking';
 import { ValueOptionsProps } from './use-value-options';
 import { ValuePipeProps } from './use-value-pipe';
-
 //--------------------------------------------------
 export type InputBoxEmitter = {
   (event: 'change', value: any): void;
@@ -57,6 +56,8 @@ export type InputBoxProps = CommonProps &
     autoI18n?: boolean;
 
     emitType?: BoxEmitType;
+
+    exportApi?: (box: InputBoxApi) => void;
 
     /**
      * 提示列表的配置
@@ -125,8 +126,8 @@ export type InputBoxProps = CommonProps &
     /**
      * 前缀图标
      */
-    prefixIcon?: IconInput;
-    prefixHoverIcon?: IconInput;
+    prefixIcon?: IconInput | null;
+    prefixHoverIcon?: IconInput | null;
     /**
      * 声明了这个动作，则表示这个图标可以点击
      */
@@ -140,8 +141,8 @@ export type InputBoxProps = CommonProps &
     /**
      * 后缀图标
      */
-    suffixIcon?: IconInput;
-    suffixHoverIcon?: IconInput;
+    suffixIcon?: IconInput | null;
+    suffixHoverIcon?: IconInput | null;
     /**
      * 声明了这个动作，则表示这个图标可以点击
      */
@@ -150,7 +151,11 @@ export type InputBoxProps = CommonProps &
 //--------------------------------------------------
 export type BoxEmitType = 'value' | 'std-item' | 'raw-item';
 //--------------------------------------------------
-export type BoxIconFor = 'copy' | 'load-options' | 'clear';
+export type BoxIconFor =
+  | 'copy'
+  | 'load-options'
+  | 'clear'
+  | ((box: InputBoxApi) => void);
 //--------------------------------------------------
 /**
  * 提示框的显示时机
@@ -171,3 +176,5 @@ export type TipShowTime = 'focus' | 'auto';
  * 在没有声明  tipList.textFormat 的前提下，它可以为其快速设置格式化方式
  */
 export type TipOptionFormat = 'T' | 'VT' | 'TV' | 'VTT' | 'TT';
+//--------------------------------------------------
+export type InputBoxApi = ReturnType<typeof useInputBox2>;

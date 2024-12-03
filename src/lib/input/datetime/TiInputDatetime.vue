@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed } from 'vue';
-  import { Alert, TiInput } from '../../';
+  import { Alert, InputBoxApi, TiInput } from '../../';
   import { DateInput } from '../../../_type';
   import { DateTime, tiGetDefaultComPropValue } from '../../../core';
   import { COM_TYPES } from '../../lib-com-types';
@@ -45,6 +45,11 @@
       delete re.prefixIconForClean;
       re.prefixIconFor = 'clear';
     }
+    re.suffixIconFor = async (_box: InputBoxApi) => {
+      Alert(`It will show a Calendar. 
+      But I am not implement it yet.
+      You can input the date at the input-box `);
+    };
     return re;
   });
   //-----------------------------------------------------
@@ -68,7 +73,7 @@
     let format =
       props.valueFormat ?? _dft_prop('valueFormat', 'yyyy-MM-dd HH:mm:ss');
     let quickMode = props.quickInputMode ?? _dft_prop('quickInputMode', '');
-    console.log('quickInputMode', quickMode)
+    console.log('quickInputMode', quickMode);
 
     let d: Date | undefined;
     if (DateTime.isDateTimeQuickParseMode(quickMode)) {
@@ -100,18 +105,11 @@
     }
   }
   //-----------------------------------------------------
-  function onClickSuffixIcon() {
-    Alert(`It will show a Calendar. 
-    But I am not implement it yet.
-    You can input the date at the input-box `);
-  }
-  //-----------------------------------------------------
 </script>
 <template>
   <TiInput
     v-bind="InputProps"
     :value="InputValue"
     :format="formatValue"
-    @click-suffix-icon="onClickSuffixIcon"
     @change="onValueChange" />
 </template>

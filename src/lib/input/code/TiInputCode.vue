@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import _ from 'lodash';
-  import { computed, onMounted, onUnmounted, ref } from 'vue';
-  import { InputBoxProps, TiInput, useViewport } from '../../';
+  import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+  import { InputBoxApi, InputBoxProps, TiInput, useViewport } from '../../';
   import { AnyOptionItem, ToStr } from '../../../_type';
   import { CssUtils, Util } from '../../../core';
   import { InputCodeProps } from './ti-input-code-types';
@@ -17,6 +17,7 @@
     canInput: true,
     trimed: true,
     mustInOptions: true,
+    gap: 't',
     // 自动，如果可编辑，就是 true ，否则就是 false
     checkValueWhenClose: undefined,
     autoSelect: true,
@@ -35,6 +36,7 @@
   });
   //-----------------------------------------------------
   const _item = ref<AnyOptionItem>();
+  const _box = ref<InputBoxApi>();
   //-----------------------------------------------------
   const InputConfig = computed(() => {
     let re: InputBoxProps = _.omit(
@@ -42,37 +44,28 @@
       'style',
       'className',
       'codeWidth',
+      'textStyle',
       'gap',
       'getDescription',
       'hideDescription',
-      'tipList',
       'tipListWidth'
     );
     re.tipListWidth = props.tipListWidth ?? `${_viewport.size.width}px`;
     if (!re.tipFormat) {
       re.tipFormat = 'VT';
     }
-    if(props.codeWidth){
-      
+    if (props.codeWidth) {
+      re.width = CssUtils.toSize(props.codeWidth);
     }
     return re;
   });
   //-----------------------------------------------------
-  const TopClass = computed(() =>
-    CssUtils.mergeClassName(props.className, `gap-${props.gap ?? 't'}`)
-  );
-  //-----------------------------------------------------
-  const TopStyle = computed(() => CssUtils.toStyle(props.style));
-  //-----------------------------------------------------
-  const PartCodeStyle = computed(() => {
-    return { width: props.codeWidth };
-  });
-  //-----------------------------------------------------
-  const PartDescClass = computed(() => {
-    return {
-      'show-border': !props.hideBorder,
-      'hide-border': props.hideBorder,
-    };
+  const CodeTextStyle = computed(() => {
+    let re = _.cloneDeep(props.textBoxStyle ?? {});
+    if (props.gap) {
+      re.marginLeft = `var(--ti-gap-${props.gap})`;
+    }
+    return re;
   });
   //-----------------------------------------------------
   const GetDescription = computed((): ToStr<AnyOptionItem> => {
@@ -97,7 +90,12 @@
     return props.getDescription;
   });
   //-----------------------------------------------------
-  const InputValue = computed(() => _item.value?.value);
+  const InputValue = computed(() => {
+    if (_.isUndefined(_item.value)) {
+      return props.value;
+    }
+    return _item.value.value;
+  });
   //-----------------------------------------------------
   const InputText = computed(() => {
     if (!_item.value) {
@@ -111,20 +109,40 @@
     emit('change', it?.value || null);
   }
   //-----------------------------------------------------
+  async function onBoxExportApi(box: InputBoxApi) {
+    _box.value = box;
+    _item.value = await _box.value?.getItemByValue(props.value);
+  }
+  //-----------------------------------------------------
 </script>
 <template>
   <TiInput
     v-bind="InputConfig"
     :emit-type="'std-item'"
     :value="InputValue"
+    :export-api="onBoxExportApi"
     @change="onBoxItemChange">
     <template v-slot:tail>
-      <div class="box-part">
+      <div
+        v-if="!props.hideDescription"
+        class="box-part as-code-text"
+        :style="CodeTextStyle">
         {{ InputText }}
       </div>
     </template>
   </TiInput>
 </template>
 <style lang="scss">
-  @use './ti-input-code.scss';
+  .box-part.as-code-text {
+    align-content: center;
+    border: 1px solid var(--box-color-border);
+    background-color: var(--ti-color-disable-r);
+    color: var(--ti-color-disable);
+    font-size: calc(var(--box-fontsz) * 0.8);
+    border-radius: var(--box-radius);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width:10px;
+  }
 </style>

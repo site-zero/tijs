@@ -1,16 +1,27 @@
 <script setup lang="ts">
-  import _ from 'lodash';
-  import { computed, reactive, useTemplateRef, watch } from 'vue';
+  import {
+    computed,
+    inject,
+    onMounted,
+    reactive,
+    ref,
+    useTemplateRef,
+    watch,
+  } from 'vue';
   import { TiList } from '../../';
-  import { Rect } from '../../../_type';
+  import { BUS_KEY, Rect, Vars } from '../../../_type';
   import { ListSelectEmitInfo } from '../../../lib';
   import { InputBoxEmitter, InputBoxProps } from './ti-input-box2-types';
   import { useBoxAspect } from './use-box-aspect';
   import { useBoxIcon } from './use-box-icon';
   import { useBoxTips } from './use-box-tips';
+  import { useDict } from './use-dict';
   import { InputBoxState, useInputBox2 } from './use-input-box2';
   import { useInputComposition } from './use-input-composition';
   import { useTipList } from './use-tip-list';
+  import { useValueHintCooking } from './use-value-hint-cooking';
+  import { useValueOptions, ValueOptions } from './use-value-options';
+  import { useValuePipe } from './use-value-pipe';
   //-----------------------------------------------------
   const emit = defineEmits<InputBoxEmitter>();
   const $el = useTemplateRef<HTMLElement>('el');
@@ -23,6 +34,8 @@
     box_text: null,
     box_tip: null,
   } as InputBoxState);
+  //-----------------------------------------------------
+  const _options_data = ref<Vars[]>();
   //-----------------------------------------------------
   const props = withDefaults(defineProps<InputBoxProps>(), {
     value: '',
@@ -37,9 +50,31 @@
     boxRadius: 's',
   });
   //-----------------------------------------------------
+  const _pipe = computed(() => useValuePipe(props));
+  const _dict = computed(() => useDict(props));
+  const _cook_hint = computed(() => useValueHintCooking(props));
+  //------------------------------------------------
+  // 组合出对选项的操作
+  const _options = computed((): ValueOptions | undefined => {
+    if (_dict.value) {
+      return useValueOptions(
+        {
+          dict: _dict.value,
+          cookHint: _cook_hint.value,
+          _options_data,
+        },
+        props
+      );
+    }
+  });
+  //-----------------------------------------------------
   const _box = computed(() =>
     useInputBox2(props, {
       _box_state,
+      _options_data,
+      _pipe: _pipe.value,
+      _dict: _dict.value,
+      _options: _options.value,
       getElement: () => $el.value,
       getInputElement: () => $input.value,
       emit,
@@ -102,7 +137,7 @@
     }
     // 取消
     else if ('Escape' == event.key) {
-      _box.value.onPropsValueChange();
+      _box.value.debouncePropsValueChange();
       _box.value.clearOptionsData();
     }
     // 确认
@@ -113,7 +148,14 @@
     }
   }
   //-----------------------------------------------------
+  const bus = inject(BUS_KEY);
+  const BUS_EVENT_FOCUS = 'INPUT_FOCUS';
+  bus?.onName(BUS_EVENT_FOCUS, () => {
+    _box.value.clearOptionsData();
+  });
+  //-----------------------------------------------------
   function onInputFocused() {
+    bus?.emit(BUS_EVENT_FOCUS);
     _box.value.setFocused(true);
   }
   //-----------------------------------------------------
@@ -127,17 +169,15 @@
   function onClickMask() {
     _box.value.clearOptionsData();
     if (_box_state.box_value != props.value) {
-      _box.value.onPropsValueChange();
+      _box.value.debouncePropsValueChange();
     }
   }
   //-----------------------------------------------------
   function onOptionSelect(payload: ListSelectEmitInfo) {
-    console.log('onOptionSelect', payload);
-    let item = payload.current;
-    if (item) {
-      _box.value.setValueByItem(item);
-    }
+    //console.log('onOptionSelect', payload);
+    _box.value.setValueByItem(payload.current || null);
     _box.value.emitIfChanged();
+    _box.value.clearOptionsData();
     // 由于 emit 了 change, 如果 value 更新，会导致 userInputBox2 重新计算
     // 因此 options_data 会被清空，hasTips 会变成 false
   }
@@ -149,7 +189,7 @@
   watch(
     () => props.value,
     () => {
-      _box.value.onPropsValueChange();
+      _box.value.debouncePropsValueChange();
     },
     { immediate: true }
   );
@@ -165,6 +205,7 @@
 <template>
   <div
     class="ti-input"
+    :class="_aspect.TopClass.value"
     :style="_aspect.TopStyle.value">
     <!--aside>
       [{{ _box.OptionsData.value.length }}]
@@ -176,12 +217,12 @@
     <div
       ref="el"
       class="part-main"
+      :class="_aspect.PartMainClass.value"
       :style="_aspect.PartMainStyle.value">
       <slot name="head"> </slot>
       <!--主体框-->
       <div
         class="main-body"
-        :class="_aspect.TopClass.value"
         :style="_aspect.MainBodyStyle.value">
         <!--====================================-->
         <div
@@ -195,7 +236,7 @@
           ref="input"
           :style="_aspect.InputStyle.value"
           :placeholder="_box.Placeholder.value"
-          :value="_box.InputText.value"
+          :value="_box.Text.value"
           :readonly="_box.isInputReadonly.value"
           spellcheck="false"
           @keydown="onKeyDown"
@@ -208,7 +249,7 @@
         <!--====================================-->
         <div
           v-if="_suffix.hasIcon.value"
-          class="icon-part at-prefix"
+          class="icon-part at-suffix"
           :class="_suffix.IconPartClass.value"
           v-html="_suffix.IconPartHtml.value"
           @click.left.stop="_suffix.onClick"></div>

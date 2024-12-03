@@ -114,7 +114,7 @@ export function useBoxTips(props: BoxTipsProps) {
     return !_.isEmpty(TipWrapperStyle.value);
   });
   //------------------------------------------------
-  const BoxMainStyle = computed(() => {
+  const MainBoxStyle = computed(() => {
     if (TipBoxStyleReady.value && _box_rect.value) {
       return CssUtils.toStyle({
         width: _box_rect.value.width,
@@ -138,7 +138,7 @@ export function useBoxTips(props: BoxTipsProps) {
   return {
     DumpInfo,
     TipBoxStyleReady,
-    BoxMainStyle,
+    MainBoxStyle,
     BoxBraceStyle,
     TipWrapperStyle,
     whenTipBoxVisibleChange,

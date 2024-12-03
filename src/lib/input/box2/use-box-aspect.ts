@@ -1,38 +1,33 @@
 import _ from 'lodash';
 import { computed } from 'vue';
 import { CssUtils } from '../../../';
-import { InputBoxProps } from './ti-input-box2-types';
+import { InputBoxProps,InputBoxApi } from './ti-input-box2-types';
 import { BoxTipsFeature } from './use-box-tips';
-import { InputBox2Feature } from './use-input-box2';
 
 export function useBoxAspect(
   props: InputBoxProps,
-  _box: InputBox2Feature,
+  _box: InputBoxApi,
   _tips: BoxTipsFeature
 ) {
   //--------------------------------------------------
-  const TopClass = computed(() =>
-    CssUtils.mergeClassName(props.className, {
-      'is-focused': _box.isFocused.value,
-      'show-tips': _tips.TipBoxStyleReady.value,
-      [`align-${props.align}`]: props.align ? true : false,
-    })
-  );
+  const TopClass = computed(() => CssUtils.mergeClassName(props.className));
   //--------------------------------------------------
   const TopStyle = computed(() => {
-    return CssUtils.toStyle(
-      CssUtils.mergeStyles([{}, props.style, _tips.BoxMainStyle.value])
-    );
+    return CssUtils.toStyle(props.style);
+  });
+  //--------------------------------------------------
+  const PartMainClass = computed(() => {
+    return {
+      'is-focused': _box.isFocused.value,
+      'show-tips': _tips.TipBoxStyleReady.value,
+    };
   });
   //--------------------------------------------------
   const PartMainStyle = computed(() => {
-    let re = CssUtils.toStyle(props.partMainStyle);
-    if (props.width) {
-      re.width = props.width;
-    }
-    if (props.hideBorder) {
-      re.border = '0px';
-    }
+    let re = _.assign(
+      CssUtils.toStyle(props.partMainStyle),
+      _tips.MainBoxStyle.value
+    );
     if (props.boxFontSize) {
       re['--box-fontsz'] = `var(--ti-fontsz-${props.boxFontSize})`;
     }
@@ -41,6 +36,9 @@ export function useBoxAspect(
     }
     if (props.boxRadius) {
       re['--box-radius'] = `var(--ti-measure-r-${props.boxRadius})`;
+    }
+    if (props.align) {
+      re['--box-align'] = props.align;
     }
     if (props.type) {
       _.assign(re, {
@@ -56,7 +54,15 @@ export function useBoxAspect(
   });
   //--------------------------------------------------
   const MainBodyStyle = computed(() => {
-    return CssUtils.toStyle(props.mainBodyStyle);
+    let re = _.assign({}, props.mainBodyStyle);
+    if (props.width) {
+      re.width = props.width;
+      re.flex = '0 0 auto';
+    }
+    if (props.hideBorder) {
+      re.border = '0px';
+    }
+    return CssUtils.toStyle(re);
   });
   //--------------------------------------------------
   //--------------------------------------------------
@@ -69,6 +75,7 @@ export function useBoxAspect(
   return {
     TopClass,
     TopStyle,
+    PartMainClass,
     PartMainStyle,
     MainBodyStyle,
     InputStyle,

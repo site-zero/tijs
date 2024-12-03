@@ -2,6 +2,7 @@ import _ from 'lodash';
 import {
   Convertor,
   IconInput,
+  isStdOptionItem,
   StdOptionItem,
   TableRowID,
   Vars,
@@ -32,16 +33,9 @@ export type StdListItemProps = {
   getValue?: string | ((item: Vars, index: number) => TableRowID);
 };
 
-export type StdListItemFeature = {
-  getItemValue: (it: Vars, index: number) => TableRowID | undefined;
-  getItemIcon: (it: Vars) => IconInput | undefined;
-  getItemText: (it: Vars) => string | undefined;
-  getItemTip: (it: Vars) => string | undefined;
-  toStdItem: (it: Vars, index: number) => StdOptionItem;
-  toStdItems: (list: Vars[]) => StdOptionItem[];
-};
+export type StdListItemFeature = ReturnType<typeof useStdListItem>;
 
-export function useStdListItem(props: StdListItemProps): StdListItemFeature {
+export function useStdListItem(props: StdListItemProps) {
   let {
     getIcon = (item: Vars) => item.icon,
     getText = (item: Vars) => item.text ?? item.title ?? item.nickname,
@@ -87,6 +81,9 @@ export function useStdListItem(props: StdListItemProps): StdListItemFeature {
   }
 
   function toStdItem(it: Vars, index: number): StdOptionItem {
+    if (isStdOptionItem(it)) {
+      return it;
+    }
     return {
       icon: getItemIcon(it),
       text: getItemText(it),
@@ -105,10 +102,10 @@ export function useStdListItem(props: StdListItemProps): StdListItemFeature {
   }
 
   return {
-    getItemValue,
-    getItemIcon,
-    getItemText,
-    getItemTip,
+    // getItemValue,
+    // getItemIcon,
+    // getItemText,
+    // getItemTip,
     toStdItem,
     toStdItems,
   };

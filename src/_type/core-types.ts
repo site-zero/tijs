@@ -114,6 +114,18 @@ export type NumOptionItem = OptionItem<number>;
 export type AnyOptionItem = OptionItem<any>;
 export type StdOptionItem = OptionItem<TableRowID>;
 
+export function isStdOptionItem(item: any): item is StdOptionItem {
+  if (isTableRowID(item.value) || _.isNull(item.value)) {
+    for (let key of _.keys(item)) {
+      if (!/^(icon|text|tip|className|value|style)$/.test(key)) {
+        return false;
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
 export function isAnyOptionItem(item: any): item is AnyOptionItem {
   if (!_.isNil(item.value)) {
     for (let key of _.keys(item)) {
@@ -213,6 +225,10 @@ export type Limitation = {
 };
 
 export type TableRowID = number | string;
+
+export function isTableRowID(input: any): input is TableRowID {
+  return _.isNumber(input) || _.isString(input);
+}
 
 export type FieldName = string | string[];
 

@@ -3,7 +3,12 @@
   import { computed } from 'vue';
   import { DateInput } from '../../../_type';
   import { DateTime, tiGetDefaultComPropValue } from '../../../core';
-  import { Alert, InputDatetimeProps, TiInput } from '../../../lib';
+  import {
+    Alert,
+    InputBoxApi,
+    InputDatetimeProps,
+    TiInput,
+  } from '../../../lib';
   import { COM_TYPES } from '../../lib-com-types';
   //-----------------------------------------------------
   let emit = defineEmits<{
@@ -40,6 +45,11 @@
       delete re.prefixIconForClean;
       re.prefixIconFor = 'clear';
     }
+    re.suffixIconFor = async (_box: InputBoxApi) => {
+      Alert(`It will show a Calendar. 
+      But I am not implement it yet.
+      You can input the date at the input-box `);
+    };
     return re;
   });
   //-----------------------------------------------------
@@ -93,18 +103,11 @@
     }
   }
   //-----------------------------------------------------
-  function onClickSuffixIcon() {
-    Alert(`It will show a Calendar. 
-    But I am not implement it yet.
-    You can input the date at the input-box `);
-  }
-  //-----------------------------------------------------
 </script>
 <template>
   <TiInput
     v-bind="InputProps"
     :value="InputValue"
     :format="formatValue"
-    @click-suffix-icon="onClickSuffixIcon"
     @change="onValueChange" />
 </template>

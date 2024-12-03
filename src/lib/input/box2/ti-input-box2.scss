@@ -18,15 +18,29 @@
     @include flex-align-nowrap($ai: stretch);
     //---------------------------------------------------
     > .box-part {
-      border: 1px solid var(--box-color-border);
       flex: 1 1 auto;
-      border: 1px solid var(--box-color-border);
-      background-color: var(--box-color-bg);
-      color: var(--box-color-text);
-      font-size: var(--box-fontsz);
-      border-radius: var(--box-radius);
-      overflow: hidden;
-      text-overflow: ellipsis;
+      padding: 0 var(--box-padding);
+      &.as-text-box {
+        align-content: center;
+        border: 1px solid var(--box-color-border);
+        background-color: var(--box-color-bg);
+        color: var(--box-color-text);
+        font-size: var(--box-fontsz);
+        border-radius: var(--box-radius);
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+    //---------------------------------------------------
+    &.show-tips {
+      position: absolute;
+      z-index: $z-mask + 1;
+    }
+    //---------------------------------------------------
+    &.is-focused > .main-body {
+      border-color: var(--box-color-focus-border);
+      background-color: var(--box-color-focus-bg);
+      color: var(--box-color-focus-text);
     }
     //---------------------------------------------------
   }
@@ -52,20 +66,10 @@
       font-family: inherit;
       background-color: transparent;
       color: inherit;
+      text-align: var(--box-align);
       &[readonly] {
         cursor: default;
       }
-    }
-    //---------------------------------------------------
-    &.show-tips {
-      position: absolute;
-      z-index: $z-mask + 1;
-    }
-    //---------------------------------------------------
-    &.is-focused {
-      border-color: var(--box-color-focus-border);
-      background-color: var(--box-color-focus-bg);
-      color: var(--box-color-focus-text);
     }
     //---------------------------------------------------
     > .icon-part {

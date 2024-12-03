@@ -6,6 +6,6 @@ export default {
   text: 'i18n:simple',
   comConf: {
     value: 500.32,
-    precise: 100,
+    precision: 100,
   } as InputNumProps,
 } as ComPropExample;

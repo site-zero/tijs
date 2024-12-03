@@ -3,6 +3,7 @@ import { AnyOptionItem, AspectSize, Vars } from '../../../_type';
 
 export type InputCodeProps = InputBoxProps & {
   codeWidth?: string | number;
+  textBoxStyle?: Vars;
   gap?: AspectSize;
   getDescription?: string | ((item: AnyOptionItem) => string);
   /**

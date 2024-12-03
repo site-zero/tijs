@@ -101,7 +101,8 @@
     //   };
     // }
     if (props.unitSelectOnly) {
-      re.suffixIcon = 'zmdi-caret-down';
+      //re.suffixIcon = 'zmdi-caret-down';
+      re.suffixIcon = null;
       re.canInput = false;
     }
     return re;
