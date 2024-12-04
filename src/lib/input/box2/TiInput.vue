@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import _ from 'lodash';
   import {
     computed,
     inject,
@@ -22,7 +23,6 @@
   import { useValueHintCooking } from './use-value-hint-cooking';
   import { useValueOptions, ValueOptions } from './use-value-options';
   import { useValuePipe } from './use-value-pipe';
-  import _ from 'lodash';
   //-----------------------------------------------------
   const emit = defineEmits<InputBoxEmitter>();
   const $el = useTemplateRef<HTMLElement>('el');
@@ -76,6 +76,7 @@
       _pipe: _pipe.value,
       _dict: _dict.value,
       _options: _options.value,
+      cookHint: _cook_hint.value,
       getElement: () => $el.value,
       getInputElement: () => $input.value,
       emit,
@@ -102,6 +103,8 @@
   //-----------------------------------------------------
   const _comp = useInputComposition({
     onChange: (val) => {
+      //确保当前状态是 focused
+      _box.value.setFocused(true);
       _box.value.onInputUpate(val);
     },
   });
@@ -164,6 +167,7 @@
     }
     bus?.emit(BUS_EVENT_FOCUS);
     _box.value.setFocused(true);
+    _box.value.whenFocused();
   }
   //-----------------------------------------------------
   function onInputBlur() {

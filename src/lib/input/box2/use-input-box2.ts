@@ -6,6 +6,7 @@ import { anyToStr } from '../../../core/text/ti-str';
 import { usePlaceholder, useReadonly } from '../../_features';
 import { InputBoxEmitter, InputBoxProps } from './ti-input-box2-types';
 import { useBoxDisplayText } from './use-box-display-text';
+import { ValueHintCooking } from './use-value-hint-cooking';
 import { ValueOptions } from './use-value-options';
 import { ValuePipeFeature } from './use-value-pipe';
 //--------------------------------------------------
@@ -30,6 +31,7 @@ export type InputBoxSetup = {
   _pipe: ValuePipeFeature;
   _dict: Dicts.TiDict | undefined;
   _options: ValueOptions | undefined;
+  cookHint: ValueHintCooking;
   getElement: () => HTMLElement | null;
   getInputElement: () => HTMLInputElement | null;
   emit: InputBoxEmitter;
@@ -43,6 +45,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     _pipe,
     _dict,
     _options,
+    cookHint,
     getElement,
     getInputElement,
     emit,
@@ -66,8 +69,10 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
       box_tip: tip,
       box_icon: icon,
     } = _box_state;
-    let dft_text = _focused.value ? usr_text || '' : value;
-    return _display.value({ text, tip, icon, value }) ?? dft_text;
+    if (_focused.value) {
+      return usr_text ?? '';
+    }
+    return _display.value({ text, tip, icon, value }) ?? value;
   });
   const isReadonly = computed(() => _readonly.value.isReadonly());
   const isInputReadonly = computed(() => isReadonly.value || !props.canInput);
@@ -195,7 +200,8 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
 
     // 尝试查询一下
     if (_dict) {
-      let item = await _dict.getStdItem(val);
+      var hint = cookHint(val);
+      let item = await _dict.getStdItem(hint);
       if (item) {
         amend.box_value = item.value;
         amend.box_icon = item.icon ?? null;
@@ -233,7 +239,8 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
   //------------------------------------------------
   async function getItemByValue(val: any): Promise<AnyOptionItem | undefined> {
     if (_dict) {
-      let re = await _dict.getStdItem(val);
+      let hint = cookHint(val);
+      let re = await _dict.getStdItem(hint);
       if (re) {
         return re.toOptionItem();
       }
@@ -300,6 +307,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     // 聚焦下一个项目
     let nextItem = getOptionItemAt(itIndex, offset);
     if (nextItem) {
+      amend.usr_text = _display.value(nextItem) ?? '';
       amend.box_value = nextItem.value;
       amend.box_icon = nextItem.icon ?? null;
       amend.box_text = nextItem.text ?? null;
@@ -312,8 +320,10 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
   //------------------------------------------------
   function setFocused(focused: boolean) {
     _focused.value = focused;
-    // 下一个时间片，Vue 会自动更新 Input.value
-    if (focused) {
+  }
+  //------------------------------------------------
+  function whenFocused() {
+    if (_focused.value) {
       if (props.autoSelect && !isInputReadonly.value) {
         nextTick(() => {
           let $input = getInputElement();
@@ -382,6 +392,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     updateBoxState,
     setValueByItem,
     setFocused,
+    whenFocused,
     onInputUpate,
     debouncePropsValueChange,
     onPropsValueChange,

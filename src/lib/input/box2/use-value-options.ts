@@ -35,6 +35,15 @@ export type ValueOptionsProps = ItemLookupProps & {
    * 获取的的 option 结果集，菜蔬原生数据还是转换为标准数据
    */
   optionKeepRaw?: boolean;
+
+  /**
+   * 开启了这个选项，在 reloadOptionsData 时，无论 hint 是否为空
+   * 都强制采用 dict.queryData 进行查询
+   *
+   * 涉及的主要场景，是查询 starte 时候，服务器可能需要 cookHint
+   * 的结果带上国家代码，而不是单纯的关键词
+   */
+  forceCookHint?: boolean;
 };
 //--------------------------------------------------
 export type ValueOptionsInput = {
@@ -109,10 +118,10 @@ export function useValueOptions(
     try {
       let re: Vars[];
       // 采用关键词查询
-      if (hint) {
+      if (hint || props.forceCookHint) {
         // 预处理搜索条件
         if (cookHint) {
-          hint = cookHint(hint);
+          hint = cookHint(hint ?? '');
         }
         re = await dict.queryData(hint, lastAbort?.signal);
       }

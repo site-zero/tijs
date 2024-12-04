@@ -60,7 +60,7 @@ function _str_to_lookup(str: string): ItemFieldLookup {
     mode: toValueMatchMode(
       {
         '=': 'equals',
-        '^': 'startsWidth',
+        '^': 'startsWith',
         '$': 'endsWith',
         '*': 'contains',
       }[m[1]] || 'equals'
