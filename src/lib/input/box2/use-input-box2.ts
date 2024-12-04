@@ -4,7 +4,11 @@ import { AnyOptionItem, IconInput, Vars } from '../../../_type';
 import { Dicts, I18n } from '../../../core';
 import { anyToStr } from '../../../core/text/ti-str';
 import { usePlaceholder, useReadonly } from '../../_features';
-import { InputBoxEmitter, InputBoxProps } from './ti-input-box2-types';
+import {
+  BoxEmitTime,
+  InputBoxEmitter,
+  InputBoxProps,
+} from './ti-input-box2-types';
 import { useBoxDisplayText } from './use-box-display-text';
 import { ValueHintCooking } from './use-value-hint-cooking';
 import { ValueOptions } from './use-value-options';
@@ -76,6 +80,16 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
   });
   const isReadonly = computed(() => _readonly.value.isReadonly());
   const isInputReadonly = computed(() => isReadonly.value || !props.canInput);
+  //------------------------------------------------
+  const emitTimeMap = new Map<BoxEmitTime, boolean>();
+  if (props.emitTime) {
+    for (let et of props.emitTime) {
+      emitTimeMap.set(et, true);
+    }
+  }
+  function shouldWhenEmit(et: BoxEmitTime) {
+    return emitTimeMap.has(et) ?? false;
+  }
   //------------------------------------------------
   const OptionsData = computed(() => {
     let re: Vars[] = [];
@@ -384,6 +398,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     getInputElement,
     hasTips,
     Text: InputText,
+    shouldWhenEmit,
     Value: computed(() => _box_state.box_value),
     isFocused: computed(() => _focused.value),
     isReadonly,

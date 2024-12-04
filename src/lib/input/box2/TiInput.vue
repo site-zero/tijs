@@ -172,12 +172,15 @@
   //-----------------------------------------------------
   function onInputBlur() {
     _box.value.setFocused(false);
-    if (!_box.value.hasTips.value) {
+    if (!_box.value.hasTips.value || _box.value.shouldWhenEmit('blur')) {
       _box.value.emitIfChanged();
     }
   }
   //-----------------------------------------------------
   function onClickMask() {
+    if (_box.value.shouldWhenEmit('close')) {
+      _box.value.emitIfChanged();
+    }
     _box.value.clearOptionsData();
     if (_box_state.box_value != props.value) {
       _box.value.debouncePropsValueChange();

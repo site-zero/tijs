@@ -57,6 +57,14 @@ export type InputBoxProps = CommonProps &
 
     emitType?: BoxEmitType;
 
+    emitTime?: BoxEmitTime[];
+
+    /**
+     * 传递输入框 api 给父控件。
+     * 每次 api 因为自动计算而导致的变化，都会触发这个回调
+     *
+     * @param box 输入框 api
+     */
     exportApi?: (box: InputBoxApi) => void;
 
     /**
@@ -162,7 +170,22 @@ export type InputBoxProps = CommonProps &
     suffixIconFor?: BoxIconFor;
   };
 //--------------------------------------------------
+/**
+ * 通知改动时候采用什么值
+ *
+ * - `value` : 普通值
+ * - `std-item` : 整体标准对象
+ * - `raw-item` : 整体原始对象
+ */
 export type BoxEmitType = 'value' | 'std-item' | 'raw-item';
+//--------------------------------------------------
+/**
+ * 除非一些必要的时机，还有哪些时候需要检查改动
+ *
+ * - blur : 默认的 blur 是，如果没有展开选项，才会检查更新，明确声明 blur 则表示肯定要检查更新
+ * - close : 选项框关闭时候检查更新
+ */
+export type BoxEmitTime = 'blur' | 'close';
 //--------------------------------------------------
 export type BoxIconFor =
   | 'copy'
