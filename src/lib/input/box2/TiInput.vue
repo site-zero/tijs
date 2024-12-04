@@ -105,7 +105,7 @@
     onChange: (val) => {
       //确保当前状态是 focused
       _box.value.setFocused(true);
-      _box.value.onInputUpate(val);
+      _box.value.debounceInputUpdate(val);
     },
   });
   //-----------------------------------------------------
@@ -172,9 +172,9 @@
   //-----------------------------------------------------
   function onInputBlur() {
     _box.value.setFocused(false);
-    if (!_box.value.hasTips.value || _box.value.shouldWhenEmit('blur')) {
-      _box.value.emitIfChanged();
-    }
+    //if (!_box.value.hasTips.value || _box.value.shouldWhenEmit('blur')) {
+    _box.value.emitIfChanged();
+    //}
   }
   //-----------------------------------------------------
   function onClickMask() {
@@ -195,7 +195,7 @@
     _box.value.setValueByItem(payload.current || null);
     _box.value.emitIfChanged();
     _box.value.clearOptionsData();
-    // 由于 emit 了 change, 如果 value 更新，会导致 userInputBox2 重新计算
+    // 由于 emit 了 change, 如果 value 更 新，会导致 userInputBox2 重新计算
     // 因此 options_data 会被清空，hasTips 会变成 false
   }
   //-----------------------------------------------------

@@ -148,6 +148,17 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     __amend_box_state(amend);
   }
   //------------------------------------------------
+  const debounceInputUpdate = _.debounce(
+    (text0: string) => {
+      onInputUpate(text0);
+    },
+    500,
+    {
+      leading: false,
+      trailing: true,
+    }
+  );
+  //------------------------------------------------
   async function onInputUpate(text0: string) {
     let { reloadOptioinsData, lookupOptionItem, getOptionItem } =
       _options ?? {};
@@ -408,6 +419,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     setValueByItem,
     setFocused,
     whenFocused,
+    debounceInputUpdate,
     onInputUpate,
     debouncePropsValueChange,
     onPropsValueChange,
