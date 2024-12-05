@@ -42,6 +42,7 @@
     value: '',
     autoI18n: true,
     tipShowTime: 'focus',
+    tipShowDelay: 500,
     tipUseHint: false,
     canInput: true,
     trimed: true,
@@ -105,7 +106,8 @@
     onChange: (val) => {
       //确保当前状态是 focused
       _box.value.setFocused(true);
-      _box.value.debounceInputUpdate(val);
+      _box.value.applyPipe(val);
+      _box.value.debounceApplyTipsByHint(_box_state.usr_text ?? undefined);
     },
   });
   //-----------------------------------------------------
@@ -116,6 +118,7 @@
       hoverIcon: props.prefixHoverIcon,
       iconFor: props.prefixIconFor,
       autoIcon: _box_state.box_icon ?? undefined,
+      getInputElement: () => $input.value,
     })
   );
   //-----------------------------------------------------
@@ -125,6 +128,7 @@
       icon: props.suffixIcon,
       hoverIcon: props.suffixHoverIcon,
       iconFor: props.suffixIconFor,
+      getInputElement: () => $input.value,
     })
   );
   //-----------------------------------------------------
@@ -146,6 +150,7 @@
     else if ('Escape' == event.key) {
       _box.value.debouncePropsValueChange();
       _box.value.clearOptionsData();
+      _box_state.usr_text = null;
     }
     // 确认
     else if ('Enter' == event.key) {
@@ -171,7 +176,9 @@
   }
   //-----------------------------------------------------
   function onInputBlur() {
+    _options.value?.abortOptonsLoading();
     _box.value.setFocused(false);
+    _box_state.usr_text = null;
     //if (!_box.value.hasTips.value || _box.value.shouldWhenEmit('blur')) {
     _box.value.emitIfChanged();
     //}
@@ -181,6 +188,7 @@
     if (_box.value.shouldWhenEmit('close')) {
       _box.value.emitIfChanged();
     }
+    _box.value.setFocused(false);
     _box.value.clearOptionsData();
     if (_box_state.box_value != props.value) {
       _box.value.debouncePropsValueChange();

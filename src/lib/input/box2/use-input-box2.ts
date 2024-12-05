@@ -73,10 +73,11 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
       box_tip: tip,
       box_icon: icon,
     } = _box_state;
+    let text0 = _display.value({ text, tip, icon, value }) ?? value;
     if (_focused.value) {
-      return usr_text ?? '';
+      return usr_text ?? text0;
     }
-    return _display.value({ text, tip, icon, value }) ?? value;
+    return text0;
   });
   const isReadonly = computed(() => _readonly.value.isReadonly());
   const isInputReadonly = computed(() => isReadonly.value || !props.canInput);
@@ -132,10 +133,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     if (item) {
       let stdItem = _options?.toOptionItem(item);
       if (stdItem) {
-        let usr_text = stdItem.text ?? null;
-        if (props.useRawValue) {
-          usr_text = stdItem.value ?? null;
-        }
+        let usr_text = _display.value(stdItem);
         _.assign(amend, {
           usr_text,
           box_value: stdItem.value ?? null,
@@ -148,21 +146,12 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     __amend_box_state(amend);
   }
   //------------------------------------------------
-  const debounceInputUpdate = _.debounce(
-    (text0: string) => {
-      onInputUpate(text0);
-    },
-    500,
-    {
-      leading: false,
-      trailing: true,
-    }
-  );
-  //------------------------------------------------
-  async function onInputUpate(text0: string) {
-    let { reloadOptioinsData, lookupOptionItem, getOptionItem } =
-      _options ?? {};
+  function applyPipe(text0: string) {
     let text1 = _pipe(text0);
+    // 无需修改
+    if (text1 == _box_state.usr_text) {
+      return;
+    }
     let amend: InputBoxState = {
       usr_text: text1,
       box_value: null,
@@ -174,40 +163,180 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     if (!props.mustInOptions) {
       amend.box_value = text1;
     }
+    // 更新状态
+    __amend_box_state(amend);
+  }
+  //------------------------------------------------
+  async function applyTipsByHint(usr_text?: string) {
+    // 未定义字典，就不需要查找了
+    if (!_dict) {
+      return;
+    }
+    let { reloadOptioinsData, lookupOptionItem, getOptionItem } =
+      _options ?? {};
+
+    // 使用当前的输入状态作为查询线索
+    let amend = _.cloneDeep(_box_state);
+    let text1 = usr_text;
+    let item: AnyOptionItem | undefined = undefined;
+
+    // 准备一个直接处理值的方法，未聚焦的时候会用
+    // 读取过程中，突然失焦的时候，也会用到
+    const __just_set_value = async () => {
+      if (text1) {
+        var hint = cookHint(text1);
+        item = (await _dict.getStdItem(hint))?.toOptionItem();
+      }
+      amend.usr_text = null;
+    };
+
+    // 如果不是聚焦状态，就不要显示选项了，直接看值
+    if (!_focused.value) {
+      await __just_set_value();
+    }
+    //.................................
+    // 否则就是聚焦咯，那么展开选项
+    //.................................
     // 没有选项，则看看是否需要展开选项
-    if (!hasTips.value) {
-      // 定义了选项展开操作，那么就需要展开
-      if (reloadOptioinsData) {
-        let hint = props.tipUseHint ? text1 : undefined;
-        await reloadOptioinsData(hint);
+    else {
+      // 如果被意外结束了，那么通常是网络错误，或者用户失焦距导致的读取中断
+      const whenAbort = async () => {
+        clearOptionsData();
+        await __just_set_value();
+      };
+
+      // 需要加载选项
+      if (!hasTips.value) {
+        // 定义了选项展开操作，那么就需要展开
+        if (reloadOptioinsData) {
+          let hint = props.tipUseHint ? text1 : undefined;
+          await reloadOptioinsData(hint, whenAbort);
+        }
+      }
+      // query hint
+      else if (props.tipUseHint) {
+        await _options?.reloadOptioinsData(text1, whenAbort);
+      }
+
+      // 首先尝试精确查找
+      if (getOptionItem) {
+        item = getOptionItem(text1);
+      }
+
+      // 如果没有则尝试模拟查找
+      if (!item && lookupOptionItem && text1) {
+        item = lookupOptionItem(text1);
       }
     }
-    // query hint
-    else if (props.tipUseHint) {
-      await _options?.reloadOptioinsData(text1);
-    }
 
-    // 首先尝试精确查找
-    let item: AnyOptionItem | undefined = undefined;
-    if (getOptionItem) {
-      item = getOptionItem(text1);
-    }
-
-    // 如果没有则尝试模拟查找
-    if (!item && lookupOptionItem) {
-      item = lookupOptionItem(text1);
-    }
-
+    // 找到了选项
     if (item) {
+      //amend.usr_text = _display.value(item) ?? '';
       amend.box_value = item.value;
       amend.box_icon = item.icon ?? null;
       amend.box_text = item.text ?? null;
       amend.box_tip = item.tip ?? null;
     }
+    // 必须在字典中
+    else if (props.mustInOptions) {
+      amend.box_value = null;
+      amend.box_icon = null;
+      amend.box_text = null;
+      amend.box_tip = null;
+    }
+    // 那么就维持原来的值咯
+    else {
+      // 似乎什么也不需要做
+    }
 
     // 更新状态
     __amend_box_state(amend);
+
+    // 后续，尝试一下通知改动
+    // 但是如果选项列表是展开的，就不要通知了
+    // 因为到等到其关闭才能决定是否要展开
+    if (!hasTips.value) {
+      emitIfChanged();
+    }
   }
+  //------------------------------------------------
+  const debounceApplyTipsByHint = _.debounce(
+    (usr_text?: string) => {
+      applyTipsByHint(usr_text);
+    },
+    props.tipShowDelay,
+    {
+      leading: false,
+      trailing: true,
+    }
+  );
+  //------------------------------------------------
+  // const debounceInputUpdate = _.debounce(
+  //   (text0: string) => {
+  //     onInputUpate(text0);
+  //   },
+  //   500,
+  //   {
+  //     leading: false,
+  //     trailing: true,
+  //   }
+  // );
+  //------------------------------------------------
+  // async function onInputUpate(text0: string) {
+  //   let { reloadOptioinsData, lookupOptionItem, getOptionItem } =
+  //     _options ?? {};
+
+  //   // 如果不是聚焦状态，就不要搞了
+  //   if (!_focused.value) {
+  //     return;
+  //   }
+
+  //   let text1 = _pipe(text0);
+  //   let amend: InputBoxState = {
+  //     usr_text: text1,
+  //     box_value: null,
+  //     box_icon: null,
+  //     box_text: null,
+  //     box_tip: null,
+  //   };
+  //   // 未定义的话，那么就直接更新了
+  //   if (!props.mustInOptions) {
+  //     amend.box_value = text1;
+  //   }
+  //   // 没有选项，则看看是否需要展开选项
+  //   if (!hasTips.value) {
+  //     // 定义了选项展开操作，那么就需要展开
+  //     if (reloadOptioinsData) {
+  //       let hint = props.tipUseHint ? text1 : undefined;
+  //       await reloadOptioinsData(hint);
+  //     }
+  //   }
+  //   // query hint
+  //   else if (props.tipUseHint) {
+  //     await _options?.reloadOptioinsData(text1);
+  //   }
+
+  //   // 首先尝试精确查找
+  //   let item: AnyOptionItem | undefined = undefined;
+  //   if (getOptionItem) {
+  //     item = getOptionItem(text1);
+  //   }
+
+  //   // 如果没有则尝试模拟查找
+  //   if (!item && lookupOptionItem) {
+  //     item = lookupOptionItem(text1);
+  //   }
+
+  //   if (item) {
+  //     amend.box_value = item.value;
+  //     amend.box_icon = item.icon ?? null;
+  //     amend.box_text = item.text ?? null;
+  //     amend.box_tip = item.tip ?? null;
+  //   }
+
+  //   // 更新状态
+  //   __amend_box_state(amend);
+  // }
   //------------------------------------------------
   async function onPropsValueChange() {
     let val = anyToStr(props.value);
@@ -223,11 +352,12 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
       amend.box_value = val;
     }
 
-    // 尝试查询一下
-    if (_dict) {
+    // 如果有值，就尝试查询一下
+    if (_dict && val) {
       var hint = cookHint(val);
       let item = await _dict.getStdItem(hint);
       if (item) {
+        amend.usr_text = _display.value(item) ?? '';
         amend.box_value = item.value;
         amend.box_icon = item.icon ?? null;
         amend.box_text = item.text ?? null;
@@ -375,15 +505,27 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     let val = _box_state.box_value;
     let emitType = props.emitType || 'value';
     if (!_.isEqual(val, props.value)) {
-      // 原始对象
-      if ('raw-item' == emitType) {
-        let item = _options?.getRawItem(val);
-        emit('change', item ?? null);
+      // 空值
+      if (_.isNil(val) || '' === val) {
+        emit('change', null);
       }
-      // 对象
-      else if ('std-item' == emitType) {
-        let item = _options?.getOptionItem(val);
-        emit('change', item ?? null);
+      // 原始对象
+      else if ('raw-item' == emitType && _dict) {
+        let hint = cookHint(val);
+        _dict.getStdItem(hint).then((it) => {
+          let item = it?.toOptionItem();
+          emit('change', item ?? null);
+        });
+      }
+      // 标准对象
+      else if ('std-item' == emitType && _dict) {
+        let item: AnyOptionItem = {
+          value: _box_state.box_value,
+          text: _box_state.box_text ?? undefined,
+          icon: _box_state.box_icon ?? undefined,
+          tip: _box_state.box_tip ?? undefined,
+        };
+        emit('change', item);
       }
       // 采用值
       else {
@@ -395,9 +537,6 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
   // 重置 _options_data
   //------------------------------------------------
   clearOptionsData();
-  // if(props.value && props.value !== _box_state.box_value) {
-  //   onPropsValueChange();
-  // }
   //------------------------------------------------
   // 返回特性
   //------------------------------------------------
@@ -419,10 +558,11 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     setValueByItem,
     setFocused,
     whenFocused,
-    debounceInputUpdate,
-    onInputUpate,
-    debouncePropsValueChange,
+    applyPipe,
+    applyTipsByHint,
+    debounceApplyTipsByHint,
     onPropsValueChange,
+    debouncePropsValueChange,
     onKeyUpOrDown,
     clearOptionsData,
     getItemByValue,

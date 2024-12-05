@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { computed } from 'vue';
 import { CssUtils } from '../../../';
-import { InputBoxProps,InputBoxApi } from './ti-input-box2-types';
+import { InputBoxApi, InputBoxProps } from './ti-input-box2-types';
 import { BoxTipsFeature } from './use-box-tips';
 
 export function useBoxAspect(
@@ -13,7 +13,11 @@ export function useBoxAspect(
   const TopClass = computed(() => CssUtils.mergeClassName(props.className));
   //--------------------------------------------------
   const TopStyle = computed(() => {
-    return CssUtils.toStyle(props.style);
+    let re = _.assign({}, props.style);
+    if (props.width) {
+      re.width = props.width;
+    }
+    return CssUtils.toStyle(re);
   });
   //--------------------------------------------------
   const PartMainClass = computed(() => {
@@ -56,12 +60,9 @@ export function useBoxAspect(
   //--------------------------------------------------
   const MainBodyStyle = computed(() => {
     let re = _.assign({}, props.mainBodyStyle);
-    if (props.width) {
-      re.width = props.width;
-      re.flex = '0 0 auto';
-    }
     if (props.hideBorder) {
       re.border = '0px';
+      re.borderRadius = '0px';
     }
     return CssUtils.toStyle(re);
   });

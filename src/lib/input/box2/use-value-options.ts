@@ -108,7 +108,14 @@ export function useValueOptions(
   let lastAbort: AbortController | null = null;
   const ABORT_REASON = 'abort-value-options-reload';
   //------------------------------------------------
-  async function reloadOptioinsData(hint?: string) {
+  function abortOptonsLoading() {
+    if (lastAbort) {
+      lastAbort.abort({ abort: true, reason: ABORT_REASON });
+      lastAbort = null;
+    }
+  }
+  //------------------------------------------------
+  async function reloadOptioinsData(hint?: string, whenAbort?: () => void) {
     // 取消重入
     if (lastAbort) {
       lastAbort.abort({ abort: true, reason: ABORT_REASON });
@@ -145,12 +152,19 @@ export function useValueOptions(
       // 计入返回结果集
       _options_data.value = _data;
     } catch (_e) {
+      // 处理错误
       // 对于主动 abort 的操作，忍受异常
       let err = _e as any;
       if (err.abort && err.reason == ABORT_REASON) {
+        if (whenAbort) {
+          await whenAbort();
+        }
         return;
       }
       throw err;
+    } finally {
+      // 确保收回 abort controller
+      lastAbort = null;
     }
   }
   //------------------------------------------------
@@ -277,5 +291,6 @@ export function useValueOptions(
     toOptionItem,
     lookupOptionItem,
     reloadOptioinsData,
+    abortOptonsLoading,
   };
 }

@@ -10,6 +10,7 @@ export type BoxIconOptions = {
   hoverIcon?: IconInput | null;
   iconFor?: BoxIconFor;
   autoIcon?: IconInput;
+  getInputElement: () => HTMLInputElement | null;
 };
 
 export function useBoxIcon(options: BoxIconOptions) {
@@ -89,7 +90,12 @@ export function useBoxIcon(options: BoxIconOptions) {
     }
     // 加载选项
     else if ('load-options' === iconFor) {
+      _box.setFocused(true);
       _box.showOptions();
+      let $input = options.getInputElement();
+      if($input) {
+        $input.focus();
+      }
     }
   }
   //--------------------------------------------------

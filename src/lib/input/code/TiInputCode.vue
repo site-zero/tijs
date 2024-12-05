@@ -54,8 +54,11 @@
     if (!re.tipFormat) {
       re.tipFormat = 'VT';
     }
-    if (props.codeWidth) {
-      re.width = CssUtils.toSize(props.codeWidth);
+    if (props.codeWidth && !props.hideDescription) {
+      re.mainBodyStyle = {
+        width: CssUtils.toSize(props.codeWidth),
+        flex: '0 0 auto',
+      };
     }
     return re;
   });
@@ -111,7 +114,9 @@
   //-----------------------------------------------------
   async function onBoxExportApi(box: InputBoxApi) {
     _box.value = box;
-    _item.value = await _box.value?.getItemByValue(props.value);
+    if (!_.isNil(props.value)) {
+      _item.value = await _box.value?.getItemByValue(props.value);
+    }
   }
   //-----------------------------------------------------
 </script>
@@ -143,6 +148,6 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width:10px;
+    width: 10px;
   }
 </style>

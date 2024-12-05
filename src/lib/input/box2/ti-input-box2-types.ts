@@ -81,6 +81,11 @@ export type InputBoxProps = CommonProps &
     tipShowTime?: TipShowTime;
 
     /**
+     * 延迟多少毫秒（反弹跳）才查询提示信息，默认 500ms
+     */
+    tipShowDelay?: number;
+
+    /**
      * 提示信息的格式
      */
     tipFormat?: TipOptionFormat;
