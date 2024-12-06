@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import _ from 'lodash';
-  import { computed, onMounted, onUnmounted, ref, watch } from 'vue';
+  import { computed, onMounted, onUnmounted, ref } from 'vue';
   import { InputBoxApi, InputBoxProps, TiInput, useViewport } from '../../';
   import { AnyOptionItem, ToStr } from '../../../_type';
   import { CssUtils, Util } from '../../../core';
@@ -114,8 +114,10 @@
   //-----------------------------------------------------
   async function onBoxExportApi(box: InputBoxApi) {
     _box.value = box;
-    if (!_.isNil(props.value)) {
+    if (props.value) {
       _item.value = await _box.value?.getItemByValue(props.value);
+    } else {
+      _item.value = undefined;
     }
   }
   //-----------------------------------------------------
