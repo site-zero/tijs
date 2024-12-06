@@ -39,8 +39,9 @@
     }
     &:hover {
       opacity: 1;
-      background-color: var(--item-color);
-      color: var(--item-color-r);
+      background-color: var(--ti-color-highlight);
+      // background-color: var(--item-color);
+      // color: var(--item-color-r);
     }
   }
   //-----------------------------------------------------
