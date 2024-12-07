@@ -175,15 +175,6 @@
     _box.value.whenFocused();
   }
   //-----------------------------------------------------
-  function onInputBlur() {
-    _options.value?.abortOptonsLoading();
-    _box.value.setFocused(false);
-    _box_state.usr_text = null;
-    //if (!_box.value.hasTips.value || _box.value.shouldWhenEmit('blur')) {
-    _box.value.emitIfChanged();
-    //}
-  }
-  //-----------------------------------------------------
   function onClickMask() {
     if (_box.value.shouldWhenEmit('close')) {
       _box.value.emitIfChanged();
@@ -195,16 +186,36 @@
     }
   }
   //-----------------------------------------------------
+  function onInputBlur() {
+    console.log('onInputBlur', _box_state.usr_text, _box_state.box_value);
+    _options.value?.abortOptonsLoading();
+    _box.value.setFocused(false);
+    _box_state.usr_text = null;
+    //if (!_box.value.hasTips.value || _box.value.shouldWhenEmit('blur')) {
+
+    //}
+    _.delay(() => {
+      let du = Date.now() - __last_click_item;
+      console.log('onInputBlur', du);
+      if (du > 1000) {
+        console.log('onInputBlur', "notifyChange");
+        _box.value.emitIfChanged();
+      }
+    }, 1000);
+  }
+  //-----------------------------------------------------
+  let __last_click_item = 0;
+  //-----------------------------------------------------
   function onOptionSelect(payload: ListSelectEmitInfo) {
     if (_box.value.isReadonly.value) {
       return;
     }
-    //console.log('onOptionSelect', payload);
+    __last_click_item = Date.now();
+    console.log('onOptionSelect', __last_click_item);
+    console.log('onOptionSelect', payload);
     _box.value.setValueByItem(payload.current || null);
     _box.value.emitIfChanged();
     _box.value.clearOptionsData();
-    // 由于 emit 了 change, 如果 value 更 新，会导致 userInputBox2 重新计算
-    // 因此 options_data 会被清空，hasTips 会变成 false
   }
   //-----------------------------------------------------
   // 这个监控器，监控 value 的改动，如果 value 变化
