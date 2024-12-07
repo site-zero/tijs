@@ -25,6 +25,11 @@
   //-------------------------------------------------------
   const isOpened = computed(() => 'opened' == OpenStatus.value);
   const isReady = computed(() => 'ready' == OpenStatus.value);
+  // 如果不指定自己的 action，那么就没必要显示 suffixIcon
+  // 毕竟这个 suffixIcon 仅仅是为了区分两种操作
+  const showTopSuffixIcon = computed(() => {
+    return props.action ? true : false;
+  });
   //-------------------------------------------------------
   const ConClass = computed(() => {
     return {
@@ -35,7 +40,7 @@
   //-------------------------------------------------------
   function OnClickHead() {
     // 指定了动作
-    if (_.isFunction(props.action)) {
+    if (props.action) {
       props.action(state?.vars || {}, bus);
     }
     // 否则就相当于 ClickSuffix
@@ -98,7 +103,7 @@
       </div>
       <!-- 显示下拉指示按钮-->
       <div
-        v-else
+        v-else-if="showTopSuffixIcon"
         class="item-suffix as-icon"
         @click.stop="OnClickSuffix">
         <i class="zmdi zmdi-chevron-down"></i>
