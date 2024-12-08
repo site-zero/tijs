@@ -187,21 +187,28 @@
   }
   //-----------------------------------------------------
   function onInputBlur() {
-    console.log('onInputBlur', _box_state.usr_text, _box_state.box_value);
+    //console.log('onInputBlur', _box_state.usr_text, _box_state.box_value);
     _options.value?.abortOptonsLoading();
     _box.value.setFocused(false);
     _box_state.usr_text = null;
     //if (!_box.value.hasTips.value || _box.value.shouldWhenEmit('blur')) {
 
     //}
-    _.delay(() => {
-      let du = Date.now() - __last_click_item;
-      console.log('onInputBlur', du);
-      if (du > 1000) {
-        console.log('onInputBlur', "notifyChange");
-        _box.value.emitIfChanged();
-      }
-    }, 1000);
+    // 如果有选项，那么需要等待一会，看看用户是否已经选择了选项
+    if (_box.value.hasTips.value) {
+      _.delay(() => {
+        let du = Date.now() - __last_click_item;
+        //console.log('onInputBlur', du, __last_click_item);
+        if (du > 1000) {
+          //console.log('onInputBlur', 'notifyChange');
+          _box.value.emitIfChanged();
+        }
+      }, 1000);
+    }
+    // 那么立刻通知
+    else {
+      _box.value.emitIfChanged();
+    }
   }
   //-----------------------------------------------------
   let __last_click_item = 0;
