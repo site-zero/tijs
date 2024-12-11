@@ -9,7 +9,7 @@ export abstract class AbstractDict<T, V> implements IDict<T, V> {
   abstract getChildren(v: V, signal?: AbortSignal): Promise<T[]>;
   abstract checkItem(val: V, signal?: AbortSignal): Promise<T>;
 
-  abstract getItemValue(it: T): V;
+  abstract getItemValue(it: T, index: number): V;
   abstract getItemText(it: T): string;
   abstract getItemTip(it: T): string;
   abstract getItemIcon(it: T): string;
@@ -110,10 +110,10 @@ export abstract class AbstractDict<T, V> implements IDict<T, V> {
     });
   }
 
-  toStdItem(it: T): DictItem<V> {
+  toStdItem(it: T, index: number = -1): DictItem<V> {
     let icon = this.getItemIcon(it);
     let text = this.getItemText(it);
-    let value = this.getItemValue(it);
+    let value = this.getItemValue(it, index);
     let tip = this.getItemTip(it);
     return new DictItem<V>(value, text, icon, tip);
   }

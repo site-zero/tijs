@@ -9,12 +9,13 @@ import {
   _gen_item_loader,
 } from './dict-options';
 import {
-  DynDictMaker,
   DictName,
   DictOptions,
   DictSetup,
+  DynDictMaker,
   TiDict,
 } from './dict-types';
+import { DictWrapper } from './dict-wrapper';
 import { DynDictFactoryImpl } from './dyn-dict-factory';
 
 export * from './dict-types';
@@ -144,6 +145,18 @@ export function getDict(name: string): TiDict | undefined {
  */
 export function checkDict(name: string): TiDict {
   return STATIC_DICT.checktDict(name);
+}
+
+/**
+ * 包裹一个字典实例，但是提供不同的标准数据获取办法。
+ * 主要是对于动态字典，在控件如果使用，可能会根据需要而修改数据获取方式
+ *
+ * @param dict 源字典
+ * @param options 标准数据获取方式
+ * @returns 包裹源字典的实例
+ */
+export function wrapDict(dict: TiDict, options: DictOptions<any, any>): TiDict {
+  return new DictWrapper(dict, options);
 }
 
 /**

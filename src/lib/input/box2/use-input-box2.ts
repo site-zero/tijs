@@ -172,6 +172,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     if (!_dict) {
       return;
     }
+
     let { reloadOptioinsData, lookupOptionItem, getOptionItem } =
       _options ?? {};
 
@@ -215,7 +216,18 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
       }
       // query hint
       else if (props.tipUseHint) {
-        await _options?.reloadOptioinsData(text1, whenAbort);
+        if (_options) {
+          await _options.reloadOptioinsData(text1, whenAbort);
+        }
+      }
+
+      // 如果查询的结果为空，那么就不显示选项
+      if (
+        'auto' == props.tipShowTime &&
+        _options &&
+        _options.isDataEmpty.value
+      ) {
+        clearOptionsData();
       }
 
       // 首先尝试精确查找
@@ -255,7 +267,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     // 后续，尝试一下通知改动
     // 但是如果选项列表是展开的，就不要通知了
     // 因为到等到其关闭才能决定是否要展开
-    if (!hasTips.value) {
+    if (!hasTips.value && !_focused.value) {
       emitIfChanged();
     }
   }

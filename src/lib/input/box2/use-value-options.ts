@@ -105,6 +105,14 @@ export function useValueOptions(
     return list;
   });
   //------------------------------------------------
+  const isDataEmpty = computed(() => {
+    return _.isEmpty(_options_data.value);
+  });
+  //------------------------------------------------
+  const isFilteredDataEmpty = computed(() => {
+    return _.isEmpty(OptionsData.value);
+  });
+  //------------------------------------------------
   let lastAbort: AbortController | null = null;
   const ABORT_REASON = 'abort-value-options-reload';
   //------------------------------------------------
@@ -284,6 +292,8 @@ export function useValueOptions(
   //------------------------------------------------
   return {
     OptionsData,
+    isDataEmpty,
+    isFilteredDataEmpty,
     getOptionItem,
     getOptionItemIndex,
     getOptionItemAt,
