@@ -218,7 +218,6 @@
       return;
     }
     __last_click_item = Date.now();
-    console.log('onOptionSelect', __last_click_item);
     console.log('onOptionSelect', payload);
     _box.value.setValueByItem(payload.current || null);
     _box.value.emitIfChanged();
