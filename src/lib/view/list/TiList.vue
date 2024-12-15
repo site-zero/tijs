@@ -4,7 +4,7 @@
   import { SelectableState, TiIcon, TiRoadblock } from '../../';
   import { TableRowID } from '../../../_type';
   import { CssUtils } from '../../../core';
-  import { ListEmitter, ListProps } from './ti-list-types';
+  import { ListEmitter, ListItem, ListProps } from './ti-list-types';
   import { useList } from './use-list';
   //-----------------------------------------------------
   const props = withDefaults(defineProps<ListProps>(), {
@@ -76,6 +76,11 @@
     };
   });
   //-----------------------------------------------------
+  function onListItemClick(item: ListItem, event: MouseEvent) {
+    //console.log('onListItemClick', item);
+    List.value.OnItemSelect(selection, { event, item });
+  }
+  //-----------------------------------------------------
   watch(
     () => [props.currentId, props.checkedIds],
     () => {
@@ -111,7 +116,7 @@
         class="list-item"
         :class="it.className"
         :style="ListItemStyle"
-        @click="List.OnItemSelect(selection, { event: $event, item: it })"
+        @click="onListItemClick(it, $event)"
         @dblclick="emit('open', it)">
         <!--***********************************-->
         <!--=Check=-->

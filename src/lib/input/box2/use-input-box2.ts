@@ -55,7 +55,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     emit,
   } = setup;
   //------------------------------------------------
-  const _focused = ref(false);
+  const _focused = ref(document.activeElement === getInputElement());
   //------------------------------------------------
   // 计算属性
   //------------------------------------------------
@@ -509,8 +509,10 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
   }
   //------------------------------------------------
   function clearOptionsData() {
-    //console.trace('clearOptionsData');
-    _options_data.value = undefined;
+    if (_options_data.value) {
+      // console.error('clearOptionsData');
+      _options_data.value = undefined;
+    }
   }
   //------------------------------------------------
   function emitIfChanged() {
@@ -548,7 +550,9 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
   //------------------------------------------------
   // 重置 _options_data
   //------------------------------------------------
-  clearOptionsData();
+  if (!_focused.value) {
+    clearOptionsData();
+  }
   //------------------------------------------------
   // 返回特性
   //------------------------------------------------

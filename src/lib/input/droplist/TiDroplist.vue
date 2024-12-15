@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-  import { computed } from 'vue';
-  import { InputBoxProps, TiInput } from '../../';
+  import { TiInput } from '../../';
   import { DroplistProps } from './ti-droplist-types';
   //-----------------------------------------------------
   defineOptions({
@@ -18,6 +17,8 @@
     tipTidyBy: () => ['main'],
     suffixIconFor: 'load-options',
     autoPrefixIcon: true,
+    autoSelect: false,
+    lookup: () => ['=text', '=value'],
   });
   //-----------------------------------------------------
   // type CleansSetup = Pick<InputBoxProps, 'prefixIconFor' | 'showCleanOption'>;
@@ -33,7 +34,7 @@
   // });
   //-----------------------------------------------------
   function onInputChange(val: any) {
-    console.log('onInputChange', val);
+    //console.log('onInputChange', val);
     emit('change', val);
   }
   //-----------------------------------------------------

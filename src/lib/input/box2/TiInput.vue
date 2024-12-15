@@ -2,7 +2,6 @@
   import _ from 'lodash';
   import {
     computed,
-    inject,
     onMounted,
     reactive,
     ref,
@@ -10,7 +9,7 @@
     watch,
   } from 'vue';
   import { TiList } from '../../';
-  import { BUS_KEY, Rect, Vars } from '../../../_type';
+  import { Rect, Vars } from '../../../_type';
   import { ListSelectEmitInfo } from '../../../lib';
   import { InputBoxEmitter, InputBoxProps } from './ti-input-box2-types';
   import { useBoxAspect } from './use-box-aspect';
@@ -37,6 +36,12 @@
   } as InputBoxState);
   //-----------------------------------------------------
   const _options_data = ref<Vars[]>();
+  //-----------------------------------------------------
+  // 最后一个按键，主要用来监控 blur 的时候是不是 tab 触发的
+  let __last_down_key = ''; // 譬如 'Tab|Enter|ArraowUp ...''
+  let __last_down_at = 0; // 最后按下的时间戳
+  // 最后一个选择的项目时间
+  let __last_select_at = 0;
   //-----------------------------------------------------
   const props = withDefaults(defineProps<InputBoxProps>(), {
     value: '',
@@ -136,6 +141,8 @@
     if (_box.value.isReadonly.value) {
       return;
     }
+    __last_down_key = event.key;
+    __last_down_at = Date.now();
     //console.log('onKeyDown', event.key);
     _comp.onKeyPress(event);
     // 选择高亮项目
@@ -160,17 +167,28 @@
     }
   }
   //-----------------------------------------------------
-  const bus = inject(BUS_KEY);
-  const BUS_EVENT_FOCUS = 'INPUT_FOCUS';
-  bus?.onName(BUS_EVENT_FOCUS, () => {
-    _box.value.clearOptionsData();
-  });
+  // const bus = inject(BUS_KEY);
+  // const BUS_EVENT_FOCUS = 'INPUT_FOCUS';
+  // bus?.onName(BUS_EVENT_FOCUS, () => {
+  //   // if (!_box.value.isFocused.value && _box.value.hasTips.value) {
+  //   //   // console.log('BUS_EVENT_FOCUS', _box.value.isFocused.value);
+  //   //   _.delay(() => {
+  //   //     _box.value.clearOptionsData();
+  //   //   }, 1000);
+  //   // }
+  // });
   //-----------------------------------------------------
   function onInputFocused() {
     if (_box.value.isReadonly.value) {
       return;
     }
-    bus?.emit(BUS_EVENT_FOCUS);
+    // 原本没有 focus ，现在需要通知全局： 我要 focus 了
+    // 那么其他的 dropdown 则会自动关闭
+    // 为了保证自己不自动关闭，则需要首先设置自己为 focus
+    if (!_box.value.isFocused.value) {
+      _box.value.setFocused(true);
+      //bus?.emit(BUS_EVENT_FOCUS);
+    }
     _box.value.setFocused(true);
     _box.value.whenFocused();
   }
@@ -187,38 +205,48 @@
   }
   //-----------------------------------------------------
   function onInputBlur() {
-    //console.log('onInputBlur', _box_state.usr_text, _box_state.box_value);
+    // console.log(
+    //   'onInputBlur',
+    //   _box_state.usr_text,
+    //   _box_state.box_value,
+    //   _box.value.hasTips.value
+    // );
     _options.value?.abortOptonsLoading();
-    _box.value.setFocused(false);
-    _box_state.usr_text = null;
-    //if (!_box.value.hasTips.value || _box.value.shouldWhenEmit('blur')) {
-
-    //}
-    // 如果有选项，那么需要等待一会，看看用户是否已经选择了选项
-    if (_box.value.hasTips.value) {
-      _.delay(() => {
-        let du = Date.now() - __last_click_item;
-        //console.log('onInputBlur', du, __last_click_item);
-        if (du > 1000) {
-          //console.log('onInputBlur', 'notifyChange');
-          _box.value.emitIfChanged();
-        }
-      }, 1000);
-    }
-    // 那么立刻通知
-    else {
-      _box.value.emitIfChanged();
-    }
+    let key_du = Date.now() - __last_down_at;
+    let isBlurByTab = 'Tab' == __last_down_key && key_du < 50;
+    //console.log(`onInputBlur: isBlurByTab=${isBlurByTab}, key_du=${key_du}`);
+    _.delay(() => {
+      // 如果有选项，那么需要等待一会，看看用户是否已经选择了选项
+      if (_box.value.hasTips.value && !isBlurByTab) {
+        //console.log('onInputBlur dely emitI_atfChanged');
+        _.delay(() => {
+          let du = Date.now() - __last_select_at;
+          //console.log(`onInputBlur du=${du}`);
+          if (du > 1000) {
+            //console.log('onInputBlur', 'notifyChange');
+            _box_state.usr_text = null;
+            _box.value.setFocused(false);
+            _box.value.emitIfChanged();
+          }
+        }, 1000);
+      }
+      // 那么立刻通知
+      else {
+        //console.log('onInputBlur rightnow emitIfChanged');
+        _box_state.usr_text = null;
+        _box.value.setFocused(false);
+        _box.value.emitIfChanged();
+      }
+    }, 10);
   }
-  //-----------------------------------------------------
-  let __last_click_item = 0;
   //-----------------------------------------------------
   function onOptionSelect(payload: ListSelectEmitInfo) {
     if (_box.value.isReadonly.value) {
       return;
     }
-    __last_click_item = Date.now();
-    console.log('onOptionSelect', payload);
+    __last_select_at = Date.now();
+    _box_state.usr_text = null;
+    //console.log('onOptionSelect', payload);
     _box.value.setValueByItem(payload.current || null);
     _box.value.emitIfChanged();
     _box.value.clearOptionsData();
@@ -231,11 +259,11 @@
   watch(
     () => props.value,
     () => {
-      if (props.options) {
-        _box.value.debouncePropsValueChange();
-      } else {
-        _box.value.onPropsValueChange();
-      }
+      // if (props.options) {
+      //   _box.value.debouncePropsValueChange();
+      // } else {
+      _box.value.onPropsValueChange();
+      //}
     },
     { immediate: true }
   );
