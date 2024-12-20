@@ -4,15 +4,15 @@ import {
   AbstractField,
   FieldChange,
   FieldValueChange,
-  LinkFieldChange,
-  ValidateResult,
-  Vars,
   getFieldTypeByValue,
   getFieldUniqKey,
+  LinkFieldChange,
   makeFieldUniqKey,
   mergeFieldChanges,
+  ValidateResult,
+  Vars,
 } from '../../../_type';
-import { I18n, Util } from '../../../core';
+import { I18n, isAsyncFunc, Util } from '../../../core';
 import { getLogger } from '../../../core/log/ti-log';
 import { Alert } from '../../_modal';
 
@@ -135,17 +135,21 @@ export function useFieldChange<T extends AbstractField>(
 
     // 指定了检查方法
     if (field.validate) {
-      let re = field.validate(value, field, data);
-      if (re && re.type != 'OK') {
-        return re;
+      // 异步检查
+      if (isAsyncFunc(field.validate)) {
+        let re = await field.validate(value, field, data);
+        if (re && re.type != 'OK') {
+          return re;
+        }
       }
-    }
-
-    // 指定了异步检查方法
-    if (field.asyncValidate) {
-      let re = await field.asyncValidate(value, field, data);
-      if (re && re.type != 'OK') {
-        return re;
+      // 同步检查
+      else {
+        let re = field.validate(value, field, data) as
+          | ValidateResult
+          | undefined;
+        if (re && re.type != 'OK') {
+          return re;
+        }
       }
     }
 

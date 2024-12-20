@@ -54,5 +54,6 @@ const TiGridFieldsInfo: TiComInfo = {
   },
 };
 
+export { buildGridFields, buildOneGridField } from './build-grid-field';
 export * from './ti-grid-fields-types';
 export { TiGridFields, TiGridFieldsInfo };

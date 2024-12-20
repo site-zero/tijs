@@ -9,6 +9,7 @@ import {
   FieldStatus,
   FieldStatusIcons,
   FieldStatusInfo,
+  FieldValidation,
   FieldValueType,
   GridLayoutProps,
   IconInput,
@@ -77,6 +78,7 @@ export type GridFieldsProps = Omit<
   | 'serialPartial'
   | 'changeEventName'
   | 'maxTrackCount'
+  | 'validation'
 > &
   Omit<FieldChangeProps<GridFieldsStrictField>, 'fields'> & {
     // 动态 explain 时的变量
@@ -136,7 +138,7 @@ export type FieldInfo = [
 export type FieldRefer = GridFieldsInput | FieldInfo | string;
 //-----------------------------------------------
 export type GridFieldsInput = CommonProps &
-  Partial<Omit<AbstractField, 'required'>> &
+  Partial<Omit<AbstractField, 'required' | 'validate'>> &
   FieldComProps &
   VisibilityProps &
   GridLayoutProps &
@@ -176,6 +178,11 @@ export type GridFieldsInput = CommonProps &
     //------------------------------------
     // 字段是否必选，是一个 `TiMatch` 匹配 `FormContext`
     required?: any;
+
+    /**
+     * 检查字段值的合法性
+     */
+    validation?: FieldValidation | FieldValidation[];
 
     // 修改前是否检查相同，默认为true
     checkEquals?: boolean;
@@ -353,7 +360,7 @@ export type GridFieldsStrictGroup = GridFieldsStrictAbstractItem &
   };
 //-----------------------------------------------
 export type GridFieldsStrictField = GridFieldsStrictAbstractItem &
-  Omit<AbstractField, 'valueChecker'> & {
+  AbstractField & {
     race: 'field';
 
     checkEquals: boolean;

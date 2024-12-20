@@ -95,21 +95,18 @@ export type AbstractField = Field & {
    */
   required?: (data: Vars) => any;
 
-  /**
-   * 同步检查字段值的合法性
-   */
-  validate?: FieldValidator;
+  validate?: FieldValidator | AyncFieldValidator;
 
-  /**
-   * 指定了快捷的验证字段值的方法，在 `validate`属性未定义时，
-   * 将采用这个值
-   */
-  valueChecker?: FieldValidateInput;
+  // // /**
+  // //  * 指定了快捷的验证字段值的方法，在 `validate`属性未定义时，
+  // //  * 将采用这个值
+  // //  */
+  // // valueChecker?: FieldValidateInput;
 
-  /**
-   * 异步检查字段值的合法性
-   */
-  asyncValidate?: AsyncFieldValidator;
+  // /**
+  //  * 异步检查字段值的合法性
+  //  */
+  // asyncValidate?: AsyncFieldValidator;
 };
 
 export type FieldConvertor = {
@@ -180,6 +177,12 @@ export type FieldValidator = (
   data: Vars
 ) => ValidateResult | undefined;
 
+export type AyncFieldValidator = (
+  value: any,
+  field: AbstractField,
+  data: Vars
+) => Promise<ValidateResult | undefined>;
+
 export type FieldValidateMatcher = {
   not?: boolean;
   test: any;
@@ -189,11 +192,12 @@ export type FieldValidateMatcher = {
 /**
  * 根据这个输入能生成一个 FieldValidator
  */
-export type FieldValidateInput =
+export type FieldValidation =
   | RegExp
   | string
   | FieldValidateMatcher
-  | FieldValidator;
+  | FieldValidator
+  | AyncFieldValidator;
 
 /**
  * 异步检查字段值的回调函数

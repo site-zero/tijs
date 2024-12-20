@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { makeFieldUniqKey, parseFieldConverter, Vars } from '../../../_type';
 import { CssUtils, Match } from '../../../core';
 import {
-  buildFieldValidate,
+  buildFieldValidatorGroup,
   TiObjFieldsFeature,
   useVisibility,
 } from '../../_features';
@@ -108,9 +108,8 @@ export function buildOneGridField(
     fld.defaultAs = field.defaultAs ?? null;
     fld.changeEventName = field.changeEventName ?? 'change';
 
-    fld.validate = field.validate;
-    if (!fld.validate && field.valueChecker) {
-      fld.validate = buildFieldValidate(field.valueChecker);
+    if (field.validation) {
+      fld.validate = buildFieldValidatorGroup(field.validation);
     }
 
     fld.transformer = parseFieldConverter(

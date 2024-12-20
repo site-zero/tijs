@@ -1,13 +1,17 @@
 import _ from 'lodash';
+import { Vars } from '../../../_type';
 import {
-  FieldValidateInput,
+  AbstractField,
+  AyncFieldValidator,
+  FieldValidation,
   FieldValidator,
+  ValidateResult,
 } from '../../../_type/lib-type-fields';
-import { Match } from '../../../core';
+import { isAsyncFunc, Match } from '../../../core';
 
-export function buildFieldValidate(
-  valueChecker?: FieldValidateInput | undefined
-): FieldValidator | undefined {
+export function buildFieldValidator(
+  valueChecker?: FieldValidation | undefined
+): FieldValidator | AyncFieldValidator | undefined {
   if (!valueChecker) {
     return;
   }
@@ -34,4 +38,63 @@ export function buildFieldValidate(
       return { type: 'VALUE_INVALID' };
     };
   }
+}
+
+export function buildFieldValidatorGroup(
+  valueChecker?: FieldValidation | FieldValidation[] | undefined
+): FieldValidator | AyncFieldValidator | undefined {
+  if (!valueChecker) {
+    return;
+  }
+
+  let vali_list: (FieldValidator | AyncFieldValidator)[] = [];
+  let inputs = _.concat([], valueChecker);
+  for (let input of inputs) {
+    let vali = buildFieldValidator(input);
+    if (vali) {
+      vali_list.push(vali);
+    }
+  }
+
+  // 如果包含异步验证，那么就是返回一个异步包裹
+  let hasAsyncValidation = false;
+  for (let vali of vali_list) {
+    if (isAsyncFunc(vali)) {
+      hasAsyncValidation = true;
+      break;
+    }
+  }
+
+  // 包括异步的验证
+  if (hasAsyncValidation) {
+    return async (
+      value: any,
+      field: AbstractField,
+      data: Vars
+    ): Promise<ValidateResult | undefined> => {
+      for (let vali of vali_list) {
+        let re = await vali(value, field, data);
+        if (re && re.type != 'OK') {
+          return re;
+        }
+      }
+      return { type: 'OK' };
+    };
+  }
+
+  // 只有同步验证
+  return (
+    value: any,
+    field: AbstractField,
+    data: Vars
+  ): ValidateResult | undefined => {
+    for (let vali of vali_list) {
+      let sync_vali = vali as FieldValidator;
+      let re = sync_vali(value, field, data);
+      if (re && re.type != 'OK') {
+        return re;
+      }
+    }
+    return { type: 'OK' };
+  };
 }
