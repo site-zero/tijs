@@ -16,6 +16,7 @@ export * from './use-value-input';
 export * from './use-value-translator';
 export * from './use-viewport';
 export * from './use-visibility';
+export * from './validate/';
 
 // 设计的不好，应该重构
 export * from './use-boolean-input';
@@ -30,4 +31,3 @@ export * from './use-class-style';
 export * from './use-emit-adaptor';
 export * from './use-icon-text';
 export * from './use-value-box';
-

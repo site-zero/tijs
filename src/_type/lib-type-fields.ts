@@ -93,7 +93,7 @@ export type AbstractField = Field & {
    * @param data 整体记录
    * @returns  当前字段对这个记录是不是必须的
    */
-  required?: (data: Vars) => any;
+  isRequired?: (data: Vars) => boolean;
 
   validate?: FieldValidator | AyncFieldValidator;
 

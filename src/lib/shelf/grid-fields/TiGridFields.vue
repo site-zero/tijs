@@ -118,7 +118,6 @@
         fieldTitleBy: props.fieldTitleBy,
         tip: props.tip,
         tipType: props.tipType ?? 'text',
-        required: props.required,
         data: props.data,
       },
       props.vars

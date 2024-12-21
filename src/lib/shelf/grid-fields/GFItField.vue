@@ -73,8 +73,8 @@
   //-------------------------------------------------
   const FieldTitleVars = computed(() => {
     let required = false;
-    if (props.required) {
-      required = props.required(props.data);
+    if (props.isRequired) {
+      required = props.isRequired(props.data);
     }
     return {
       uniqKey: props.uniqKey,

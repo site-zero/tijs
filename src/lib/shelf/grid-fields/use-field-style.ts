@@ -348,7 +348,7 @@ export function getFieldTextInfo(
     | 'fieldTitleBy'
     | 'tip'
     | 'tipType'
-    | 'required'
+    | 'isRequired'
     | 'data'
   >,
   vars?: Vars
@@ -357,7 +357,7 @@ export function getFieldTextInfo(
     title: title_arms,
     titleType,
     fieldTitleBy,
-    required,
+    isRequired,
     tip: tip_arms,
     tipType,
   } = field;
@@ -372,7 +372,7 @@ export function getFieldTextInfo(
     title = I18n.text(title);
   }
 
-  if (required && required(field.data) && title && !fieldTitleBy) {
+  if (isRequired && isRequired(field.data) && title && !fieldTitleBy) {
     if ('text' == titleType) {
       title = _.escape(title);
     }

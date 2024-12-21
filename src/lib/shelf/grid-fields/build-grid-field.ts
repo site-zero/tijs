@@ -101,7 +101,7 @@ export function buildOneGridField(
     });
 
     let isRequired = Match.parse(field.required, false);
-    fld.required = (data: Vars) => isRequired.test(data);
+    fld.isRequired = (data: Vars) => isRequired.test(data);
 
     fld.checkEquals = field.checkEquals ?? true;
     fld.emptyAs = field.emptyAs ?? null;
