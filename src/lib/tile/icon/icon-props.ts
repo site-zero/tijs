@@ -9,6 +9,7 @@ export interface IconProps extends CommonProps {
   base?: string;
   dict?: TiDict;
   defaultValue?: IconInput;
+  tip?: string;
   //
   // Behavior
   //

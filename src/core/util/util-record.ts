@@ -1,6 +1,6 @@
 import _ from 'lodash';
 
-export function filterRecordNilValue(val: any): any {
+export function filterRecordNilValueDeeply(val: any): any {
   // 特殊值，有些时候需要保留 null 以便数据库判断 IS NULL 条件
   // 我们用特殊的  '<NULL>' 来表示，一边区分原生的 null，因为原生的 null
   // 主要意思是这个条件无视
@@ -30,14 +30,14 @@ export function filterRecordNilValue(val: any): any {
     }
     // 处理对象
     if (_.isPlainObject(v)) {
-      let obj = filterRecordNilValue(v);
+      let obj = filterRecordNilValueDeeply(v);
       re[k] = obj;
     }
     // 处理数组
     else if (_.isArray(v)) {
       let list = [] as any[];
       for (let li of v) {
-        let l2 = filterRecordNilValue(li);
+        let l2 = filterRecordNilValueDeeply(li);
         list.push(l2);
       }
       re[k] = list;
@@ -45,6 +45,31 @@ export function filterRecordNilValue(val: any): any {
     // 其他值
     else {
       re[k] = v;
+    }
+  }
+  return re;
+}
+
+export function filterRecord<K extends string | number, V>(
+  map: Record<K, V>,
+  predicate: (v: V, k: K) => boolean
+): Record<K, V> {
+  let re = {} as Record<K, V>;
+  for (let [k, v] of Object.entries(map)) {
+    if (predicate(v as V, k as K)) {
+      re[k as K] = v as V;
+    }
+  }
+  return re;
+}
+
+export function filterRecordNilValue<K extends string | number, V>(
+  map: Record<K, V | null | undefined>
+): Record<K, V> {
+  let re = {} as Record<K, V>;
+  for (let [k, v] of Object.entries(map)) {
+    if (!_.isNil(v)) {
+      re[k as K] = v as V;
     }
   }
   return re;

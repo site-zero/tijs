@@ -44,7 +44,8 @@
   <div
     class="ti-icon"
     :class="TopClass"
-    :style="TopStyle">
+    :style="TopStyle"
+    :title="props.tip">
     <!-- Emoji Icon-->
     <div
       class="part-main as-emoji"

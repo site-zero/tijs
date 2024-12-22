@@ -270,9 +270,12 @@ export type FieldTitleIcon = {
   tipAsIcon: boolean;
   titlePrefixIcon?: IconInput;
   titleSuffixIcon?: IconInput;
+  titlePrefixTip?: string;
+  titleSuffixTip?: string;
   tipPrefixIcon?: IconInput;
   tipSuffixIcon?: IconInput;
   valueIcon?: IconInput;
+  valueTip?: string;
 };
 
 /**
@@ -289,16 +292,21 @@ export function getFieldIcon(
   //
   let tipIconInfo = getFieldTipIcon(field, hasTip);
   let reIcon: FieldTitleIcon = { tipAsIcon: tipIconInfo ? true : false };
+  let fieldTip = Util.selectValue(field.vars, field.tip, {
+    explain: true,
+  });
   if (tipIconInfo && tipIconInfo.type) {
     // 标题区提示图标
     if (hasTitle && tipIconInfo.position == 'title') {
       // 提示在前缀
       if ('prefix' == tipIconInfo.type) {
         reIcon.titlePrefixIcon = field.tipIcon;
+        reIcon.titlePrefixTip = fieldTip;
       }
       // 提示在后缀
       else if ('suffix' == tipIconInfo.type) {
         reIcon.titleSuffixIcon = field.tipIcon;
+        reIcon.titleSuffixTip = fieldTip;
       }
     }
     // 值区提示图标
@@ -321,12 +329,24 @@ export function getFieldIcon(
   // 状态图标
   //
   if (status && status.icon) {
+    let statusTip = status.text ?? fieldTip;
+    Util.selectValue(field.vars, field.tip, {
+      explain: true,
+    });
+    // 显示标题
     if (hasTitle) {
       reIcon.titleSuffixIcon = status.icon;
-    } else if (hasTip) {
+      reIcon.titleSuffixTip = statusTip;
+    }
+    // 显示提示区
+    else if (hasTip) {
       reIcon.tipPrefixIcon = status.icon;
-    } else {
+      reIcon.titlePrefixTip = statusTip;
+    }
+    // 那么就是 Value 区了
+    else {
       reIcon.valueIcon = status.icon;
+      reIcon.valueTip = statusTip;
     }
   }
 

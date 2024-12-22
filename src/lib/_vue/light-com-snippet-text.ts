@@ -28,7 +28,9 @@ export type TextSnippetProps = FieldComProps & {
   textType?: TextContentType;
   autoI18n?: boolean;
   prefixIcon?: IconInput;
+  prefixTip?: string;
   suffixIcon?: IconInput;
+  suffixTip?: string;
 };
 
 export function TextSnippet(
@@ -87,7 +89,13 @@ export function TextSnippet(
 
   // 前缀图标
   if (props.prefixIcon) {
-    children.push(h(TiIcon, { class: 'at-prefix', value: props.prefixIcon }));
+    children.push(
+      h(TiIcon, {
+        class: 'at-prefix',
+        value: props.prefixIcon,
+        tip: props.prefixTip,
+      })
+    );
   }
 
   // 文字内容
@@ -106,7 +114,13 @@ export function TextSnippet(
 
   // 后缀图标
   if (props.suffixIcon) {
-    children.push(h(TiIcon, { class: 'at-suffix', value: props.suffixIcon }));
+    children.push(
+      h(TiIcon, {
+        class: 'at-suffix',
+        value: props.suffixIcon,
+        tip: props.suffixTip,
+      })
+    );
   }
 
   return h(tag, tagProps, children);

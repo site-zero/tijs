@@ -136,20 +136,9 @@ export function useFieldChange<T extends AbstractField>(
     // 指定了检查方法
     if (field.validate) {
       // 异步检查
-      if (isAsyncFunc(field.validate)) {
-        let re = await field.validate(value, field, data);
-        if (re && re.type != 'OK') {
-          return re;
-        }
-      }
-      // 同步检查
-      else {
-        let re = field.validate(value, field, data) as
-          | ValidateResult
-          | undefined;
-        if (re && re.type != 'OK') {
-          return re;
-        }
+      let re = await field.validate(value, field, data);
+      if (re && re.type != 'OK') {
+        return re;
       }
     }
 

@@ -325,6 +325,31 @@ export function objToMap<K extends string | number, V>(
   return map;
 }
 
+export function filterMap<K extends string | number, V>(
+  map: Map<K, V>,
+  predicate: (v: V, k: K) => boolean
+): Map<K, V> {
+  let re = new Map<K, V>();
+  for (let [k, v] of map.entries()) {
+    if (predicate(v, k)) {
+      re.set(k, v);
+    }
+  }
+  return re;
+}
+
+export function filterMapNilValue<K extends string | number, V>(
+  map: Map<K, V | null | undefined>
+): Map<K, V> {
+  let re = new Map<K, V>();
+  for (let [k, v] of map.entries()) {
+    if (!_.isNil(v)) {
+      re.set(k, v);
+    }
+  }
+  return re;
+}
+
 /**
  * 浅层合并 `Map`
  *

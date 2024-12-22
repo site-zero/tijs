@@ -2,7 +2,7 @@
   import { computed, inject } from 'vue';
   import { TextSnippet, useFieldCom } from '../../';
   import { ValueChange, getFieldValue } from '../../../_type';
-  import { CssUtils } from '../../../core';
+  import { CssUtils, Util } from '../../../core';
   import {
     FIELD_STATUS_KEY,
     GridFieldsStrictField,
@@ -150,8 +150,13 @@
       :activatedComType="props.fieldTitleBy?.activatedComType"
       :activatedComConf="props.fieldTitleBy?.activatedComConf"
       :changeEventName="props.fieldTitleBy?.changeEventName"
+
       :prefixIcon="FieldIcon?.titlePrefixIcon"
+      :prefixTip="FieldIcon?.titlePrefixTip"
+      
       :suffixIcon="FieldIcon?.titleSuffixIcon"
+      :suffixTip="FieldIcon?.titleSuffixTip"
+      
       :vars="FieldTitleVars"
       @change="onTitleChange" />
     <!--===============: 字段值 :===================-->

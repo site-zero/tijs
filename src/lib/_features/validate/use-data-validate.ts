@@ -15,6 +15,15 @@ export type ValidateOptions = {
   checkRequired?: boolean;
 
   /**
+   * 如果检查的结果是 OK，那么设置为
+   *
+   * 'null' - null, 主要用来在 delta 场景下，这样错误后又正确的值可以移除错误提示
+   * 'ignore' - 忽略，不设置任何值，主要用在全量检查场景
+   * 'ok' - {type:'ok'} 维持 ok 的值
+   */
+  okAs?: 'null' | 'ignore' | 'ok';
+
+  /**
    * 隐藏字段也要检查, 默认 false
    */
   checkHidden?: boolean;
@@ -62,7 +71,7 @@ export function useDataValidate(props: DataValidationProps) {
   }
 
   async function __validate_with_fld(
-    status: Record<string, FieldStatus>,
+    status: Record<string, FieldStatus | null>,
     fld: DataValidatableField,
     key: string,
     val: any,
@@ -92,12 +101,18 @@ export function useDataValidate(props: DataValidationProps) {
     }
 
     if (fld.validate) {
-      let re = await fld.validate(val, fld, data);
-      if (re && re.type != 'OK') {
+      let re = (await fld.validate(val, fld, data)) ?? { type: 'OK' };
+      if ('OK' == re.type) {
+        if ('null' == options.okAs) {
+          status[key] = null;
+        } else if ('ok' == options.okAs) {
+          status[key] = { type: 'ok' };
+        }
+      } else {
         let title = Util.selectValue(data, fld.title);
         status[key] = {
-          type: 'error',
-          text: [`Field '${title}' Invalid`, re.message].join(':'),
+          type: 'warn',
+          text: [`Field '${title}' Invalid`, re.message].join(': '),
         };
       }
     }
@@ -116,9 +131,9 @@ export function useDataValidate(props: DataValidationProps) {
     delta: Vars,
     data: Vars,
     options: ValidateOptions = {}
-  ): Promise<Record<string, FieldStatus> | undefined> {
+  ): Promise<Record<string, FieldStatus | null>> {
     // 准备返回值
-    let status: Record<string, FieldStatus> = {};
+    let status: Record<string, FieldStatus | null> = {};
 
     // 循环改动的键
     for (let key of _.keys(delta)) {
@@ -133,7 +148,7 @@ export function useDataValidate(props: DataValidationProps) {
     }
 
     // 返回检查结果
-    return _.isEmpty(status) ? undefined : status;
+    return status;
   }
 
   /**
@@ -146,8 +161,8 @@ export function useDataValidate(props: DataValidationProps) {
   async function validateData(
     data: Vars,
     options: ValidateOptions = {}
-  ): Promise<Record<string, FieldStatus> | undefined> {
-    let status: Record<string, FieldStatus> = {};
+  ): Promise<Record<string, FieldStatus | null>> {
+    let status: Record<string, FieldStatus | null> = {};
 
     for (let fld of _field_list) {
       let val = getFieldValue(fld.name, data);

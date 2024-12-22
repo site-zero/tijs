@@ -95,7 +95,7 @@ export type AbstractField = Field & {
    */
   isRequired?: (data: Vars) => boolean;
 
-  validate?: FieldValidator | AyncFieldValidator;
+  validate?: AyncFieldValidator;
 
   // // /**
   // //  * 指定了快捷的验证字段值的方法，在 `validate`属性未定义时，
@@ -164,18 +164,18 @@ export type ValidateResult = {
 };
 
 /**
- * 同步检查字段值的回调函数
+ * 检查字段值的回调函数
  *
  * @param value  字段的值
  * @param field  字段定义
  * @param data  整体数据对象
  * @returns 指定检查结果，如果 undefined 表示检查通过
  */
-export type FieldValidator = (
-  value: any,
-  field: AbstractField,
-  data: Vars
-) => ValidateResult | undefined;
+// export type FieldValidator = (
+//   value: any,
+//   field: AbstractField,
+//   data: Vars
+// ) => ValidateResult | undefined;
 
 export type AyncFieldValidator = (
   value: any,
@@ -196,7 +196,6 @@ export type FieldValidation =
   | RegExp
   | string
   | FieldValidateMatcher
-  | FieldValidator
   | AyncFieldValidator;
 
 /**
