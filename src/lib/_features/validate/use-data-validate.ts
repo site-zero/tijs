@@ -78,6 +78,14 @@ export function useDataValidate(props: DataValidationProps) {
     data: Vars,
     options: ValidateOptions
   ) {
+    const __set_ok = function () {
+      if ('null' == options.okAs) {
+        status[key] = null;
+      } else if ('ok' == options.okAs) {
+        status[key] = { type: 'ok' };
+      }
+    };
+
     if (!options.checkDisabled && fld.isDisabled(data)) {
       return;
     }
@@ -96,6 +104,8 @@ export function useDataValidate(props: DataValidationProps) {
           type: 'error',
           text: `Field '${title}' is required`,
         };
+      } else {
+        __set_ok();
       }
       return;
     }
@@ -103,11 +113,7 @@ export function useDataValidate(props: DataValidationProps) {
     if (fld.validate) {
       let re = (await fld.validate(val, fld, data)) ?? { type: 'OK' };
       if ('OK' == re.type) {
-        if ('null' == options.okAs) {
-          status[key] = null;
-        } else if ('ok' == options.okAs) {
-          status[key] = { type: 'ok' };
-        }
+        __set_ok();
       } else {
         let title = Util.selectValue(data, fld.title);
         status[key] = {
