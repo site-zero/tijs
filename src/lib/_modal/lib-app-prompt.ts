@@ -1,5 +1,4 @@
 import _ from 'lodash';
-import { HtmlSnippetListenner, openAppModal } from '../../lib';
 import {
   AppModalProps,
   IconInput,
@@ -7,6 +6,7 @@ import {
   PopItemProps,
   Vars,
 } from '../../_type';
+import { HtmlSnippetListenner, openAppModal } from '../../lib';
 import { __get_msg_box_html } from './get-msg-box-html';
 
 export type PromptOptions = PopItemProps & {
@@ -19,6 +19,8 @@ export type PromptOptions = PopItemProps & {
   iconCancel?: IconInput;
   textCancel?: string;
   bodyIcon?: IconInput;
+  bodyClass?: any;
+  bodyStyle?: Vars;
   contentType?: 'text' | 'html';
   placeholder?: string;
   value?: any;
@@ -32,7 +34,7 @@ export async function Prompt(
   let html = __get_msg_box_html({
     msg,
     type: options.type || 'info',
-    bodyIcon: options.bodyIcon ?? 'zmdi-keyboard',
+    bodyIcon: options.bodyIcon ?? options.icon ?? 'zmdi-keyboard',
     msgAsHtml: 'html' == options.contentType,
     mainSuffixHtml: `<div class="part-input" spellcheck="false"><input></div>`,
     vars: options.vars,
@@ -50,12 +52,14 @@ export async function Prompt(
     comType: 'TiHtmlSnippet',
     comConf: {
       content: html,
+      className: options.bodyClass,
+      style: options.bodyStyle,
       listenners: [
         {
           selector: '.part-input > input',
           eventName: 'change',
           setup: ($el) => {
-            console.log('prompt setup')
+            console.log('prompt setup');
             let $input = $el as HTMLInputElement;
             if (!_.isNil(options.value)) {
               $input.value = options.value;

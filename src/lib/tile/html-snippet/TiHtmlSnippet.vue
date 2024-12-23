@@ -22,6 +22,7 @@
   });
   //-----------------------------------------------------
   const TopClass = computed(() => CssUtils.mergeClassName(props.className));
+  const TopStyle = computed(() => CssUtils.toStyle(props.style));
   //-----------------------------------------------------
   watch(
     () => [snippetInnerHtml.value, _event.value, $top.value],
@@ -46,6 +47,7 @@
     ref="$top"
     class="ti-html-snippet"
     :class="TopClass"
+    :style="TopStyle"
     v-html="snippetInnerHtml"
     v-on="eventBinding"></div>
 </template>

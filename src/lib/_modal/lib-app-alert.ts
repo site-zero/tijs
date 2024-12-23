@@ -17,6 +17,8 @@ export type AlertOptions = PopItemProps & {
   iconOk?: IconInput;
   textOk?: string;
   bodyIcon?: IconInput;
+  bodyClass?: any;
+  bodyStyle?: Vars;
   contentType?: 'text' | 'html';
 };
 
@@ -28,7 +30,7 @@ export async function Alert(
   let html = __get_msg_box_html({
     msg,
     type: options.type || 'primary',
-    bodyIcon: options.bodyIcon,
+    bodyIcon: options.bodyIcon ?? options.icon,
     msgAsHtml: 'html' == options.contentType,
     vars: options.vars,
   });
@@ -44,6 +46,8 @@ export async function Alert(
     comType: 'TiHtmlSnippet',
     comConf: {
       content: html,
+      className: options.bodyClass,
+      style: options.bodyStyle,
     },
     showMask: true,
     clickMaskToClose: false,

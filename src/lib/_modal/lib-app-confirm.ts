@@ -20,6 +20,8 @@ export type ConfirmOptions = PopItemProps & {
   iconCancel?: IconInput;
   textCancel?: string;
   bodyIcon?: IconInput;
+  bodyClass?: any;
+  bodyStyle?: Vars;
   contentType?: 'text' | 'html';
 };
 
@@ -31,7 +33,7 @@ export async function Confirm(
   let html = __get_msg_box_html({
     msg,
     type: options.type || 'info',
-    bodyIcon: options.bodyIcon ?? 'zmdi-help',
+    bodyIcon: options.bodyIcon ?? options.icon ?? 'zmdi-help',
     msgAsHtml: 'html' == options.contentType,
     vars: options.vars,
   });
@@ -48,6 +50,8 @@ export async function Confirm(
     comType: 'TiHtmlSnippet',
     comConf: {
       content: html,
+      className: options.bodyClass,
+      style: options.bodyStyle,
     },
     showMask: true,
     clickMaskToClose: false,
