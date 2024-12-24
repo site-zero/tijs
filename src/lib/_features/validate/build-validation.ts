@@ -31,6 +31,7 @@ export function _build_validatable_field(
     name: field.name,
     type: field.type,
     validate: buildFieldValidatorGroup(field.validation),
+    srcValidation: field.validation,
     ...visiblity,
     readonly: field.readonly,
   };

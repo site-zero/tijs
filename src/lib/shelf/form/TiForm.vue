@@ -16,6 +16,7 @@
     v-bind="props"
     @change="emit('change', $event)"
     @change-fields="emit('change-fields', $event)"
+    @change-validate="emit('change-validate', $event)"
     @name-change="emit('name-change', $event)"
     @dom-ready="emit('dom-ready', $event)">
     <template v-slot:head>

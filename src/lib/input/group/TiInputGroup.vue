@@ -35,7 +35,7 @@
       });
       val = v2;
     }
-    console.log('onValueChange', change, val);
+    //console.log('onValueChange', change, val);
     emit('change', val);
   }
 </script>

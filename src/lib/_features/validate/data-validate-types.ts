@@ -36,4 +36,8 @@ export type DataValidatableField = AbstractField &
   ReadonlyProps &
   VisibilityFeature & {
     title: TextArm;
+    /**
+     * 存储一下源校验配置，以便动态可以展示校验规则
+     */
+    srcValidation?: any;
   };

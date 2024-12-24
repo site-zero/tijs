@@ -117,7 +117,7 @@ export function useDataValidate(props: DataValidationProps) {
       } else {
         let title = Util.selectValue(data, fld.title);
         status[key] = {
-          type: 'warn',
+          type: 'error',
           text: [`Field '${title}' Invalid`, re.message].join(': '),
         };
       }
@@ -179,10 +179,22 @@ export function useDataValidate(props: DataValidationProps) {
     return status;
   }
 
+  function toCSV() {
+    let rows = [];
+    for (let fld of _field_list) {
+      let name = `${fld.name}`;
+      let title = `${fld.title}`;
+      let vlidation = `[${fld.srcValidation}]`;
+      rows.push([name, title, vlidation].join(','));
+    }
+    return rows.join('\n');
+  }
+
   return {
     _field_list,
     _field_map,
     validateChange,
     validateData,
+    toCSV,
   };
 }

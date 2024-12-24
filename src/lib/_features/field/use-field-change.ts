@@ -3,6 +3,8 @@ import { computed } from 'vue';
 import {
   AbstractField,
   FieldChange,
+  FieldStatus,
+  FieldStatusType,
   FieldValueChange,
   getFieldTypeByValue,
   getFieldUniqKey,
@@ -18,10 +20,13 @@ import { Alert } from '../../_modal';
 
 const log = getLogger('ti.use-field-change');
 
+export type FieldChangeValidateEvent = FieldStatus &
+  Pick<AbstractField, 'name'>;
+
 export type FieldChangeEmitter = {
   (eventName: 'change', payload: Vars): void;
   (eventName: 'change-fields', payload: FieldChange[]): void;
-  (eventName: 'change-invalid', payload: FieldChange[]): void;
+  (eventName: 'change-validate', payload: FieldChangeValidateEvent): void;
 };
 
 /**
@@ -43,6 +48,11 @@ export type FieldChangeProps<T extends AbstractField> = {
 
   // 检查字段的时候，如果字段未定义，则无视，全当 OK
   allowUndefinedFields?: boolean;
+
+  /**
+   * 如果字段检查失败，将不通知 chang 事件
+   */
+  blockInvalid?: boolean;
 
   /**
    * 在 applyFieldChange 的时候，总是需要一个字段定义的
@@ -278,20 +288,20 @@ export function useFieldChange<T extends AbstractField>(
     change: FieldValueChange,
     options: Omit<HandleValueChangeOptions, 'emit'>,
     notifyChange: (changeData: Vars, pairs: FieldChange[], field: T) => void,
-    notifyError?: (
+    notifyValidation?: (
       valiResult: ValidateResult,
       change: FieldValueChange,
-      field: T,
-      orgData: Vars
+      orgData: Vars,
+      field?: T
     ) => void
   ) {
     let { data, checkEquals } = options;
-    let msg_vars: Vars = { key: change.uniqKey, val: change.value };
     // 获取字段定义
     let field = getField(change.uniqKey);
     if (!field) {
-      let msg = I18n.textf('i18n:e-field-undefined', msg_vars);
-      await Alert(msg, { type: 'danger' });
+      if (notifyValidation) {
+        notifyValidation({ type: 'FIELD_UNDEFINED' }, change, data);
+      }
       return;
     }
     log.debug('field=', field);
@@ -324,32 +334,16 @@ export function useFieldChange<T extends AbstractField>(
     // 检查一下改动
     let validation = await verifyFieldChange(change, data);
     if (validation.type != 'OK') {
-      if (!field || validation.type == 'FIELD_UNDEFINED') {
-        let msg =
-          validation.message ?? I18n.textf('i18n:e-field-undefined', msg_vars);
-        await Alert(msg, { type: 'danger' });
+      if (notifyValidation) {
+        notifyValidation(validation, change, data, field);
+      }
+      if (props.blockInvalid) {
         return;
       }
-      msg_vars.title = _.get(field, 'title');
-      msg_vars.tip = _.get(field, 'tip');
-      if (validation.type == 'VALUE_NIL') {
-        let msg = validation.message ?? I18n.textf('i18n:e-val-nil', msg_vars);
-        //await Alert(msg, { type: 'danger' });
-        if (notifyError) {
-          notifyError(validation, change, field, data);
-        }
-        return;
-      }
-      if (validation.type == 'VALUE_INVALID') {
-        let msg =
-          validation.message ??
-          I18n.textf('i18n:e-field-val-invalid', msg_vars);
-        //await Alert(msg, { type: 'danger' });
-        if (notifyError) {
-          notifyError(validation, change, field, data);
-        }
-        return;
-      }
+    }
+    // 通知字段值通过检查
+    else if (notifyValidation) {
+      notifyValidation({ type: 'OK' }, change, data, field);
     }
 
     // 应用连接字段
@@ -396,7 +390,41 @@ export function useFieldChange<T extends AbstractField>(
         emit('change', data);
         emit('change-fields', changes);
       },
-      async (validation, change, field, data) => {}
+      async (validation, change, data, field) => {
+        let msg_vars: Vars = {
+          key: change.uniqKey,
+          val: change.value,
+          title: _.get(field, 'title') ?? field?.uniqKey,
+          tip: _.get(field, 'tip'),
+          data,
+        };
+        let msg: string | undefined = undefined;
+        let type: FieldStatusType = 'ok';
+        // 字段未定义： 似乎不太可能出现
+        if (!field || validation.type == 'FIELD_UNDEFINED') {
+          type = 'error';
+          msg =
+            validation.message ??
+            I18n.textf('i18n:e-field-undefined', msg_vars);
+        }
+        // 必选值为空
+        else if (validation.type == 'VALUE_NIL') {
+          type = 'error';
+          msg = validation.message ?? I18n.textf('i18n:e-val-nil', msg_vars);
+        }
+        // 值非法
+        else if (validation.type == 'VALUE_INVALID') {
+          type = 'error';
+          msg =
+            validation.message ??
+            I18n.textf('i18n:e-field-val-invalid', msg_vars);
+        }
+        emit('change-validate', {
+          name: field?.name ?? '-unknown-',
+          type,
+          text: msg,
+        });
+      }
     );
   }
 

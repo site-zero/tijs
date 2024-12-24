@@ -101,7 +101,7 @@
     let key = props.changeEventName ?? 'change';
     return {
       [key]: (val: any) => {
-        console.log('value-chagne!!!', val);
+        //console.log('value-chagne!!!', val);
         emit('value-change', {
           uniqKey: props.uniqKey,
           name: props.name,
