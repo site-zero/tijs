@@ -12,7 +12,7 @@ import {
   ValidateResult,
   Vars,
 } from '../../../_type';
-import { I18n, isAsyncFunc, Util } from '../../../core';
+import { I18n, Util } from '../../../core';
 import { getLogger } from '../../../core/log/ti-log';
 import { Alert } from '../../_modal';
 
@@ -21,6 +21,7 @@ const log = getLogger('ti.use-field-change');
 export type FieldChangeEmitter = {
   (eventName: 'change', payload: Vars): void;
   (eventName: 'change-fields', payload: FieldChange[]): void;
+  (eventName: 'change-invalid', payload: FieldChange[]): void;
 };
 
 /**
@@ -276,7 +277,13 @@ export function useFieldChange<T extends AbstractField>(
   async function tidyValueChange(
     change: FieldValueChange,
     options: Omit<HandleValueChangeOptions, 'emit'>,
-    callback: (changeData: Vars, pairs: FieldChange[], field: T) => void
+    notifyChange: (changeData: Vars, pairs: FieldChange[], field: T) => void,
+    notifyError?: (
+      valiResult: ValidateResult,
+      change: FieldValueChange,
+      field: T,
+      orgData: Vars
+    ) => void
   ) {
     let { data, checkEquals } = options;
     let msg_vars: Vars = { key: change.uniqKey, val: change.value };
@@ -327,14 +334,20 @@ export function useFieldChange<T extends AbstractField>(
       msg_vars.tip = _.get(field, 'tip');
       if (validation.type == 'VALUE_NIL') {
         let msg = validation.message ?? I18n.textf('i18n:e-val-nil', msg_vars);
-        await Alert(msg, { type: 'danger' });
+        //await Alert(msg, { type: 'danger' });
+        if (notifyError) {
+          notifyError(validation, change, field, data);
+        }
         return;
       }
       if (validation.type == 'VALUE_INVALID') {
         let msg =
           validation.message ??
           I18n.textf('i18n:e-field-val-invalid', msg_vars);
-        await Alert(msg, { type: 'danger' });
+        //await Alert(msg, { type: 'danger' });
+        if (notifyError) {
+          notifyError(validation, change, field, data);
+        }
         return;
       }
     }
@@ -355,12 +368,12 @@ export function useFieldChange<T extends AbstractField>(
         return;
       }
       log.debug('notify diff=', diff);
-      callback(changedData, changes, field);
+      notifyChange(changedData, changes, field);
     }
     // 通知改动
     else {
       log.debug('notify change', changedData);
-      callback(changedData, changes, field);
+      notifyChange(changedData, changes, field);
     }
   }
 
@@ -374,12 +387,17 @@ export function useFieldChange<T extends AbstractField>(
     change: FieldValueChange,
     options: HandleValueChangeOptions
   ) {
+    let { emit } = options;
     //console.log('handleValueChange', change);
-    await tidyValueChange(change, options, (data, changes) => {
-      let { emit } = options;
-      emit('change', data);
-      emit('change-fields', changes);
-    });
+    await tidyValueChange(
+      change,
+      options,
+      (data, changes) => {
+        emit('change', data);
+        emit('change-fields', changes);
+      },
+      async (validation, change, field, data) => {}
+    );
   }
 
   //...................................................
