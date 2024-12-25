@@ -1,11 +1,10 @@
 <script setup lang="ts">
   import { computed, reactive, useTemplateRef, watch } from 'vue';
   import { useDict, usePlaceholder, useValuePipe } from '../../';
-  import { CssUtils } from '../../../core';
   import { LabelEmitter, LabelProps, LabelState } from './ti-label-types';
   import { useLabel } from './use-label';
-  import { useLabelIcon } from './use-label-icon';
   import { useLabelAspect } from './use-label-aspect';
+  import { useLabelIcon } from './use-label-icon';
   //-----------------------------------------------------
   defineOptions({ inheritAttrs: true });
   //-----------------------------------------------------
@@ -14,6 +13,9 @@
   let props = withDefaults(defineProps<LabelProps>(), {
     autoI18n: true,
     nowrap: true,
+    boxRadius: 's',
+    boxFontSize: 's',
+    boxPadding: 's',
   });
   //-----------------------------------------------------
   const $el = useTemplateRef('el');
@@ -35,6 +37,7 @@
   const _prefix = computed(() =>
     useLabelIcon({
       _api: _api,
+      href: _api.Href.value,
       icon: props.prefixIcon,
       hoverIcon: props.prefixHoverIcon,
       iconFor: props.prefixIconFor,
@@ -80,7 +83,19 @@
       v-html="_prefix.IconPartHtml.value"
       @click.left.stop="_prefix.onClick"></div>
     <!--====================================-->
-    <div class="value-part">{{ LabelText }}</div>
+    <div
+      class="value-part"
+      :style="_aspect.ValuePartStyle.value">
+      <a
+        v-if="_api.Href.value"
+        :href="_api.Href.value"
+        target="_blank"
+        >{{ LabelText }}</a
+      >
+      <span v-else>
+        {{ LabelText }}
+      </span>
+    </div>
     <!--====================================-->
     <div
       v-if="_suffix.hasIcon.value"
@@ -91,6 +106,6 @@
     <!--====================================-->
   </div>
 </template>
-<style lang="scss" scoped>
+<style lang="scss">
   @use './ti-label.scss';
 </style>

@@ -6,6 +6,7 @@ import { LabelApi, LabelEmitter, LabelIconFor } from './ti-label-types';
 
 export type LabelIconOptions = {
   _api: LabelApi;
+  href?: string;
   icon?: IconInput | null;
   hoverIcon?: IconInput | null;
   iconFor?: LabelIconFor;
@@ -14,7 +15,7 @@ export type LabelIconOptions = {
 };
 
 export function useLabelIcon(options: LabelIconOptions) {
-  const { _api, icon, hoverIcon, iconFor, autoIcon, emit } = options;
+  const { _api, href, icon, hoverIcon, iconFor, autoIcon, emit } = options;
   //--------------------------------------------------
   const _icon = computed(() => {
     if (autoIcon) return autoIcon;
@@ -27,6 +28,9 @@ export function useLabelIcon(options: LabelIconOptions) {
         'copy': 'zmdi-copy',
         'copy-raw': 'zmdi-copy',
       }[iconFor];
+    }
+    if (href) {
+      return 'zmdi-open-in-new';
     }
   });
   //--------------------------------------------------

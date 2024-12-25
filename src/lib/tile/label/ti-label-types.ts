@@ -6,10 +6,12 @@ import {
 } from '../../';
 import {
   AspectSize,
+  BoxColorMode,
   CommonProps,
   CssAlignment,
   IconInput,
   LogicType,
+  Vars,
 } from '../../../_type';
 import { useLabel } from './use-label';
 
@@ -35,9 +37,18 @@ export type LabelAspectProps = {
   boxFontSize?: AspectSize;
   boxPadding?: AspectSize;
   boxRadius?: AspectSize | 'none';
+  showBorder?: boolean;
   align?: CssAlignment;
   type?: LogicType;
+  /**
+   * 如果通过 type 来指定控件的颜色，有时候，我们希望
+   * 整体背景是主颜色，这时候可以设置 colorMode 为 'box'
+   *
+   * 默认的，我们使用 'text
+   */
+  colorMode?: BoxColorMode;
   width?: string;
+  valuePartStyle?: Vars;
 };
 
 export type LabelProps = CommonProps &
@@ -47,6 +58,17 @@ export type LabelProps = CommonProps &
   DictProps &
   DisplayTextProps & {
     value?: any;
+
+    /**
+     * 指定超链接
+     */
+    href?: string | ((ctx: Vars) => string);
+
+    /**
+     * 指定渲染超链接的上下文，其中value键会被控件 value 取代。
+     * 因此你设置了也没用。
+     */
+    vars?: Vars;
 
     clickable?: boolean;
     nowrap?: boolean;

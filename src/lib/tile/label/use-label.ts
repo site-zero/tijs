@@ -1,5 +1,6 @@
+import _ from 'lodash';
 import { computed } from 'vue';
-import { Str, TiDict } from '../../../core';
+import { Str, TiDict, Tmpl } from '../../../core';
 import { useDisplayText } from '../../_features';
 import { LabelEmitter, LabelProps, LabelState } from './ti-label-types';
 
@@ -21,6 +22,18 @@ export function useLabel(props: LabelProps, options: LabelOptions) {
       getDisplayText: props.getDisplayText,
     })
   );
+  //--------------------------------------------------
+  const Href = computed(() => {
+    if (!props.href) {
+      return;
+    }
+    let ctx = _.assign({}, props.vars, { value: props.value });
+    if (_.isString(props.href)) {
+      let tmpl = Tmpl.parse(props.href);
+      return tmpl.render(ctx);
+    }
+    return props.href(ctx);
+  });
   //--------------------------------------------------
   let lastAbort: AbortController | null = null;
   const ABORT_REASON = 'abort-labe-dict-item-reload';
@@ -60,6 +73,7 @@ export function useLabel(props: LabelProps, options: LabelOptions) {
   return {
     getElement,
     RawValue,
+    Href,
     DisplayValue: computed(() => _state.text ?? ''),
     updateDisplay,
   };

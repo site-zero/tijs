@@ -372,6 +372,13 @@ export type LogicType =
   | 'number'
   | 'primary'
   | 'secondary';
+/**
+ * 如果通过 type 来指定控件的颜色，有时候，我们希望
+ * 整体背景是主颜色，这时候可以设置 colorMode 为 'box'
+ *
+ * 默认的，我们使用 'text
+ */
+export type BoxColorMode = 'box' | 'text';
 
 export type ObjDataStatus = 'loading' | 'saving' | 'ready' | 'empty';
 /*---------------------------------------------------
