@@ -24,7 +24,7 @@ export function useLabel(props: LabelProps, options: LabelOptions) {
   );
   //--------------------------------------------------
   const Href = computed(() => {
-    if (!props.href) {
+    if (!props.href || _.isNil(props.value)) {
       return;
     }
     let ctx = _.assign({}, props.vars, { value: props.value });
