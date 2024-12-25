@@ -1,64 +1,63 @@
 <script setup lang="ts">
-  import _ from 'lodash';
-  import { computed, onMounted, reactive, ref, watch } from 'vue';
-  import { PrefixSuffixEvents, TiIcon, usePlaceholder } from '../../';
+  import { computed, reactive, useTemplateRef, watch } from 'vue';
+  import { useDict, usePlaceholder, useValuePipe } from '../../';
   import { CssUtils } from '../../../core';
-  import { COM_TYPES } from '../../lib-com-types';
-  import { LabelProps, LabelState } from './ti-label-types';
+  import { LabelEmitter, LabelProps, LabelState } from './ti-label-types';
   import { useLabel } from './use-label';
+  import { useLabelIcon } from './use-label-icon';
   //-----------------------------------------------------
-  defineOptions({
-    inheritAttrs: true,
-  });
+  defineOptions({ inheritAttrs: true });
   //-----------------------------------------------------
-  const COM_TYPE = COM_TYPES.Label;
+  let emit = defineEmits<LabelEmitter>();
   //-----------------------------------------------------
-  let emit = defineEmits<{
-    (event: PrefixSuffixEvents): void;
-    (event: 'change', payload: string): void;
-    (event: 'click'): void;
-  }>();
-  //-----------------------------------------------------
-  const state = reactive({
-    boxValue: null,
-    boxInputing: '',
-    boxFocused: false,
-    boxErrMsg: '',
-    prefixIconHovered: false,
-    prefixTextHovered: false,
-    suffixIconHovered: false,
-    suffixTextHovered: false,
-  } as LabelState);
-
   let props = withDefaults(defineProps<LabelProps>(), {
     autoI18n: true,
     nowrap: true,
   });
   //-----------------------------------------------------
-  const $el = ref<any>(null);
-  const Box = computed(() =>
-    useLabel(state, props, {
+  const $el = useTemplateRef('el');
+  const _state = reactive<LabelState>({});
+
+  const _pipe = computed(() => useValuePipe(props));
+  const _dict = computed(() => useDict(props));
+  //-----------------------------------------------------
+  const _api = computed(() =>
+    useLabel(props, {
+      _state,
+      _pipe: _pipe.value,
+      _dict: _dict.value,
       emit,
-      getBoxElement: () => $el.value,
-      COM_TYPE,
+      getElement: () => $el.value!,
     })
   );
-  /*-------------------------------------------------------
-
-                      Computed
-
--------------------------------------------------------*/
+  //-----------------------------------------------------
+  const _prefix = computed(() =>
+    useLabelIcon({
+      _api: _api.value,
+      icon: props.prefixIcon,
+      hoverIcon: props.prefixHoverIcon,
+      iconFor: props.prefixIconFor,
+      emit,
+    })
+  );
+  //-----------------------------------------------------
+  const _suffix = computed(() =>
+    useLabelIcon({
+      _api: _api.value,
+      icon: props.suffixIcon,
+      hoverIcon: props.suffixHoverIcon,
+      iconFor: props.suffixIconFor,
+      emit,
+    })
+  );
+  //-----------------------------------------------------
   const hasValue = computed(() => {
-    if (_.isString(state.boxValue)) {
-      return !_.isEmpty(state.boxValue);
-    }
-    return !_.isNil(state.boxValue);
+    return _state.text ? true : false;
   });
-
+  //-----------------------------------------------------
   const TopClass = computed(() =>
     CssUtils.mergeClassName(
       props.className,
-      Box.value.getClass(),
       {
         'has-value': hasValue.value,
         'nil-value': !hasValue.value,
@@ -73,99 +72,53 @@
       }
     )
   );
+  //-----------------------------------------------------
   const TextStyle = computed(() => {
     return {
       textAlign: props.textAlign,
     };
   });
-  const LabelText = computed(() => {
-    if (hasValue.value) {
-      return state.boxInputing || state.boxValue;
-    }
-    return usePlaceholder(props);
-  });
   //-----------------------------------------------------
-  function onClickValue() {
-    if (props.clickable) {
-      emit('click');
-    }
-  }
+  const LabelText = computed(() => {
+    return _state.text || usePlaceholder(props);
+  });
   //-----------------------------------------------------
   // 看看是否满足选项列表的打开条件
   watch(
     () => [props.value],
-    () => {
-      state.boxValue = props.value;
-      Box.value.doUpdateText();
-    }
+    async () => {
+      await _api.value.updateDisplay();
+    },
+    { immediate: true }
   );
-  //-----------------------------------------------------
-  onMounted(() => {
-    Box.value.doUpdateText();
-  });
 </script>
 
 <template>
   <div
     class="ti-label prefix-suffix-box"
     :class="TopClass"
-    ref="$el">
+    ref="el">
+    <!--====================================-->
     <div
-      v-if="Box.Prefix.show"
-      class="part-prefix as-icon-text"
-      :class="Box.Prefix.className"
-      :style="Box.Prefix.style">
-      <TiIcon
-        v-if="Box.Prefix.showIcon && hasValue"
-        class="as-icon at-prefix"
-        :class="Box.Prefix.iconClass"
-        :style="Box.Prefix.iconStyle"
-        :value="Box.Prefix.icon"
-        @click="Box.OnClickPrefixIcon"
-        @mouseenter="Box.setPrefixIconHover(true)"
-        @mouseleave="Box.setPrefixIconHover(false)" />
-      <span
-        v-if="Box.Prefix.showText"
-        class="as-text at-prefix"
-        :class="Box.Prefix.textClass"
-        :style="Box.Prefix.textStyle"
-        @click="Box.Prefix.OnClickText"
-        @mouseenter="Box.setPrefixTextHover(true)"
-        @mouseleave="Box.setPrefixTextHover(false)"
-        >{{ Box.Prefix.text }}</span
-      >
-    </div>
+      v-if="_prefix.hasIcon.value"
+      class="icon-part at-prefix"
+      :class="_prefix.IconPartClass.value"
+      v-html="_prefix.IconPartHtml.value"
+      @click.left.stop="_prefix.onClick"></div>
+    <!--====================================-->
     <div
       class="part-value"
-      :style="TextStyle"
-      @click="onClickValue">
+      :style="TextStyle">
       {{ LabelText }}
     </div>
+    <!--====================================-->
     <div
-      v-if="Box.Suffix.show"
-      class="part-suffix as-icon-text"
-      :class="Box.Suffix.className"
-      :style="Box.Suffix.style">
-      <span
-        v-if="Box.Suffix.showText"
-        class="as-text at-suffix"
-        :class="Box.Suffix.textClass"
-        :style="Box.Suffix.textStyle"
-        @click="Box.Suffix.OnClickText"
-        @mouseenter="Box.setSuffixTextHover(true)"
-        @mouseleave="Box.setSuffixTextHover(false)"
-        >{{ Box.Suffix.text }}</span
-      >
-      <TiIcon
-        v-if="Box.Suffix.showIcon"
-        :value="Box.Suffix.icon"
-        class="as-icon at-suffix"
-        :class="Box.Suffix.iconClass"
-        :style="Box.Suffix.iconStyle"
-        @click="Box.OnClickSuffixIcon"
-        @mouseenter="Box.setSuffixIconHover(true)"
-        @mouseleave="Box.setSuffixIconHover(false)" />
-    </div>
+      v-if="_suffix.hasIcon.value"
+      class="icon-part at-suffix"
+      :class="_suffix.IconPartClass.value"
+      v-html="_suffix.IconPartHtml.value"
+      @click.left.stop="_suffix.onClick"></div>
+    <!--====================================-->
   </div>
 </template>
 <style lang="scss" scoped>

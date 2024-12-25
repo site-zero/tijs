@@ -1,5 +1,5 @@
 import { ComPropExample } from '../../../../_type';
-import { InputBoxProps } from '../ti-input-box2-types';
+import { InputBoxProps } from '../ti-input-box-types';
 
 export default {
   name: 'options',

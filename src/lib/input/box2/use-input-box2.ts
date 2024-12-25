@@ -3,16 +3,15 @@ import { computed, nextTick, Ref, ref } from 'vue';
 import { AnyOptionItem, IconInput, Vars } from '../../../_type';
 import { Dicts, I18n } from '../../../core';
 import { anyToStr } from '../../../core/text/ti-str';
-import { usePlaceholder, useReadonly } from '../../_features';
+import { usePlaceholder, useReadonly, ValuePipeFeature } from '../../_features';
 import {
   BoxEmitTime,
   InputBoxEmitter,
   InputBoxProps,
-} from './ti-input-box2-types';
-import { useBoxDisplayText } from './use-box-display-text';
+} from './ti-input-box-types';
+import { useDisplayText } from './../../_features';
 import { ValueHintCooking } from './use-value-hint-cooking';
 import { ValueOptions } from './use-value-options';
-import { ValuePipeFeature } from './use-value-pipe';
 //--------------------------------------------------
 export type InputBoxState = {
   /**
@@ -63,7 +62,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
   //------------------------------------------------
   const hasTips = computed(() => (_options_data.value ? true : false));
   //------------------------------------------------
-  const _display = computed(() => useBoxDisplayText(props));
+  const _display = computed(() => useDisplayText(props));
   //------------------------------------------------
   const InputText = computed(() => {
     let {

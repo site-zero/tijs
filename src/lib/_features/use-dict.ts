@@ -1,8 +1,7 @@
 import JSON5 from 'json5';
 import _ from 'lodash';
-import { computed } from 'vue';
-import { Convertor, IconInput, Vars } from '../../../_type';
-import { DictName, Dicts, isDictSetup } from '../../../core';
+import { Convertor, IconInput, Vars } from '../../_type';
+import { DictName, Dicts, isDictSetup } from '../../core';
 
 export type BoxDictFeature = ReturnType<typeof useDict>;
 export type DictInput = string | DictName | DictProps | Vars[];

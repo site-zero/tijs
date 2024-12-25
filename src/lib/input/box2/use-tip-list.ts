@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { ListProps } from '../../view/list/ti-list-types';
 import { computed, Ref } from 'vue';
 import { Vars } from '../../../_type';
-import { InputBoxProps } from './ti-input-box2-types';
+import { InputBoxProps } from './ti-input-box-types';
 
 export type TipListSetup = {
   _options_data: Ref<Vars[] | undefined>;

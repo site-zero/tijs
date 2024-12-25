@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { computed } from 'vue';
 import { CssUtils } from '../../../';
-import { InputBoxApi, InputBoxProps } from './ti-input-box2-types';
+import { InputBoxApi, InputBoxProps } from './ti-input-box-types';
 import { BoxTipsFeature } from './use-box-tips';
 
 export function useBoxAspect(

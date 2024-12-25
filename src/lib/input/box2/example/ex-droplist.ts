@@ -1,5 +1,5 @@
 import { ComPropExample } from '../../../../_type';
-import { InputBoxProps } from '../ti-input-box2-types';
+import { InputBoxProps } from '../ti-input-box-types';
 
 export default {
   name: 'droplist',
@@ -8,8 +8,8 @@ export default {
     value: 'otter',
     trimed: false,
     placeholder: 'Choose one Animal',
-    type:'primary',
-    boxFontSize:'t',
+    type: 'primary',
+    boxFontSize: 't',
     prefixIconFor: 'clear',
     suffixIconFor: 'load-options',
     mustInOptions: true,

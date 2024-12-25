@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { computed } from 'vue';
-import { StrCaseMode, Vars } from '../../../_type';
-import { Str } from '../../../core';
+import { StrCaseMode, Vars } from '../../_type';
+import { Str } from '../../core';
 
 export type ValuePipeFeature = ReturnType<typeof useValuePipe>;
 export type ValueProcesser = (input: any, context: Vars) => string;

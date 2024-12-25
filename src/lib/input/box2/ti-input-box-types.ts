@@ -6,14 +6,18 @@ import {
   LogicType,
   Vars,
 } from '../../../_type';
-import { PlaceholderProps, ReadonlyProps } from '../../_features';
+import {
+  DictProps,
+  DisplayTextProps,
+  PlaceholderProps,
+  ReadonlyProps,
+  ValuePipeProps,
+} from '../../_features';
 import { ListProps } from '../../view/all-views';
-import { DictInput, DictProps } from './use-dict';
 import { useInputBox2 } from './use-input-box2';
 import { ItemLookupProps } from './use-item-lookup';
 import { ValueHintCookingProps } from './use-value-hint-cooking';
 import { ValueOptionsProps } from './use-value-options';
-import { ValuePipeProps } from './use-value-pipe';
 //--------------------------------------------------
 export type InputBoxEmitter = {
   (event: 'change', value: any): void;
@@ -45,13 +49,12 @@ export type InputBoxProps = CommonProps &
   ItemLookupProps &
   PlaceholderProps &
   InputBoxAspect &
-  ReadonlyProps & {
+  ReadonlyProps &
+  DisplayTextProps & {
     /**
      * 输入值
      */
     value?: any;
-
-    options?: DictInput;
 
     autoI18n?: boolean;
 
@@ -66,14 +69,6 @@ export type InputBoxProps = CommonProps &
      * @param box 输入框 api
      */
     exportApi?: (box: InputBoxApi) => void;
-
-    /**
-     * 指定输入框显示文字的获取方式
-     * 默认为 'text|value'
-     * 如果指定了 useRawValue 相当于 'value'
-     * 也可以指定为 'tip|value|text'等
-     */
-    getDisplayText?: string;
 
     /**
      * 提示列表的配置
@@ -120,12 +115,6 @@ export type InputBoxProps = CommonProps &
     autoFocus?: boolean;
 
     /**
-     * 如果值是某个选项，默认的会在输入框显示选项的文字而不是值。
-     * 开启这个选项，则在输入框直接显示值而不是翻译后的文字
-     */
-    useRawValue?: boolean;
-
-    /**
      * 默认的，当输入框聚焦，且输入框不是只读还且是可输入的状态
      * 输入框会自动将内容变成原始值。因为这个框本来就代表着原始值。
      *
@@ -150,6 +139,12 @@ export type InputBoxProps = CommonProps &
     showCleanOption?: boolean;
 
     /**
+     * 如果开启这个开关, 只要定义了字典，且 mustInOptions
+     * 那么将自动根据选项设置前缀图标
+     */
+    autoPrefixIcon?: boolean;
+
+    /**
      * 前缀图标
      */
     prefixIcon?: IconInput | null;
@@ -158,11 +153,6 @@ export type InputBoxProps = CommonProps &
      * 声明了这个动作，则表示这个图标可以点击
      */
     prefixIconFor?: BoxIconFor;
-    /**
-     * 如果开启这个开关, 只要定义了字典，且 mustInOptions
-     * 那么将自动根据选项设置前缀图标
-     */
-    autoPrefixIcon?: boolean;
 
     /**
      * 后缀图标

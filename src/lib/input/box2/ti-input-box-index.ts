@@ -47,5 +47,5 @@ const TiInputInfo: TiComInfo = {
   ],
 };
 
-export * from './ti-input-box2-types';
+export * from './ti-input-box-types';
 export { TiInput, TiInputInfo };

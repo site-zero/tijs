@@ -11,17 +11,17 @@
   import { TiList } from '../../';
   import { Rect, Vars } from '../../../_type';
   import { ListSelectEmitInfo } from '../../../lib';
-  import { InputBoxEmitter, InputBoxProps } from './ti-input-box2-types';
+  import { useDict, useValuePipe } from '../../_features';
+  import { InputBoxEmitter, InputBoxProps } from './ti-input-box-types';
   import { useBoxAspect } from './use-box-aspect';
   import { useBoxIcon } from './use-box-icon';
   import { useBoxTips } from './use-box-tips';
-  import { useDict } from './use-dict';
   import { InputBoxState, useInputBox2 } from './use-input-box2';
   import { useInputComposition } from './use-input-composition';
   import { useTipList } from './use-tip-list';
   import { useValueHintCooking } from './use-value-hint-cooking';
   import { useValueOptions, ValueOptions } from './use-value-options';
-  import { useValuePipe } from './use-value-pipe';
+
   //-----------------------------------------------------
   const emit = defineEmits<InputBoxEmitter>();
   const $el = useTemplateRef<HTMLElement>('el');
@@ -371,5 +371,5 @@
   </div>
 </template>
 <style lang="scss">
-  @use './ti-input-box2.scss';
+  @use './ti-input-box.scss';
 </style>

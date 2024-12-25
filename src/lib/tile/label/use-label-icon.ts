@@ -2,19 +2,19 @@ import _ from 'lodash';
 import { computed } from 'vue';
 import { IconInput } from '../../../_type/core-types';
 import { Be, Icons } from '../../../core';
-import { BoxIconFor, InputBoxApi } from './ti-input-box-types';
+import { LabelApi, LabelEmitter, LabelIconFor } from './ti-label-types';
 
-export type BoxIconOptions = {
-  _box: InputBoxApi;
+export type LabelIconOptions = {
+  _api: LabelApi;
   icon?: IconInput | null;
   hoverIcon?: IconInput | null;
-  iconFor?: BoxIconFor;
+  iconFor?: LabelIconFor;
   autoIcon?: IconInput;
-  getInputElement: () => HTMLInputElement | null;
+  emit: LabelEmitter;
 };
 
-export function useBoxIcon(options: BoxIconOptions) {
-  const { _box, icon, hoverIcon, iconFor, autoIcon } = options;
+export function useLabelIcon(options: LabelIconOptions) {
+  const { _api, icon, hoverIcon, iconFor, autoIcon, emit } = options;
   //--------------------------------------------------
   const _icon = computed(() => {
     if (autoIcon) return autoIcon;
@@ -25,7 +25,7 @@ export function useBoxIcon(options: BoxIconOptions) {
       return {
         'clear': 'zmdi-minus',
         'copy': 'zmdi-copy',
-        'load-options': 'zmdi-caret-down',
+        'copy-raw': 'zmdi-copy',
       }[iconFor];
     }
   });
@@ -38,7 +38,7 @@ export function useBoxIcon(options: BoxIconOptions) {
       return {
         'clear': 'zmdi-close',
         'copy': 'zmdi-copy',
-        'load-options': 'zmdi-caret-down',
+        'copy-raw': 'zmdi-copy',
       }[iconFor];
     }
   });
@@ -66,35 +66,22 @@ export function useBoxIcon(options: BoxIconOptions) {
     if (!iconFor) return;
     // 自定义动作
     if (_.isFunction(iconFor)) {
-      iconFor(_box);
+      iconFor(_api);
     }
     // 清除值
     else if ('clear' === iconFor) {
-      _box.clearOptionsData();
-      _box.updateBoxState({
-        box_value: null,
-        usr_text: null,
-        box_icon: null,
-        box_text: null,
-        box_tip: null,
-      });
-      _box.emitIfChanged();
+      emit('change', null);
     }
     // 写入剪贴板
-    else if ('copy' === iconFor) {
-      Be.Clipboard.write(_box.Text.value ?? '');
-      let el = _box.getElement();
+    else if ('copy' === iconFor || 'copy-raw' == iconFor) {
+      let text = {
+        'copy': _api.DisplayValue.value,
+        'copy-raw': _api.RawValue.value,
+      }[iconFor];
+      Be.Clipboard.write(text ?? '');
+      let el = _api.getElement();
       if (el) {
         Be.BlinkIt(el);
-      }
-    }
-    // 加载选项
-    else if ('load-options' === iconFor) {
-      _box.setFocused(true);
-      _box.showOptions();
-      let $input = options.getInputElement();
-      if($input) {
-        $input.focus();
       }
     }
   }
