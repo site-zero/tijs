@@ -7,7 +7,7 @@ const en_us = {
   'com-name': 'InputBox2',
 };
 const zh_cn = {
-  'com-name': '输入框v2',
+  'com-name': '输入框',
   'example-options': '带选项',
   'example-formated': '格式显示值',
   'example-query': '动态查询',
@@ -17,7 +17,6 @@ const zh_cn = {
 const COM_TYPE = 'TiInput';
 
 const TiInputInfo: TiComInfo = {
-  tags: ['ing'],
   icon: 'fas-i-cursor',
   race: TiComRace.INPUT,
   name: COM_TYPE,

@@ -1,7 +1,13 @@
-import { DictProps, DisplayTextProps, PlaceholderProps, ValuePipeProps } from '../../';
 import {
+  DictProps,
+  DisplayTextProps,
+  PlaceholderProps,
+  ValuePipeProps,
+} from '../../';
+import {
+  AspectSize,
   CommonProps,
-  CssTextAlign,
+  CssAlignment,
   IconInput,
   LogicType,
 } from '../../../_type';
@@ -25,15 +31,23 @@ export type LabelIconFor =
   | 'copy-raw'
   | ((label: LabelApi) => void);
 
+export type LabelAspectProps = {
+  boxFontSize?: AspectSize;
+  boxPadding?: AspectSize;
+  boxRadius?: AspectSize | 'none';
+  align?: CssAlignment;
+  type?: LogicType;
+  width?: string;
+};
+
 export type LabelProps = CommonProps &
+  LabelAspectProps &
   PlaceholderProps &
   ValuePipeProps &
   DictProps &
   DisplayTextProps & {
     value?: any;
 
-    type?: LogicType;
-    textAlign?: CssTextAlign;
     clickable?: boolean;
     nowrap?: boolean;
     disable?: boolean;

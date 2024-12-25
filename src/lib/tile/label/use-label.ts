@@ -16,7 +16,11 @@ export function useLabel(props: LabelProps, options: LabelOptions) {
   //--------------------------------------------------
   const RawValue = computed(() => Str.anyToStr(props.value));
   //--------------------------------------------------
-  const getDisplay = useDisplayText(props);
+  const getDisplay = computed(() =>
+    useDisplayText({
+      getDisplayText: props.getDisplayText,
+    })
+  );
   //--------------------------------------------------
   let lastAbort: AbortController | null = null;
   const ABORT_REASON = 'abort-labe-dict-item-reload';
@@ -35,7 +39,7 @@ export function useLabel(props: LabelProps, options: LabelOptions) {
       let item = await _dict.getStdItem(v1, lastAbort.signal);
       if (item) {
         _state.icon = item.icon;
-        _state.text = getDisplay(item.toOptionItem());
+        _state.text = getDisplay.value(item.toOptionItem());
         _state.tip = undefined;
       }
       // 采用裸值
@@ -44,6 +48,12 @@ export function useLabel(props: LabelProps, options: LabelOptions) {
         _state.text = Str.anyToStr(v1);
         _state.tip = undefined;
       }
+    }
+    // 采用裸值
+    else {
+      _state.icon = undefined;
+      _state.text = Str.anyToStr(v1);
+      _state.tip = undefined;
     }
   }
   //--------------------------------------------------

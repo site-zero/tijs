@@ -67,7 +67,6 @@ export function useBoxAspect(
     return CssUtils.toStyle(re);
   });
   //--------------------------------------------------
-  //--------------------------------------------------
   const InputStyle = computed(() => {
     return CssUtils.toStyle(props.inputStyle);
   });

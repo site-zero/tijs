@@ -20,7 +20,17 @@ export function filterRecordNilValueDeeply(val: any): any {
     return val;
   }
 
-  // 递归处理
+  // 递归处理: 数组
+  if (_.isArray(val)) {
+    let list = [] as any[];
+    for (let li of val) {
+      let l2 = filterRecordNilValueDeeply(li);
+      list.push(l2);
+    }
+    return list;
+  }
+
+  // 递归处理: 对象
   let re = {} as any;
   let ks = _.keys(val);
   for (let k of ks) {
@@ -28,24 +38,7 @@ export function filterRecordNilValueDeeply(val: any): any {
     if (_.isNil(v) || /^_/.test(k)) {
       continue;
     }
-    // 处理对象
-    if (_.isPlainObject(v)) {
-      let obj = filterRecordNilValueDeeply(v);
-      re[k] = obj;
-    }
-    // 处理数组
-    else if (_.isArray(v)) {
-      let list = [] as any[];
-      for (let li of v) {
-        let l2 = filterRecordNilValueDeeply(li);
-        list.push(l2);
-      }
-      re[k] = list;
-    }
-    // 其他值
-    else {
-      re[k] = v;
-    }
+    re[k] = filterRecordNilValueDeeply(v);
   }
   return re;
 }

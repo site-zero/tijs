@@ -50,6 +50,7 @@
       :activatedComType="props.activatedComType"
       :activatedComConf="props.activatedComConf"
       :changeEventName="props.changeEventName"
+      :prefixIcon="props.titleIcon"
       :vars="props.data" />
     <!--===: 摘要 :===-->
     <TextSnippet

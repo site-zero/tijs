@@ -1,14 +1,19 @@
 @use '@site0/tijs/sass/_all.scss' as *;
 
-div.ti-label {
+.ti-label {
+  @include flex-align-nowrap($ai: stretch);
   min-height: var(--ti-measure-box-height);
-
+  //-----------------------------------------------
+  // 空值
+  //-----------------------------------------------
   &.nil-value {
     opacity: 0.62;
     font-style: italic;
   }
-
-  &.is-nowrap > .part-value {
+  //-----------------------------------------------
+  // 不可换行
+  //-----------------------------------------------
+  &.is-nowrap > .value-part {
     overflow: hidden;
     text-overflow: ellipsis;
     display: block;
