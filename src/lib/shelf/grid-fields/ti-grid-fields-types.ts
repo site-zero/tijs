@@ -377,6 +377,9 @@ export type GridFieldsStrictField = GridFieldsStrictAbstractItem &
 //-----------------------------------------------
 export type GridFieldsStrictLabel = GridFieldsStrictAbstractItem & {
   race: 'label';
+  titleTextStyle?: Vars;
+  tipIcon?: IconInput;
+  tipTextStyle?: Vars;
 };
 //-----------------------------------------------
 export type GridFieldsStrictItem =

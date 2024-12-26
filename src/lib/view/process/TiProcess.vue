@@ -2,13 +2,15 @@
   import _ from 'lodash';
   import { computed, onMounted, onUnmounted, useTemplateRef } from 'vue';
   import { TextSnippet } from '../../';
-  import { CssUtils } from '../../../';
+  import { CssUtils, TiButton } from '../../../';
   import { TiProgressBar } from '../../tile/progress-bar/ti-progress-bar-index';
   import { ProcessProps } from './ti-process-types';
   //-------------------------------------------------------
-  defineOptions({
-    inheritAttrs: true,
-  });
+  defineOptions({ inheritAttrs: false });
+  //-------------------------------------------------------
+  const emit = defineEmits<{
+    (event: 'abort', payload?: any): void;
+  }>();
   //-------------------------------------------------------
   const $logs = useTemplateRef<HTMLElement>('logs');
   //-------------------------------------------------------
@@ -41,6 +43,15 @@
     return val >= max;
   });
   //-----------------------------------------------------
+  const AbortButton = computed(() => {
+    if (props.abort) {
+      if (_.isString(props.abort)) {
+        return { text: props.abort };
+      }
+      return _.assign({ text: 'i18n:cancel' }, props.abort);
+    }
+  });
+  //-----------------------------------------------------
   const observer = new MutationObserver(() => {
     if (!$logs.value) {
       return;
@@ -54,6 +65,10 @@
     if ($logs.value) {
       observer.observe($logs.value, { childList: true, subtree: false });
     }
+  }
+  //-----------------------------------------------------
+  function onClickAbortButton() {
+    emit('abort');
   }
   //-----------------------------------------------------
   onMounted(() => {
@@ -78,6 +93,13 @@
       class="part-progress"
       :style="ProgressPartStyle">
       <TiProgressBar v-bind="props.progress" />
+    </div>
+    <div
+      class="part-abort"
+      v-if="AbortButton">
+      <TiButton
+        v-bind="AbortButton"
+        @click="onClickAbortButton" />
     </div>
     <div
       class="part-logs"

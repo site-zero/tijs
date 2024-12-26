@@ -38,9 +38,10 @@
     <TextSnippet
       v-if="props.title || props.comType"
       className="as-label-title"
-      :style="TopStyle"
+      :style="props.titleStyle"
       :text="LabelText.title"
       :textType="LabelText.titleType"
+      :textStyle="props.titleTextStyle"
       :dynamic="props.dynamic"
       :comType="props.comType"
       :comConf="props.comConf"
@@ -56,8 +57,10 @@
     <TextSnippet
       v-if="props.tip || props.tipBy"
       className="as-group-title"
+      :style="props.tipStyle"
       :text="LabelText.tip ?? ''"
       :textType="LabelText.tipType"
+      :textStyle="props.tipTextStyle"
       :comType="props.tipBy?.comType"
       :comConf="props.tipBy?.comConf"
       :autoValue="props.tipBy?.autoValue"
@@ -66,6 +69,7 @@
       :activatedComType="props.tipBy?.activatedComType"
       :activatedComConf="props.tipBy?.activatedComConf"
       :changeEventName="props.tipBy?.changeEventName"
+      :prefixIcon="props.tipIcon"
       :vars="props.data" />
   </div>
 </template>

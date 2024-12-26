@@ -6,9 +6,11 @@ import example from './example';
 
 const en_us = {
   'com-name': 'Process',
+  'example-abortable': 'Abortable',
 };
 const zh_cn = {
   'com-name': '处理过程',
+  'example-abortable': '可中止',
 };
 
 const COM_TYPE = COM_TYPES.Process;
@@ -29,7 +31,7 @@ const TiProcessInfo: TiComInfo = {
     app.component(COM_TYPE, TiProcess);
   },
   defaultProps: 'simple',
-  exampleProps: [example.simple],
+  exampleProps: [example.simple, example.abortable],
 };
 
 export * from './ti-process-types';

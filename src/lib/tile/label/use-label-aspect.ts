@@ -18,11 +18,10 @@ export function useLabelAspect(props: LabelProps) {
   });
   //--------------------------------------------------
   const TopStyle = computed(() => {
-    let re = _.assign({}, props.style);
+    let re = CssUtils.toStyle(props.style);
     if (props.width) {
       re.width = props.width;
     }
-    re = CssUtils.toStyle(re);
     _.assign(re, {
       '--box-color-hover-icon': 'var(--ti-color-primary-r)',
       '--box-color-hover-icon-bg': 'var(--ti-color-primary)',
