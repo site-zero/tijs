@@ -104,11 +104,12 @@
   //
   > .table-cell-wrapper {
     @include flex-align-nowrap($ai: stretch);
-    > .ti-input-box, .prefix-suffix-box {
-      flex: 1 1 auto;
-    }
+    width: 100%;
     > .ti-icon {
       margin: auto;
+    }
+    > .ti-label {
+      width: 10px;
     }
   }
 } // >.table-cell

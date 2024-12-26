@@ -6,6 +6,7 @@ import { LabelApi, LabelEmitter, LabelIconFor } from './ti-label-types';
 
 export type LabelIconOptions = {
   _api: LabelApi;
+  type: 'prefix' | 'suffix';
   href?: string;
   icon?: IconInput | null;
   hoverIcon?: IconInput | null;
@@ -21,16 +22,16 @@ export function useLabelIcon(options: LabelIconOptions) {
     if (autoIcon) return autoIcon;
     if (_.isNull(icon)) return;
     if (icon) return icon;
-    if (_.isFunction(iconFor)) return;
-    if (iconFor) {
+    if (href) {
+      return 'zmdi-open-in-new';
+    }
+    if (_.isString(iconFor)) {
       return {
         'clear': 'zmdi-minus',
         'copy': 'zmdi-copy',
         'copy-raw': 'zmdi-copy',
+        'click': 'zmdi-more',
       }[iconFor];
-    }
-    if (href) {
-      return 'zmdi-open-in-new';
     }
   });
   //--------------------------------------------------
@@ -43,6 +44,7 @@ export function useLabelIcon(options: LabelIconOptions) {
         'clear': 'zmdi-close',
         'copy': 'zmdi-copy',
         'copy-raw': 'zmdi-copy',
+        'click': icon || 'zmdi-more',
       }[iconFor];
     }
   });
@@ -53,7 +55,7 @@ export function useLabelIcon(options: LabelIconOptions) {
     //console.log("IconPartClass", iconFor, 'clear' == iconFor)
     return {
       'can-hover': iconFor ? true : false,
-      'can-rotate': 'clear' == iconFor,
+      'can-rotate': 'clear' == iconFor || 'click' == iconFor,
     };
   });
   //--------------------------------------------------
@@ -86,6 +88,14 @@ export function useLabelIcon(options: LabelIconOptions) {
       let el = _api.getElement();
       if (el) {
         Be.BlinkIt(el);
+      }
+    }
+    // 点击
+    else if ('click' === iconFor) {
+      if ('prefix' == options.type) {
+        emit('click-prefix-icon', _api);
+      } else {
+        emit('click-suffix-icon', _api);
       }
     }
   }

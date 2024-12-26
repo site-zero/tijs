@@ -17,6 +17,8 @@ import { useLabel } from './use-label';
 
 export type LabelEmitter = {
   (eventName: 'change', payload: any): void;
+  (eventName: 'click-prefix-icon', api: LabelApi): void;
+  (eventName: 'click-suffix-icon', api: LabelApi): void;
 };
 
 export type LabelApi = ReturnType<typeof useLabel>;
@@ -31,6 +33,7 @@ export type LabelIconFor =
   | 'clear'
   | 'copy'
   | 'copy-raw'
+  | 'click'
   | ((label: LabelApi) => void);
 
 export type LabelAspectProps = {

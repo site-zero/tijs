@@ -45,6 +45,7 @@
   const _current_tab_key = ref<string | undefined>();
   //-------------------------------------------------
   const TopClass = computed(() => CssUtils.mergeClassName(props.className));
+  const TopStyle = computed(() => CssUtils.toStyle(props.style));
   const MainClass = computed(() => CssUtils.mergeClassName(props.mainClass));
   //-------------------------------------------------
   const TabsConfig = computed(() =>
@@ -125,6 +126,7 @@
   <div
     class="ti-layout-tabs"
     :class="TopClass"
+    :style="TopStyle"
     :tabs-at="props.tabsAt">
     <!--======== Head Tabs =======-->
     <header>

@@ -86,7 +86,7 @@
         :className="it.className"
         :prefixIcon="it.icon"
         :suffixIcon="props.editable ? 'zmdi-close' : undefined"
-        :suffixIconClickable="true"
+        suffixIconFor="click"
         suffixIconClass="hover-rotate"
         :value="it.text"
         @click-suffix-icon="onRemoveItem(it)"

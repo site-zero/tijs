@@ -13,7 +13,7 @@
     wrapTabs: false,
     tabItemSpace: 'm',
     tabsAt: 'top',
-    tabsAlign: 'center',
+    tabsAlign: 'left',
   });
   //-------------------------------------------------------
   const $el = ref<HTMLElement>();

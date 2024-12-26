@@ -2,24 +2,30 @@
 
 .ti-label {
   @include flex-align-nowrap($ai: center);
+  overflow: hidden;
+  flex:1 1 auto;
   //-----------------------------------------------
-  min-height: var(--ti-measure-box-height);
+  //min-height: var(--ti-measure-box-height);
   font-size: var(--box-fontsz);
   border-radius: var(--box-radius);
   background-color: var(--box-color-bg);
   color: var(--box-color-text);
   border-color: var(--box-color-border);
+  &.can-click {
+    cursor: pointer;
+  }
   //-----------------------------------------------
   // border
   //-----------------------------------------------
   &.show-border {
     border: 1px solid var(--box-color-border);
+    min-height: 2.6em;
   }
   //-----------------------------------------------
   // 空值
   //-----------------------------------------------
   &.nil-value {
-    >.value-part {
+    > .value-part {
       opacity: 0.62;
       font-style: italic;
     }
@@ -28,6 +34,7 @@
   // 不可换行
   //-----------------------------------------------
   &.is-nowrap > .value-part {
+    width: 100%;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -40,7 +47,7 @@
     flex: 1 1 auto;
     text-align: var(--box-align);
     line-height: 1.2em;
-    padding: 0 .5em;
+    padding: 0 0.5em;
     padding: var(--box-padding);
     margin: 0;
   }

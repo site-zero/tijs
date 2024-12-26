@@ -68,8 +68,8 @@
         //...................................................
         &.is-disabled {
           cursor: default;
-          background-color: var(--ti-color-disable);
-          color: var(--ti-color-disable-r);
+          background-color: var(--ti-color-disable-r);
+          color: var(--ti-color-disable);
         }
         //...................................................
       }

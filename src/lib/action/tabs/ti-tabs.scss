@@ -116,13 +116,13 @@
   }
   //....................................
   // Horizontal alighment
-  &.tabs-align-left > .tab-items-con {
+  &.tabs-align-left > .tab-items-con > .items-wrapper {
     justify-content: flex-start;
   }
-  &.tabs-align-center > .tab-items-con {
+  &.tabs-align-center > .tab-items-con > .items-wrapper {
     justify-content: center;
   }
-  &.tabs-align-right > .tab-items-con {
+  &.tabs-align-right > .tab-items-con > .items-wrapper {
     justify-content: flex-end;
   }
   //....................................

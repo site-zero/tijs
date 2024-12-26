@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { InputBoxProps, LabelProps } from '../../';
 import { ColumnRefer, TableInputColumn } from '../../../_type';
 //-----------------------------------------------
 type QuickColumnInfo = {
@@ -64,7 +65,11 @@ function defineObjColumns(featureName: string): ObjColumnsFeature {
     }
 
     if (col_info.disable) {
-      re.comConf.disable = true;
+      if (!re.comType || 'TiLable' === re.comType) {
+        re.comConf.type = 'disable';
+      } else {
+        re.comConf.disable = true;
+      }
     }
 
     // 候选字段
@@ -124,6 +129,26 @@ function defineObjColumns(featureName: string): ObjColumnsFeature {
     }
     if (!column.name) {
       column.name = uniqKey;
+    }
+    // 表格内，如果是标签，那么默认是没有圆角的
+    if (column.comType == 'TiLabel' || !column.comType) {
+      column.comConf = column.comConf ?? {};
+      _.defaults(column.comConf, { boxRadius: 'none' } as LabelProps);
+    }
+    // 表格内，如果是输入框，那么默认是没有圆角和边框的
+    if (/^(Ti(Input|Droplist))/.test(column.comType ?? '')) {
+      column.comConf = column.comConf ?? {};
+      _.defaults(column.comConf, {
+        boxRadius: 'none',
+        hideBorder: true,
+      } as InputBoxProps);
+    }
+    if (/^(Ti(Input|Droplist))/.test(column.activatedComType ?? '')) {
+      column.activatedComConf = column.activatedComConf ?? {};
+      _.defaults(column.activatedComConf, {
+        boxRadius: 'none',
+        hideBorder: true,
+      } as InputBoxProps);
     }
     _COLUMNS.set(uniqKey, column as TableInputColumn);
   }

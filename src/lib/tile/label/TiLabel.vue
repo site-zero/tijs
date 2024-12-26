@@ -37,6 +37,7 @@
   const _prefix = computed(() =>
     useLabelIcon({
       _api: _api,
+      type: 'prefix',
       href: _api.Href.value,
       icon: props.prefixIcon,
       hoverIcon: props.prefixHoverIcon,
@@ -48,6 +49,7 @@
   const _suffix = computed(() =>
     useLabelIcon({
       _api: _api,
+      type: 'suffix',
       icon: props.suffixIcon,
       hoverIcon: props.suffixHoverIcon,
       iconFor: props.suffixIconFor,

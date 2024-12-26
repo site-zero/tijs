@@ -6,13 +6,14 @@ import { LabelProps } from './ti-label-types';
 export function useLabelAspect(props: LabelProps) {
   //--------------------------------------------------
   const TopClass = computed(() => {
-    let hasValue = !_.isNil(props.value);
+    let hasValue = !_.isNil(props.value) && '' != props.value;
     return CssUtils.mergeClassName(props.className, {
       [`is-${props.type}`]: props.type ? true : false,
       'has-value': hasValue,
       'nil-value': !hasValue,
       'is-nowrap': props.nowrap,
       'show-border': props.showBorder,
+      'can-click': props.clickable,
     });
   });
   //--------------------------------------------------

@@ -2,11 +2,10 @@ import { ComputedRef, Ref } from 'vue';
 import { Dragging, useDragging } from '../../';
 import { Callback, Callback1, FuncA0 } from '../../../_type';
 import { Dom, Num } from '../../../core';
-import { getLogger } from '../../../core/log/ti-log';
 import { ColResizingState } from './use-table';
 import { TableKeepFeature } from './use-table-keep';
 
-const log = getLogger('TiTable.resizing');
+const debug = false;
 
 /**
  * 为表格绑定拖拽调整列宽的特性
@@ -29,8 +28,8 @@ export function useTableResizing(
     let colSize = Num.round(colResizing.left + scrollLeft - colLeftInView, 100);
     columnSizes.value[i] = Math.max(10, colSize);
 
-    if (log.isDebugEnabled()) {
-      log.debug(
+    if (debug) {
+      console.log(
         'moving',
         `${colResizing.left} + ${scrollLeft} - ${colLeftInView} = ${colSize}`
       );
@@ -47,7 +46,7 @@ export function useTableResizing(
       //ing.watchZone = Rects.createBy(ing.body!);
       ing.watchMode = 'play';
       ing.setVar('resize-in-time', isColumnResizeInTime());
-      log.info('onReady', ing.activated, ing.client);
+      if (debug) console.log('onReady', ing.activated, ing.client);
     },
     onStart: (ing: Dragging) => {
       if (!ing.target || !ing.viwportElement) {
@@ -66,7 +65,12 @@ export function useTableResizing(
       colResizing.activated = true;
       colResizing.left = ing.inview.x;
 
-      log.info(`onStart[${isForPrev ? 'prev' : 'self'}]`, ing.activated, ing);
+      if (debug)
+        console.log(
+          `onStart[${isForPrev ? 'prev' : 'self'}]`,
+          ing.activated,
+          ing
+        );
 
       // 获取标题初始列宽
       for (let $cell of $head_cells) {
@@ -87,8 +91,8 @@ export function useTableResizing(
       let colLeftInView = cellLeft + scrollLeft - viewLeft;
       ing.setMeasure('col_offset_x', Num.round(colLeftInView, 100));
 
-      if (log.isDebugEnabled()) {
-        log.debug('onStart', `${cellLeft} - ${viewLeft} = ${colLeftInView}`);
+      if (debug) {
+        console.log('onStart', `${cellLeft} - ${viewLeft} = ${colLeftInView}`);
       }
     },
     onMoving: (ing: Dragging) => {
@@ -100,9 +104,7 @@ export function useTableResizing(
     },
     onEnd: (ing: Dragging) => {
       __update_colmun_sizes(ing);
-      if (log.isInfoEnabled()) {
-        log.info('onEnd', ing.activated, ing);
-      }
+      if (debug) console.log('onEnd', ing.activated, ing);
       colResizing.activated = false;
       colResizing.left = -1;
       colResizing.colIndex = -1;
