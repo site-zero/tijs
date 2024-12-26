@@ -2,6 +2,7 @@
   import _ from 'lodash';
   import { computed, onMounted, onUnmounted, useTemplateRef } from 'vue';
   import { TextSnippet } from '../../';
+  import { CssUtils } from '../../../';
   import { TiProgressBar } from '../../tile/progress-bar/ti-progress-bar-index';
   import { ProcessProps } from './ti-process-types';
   //-------------------------------------------------------
@@ -12,6 +13,18 @@
   const $logs = useTemplateRef<HTMLElement>('logs');
   //-------------------------------------------------------
   const props = defineProps<ProcessProps>();
+  //-------------------------------------------------------
+  const TopClass = computed(() =>
+    CssUtils.mergeClassName(props.className, {
+      'fit-parent': 'fit' == props.fillMode,
+      'cover-parent': 'cover' == props.fillMode,
+    })
+  );
+  const TopStyle = computed(() => CssUtils.toStyle(props.style));
+  const ProgressPartStyle = computed(() =>
+    CssUtils.toStyle(props.progressPartStyle)
+  );
+  const LogPartStyle = computed(() => CssUtils.toStyle(props.logPartStyle));
   //-------------------------------------------------------
   const ProcessTitle = computed(() => {
     if (props.title) {
@@ -53,16 +66,22 @@
   //-------------------------------------------------------
 </script>
 <template>
-  <div class="ti-process cover-parent">
+  <div
+    class="ti-process"
+    :class="TopClass"
+    :style="TopStyle">
     <TextSnippet
       v-if="ProcessTitle"
       class="part-title"
       v-bind="ProcessTitle" />
-    <div class="part-progress">
+    <div
+      class="part-progress"
+      :style="ProgressPartStyle">
       <TiProgressBar v-bind="props.progress" />
     </div>
     <div
       class="part-logs"
+      :style="LogPartStyle"
       ref="logs">
       <div
         class="log-line"

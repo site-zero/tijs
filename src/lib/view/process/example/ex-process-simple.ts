@@ -6,6 +6,7 @@ export default {
   text: 'i18n:simple',
   comConf: {
     title: 'Process Title',
+    fillMode: 'fit',
     progress: {
       value: 0.23,
     },

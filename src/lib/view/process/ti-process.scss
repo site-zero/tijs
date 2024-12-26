@@ -4,10 +4,17 @@
   @include flex-align-v-nowrap($jc: center);
   //-------------------------------------------------------
   > .part-title {
-    text-align: center;
-    font-size: 1.2em;
+    @include flex-align-nowrap($jc: center);
+    font-size: var(--ti-fontsz-h);
     font-weight: bold;
     padding: var(--ti-gap-m);
+    > .ti-icon {
+      font-size: 2em;
+      margin:0 .6em;
+    }
+    > .as-snippet-text {
+      padding:.5em;
+    }
   }
   //-------------------------------------------------------
   > .part-progress {
