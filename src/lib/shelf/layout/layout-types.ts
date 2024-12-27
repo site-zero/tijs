@@ -29,13 +29,13 @@ export type LayoutState = {
 export type LayoutProps = CommonProps &
   Pick<LayoutBlock, 'name' | 'blocks' | 'itemStyle' | 'itemClass'> & {
     schema?: LayoutSchema;
-    // /**
-    //  * 如果是组合的布局，这里就需要传递 true
-    //  * 以便把深层组合的 block 也传递过来
-    //  *
-    //  * 这个属性通常不需要用户主动设置。
-    //  * 在 layout -> layout 的时候，在内部设置即可
-    //  */
+    /**
+     * 如果是组合的布局，这里就需要传递 true
+     * 以便把深层组合的 block 也传递过来
+     *
+     * 这个属性通常不需要用户主动设置。
+     * 在 layout -> layout 的时候，在内部设置即可
+     */
     subLayout?: boolean;
   };
 
