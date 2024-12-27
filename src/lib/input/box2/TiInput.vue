@@ -21,7 +21,6 @@
   import { useTipList } from './use-tip-list';
   import { useValueHintCooking } from './use-value-hint-cooking';
   import { useValueOptions, ValueOptions } from './use-value-options';
-
   //-----------------------------------------------------
   const emit = defineEmits<InputBoxEmitter>();
   const $el = useTemplateRef<HTMLElement>('el');
