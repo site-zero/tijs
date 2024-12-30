@@ -65,7 +65,7 @@ function defineObjColumns(featureName: string): ObjColumnsFeature {
     }
 
     if (col_info.disable) {
-      if (!re.comType || 'TiLable' === re.comType) {
+      if (!re.comType || 'TiLabel' === re.comType) {
         re.comConf.type = 'disable';
       } else {
         re.comConf.disable = true;

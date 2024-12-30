@@ -177,18 +177,13 @@ function defineObjFields(featureName: string) {
   }
   //---------------------------------------------
   function setTimeLabelField(uniqKey: string, title: string) {
-    const timeTransformer = (ct: number) => {
-      let fmt = getEnv(ENV_KEYS.DFT_DATETIME_FORMAT, 'yyyy-MM-dd HH:mm');
-      return DateTime.format(ct, { fmt });
-    };
     setField(uniqKey, {
       name: uniqKey,
       title,
-      type: 'AMS',
-      transformer: timeTransformer,
       comType: 'TiLabel',
       comConf: {
         placeholder: 'i18n:unknown',
+        valuePiping: '$DT',
       } as LabelProps,
     });
   }

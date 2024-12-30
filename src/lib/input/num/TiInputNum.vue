@@ -10,7 +10,7 @@
   });
   //-----------------------------------------------------
   const emit = defineEmits<{
-    (event: 'change', payload: number): void;
+    (event: 'change', payload: number | null): void;
   }>();
   //-----------------------------------------------------
   const props = withDefaults(defineProps<InputNumProps>(), {
@@ -62,7 +62,11 @@
     });
   }
   //-----------------------------------------------------
-  function onChange(str: string) {
+  function onChange(s: string) {
+    let str = _.trim(s);
+    if (!str) {
+      emit('change', null);
+    }
     console.log('num:change', str);
     // 移除分隔符号
     if (props.partSep) {

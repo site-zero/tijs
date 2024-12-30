@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { computed } from 'vue';
 import { StrCaseMode, Vars } from '../../_type';
-import { Str } from '../../core';
+import { Bank, DateTime, ENV_KEYS, getEnv, Str } from '../../core';
 
 export type ValuePipeFeature = ReturnType<typeof useValuePipe>;
 export type ValueProcesser = (input: any, context: Vars) => string;
@@ -64,6 +64,22 @@ export function useValuePipe(props: ValuePipeProps) {
     if (props.valueCase) {
       re.set('$CASE', Str.getCaseFunc(props.valueCase));
     }
+    // Float 1-6
+    for (let i = 1; i <= 6; i++) {
+      re.set(`$F${i}`, (v: any) => {
+        return Bank.toBankText(v, {
+          decimalPlaces: i,
+        });
+      });
+    }
+    // Datetime
+    re.set('$DT', (v: any) => {
+      if (v) {
+        let format = getEnv(ENV_KEYS.DFT_DATETIME_FORMAT) as string;
+        return DateTime.format(v, { fmt: format }) ?? '';
+      }
+      return '';
+    });
     // customized
     if (props.pipeProcessers) {
       for (let [k, p] of Object.entries(props.pipeProcessers)) {

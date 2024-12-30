@@ -398,15 +398,17 @@ export function genFormatContext(date: any) {
   };
 }
 
-export function format(
-  date: undefined | null,
-  options?: DateFormatOptions
-): undefined;
-export function format(date: DateInput, options?: DateFormatOptions): string;
-export function format(
+export function formats(
   date: DateInput[],
   options?: DateFormatOptions
-): string[];
+): string[] {
+  //console.log("formatDate", date, fmt)
+  let list = [] as string[];
+  for (let d of date) {
+    list.push(format(d, options) as string);
+  }
+  return list;
+}
 
 /**
  * 格式化输出日期时间对象
@@ -418,30 +420,16 @@ export function format(
  * @returns 
  */
 export function format(
-  date: DateInput | DateInput[] | null | undefined,
+  _date: DateInput,
   options: DateFormatOptions = {}
-): string | string[] | undefined {
-  if (_.isNil(date)) {
-    return;
-  }
-
+): string {
   let { fmt = 'yyyy-MM-dd HH:mm:ss', trimZero = false } = options;
-  // Date Range or a group of date
-  if (_.isArray(date)) {
-    //console.log("formatDate", date, fmt)
-    let list = [] as string[];
-    for (let d of date) {
-      list.push(format(d, { fmt, trimZero }) as string);
-    }
-    return list;
-  }
 
-  if (!_.isDate(date)) {
-    date = parse(date);
-  }
-  // Guard it
-  if (!date) {
-    return;
+  let date: Date;
+  if (!_.isDate(_date)) {
+    date = parse(_date);
+  } else {
+    date = _date;
   }
 
   // Compare TimeZone with remote
