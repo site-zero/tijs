@@ -25,7 +25,7 @@ export type InputNumUnitProps = Omit<InputNumProps, 'value'> & {
   /**
    * 如果未能取到数字，那么是否需要给个默认值，默认是 `0`
    */
-  defaultNumber?: number | string;
+  defaultNumber?: number;
   /**
    * 如果未能取到单位，那么是否需要给个默认值
    */

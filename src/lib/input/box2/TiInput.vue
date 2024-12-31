@@ -247,6 +247,7 @@
     _box_state.usr_text = null;
     //console.log('onOptionSelect', payload);
     _box.value.setValueByItem(payload.current || null);
+    _box.value.setFocused(false);
     _box.value.emitIfChanged();
     _box.value.clearOptionsData();
   }

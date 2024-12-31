@@ -103,7 +103,10 @@ export function useNumUnit(
   //------------------------------------------
   // 通知改动
   //------------------------------------------
-  function emitNumberChange(num: number) {
+  function emitNumberChange(num: number | null) {
+    if (_.isNil(num)) {
+      num = props.defaultNumber ?? 0;
+    }
     console.log('emitNumberChange', num);
     let data = _.cloneDeep(props.value ?? {});
     setNumber(data, num);

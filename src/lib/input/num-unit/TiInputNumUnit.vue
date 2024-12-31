@@ -108,7 +108,7 @@
     return re;
   });
   //-----------------------------------------------------
-  function onNumberChange(val: number) {
+  function onNumberChange(val: number|null) {
     NU.value.emitNumberChange(val);
   }
   //-----------------------------------------------------

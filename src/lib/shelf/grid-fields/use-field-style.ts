@@ -295,6 +295,7 @@ export function getFieldIcon(
   let fieldTip = Util.selectValue(field.vars, field.tip, {
     explain: true,
   });
+  reIcon.titleSuffixIcon = field.titleIcon;
   if (tipIconInfo && tipIconInfo.type) {
     // 标题区提示图标
     if (hasTitle && tipIconInfo.position == 'title') {
@@ -302,16 +303,19 @@ export function getFieldIcon(
       if ('prefix' == tipIconInfo.type) {
         reIcon.titlePrefixIcon = field.tipIcon;
         reIcon.titlePrefixTip = fieldTip;
+        reIcon.titleSuffixIcon = field.titleIcon;
       }
       // 提示在后缀
       else if ('suffix' == tipIconInfo.type) {
         reIcon.titleSuffixIcon = field.tipIcon;
         reIcon.titleSuffixTip = fieldTip;
+        reIcon.titlePrefixIcon = field.titleIcon;
       }
     }
     // 值区提示图标
     else if (tipIconInfo.position == 'value') {
       // ... 好像没什么需要做的
+      reIcon.titleSuffixIcon = field.titleIcon;
     }
     // 提示区图标
     else if (hasTip) {
