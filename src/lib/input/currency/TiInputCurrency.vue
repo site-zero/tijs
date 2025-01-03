@@ -19,6 +19,13 @@
   });
   //-----------------------------------------------------
   const InputNumUnitConfig = computed(() => {
+    let boxAspect = _.pick(props, [
+      'boxFontSize',
+      'boxPadding',
+      'boxRadius',
+      'type',
+      'hideBorder',
+    ]);
     return {
       autoSelect: props.autoSelect,
       readonly: props.readonly,
@@ -32,6 +39,7 @@
       valueInputAlign: 'right',
       getNumber: _.first(props.valueKeys),
       getUnit: _.last(props.valueKeys),
+      ...boxAspect,
       units: {
         readonly: props.readonly,
         ...props.currencies,
@@ -40,6 +48,7 @@
         tipUseHint: true,
         useRawValue: true,
         tipListMinWidth: props.tipListMinWidth,
+        ...boxAspect,
       },
     } as InputNumUnitProps;
   });

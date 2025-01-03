@@ -1,5 +1,5 @@
 import { OptionsProps, ReadonlyProps } from '../../';
-import { CommonProps, Vars } from '../../../_type';
+import { AspectSize, CommonProps, LogicType, Vars } from '../../../_type';
 
 export type InputCurrencyProps = CommonProps &
   ReadonlyProps & {
@@ -18,4 +18,18 @@ export type InputCurrencyProps = CommonProps &
     currencyWidth?: number | string;
 
     tipListMinWidth?: number | string;
+
+    /**
+     * 隐藏输入框边框
+     */
+    hideBorder?: boolean;
+
+    //style?: Vars;
+    // inputStyle?: Vars;
+    // partMainStyle?: Vars;
+    // mainBodyStyle?: Vars;
+    boxFontSize?: AspectSize;
+    boxPadding?: AspectSize;
+    boxRadius?: AspectSize | 'none';
+    type?: LogicType;
   };
