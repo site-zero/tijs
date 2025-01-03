@@ -5,9 +5,9 @@ import {
   GetItemText,
   GetItemValue,
   IDict,
+  IsMatched,
   LoadDictItem,
   QueryDictItems,
-  IsMatched,
 } from './dict-types';
 
 export function dft_get_item<T, V>(): LoadDictItem<T, V> {
@@ -19,7 +19,7 @@ export function dft_get_item<T, V>(): LoadDictItem<T, V> {
           for (let i = 0; i < list.length; i++) {
             let li = list[i];
             let v = dict.getItemValue(li, i);
-            if (_.isEqual(v, val)) {
+            if (v == val || _.isEqual(v, val)) {
               resolve(li);
               return;
             }

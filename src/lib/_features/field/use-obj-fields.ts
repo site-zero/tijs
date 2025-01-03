@@ -1,12 +1,4 @@
-import {
-  DateTime,
-  ENV_KEYS,
-  FieldRefer,
-  getEnv,
-  GridFieldsInput,
-  LabelProps,
-  Str,
-} from '@site0/tijs';
+import { FieldRefer, GridFieldsInput, LabelProps, Str } from '@site0/tijs';
 import _ from 'lodash';
 
 //const log = getLogger('wn.obj-fields');
@@ -15,6 +7,7 @@ export type QuickFieldInfo = {
   _key: string;
   name?: string | string[];
   title?: string;
+  tip?: string;
   disabled?: boolean;
   required?: boolean;
   readonly?: boolean;
@@ -66,6 +59,7 @@ function defineObjFields(featureName: string) {
     re.comConf = re.comConf ?? {};
     _.assign(re.comConf, field?.comConf);
     if (finfo.readonly) {
+      re.readonly = true;
       re.comConf.readonly = true;
     }
 
@@ -81,6 +75,7 @@ function defineObjFields(featureName: string) {
       re.name = undefined;
     }
     re.title = finfo.title ?? re.title;
+    re.tip = finfo.tip;
     re.colStart = finfo.colStart ?? re.colStart;
     re.colSpan = finfo.colSpan ?? re.colSpan;
     re.rowStart = finfo.rowStart ?? re.rowStart;
@@ -275,10 +270,11 @@ export function parseNameForObjField(key: string) {
     let title = m[3];
     re.title = title;
     if (title) {
-      let m2 = /^([^/]*)(\/(.+))?/.exec(title);
+      let m2 = /^([^/]+)(\/([^>]+)(>(.+))?)?/.exec(title);
       if (m2) {
         re.name = m2[1] || undefined;
         re.title = m2[3];
+        re.tip = m2[5];
       }
     }
   }
@@ -291,9 +287,9 @@ export function parseNameForObjField(key: string) {
   const __grid_info = function (input: string) {
     let start: number | undefined;
     let span: number | undefined;
-    let m = /^(\d+)(\/(\d+))?/.exec(input);
+    let m = /^(\d*)(\/(\d+))?/.exec(input);
     if (m) {
-      start = parseInt(m[1]);
+      start = m[1] ? parseInt(m[1]) : undefined;
       if (m[3]) {
         span = parseInt(m[3]);
       }
