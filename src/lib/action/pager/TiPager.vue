@@ -9,6 +9,7 @@
   const props = withDefaults(defineProps<PagerProps>(), {
     brief: true,
     showText: true,
+    canAskPageSize: true,
   });
   const Page = computed(() => usePager(props, { emit }));
   const TopClass = computed(() =>
@@ -91,10 +92,16 @@
           ></a>
         </div>
         <div
-          class="part brief"
           v-if="Page.briefText"
+          class="part brief"
           @click="Page.askPageSize">
           <a>{{ Page.briefText }}</a>
+        </div>
+        <div
+          v-else-if="props.canAskPageSize"
+          class="part ask-page-size"
+          title="Change Page Size">
+          <a @click="Page.askPageSize"><i class="zmdi zmdi-settings"></i></a>
         </div>
       </template>
     </template>

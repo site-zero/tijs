@@ -126,6 +126,9 @@ export function usePager(props: PagerProps, options: UsePagerOptions) {
   }
 
   async function askPageSize() {
+    if (!props.canAskPageSize) {
+      return;
+    }
     let msg = I18n.getf('paging-change-pgsz', {
       pageSize,
     });

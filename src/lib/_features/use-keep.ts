@@ -51,17 +51,8 @@ function parseInfo(info: KeepInfo): KeepProps {
                   User Featrue
 
 -------------------------------------------------------*/
-export type KeepFeature = {
-  _store_key: string | undefined;
-  _enabled: boolean;
-  _mode: KeepMode;
-  save: Callback1<any>;
-  load: (dft?: string) => string | undefined;
-  loadObj: (dft?: Vars) => Vars | null;
-  loadArray: (dft?: any[]) => any[] | null;
-  reset: () => void;
-};
-export function useKeep(info?: KeepInfo): KeepFeature {
+export type KeepFeature = ReturnType<typeof useKeep>;
+export function useKeep(info?: KeepInfo) {
   let keepAt: string | undefined;
   let keep = TiStore.session;
   let keepMode: KeepMode = 'session';

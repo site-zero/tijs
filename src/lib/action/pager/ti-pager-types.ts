@@ -36,6 +36,11 @@ export type PagerProps = CommonProps &
     brief?: string | boolean;
 
     /**
+     * 是否支持修改页大小
+     */
+    canAskPageSize?: boolean;
+
+    /**
      * 如果页特别多，譬如 10K 页，不能全显示处理来
      * 因此要有一个最大的页面显示限制。
      * 默认 10

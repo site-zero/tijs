@@ -109,6 +109,18 @@
         color: var(--ti-color-link-hover);
       }
     }
+    &.ask-page-size {
+      > a {
+        cursor: pointer;
+        > i {
+          transition: transform 0.5s;
+        }
+        &:hover > i {
+          transform: rotate(360deg) scale(1.5);
+          color: var(--ti-color-secondary);
+        }
+      }
+    }
   }
   //-------------------------------------------
 }
