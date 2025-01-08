@@ -30,6 +30,10 @@
       @include flex-align-nowrap($ai: center);
       font-weight: bold;
       padding: 0 0.6em;
+      > .ti-icon {
+        font-size: 1.5em;
+        margin-right: 0.3em;
+      }
     }
     > .bar-item-wrapper {
       @include flex-align-nowrap($ai: stretch);
