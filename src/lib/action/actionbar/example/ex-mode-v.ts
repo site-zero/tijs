@@ -2,7 +2,7 @@ import { ActionBarProps } from '../ti-action-bar-types';
 
 export default {
   name: 'mode_v',
-  text: 'i18n:ti-action-bar-exmple-mode-v',
+  text: 'i18n:ti-action-bar-example-mode-v',
   comConf: {
     vars: {
       saving: false,
