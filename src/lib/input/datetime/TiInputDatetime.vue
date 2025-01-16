@@ -2,7 +2,7 @@
   import _ from 'lodash';
   import { computed } from 'vue';
   import { Alert, InputBoxApi, TiInput } from '../../';
-  import { DateInput } from '../../../_type';
+  import { DateParseOptionsZone } from '../../../_type';
   import { DateTime, tiGetDefaultComPropValue } from '../../../core';
   import { COM_TYPES } from '../../lib-com-types';
   import { InputDatetimeProps } from './ti-input-datetime-types';
@@ -24,16 +24,21 @@
     autoSelect: true,
   });
   //-----------------------------------------------------
+  const TimeZone = computed((): DateParseOptionsZone => {
+    return DateTime.getDefaultTimezoneProp(COM_TYPE, props.timezone);
+  });
+  //-----------------------------------------------------
   const InputValue = computed(() => {
     if (!props.value) {
       return;
     }
     let format =
-      props.valueFormat ?? _dft_prop('valueFormat', 'yyyy-MM-dd HH:mm:ss');
+      props.valueFormat ?? _dft_prop('format', 'yyyy-MM-dd HH:mm:ss');
 
     return DateTime.format(props.value, {
       fmt: format,
       trimZero: false,
+      timezone: TimeZone.value,
     });
   });
   //-----------------------------------------------------
@@ -53,17 +58,17 @@
     return re;
   });
   //-----------------------------------------------------
-  function formatValue(val: any): string {
-    if (!val?.val) {
-      return '';
-    }
-    let format = props.format ?? _dft_prop('format', 'yyyy-MM-dd HH:mm:ss');
-    let d = DateTime.parse(val.val as DateInput);
-    if (isNaN(d.getTime())) {
-      throw 'Invalid Date: ' + val;
-    }
-    return DateTime.format(d, { fmt: format, trimZero: false });
-  }
+  // function formatValue(val: any): string {
+  //   if (!val?.val) {
+  //     return '';
+  //   }
+  //   let format = props.format ?? _dft_prop('format', 'yyyy-MM-dd HH:mm:ss');
+  //   let d = DateTime.parse(val.val as DateInput);
+  //   if (!_.isDate(d) || isNaN(d.getTime())) {
+  //     throw 'Invalid Date: ' + val;
+  //   }
+  //   return DateTime.format(d, { fmt: format, trimZero: false });
+  // }
   //-----------------------------------------------------
   function onValueChange(val: string) {
     val = _.trim(val);
@@ -73,13 +78,18 @@
     let format =
       props.valueFormat ?? _dft_prop('valueFormat', 'yyyy-MM-dd HH:mm:ss');
     let quickMode = props.quickInputMode ?? _dft_prop('quickInputMode', '');
-    console.log('quickInputMode', quickMode);
+    //console.log('quickInputMode', quickMode);
 
     let d: Date | undefined;
     if (DateTime.isDateTimeQuickParseMode(quickMode)) {
-      d = DateTime.quickParse(val, { mode: quickMode });
+      d = DateTime.quickParse(val, {
+        mode: quickMode,
+        timezone: TimeZone.value,
+      });
     } else {
-      d = DateTime.parse(val);
+      d = DateTime.parse(val, {
+        timezone: TimeZone.value,
+      });
     }
 
     // 判断日期对象是否有效
@@ -100,6 +110,7 @@
       let str = DateTime.format(d, {
         fmt: format,
         trimZero: false,
+        timezone: TimeZone.value,
       });
       emit('change', str);
     }
@@ -110,6 +121,5 @@
   <TiInput
     v-bind="InputProps"
     :value="InputValue"
-    :format="formatValue"
     @change="onValueChange" />
 </template>

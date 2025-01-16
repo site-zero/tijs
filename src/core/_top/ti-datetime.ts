@@ -1,8 +1,18 @@
 import _ from 'lodash';
-import { I18n, Str, TiTime, getEnv } from '../';
+import {
+  ENV_KEYS,
+  getEnv,
+  I18n,
+  Str,
+  tiGetDefaultComPropValue,
+  TiTime,
+  Util,
+} from '../';
 import {
   DateFormatOptions,
   DateInput,
+  DateParseOptions,
+  DateParseOptionsZone,
   DateTimeQuickParseMode,
   DateTimeQuickParseOptions,
   DateTimeQuickParserSet,
@@ -28,8 +38,11 @@ const P_DATE = new RegExp(
     '(Z(\\d*))?$'
 );
 
-export function parse(d: undefined | null | []): undefined;
-export function parse(d: DateInput): Date;
+export function parse(
+  d: undefined | null | [],
+  options?: DateParseOptions
+): undefined;
+export function parse(d: DateInput, options?: DateParseOptions): Date;
 
 /**
  * 把任何输入转换为日期对象。
@@ -47,9 +60,13 @@ export function parse(d: DateInput): Date;
  * 如果输入不符合上述条件，则会抛错
  *
  * @param d 输入对象
+ *
  * @returns  日期对象
  */
-export function parse(d: any): Date | undefined {
+export function parse(
+  d: any,
+  options: DateParseOptions = {}
+): Date | undefined {
   if (_.isNil(d) || Str.isBlank(d)) {
     return;
   }
@@ -79,9 +96,6 @@ export function parse(d: any): Date | undefined {
   if (_.isString(d)) {
     let str = _.trim(d);
 
-    if ('2024-05-14 19:24:29.000' == str) {
-      console.log('!!!DateTime.parse', str);
-    }
     // MS
     if (/\d{13,}/.test(str)) {
       return new Date((str as any) * 1);
@@ -115,7 +129,7 @@ export function parse(d: any): Date | undefined {
         _.padStart(MM as unknown as string, 2, '0'),
         '-',
         _.padStart(dd as unknown as string, 2, '0'),
-        'T',
+        ' ',
         _.padStart(HH as unknown as string, 2, '0'),
         ':',
         _.padStart(mm as unknown as string, 2, '0'),
@@ -124,14 +138,12 @@ export function parse(d: any): Date | undefined {
         '.',
         _.padStart(ms as unknown as string, 3, '0'),
       ];
+      // 加上后缀
+      let zone: DateParseOptionsZone = Util.fallback(options.timezone, 'Z');
+      list.push(toTimezoneSuffix(zone));
+
       let dateStr = list.join('');
       let date = new Date(dateStr);
-
-      // Compare TimeZone with remote
-      let tzDiff = getEnv('TIMEZONE_DIFF');
-      if (_.isNumber(tzDiff) && tzDiff !== 0) {
-        date = new Date(date.getTime() - tzDiff);
-      }
 
       return date;
     }
@@ -159,7 +171,7 @@ const _quick_parsers: DateTimeQuickParserSet = {
    *  - 20240806 -> 2024-08-06 00:00:00
    *  - 2408 11 -> 2024-08-01 11:00:00
    */
-  ymd: (s: string): Date | undefined => {
+  ymd: (s: string): string | undefined => {
     const toyear = new Date().getFullYear();
     let year: number, month: number, day: number;
 
@@ -190,8 +202,12 @@ const _quick_parsers: DateTimeQuickParserSet = {
     else {
       return;
     }
-    // 返回日期对象
-    return new Date(year, month, day);
+    // 返回日期字符串
+    return [
+      _.padStart(`${year}`, 4, '0'),
+      _.padStart(`${month + 1}`, 2, '0'),
+      _.padStart(`${day}`, 2, '0'),
+    ].join('-');
   },
   /**
    * 假设今年是 2024 年
@@ -201,7 +217,7 @@ const _quick_parsers: DateTimeQuickParserSet = {
    *  - 190828 -> 2028-08-19
    *  - 19082028 -> 2028-08-19
    */
-  dmy: (s: string): Date | undefined => {
+  dmy: (s: string): string | undefined => {
     const toyear = new Date().getFullYear();
     let day: number, month: number, year: number;
 
@@ -232,8 +248,12 @@ const _quick_parsers: DateTimeQuickParserSet = {
       return undefined;
     }
 
-    // 返回日期对象
-    return new Date(year, month, day);
+    // 返回日期字符串
+    return [
+      _.padStart(`${year}`, 4, '0'),
+      _.padStart(`${month + 1}`, 2, '0'),
+      _.padStart(`${day}`, 2, '0'),
+    ].join('-');
   },
   /**
    * 假设今年是 2024 年
@@ -243,7 +263,7 @@ const _quick_parsers: DateTimeQuickParserSet = {
    *  - 081928 -> 2028-08-19
    *  - 08192028 -> 2028-08-19
    */
-  mdy: (s: string): Date | undefined => {
+  mdy: (s: string): string | undefined => {
     const toyear = new Date().getFullYear();
     let day: number, month: number, year: number;
 
@@ -274,10 +294,36 @@ const _quick_parsers: DateTimeQuickParserSet = {
       return undefined;
     }
 
-    // 返回日期对象
-    return new Date(year, month, day);
+    // 返回日期字符串
+    return [
+      _.padStart(`${year}`, 4, '0'),
+      _.padStart(`${month + 1}`, 2, '0'),
+      _.padStart(`${day}`, 2, '0'),
+    ].join('-');
   },
 };
+
+/**
+ * 在日期字符串后附加时区后缀。
+ *
+ * @param d_str - 日期字符串。
+ * @param options - 解析选项。
+ * @param options.timezone - 时区信息，可以是 'Z' 或数字表示的时区偏移量。
+ * @returns 附加时区后缀后的日期字符串。
+ */
+function toTimezoneSuffix(timezone?: DateParseOptionsZone) {
+  if ('Z' === timezone) {
+    return 'Z';
+  }
+  // 直接时区偏移量
+  else if (_.isNumber(timezone)) {
+    if (timezone >= 0) {
+      return `+${timezone}`;
+    }
+    return `${timezone}`;
+  }
+  return '';
+}
 
 /**
  * 根据一个简洁的输入，解析出一个日期对象。 如果不能通过快速模式解析，
@@ -294,7 +340,7 @@ export function quickParse(
   let s = _.trim(_input);
   if (!s) return;
   let { mode = 'dmy' } = options;
-  let parser = _quick_parsers[mode];
+  let quick_parser = _quick_parsers[mode];
 
   // 获取日期部分和时间部分
   let m = /^([^\s]+)(\s+([^\s]+))?$/.exec(_input);
@@ -304,23 +350,28 @@ export function quickParse(
 
     // 如果日期部分包括特殊字符，就一定不是快速模式
     if (!/^[0-9]+$/.test(s_date)) {
-      return parse(_input);
+      return parse(_input, options);
     }
 
     // 尝试解析日期
-    let d = parser(s_date);
+    let dInStr = quick_parser(s_date);
 
     // 解析失败
-    if (!d) {
-      return parse(_input);
+    if (!dInStr) {
+      return parse(_input, options);
     }
 
-    // 解析时间
-    let _t = new TiTime(s_time);
-    _t.updateDate(d);
+    // 准备完整的日期时间字符串
+    let date_str = dInStr;
+    if (s_time) {
+      date_str += ' ' + s_time;
+    } else {
+      date_str += ' 00:00:00.000';
+    }
+    date_str += toTimezoneSuffix(options.timezone);
 
     // 搞定
-    return d;
+    return new Date(date_str);
   }
 
   // 采用普通的解析方式
@@ -332,12 +383,52 @@ export function quickParse(
  * @param date  日期值
  * @returns  用来格式化日期的上下文变量
  */
-export function genFormatContext(date: any) {
-  if (!_.isDate(date)) {
-    date = parse(date);
+export function genFormatContext(_d: any, timezone?: DateParseOptionsZone) {
+  let date: Date;
+  if (!_.isDate(_d)) {
+    let d2 = parse(_d);
+    if (!d2) {
+      return {};
+    }
+    date = d2;
+  } else {
+    date = _d;
   }
-  // Guard it
-  if (!date) return {};
+
+  let m_i: number,
+    yyyy: number,
+    d: number,
+    H: number,
+    m: number,
+    s: number,
+    S: number;
+
+  // 采用浏览器默认时区
+  if (_.isNil(timezone)) {
+    m_i = date.getMonth();
+    yyyy = date.getFullYear();
+    d = date.getDate();
+    H = date.getHours();
+    m = date.getMinutes();
+    s = date.getSeconds();
+    S = date.getMilliseconds();
+  }
+  // 指定了显示时区
+  else {
+    // 偏移
+    if (_.isNumber(timezone)) {
+      let offset = timezone * 3600000;
+      date = new Date(date.getTime() + offset);
+    }
+
+    m_i = date.getUTCMonth();
+    yyyy = date.getUTCFullYear();
+    d = date.getUTCDate();
+    H = date.getUTCHours();
+    m = date.getUTCMinutes();
+    s = date.getUTCSeconds();
+    S = date.getUTCMilliseconds();
+  }
 
   // TODO here add another param
   // to format the datetime to "in 5min" like string
@@ -353,15 +444,7 @@ export function genFormatContext(date: any) {
   MMMM:September
   */
   // Format by pattern
-  let m_i = date.getMonth();
-  let yyyy = date.getFullYear();
   let M = m_i + 1;
-  let d = date.getDate();
-  let H = date.getHours();
-  let m = date.getMinutes();
-  let s = date.getSeconds();
-  let S = date.getMilliseconds();
-
   let Mmm = MONTH_ABBR[m_i];
   let MMM = Mmm.toUpperCase();
   let MMMM = I18n ? I18n.get(`month-${Mmm}`) : MONTH_NAME[m_i];
@@ -381,13 +464,13 @@ export function genFormatContext(date: any) {
     S,
     yyy: yyyy,
     yy: ('' + yyyy).substring(2, 4),
-    MM: _.padStart(M, 2, '0'),
-    dd: _.padStart(d, 2, '0'),
-    HH: _.padStart(H, 2, '0'),
-    mm: _.padStart(m, 2, '0'),
-    ss: _.padStart(s, 2, '0'),
-    SS: _.padStart(S, 3, '0'),
-    SSS: _.padStart(S, 3, '0'),
+    MM: _.padStart(`${M}`, 2, '0'),
+    dd: _.padStart(`${d}`, 2, '0'),
+    HH: _.padStart(`${H}`, 2, '0'),
+    mm: _.padStart(`${m}`, 2, '0'),
+    ss: _.padStart(`${s}`, 2, '0'),
+    SS: _.padStart(`${S}`, 3, '0'),
+    SSS: _.padStart(`${S}`, 3, '0'),
     E,
     EE: E,
     EEE: E,
@@ -411,6 +494,45 @@ export function formats(
 }
 
 /**
+ * 获取默认时区偏移量(小时)。
+ *
+ * @param {boolean} [dftAsLocal=true] -
+ * 在环境变量未定义 TIMEZONE 时，是否返回本地时区偏移量。
+ * 如果为 true，则返回本地时区偏移量；否则返回 undefined。
+ * @returns {number | undefined} 返回时区偏移量（以小时为单位），
+ * 如果未设置时区且 dftAsLocal 为 false，则返回 undefined。
+ */
+export function getDefaultTimezoneOffset(dftAsLocal = true) {
+  let tz = (getEnv(ENV_KEYS.TIMEZONE) as string) ?? '';
+  let m = /^(GMT|UTC)([+-]\d{1,2})$/.exec(tz);
+  if (m) {
+    return parseInt(m[2]);
+  }
+  if (dftAsLocal) {
+    let localOffsetInMin = new Date().getTimezoneOffset();
+    return localOffsetInMin / -60;
+  }
+  return undefined;
+}
+
+export function getDefaultTimezoneProp(
+  COM_TYPE: string,
+  timezone?: DateParseOptionsZone
+): DateParseOptionsZone {
+  if (!_.isNil(timezone)) {
+    return timezone;
+  }
+  let dft = tiGetDefaultComPropValue(COM_TYPE, 'timezone', 'auto');
+  if ('Z' == dft) {
+    return 'Z';
+  }
+  if (/^[+-][0-9]{1,2}$/.test(dft)) {
+    return parseInt(dft);
+  }
+  return getDefaultTimezoneOffset();
+}
+
+/**
  * 格式化输出日期时间对象
  * 
  * @param date 日期值
@@ -423,22 +545,49 @@ export function format(
   _date: DateInput,
   options: DateFormatOptions = {}
 ): string {
-  let { fmt = 'yyyy-MM-dd HH:mm:ss', trimZero = false } = options;
+  // 防空
+  if (_.isNil(_date)) {
+    return '';
+  }
 
+  let { fmt = 'yyyy-MM-dd HH:mm:ss', trimZero = false, timezone } = options;
+
+  // 未指定 timezone 那么尝试从全局环境变量里获取
+  // 这个通常由开发者在连接远程服务器获得正确的时区后
+  // 通过类似 setEnv(ENV_KEYS.TIMEZONE,'GMT+8'); 来设置
+  if (_.isUndefined(timezone)) {
+    timezone = getDefaultTimezoneOffset(false);
+  }
   let date: Date;
   if (!_.isDate(_date)) {
-    date = parse(_date);
+    if (_.isNumber(_date)) {
+      date = new Date(_date);
+    }
+    // 直接解析
+    else if (_.isString(_date)) {
+      let m = /(Z|[+-]\d{1,2})$/.exec(_date);
+      if (m) {
+        date = new Date(_date);
+      }
+      // 那么默认当作 UTC 时间戳
+      else {
+        date = new Date(_date + 'Z');
+      }
+    }
+    // 不知道是什么
+    else {
+      return '???';
+    }
+
+    // 最后防守一道
+    if (!_.isDate(date) || isNaN(date.getTime())) {
+      return '!!!';
+    }
   } else {
     date = _date;
   }
 
-  // Compare TimeZone with remote
-  let tzDiff = getEnv('TIMEZONE_DIFF');
-  if (_.isNumber(tzDiff) && tzDiff !== 0) {
-    date = new Date(date.getTime() + tzDiff);
-  }
-
-  let _c = genFormatContext(date);
+  let _c = genFormatContext(date, timezone);
   let regex = /(y{2,4}|Mmm|M{1,4}|dd?|HH?|mm?|ss?|S{1,3}|E{1,4}|'([^']+)')/g;
   let list = [];
   let last = 0;

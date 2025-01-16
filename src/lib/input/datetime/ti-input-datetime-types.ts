@@ -1,10 +1,9 @@
+import { InputBoxProps, PlaceholderProps, ReadonlyProps } from '../../';
 import {
-  InputBoxProps,
-  PlaceholderProps,
-  PrefixSuffixProps,
-  ReadonlyProps,
-} from '../../';
-import { CommonProps, DateTimeQuickParseMode } from '../../../_type';
+  CommonProps,
+  DateParseOptionsZone,
+  DateTimeQuickParseMode,
+} from '../../../_type';
 
 export type InputDatetimeProps = CommonProps &
   ReadonlyProps &
@@ -45,4 +44,10 @@ export type InputDatetimeProps = CommonProps &
      * @see ti-datetime.ts#quickParse
      */
     quickInputMode?: DateTimeQuickParseMode;
+
+    /**
+     * 本控件的所在时区，
+     * 如果未指定则采用默认时区
+     */
+    timezone?: DateParseOptionsZone;
   };

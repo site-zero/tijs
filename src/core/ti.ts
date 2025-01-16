@@ -17,6 +17,7 @@ const _ENV = {
 
 export const ENV_KEYS = {
   DFT_DATETIME_FORMAT: 'TI_DFT_DATETIME_FORMAT',
+  TIMEZONE: 'TIMEZONE',
 };
 
 export function assignEnv(input: Vars) {

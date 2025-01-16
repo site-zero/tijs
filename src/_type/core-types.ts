@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { App, DefineComponent, InjectionKey, Ref } from 'vue';
 import { ActionBarProps, BlockOverflowMode } from '../lib';
 
+export type DocumentIconType = 'emoji' | 'image/png' | 'image/x-icon';
 /*---------------------------------------------------`
 
                      补足原生
@@ -141,12 +142,6 @@ export function isAnyOptionItem(item: any): item is AnyOptionItem {
 export type OptionValueProps = {
   value: any;
   options: AnyOptionItem[];
-};
-
-export type DateInput = string | number | Date;
-export type DateFormatOptions = {
-  fmt?: string;
-  trimZero?: boolean;
 };
 
 export type TextStrValue = TextValue<string>;
@@ -1198,9 +1193,9 @@ export type DateTimeQuickParserSet = {
    *  - 240806 -> 2024-08-06 00:00:00
    *  - 20240806 -> 2024-08-06 00:00:00
    *
-   * @return Date 即解析成功的日期对象， undefined 则表示不能接受的字符串
+   * @return "yyyy-MM-dd" 格式的字符串， undefined 则表示不能接受的字符串
    */
-  ymd: (s: string) => Date | undefined;
+  ymd: (s: string) => string | undefined;
   /**
    * 假设今年是 2024 年
    *
@@ -1211,9 +1206,9 @@ export type DateTimeQuickParserSet = {
    *
    * > 如果并未指明年份，则用今年来表示
    *
-   * @return Date 即解析成功的日期对象， undefined 则表示不能接受的字符串
+   * @return "yyyy-MM-dd" 格式的字符串， undefined 则表示不能接受的字符串
    */
-  dmy: (s: string) => Date | undefined;
+  dmy: (s: string) => string | undefined;
 
   /**
    * 假设今年是 2024 年
@@ -1225,14 +1220,29 @@ export type DateTimeQuickParserSet = {
    *
    * > 如果并未指明年份，则用今年来表示
    *
-   * @return Date 即解析成功的日期对象， undefined 则表示不能接受的字符串
+   * @return "yyyy-MM-dd" 格式的字符串， undefined 则表示不能接受的字符串
    */
-  mdy: (s: string) => Date | undefined;
+  mdy: (s: string) => string | undefined;
 };
 
 export type DateTimeQuickParseMode = keyof DateTimeQuickParserSet;
 export type DateTimeQuickParseOptions = {
   mode?: DateTimeQuickParseMode;
+  timezone?: DateParseOptionsZone;
 };
 
-export type DocumentIconType = 'emoji' | 'image/png' | 'image/x-icon';
+/**
+ * 'Z' 表示 UTC 时间
+ *  8  表示 GMT+8 时区
+ * null | undefined 表示采用用户浏览器本地时区设置
+ */
+export type DateParseOptionsZone = 'Z' | number | null | undefined;
+export type DateInput = string | number | Date;
+export type DateFormatOptions = {
+  fmt?: string;
+  trimZero?: boolean;
+  timezone?: DateParseOptionsZone;
+};
+export type DateParseOptions = {
+  timezone?: DateParseOptionsZone;
+};
