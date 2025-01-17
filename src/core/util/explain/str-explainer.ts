@@ -153,7 +153,7 @@ export class StringExplainer implements Explainer {
     let m_val: string | undefined;
     let func = __static_val(input);
     // Match template or function call
-    m = /^(==?>>?\??|->)(.*)$/.exec(input);
+    m = /^(==?>>?\??|->)(.*)$/s.exec(input);
     if (m) {
       m_type = m[1];
       m_val = _.trim(m[2]);

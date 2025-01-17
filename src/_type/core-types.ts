@@ -1245,4 +1245,9 @@ export type DateFormatOptions = {
 };
 export type DateParseOptions = {
   timezone?: DateParseOptionsZone;
+  /**
+   * 即使时间字符串里包括了时区，也需要强制用选项里的 timezone 覆盖它
+   * 当然如果选项是未定义，则不会覆盖
+   */
+  overrideTimezone?:boolean;
 };

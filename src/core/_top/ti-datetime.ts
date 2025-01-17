@@ -30,12 +30,11 @@ import {
 //     "(Z(\\d*))?$"
 // );
 const P_DATE = new RegExp(
-  '^((\\d{2,4})([^0-9])?(\\d{1,2})?([^0-9])?(\\d{1,2})?)?([^0-9])?' +
+  '^((\\d{2,4})([^0-9])(\\d{1,2})?([^0-9])?(\\d{1,2})?)?([^0-9])?' +
     '(([ T])?' +
     '(\\d{1,2})(:)(\\d{1,2})((:)(\\d{1,2}))?' +
-    '((.)(\\d{1,3}))?)?' +
-    '(([+-])(\\d{1,2})(:\\d{1,2})?)?' +
-    '(Z(\\d*))?$'
+    '(([.])(\\d{1,3}))?)?' +
+    '(Z|([+-]\\d{1,2}(:\\d{2})?)?)?$'
 );
 
 export function parse(
@@ -100,53 +99,102 @@ export function parse(
     if (/\d{13,}/.test(str)) {
       return new Date((str as any) * 1);
     }
-    // Try to tidy string
-    let m = P_DATE.exec(str);
-    if (m) {
-      let _int = (m: string[], index: number, dft: number) => {
-        let s = m[index];
-        if (s) {
-          return parseInt(s);
-        }
-        return dft;
-      };
 
-      let today = new Date();
-      let year = m[2];
-      if (year.length == 2) {
-        year = '20' + year;
+    // 符合标准，可以直接创建日期对象
+    //      | year   | month | day     T    HH      mm       ss    .    ms    Z
+    if (
+      /^\d{4}[/-]\d{2}[/-]\d{2}([ T]\d{1,2}:\d{1,2}:\d{1,2})?(\.\d{1,3})(Z|\d{1,2}(:\d{2})?)$/.test(
+        str
+      )
+    ) {
+      return new Date(str);
+    }
+
+    // 开始解析
+    let today = new Date();
+    let info = {
+      input: str,
+      yy: `${today.getFullYear()}`,
+      MM: `01`,
+      dd: `01`,
+      time: new TiTime('00:00:00'),
+      tz: '',
+    };
+
+    // 结尾是 timezone 拿出来
+    let m = /(Z|([+-]\d{1,2}(:\d{2})?))$/.exec(str);
+    if (m) {
+      info.tz = m[1];
+      info.input = str.substring(0, m.index).trim();
+    }
+
+    // 截取时间部分
+    m = /[^\d](\d{1,2}:(\d{1,2})(:(\d{1,2}))?)$/.exec(info.input);
+    if (m) {
+      info.time.update(m[1]);
+      info.input = info.input.substring(0, m.index + 1).trim();
+    }
+
+    // 处理日期部分: 
+    // 250312 -> 2025-03-12
+    // 20250312 -> 2025-03-12
+    m = /^(\d?\d?\d\d)([01]\d)([0123]\d)$/.exec(info.input);
+    if (m) {
+      info.yy = info.yy.substring(0, 2) + m[1];
+      info.MM = m[2] ?? info.MM;
+      info.dd = m[3] ?? info.dd;
+    }
+    // 处理日期部分:
+    //  20250312 -> 2025-03-12
+    //  2025年03月12日 -> 2025-03-12
+    else {
+      m = /^(\d{2,4})([^\d]*([01]?\d)([^\d]*([0123]\d))?)?[^\d]*$/.exec(
+        info.input
+      );
+      if (m) {
+        let yy = m[1];
+        if(yy.length == 2){
+          yy = info.yy.substring(0, 2) + yy;
+        }
+        info.yy = yy;
+        info.MM = m[3] ?? info.MM;
+        info.dd = m[5] ?? info.dd;
       }
-      let yy: number = parseInt(year);
-      let MM: number = _int(m, 4, m[2] ? 1 : today.getMonth() + 1);
-      let dd: number = _int(m, 6, m[2] ? 1 : today.getDate());
-      let HH: number = _int(m, 10, 0);
-      let mm: number = _int(m, 12, 0);
-      let ss: number = _int(m, 15, 0);
-      let ms: number = _int(m, 18, 0);
-      let list = [
-        _.padStart(yy as unknown as string, 4, '0'),
-        '-',
-        _.padStart(MM as unknown as string, 2, '0'),
-        '-',
-        _.padStart(dd as unknown as string, 2, '0'),
-        ' ',
-        _.padStart(HH as unknown as string, 2, '0'),
-        ':',
-        _.padStart(mm as unknown as string, 2, '0'),
-        ':',
-        _.padStart(ss as unknown as string, 2, '0'),
-        '.',
-        _.padStart(ms as unknown as string, 3, '0'),
-      ];
-      // 加上后缀
+      // can't parse
+      else {
+        return new Date(str);
+      }
+    }
+
+    // 合并输出
+    let list = [
+      _.padStart(info.yy, 4, '0'),
+      '-',
+      _.padStart(info.MM, 2, '0'),
+      '-',
+      _.padStart(info.dd, 2, '0'),
+      ' ',
+      info.time.toString(),
+    ];
+
+    // 强制覆盖
+    if (!_.isNil(options.timezone) && options.overrideTimezone) {
+      list.push(toTimezoneSuffix(options.timezone));
+    }
+    // 输入的值就有时区后缀
+    else if (info.tz) {
+      list.push(info.tz);
+    }
+    // 采用配置的时区
+    else {
       let zone: DateParseOptionsZone = Util.fallback(options.timezone, 'Z');
       list.push(toTimezoneSuffix(zone));
-
-      let dateStr = list.join('');
-      let date = new Date(dateStr);
-
-      return date;
     }
+
+    let dateStr = list.join('');
+    let date = new Date(dateStr);
+
+    return date;
   }
   // Invalid date
   console.trace('Invalid Date:', d);
@@ -364,7 +412,8 @@ export function quickParse(
     // 准备完整的日期时间字符串
     let date_str = dInStr;
     if (s_time) {
-      date_str += ' ' + s_time;
+      let time = parseTime(s_time);
+      date_str += ' ' + time.toString();
     } else {
       date_str += ' 00:00:00.000';
     }
@@ -565,7 +614,7 @@ export function format(
     }
     // 直接解析
     else if (_.isString(_date)) {
-      let m = /(Z|[+-]\d{1,2})$/.exec(_date);
+      let m = /(Z|[+-]\d{1,2}(:\d{2})?)$/.exec(_date);
       if (m) {
         date = new Date(_date);
       }
