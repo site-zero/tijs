@@ -18,7 +18,14 @@
   const eventBinding = computed(() => _event.value.buildEventBinding());
   //-----------------------------------------------------
   const snippetInnerHtml = computed(() => {
-    return props.content ?? '<strong>HTML <em>snippet</em></strong>';
+    let html = [];
+    if (props.styleSheet) {
+      html.push(`<style>
+      ${CssUtils.renderCssStyleSheet(props.styleSheet)}
+      </style>`);
+    }
+    html.push(props.content ?? '<strong>HTML <em>snippet</em></strong>');
+    return html.join('\n');
   });
   //-----------------------------------------------------
   const TopClass = computed(() => CssUtils.mergeClassName(props.className));

@@ -51,7 +51,7 @@ export function useFieldCom(
   function getComConf(context: Vars, val?: any): Vars {
     let comConf = _.cloneDeep(props.comConf ?? defaultComConf);
     if (props.dynamic) {
-      comConf = Util.explainObj(context, comConf);
+      comConf = Util.explainObj(context, comConf, props.explainOptions);
     }
     // 自动为控件添加值属性
     let valueKey = props.autoValue ?? 'value';

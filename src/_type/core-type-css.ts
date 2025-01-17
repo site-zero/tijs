@@ -1,3 +1,5 @@
+import { Vars } from "./core-types";
+
 /*-------------------------------------------------------
 
                      Css 相关
@@ -83,3 +85,9 @@ export type CssTextAlign =
 export type CssBorderStyle = 'solid' | 'dashed' | 'dotted';
 
 export type CssObjectFit = 'fill' | 'contain' | 'cover' | 'none' | 'scale-down';
+
+
+export type CssSheet = {
+  selectors: string[];
+  rules: Vars;
+};

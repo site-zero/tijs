@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { Str, Util } from '../';
-import { FuncA2, MessageMap, Size2D, StrCaseMode, Vars } from '../../_type';
+import { CssSheet, FuncA2, MessageMap, Size2D, StrCaseMode, Vars } from '../../_type';
 import * as Dom from './web-dom';
 import { AttrFilter } from './web-dom';
 
@@ -488,10 +488,6 @@ export function renderCssRule(css = {}) {
  *
  * @param sheet{Array} : style selecor and rules
  */
-export type CssSheet = {
-  selectors: string[];
-  rules: Vars;
-};
 export function renderCssStyleSheet(sheet = [] as CssSheet[]) {
   sheet = _.concat(sheet);
   let re = [];

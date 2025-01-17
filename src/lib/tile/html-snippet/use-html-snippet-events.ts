@@ -66,7 +66,7 @@ export function useHtmlSnippetEventDelegate(
 
       // 处理吧
       if (lis.handler) {
-        lis.handler(evt, emit);
+        lis.handler(emit, evt);
       }
       if (lis.emitName) {
         emit(lis.emitName, {

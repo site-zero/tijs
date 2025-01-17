@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _, { forEach } from 'lodash';
 import { makeFieldUniqKey, parseFieldConverter, Vars } from '../../../_type';
 import { CssUtils, Match } from '../../../core';
 import {
@@ -41,6 +41,7 @@ export function buildOneGridField(
     // 数据
     data: dft.data!,
     dynamic: field.dynamic ?? dft.dynamic,
+    explainOptions: field.explainOptions ?? dft.explainOptions,
     vars: field.vars ?? dft.vars,
 
     // 动态类选择器

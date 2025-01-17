@@ -135,7 +135,8 @@
     <TextSnippet
       v-if="hasTitle"
       class="field-part as-title"
-      :dynamic="true"
+      :dynamic="props.dynamic"
+      :explain-options="props.explainOptions"
       :style="FieldTitleStyle"
       :textStyle="props.titleTextStyle"
       :attrs="{ dataAlign: TitleAlign }"

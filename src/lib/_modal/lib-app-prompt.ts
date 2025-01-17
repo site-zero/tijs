@@ -69,7 +69,7 @@ export async function Prompt(
             }
             $input.select();
           },
-          handler: (evt, emit) => {
+          handler: (emit, evt) => {
             let $input = evt.target;
             if (_.isElement($input) && $input instanceof HTMLInputElement) {
               let val = _.trim($input.value);
@@ -80,7 +80,7 @@ export async function Prompt(
         {
           selector: '.part-input > input',
           eventName: 'focus',
-          handler: (evt) => {
+          handler: (_emit, evt) => {
             let $input = evt.target;
             if (_.isElement($input) && $input instanceof HTMLInputElement) {
               $input.select();

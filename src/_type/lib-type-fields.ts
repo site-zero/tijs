@@ -6,6 +6,7 @@ import {
   ComRef,
   Convertor,
   DateInput,
+  ExplainOptions,
   FieldChange,
   FieldName,
   InvokePartial,
@@ -533,6 +534,11 @@ export type FieldComProps = ComRef & {
    * 动态解释字段
    */
   dynamic?: boolean;
+
+  /**
+   * 当 dynamic 为 true 时，这里可以指定解释字段的选项
+   */
+  explainOptions?:ExplainOptions;
 
   /**
    * 动态解释字段时，默认上下文就是 data

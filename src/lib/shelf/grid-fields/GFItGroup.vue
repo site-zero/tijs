@@ -2,8 +2,8 @@
   import { computed, onMounted, onUnmounted, ref } from 'vue';
   import {
     TextSnippet,
-    useGridLayoutTrack,
     useGridLayoutStyle,
+    useGridLayoutTrack,
     useViewport,
   } from '../../';
   import { CssUtils } from '../../../core';
@@ -80,6 +80,8 @@
       :text="GroupText.title"
       :prefixIcon="props.titleIcon"
       :textType="GroupText.titleType"
+      :dynamic="props.dynamic"
+      :explain-options="props.explainOptions"
       :comType="props.comType"
       :comConf="props.comConf"
       :autoValue="props.autoValue"
@@ -95,6 +97,8 @@
       className="as-group-title"
       :text="GroupText.tip ?? ''"
       :textType="GroupText.tipType"
+      :dynamic="props.dynamic"
+      :explain-options="props.explainOptions"
       :comType="props.tipBy?.comType"
       :comConf="props.tipBy?.comConf"
       :autoValue="props.tipBy?.autoValue"

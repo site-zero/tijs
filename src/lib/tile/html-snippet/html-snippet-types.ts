@@ -1,4 +1,4 @@
-import { Callback2, CommonProps } from '../../../_type';
+import { CommonProps, CssSheet } from '../../../_type';
 
 export type HtmlSnippetEmitter = {
   (name: string, playload?: any): void;
@@ -12,7 +12,7 @@ export type HtmlSnippetListenner = {
   emitName?: string;
   emitPayload?: any;
   // 进行什么处理？
-  handler?: (evt: Event, emit: Callback2<string, any>) => void;
+  handler?: (emit: HtmlSnippetEmitter, evt: Event) => void;
   // 如何初始化
   setup?: (el: HTMLElement) => void;
 };
@@ -20,4 +20,6 @@ export type HtmlSnippetListenner = {
 export type HtmlSnippetProps = CommonProps & {
   content?: string;
   listenners?: HtmlSnippetListenner[];
+  // 设置内部样式
+  styleSheet?: CssSheet[];
 };
