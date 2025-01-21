@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import { Callback1 } from '../../_type';
 import { AbstractDict } from './dict-abstract';
 import {
   dft_children,
@@ -9,14 +10,14 @@ import {
   dft_query,
 } from './dict-impl-dft';
 import {
+  DictOptions,
   GetItemText,
   GetItemValue,
   IDict,
-  LoadDictItem,
-  QueryDictItems,
   IsMatched,
   LoadData,
-  DictOptions,
+  LoadDictItem,
+  QueryDictItems,
 } from './dict-types';
 
 export class DictImpl<T, V> extends AbstractDict<T, V> implements IDict<T, V> {
@@ -41,6 +42,13 @@ export class DictImpl<T, V> extends AbstractDict<T, V> implements IDict<T, V> {
   __create_name: any = undefined;
   __create_options: any = undefined;
 
+  /**
+   * 如果第一个调用来了，那么就让这个队列变成一个数组
+   * 以后再有调用，就加入这个数组
+   * 等第一个调用完成了，会循环调用这个数组一遍通知回调
+   */
+  __loading_resolves: Callback1<any>[] | undefined = undefined;
+
   constructor(info: DictOptions<T, V>) {
     super();
     this._data = info.data;
@@ -58,12 +66,34 @@ export class DictImpl<T, V> extends AbstractDict<T, V> implements IDict<T, V> {
   }
 
   async getData(force = false, signal?: AbortSignal): Promise<T[]> {
+    //console.log('DictImpl.getData', this.__create_name);
     if (_.isEmpty(this._cache_data) || force) {
+      // 之前已经有调用在加载了，那么这里就记录一下回调
+      if (this.__loading_resolves) {
+        let wait_queue = this.__loading_resolves;
+        return new Promise<T[]>((resolve) => {
+          wait_queue.push(resolve);
+        });
+      }
+
+      // 标记一下加载
+      this.__loading_resolves = [];
+
+      // 存入缓存
       this._cache_data = await this._data(signal);
       for (let it of this._cache_data) {
         let v = this._get_value(it, -1);
         this._cache_item.set(v, it);
       }
+
+      // 循环处理加载完成的回调
+      let data = _.cloneDeep(this._cache_data);
+      for (let resolve of this.__loading_resolves) {
+        resolve(data);
+      }
+
+      // 清空加载标记
+      this.__loading_resolves = undefined;
     }
     let re = _.cloneDeep(this._cache_data);
     return new Promise<T[]>((resolve) => {
