@@ -4,7 +4,7 @@
   .bar-item-info {
     &.hover-rotate {
       > .item-icon {
-        transition: transform 300ms;
+        transition: transform 500ms;
       }
       &:hover .item-icon {
         transform: scale(1.4) rotate(360deg);
