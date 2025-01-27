@@ -1,11 +1,11 @@
 @use '@site0/tijs/sass/_all.scss' as *;
 
 .ti-grid-fiels-item.part-label {
-  &.as-info-box {
-    background-color: var(--ti-color-border-shallow);
-    padding: var(--ti-gap-s) var(--ti-gap-m);
-    border-radius: var(--ti-measure-r-s);
-  }
+  // &.as-info-box {
+  //   background-color: var(--ti-color-border-shallow);
+  //   padding: var(--ti-gap-s) var(--ti-gap-m);
+  //   border-radius: var(--ti-measure-r-s);
+  // }
   &.as-sep-line {
     height: 0;
     border-bottom: 1px solid var(--ti-color-border-shallow);

@@ -131,7 +131,11 @@ export function useFieldCom(
         return getActivatedComConf(context, val);
       }
     }
-    return getComConf(context, val);
+    let comConf = getComConf(context, val);
+    if (status.readonly) {
+      comConf.readonly = true;
+    }
+    return comConf;
   }
 
   function autoGetCom(status: FieldMode, context: Vars, val?: any): FieldCom {

@@ -16,8 +16,8 @@
     TabChangeEvent,
     TiBlock,
     TiLayoutTabs,
-    useGridLayoutTrack,
     useGridLayoutStyle,
+    useGridLayoutTrack,
     useViewport,
   } from '../../../';
   import { Rect, Vars } from '../../../../_type';
@@ -322,6 +322,7 @@
                 v-if="'block' == pan.type"
                 :title="pan.title"
                 :icon="pan.icon"
+                overflow-mode="fit"
                 v-bind="pan.propsForBlock"
                 @fire="onBlockActionFire"
                 @happen="OnBlockEventHappen" />

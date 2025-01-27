@@ -1,4 +1,4 @@
-import _, { forEach } from 'lodash';
+import _ from 'lodash';
 import { makeFieldUniqKey, parseFieldConverter, Vars } from '../../../_type';
 import { CssUtils, Match } from '../../../core';
 import {
@@ -27,7 +27,8 @@ export function buildOneGridField(
   let uniqKey = makeFieldUniqKey(indexes, field.name, field.uniqKey);
   // 可见性
   let visiblity = useVisibility(field, uniqKey);
-  if (dft.readonly) {
+  let readonly = field.readonly ?? dft.readonly;
+  if (readonly) {
     visiblity.isDisabled = () => true;
   }
 

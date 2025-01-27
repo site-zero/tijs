@@ -118,6 +118,7 @@
       'mainStyle',
       'comType'
     );
+    conf.overflowMode = 'fit';
     conf.className = ['fit-parent'];
     if (props.type) {
       conf.className.push(`is-${props.type}`);

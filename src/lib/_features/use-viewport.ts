@@ -1,14 +1,9 @@
 import { Ref, reactive } from 'vue';
 import { Callback, Rect, Size2D } from '../../_type';
 import { Rects } from '../../core';
+import _ from 'lodash';
 
-export type ViewportFeature = {
-  getViewElement: () => HTMLElement | undefined | null;
-  size: Size2D;
-  updateViewPortSize: () => void;
-  startWatch: () => void;
-  stopWatch: () => void;
-};
+export type ViewportFeature = ReturnType<typeof useViewport>;
 
 export type ViewportOptions = {
   el: Ref<HTMLElement | undefined | null>;
@@ -17,7 +12,7 @@ export type ViewportOptions = {
   onUnmounted?: (callback: Callback) => void;
 };
 
-export function useViewport(options: ViewportOptions): ViewportFeature {
+export function useViewport(options: ViewportOptions) {
   let { el: $main, emit, onMounted, onUnmounted } = options;
   const _viewport = reactive({
     width: 0,
@@ -39,8 +34,10 @@ export function useViewport(options: ViewportOptions): ViewportFeature {
     }
   }
 
+  const debounceUpdateViewPortSize = _.debounce(updateViewPortSize, 100);
+
   const obResize = new ResizeObserver((_entries) => {
-    updateViewPortSize();
+    debounceUpdateViewPortSize();
   });
 
   function startWatch() {

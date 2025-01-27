@@ -268,7 +268,7 @@ export type LayoutItem = LayoutBlock & {
  * - cover: 内容将严格按照块的区域（通常由grid布局来决定），如果超过，则会自动滚动
  * - auto: 内容将会把 块的内容撑开
  */
-export type BlockOverflowMode = 'cover' | 'auto';
+export type BlockOverflowMode = 'cover' | 'fit' | 'auto';
 
 export type BlockProps = CommonProps &
   CssGridItem &

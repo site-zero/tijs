@@ -6,7 +6,7 @@
     useGridLayoutTrack,
     useViewport,
   } from '../../';
-  import { CssUtils } from '../../../core';
+  import { CssUtils, Tmpl } from '../../../core';
   import GFItField from './GFItField.vue';
   import GFItLabel from './GFItLabel.vue';
   import {
@@ -65,7 +65,17 @@
     return GridLayoutStyle.value.mergetStyle(css);
   });
   //-------------------------------------------------
-  const GroupText = computed(() => getFieldTextInfo(props, props.vars));
+  const GroupText = computed(() => {
+    return getFieldTextInfo(props, props.vars);
+  });
+  //-------------------------------------------------
+  const GroupTextTitle = computed(() => {
+    if (GroupText.value.title) {
+      let ctx = { data: props.data, vars: props.vars };
+      return Tmpl.exec(GroupText.value.title, ctx);
+    }
+    return '';
+  });
   //-------------------------------------------------
 </script>
 <template>
@@ -77,7 +87,7 @@
     <TextSnippet
       v-if="props.title || props.comType"
       className="as-group-title"
-      :text="GroupText.title"
+      :text="GroupTextTitle"
       :prefixIcon="props.titleIcon"
       :textType="GroupText.titleType"
       :dynamic="props.dynamic"

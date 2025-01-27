@@ -16,7 +16,7 @@
       !props.title && !props.comType && !props.tip && !props.tipBy;
     return CssUtils.mergeClassName(
       {
-        'as-info-box': !_is_empty,
+        //'as-info-box': !_is_empty,
         'as-sep-line': _is_empty,
       },
       props.className

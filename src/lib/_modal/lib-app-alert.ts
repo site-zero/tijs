@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { openAppModal } from '..';
+import { CssUtils } from '../../';
 import {
   AppModalProps,
   IconInput,
@@ -43,10 +44,11 @@ export async function Alert(
     textCancel: null,
     position: 'center',
     maxWidth: '80vw',
+    minHeight: '200px',
     comType: 'TiHtmlSnippet',
     comConf: {
       content: html,
-      className: options.bodyClass,
+      className: CssUtils.mergeClassName(options.bodyClass, 'fit-parent'),
       style: options.bodyStyle,
     },
     showMask: true,

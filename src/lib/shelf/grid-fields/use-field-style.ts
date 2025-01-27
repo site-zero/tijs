@@ -6,7 +6,7 @@ import {
   TextContentType,
   Vars,
 } from '../../../_type';
-import { I18n, Util } from '../../../core';
+import { I18n, Tmpl, Util } from '../../../core';
 import {
   GridFieldLayoutMode,
   GridFieldsProps,
@@ -395,7 +395,6 @@ export function getFieldTextInfo(
   if (title) {
     title = I18n.text(title);
   }
-
   if (isRequired && isRequired(field.data) && title && !fieldTitleBy) {
     if ('text' == titleType) {
       title = _.escape(title);
