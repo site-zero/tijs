@@ -201,7 +201,6 @@ export function useTable(props: TableProps, emit: TableEmitter) {
     },
 
     OnRowSelect(selection: TableSelection, rowEvent: TableEventPayload) {
-      console.log('OnRowSelect', rowEvent);
       selection.columnIndex = -1;
       // Guard actived
       if (selection.currentId == rowEvent.row.id) {
