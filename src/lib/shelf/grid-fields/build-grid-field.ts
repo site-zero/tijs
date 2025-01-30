@@ -27,10 +27,10 @@ export function buildOneGridField(
   let uniqKey = makeFieldUniqKey(indexes, field.name, field.uniqKey);
   // 可见性
   let visiblity = useVisibility(field, uniqKey);
-  let readonly = field.readonly ?? dft.readonly;
-  if (readonly) {
-    visiblity.isDisabled = () => true;
-  }
+  // let readonly = field.readonly ?? dft.readonly;
+  // if (readonly) {
+  //   visiblity.isDisabled = () => true;
+  // }
 
   // 准备返回值
   let re: GridFieldsStrictAbstractItem = {

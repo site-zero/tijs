@@ -75,9 +75,14 @@ export function joinFieldsList(
 export function joinFieldsTitle(flds: GridFieldsInput[]) {
   let texts = _.map(flds, (fld) => {
     if (fld.title) {
-      let title = Util.selectValue({}, fld.title, {
-        explain: true,
-      });
+      let title: string | undefined;
+      if (_.isFunction(fld.title)) {
+        title = fld.title({ data: {}, vars: {} });
+      } else {
+        title = Util.selectValue({}, fld.title, {
+          explain: true,
+        });
+      }
       if (title) {
         return I18n.text(title);
       }

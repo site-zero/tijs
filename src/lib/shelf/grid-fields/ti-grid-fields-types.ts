@@ -46,7 +46,7 @@ export type GridFieldsFeature = {
   className?: Vars;
   style?: Vars;
   // 标题 & 提示
-  title: string | null | TextArm;
+  title: string | null | TextArm | ((ctx: FieldDynamicContext) => string);
   titleType: TextContentType;
   tip: string | null;
   tipType: TextContentType;
@@ -146,7 +146,7 @@ export type GridFieldsInput = CommonProps &
     //------------------------------------
     // 显示
     //------------------------------------
-    title?: string | TextArm;
+    title?: string | TextArm | ((ctx: FieldDynamicContext) => string);
     titleType?: TextContentType; // 默认 text
     titleIcon?: IconInput;
     titleStyle?: Vars;
@@ -298,6 +298,10 @@ export type GridFieldLayoutMode =
   | 'v-value-icon-prefix'
   | 'v-value-icon-suffix';
 //-----------------------------------------------
+export type FieldDynamicContext = {
+  data: Vars;
+  vars: Vars;
+};
 /**
  * 编译后的严格属性字段
  */
@@ -308,7 +312,7 @@ export type GridFieldsStrictAbstractItem = FieldComProps &
     uniqKey: string;
     index: number;
     race: GridFieldsItemRace;
-    title?: TextArm;
+    title?: TextArm | ((ctx: FieldDynamicContext) => string);
     titleIcon?: IconInput;
     titleType: TextContentType; // 默认 text
     titleStyle?: Vars;

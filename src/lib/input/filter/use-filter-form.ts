@@ -67,9 +67,14 @@ export function getFilterFormConfig(
       let nameTranslator = {} as Record<string, TagNameInfo>;
       for (let fld of Flt.AllFields.value) {
         if (fld.name) {
-          let title = Util.selectValue({}, fld.title, {
-            explain: true,
-          });
+          let title: string | undefined;
+          if (_.isFunction(fld.title)) {
+            title = fld.title({ data: {}, vars: {} });
+          } else {
+            title = Util.selectValue({}, fld.title, {
+              explain: true,
+            });
+          }
           if (title) {
             title = I18n.text(title);
           }

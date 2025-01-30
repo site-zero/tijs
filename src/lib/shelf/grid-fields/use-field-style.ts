@@ -6,8 +6,9 @@ import {
   TextContentType,
   Vars,
 } from '../../../_type';
-import { I18n, Tmpl, Util } from '../../../core';
+import { I18n, Util } from '../../../core';
 import {
+  FieldDynamicContext,
   GridFieldLayoutMode,
   GridFieldsProps,
   GridFieldsStrictAbstractItem,
@@ -385,12 +386,18 @@ export function getFieldTextInfo(
     tip: tip_arms,
     tipType,
   } = field;
-  let ctx = { data: field.data, vars };
+  let ctx: FieldDynamicContext = { data: field.data, vars: vars ?? {} };
 
   // for title
-  let title = Util.selectValue(ctx, title_arms, {
-    explain: true,
-  });
+  let title: string | undefined;
+  if (_.isFunction(title_arms)) {
+    title = title_arms(ctx);
+  } else if (title_arms) {
+    title = Util.selectValue(ctx, title_arms, {
+      explain: true,
+    });
+  }
+
   // auto i18n
   if (title) {
     title = I18n.text(title);
