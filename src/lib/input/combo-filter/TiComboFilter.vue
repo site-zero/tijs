@@ -53,7 +53,7 @@
   //-------------------------------------------------
   function onFilterMajorReset() {
     _major_fields.value = props.filterConfig?.majorFields ?? [];
-    KeepMajor.value.reset();
+    KeepMajor.value.remove();
   }
   //-------------------------------------------------
   function onFilterChange(flt: FilterValue) {

@@ -19,6 +19,7 @@ import {
   LogicType,
   TableColumnAspect,
   TableRowID,
+  TiMatch,
   Vars,
 } from '../../../_type';
 
@@ -111,6 +112,16 @@ export type TableStrictColumn = CommonProps &
   TableColumnAspect & {
     index: number;
     dragIndex: number;
+
+    /**
+     * 指定本列的单元格是否只读，支持 Match
+     */
+    readonly?: TiMatch;
+
+    /**
+     * 指定本列的单元格是否Disable，支持 Match
+     */
+    disabled?: TiMatch;
   };
 
 export type TableSelectEmitInfo = SelectEmitInfo<TableRowID> & {
@@ -170,6 +181,12 @@ export type TableProps = CommonProps &
     defaultCellComConf?: Vars;
     defaultCellActivatedComType?: string;
     defaultCellActivatedComConf?: Vars;
+
+    /**
+     * 判断一个单元格是否是只读的方法
+     */
+    cellReadonly?: any;
+    cellDisabled?: any;
     /*......................................
 
                   Behaviors
@@ -280,7 +297,6 @@ export type TableCellProps = Omit<
   | 'tipIcon'
   | 'candidate'
 > & {
-  disabled?: boolean;
   activated?: boolean;
   editable?: boolean;
 

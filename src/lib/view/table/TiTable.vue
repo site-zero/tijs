@@ -17,8 +17,6 @@
   } from '../../';
   import { Size2D, TableRowID } from '../../../_type';
   import { CssUtils } from '../../../core';
-  import { getLogger } from '../../../core/log/ti-log';
-  import { COM_TYPES } from '../../lib-com-types';
   import TableRow from './TableRow.vue';
   import { buildTableColumns } from './build-table-column';
   import {
@@ -38,8 +36,7 @@
   import { useViewMeasure } from './use-view-measure';
 
   //-------------------------------------------------------
-  const COM_TYPE = COM_TYPES.Table;
-  const log = getLogger(COM_TYPE);
+  const debug = false;
   //-------------------------------------------------------
   const showDebugScrolling = false;
   const showDebugResizing = false;
@@ -241,7 +238,7 @@
   }
   //-------------------------------------------------------
   function onCellChange(changed: TableCellChanged) {
-    log.debug('OnCellChange', changed);
+    if (debug) console.log('OnCellChange', changed);
 
     // 首先通知单元格改动
     emit('cell-change', changed);
@@ -315,7 +312,7 @@
   watch(
     () => props.keepColumns,
     () => {
-      log.debug('keepColumns changed', props.keepColumns);
+      if (debug) console.log('keepColumns changed', props.keepColumns);
       loadColumnSizes(columnSizes, Keep.value);
       _mea.updateMeasure();
     }

@@ -1,9 +1,10 @@
 <script lang="ts" setup>
-  import { computed, ref } from 'vue';
-  import { InputTextProps } from './ti-input-text-types';
-  import { CssUtils, Str } from '../../../core';
   import JSON5 from 'json5';
-  import _ from 'lodash';
+import _ from 'lodash';
+import { computed, ref } from 'vue';
+import { CssUtils, Str } from '../../../core';
+import { InputTextProps } from './ti-input-text-types';
+import { useReadonly } from '../../';
 
   const emit = defineEmits<{
     (eventName: 'change', payload: any): void;
@@ -13,6 +14,9 @@
   const props = defineProps<InputTextProps>();
 
   const hasValue = computed(() => !_.isNil(props.value));
+
+  const _readonly = computed(() => useReadonly(props));
+  const isReadonly = computed(() => _readonly.value.isReadonly(props.value));
 
   const TopClass = computed(() => {
     return CssUtils.mergeClassName(props.className, {
@@ -85,7 +89,7 @@
     :class="TopClass"
     :style="TopStyle"
     spellcheck="false"
-    :readonly="props.readonly"
+    :readonly="isReadonly"
     @change="onTextChange"
     @focus="_focused = true"
     @blur="_focused = false"

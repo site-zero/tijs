@@ -2,9 +2,7 @@ import _ from 'lodash';
 import { EmitAdaptorHandler, EmitAdaptorProps } from '../../_type';
 import { Tmpl } from '../../core';
 
-import { getLogger } from '../../core/log/ti-log';
-
-const log = getLogger('ti.use-emit-adaptor');
+const debug = false;
 
 export type EmitAdaptorOptions = {
   ignoreNativeEvents?: boolean;
@@ -18,7 +16,8 @@ export function useEmitAdaptor(
 ): Record<string, Function> {
   //console.log('-----------useEmitAdaptor', _.get(props, 'name'), props.emitAdaptors);
   let { ignoreNativeEvents = true } = options;
-  log.info(`useEmitAdaptor<${COM_TYPE}>`, _.cloneDeep(props.events));
+  if (debug)
+    console.log(`useEmitAdaptor<${COM_TYPE}>`, _.cloneDeep(props.events));
   let listens = {} as Record<string, Function>;
   if (props.events) {
     for (let eventName of _.keys(props.events)) {
@@ -35,12 +34,19 @@ export function useEmitAdaptor(
             }
           }
           // 路由事件名称
-          log.debug(`👽<${COM_TYPE}>`, `String adaptEmit`, eventName, payload);
+          if (debug)
+            console.log(
+              `👽<${COM_TYPE}>`,
+              `String adaptEmit`,
+              eventName,
+              payload
+            );
           let newEventName = Tmpl.exec(adaptEmit as string, {
             eventName,
             payload,
           });
-          log.debug(`👽<${COM_TYPE}>`, 'newEventName =>', newEventName);
+          if (debug)
+            console.log(`👽<${COM_TYPE}>`, 'newEventName =>', newEventName);
           if (options.handler) {
             options.handler({
               eventName: newEventName,
@@ -66,12 +72,13 @@ export function useEmitAdaptor(
               return;
             }
           }
-          log.debug(
-            `👽<${COM_TYPE}>`,
-            `Customized adaptEmit`,
-            eventName,
-            payload
-          );
+          if (debug)
+            console.log(
+              `👽<${COM_TYPE}>`,
+              `Customized adaptEmit`,
+              eventName,
+              payload
+            );
           customizedAdapt({
             eventName: eventName,
             orginName: eventName,

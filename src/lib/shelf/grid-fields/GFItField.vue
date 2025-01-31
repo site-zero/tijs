@@ -1,8 +1,8 @@
 <script lang="ts" setup>
   import { computed, inject } from 'vue';
-  import { TextSnippet, useFieldCom } from '../../';
+  import { TextSnippet, useFieldCom, useReadonly } from '../../';
   import { ValueChange, getFieldValue } from '../../../_type';
-  import { CssUtils, Util } from '../../../core';
+  import { CssUtils } from '../../../core';
   import {
     FIELD_STATUS_KEY,
     GridFieldsStrictField,
@@ -56,6 +56,21 @@
     getFieldTitleStyle(props, FieldStatus.value)
   );
   //-------------------------------------------------
+  const FieldDynamicContext = computed(() => {
+    return {
+      ...(props.vars ?? {}),
+      uniqKey: props.uniqKey,
+      name: props.name,
+      value: FieldValue.value,
+      data: props.data,
+    };
+  });
+  //-------------------------------------------------
+  const _readonly = computed(() => useReadonly(props));
+  const FieldReadonly = computed(() => {
+    return _readonly.value.isReadonly(FieldDynamicContext.value);
+  });
+  //-------------------------------------------------
   const TitleAlign = computed(() => getFieldTitleAlign(props));
   //-------------------------------------------------
   const FieldText = computed(() => getFieldTextInfo(props, props.vars));
@@ -84,15 +99,15 @@
       value: FieldValue.value,
       data: props.data,
       required,
-      readonly: props.readonly,
+      readonly: FieldReadonly.value,
     };
   });
   //-------------------------------------------------
   const FieldCom = computed(() => {
     let com = useFieldCom(props);
     return com.autoGetCom(
-      { readonly: props.readonly, actived: props.isActived },
-      { value: FieldValue.value, data: props.data, vars: props.vars ?? {} },
+      { readonly: FieldReadonly.value, actived: props.isActived },
+      FieldDynamicContext.value,
       FieldValue.value
     );
   });
@@ -151,13 +166,10 @@
       :activatedComType="props.fieldTitleBy?.activatedComType"
       :activatedComConf="props.fieldTitleBy?.activatedComConf"
       :changeEventName="props.fieldTitleBy?.changeEventName"
-
       :prefixIcon="FieldIcon?.titlePrefixIcon"
       :prefixTip="FieldIcon?.titlePrefixTip"
-      
       :suffixIcon="FieldIcon?.titleSuffixIcon"
       :suffixTip="FieldIcon?.titleSuffixTip"
-      
       :vars="FieldTitleVars"
       @change="onTitleChange" />
     <!--===============: 字段值 :===================-->
@@ -165,7 +177,7 @@
       class="field-part as-value"
       :style="props.fieldValueStyle">
       <component
-        :is="FieldCom.comType"
+        :is="FieldCom.rawCom"
         v-bind="FieldCom.comConf"
         v-on="ListenValueChange" />
     </div>

@@ -9,7 +9,7 @@ type QuickColumnInfo = {
   tip?: string;
   candidate?: boolean;
   readonly?: boolean;
-  disable?: boolean;
+  disabled?: boolean;
 };
 
 //-----------------------------------------------
@@ -62,14 +62,16 @@ function defineObjColumns(featureName: string): ObjColumnsFeature {
     if (col_info.readonly || !editable) {
       re.activatedComType = undefined;
       re.activatedComConf = undefined;
+      re.readonly = true;
     }
 
-    if (col_info.disable) {
+    if (col_info.disabled) {
       if (!re.comType || 'TiLabel' === re.comType) {
         re.comConf.type = 'disable';
       } else {
         re.comConf.disable = true;
       }
+      re.disabled = true;
     }
 
     // 候选字段
@@ -211,7 +213,7 @@ function parseNameColumn(key: string): QuickColumnInfo {
   let re = { candidate } as QuickColumnInfo;
   if (parts[1]) {
     re.readonly = parts[1].indexOf('read') >= 0;
-    re.disable = parts[1].indexOf('disable') >= 0;
+    re.disabled = parts[1].indexOf('disable') >= 0;
   }
 
   // name/title

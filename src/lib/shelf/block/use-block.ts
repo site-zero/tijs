@@ -77,7 +77,7 @@ export function useBlock(props: BlockProps, _options: BlockOptions) {
 
   //
   // 获取控件`
-  let BlockComType = getComType();
+  let BlockComType = getComType().com;
   let BlockComConf = props.comConf || {};
 
   return {

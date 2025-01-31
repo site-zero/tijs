@@ -78,7 +78,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     }
     return text0;
   });
-  const isReadonly = computed(() => _readonly.value.isReadonly());
+  const isReadonly = computed(() => _readonly.value.isReadonly(props.value));
   const isInputReadonly = computed(() => isReadonly.value || !props.canInput);
   //------------------------------------------------
   const emitTimeMap = new Map<BoxEmitTime, boolean>();

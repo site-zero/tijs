@@ -77,7 +77,7 @@ export function resetSizeState(
 ) {
   state.columns = [];
   state.rows = [];
-  Keep.KeepSizes.reset();
+  Keep.KeepSizes.remove();
 }
 
 export function resetShownState(
@@ -85,5 +85,5 @@ export function resetShownState(
   Keep: LayoutGridKeepFeature
 ) {
   state.shown = {};
-  Keep.KeepShown.reset();
+  Keep.KeepShown.remove();
 }

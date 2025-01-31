@@ -74,7 +74,7 @@ export function TextSnippet(
 
     let com = useFieldCom(props);
     let CustomizedCom = com.autoGetCom({}, props.vars ?? { text }, text);
-    let { comType, comConf } = CustomizedCom;
+    let { rawCom: comType, comConf } = CustomizedCom;
     comConf[eventKey] = (val: any) => {
       emit('change', { value: val, oldVal: props.text });
     };

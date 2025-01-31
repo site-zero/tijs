@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { FieldComProps, TiRawCom, Vars } from '../../../_type';
+import { FieldComProps, TiCom, TiRawCom, Vars } from '../../../_type';
 import { Util, tiCheckComponent } from '../../../core';
 export type FieldMode = {
   readonly?: boolean;
@@ -7,7 +7,8 @@ export type FieldMode = {
 };
 
 export type FieldCom = {
-  comType: TiRawCom;
+  rawCom: TiRawCom;
+  comType: TiCom;
   comConf: Vars;
 };
 
@@ -17,13 +18,13 @@ export type FieldCom = {
 
 -------------------------------------------------------*/
 export type FieldComFeature = {
-  getComType: () => TiRawCom;
+  getComType: () => TiCom;
   getComConf: (context: Vars, val?: any) => Vars;
-  getReadonlyComType: () => TiRawCom;
+  getReadonlyComType: () => TiCom;
   getReadonlyComConf: (context: Vars, val?: any) => Vars;
-  getActivatedComType: () => TiRawCom;
+  getActivatedComType: () => TiCom;
   getActivatedComConf: (context: Vars, val?: any) => Vars;
-  autoGetComType: (status: FieldMode) => TiRawCom;
+  autoGetComType: (status: FieldMode) => TiCom;
   autoGetComConf: (status: FieldMode, context: Vars, val?: any) => Vars;
   autoGetCom: (status: FieldMode, context: Vars, val?: any) => FieldCom;
 };
@@ -46,7 +47,7 @@ export function useFieldCom(
   //             Normal Com
   //
   function getComType() {
-    return tiCheckComponent(props.comType || defaultComType).com;
+    return tiCheckComponent(props.comType || defaultComType);
   }
   function getComConf(context: Vars, val?: any): Vars {
     let comConf = _.cloneDeep(props.comConf ?? defaultComConf);
@@ -62,7 +63,7 @@ export function useFieldCom(
   }
 
   function getReadonlyComType() {
-    return tiCheckComponent(props.readonlyComType || defaultComType).com;
+    return tiCheckComponent(props.readonlyComType || defaultComType);
   }
   function getReadonlyComConf(context: Vars, val?: any): Vars {
     let comConf = _.cloneDeep(
@@ -88,7 +89,7 @@ export function useFieldCom(
   }
 
   function getActivatedComType() {
-    return tiCheckComponent(props.activatedComType || 'TiInput').com;
+    return tiCheckComponent(props.activatedComType || 'TiInput');
   }
   function getActivatedComConf(context: Vars, val?: any): Vars {
     let comConf = _.cloneDeep(
@@ -106,7 +107,7 @@ export function useFieldCom(
     return comConf;
   }
 
-  function autoGetComType(status: FieldMode = {}): TiRawCom {
+  function autoGetComType(status: FieldMode = {}) {
     if (status.readonly) {
       if (props.readonlyComType) {
         return getReadonlyComType();
@@ -139,8 +140,10 @@ export function useFieldCom(
   }
 
   function autoGetCom(status: FieldMode, context: Vars, val?: any): FieldCom {
+    let comType = autoGetComType(status);
     return {
-      comType: autoGetComType(status),
+      rawCom: comType.com,
+      comType,
       comConf: autoGetComConf(status, context, val),
     };
   }

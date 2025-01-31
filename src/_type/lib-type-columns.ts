@@ -29,6 +29,16 @@ export type TableInputColumn = CommonProps &
     serializer?: string | Function;
     serialArgs?: any[];
     serialPartial?: InvokePartial;
+
+    /**
+     * 指定本列的单元格是否只读，支持 Match
+     */
+    readonly?:any;
+
+    /**
+     * 指定本列的单元格是否Disable，支持 Match
+     */
+    disabled?: any;
   };
 //-----------------------------------------------
 export type TableColumnAspect = {

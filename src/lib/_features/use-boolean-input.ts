@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { ReadonlyProps, useReadonly } from './use-readonly';
 import { computed } from 'vue';
+import { ReadonlyProps, useReadonly } from './use-readonly';
 
 export type BooleanProps = {
   value?: any;
@@ -53,7 +53,7 @@ export function useBooleanInput(
   }
 
   function emitToggle() {
-    if (Readonly.isReadonly()) {
+    if (Readonly.isReadonly(props.value)) {
       return;
     }
     let I = isTrue(props.value) ? 0 : 1;

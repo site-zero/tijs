@@ -157,15 +157,10 @@
         class="row-indent"
         :style="RowIndentStyle"></div>
       <!--插入单元格控件-->
-      <TableCell
-        v-bind="cell"
-        :rowIndex="props.row.index"
-        :colIndex="i"
-        :data="props.row.rawData"
-        :vars="props.vars"
-        :activated="props.activated && i == props.activedColIndex"
-        :editable="props.editable"
-        @cell-change="emit('cell-change', $event)" />
+      <TableCell v-bind="cell" :rowIndex="props.row.index" :colIndex="i"
+      :data="props.row.rawData" :vars="props.vars" :activated="props.activated
+      && i == props.activedColIndex"" :editable="props.editable"
+      @cell-change="emit('cell-change', $event)" />
     </div>
   </template>
 </template>

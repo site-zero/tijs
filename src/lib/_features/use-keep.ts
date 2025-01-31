@@ -1,6 +1,6 @@
 import JSON5 from 'json5';
 import _ from 'lodash';
-import { Callback1, Vars } from '../../_type';
+import { Vars } from '../../_type';
 import { TiStore } from '../../core';
 /*-------------------------------------------------------
 
@@ -73,7 +73,7 @@ export function useKeep(info?: KeepInfo) {
   }
 
   //------------------------------------------------
-  function reset() {
+  function remove() {
     if (keepAt) {
       keep.remove(keepAt);
     }
@@ -116,7 +116,7 @@ export function useKeep(info?: KeepInfo) {
     load,
     loadObj,
     loadArray,
-    reset,
+    remove,
   };
 }
 

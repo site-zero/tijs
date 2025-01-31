@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { TableProps, TableStrictColumn, useObjColumns } from '../../';
 import { makeFieldUniqKey, parseFieldConverter } from '../../../_type';
-import { I18n, Util } from '../../../core';
+import { I18n, Match, Util } from '../../../core';
 
 export function buildTableColumns(props: TableProps) {
   //console.log('buildTableColumns', props.columns.length);
@@ -28,6 +28,10 @@ export function buildTableColumns(props: TableProps) {
         title = _.upperCase(uniqKey);
       }
 
+      // 单元格状态
+      let readonly = col.readonly ?? props.cellReadonly;
+      let disabled = col.disabled ?? props.cellDisabled;
+
       // 准备列
       let re: TableStrictColumn = {
         uniqKey,
@@ -48,6 +52,10 @@ export function buildTableColumns(props: TableProps) {
 
         candidate,
         dragIndex: candidate ? -1 : dragIndex++,
+
+        // 单元格状态
+        readonly: _.isNil(readonly) ? undefined : Match.parse(readonly, false),
+        disabled: _.isNil(disabled) ? undefined : Match.parse(disabled, false),
 
         // 表格默认控件
         dynamic: col.dynamic,
