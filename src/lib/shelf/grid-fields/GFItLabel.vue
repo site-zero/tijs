@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed } from 'vue';
-  import { TextSnippet } from '../../';
+  import { TiTextSnippet } from '../../';
   import { CssUtils } from '../../../core';
   import { GridFieldsStrictLabel } from './ti-grid-fields-types';
   import { getFieldTextInfo, getGridItemStyle } from './use-field-style';
@@ -35,7 +35,7 @@
     :class="TopClass"
     :style="TopStyle">
     <!--===: 标题 :===-->
-    <TextSnippet
+    <TiTextSnippet
       v-if="props.title || props.comType"
       className="as-label-title"
       :style="props.titleStyle"
@@ -55,7 +55,7 @@
       :prefixIcon="props.titleIcon"
       :vars="props.data" />
     <!--===: 摘要 :===-->
-    <TextSnippet
+    <TiTextSnippet
       v-if="props.tip || props.tipBy"
       className="as-group-title"
       :style="props.tipStyle"

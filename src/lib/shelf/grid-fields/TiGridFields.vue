@@ -3,8 +3,8 @@
   import { computed, onMounted, onUnmounted, provide, ref, watch } from 'vue';
   import {
     RoadblockProps,
-    TextSnippet,
     TiRoadblock,
+    TiTextSnippet,
     useFieldChange,
     useGridLayout,
     useViewport,
@@ -197,7 +197,7 @@
     ref="$el">
     <!--===============: 表单头 :===================-->
     <slot name="head">
-      <TextSnippet
+      <TiTextSnippet
         v-if="props.title"
         className="part-title"
         :class="props.titleClass"
@@ -272,7 +272,7 @@
     </template>
     <!--===============: 表单尾 :===================-->
     <slot name="foot">
-      <TextSnippet
+      <TiTextSnippet
         v-if="props.tip"
         className="part-foot"
         :class="props.tipClass"

@@ -11,7 +11,7 @@
   } from 'vue';
   import { AppEvents, BUS_KEY, BusMsg, Vars } from '../../../_type';
   import { CssUtils } from '../../../core';
-  import { TextSnippet } from '../../../lib';
+  import { TiTextSnippet } from '../../../lib';
   import ItemAsAction from './ItemAsAction.vue';
   import ItemAsFolderGroup from './ItemAsFolderGroup.vue';
   import { buildActionBarItems } from './build-action-bar-items';
@@ -125,7 +125,7 @@
     ref="$root">
     <!--===: Bar Head :===-->
     <slot name="head">
-      <TextSnippet
+      <TiTextSnippet
         v-if="props.head"
         className="bar-head"
         :class="props.head.className"
@@ -179,7 +179,7 @@
     <!-- // end v-for -->
     <!--===: Bar Tail :===-->
     <slot name="tail">
-      <TextSnippet
+      <TiTextSnippet
         v-if="props.tail"
         className="bar-tail"
         :class="props.tail.className"

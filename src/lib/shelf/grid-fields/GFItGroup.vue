@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { computed, onMounted, onUnmounted, ref } from 'vue';
   import {
-    TextSnippet,
+    TiTextSnippet,
     useGridLayoutStyle,
     useGridLayoutTrack,
     useViewport,
@@ -84,7 +84,7 @@
     :class="TopClass"
     :style="TopStyle">
     <!--===============: 组头 :===================-->
-    <TextSnippet
+    <TiTextSnippet
       v-if="props.title || props.comType"
       className="as-group-title"
       :text="GroupTextTitle"
@@ -102,7 +102,7 @@
       :changeEventName="props.changeEventName"
       :vars="props.data" />
     <!--===============: 摘要 :===================-->
-    <TextSnippet
+    <TiTextSnippet
       v-if="props.tip || props.tipBy"
       className="as-group-title"
       :text="GroupText.tip ?? ''"

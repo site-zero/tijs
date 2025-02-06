@@ -4,7 +4,7 @@
   import { ActionBarEvent, TiActionBar } from '../../';
   import { Vars } from '../../../_type';
   import { CssUtils } from '../../../core';
-  import { TextSnippet, TiImage, TiProgressBar } from '../../../lib';
+  import { TiImage, TiProgressBar, TiTextSnippet } from '../../../lib';
   import { useDropping } from '../image/use-dropping';
   import { UploadBarEmitter, UploadBarProps } from './ti-upload-bar-types';
   import { useUploadBar } from './use-upload-bar';
@@ -159,7 +159,7 @@
         </div>
       </div>
       <!--============= Text =============-->
-      <TextSnippet
+      <TiTextSnippet
         class="part-text"
         v-bind="Bar.Text.value" />
       <!--============= Actions =============-->

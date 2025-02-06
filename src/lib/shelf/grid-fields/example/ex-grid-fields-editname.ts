@@ -1,4 +1,4 @@
-import { ComPropExample, IconInput } from '../../../../_type';
+import { ComPropExample } from '../../../../_type';
 import { GridFieldsProps } from '../ti-grid-fields-types';
 
 export default {
@@ -20,19 +20,23 @@ export default {
     maxFieldNameWidth: 120,
     fieldLayoutMode: 'h-wrap',
     defaultFieldTitleBy: {
+      dynamic: true,
+      // explainOptions: {
+      //   evalFunc: false,
+      // },
       comType: 'TiInput',
       comConf: {
         value: '=name',
         format: '=title',
-        prefixIcon: function (payload: any): IconInput | undefined {
-          if (payload.required) {
-            return {
-              type: 'font',
-              className: 'is-error-r',
-              value: 'zmdi-alert-polygon',
-            };
-          }
-        },
+        // prefixIcon: function (payload: any): IconInput | undefined {
+        //   if (payload.required) {
+        //     return {
+        //       type: 'font',
+        //       className: 'is-error-r',
+        //       value: 'zmdi-alert-polygon',
+        //     };
+        //   }
+        // },
       },
     },
     fields: [

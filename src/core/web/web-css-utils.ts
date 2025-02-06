@@ -1,6 +1,13 @@
 import _ from 'lodash';
 import { Str, Util } from '../';
-import { CssSheet, FuncA2, MessageMap, Size2D, StrCaseMode, Vars } from '../../_type';
+import {
+  CssSheet,
+  FuncA2,
+  MessageMap,
+  Size2D,
+  StrCaseMode,
+  Vars,
+} from '../../_type';
 import * as Dom from './web-dom';
 import { AttrFilter } from './web-dom';
 
@@ -458,6 +465,11 @@ export function renderCssRule(css = {}) {
   let list = [] as string[];
   _.forEach(css, (val, key) => {
     if (_.isNull(val) || _.isUndefined(val) || Str.isBlank(val)) return;
+    // CSS 变量
+    if (key.startsWith('--')) {
+      list.push(`${key}:${val}`);
+      return;
+    }
     let pnm = _.kebabCase(key);
     if (/^(opacity|z-index|order)$/.test(pnm)) {
       list.push(`${pnm}:${val}`);

@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { Alert, Confirm, Prompt, openAppModal } from './_modal';
+import { getTipManager } from './_tipbox';
 
 // console.log('ti lib index');
 //
@@ -14,10 +15,12 @@ _.assign(G.Ti, {
   Confirm,
   Prompt,
   openAppModal,
+  getTipManager,
 });
 
 export * from './_features';
 export * from './_modal';
+export * from './_tipbox';
 export * from './_vue';
 export * from './action/all-actions';
 export * from './edit/all-edit';

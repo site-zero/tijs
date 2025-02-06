@@ -123,7 +123,7 @@ export function replace($el: Element, $newEl: Element, keepInnerHTML = false) {
 }
 //----------------------------------------------------
 export type AttrPredicate = {
-  (name: string, value?: string): boolean | string | NameStrValue;
+  (name: string, value?: string): undefined | boolean | string | NameStrValue;
 };
 export type AttrFilter =
   | string
@@ -188,6 +188,9 @@ export function attrs($el: Element, flt: AttrFilter = true) {
   for (let i = 0; i < $el.attributes.length; i++) {
     let { name, value } = $el.attributes[i];
     let fre = filter(name, value);
+    if (!fre) {
+      continue;
+    }
     let key: string | undefined;
     let val: any = value;
     // Just say yes
@@ -328,7 +331,7 @@ export function removeAttrs($el: Element, flt = false) {
   return re;
 }
 //----------------------------------------------------
-export function getData($el: Element, flt = true) {
+export function getData($el: Element, flt: AttrFilter = true) {
   let filter = attrFilter(flt);
   let re = {} as Vars;
   for (let i = 0; i < $el.attributes.length; i++) {
@@ -667,6 +670,30 @@ export function nextUtil<T extends Element>(
     by: (el) => el.nextElementSibling as T,
   });
 }
+
+export function inScope(src: HTMLElement, scope?: HTMLElement) {
+  if (!scope) {
+    return false;
+  }
+  if (src.ownerDocument != scope.ownerDocument) {
+    return false;
+  }
+  let el: HTMLElement | null = src;
+  let inScope = src === scope;
+  if (!inScope) {
+    let body = src.ownerDocument.body;
+    while (el) {
+      if (el === body) break;
+      if (el === scope) {
+        inScope = true;
+        break;
+      }
+      el = el.parentElement;
+    }
+  }
+  return inScope;
+}
+
 //
 // Closest
 //

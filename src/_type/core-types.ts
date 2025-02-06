@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { App, DefineComponent, InjectionKey, Ref } from 'vue';
-import { ActionBarProps, BlockOverflowMode } from '../lib';
+import { ActionBarProps, AppTipSetApi, BlockOverflowMode } from '../lib';
 
 export type DocumentIconType = 'emoji' | 'image/png' | 'image/x-icon';
 /*---------------------------------------------------`
@@ -893,6 +893,8 @@ export type TiAppBus = TiBus<any>;
 
 export const BUS_KEY: InjectionKey<TiAppBus> = Symbol('EVENT_BUS');
 
+export const TIPSET_API: InjectionKey<AppTipSetApi> = Symbol('TIPSET_API');
+
 /**
  *  如果仅仅是名称适配
  */
@@ -1139,15 +1141,7 @@ export type TranName =
   | 'ti-slide-right'
   | 'ti-zoom';
 
-export type PopItemProps = {
-  position?: PopPosition;
-  tranSpeed?: TranSpeed;
-
-  showMask?: boolean;
-  showCloser?: boolean;
-  escToClose?: boolean;
-  clickMaskToClose?: boolean;
-
+export type PopItemMeasure = {
   width?: string;
   height?: string;
   maxWidth?: string;
@@ -1159,6 +1153,16 @@ export type PopItemProps = {
   top?: string;
   bottom?: string;
   overflow?: string;
+};
+
+export type PopItemProps = PopItemMeasure & {
+  position?: PopPosition;
+  tranSpeed?: TranSpeed;
+
+  showMask?: boolean;
+  showCloser?: boolean;
+  escToClose?: boolean;
+  clickMaskToClose?: boolean;
 };
 
 /**
@@ -1249,5 +1253,5 @@ export type DateParseOptions = {
    * 即使时间字符串里包括了时区，也需要强制用选项里的 timezone 覆盖它
    * 当然如果选项是未定义，则不会覆盖
    */
-  overrideTimezone?:boolean;
+  overrideTimezone?: boolean;
 };

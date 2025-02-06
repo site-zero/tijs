@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed, onMounted, onUnmounted, useTemplateRef } from 'vue';
-  import { TextSnippet } from '../../';
+  import { TiTextSnippet } from '../../';
   import { CssUtils, TiButton } from '../../../';
   import { TiProgressBar } from '../../tile/progress-bar/ti-progress-bar-index';
   import { ProcessProps } from './ti-process-types';
@@ -85,7 +85,7 @@
     class="ti-process"
     :class="TopClass"
     :style="TopStyle">
-    <TextSnippet
+    <TiTextSnippet
       v-if="ProcessTitle"
       class="part-title"
       v-bind="ProcessTitle" />

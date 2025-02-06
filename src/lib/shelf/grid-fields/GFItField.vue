@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { computed, inject } from 'vue';
-  import { TextSnippet, useFieldCom, useReadonly } from '../../';
+  import { TiTextSnippet, useFieldCom, useReadonly } from '../../';
   import { ValueChange, getFieldValue } from '../../../_type';
   import { CssUtils } from '../../../core';
   import {
@@ -147,25 +147,16 @@
     :style="TopStyle"
     @mousedown="onFieldMouseDown">
     <!--===============: 字段名 :===================-->
-    <TextSnippet
+    <TiTextSnippet
       v-if="hasTitle"
       class="field-part as-title"
-      :dynamic="props.dynamic"
-      :explain-options="props.explainOptions"
+      v-bind="props.fieldTitleBy"
       :style="FieldTitleStyle"
       :textStyle="props.titleTextStyle"
       :attrs="{ dataAlign: TitleAlign }"
       :text="FieldText.title"
       :textType="FieldText.titleType"
       :autoI18n="false"
-      :comType="props.fieldTitleBy?.comType"
-      :comConf="props.fieldTitleBy?.comConf"
-      :autoValue="props.fieldTitleBy?.autoValue"
-      :readonlyComType="props.fieldTitleBy?.readonlyComType"
-      :readonlyComConf="props.fieldTitleBy?.readonlyComConf"
-      :activatedComType="props.fieldTitleBy?.activatedComType"
-      :activatedComConf="props.fieldTitleBy?.activatedComConf"
-      :changeEventName="props.fieldTitleBy?.changeEventName"
       :prefixIcon="FieldIcon?.titlePrefixIcon"
       :prefixTip="FieldIcon?.titlePrefixTip"
       :suffixIcon="FieldIcon?.titleSuffixIcon"
@@ -182,7 +173,7 @@
         v-on="ListenValueChange" />
     </div>
     <!--==============: 提示信息 :==================-->
-    <TextSnippet
+    <TiTextSnippet
       v-if="hasTip && !FieldIcon.tipAsIcon"
       class="field-part as-tip"
       :style="props.tipStyle"
