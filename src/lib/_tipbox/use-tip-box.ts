@@ -210,7 +210,7 @@ export function drawTipBox(tip: TipTarget): TipInstance | undefined {
       box.dockTo(ref, {
         mode: 'H',
         axis: { x: 'center', y: 'top' },
-        space: { x: 0, y: axis_space },
+        space: { x: 0, y: 0 },
         viewport: win,
         wrapCut: true,
       });
