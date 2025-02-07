@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import { Dom, Point2D } from '../../';
+import { TipInstance } from './lib-tip-types';
 import { AppTipSetApi, useAppTipSet } from './use-app-tipset';
 import { drawTipBox } from './use-tip-box';
 
@@ -82,19 +84,58 @@ export function useTipManager() {
     }
   }
 
+  const _tip_objs = [] as TipInstance[];
+  let _pointer: Point2D = { x: -1, y: -1 };
+
   function watchDocumentBody() {
     if (document.body.getAttribute('tip-watched')) {
       return;
     }
     document.body.addEventListener('mouseover', (ev) => {
+      // 实时保存鼠标位置，以便延迟取消 tip 时进行判断
+      _pointer.x = ev.pageX;
+      _pointer.y = ev.pageY;
+
+      // 释放已有的 tips
+      for (let tipObj of _tip_objs) {
+        if (!tipObj.box.hasPoint(_pointer) && !tipObj.ref.hasPoint(_pointer)) {
+          _.delay(() => {
+            tryEraseTip(tipObj);
+          }, 300);
+        }
+      }
+
+      // 看看是否要开启新的 tips
       let src = ev.target as HTMLElement;
       let tip = getTipByElement(src);
-      //console.log('mouseenter', src.tagName);
+      //console.log('mouseover', src.tagName);
       if (tip) {
-        drawTipBox(tip);
+        let tipObj = drawTipBox(tip);
+        if (tipObj) {
+          _tip_objs.push(tipObj);
+        }
       }
     });
     document.body.setAttribute('tip-watched', 'yes');
+  }
+
+  function tryEraseTip(tipObj: TipInstance) {
+    // 再次确认，提示信息可以被删除
+    if (tipObj.box.hasPoint(_pointer) || tipObj.ref.hasPoint(_pointer)) {
+      return;
+    }
+
+    // 看看转场时间
+    let { conTransform, tr_du, $tipbox } = tipObj;
+    Dom.updateStyle($tipbox, {
+      transform: conTransform,
+      opacity: 0,
+    });
+
+    // 最后移除 tip 的定义和 DOM
+    _.delay(() => {
+      Dom.remove($tipbox);
+    }, tr_du);
   }
 
   // 输出特性

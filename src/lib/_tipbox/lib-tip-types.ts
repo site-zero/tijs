@@ -1,25 +1,65 @@
-import { PopItemMeasure, TextContentType, TranSpeed, Vars } from '../../_type';
+import {
+  AspectSize,
+  LogicType,
+  PopItemMeasure,
+  Rect,
+  TextContentType,
+  TranSpeed,
+  Vars,
+} from '../../_type';
 
-export type TipPosition =
-  | 'left'
-  | 'right'
-  | 'top'
-  | 'bottom'
-  | 'left-top'
-  | 'right-top'
-  | 'bottom-left'
-  | 'bottom-right'
-  | 'x-auto'
-  | 'y-auto';
+/**
+ * 四种原始定位方式
+ *
+ * ```
+ * #########################################
+ * # V-top : 垂直顶部停靠
+ * +----------------------+
+ * | tip xxxxx            |
+ * +----------------------+
+ *       +--------+
+ *       | Ref El |
+ *       +--------+
+ * #########################################
+ * # V-bottom : 垂直底部停靠
+ *       +--------+
+ *       | Ref El |
+ *       +--------+
+ * +----------------------+
+ * | tip xxxxx            |
+ * +----------------------+
+ * #########################################
+ * # H-left : 水平左侧停靠
+ * +----------------------++--------+
+ * | tip xxxxx            || Ref El |
+ * |                      |+--------+
+ * +----------------------+
+ * #########################################
+ * # H-right : 水平右侧停靠
+ * +--------++----------------------+
+ * | Ref El || tip xxxxx            |
+ * +--------+|                      |
+ *           +----------------------+
+ * ```
+ */
+export type TipDockPosition = 'H-left' | 'H-right' | 'V-top' | 'V-bottom';
+
+export type TipDockMode = 'H' | 'V' | TipDockPosition;
 
 type TipAspect = PopItemMeasure & {
-  position?: TipPosition;
+  dockMode?: TipDockMode;
   tranSpeed?: TranSpeed;
-  // H: 水平边, 会放置在目标对象上方，实在放不下，才会放置在目标
-  //    对象下面
-  // V: 垂直边，目标对象在屏幕左侧，就放右边，否则就放左边
-  dockMode?: 'H' | 'V'
+
   selector?: HTMLElement | string;
+
+  // 默认 s
+  fontSize?: AspectSize;
+  // 默认 m
+  padding?: AspectSize;
+  // 默认 s
+  radius?: AspectSize | 'none';
+  // 默认 primary
+  type?: LogicType;
 };
 
 export type TipBoxProps = TipAspect & {
@@ -80,4 +120,14 @@ export type TipBoxProps = TipAspect & {
 
 export type TipTarget = TipBoxProps & {
   target: HTMLElement;
+};
+
+export type TipInstance = {
+  tip: TipTarget;
+  box: Rect;
+  ref: Rect;
+  conTransform: string;
+  tr_du: number;
+  $tipbox: HTMLElement;
+  $tipcon: HTMLElement;
 };

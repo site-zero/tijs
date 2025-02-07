@@ -366,7 +366,8 @@ export type LogicType =
   | 'text'
   | 'number'
   | 'primary'
-  | 'secondary';
+  | 'secondary'
+  | 'tip';
 /**
  * 如果通过 type 来指定控件的颜色，有时候，我们希望
  * 整体背景是主颜色，这时候可以设置 colorMode 为 'box'
