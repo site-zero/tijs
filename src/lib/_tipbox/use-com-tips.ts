@@ -39,7 +39,7 @@ export function useComTips(options: UseComTipsOptions) {
       canDisabled: tip.id ? true : false,
       position: 'y-auto',
       tranSpeed: 'normal',
-    } as TipBoxProps);
+    } as Partial<TipBoxProps>);
 
     _.assign(tip, {
       appId: _app_id,

@@ -40,6 +40,7 @@ export function __get_msg_box_html(options: MsgBoxHtmlOptions) {
       number: 'zmdi-n-1-square',
       primary: 'zmdi-info-outline',
       secondary: 'zmdi-info-outline',
+      tip: 'zmdi-info'
     }[type];
     msgIcon = Icons.parseIcon(icon_str);
   }
