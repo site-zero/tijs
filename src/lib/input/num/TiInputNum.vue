@@ -67,7 +67,7 @@
     if (!str) {
       emit('change', null);
     }
-    console.log('num:change', str);
+    //console.log('num:change', str);
     // 移除分隔符号
     if (props.partSep) {
       str = str.replaceAll(props.partSep, '');

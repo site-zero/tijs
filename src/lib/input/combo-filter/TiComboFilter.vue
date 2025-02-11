@@ -46,9 +46,13 @@
   const TopClass = computed(() => CssUtils.mergeClassName(props.className));
   //-------------------------------------------------
   function onFilterMajorChange(majorKeys: string[]) {
-    _major_fields.value = majorKeys;
-    console.log('onFilterMajorChange', majorKeys);
-    KeepMajor.value.save(_major_fields.value);
+    if (_.isEmpty(majorKeys)) {
+      _major_fields.value = props.filterConfig?.majorFields ?? [];
+      KeepMajor.value.remove();
+    } else {
+      _major_fields.value = majorKeys;
+      KeepMajor.value.save(_major_fields.value);
+    }
   }
   //-------------------------------------------------
   function onFilterMajorReset() {

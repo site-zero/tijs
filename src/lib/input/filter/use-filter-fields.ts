@@ -49,7 +49,11 @@ export function makeFieldsMap(
       }
     }
   }
-  ___join_field(flds);
+  try {
+    ___join_field(flds);
+  } catch (e) {
+    console.warn(e);
+  }
   return map;
 }
 
