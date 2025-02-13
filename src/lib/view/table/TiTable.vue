@@ -60,7 +60,7 @@
     canCheck: true,
     editable: true,
     getId: 'id',
-    columnResizeInTime: 50,
+    columnResizeInTime: 25,
     rowMinHeight: 32,
     rowGap: 1,
     colGap: 1,
