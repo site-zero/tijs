@@ -148,6 +148,13 @@
 <style lang="scss">
   @use '../../../assets/style/_all.scss' as *;
   .ti-tabs-form {
+    @include flex-align-v-nowrap;
+    // 特殊一下指定 part-body
+    > .part-body {
+      overflow: auto;
+      flex: 1 1 auto;
+      height: 20px;
+    }
     // 如果标签之上还有标题，去掉这个分割线
     &.tabs-at-top {
       > .part-title {
