@@ -33,7 +33,7 @@ export type TableInputColumn = CommonProps &
     /**
      * 指定本列的单元格是否只读，支持 Match
      */
-    readonly?:any;
+    readonly?: any;
 
     /**
      * 指定本列的单元格是否Disable，支持 Match
@@ -62,5 +62,5 @@ export type TableColumnAspect = {
 
   // 本列默认初始宽度，如果不指定则采用 Table 整体设定 `colDefaultSize`
   // : 0 表示 `1fr` 均分
-  width?: number
+  width?: number;
 };

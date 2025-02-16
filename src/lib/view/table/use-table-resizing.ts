@@ -3,7 +3,7 @@ import { Dragging, useDragging } from '../../';
 import { Callback, Callback1, FuncA0 } from '../../../_type';
 import { Dom, Num } from '../../../core';
 import { ColResizingState } from './use-table';
-import { keepColumnSizes, TableKeepFeature } from './use-table-keep';
+import { keepColumns, TableKeepFeature } from './use-table-keep';
 
 const debug = false;
 
@@ -16,6 +16,7 @@ export function useTableResizing(
   $main: HTMLElement,
   colResizing: ColResizingState,
   _column_sizes: Ref<Record<string, number>>,
+  _display_column_keys: Ref<string[]>,
   showRowMarker: boolean,
   onDestroy: Callback1<Callback>,
   isColumnResizeInTime: FuncA0<boolean>,
@@ -117,7 +118,7 @@ export function useTableResizing(
       colResizing.left = -1;
       colResizing.colIndex = -1;
       if (Keep.value) {
-        keepColumnSizes(_column_sizes, Keep.value);
+        keepColumns(_column_sizes, _display_column_keys, Keep.value);
       }
     },
   });

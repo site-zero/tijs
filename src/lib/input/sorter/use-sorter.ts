@@ -80,7 +80,7 @@ export function useSorter(props: SorterProps) {
 
   async function onSetupSorterValue(): Promise<SorterValue | undefined> {
     let vals = _.keys(props.value ?? {});
-    console.log(options.value);
+    //console.log(options.value);
     let re = await openAppModal({
       title: 'i18n:ti-sorter-choose',
       type: 'info',

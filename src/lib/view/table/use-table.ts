@@ -142,7 +142,8 @@ export function useTable(props: TableProps, emit: TableEmitter) {
     bindTableResizing: (
       $main: HTMLElement,
       colResizing: ColResizingState,
-      columnSizes: Ref<Record<string, number>>,
+      _column_sizes: Ref<Record<string, number>>,
+      _display_column_keys: Ref<string[]>,
       showRowMarker: boolean,
       onDestroy: Callback1<Callback>,
       Keep: ComputedRef<TableKeepFeature>
@@ -151,7 +152,8 @@ export function useTable(props: TableProps, emit: TableEmitter) {
         useTableResizing(
           $main,
           colResizing,
-          columnSizes,
+          _column_sizes,
+          _display_column_keys,
           showRowMarker,
           onDestroy,
           () => {

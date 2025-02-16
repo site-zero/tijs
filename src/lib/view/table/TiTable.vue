@@ -18,12 +18,13 @@
   import { Size2D, TableRowID } from '../../../_type';
   import { CssUtils } from '../../../core';
   import TableRow from './TableRow.vue';
-  import { buildTableColumns } from './build-table-column';
+  import { buildTableColumnsMap } from './build-table-column';
   import {
     TableCellChanged,
     TableEmitter,
     TableProps,
     TableSelection,
+    TableStrictColumn,
   } from './ti-table-types';
   import {
     ColResizingState,
@@ -32,7 +33,7 @@
   } from './use-table';
   import { TableScrolling, getTableDebugInfo } from './use-table-debug-info';
   import { useTableHeadMenu } from './use-table-head-menu';
-  import { loadColumnSizes, useKeepTable } from './use-table-keep';
+  import { loadColumns, useKeepTable } from './use-table-keep';
   import { useViewMeasure } from './use-view-measure';
 
   //-------------------------------------------------------
@@ -65,7 +66,7 @@
     rowGap: 1,
     colGap: 1,
     changeMode: 'diff',
-    colDefaultWidth: 100,
+    colDefaultWidth: 0,
     data: () => [],
     emptyRoadblock: () => ({
       text: 'i18n:empty-data',
@@ -128,18 +129,55 @@
   //-------------------------------------------------------
   const isInRenderZone = computed(() => useLargeScrolling(scrolling));
   const TopClass = computed(() => CssUtils.mergeClassName(props.className));
-  const TableColumns = computed(() =>
-    buildTableColumns(props, _column_sizes)
-  );
+  //-------------------------------------------------------
+  const _table_column_map = computed(() => buildTableColumnsMap(props));
+  const AllTableColumns = computed(() => {
+    return Array.from(_table_column_map.value.values());
+  });
+  //-------------------------------------------------------
+  const _display_column_keys = ref<string[]>([]);
+  const TableColumns = computed(() => {
+    let re = [] as TableStrictColumn[];
+    // 采用默认
+    if (_.isEmpty(_display_column_keys.value)) {
+      for (let col of _table_column_map.value.values()) {
+        if (!col.candidate) {
+          re.push(col);
+        }
+      }
+    }
+    // 指定了 column key
+    else {
+      for (let key of _display_column_keys.value) {
+        let col = _table_column_map.value.get(key);
+        if (col) {
+          re.push(col);
+        }
+      }
+    }
+    return re;
+  });
+  //-------------------------------------------------------
   const TableData = computed(() => {
     return Table.value.getTableData();
   });
   const hasData = computed(() => TableData.value.length > 0);
+  //-------------------------------------------------------
   const ShowRowMarker = computed(
     () => props.showCheckbox || props.showRowIndex
   );
-  const HeadMenu = computed(() => useTableHeadMenu(selection, Table.value));
-
+  //-------------------------------------------------------
+  const HeadMenu = computed(() =>
+    useTableHeadMenu(
+      selection,
+      Table.value,
+      AllTableColumns,
+      _column_sizes,
+      _display_column_keys,
+      Keep.value
+    )
+  );
+  //-------------------------------------------------------
   const Change = useFieldChange(
     {
       changeMode: props.changeMode,
@@ -150,22 +188,23 @@
   //-------------------------------------------------------
   //                      计算格子的列
   //-------------------------------------------------------
-  const RealN = computed(() => {
-    let N = 0;
-    for (let col of TableColumns.value) {
-      if (!col.candidate) {
-        N += 1;
-      }
-    }
-    return N;
-  });
-  //-------------------------------------------------------
   const MainStyle = computed(() => {
-    let cols = [];
+    // console.log('re-computed MainStyle');
+    let cols = [] as any[];
+    const __push_col_size = function (sz: any) {
+      if (_.isNumber(sz) && sz > 0) {
+        cols.push(`${sz}px`);
+      } else if (_.isString(sz)) {
+        cols.push(sz);
+      } else {
+        cols.push('1fr');
+      }
+    };
+
     // 如果需要显示行头标记列 ...
     if (ShowRowMarker.value) {
       let w = _column_sizes.value['HEAD_MARKER'] ?? '60px';
-      cols.push(w);
+      __push_col_size(w);
     }
     // 每列都需要看看是否被定制了
     for (let col of TableColumns.value) {
@@ -175,14 +214,11 @@
 
       // 0 就表示 `1fr`
       let sz = _column_sizes.value[col.uniqKey] ?? 0;
-      if (_.isNumber(sz)) {
-        cols.push(`${sz}px`);
-      } else {
-        cols.push('1fr');
-      }
+      // console.log('- col:', col.uniqKey, sz, typeof sz);
+      __push_col_size(sz);
     }
+    //console.log('re-computed MainStyle', cols.join(' '));
 
-    //console.log("re-computed MainStyle", cols.join(" "))
     let re = _.assign({}, props.mainStyle, {
       'grid-template-columns': cols.join(' '),
       'grid-auto-rows': `minmax(${props.rowMinHeight - props.rowGap}px, auto)`,
@@ -200,7 +236,7 @@
   //                 虚拟占位行
   //-------------------------------------------------------
   const VirtualRowStyle = computed(() => {
-    let N = RealN.value;
+    let N = TableColumns.value.length;
     // 显示行头标记列，需要凭空为列+1
     if (ShowRowMarker.value) {
       N++;
@@ -315,7 +351,12 @@
     () => props.keepColumns,
     () => {
       if (debug) console.log('keepColumns changed', props.keepColumns);
-      loadColumnSizes(_column_sizes, Keep.value);
+      loadColumns(
+        TableColumns,
+        _column_sizes,
+        _display_column_keys,
+        Keep.value
+      );
       _mea.updateMeasure();
     }
   );
@@ -325,11 +366,12 @@
       $main.value,
       _col_resizing,
       _column_sizes,
+      _display_column_keys,
       ShowRowMarker.value,
       onUnmounted,
       Keep
     );
-    loadColumnSizes(_column_sizes, Keep.value);
+    loadColumns(TableColumns, _column_sizes, _display_column_keys, Keep.value);
     _mea.watchMain();
   });
   //-------------------------------------------------------
@@ -361,11 +403,9 @@
           v-for="(col, i) in TableColumns"
           :key="col.uniqKey">
           <div
-            v-if="!col.candidate"
             class="table-cell as-head"
             :class="Table.getTableHeadClass(selection, col)"
             :col-index="i"
-            :drag-index="col.dragIndex"
             :cols-count="TableColumns.length"
             :col-key="col.uniqKey"
             :col-prev-key="
@@ -379,7 +419,7 @@
               <span class="head-text">{{ col.title || col.name }}</span>
               <!-- 调整列宽的控制柄: 最后一列 -->
               <div
-                v-if="col.dragIndex == RealN - 1"
+                v-if="i == TableColumns.length - 1"
                 class="column-resize-hdl for-self"></div>
             </div>
           </div>

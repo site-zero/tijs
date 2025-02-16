@@ -137,12 +137,11 @@
       ><i class="zmdi zmdi-caret-right"></i><i class="zmdi zmdi-open-in-new"></i
     ></span>
   </div>
-  <!--正式列单元格: 这里面考虑 candidate -->
+  <!--正式列单元格-->
   <template
     v-for="(cell, i) in props.columns"
     :key="cell.uniqKey">
     <div
-      v-if="!cell.candidate"
       class="table-cell as-body"
       :row-id="props.row.id"
       :row-index="props.row.index"

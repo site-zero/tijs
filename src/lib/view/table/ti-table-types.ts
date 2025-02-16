@@ -111,7 +111,6 @@ export type TableStrictColumn = CommonProps &
   AbstractField &
   TableColumnAspect & {
     index: number;
-    dragIndex: number;
 
     /**
      * 指定本列的单元格是否只读，支持 Match

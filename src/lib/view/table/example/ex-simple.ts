@@ -14,6 +14,7 @@ export default {
       columns: [
         {
           name: 'id',
+          width: 320
         },
         {
           name: 'name',

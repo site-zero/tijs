@@ -2,17 +2,12 @@ import _ from 'lodash';
 import { TableProps, TableStrictColumn, useObjColumns } from '../../';
 import { makeFieldUniqKey, parseFieldConverter } from '../../../_type';
 import { I18n, Match, Util } from '../../../core';
-import { Ref } from 'vue';
 
-export function buildTableColumns(
-  props: TableProps,
-  _column_sizes: Ref<Record<string, number>>
-) {
+export function buildTableColumnsMap(props: TableProps) {
   //console.log('buildTableColumns', props.columns.length);
   let _ocs = useObjColumns();
-  let reColumns = [] as TableStrictColumn[];
+  let reColumns = new Map<string, TableStrictColumn>();
   if (props.columns) {
-    let dragIndex = 0;
     for (let i = 0; i < props.columns.length; i++) {
       let ref = props.columns[i];
       let col = _ocs.getColumnBy(ref);
@@ -23,9 +18,6 @@ export function buildTableColumns(
       let uniqKey = makeFieldUniqKey([i], col.name, col.uniqKey);
 
       let candidate = col.candidate ?? false;
-
-      // 提炼出列宽
-      _column_sizes.value[uniqKey] = col.width ?? props.colDefaultWidth ?? 0;
 
       // 列标题
       let title: string;
@@ -58,7 +50,8 @@ export function buildTableColumns(
         tipAlign: col.tipAlign,
 
         candidate,
-        dragIndex: candidate ? -1 : dragIndex++,
+
+        width: col.width ?? props.colDefaultWidth,
 
         // 单元格状态
         readonly: _.isNil(readonly) ? undefined : Match.parse(readonly, false),
@@ -104,7 +97,7 @@ export function buildTableColumns(
         ),
       };
       // 记入列表
-      reColumns.push(re);
+      reColumns.set(uniqKey, re);
     }
   }
 
