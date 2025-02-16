@@ -23,6 +23,9 @@ import {
   Vars,
 } from '../../../_type';
 
+export const KK_DISPLAY_COL_KEYS = '$table$display_column_keys';
+export const HEAD_MARKER = '$table$HEAD_MARKER';
+
 export type TableSelectable = SelectableFeature<TableRowID>;
 
 export type TableRowData = {

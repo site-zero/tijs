@@ -7,17 +7,21 @@ import {
   TransferProps,
 } from '../../../';
 import { TableStrictColumn } from './ti-table-types';
-import { keepColumns, TableKeepFeature } from './use-table-keep';
+import {
+  getDefaultColumnSizes,
+  keepColumns,
+  TableKeepFeature,
+} from './use-table-keep';
 
 export async function doCustomizeColumn(
-  RenderedTableColumns: ComputedRef<TableStrictColumn[]>,
+  AllTableColumns: ComputedRef<TableStrictColumn[]>,
   _column_sizes: Ref<Record<string, number>>,
   _display_column_keys: Ref<string[]>,
   Keep: TableKeepFeature
 ) {
   // 可选的列
   let colOptions = [] as StrOptionItem[];
-  for (let col of RenderedTableColumns.value) {
+  for (let col of AllTableColumns.value) {
     colOptions.push({
       value: col.uniqKey,
       text: col.title ?? col.uniqKey,
@@ -27,7 +31,7 @@ export async function doCustomizeColumn(
   // 已经显示的列
   let keys = _.cloneDeep(_display_column_keys.value);
   if (_.isEmpty(keys)) {
-    for (let col of RenderedTableColumns.value) {
+    for (let col of AllTableColumns.value) {
       if (!col.candidate) {
         keys.push(col.uniqKey);
       }
@@ -48,7 +52,7 @@ export async function doCustomizeColumn(
     handleActions: {
       reset: async (api: AppModelApi) => {
         _display_column_keys.value = [];
-        _column_sizes.value = {};
+        _column_sizes.value = getDefaultColumnSizes(AllTableColumns);
         keepColumns(_column_sizes, _display_column_keys, Keep);
         api.close(false);
       },

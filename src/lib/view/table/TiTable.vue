@@ -20,6 +20,7 @@
   import TableRow from './TableRow.vue';
   import { buildTableColumnsMap } from './build-table-column';
   import {
+    HEAD_MARKER,
     TableCellChanged,
     TableEmitter,
     TableProps,
@@ -203,7 +204,7 @@
 
     // 如果需要显示行头标记列 ...
     if (ShowRowMarker.value) {
-      let w = _column_sizes.value['HEAD_MARKER'] ?? '60px';
+      let w = _column_sizes.value[HEAD_MARKER] ?? '60px';
       __push_col_size(w);
     }
     // 每列都需要看看是否被定制了
@@ -352,7 +353,7 @@
     () => {
       if (debug) console.log('keepColumns changed', props.keepColumns);
       loadColumns(
-        TableColumns,
+        AllTableColumns,
         _column_sizes,
         _display_column_keys,
         Keep.value
@@ -394,7 +395,7 @@
         <div
           v-if="ShowRowMarker"
           class="table-cell as-head as-marker"
-          col-key="HEAD_MARKER"
+          :col-key="HEAD_MARKER"
           @click.stop>
           <TiActionBar v-bind="HeadMenu" />
         </div>
@@ -408,9 +409,7 @@
             :col-index="i"
             :cols-count="TableColumns.length"
             :col-key="col.uniqKey"
-            :col-prev-key="
-              i == 0 ? 'HEAD_MARKER' : TableColumns[i - 1]?.uniqKey
-            "
+            :col-prev-key="i == 0 ? HEAD_MARKER : TableColumns[i - 1]?.uniqKey"
             :title="col.tip">
             <div class="head-cell-con">
               <!-- 调整列宽的控制柄 -->
