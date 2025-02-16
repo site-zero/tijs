@@ -3,7 +3,7 @@ import { Dragging, useDragging } from '../../';
 import { Callback, Callback1, FuncA0 } from '../../../_type';
 import { Dom, Num } from '../../../core';
 import { ColResizingState } from './use-table';
-import { TableKeepFeature } from './use-table-keep';
+import { keepColumnSizes, TableKeepFeature } from './use-table-keep';
 
 const debug = false;
 
@@ -15,7 +15,7 @@ const debug = false;
 export function useTableResizing(
   $main: HTMLElement,
   colResizing: ColResizingState,
-  columnSizes: Ref<number[]>,
+  _column_sizes: Ref<Record<string, number>>,
   showRowMarker: boolean,
   onDestroy: Callback1<Callback>,
   isColumnResizeInTime: FuncA0<boolean>,
@@ -26,7 +26,8 @@ export function useTableResizing(
     let scrollLeft = Num.round(ing.viwportElement?.scrollLeft ?? 0, 100);
     let i = showRowMarker ? colResizing.colIndex + 1 : colResizing.colIndex;
     let colSize = Num.round(colResizing.left + scrollLeft - colLeftInView, 100);
-    columnSizes.value[i] = Math.max(10, colSize);
+    let key = colResizing.colUniqKey;
+    _column_sizes.value[key] = Math.max(10, colSize);
 
     if (debug) {
       console.log(
@@ -58,12 +59,15 @@ export function useTableResizing(
       let isForPrev = Dom.is(ing.target, '.for-prev');
       let $target_cell = Dom.closest(ing.target, '.table-cell.as-head');
       let $head_cells = Dom.findAll('.table-cell.as-head', $view);
+      let colPrevUniqKey = $target_cell!.getAttribute('col-prev-key') ?? '';
+      let colUniqKey = $target_cell!.getAttribute('col-key') ?? '';
 
       // 记录初始的拖动位置
       let colIndex = parseInt($target_cell!.getAttribute('drag-index')!);
       colResizing.colIndex = isForPrev ? colIndex - 1 : colIndex;
       colResizing.activated = true;
       colResizing.left = ing.inview.x;
+      colResizing.colUniqKey = isForPrev ? colPrevUniqKey : colUniqKey;
 
       if (debug)
         console.log(
@@ -78,7 +82,11 @@ export function useTableResizing(
         let colIndex = parseInt(Dom.attr($cell, 'drag-index', -1));
         w = Num.round(w, 100);
         let i = showRowMarker ? colIndex + 1 : colIndex;
-        columnSizes.value[i] = w;
+        let colKey = $cell.getAttribute('col-key');
+        if (!colKey) {
+          throw `Table Resize drag-index: ${colIndex} without col-key`;
+        }
+        _column_sizes.value[colKey] = w;
       }
 
       // 记录列初始的 left
@@ -109,7 +117,7 @@ export function useTableResizing(
       colResizing.left = -1;
       colResizing.colIndex = -1;
       if (Keep.value) {
-        Keep.value.KeepColumns.save(columnSizes.value);
+        keepColumnSizes(_column_sizes, Keep.value);
       }
     },
   });

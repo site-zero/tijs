@@ -2,8 +2,12 @@ import _ from 'lodash';
 import { TableProps, TableStrictColumn, useObjColumns } from '../../';
 import { makeFieldUniqKey, parseFieldConverter } from '../../../_type';
 import { I18n, Match, Util } from '../../../core';
+import { Ref } from 'vue';
 
-export function buildTableColumns(props: TableProps) {
+export function buildTableColumns(
+  props: TableProps,
+  _column_sizes: Ref<Record<string, number>>
+) {
   //console.log('buildTableColumns', props.columns.length);
   let _ocs = useObjColumns();
   let reColumns = [] as TableStrictColumn[];
@@ -19,6 +23,9 @@ export function buildTableColumns(props: TableProps) {
       let uniqKey = makeFieldUniqKey([i], col.name, col.uniqKey);
 
       let candidate = col.candidate ?? false;
+
+      // 提炼出列宽
+      _column_sizes.value[uniqKey] = col.width ?? props.colDefaultWidth ?? 0;
 
       // 列标题
       let title: string;

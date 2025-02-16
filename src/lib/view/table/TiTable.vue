@@ -65,6 +65,7 @@
     rowGap: 1,
     colGap: 1,
     changeMode: 'diff',
+    colDefaultWidth: 100,
     data: () => [],
     emptyRoadblock: () => ({
       text: 'i18n:empty-data',
@@ -102,9 +103,9 @@
   /**
    * 定制每个列的宽高，0 表示这个行是自动 `1fr`
    */
-  const columnSizes: Ref<number[]> = ref([]);
+  const _column_sizes = ref<Record<string, number>>({});
   //-------------------------------------------------------
-  const colResizing = reactive({
+  const _col_resizing = reactive({
     activated: false,
     left: -1,
     colIndex: -1,
@@ -127,7 +128,9 @@
   //-------------------------------------------------------
   const isInRenderZone = computed(() => useLargeScrolling(scrolling));
   const TopClass = computed(() => CssUtils.mergeClassName(props.className));
-  const TableColumns = computed(() => buildTableColumns(props));
+  const TableColumns = computed(() =>
+    buildTableColumns(props, _column_sizes)
+  );
   const TableData = computed(() => {
     return Table.value.getTableData();
   });
@@ -158,28 +161,27 @@
   });
   //-------------------------------------------------------
   const MainStyle = computed(() => {
-    let N = RealN.value;
     let cols = [];
-    // 未定制列的宽度
-    if (_.isEmpty(columnSizes.value)) {
-      if (ShowRowMarker.value) {
-        cols.push(`60px`);
-      }
-      cols.push(`repeat(${N},  1fr)`);
+    // 如果需要显示行头标记列 ...
+    if (ShowRowMarker.value) {
+      let w = _column_sizes.value['HEAD_MARKER'] ?? '60px';
+      cols.push(w);
     }
-    // 采用定制宽度
-    else {
-      if (ShowRowMarker.value) {
-        N += 1;
+    // 每列都需要看看是否被定制了
+    for (let col of TableColumns.value) {
+      if (col.candidate) {
+        continue;
       }
-      for (let i = 0; i < N; i++) {
-        let colSize = _.nth(columnSizes.value, i) ?? '1fr';
-        if (_.isNumber(colSize)) {
-          colSize = `${colSize}px`;
-        }
-        cols.push(colSize);
+
+      // 0 就表示 `1fr`
+      let sz = _column_sizes.value[col.uniqKey] ?? 0;
+      if (_.isNumber(sz)) {
+        cols.push(`${sz}px`);
+      } else {
+        cols.push('1fr');
       }
     }
+
     //console.log("re-computed MainStyle", cols.join(" "))
     let re = _.assign({}, props.mainStyle, {
       'grid-template-columns': cols.join(' '),
@@ -212,7 +214,7 @@
   //-------------------------------------------------------
   const ResizingBarStyle = computed(() => {
     return {
-      left: `${colResizing.left + 1}px`,
+      left: `${_col_resizing.left + 1}px`,
     };
   });
   //-------------------------------------------------------
@@ -313,7 +315,7 @@
     () => props.keepColumns,
     () => {
       if (debug) console.log('keepColumns changed', props.keepColumns);
-      loadColumnSizes(columnSizes, Keep.value);
+      loadColumnSizes(_column_sizes, Keep.value);
       _mea.updateMeasure();
     }
   );
@@ -321,13 +323,13 @@
   onMounted(() => {
     Table.value.bindTableResizing(
       $main.value,
-      colResizing,
-      columnSizes,
+      _col_resizing,
+      _column_sizes,
       ShowRowMarker.value,
       onUnmounted,
       Keep
     );
-    loadColumnSizes(columnSizes, Keep.value);
+    loadColumnSizes(_column_sizes, Keep.value);
     _mea.watchMain();
   });
   //-------------------------------------------------------
@@ -350,6 +352,7 @@
         <div
           v-if="ShowRowMarker"
           class="table-cell as-head as-marker"
+          col-key="HEAD_MARKER"
           @click.stop>
           <TiActionBar v-bind="HeadMenu" />
         </div>
@@ -365,6 +368,9 @@
             :drag-index="col.dragIndex"
             :cols-count="TableColumns.length"
             :col-key="col.uniqKey"
+            :col-prev-key="
+              i == 0 ? 'HEAD_MARKER' : TableColumns[i - 1]?.uniqKey
+            "
             :title="col.tip">
             <div class="head-cell-con">
               <!-- 调整列宽的控制柄 -->
@@ -422,14 +428,14 @@
     <div
       class="resizing-bar"
       :style="ResizingBarStyle"
-      v-if="colResizing.activated"></div>
+      v-if="_col_resizing.activated"></div>
     <!-- vvvvvvvvvvvvv 下面是调试信息，无需在意 vvvvvvvvvvvvv-->
     <div
       class="table-debug-info"
       v-if="showDebug">
       <template v-if="showDebugResizing">
-        {{ columnSizes }} <br />
-        [{{ colResizing.colIndex }}] -> {{ colResizing.left }}
+        {{ _column_sizes }} <br />
+        [{{ _col_resizing.colIndex }}] -> {{ _col_resizing.left }}
       </template>
       <template v-if="showDebugScrolling">
         {{ scrolling.viewport }}

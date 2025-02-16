@@ -156,6 +156,11 @@ export type TableBehaviorsProps = {
    * 如果设置为 false， 则会将 activedCom 全都取消
    */
   editable?: boolean;
+
+  /**
+   * 表格列默认宽度，0 表示 `1fr` 均分
+   */
+  colDefaultWidth?: number;
 };
 
 export type TableProps = CommonProps &

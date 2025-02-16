@@ -44,6 +44,11 @@ export type ColResizingState = {
    * 拖动的列下标（0Base）
    */
   colIndex: number;
+
+  /**
+   * 拖动的列:UniqKey
+   */
+  colUniqKey: string;
 };
 
 /*-------------------------------------------------------
@@ -137,7 +142,7 @@ export function useTable(props: TableProps, emit: TableEmitter) {
     bindTableResizing: (
       $main: HTMLElement,
       colResizing: ColResizingState,
-      columnSizes: Ref<number[]>,
+      columnSizes: Ref<Record<string, number>>,
       showRowMarker: boolean,
       onDestroy: Callback1<Callback>,
       Keep: ComputedRef<TableKeepFeature>

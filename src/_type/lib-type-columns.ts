@@ -57,6 +57,10 @@ export type TableColumnAspect = {
   tipAlign?: CssTextAlign;
   tipIcon?: IconInput;
 
-  // 本字段，是否为候选字段
+  // 本列是否为候选字段
   candidate: boolean;
+
+  // 本列默认初始宽度，如果不指定则采用 Table 整体设定 `colDefaultSize`
+  // : 0 表示 `1fr` 均分
+  width?: number
 };

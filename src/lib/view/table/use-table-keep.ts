@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import { Ref } from 'vue';
 import { KeepFeature, TableKeepProps, makeKeepProps, useKeep } from '../../';
+import { Util } from '../../../core';
 import { getLogger } from '../../../core/log/ti-log';
 import { COM_TYPES } from '../../lib-com-types';
 
@@ -17,21 +18,21 @@ export function useKeepTable(props: TableKeepProps): TableKeepFeature {
   };
 }
 
-export function keepColumnSizes(columnSizes: number[], Keep: TableKeepFeature) {
-  if (!_.isEmpty(columnSizes)) {
-    Keep.KeepColumns.save(columnSizes);
+export function keepColumnSizes(
+  columnSizes: Ref<Record<string, number>>,
+  Keep: TableKeepFeature
+) {
+  if (!_.isEmpty(columnSizes.value)) {
+    Keep.KeepColumns.save(columnSizes.value);
   }
 }
 
 export function loadColumnSizes(
-  columnSizes: Ref<number[]>,
+  columnSizes: Ref<Record<string, number>>,
   Keep: TableKeepFeature
 ) {
-  let col_sizes = Keep.KeepColumns.loadArray();
-  log.debug('col_sizes', col_sizes);
-  if (col_sizes) {
-    columnSizes.value = col_sizes;
-  } else {
-    columnSizes.value = [];
+  let re = Keep.KeepColumns.loadObj();
+  if (_.isPlainObject(re)) {
+    columnSizes.value = _.mapValues(re, (v) => Math.round(v * 1));
   }
 }
