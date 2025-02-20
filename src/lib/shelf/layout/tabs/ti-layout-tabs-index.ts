@@ -1,8 +1,18 @@
-import { App } from 'vue';
+import { App, defineAsyncComponent } from 'vue';
 import { TiComInfo, TiComRace } from '../../../../_type';
 import { COM_TYPES } from '../../../lib-com-types';
-import TiLayoutTabs from './TiLayoutTabs.vue';
+//import TiLayoutTabs from './TiLayoutTabs.vue';
 import { atBottom, atTop } from './example';
+
+const TiLayoutTabs = defineAsyncComponent({
+  loader: () => import('./TiLayoutTabs.vue'),
+  loadingComponent: {
+    template: '<div>Loading AsyncComponent...</div>',
+  },
+  errorComponent: {
+    template: '<div>Fail to async load TiLayoutTabs.vue</div>',
+  },
+});
 
 const en_us = {
   'com-name': 'Tabs Layout',

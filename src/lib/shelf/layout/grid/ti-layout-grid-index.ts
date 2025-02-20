@@ -1,9 +1,18 @@
-import { App } from 'vue';
+import { App, defineAsyncComponent } from 'vue';
 import { TiComInfo, TiComRace } from '../../../../_type';
 import { COM_TYPES } from '../../../lib-com-types';
-import TiLayoutGrid from './TiLayoutGrid.vue';
 import { simple } from './example';
 import i18n from './i18n';
+//import TiLayoutGrid from './TiLayoutGrid.vue';
+const TiLayoutGrid:any = defineAsyncComponent({
+  loader: () => import('./TiLayoutGrid.vue'),
+  loadingComponent: {
+    template: '<div>Loading AsyncComponent...</div>',
+  },
+  errorComponent: {
+    template: '<div>Fail to async load TiLayoutGrid.vue</div>',
+  },
+});
 
 const COM_TYPE = COM_TYPES.LayoutGrid;
 

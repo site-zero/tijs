@@ -1,9 +1,9 @@
 <script setup lang="ts">
   import _ from 'lodash';
   import { Ref, computed, onMounted, reactive, ref, watch } from 'vue';
-  import { DateTime, Tmpl, Util, tiCheckComponent } from '../../../core';
   import { TiComExampleModelTarget, Vars } from '../../../_type';
-  import TiLayoutGrid from '../layout/grid/TiLayoutGrid.vue';
+  import { DateTime, Tmpl, Util, tiCheckComponent } from '../../../core';
+  import TiLayoutGrid from '../all-shelf';
   import PlayConf from './PlayConf.vue';
   import PlayLive from './PlayLive.vue';
   import PlayTabs from './PlayTabs.vue';

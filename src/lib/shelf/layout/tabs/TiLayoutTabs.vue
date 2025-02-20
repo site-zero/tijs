@@ -3,8 +3,6 @@
   import {
     BlockEvent,
     TiBlock,
-    TiLayoutGrid,
-    TiLayoutTabs,
     TiRoadblock,
     TiTabs,
     getLayoutItem,
@@ -20,6 +18,17 @@
     buildLayoutTabsConfig,
     buildOneTab,
   } from './use-layout-tabs';
+  //-------------------------------------------------
+  // const TiLayoutGrid = defineAsyncComponent({
+  //   loader: () => import('../grid/TiLayoutGrid.vue'),
+  //   loadingComponent: {
+  //     template: '<div>Loading AsyncComponent...</div>',
+  //   },
+  //   errorComponent: {
+  //     template: '<div>Fail to async load TilaLayoutGrid.vue</div>',
+  //   },
+  // });
+  import { TiLayoutGrid } from '../grid/ti-layout-grid-index';
   //-------------------------------------------------
   const COM_TYPE = COM_TYPES.LayoutTabs;
   const log = getLogger(COM_TYPE);
@@ -136,7 +145,9 @@
         @change="OnTabChange" />
     </header>
     <!--======== Main Block =======-->
-    <main :style="props.mainStyle" :class="MainClass">
+    <main
+      :style="props.mainStyle"
+      :class="MainClass">
       <div class="tabs-main-block-con">
         <!----------------------------->
         <template v-if="MainTab">

@@ -31,7 +31,7 @@
     _pipe: _pipe.value,
     _dict: _dict.value,
     emit,
-    getElement: () => $el.value!,
+    getElement: () => $el.value! as unknown as HTMLElement,
   });
   //-----------------------------------------------------
   const _prefix = computed(() =>
