@@ -270,7 +270,7 @@ export function parseNameForObjField(key: string) {
     let title = m[3];
     re.title = title;
     if (title) {
-      let m2 = /^([^/]+)(\/([^>]+)(>(.+))?)?/.exec(title);
+      let m2 = /^([^/]*)(\/([^>]+)(>(.+))?)?/.exec(title);
       if (m2) {
         re.name = m2[1] || undefined;
         re.title = m2[3];

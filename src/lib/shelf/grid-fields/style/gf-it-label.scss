@@ -13,8 +13,12 @@
   }
   .as-label-title {
     @include flex-align($ai: center, $ac: center);
+    border-bottom: 2px solid var(--ti-color-border-shallow);
     > .ti-icon:first-child {
       margin-right: 0.3em;
+    }
+    > .as-snippet-text {
+      padding: 0 0.5em;
     }
   }
 }

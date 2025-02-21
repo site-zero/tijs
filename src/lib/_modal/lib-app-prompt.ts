@@ -28,7 +28,7 @@ export type PromptOptions = PopItemProps & {
 
 export async function Prompt(
   msg: string,
-  options: PromptOptions
+  options: PromptOptions = {}
 ): Promise<string> {
   // Build html
   let html = __get_msg_box_html({
