@@ -132,6 +132,7 @@
         :style="props.head.style"
         :prefixIcon="props.head.icon"
         :text="props.head.text ?? ''"
+        :auto-i18n="true"
         :textType="props.head.textType"
         :comType="props.head.comType"
         :comConf="props.head.comConf" />

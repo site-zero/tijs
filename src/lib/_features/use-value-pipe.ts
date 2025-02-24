@@ -75,7 +75,19 @@ export function useValuePipe(props: ValuePipeProps) {
     // Datetime
     re.set('$DT', (v: any) => {
       if (v) {
-        let format = getEnv(ENV_KEYS.DFT_DATETIME_FORMAT) as string;
+        let format = getEnv(
+          ENV_KEYS.DFT_DATETIME_FORMAT,
+          'yyyy-MM-dd HH:mm:ss'
+        ) as string;
+        return DateTime.format(v, { fmt: format }) ?? '';
+      }
+      return '';
+    });
+
+    // Date
+    re.set('$DATE', (v: any) => {
+      if (v) {
+        let format = getEnv(ENV_KEYS.DFT_DATE_FORMAT) as string;
         return DateTime.format(v, { fmt: format }) ?? '';
       }
       return '';

@@ -171,7 +171,7 @@ function defineObjFields(featureName: string) {
     _FIELDS.set(uniqKey, field);
   }
   //---------------------------------------------
-  function setTimeLabelField(uniqKey: string, title: string) {
+  function setDateTimeLabelField(uniqKey: string, title: string) {
     setField(uniqKey, {
       name: uniqKey,
       title,
@@ -192,7 +192,7 @@ function defineObjFields(featureName: string) {
     getFieldList,
     getFieldGroup,
     setField,
-    setTimeLabelField,
+    setDateTimeLabelField,
   };
 }
 //-----------------------------------------------
