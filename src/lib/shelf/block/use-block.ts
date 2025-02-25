@@ -60,15 +60,15 @@ export function useBlock(props: BlockProps, _options: BlockOptions) {
     props.className,
     `overflow-${props.overflowMode ?? 'auto'}`
   );
-  const TopStyle = CssUtils.mergeStyles(
+  const TopStyle = CssUtils.mergeStyles([
     gridStyle,
-    CssUtils.pickGridItemStyle(props)
-  );
+    CssUtils.pickGridItemStyle(props),
+  ]);
   const HeadClass = CssUtils.mergeClassName(props.headClass);
-  const HeadStyle = CssUtils.mergeStyles({}, props.headStyle);
+  const HeadStyle = CssUtils.mergeStyles([{}, props.headStyle]);
 
   const MainClass = CssUtils.mergeClassName(props.mainClass);
-  const MainStyle = CssUtils.mergeStyles({}, props.mainStyle);
+  const MainStyle = CssUtils.mergeStyles([{}, props.mainStyle]);
 
   //
   // 标题动作条

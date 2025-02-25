@@ -37,7 +37,11 @@ const TiUploadBarInfo: TiComInfo = {
     app.component(COM_TYPE, TiUploadBar);
   },
   liveStyle: {
-    width: '380px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100%',
+    padding: '30px',
   },
   defaultProps: 'simple',
   exampleProps: [example.simple, example.inProgress, example.nil],

@@ -45,13 +45,13 @@
     }
   });
   //-------------------------------------------------------
-  function getRowCellClass(colIndex: number) {
+  function getRowCellClass(uniqKey?: string) {
     let isActived = false;
     if (props.activated) {
-      // 如果本行是激活的，那么 -1 表示 marker 列，以及内容列需要判断一下
-      isActived = colIndex < 0 || colIndex == props.activedColIndex;
+      // 如果本行是激活的，那么 undefined 表示 marker 列，以及内容列需要判断一下
+      isActived = !uniqKey || uniqKey == props.activedColUniqKey;
     }
-    let col = props.columns[colIndex];
+    let col = uniqKey ? props.columnMap.get(uniqKey) : undefined;
     return CssUtils.mergeClassName({
       'is-actived': isActived,
       'is-checked': props.checked,
@@ -63,8 +63,8 @@
   //-------------------------------------------------------
   function onRow(eventName: TableRowEventName, event: Event) {
     emit(eventName, {
-      colIndex: -1,
       rowIndex: props.row.index,
+      colUniqKey: null,
       event,
       row: props.row,
     });
@@ -72,12 +72,12 @@
   //-------------------------------------------------------
   function onCell(
     eventName: TableRowEventName,
-    colIndex: number,
+    colUniqKey: string,
     event: Event
   ) {
     emit(eventName, {
-      colIndex,
       rowIndex: props.row.index,
+      colUniqKey,
       event,
       row: props.row,
     });
@@ -105,7 +105,7 @@
   <div
     v-if="props.showRowMarker"
     class="table-row-marker"
-    :class="getRowCellClass(-1)"
+    :class="getRowCellClass()"
     :row-id="props.row.id"
     :row-index="props.row.index"
     @click.stop="onRow('row-select', $event)"
@@ -146,10 +146,10 @@
       :row-id="props.row.id"
       :row-index="props.row.index"
       :col="i"
-      :class="getRowCellClass(i)"
+      :class="getRowCellClass(cell.uniqKey)"
       ref="$cells"
-      @click.stop="onCell('cell-select', cell.index, $event)"
-      @dblclick.stop="onCell('cell-open', cell.index, $event)">
+      @click.stop="onCell('cell-select', cell.uniqKey, $event)"
+      @dblclick.stop="onCell('cell-open', cell.uniqKey, $event)">
       <!--首列，这里有可能插入缩进占位块-->
       <div
         v-if="0 === i && ShowIndentor"
@@ -158,7 +158,7 @@
       <!--插入单元格控件-->
       <TableCell v-bind="cell" :rowIndex="props.row.index" :colIndex="i"
       :data="props.row.rawData" :vars="props.vars" :activated="props.activated
-      && i == props.activedColIndex"" :editable="props.editable"
+      && cell.uniqKey == props.activedColUniqKey"" :editable="props.editable"
       @cell-change="emit('cell-change', $event)" />
     </div>
   </template>

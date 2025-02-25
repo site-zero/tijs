@@ -132,7 +132,7 @@ export function useTable(props: TableProps, emit: TableEmitter) {
     selectable,
     getTableHeadClass: (selection: TableSelection, col: TableStrictColumn) => {
       return {
-        'is-actived-column': selection.columnIndex == col.index,
+        'is-actived-column': selection.uniqKey == col.uniqKey,
         'has-tip': col.tip ? true : false,
       };
     },
@@ -208,7 +208,7 @@ export function useTable(props: TableProps, emit: TableEmitter) {
     },
 
     OnRowSelect(selection: TableSelection, rowEvent: TableEventPayload) {
-      selection.columnIndex = -1;
+      selection.uniqKey = null;
       // Guard actived
       if (selection.currentId == rowEvent.row.id) {
         return;
@@ -247,7 +247,7 @@ export function useTable(props: TableProps, emit: TableEmitter) {
       } else {
         selectable.selectId(selection, rowEvent.row.id);
       }
-      selection.columnIndex = -1;
+      selection.uniqKey = null;
 
       //
       // Prepare the emit info
@@ -265,9 +265,9 @@ export function useTable(props: TableProps, emit: TableEmitter) {
     OnCellSelect(
       selection: TableSelection,
       rowEvent: TableEventPayload,
-      columns: TableStrictColumn[]
+      columnMap: Map<string, TableStrictColumn>
     ) {
-      let { row, colIndex } = rowEvent;
+      let { row, colUniqKey } = rowEvent;
       // console.log(
       //   'OnCellSelect',
       //   rowEvent.rowIndex,
@@ -275,7 +275,9 @@ export function useTable(props: TableProps, emit: TableEmitter) {
       //   'cols：',
       //   columns.length
       // );
-      selection.columnIndex = colIndex ?? -1;
+
+      console.log('colIndex', colUniqKey);
+      selection.uniqKey = colUniqKey;
       //if (!selection.checkedIds.get(row.id)) {
       if (selection.currentId != row.id) {
         let oldCurrentId = _.cloneDeep(selection.currentId);
@@ -293,12 +295,16 @@ export function useTable(props: TableProps, emit: TableEmitter) {
           oldCurrentId
         ) as TableSelectEmitInfo;
 
-        // add Column info
-        if (colIndex && colIndex >= 0) {
-          info.colIndex = colIndex;
-          info.column = columns[colIndex];
-        }
+        info.colIndex = -1;
 
+        // add Column info
+        if (colUniqKey) {
+          let col = columnMap.get(colUniqKey);
+          if (col) {
+            info.colIndex = col.index;
+            info.column = col;
+          }
+        }
         emit('select', info);
       }
     },
@@ -317,12 +323,11 @@ export function useTable(props: TableProps, emit: TableEmitter) {
   };
 }
 
-export function getRowActivedColIndex(
+export function getRowActivedColUniqKey(
   selection: TableSelection,
   row: TableRowData
-): number {
+): string | undefined {
   if (row.id == selection.currentId) {
-    return selection.columnIndex;
+    return selection.uniqKey ?? undefined;
   }
-  return -1;
 }

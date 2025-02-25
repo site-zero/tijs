@@ -1,3 +1,4 @@
+import { InputBoxProps } from '../../../';
 import { TableCellProps, TableProps } from '../ti-table-types';
 import { mockData } from './mock-table-row';
 
@@ -13,8 +14,8 @@ export default {
       defaultCellActivatedComType: 'TiInput',
       defaultCellActivatedComConf: {
         hideBorder: true,
-        autoSelect: false,
-        boxFocused: true,
+        autoSelect: true,
+        autoFocus: true,
       },
       data: mockData(10),
       columns: [
@@ -30,9 +31,9 @@ export default {
           activatedComType: 'TiInput',
           activatedComConf: {
             hideBorder: true,
-            autoSelect: false,
-            boxFocused: true,
-          },
+            autoSelect: true,
+            autoFocus: true,
+          } as InputBoxProps,
         },
         {
           name: 'age',

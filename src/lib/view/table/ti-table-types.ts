@@ -39,7 +39,7 @@ export type TableRowData = {
 };
 
 export type TableSelection = SelectableState<TableRowID> & {
-  columnIndex: number;
+  uniqKey: string | null;
 };
 
 /**
@@ -66,7 +66,7 @@ export type TableCellChanged = FieldChange &
   Omit<TableCellEventPayload, 'event'>;
 
 export type TableEventPayload = {
-  colIndex: number;
+  colUniqKey: string | null;
   rowIndex: number;
   event: Event;
   row: TableRowData;
@@ -272,6 +272,8 @@ export type TableRowProps = CommonProps &
      * 严格模式的列定义
      */
     columns: TableStrictColumn[];
+
+    columnMap: Map<string, TableStrictColumn>;
     /**
      * 传入的行数据对象
      */
@@ -281,7 +283,7 @@ export type TableRowProps = CommonProps &
     checked?: boolean;
     indent?: number;
 
-    activedColIndex?: number;
+    activedColUniqKey?: string;
 
     /**
      * 表格给的回调，用来更新每行的行高

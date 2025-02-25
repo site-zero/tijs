@@ -29,7 +29,7 @@
   } from './ti-table-types';
   import {
     ColResizingState,
-    getRowActivedColIndex,
+    getRowActivedColUniqKey,
     useTable,
   } from './use-table';
   import { TableScrolling, getTableDebugInfo } from './use-table-debug-info';
@@ -98,7 +98,7 @@
     currentId: undefined,
     checkedIds: new Map<TableRowID, boolean>(),
     ids: [],
-    columnIndex: -1,
+    uniqKey: null,
     lastSelectIndex: -1,
   } as TableSelection);
   //-------------------------------------------------------
@@ -437,6 +437,7 @@
         <TableRow
           v-else
           :columns="TableColumns"
+          :columnMap="_table_column_map"
           :showRowMarker="ShowRowMarker"
           :showCheckbox="showCheckbox"
           :showRowIndex="showRowIndex"
@@ -446,12 +447,14 @@
           :checked="Table.selectable.isIDChecked(selection, row.id)"
           :indent="row.indent"
           :editable="props.editable"
-          :activedColIndex="getRowActivedColIndex(selection, row)"
+          :activedColUniqKey="getRowActivedColUniqKey(selection, row)"
           :updateRowHeight="updateRowHeight"
           @row-select="Table.OnRowSelect(selection, $event)"
           @row-check="Table.OnRowCheck(selection, $event)"
           @row-open="Table.OnRowOpen(selection, $event)"
-          @cell-select="Table.OnCellSelect(selection, $event, TableColumns)"
+          @cell-select="
+            Table.OnCellSelect(selection, $event, _table_column_map)
+          "
           @cell-open="Table.OnCellOpen(selection, $event)"
           @cell-change="onCellChange" />
       </template>
