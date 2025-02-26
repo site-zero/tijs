@@ -75,7 +75,10 @@
         @fire="emit('fire', $event)" />
     </header>
     <!--Block:Main-->
-    <div class="block-main-body-wrapper">
+    <div
+      class="block-main-body-wrapper"
+      :class="Block.BodyClass"
+      :style="Block.BodyStyle">
       <main
         :class="Block.MainClass"
         :style="Block.MainStyle">

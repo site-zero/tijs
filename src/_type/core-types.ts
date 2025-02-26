@@ -992,6 +992,9 @@ export type BlockAspectClass = {
   headClass?: any;
   headStyle?: Vars;
 
+  bodyClass?: any;
+  bodyStyle?: Vars;
+
   mainClass?: any;
   mainStyle?: Vars;
 

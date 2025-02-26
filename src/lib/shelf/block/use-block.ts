@@ -67,6 +67,9 @@ export function useBlock(props: BlockProps, _options: BlockOptions) {
   const HeadClass = CssUtils.mergeClassName(props.headClass);
   const HeadStyle = CssUtils.mergeStyles([{}, props.headStyle]);
 
+  const BodyClass = CssUtils.mergeClassName(props.bodyClass);
+  const BodyStyle = CssUtils.mergeStyles([{}, props.bodyStyle]);
+
   const MainClass = CssUtils.mergeClassName(props.mainClass);
   const MainStyle = CssUtils.mergeStyles([{}, props.mainStyle]);
 
@@ -87,6 +90,8 @@ export function useBlock(props: BlockProps, _options: BlockOptions) {
     HeadClass,
     HeadStyle,
     HeadActions,
+    BodyClass,
+    BodyStyle,
     MainClass,
     MainStyle,
     BlockIcon,
