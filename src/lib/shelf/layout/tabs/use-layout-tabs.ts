@@ -5,7 +5,7 @@ import { ComputedRef, Ref } from 'vue';
 import { StrOptionItem } from '../../../../_type';
 import { CssUtils } from '../../../../core';
 import { TabsProps } from '../../../action/tabs/ti-tabs-types';
-import { LayoutTabItem, LayoutTabsProps } from './ti-layout-tabs-types';
+import { LayoutTabItem, TabsLayoutProps } from './ti-layout-tabs-types';
 
 export type TabMain = LayoutTabItem & {
   // uniqKey?: string;
@@ -47,7 +47,7 @@ export function buildOneTab(items: LayoutTabItem[], tabKey?: string) {
 }
 
 export function buildLayoutTabsConfig(
-  props: LayoutTabsProps,
+  props: TabsLayoutProps,
   blocks: LayoutTabItem[]
 ): Omit<TabsProps, 'value'> {
   let options = [] as StrOptionItem[];

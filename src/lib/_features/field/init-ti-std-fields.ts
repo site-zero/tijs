@@ -330,6 +330,7 @@ export function init_ti_std_fields() {
   _ofs.setField('obj.tp', {
     name: 'tp',
     title: 'i18n:wn-obj-tp',
+    visible: { race: 'FILE' },
     comType: 'TiLabel',
     comConf: {
       placeholder: 'i18n:nil',
@@ -343,6 +344,7 @@ export function init_ti_std_fields() {
   _ofs.setField('obj.mime', {
     name: 'mime',
     title: 'i18n:wn-obj-mime',
+    visible: { race: 'FILE' },
     comType: 'TiLabel',
     comConf: {
       placeholder: 'i18n:nil',
@@ -357,6 +359,7 @@ export function init_ti_std_fields() {
   _ofs.setField('obj.len', {
     name: 'len',
     title: 'i18n:wn-obj-len',
+    visible: { race: 'FILE' },
     comType: 'TiLabel',
     comConf: {
       placeholder: 'i18n:nil',
@@ -365,6 +368,7 @@ export function init_ti_std_fields() {
   _ofs.setField('obj.sha1', {
     name: 'sha1',
     title: 'i18n:wn-obj-sha1',
+    visible: { race: 'FILE' },
     comType: 'TiLabel',
     comConf: {
       placeholder: 'i18n:nil',

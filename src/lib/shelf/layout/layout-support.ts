@@ -6,7 +6,7 @@ import {
   LayoutProps,
   LayoutSchema,
   LayoutState,
-  LayoutTabsProps,
+  TabsLayoutProps,
 } from '../../';
 import { CssUtils } from '../../../core';
 
@@ -178,7 +178,7 @@ export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
         classNme: it.tabsClass,
         itemStyle: it.itemStyle,
         itemClass: it.itemClass,
-      } as LayoutTabsProps);
+      } as TabsLayoutProps);
     }
   }
 }

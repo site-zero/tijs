@@ -1,5 +1,5 @@
 import { FormProps } from '../../../../';
-import { LayoutTabsProps } from '../ti-layout-tabs-types';
+import { TabsLayoutProps } from '../ti-layout-tabs-types';
 
 export default {
   name: 'at-top',
@@ -56,5 +56,5 @@ export default {
         },
       },
     },
-  } as LayoutTabsProps,
+  } as TabsLayoutProps,
 };

@@ -1,4 +1,4 @@
-import { LayoutTabsProps } from '../ti-layout-tabs-types';
+import { TabsLayoutProps } from '../ti-layout-tabs-types';
 
 export default {
   name: 'at-bottom',
@@ -54,5 +54,5 @@ export default {
         },
       },
     },
-  } as LayoutTabsProps,
+  } as TabsLayoutProps,
 };

@@ -12,7 +12,7 @@
   import { getLogger } from '../../../../core/log/ti-log';
   import { COM_TYPES } from '../../../lib-com-types';
   import { TabDisplayItem } from '../layout-types';
-  import { LayoutTabsProps, TabChangeEvent } from './ti-layout-tabs-types';
+  import { TabsLayoutProps, TabChangeEvent } from './ti-layout-tabs-types';
   import {
     autoSetCurrentTablKey,
     buildLayoutTabsConfig,
@@ -39,7 +39,7 @@
     (event: '_sub_block', payload: BlockEvent): void;
   }>();
   //-------------------------------------------------
-  const props = withDefaults(defineProps<LayoutTabsProps>(), {
+  const props = withDefaults(defineProps<TabsLayoutProps>(), {
     wrapTabs: false,
     tabItemSpace: 'm',
     tabsAt: 'top',

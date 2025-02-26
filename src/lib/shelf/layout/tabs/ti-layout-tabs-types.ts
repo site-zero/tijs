@@ -10,7 +10,7 @@ import {
 //
 // Tab Layout
 //
-export type LayoutTabsProps = LayoutProps &
+export type TabsLayoutProps = LayoutProps &
   LayoutPanelProps &
   TabsAspect & {
     mainStyle?: Vars;

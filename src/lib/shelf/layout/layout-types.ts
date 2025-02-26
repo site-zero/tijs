@@ -16,7 +16,7 @@ import {
 } from '../../../_type';
 import { KeepInfo } from '../../_features';
 import { LayoutGridProps } from './grid/ti-layout-grid-types';
-import { LayoutTabsProps } from './tabs/ti-layout-tabs-types';
+import { TabsLayoutProps } from './tabs/ti-layout-tabs-types';
 
 export type BlockSchema = ComRef & EmitAdaptorProps;
 
@@ -259,7 +259,7 @@ export type LayoutItem = LayoutBlock & {
   //itemConfig?: Vars; zozoh: 废弃了，采用下面的三个属性分别设置三种块
   propsForBlock?: BlockProps;
   propsForLayoutGrid?: LayoutGridProps;
-  propsForLayoutTabs?: LayoutTabsProps;
+  propsForLayoutTabs?: TabsLayoutProps;
 };
 
 /**
