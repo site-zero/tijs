@@ -24,6 +24,7 @@ const TYPES = {
   'hmaker_site': 'zmdi-globe-alt',
   'html': 'fab-html5',
   'js': 'fab-node-js',
+  'sql': 'fas-file-fragment',
   'json': 'far-file-code',
   'less': 'fab-first-order-alt',
   'md': 'fab-markdown',

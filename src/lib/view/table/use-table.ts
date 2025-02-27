@@ -276,7 +276,7 @@ export function useTable(props: TableProps, emit: TableEmitter) {
       //   columns.length
       // );
 
-      console.log('colIndex', colUniqKey);
+      //console.log('colIndex', colUniqKey);
       selection.uniqKey = colUniqKey;
       //if (!selection.checkedIds.get(row.id)) {
       if (selection.currentId != row.id) {
