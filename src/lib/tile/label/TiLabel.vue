@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { computed, reactive, useTemplateRef, watch } from 'vue';
   import { useDict, usePlaceholder, useValuePipe } from '../../';
+  import { I18n } from '../../../core';
   import { LabelEmitter, LabelProps, LabelState } from './ti-label-types';
   import { useLabel } from './use-label';
   import { useLabelAspect } from './use-label-aspect';
@@ -58,7 +59,11 @@
   );
   //-----------------------------------------------------
   const LabelText = computed(() => {
-    return _state.text || usePlaceholder(props);
+    let re = _state.text || usePlaceholder(props);
+    if (props.autoI18n) {
+      re = I18n.text(re);
+    }
+    return re;
   });
   //-----------------------------------------------------
   // 看看是否满足选项列表的打开条件
