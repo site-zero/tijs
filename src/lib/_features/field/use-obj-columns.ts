@@ -10,6 +10,7 @@ type QuickColumnInfo = {
   candidate?: boolean;
   readonly?: boolean;
   disabled?: boolean;
+  width?: number;
 };
 
 //-----------------------------------------------
@@ -77,6 +78,11 @@ function defineObjColumns(featureName: string): ObjColumnsFeature {
     // 候选字段
     if (col_info.candidate) {
       re.candidate = true;
+    }
+
+    // 指定列宽
+    if (_.isNumber(col_info.width)) {
+      re.width = col_info.width;
     }
 
     // 字段的名称和标题
@@ -179,27 +185,24 @@ export function useObjColumns(name = '_DEFAULT_COLUMN_SET'): ObjColumnsFeature {
 }
 //-----------------------------------------------
 /**
- * 根据下面的规则获取字段，主要通过 `uniqKey` 可以很简明的创建字段
+ * 根据特定规则解析字段键，生成字段信息。
  *
- * ```bash
- * uniqKey = 'type=Hello'
- * > {name:'type', title:'Hello'}
+ * @param key 字段键，格式为 `[~]<_key>[=TITLE][:FLAGS]`，例如 `'type=Hello'`、`'~type:!read'`。
+ * @returns QuickColumnInfo 对象，包含解析出的字段信息。
  *
- * uniqKey = 'type=hello/Hello'
- * > {name:'hello', title:'Hello'}
+ * ### 解析规则
+ * 1. 若以 `~` 开头，`candidate = true`，并移除 `~`。
+ * 2. 按 ':' 分割，第一部分解析 `_key` 和 `TITLE`，第二部分（若存在）检查 'read' 和 'disable' 设置 `readonly` 和 `disabled`。
+ * 3. 第一部分用 `/^([^=]+)(=(.+))?/` 提取 `_key` 和 `TITLE`。
+ * 4. 若有 `TITLE`，用 `/^([^/]+)(\/([^>]+)(>(.+))?)?/` 解析 `name`、`title` 和 `tip`。
  *
- * uniqKey = '~type'
- * > {name:'type', candidate:true}
- *
- * uniqKey = '~type:!read'
- * > {name:'type', readonly:true}
- *
- * uniqKey = '~type:!read!disable'
- * > {name:'type', readonly:true, disable:true}
- *
- * ```
- *
- * @param key 字段键
+ * ### 示例
+ * - `'type=Hello'` → `{ _key: 'type', name: 'Hello' }`
+ * - `'type=hello/Hello'` → `{ _key: 'type', name: 'hello', title: 'Hello' }`
+ * - `'~type'` → `{ _key: 'type', candidate: true }`
+ * - `'~type:!read'` → `{ _key: 'type', candidate: true, readonly: true }`
+ * - `'~type:!read!disable'` → `{ _key: 'type', candidate: true, readonly: true, disabled: true }`
+ * - `'field=name/Title>Tooltip'` → `{ _key: 'field', name: 'name', title: 'Title', tip: 'Tooltip' }`
  */
 function parseNameColumn(key: string): QuickColumnInfo {
   let candidate = false;
@@ -214,6 +217,9 @@ function parseNameColumn(key: string): QuickColumnInfo {
   if (parts[1]) {
     re.readonly = parts[1].indexOf('read') >= 0;
     re.disabled = parts[1].indexOf('disable') >= 0;
+  }
+  if (parts[2]) {
+    re.width = parseInt(parts[2]);
   }
 
   // name/title

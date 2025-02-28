@@ -22,7 +22,7 @@
     return Icons.toIconObj(props.value ?? props.defaultValue);
   });
   const TopClass = computed(() =>
-    CssUtils.mergeClassName(props.className, Icon.value.topClass, () => {
+    CssUtils.mergeClassName(props.className, () => {
       return `is-type-${Icon.value.type}`;
     })
   );

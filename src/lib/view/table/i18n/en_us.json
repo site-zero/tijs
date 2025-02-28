@@ -3,5 +3,11 @@
   "example-300": "300",
   "example-1k": "1K",
   "example-10k": "10K",
-  "example-editable": "Editable"
+  "example-editable": "Editable",
+  "customized": "Customized Fields ...",
+  "reset-all": "Reset Columns",
+  "reset-size": "Reset Width Only",
+  "reset-cols": "Reset Layout Only",
+  "select-all": "Select All",
+  "select-none": "Select None"
 }

@@ -42,7 +42,10 @@ export function loadColumns(
       if (KK_DISPLAY_COL_KEYS == k) {
         _display_column_keys.value = v ?? [];
       } else {
-        sizes[k] = Math.round(v * 1);
+        let sz = Math.round(v * 1);
+        if (sz > 0) {
+          sizes[k] = sz;
+        }
       }
     });
     //console.log('loadColumnSizes', JSON.stringify(_column_sizes.value));

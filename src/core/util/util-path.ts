@@ -138,17 +138,36 @@ export function appendPath(...args: string[]) {
   }
   return re.join('');
 }
-/***
- * Get the parent path
+
+/**
+ * 获取给定路径的父路径。
+ *
+ * @param path 要获取父路径的路径，默认为空字符串。
+ * @param options 可选参数，用于配置父路径的行为。
+ * @param options.closePath 是否返回带尾部斜杠的父路径。默认为 `true`。
+ * @returns 父路径字符串。如果输入路径为空，则返回空字符串。如果路径中不包含斜杠，则返回空字符串。
+ *
+ * @example
+ * ```ts
+ * getParentPath('/a/b/c'); // 返回 '/a/b/'
+ * getParentPath('/a/b/c', { closePath: false }); // 返回 '/a/b'
+ * getParentPath('/a/b/c/'); // 返回 '/a/b/'
+ * getParentPath('/a/b/c/', { closePath: false }); // 返回 '/a/b'
+ * getParentPath('a'); // 返回 ''
+ * getParentPath(''); // 返回 ''
+ * ```
  */
-export function getParentPath(path = '') {
+export function getParentPath(path = '', { closePath = true } = {}) {
   if (!path) return path;
   while (path.endsWith('/')) {
     path = path.substring(0, path.length - 1);
   }
   let pos = path.lastIndexOf('/');
   if (pos < 0) return '';
-  return path.substring(0, pos + 1);
+  if (closePath) {
+    return path.substring(0, pos + 1);
+  }
+  return path.substring(0, pos);
 }
 /***
  * 将两个路径比较，得出相对路径。

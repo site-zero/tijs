@@ -3,5 +3,11 @@
   "example-300": "300条",
   "example-1k": "1千条",
   "example-10k": "1万条",
-  "example-editable": "可编辑"
+  "example-editable": "可编辑",
+  "customized": "定制字段 ...",
+  "reset-all": "重置列宽和布局",
+  "reset-size": "重置列宽",
+  "reset-cols": "重置布局",
+  "select-all": "全部选中",
+  "select-none": "全部取消"
 }

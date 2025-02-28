@@ -16,14 +16,14 @@ export function useTableHeadMenu(
   let items = [
     {
       icon: 'zmdi-check-all',
-      text: 'Select All',
+      text: 'i18n:ti-table-select-all',
       action: () => {
         Table.checkAll(selection);
       },
     },
     {
       icon: 'zmdi-minus',
-      text: 'Select None',
+      text: 'i18n:ti-table-select-none',
       action: () => {
         Table.selectNone(selection);
       },
@@ -31,7 +31,7 @@ export function useTableHeadMenu(
     {},
     {
       icon: 'zmdi-settings',
-      text: 'Customiezed Fields',
+      text: 'i18n:ti-table-customized',
       action: async () => {
         await doCustomizeColumn(
           AllTableColumns,
@@ -52,10 +52,6 @@ export function useTableHeadMenu(
   //   }[rowCheckedStatus];
   return {
     className: 'cover-parent',
-    style: {
-      justifyContent: 'center',
-      alignItem: 'center',
-    },
     barPad: 'none',
     vars: {
       checked: rowCheckedStatus,
@@ -65,7 +61,8 @@ export function useTableHeadMenu(
         icon: 'zmdi-square-o',
         className: 'bg-transparent fit-parent',
         style: {
-          justifyContent: 'center',
+          gridTemplateColumns: '1fr auto',
+          justifyContent: 'flex-start',
           alignItem: 'center',
           borderRadius: '2px',
         },

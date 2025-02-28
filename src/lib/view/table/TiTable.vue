@@ -209,13 +209,9 @@
     }
     // 每列都需要看看是否被定制了
     for (let col of TableColumns.value) {
-      if (col.candidate) {
-        continue;
-      }
-
       // 0 就表示 `1fr`
       let sz = _column_sizes.value[col.uniqKey] ?? 0;
-      // console.log('- col:', col.uniqKey, sz, typeof sz);
+      //console.log('- col:', col.uniqKey, sz, typeof sz);
       __push_col_size(sz);
     }
     //console.log('re-computed MainStyle', cols.join(' '));

@@ -257,9 +257,17 @@ export function init_ti_std_columns() {
   _ofs.addColumn('obj.race', { name: 'race', title: 'i18n:wn-obj-race' });
   _ofs.addColumn('obj.sort', { name: 'sort', title: 'i18n:wn-obj-sort' });
   _ofs.addColumn('obj.title', { name: 'title', title: 'i18n:wn-obj-title' });
+  // ----------------------------- 文件
   _ofs.addColumn('obj.tp', { name: 'tp', title: 'i18n:wn-obj-tp' });
   _ofs.addColumn('obj.mime', { name: 'mime', title: 'i18n:wn-obj-mime' });
-  _ofs.addColumn('obj.len', { name: 'len', title: 'i18n:wn-obj-len' });
+  _ofs.addColumn('obj.len', {
+    name: 'len',
+    title: 'i18n:wn-obj-len',
+    comConf: {
+      valuePiping: '$SIZE_TEXT',
+      align: 'right',
+    } as LabelProps,
+  });
   _ofs.addColumn('obj.sha1', { name: 'sha1', title: 'i18n:wn-obj-sha1' });
   // ----------------------------- 权限
   _ofs.addColumn('obj.d0', { name: 'd0', title: 'D0' });
@@ -276,7 +284,7 @@ export function init_ti_std_columns() {
     comType: 'TiLabel',
     comConf: {
       placeholder: 'i18n:unknown',
-      valuePiping: '$DT',
+      valuePiping: '$TIME_TEXT',
     } as LabelProps,
   });
   _ofs.addColumn('obj.lm', {
@@ -286,7 +294,7 @@ export function init_ti_std_columns() {
     comType: 'TiLabel',
     comConf: {
       placeholder: 'i18n:unknown',
-      valuePiping: '$DT',
+      valuePiping: '$TIME_TEXT',
     } as LabelProps,
   });
   _ofs.addColumn('obj.expi', {
@@ -296,7 +304,7 @@ export function init_ti_std_columns() {
     comType: 'TiLabel',
     comConf: {
       placeholder: 'i18n:unknown',
-      valuePiping: '$DT',
+      valuePiping: '$TIME_TEXT',
     } as LabelProps,
   });
 } // export function init_ti_std_columns() {

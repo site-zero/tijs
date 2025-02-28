@@ -28,7 +28,7 @@ function __get_val(
 ): ValueGetter {
   return (context, options) => {
     let v = _.get(context, path);
-    if (_.isUndefined(v)) {
+    if (_.isNil(v)) {
       return getDft(context, options);
     }
     if (autoJsValue) {
@@ -130,13 +130,15 @@ export class StringExplainer implements Explainer {
   // 解析后的处理函数
   private _func: ValueGetter = (v) => v;
 
+  private _input: string;
+
   // 构造函数，进行编译
   constructor(input: string) {
+    this._input = input;
     this.valueOf(input);
   }
 
   valueOf(input: string): void {
-    //console.log('StringExplainer.valueOf', input);
     //
     // 逃逸
     //

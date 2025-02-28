@@ -92,6 +92,25 @@ export function useValuePipe(props: ValuePipeProps) {
       }
       return '';
     });
+
+    // Size Time
+    re.set('$SIZE_TEXT', (v: any) => {
+      //console.log('SIZE_TEXT', v);
+      if (_.isString(v) && Str.isBlank(v)) {
+        return '';
+      }
+      let len = v * 1;
+      if (_.isNumber(len)) {
+        return Str.sizeText(len);
+      }
+      return `${v}`;
+    });
+
+    // Size Time
+    re.set('$TIME_TEXT', (v: any) => {
+      return DateTime.timeText(v) || `${v}`;
+    });
+
     // customized
     if (props.pipeProcessers) {
       for (let [k, p] of Object.entries(props.pipeProcessers)) {

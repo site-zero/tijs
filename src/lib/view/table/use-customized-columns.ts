@@ -39,7 +39,8 @@ export async function doCustomizeColumn(
   }
 
   let re = await openAppModal({
-    title: 'i18n:ti-table-cutomized',
+    title: 'i18n:ti-table-customized',
+    icon: 'fas-swatchbook',
     type: 'primary',
     position: 'top',
     width: '72%',
@@ -48,11 +49,39 @@ export async function doCustomizeColumn(
     height: '80%',
     clickMaskToClose: true,
     result: keys,
-    actions: [{ text: 'Reset', action: 'reset' }],
+    actions: [
+      {
+        text: 'i18n:ti-table-reset-all',
+        icon: 'fas-clock-rotate-left',
+        action: 'reset:all',
+        items: [
+          {
+            text: 'i18n:ti-table-reset-size',
+            icon: 'fas-ruler-combined',
+            action: 'reset:size',
+          },
+          {
+            text: 'i18n:ti-table-reset-cols',
+            icon: 'fas-table-columns',
+            action: 'reset:cols',
+          },
+        ],
+      },
+    ],
     handleActions: {
-      reset: async (api: AppModelApi) => {
+      'reset:all': async (api: AppModelApi) => {
         _display_column_keys.value = [];
         _column_sizes.value = getDefaultColumnSizes(AllTableColumns);
+        keepColumns(_column_sizes, _display_column_keys, Keep);
+        api.close(false);
+      },
+      'reset:size': async (api: AppModelApi) => {
+        _column_sizes.value = getDefaultColumnSizes(AllTableColumns);
+        keepColumns(_column_sizes, _display_column_keys, Keep);
+        api.close(false);
+      },
+      'reset:cols': async (api: AppModelApi) => {
+        _display_column_keys.value = [];
         keepColumns(_column_sizes, _display_column_keys, Keep);
         api.close(false);
       },

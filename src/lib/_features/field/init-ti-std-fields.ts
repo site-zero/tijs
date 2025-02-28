@@ -363,6 +363,7 @@ export function init_ti_std_fields() {
     comType: 'TiLabel',
     comConf: {
       placeholder: 'i18n:nil',
+      valuePiping: '$SIZE_TEXT',
     } as LabelProps,
   });
   _ofs.setField('obj.sha1', {

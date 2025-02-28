@@ -59,7 +59,7 @@ export async function Prompt(
           selector: '.part-input > input',
           eventName: 'change',
           setup: ($el) => {
-            console.log('prompt setup');
+            //console.log('prompt setup');
             let $input = $el as HTMLInputElement;
             if (!_.isNil(options.value)) {
               $input.value = options.value;
