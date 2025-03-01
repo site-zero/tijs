@@ -1,9 +1,9 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed, reactive, ref, useTemplateRef, watch } from 'vue';
-  import { CssUtils } from '../../../';
+  import { CssUtils } from '../../../core';
+  import { useDropping } from '../../_features';
   import { ImageProps } from './ti-image-types';
-  import { useDropping } from './use-dropping';
   import { ImageState, useImage } from './use-image';
   //-----------------------------------------------------
   defineOptions({
@@ -50,8 +50,8 @@
   //-----------------------------------------------------
   const ImageStyle = computed(() => {
     return CssUtils.toStyle({
-      ...(props.imgStyle ?? {}),
       objectFit: props.objectFit,
+      ...(props.imgStyle ?? {}),
     });
   });
   //-----------------------------------------------------

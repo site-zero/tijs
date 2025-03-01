@@ -5,7 +5,7 @@
   import { Vars } from '../../../_type';
   import { CssUtils } from '../../../core';
   import { TiImage, TiProgressBar, TiTextSnippet } from '../../../lib';
-  import { useDropping } from '../image/use-dropping';
+  import { useDropping } from '../../_features';
   import { UploadBarEmitter, UploadBarProps } from './ti-upload-bar-types';
   import { useUploadBar } from './use-upload-bar';
   //-----------------------------------------------------

@@ -6,6 +6,7 @@ export * from './use-dict';
 export * from './use-display-text';
 export * from './use-docking';
 export * from './use-dragging';
+export * from './use-dropping';
 export * from './use-grid-layout';
 export * from './use-keep';
 export * from './use-large-scrolling';

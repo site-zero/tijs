@@ -2,6 +2,7 @@
 
 .ti-thumb {
   position: relative;
+  line-height: 1.2em;
   @include flex-align-v-nowrap;
   @mixin thumb_text_size($prefix, $sz) {
     &[#{$prefix}-size='#{$sz}'] > .part-#{$prefix} {
@@ -114,7 +115,7 @@
   .part-progress {
     position: absolute;
     inset: 0;
-    padding: .5em;
+    padding: 0.5em;
     background-color: var(--ti-color-mask-thin);
     @include flex-center;
   }
