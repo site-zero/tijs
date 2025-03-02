@@ -2,15 +2,21 @@ import { App } from 'vue';
 import { TiComInfo, TiComRace } from '../../../_type';
 import { COM_TYPES } from '../../lib-com-types';
 import TiIcon from './TiIcon.vue';
-import { IconProps } from './icon-props';
+import { IconProps } from './ti-icon-types';
 
 const en_us = {
   'com-name': 'Icon',
+  'example-simple-icon': 'Simple',
+  'example-color-icon': 'Colorized',
+  'example-color-icon-val': 'Colorized by Value',
+  'example-image-icon': 'Image',
+  'example-svg-icon': 'SVG',
 };
 const zh_cn = {
   'com-name': '图标',
   'example-simple-icon': '简单图标',
   'example-color-icon': '颜色图标',
+  'example-color-icon-val': '通过值设置颜色',
   'example-image-icon': '图片图标',
   'example-svg-icon': 'SVG图标',
 };
@@ -48,6 +54,19 @@ const TiIconInfo: TiComInfo = {
         className: 's128',
         value: 'fas-snowflake',
         color: '#F00',
+        opacity: 0.8,
+      } as IconProps,
+    },
+    {
+      name: 'color-icon-val',
+      text: 'i18n:ti-icon-example-color-icon-val',
+      comConf: {
+        className: 's128',
+        value: {
+          type:'font',
+          
+          value: 'fas-snowflake',
+        },
         opacity: 0.8,
       } as IconProps,
     },

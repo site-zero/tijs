@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { ComputedRef } from 'vue';
 import { FuncSet, IconObj, Vars } from '../../../_type';
 import { CssUtils, colorToStr } from '../../../core';
-import { IconProps } from './icon-props';
+import { IconProps } from './ti-icon-types';
 
 export function getIconStyle(props: IconProps, icon: ComputedRef<IconObj>) {
   // 通过 props 获取的属性

@@ -186,6 +186,7 @@ export function toIconObj(val?: IconInput): IconObj {
     let icon = parseIcon(val.value);
     icon.topClass = val.className;
     icon.style = val.style;
+    
     return icon;
   }
   return val;
@@ -226,6 +227,7 @@ export function parseIcon(val: IconInput, dft?: string | IconObj): IconObj {
       else {
         icon.className = m[1] + ' ' + val;
       }
+      
     }
     // Default as image
     else {

@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { computed } from 'vue';
   import { CssUtils, Icons } from '../../../core';
-  import { IconProps } from './icon-props';
+  import { IconProps } from './ti-icon-types';
   import { getIconStyle } from './use-icon';
   defineOptions({
     name: 'TiIcon',

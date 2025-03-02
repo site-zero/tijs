@@ -164,7 +164,8 @@ export type IconType = 'font' | 'image' | 'emoji';
 export type IconObj = {
   type: IconType;
   src?: string; // for image icon
-  className?: any; // for font icon
+  logicType?: LogicType; // for font icon
+  className?: string; // for font icon
   value?: string; // for emojie
   style?: Vars; // font/image container style
   topClass?: any;
