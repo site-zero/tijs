@@ -601,6 +601,8 @@ export interface Explainer {
   explain: { (context: Vars, options: ExplainOptions): any };
 }
 
+export type ValueProcesser = (input: any, context: Vars) => string;
+
 /*---------------------------------------------------
 
                 接口

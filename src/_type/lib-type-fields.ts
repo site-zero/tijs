@@ -419,7 +419,7 @@ export type ToIntegerOptions = {
   border?: [boolean, boolean];
 };
 
-function toInteger(input: any, options: ToIntegerOptions = {}) {
+export function anyToInteger(input: any, options: ToIntegerOptions = {}) {
   let { mode = 'round', dft = -1, range = [], border = [true, true] } = options;
   let n = INT_CONVERTERS[mode](input);
   // Apply the default
@@ -454,12 +454,16 @@ function toInteger(input: any, options: ToIntegerOptions = {}) {
   return n;
 }
 
+function toInteger(input: any) {
+  return anyToInteger(input);
+}
+
 export type ToFloatOptions = {
   precision?: number;
   dft?: number;
 };
 
-function toFloat(input: any, options: ToFloatOptions = {}) {
+function anyToFloat(input: any, options: ToFloatOptions = {}) {
   let { precision = 2, dft = NaN } = options;
   //console.log("toFloat", val, precision, dft)
   if (_.isNil(input)) {
@@ -475,6 +479,11 @@ function toFloat(input: any, options: ToFloatOptions = {}) {
   }
   return n;
 }
+
+function toFloat(input: any) {
+  return anyToFloat(input);
+}
+
 function toBoolean(input: any) {
   if (false == input) {
     return false;
@@ -538,7 +547,7 @@ export type FieldComProps = ComRef & {
   /**
    * 当 dynamic 为 true 时，这里可以指定解释字段的选项
    */
-  explainOptions?:ExplainOptions;
+  explainOptions?: ExplainOptions;
 
   /**
    * 动态解释字段时，默认上下文就是 data

@@ -1,10 +1,10 @@
 import _ from 'lodash';
 import { computed } from 'vue';
-import { StrCaseMode, Vars } from '../../_type';
-import { Bank, DateTime, ENV_KEYS, getEnv, Str } from '../../core';
+import { StrCaseMode, ValueProcesser, Vars } from '../../_type';
+import { Str } from '../../core';
+import { getDefaultValPipes } from './val-pipes/dft-val-pipes';
 
 export type ValuePipeFeature = ReturnType<typeof useValuePipe>;
-export type ValueProcesser = (input: any, context: Vars) => string;
 
 export type ValuePipeProps = {
   /**
@@ -54,62 +54,16 @@ export function useValuePipe(props: ValuePipeProps) {
    */
   function __prepare_processor_map() {
     let re = new Map<string, ValueProcesser>();
-    // trime
-    if (props.trimed) {
-      re.set('$TRIM', (v: any) => {
-        return _.trim(v);
-      });
-    }
+    // Default
+    let dft = getDefaultValPipes();
+    _.forEach(dft, (v, k) => {
+      re.set(k, v);
+    });
+    
     // case
     if (props.valueCase) {
       re.set('$CASE', Str.getCaseFunc(props.valueCase));
     }
-    // Float 1-6
-    for (let i = 1; i <= 6; i++) {
-      re.set(`$F${i}`, (v: any) => {
-        return Bank.toBankText(v, {
-          decimalPlaces: i,
-        });
-      });
-    }
-    // Datetime
-    re.set('$DT', (v: any) => {
-      if (v) {
-        let format = getEnv(
-          ENV_KEYS.DFT_DATETIME_FORMAT,
-          'yyyy-MM-dd HH:mm:ss'
-        ) as string;
-        return DateTime.format(v, { fmt: format }) ?? '';
-      }
-      return '';
-    });
-
-    // Date
-    re.set('$DATE', (v: any) => {
-      if (v) {
-        let format = getEnv(ENV_KEYS.DFT_DATE_FORMAT) as string;
-        return DateTime.format(v, { fmt: format }) ?? '';
-      }
-      return '';
-    });
-
-    // Size Time
-    re.set('$SIZE_TEXT', (v: any) => {
-      //console.log('SIZE_TEXT', v);
-      if (_.isString(v) && Str.isBlank(v)) {
-        return '';
-      }
-      let len = v * 1;
-      if (_.isNumber(len)) {
-        return Str.sizeText(len);
-      }
-      return `${v}`;
-    });
-
-    // Size Time
-    re.set('$TIME_TEXT', (v: any) => {
-      return DateTime.timeText(v) || `${v}`;
-    });
 
     // customized
     if (props.pipeProcessers) {
