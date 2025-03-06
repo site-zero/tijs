@@ -244,7 +244,6 @@ export function init_ti_std_fields() {
     } as LabelProps,
     activatedComType: 'TiInput',
     activatedComConf: {
-      prefixIconFor: 'clear',
       autoSelect: true,
       autoFocus: true,
       placeholder: '=data.nm',
@@ -261,7 +260,7 @@ export function init_ti_std_fields() {
     } as LabelProps,
     activatedComType: 'TiInput',
     activatedComConf: {
-      autoSelect: true,
+      autoSelect: false,
       autoFocus: true,
     } as InputBoxProps,
   });

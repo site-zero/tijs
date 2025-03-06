@@ -897,7 +897,7 @@ export type TiAppBus = TiBus<any>;
 
 export const BUS_KEY: InjectionKey<TiAppBus> = Symbol('EVENT_BUS');
 
-export const TIPSET_API: InjectionKey<AppTipSetApi> = Symbol('TIPSET_API');
+export const TI_TIPS_API: InjectionKey<AppTipSetApi> = Symbol('TIPSET_API');
 
 /**
  *  如果仅仅是名称适配

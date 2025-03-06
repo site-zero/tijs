@@ -29,12 +29,12 @@
   const TopStyle = computed(() =>
     CssUtils.mergeStyles([
       {},
-      props.style,
       CssUtils.toStyle({
         width: props.width,
         height: props.height,
         opacity: props.opacity,
       }),
+      props.style,
     ])
   );
   const IconStyle = computed(() => getIconStyle(props, Icon));

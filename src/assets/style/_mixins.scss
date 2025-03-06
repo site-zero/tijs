@@ -277,6 +277,8 @@ $BARLINE: 1px;
   @include __color_by_name(disable);
   @include __color_by_name(text);
   @include __color_by_name(number);
+  @include __color_by_name(primary);
+  @include __color_by_name(secondary);
 }
 
 //-------------------------------------------------------------

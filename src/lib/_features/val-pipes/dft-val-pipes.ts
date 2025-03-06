@@ -68,6 +68,9 @@ export function getDefaultValPipes(): Record<string, ValueProcesser> {
       return DateTime.timeText(v) || `${v}`;
     },
     //----------------------------------------------
+    /**
+     * 用于处理敏感信息的处理器。 譬如密码、身份证号等。
+     */
     $DESENS: (v: any) => {
       if (!v) {
         return '';
