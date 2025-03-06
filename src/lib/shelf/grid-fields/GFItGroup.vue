@@ -133,7 +133,8 @@
             :is-actived="fld.uniqKey == props.activedUniqKey"
             @name-change="emit('name-change', $event)"
             @value-change="emit('value-change', $event)"
-            @field-active="emit('field-active', $event)" />
+            @field-actived="emit('field-actived', $event)"
+            @field-inactived="emit('field-inactived', $event)" />
           <!------[:Group:]---------->
           <GFItGroup
             v-else-if="'group' == fld.race"

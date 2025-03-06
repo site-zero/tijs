@@ -83,7 +83,8 @@ export function useSorter(props: SorterProps) {
     //console.log(options.value);
     let re = await openAppModal({
       title: 'i18n:ti-sorter-choose',
-      type: 'info',
+      icon: "fas-arrow-up-wide-short",
+      type: props.colorType ?? 'primary',
       position: 'top',
       width: '72%',
       minWidth: '800px',

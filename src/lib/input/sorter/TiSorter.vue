@@ -10,7 +10,6 @@
   }>();
   //-----------------------------------------------------
   const props = withDefaults(defineProps<SorterProps>(), {
-    colorType: 'info',
     canSetup: true,
   });
   //-----------------------------------------------------

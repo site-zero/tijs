@@ -135,17 +135,13 @@
     });
   }
   //-------------------------------------------------
-  function onFieldMouseDown() {
-    emit('field-active', props.uniqKey);
-  }
-  //-------------------------------------------------
 </script>
 <template>
   <div
     class="ti-grid-fiels-item part-field"
     :class="TopClass"
     :style="TopStyle"
-    @mousedown="onFieldMouseDown">
+    @mousedown="emit('field-actived', props.uniqKey)">
     <!--===============: 字段名 :===================-->
     <TiTextSnippet
       v-if="hasTitle"
@@ -170,7 +166,9 @@
       <component
         :is="FieldCom.rawCom"
         v-bind="FieldCom.comConf"
-        v-on="ListenValueChange" />
+        v-on="ListenValueChange"
+        @blur="emit('field-inactived', props.uniqKey)"
+        @focus="if (!props.isActived) emit('field-actived', props.uniqKey);" />
     </div>
     <!--==============: 提示信息 :==================-->
     <TiTextSnippet

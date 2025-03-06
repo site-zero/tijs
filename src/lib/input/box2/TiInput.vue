@@ -252,6 +252,19 @@
     _box.value.clearOptionsData();
   }
   //-----------------------------------------------------
+  watch(
+    () => _box.value.isFocused.value,
+    (focused, oldVal) => {
+      if (focused != oldVal || _.isUndefined(oldVal)) {
+        if (focused) {
+          emit('focus');
+        } else {
+          emit('blur');
+        }
+      }
+    }
+  );
+  //-----------------------------------------------------
   // 这个监控器，监控 value 的改动，如果 value 变化
   // 会导致 useInputBox2 重新计算，因此其内部 _focused 状态会变成 false
   // 而 _options_data 会立刻被变成 undefined

@@ -17,7 +17,6 @@
   }>();
   //-----------------------------------------------------
   const props = withDefaults(defineProps<TagsProps>(), {
-    defaultTagType: 'text',
     placeholder: 'i18n:nil-content',
     autoI18n: true,
     valueIsMatcher: undefined,

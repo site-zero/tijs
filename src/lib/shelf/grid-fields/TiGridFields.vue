@@ -147,9 +147,17 @@
   }
   //-------------------------------------------------
   function onFieldActived(uniqKey: string) {
-    _.delay(() => {
-      _actived_uniqKey.value = uniqKey;
-    }, 10);
+    // _.delay(() => {
+    //   _actived_uniqKey.value = uniqKey;
+    // }, 10);
+    _actived_uniqKey.value = uniqKey;
+  }
+  //-------------------------------------------------
+  function onFieldInactived(uniqKey: string) {
+    _actived_uniqKey.value = uniqKey;
+    if (_actived_uniqKey.value == uniqKey) {
+      _actived_uniqKey.value = undefined;
+    }
   }
   //-------------------------------------------------
   // const obResize = new ResizeObserver((_entries) => {
@@ -242,7 +250,8 @@
               :is-actived="fld.uniqKey == _actived_uniqKey"
               @name-change="emit('name-change', $event)"
               @value-change="onValueChange"
-              @field-active="onFieldActived" />
+              @field-actived="onFieldActived"
+              @field-inactived="onFieldInactived" />
             <!------[:Group:]---------->
             <GFItGroup
               v-else-if="'group' == fld.race"
@@ -251,7 +260,7 @@
               :actived-uniq-key="_actived_uniqKey"
               @name-change="emit('name-change', $event)"
               @value-change="onValueChange"
-              @field-active="onFieldActived" />
+              @field-actived="onFieldActived" />
             <!------[:Label:]---------->
             <GFItLabel
               v-else-if="'label' == fld.race"

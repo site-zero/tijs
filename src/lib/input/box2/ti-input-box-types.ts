@@ -21,6 +21,8 @@ import { ValueOptionsProps } from './use-value-options';
 //--------------------------------------------------
 export type InputBoxEmitter = {
   (event: 'change', value: any): void;
+  (event: 'blur'): void;
+  (event: 'focus'): void;
 };
 //--------------------------------------------------
 export type InputBoxAspect = {

@@ -47,7 +47,7 @@ export function useTags(props: TagsProps, tagItems: Ref<TagItem[]>) {
           value = await valueTranslator.value(it.name, it.value);
         }
         items.push({
-          type: it.type ?? props.defaultTagType,
+          type: it.type ?? props.defaultTagType ?? undefined,
           className: it.className ?? props.defaultTagClass,
           icon: it.icon,
           text: it.text ?? `${value}`,

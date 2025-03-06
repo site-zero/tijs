@@ -236,6 +236,7 @@ export function init_ti_std_fields() {
   _ofs.setField('obj.title', {
     name: 'title',
     title: 'i18n:wn-obj-title',
+    dynamic: true,
     comType: 'TiLabel',
     comConf: {
       nowrap: true,
@@ -243,8 +244,10 @@ export function init_ti_std_fields() {
     } as LabelProps,
     activatedComType: 'TiInput',
     activatedComConf: {
-      autoSelect: false,
-      boxFocused: true,
+      prefixIconFor: 'clear',
+      autoSelect: true,
+      autoFocus: true,
+      placeholder: '=data.nm',
     } as InputBoxProps,
   });
 
@@ -258,8 +261,8 @@ export function init_ti_std_fields() {
     } as LabelProps,
     activatedComType: 'TiInput',
     activatedComConf: {
-      autoSelect: false,
-      boxFocused: true,
+      autoSelect: true,
+      autoFocus: true,
     } as InputBoxProps,
   });
   _ofs.setField('obj.race', {
@@ -337,8 +340,8 @@ export function init_ti_std_fields() {
     } as LabelProps,
     activatedComType: 'TiInput',
     activatedComConf: {
-      autoSelect: false,
-      boxFocused: true,
+      autoSelect: true,
+      autoFocus: true,
     } as InputBoxProps,
   });
   _ofs.setField('obj.mime', {
@@ -352,8 +355,8 @@ export function init_ti_std_fields() {
     } as LabelProps,
     activatedComType: 'TiInput',
     activatedComConf: {
-      autoSelect: false,
-      boxFocused: true,
+      autoSelect: true,
+      autoFocus: true,
     } as InputBoxProps,
   });
   _ofs.setField('obj.len', {
