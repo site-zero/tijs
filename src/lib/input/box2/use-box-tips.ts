@@ -117,6 +117,8 @@ export function useBoxTips(props: BoxTipsProps) {
   const MainBoxStyle = computed(() => {
     if (TipBoxStyleReady.value && _box_rect.value) {
       return CssUtils.toStyle({
+        top: _box_rect.value.top,
+        left: _box_rect.value.left,
         width: _box_rect.value.width,
         height: _box_rect.value.height,
       });
