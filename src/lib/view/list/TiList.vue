@@ -62,9 +62,11 @@
     );
   });
   //-----------------------------------------------------
+  const MarkerIcons = computed(() => List.value.getMarkerIcons());
+  //-----------------------------------------------------
   const ListItemStyle = computed(() => {
     let cols = [];
-    if (props.multi) {
+    if (MarkerIcons.value) {
       cols.push('2em');
     }
     if (isItemsHasIcon.value) {
@@ -121,17 +123,17 @@
         <!--***********************************-->
         <!--=Check=-->
         <div
-          v-if="props.multi"
+          v-if="MarkerIcons"
           class="list-part as-check"
           @click.stop="
             List.OnItemCheck(selection, { event: $event, item: it })
           ">
-          <i
+          <TiIcon
             v-if="it.checked"
-            class="zmdi zmdi-check-square"></i>
-          <i
+            :value="MarkerIcons[1]" />
+          <TiIcon
             v-else
-            class="zmdi zmdi-square-o"></i>
+            :value="MarkerIcons[0]" />
         </div>
         <!--=Icon=-->
         <div

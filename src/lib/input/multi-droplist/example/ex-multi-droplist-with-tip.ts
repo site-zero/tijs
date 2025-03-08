@@ -1,9 +1,9 @@
 import { ComPropExample } from '../../../../_type';
-import { DroplistProps } from '../ti-droplist-types';
+import { MulTiMultiDroplistProps } from '../ti-multi-droplist-types';
 
 export default {
   name: 'with_tip',
-  text: 'i18n:ti-droplist-example-with-tip',
+  text: 'i18n:ti-multi-droplist-example-with-tip',
   comConf: {
     value: 'otter',
     placeholder: 'Choose one Animal',
@@ -118,5 +118,5 @@ export default {
         tip: 'Cats are independent animals',
       },
     ],
-  } as DroplistProps,
+  } as MulTiMultiDroplistProps,
 } as ComPropExample;

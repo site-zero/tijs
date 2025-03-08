@@ -1,9 +1,9 @@
 import { computed, ref } from 'vue';
 import { StdOptionItem } from '../../../_type';
 import { ListProps, useOptions, useStdListItem } from '../../../lib';
-import { CheckListProps } from './ti-check-list-types';
+import { RadioListProps } from './ti-radio-list-types';
 
-export function useChecklist(props: CheckListProps) {
+export function useRadioList(props: RadioListProps) {
   let { dict } = useOptions(props);
   let { toStdItems } = useStdListItem(props);
   let _options = ref<StdOptionItem[]>([]);

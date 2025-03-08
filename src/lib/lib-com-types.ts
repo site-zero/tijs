@@ -26,8 +26,10 @@ export const COM_TYPES = {
   //------------------- INPUT
   Check: 'TiCheck',
   CheckList: 'TiCheckList',
+  RadioList: 'TiRadioList',
   ComboFilter: 'TiComboFilter',
   Droplist: 'TiDroplist',
+  MultiDroplist: 'TiMultiDroplist',
   Filter: 'TiFilter',
   Input: 'TiInput',
   InputCode: 'TiInputCode',

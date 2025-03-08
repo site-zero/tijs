@@ -2,46 +2,50 @@
   import _ from 'lodash';
   import { computed, watch } from 'vue';
   import { ListSelectEmitInfo, TiList } from '../../';
-  import { Util } from '../../../core';
-  import { CheckListEmitter, CheckListProps } from './ti-check-list-types';
-  import { useChecklist } from './use-checklist';
+  import { RadioListEmitter, RadioListProps } from './ti-radio-list-types';
+  import { useRadioList } from './use-radio-list';
   //-----------------------------------------------------
-  const emit = defineEmits<CheckListEmitter>();
+  const emit = defineEmits<RadioListEmitter>();
   //-----------------------------------------------------
-  const props = withDefaults(defineProps<CheckListProps>(), {
+  const props = withDefaults(defineProps<RadioListProps>(), {
     textAsHtml: true,
     borderStyle: 'solid',
     highlightChecked: false,
     canHover: true,
   });
   //-----------------------------------------------------
-  const _L = computed(() => useChecklist(props));
+  const _list = computed(() => useRadioList(props));
   //-----------------------------------------------------
-  const checkedIds = computed(() => Util.arrayToMap(props.value));
+  const checkedIds = computed(() => {
+    if (_.isNil(props.value)) return {};
+    return [props.value];
+  });
   //-----------------------------------------------------
   function onSelect(payload: ListSelectEmitInfo) {
-    let ids = Util.mapTruthyKeys(payload.checkedIds);
-    if (!_.isEqual(ids, props.value)) {
-      emit('change', ids);
+    let keys = Array.from(payload.checkedIds.keys());
+    let val = keys.length > 0 ? keys[0] : null;
+    console.log('onSelect', val);
+    if (!_.isEqual(val, props.value)) {
+      emit('change', val);
     }
   }
   //-----------------------------------------------------
   watch(
     () => props.options,
     () => {
-      _L.value.reloadOptions();
+      _list.value.reloadOptions();
     },
     { immediate: true }
   );
-  //-----------------------------------------------------
 </script>
 <template>
   <TiList
-    v-bind="_L.ListConfig.value"
+    v-bind="_list.ListConfig.value"
     :multi="true"
-    :data="_L.optionsData.value"
-    :max-checked="props.maxChecked"
-    :min-checked="props.minChecked"
+    :marker-icon="'auto'"
+    :data="_list.optionsData.value"
+    :marker-icons="['zmdi-circle-o', 'zmdi-dot-circle']"
+    :max-checked="1"
     :can-select="false"
     :can-check="true"
     :checked-ids="checkedIds"

@@ -1,8 +1,8 @@
 import { ComPropExample } from '../../../../_type';
-import { DroplistProps } from '../ti-droplist-types';
+import { MulTiMultiDroplistProps } from '../ti-multi-droplist-types';
 
 export default {
   name: 'multi_with_tip',
-  text: 'i18n:ti-droplist-example-multi-with-tip',
-  comConf: {} as DroplistProps,
+  text: 'i18n:ti-multi-droplist-example-multi-with-tip',
+  comConf: {} as MulTiMultiDroplistProps,
 } as ComPropExample;

@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { TiInput } from '../../';
-  import { DroplistProps } from './ti-droplist-types';
+  import { MulTiMultiDroplistProps } from './ti-multi-droplist-types';
   //-----------------------------------------------------
   defineOptions({
     inheritAttrs: false,
@@ -10,7 +10,7 @@
     (event: 'change', payload: string): void;
   }>();
   //-----------------------------------------------------
-  let props = withDefaults(defineProps<DroplistProps>(), {
+  let props = withDefaults(defineProps<MulTiMultiDroplistProps>(), {
     autoI18n: true,
     tipShowTime: 'focus',
     tipUseHint: false,
@@ -48,5 +48,5 @@
     @change="onInputChange" />
 </template>
 <style lang="scss" scoped>
-  @use './ti-droplist.scss';
+  @use './ti-multi-droplist.scss';
 </style>

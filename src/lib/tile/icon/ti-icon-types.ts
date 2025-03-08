@@ -1,4 +1,4 @@
-import { CommonProps, IconInput, Vars } from '../../../_type';
+import { CommonProps, IconInput, LogicType, Vars } from '../../../_type';
 import { TiColor, TiDict } from '../../../core';
 
 export interface IconProps extends CommonProps {
@@ -25,6 +25,7 @@ export interface IconProps extends CommonProps {
   // font only
   fontSize?: number | string;
   color?: string | TiColor;
+  logicType?: LogicType; // for font icon
   // image only
   objectFit?: 'contain' | 'cover' | 'fill' | 'scale-down';
   // Free Style

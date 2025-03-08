@@ -63,8 +63,8 @@ const TiIconInfo: TiComInfo = {
       comConf: {
         className: 's128',
         value: {
-          type:'font',
-          
+          type: 'font',
+          logicType: 'info',
           value: 'fas-snowflake',
         },
         opacity: 0.8,

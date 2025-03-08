@@ -3,6 +3,8 @@
   import { CssUtils, Icons } from '../../../core';
   import { IconProps } from './ti-icon-types';
   import { getIconStyle } from './use-icon';
+  import { LogicType } from 'src/_type/core-types';
+  import _ from 'lodash';
   defineOptions({
     name: 'TiIcon',
     inheritAttrs: true,
@@ -21,13 +23,20 @@
   const Icon = computed(() => {
     return Icons.toIconObj(props.value ?? props.defaultValue);
   });
-  const TopClass = computed(() =>
-    CssUtils.mergeClassName(props.className, () => {
-      return `is-type-${Icon.value.type}`;
-    })
-  );
-  const TopStyle = computed(() =>
-    CssUtils.mergeStyles([
+  const TopClass = computed(() => {
+    return CssUtils.mergeClassName(
+      props.className,
+      `is-type-${Icon.value.type}`
+    );
+  });
+  const TopStyle = computed(() => {
+    let logicType: LogicType | undefined = props.logicType;
+    if (props.value) {
+      if (!_.isString(props.value) && props.value.logicType) {
+        logicType = props.value.logicType;
+      }
+    }
+    let re = CssUtils.mergeStyles([
       {},
       CssUtils.toStyle({
         width: props.width,
@@ -35,8 +44,12 @@
         opacity: props.opacity,
       }),
       props.style,
-    ])
-  );
+    ]);
+    if (logicType) {
+      re.color = `var(--ti-color-${logicType})`;
+    }
+    return re;
+  });
   const IconStyle = computed(() => getIconStyle(props, Icon));
 </script>
 

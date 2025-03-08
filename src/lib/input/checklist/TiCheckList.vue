@@ -15,7 +15,7 @@
     canHover: true,
   });
   //-----------------------------------------------------
-  const _L = computed(() => useChecklist(props));
+  const _list = computed(() => useChecklist(props));
   //-----------------------------------------------------
   const checkedIds = computed(() => Util.arrayToMap(props.value));
   //-----------------------------------------------------
@@ -29,7 +29,7 @@
   watch(
     () => props.options,
     () => {
-      _L.value.reloadOptions();
+      _list.value.reloadOptions();
     },
     { immediate: true }
   );
@@ -37,9 +37,9 @@
 </script>
 <template>
   <TiList
-    v-bind="_L.ListConfig.value"
+    v-bind="_list.ListConfig.value"
     :multi="true"
-    :data="_L.optionsData.value"
+    :data="_list.optionsData.value"
     :max-checked="props.maxChecked"
     :min-checked="props.minChecked"
     :can-select="false"

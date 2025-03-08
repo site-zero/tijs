@@ -13,9 +13,11 @@ import { TiDroplistInfo } from './droplist/ti-droplist-index';
 import { TiFilterInfo } from './filter/ti-filter-index';
 import { TiInputGroupInfo } from './group/ti-input-group-index';
 import { TiInputIconInfo } from './icon/ti-input-icon-index';
+import { TiMultiDroplistInfo } from './multi-droplist/ti-multi-droplist-index';
 import { TiInputNumUnitInfo } from './num-unit/ti-input-num-unit-index';
 import { TiInputNumInfo } from './num/ti-input-num-index';
 import { TiInputPickerInfo } from './picker/ti-input-picker-index';
+import { TiRadioListInfo } from './radiolist/ti-radio-list-index';
 import { TiScoreInfo } from './score/ti-score-index';
 import { TiSorterInfo } from './sorter/ti-sorter-index';
 import { TiSwitcherInfo } from './switcher/ti-switcher-index';
@@ -23,6 +25,7 @@ import { TiInputTextInfo } from './text/ti-input-text-index';
 import { TiInputTimeInfo } from './time/ti-input-time-index';
 import { TiToggleInfo } from './toggle/ti-toggle-index';
 import { TiTransferInfo } from './transfer/ti-transfer-index';
+export * from './radiolist/ti-radio-list-index';
 
 export default {
   TiInput: TiInputInfo,
@@ -32,6 +35,7 @@ export default {
   TiFilter: TiFilterInfo,
   TiTransfer: TiTransferInfo,
   TiDroplist: TiDroplistInfo,
+  TiMultiDroplist: TiMultiDroplistInfo,
   TiToggle: TiToggleInfo,
   TiInputColor: TiInputColorInfo,
   TiInputCurrency: TiInputCurrencyInfo,
@@ -49,6 +53,7 @@ export default {
   TiInputIcon: TiInputIconInfo,
   TiInputGroup: TiInputGroupInfo,
   TiCheckList: TiCheckListInfo,
+  TiRadioList: TiRadioListInfo,
 } as TiComSet;
 
 export * from './box2/ti-input-box-index';
@@ -65,9 +70,11 @@ export * from './droplist/ti-droplist-index';
 export * from './filter/ti-filter-index';
 export * from './group/ti-input-group-index';
 export * from './icon/ti-input-icon-index';
+export * from './multi-droplist/ti-multi-droplist-index';
 export * from './num-unit/ti-input-num-unit-index';
 export * from './num/ti-input-num-index';
 export * from './picker/ti-input-picker-index';
+export * from './radiolist/ti-radio-list-index';
 export * from './score/ti-score-index';
 export * from './sorter/ti-sorter-index';
 export * from './switcher/ti-switcher-index';

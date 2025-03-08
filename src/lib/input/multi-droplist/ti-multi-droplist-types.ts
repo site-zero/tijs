@@ -1,5 +1,5 @@
 import { CommonProps } from '../../../_type';
 import { InputBoxProps } from '../all-input';
 
-export type DroplistProps = CommonProps &
+export type MulTiMultiDroplistProps = CommonProps &
   Omit<InputBoxProps, 'canInput' | 'trimed' | 'mustInOptions'>;

@@ -8,6 +8,7 @@ import {
   AspectSize,
   CommonProps,
   CssBorderStyle,
+  IconInput,
   TableRowID,
   Vars,
 } from '../../../_type';
@@ -29,6 +30,20 @@ export type ListAspect = {
    * 默认相当于 `${text}`
    */
   textFormat?: string | ((it: AnyOptionItem, raw: Vars) => string);
+
+  /**
+   * 每行的选中图标的样子。
+   *
+   * 如果未指定，默认的行为是：
+   *
+   * - `multi:true` 时:
+   *    > 显示一个勾选框 `['zmdi-square-o','zmdi-check-square']`
+   * - `multi:false` 时：
+   *    > 不显示标记图标，但是如果属性为 true
+   *    > 则显示一个单选按钮 `['zmdi-circle-o','zmdi-dot-circle']`
+   */
+  markerIcons?: [IconInput, IconInput] | 'auto';
+
   /**
    * 如果开启了这个选项，那么显示的文本被认为是一个 HTML
    */

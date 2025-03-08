@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { AnyOptionItem, TableRowID, Vars } from '../../../_type';
+import { AnyOptionItem, IconInput, TableRowID, Vars } from '../../../_type';
 import { EventUtils, I18n, Tmpl, Util } from '../../../core';
 import { getLogger } from '../../../core/log/ti-log';
 import {
@@ -44,6 +44,23 @@ export function useList(props: ListProps, emit: ListEmitter) {
     };
     _.assign(re, props.emptyRoadblock);
     return re as RoadblockProps;
+  }
+  //-----------------------------------------------------
+  function getMarkerIcons(): [IconInput, IconInput] | undefined {
+    if (props.markerIcons) {
+      if ('auto' == props.markerIcons) {
+        if (props.multi) {
+          return ['zmdi-square-o', 'zmdi-check-square'];
+        }
+        return ['zmdi-circle-o', 'zmdi-dot-circle'];
+      }
+      return props.markerIcons;
+    }
+    // 如果是多选，但是没有指定 markerIcon
+    else if (_.isNil(props.markerIcons) && props.multi) {
+      return ['zmdi-square-o', 'zmdi-check-square'];
+    }
+    return undefined;
   }
   //-----------------------------------------------------
   // 准备格式化文本函数
@@ -141,7 +158,11 @@ export function useList(props: ListProps, emit: ListEmitter) {
   }
   //-----------------------------------------------------
   function itemsHasIcon(items: ListItem[]) {
-    for (let it of items) if (it.icon) return true;
+    for (let it of items) {
+      if (it.icon) {
+        return true;
+      }
+    }
     return false;
   }
   //-----------------------------------------------------
@@ -202,6 +223,7 @@ export function useList(props: ListProps, emit: ListEmitter) {
     buildOptionItems,
     itemsHasIcon,
     itemsHasTip,
+    getMarkerIcons,
 
     updateSelection: selectable.updateSelection,
 
