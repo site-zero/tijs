@@ -40,8 +40,8 @@
       overflow: hidden;
     }
 
-    &.with-shadown > .grid-item > .grid-item-con {
-      box-shadow: 1px 1px 3px var(--ti-color-mask-weak);
+    &.with-shadow > .grid-item > .grid-item-con {
+      box-shadow: 1px 1px 4px var(--ti-color-mask-weak);
     }
 
     &.r-b > .grid-item > .grid-item-con {
