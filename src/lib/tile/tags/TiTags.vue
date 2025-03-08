@@ -2,8 +2,8 @@
   import _ from 'lodash';
   import { computed, ref, watch } from 'vue';
   import { TiLabel, usePlaceholder } from '../../';
-  import { I18n } from '../../../core';
   import { Vars } from '../../../_type';
+  import { I18n } from '../../../core';
   import { TagItem, TagsProps } from './ti-tags-types';
   import { useTags } from './use-tags';
   //-----------------------------------------------------
@@ -59,9 +59,9 @@
       props.valueTranslators,
       props.nameTranslator,
     ],
-    () => {
+    async () => {
       //console.log('Tags change');
-      Tags.value.loadTagItems();
+      await Tags.value.loadTagItems();
     },
     { immediate: true }
   );
@@ -85,7 +85,7 @@
         :className="it.className"
         :prefixIcon="it.icon"
         :suffixIcon="props.editable ? 'zmdi-close' : undefined"
-        suffixIconFor="click"
+        :suffixIconFor="props.editable ? 'click' : undefined"
         suffixIconClass="hover-rotate"
         :value="it.text"
         @click-suffix-icon="onRemoveItem(it)"

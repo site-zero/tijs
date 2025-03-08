@@ -61,6 +61,8 @@ export const COM_TYPES = {
   //------------------- VIEW
   Falls: 'TiFalls',
   List: 'TiList',
+  Tree: 'TiTree',
+  TreeTable: 'TiTreeTable',
   Table: 'TiTable',
   Wall: 'TiWall',
   Process: 'TiProcess',

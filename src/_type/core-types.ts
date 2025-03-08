@@ -750,14 +750,16 @@ export type ComInfoFilter = (info: TiComInfo) => boolean;
 
 export type TiRawCom = DefineComponent<any, any, any>;
 
+
+export type DeltaUpdateMode = 'merge' | 'assign'
 export type TiComExampleModelTarget =
   | string
   | ((val: any, comConf: Vars) => void)
   | {
-      key: string;
-      val: any;
-      mode?: 'set' | 'merge' | 'assign';
-    };
+    key: string;
+    val: any;
+    mode?: 'set' | 'merge' | 'assign';
+  };
 
 export interface TiComInfo {
   icon?: string;

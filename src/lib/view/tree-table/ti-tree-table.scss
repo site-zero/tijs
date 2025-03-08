@@ -1,0 +1,187 @@
+@use '@site0/tijs/sass/_all.scss' as *;
+
+.ti-list {
+  font-size: var(--ti-fontsz-m);
+  //--------------------------------
+  &.none-user-select {
+    user-select: none;
+  }
+  //--------------------------------
+  &.fit-parent,
+  &.cover-parent {
+    @include flex-align-v-nowrap;
+    > main {
+      flex: 1 1 auto;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+    }
+  }
+  //--------------------------------
+  > .empty-tip {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  //--------------------------------
+  > main {
+    > .list-item {
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto;
+      gap: 1px;
+      //------------------------------
+      > .list-part {
+        //----------------------------
+        &.as-check {
+          @include flex-center;
+          &:hover {
+            color: var(--ti-color-secondary);
+          }
+        }
+        //----------------------------
+        &.as-icon {
+          @include flex-center;
+        }
+        //----------------------------
+        &.as-text {
+          @include flex-align;
+          padding: 0.7em 0.5em;
+          line-height: 1.2em;
+          em {
+            font-style: normal;
+            flex: 1 1 auto;
+          }
+          abbr {
+            font-size: 0.8em;
+            opacity: 0.62;
+          }
+          div {
+            @include flex-align;
+          }
+          div.new-row {
+            width: 100%;
+          }
+          .as-index {
+            color: var(--ti-color-track);
+            margin-right: 0.5em;
+            font-size: 0.8em;
+          }
+          .as-tag {
+            font-size: 10px;
+            display: block;
+            padding: 0 0.5em;
+            line-height: 1.5em;
+            margin: 0 1px;
+            background-color: var(--ti-color-mask-thin);
+            border-radius: var(--ti-measure-r-s);
+          }
+        }
+        //----------------------------
+      } // > .list-part
+      //------------------------------
+    } // > .list-item
+  }
+  //--------------------------------
+  &.is-hoverable {
+    > main > .list-item {
+      &:hover {
+        color: var(--ti-color-highlight-f);
+        background-color: var(--ti-color-highlight);
+      }
+    }
+  }
+  //--------------------------------
+  &.is-selectable > main {
+    cursor: pointer;
+    > .list-item {
+      border-left: 3px solid transparent;
+      //----------------------------
+      &.is-current {
+        border-left-color: var(--ti-color-primary);
+      }
+      //----------------------------
+    }
+  }
+
+  //--------------------------------
+  &.is-highlight-checked > main {
+    > .list-item {
+      //----------------------------
+      &.is-checked,
+      &.is-checked:hover {
+        color: var(--ti-color-selected-f);
+        background-color: var(--ti-color-selected);
+      }
+      &.is-checked + .list-item.is-checked {
+        border-top-color: var(--ti-color-primary);
+      }
+    }
+  }
+
+  //--------------------------------
+  &.border-solid > main > .list-item {
+    border-top: 1px solid var(--ti-color-border-shallow);
+    &:first-child {
+      border-top: 0;
+    }
+  }
+  //--------------------------------
+  &.border-dashed > main > .list-item {
+    border-top: 1px dashed var(--ti-color-border-thin);
+    &:first-child {
+      border-top: 0;
+    }
+  }
+  //--------------------------------
+  &.border-dotted > main > .list-item {
+    border-top: 1px dotted var(--ti-color-border-thin);
+    &:first-child {
+      border-top: 0;
+    }
+  }
+  //--------------------------------
+}
+
+@mixin __li_color($name) {
+  .ti-list > main > .list-item.is-#{$name} {
+    color: var(--ti-color-#{$name});
+
+    &.is-checked {
+      color: var(--ti-color-#{$name});
+      background-color: var(--ti-color-#{$name}-r);
+    }
+
+    > .list-part.as-text .as-tag {
+      color: var(--ti-color-#{$name}-r);
+      background-color: var(--ti-color-#{$name});
+    }
+  }
+  .ti-list.is-selectable > main {
+    > .list-item.is-#{$name} {
+      &.is-current {
+        border-left-color: var(--ti-color-#{$name});
+        &:hover {
+          color: var(--ti-color-#{$name}-b);
+          background-color: var(--ti-color-#{$name}-r);
+        }
+      }
+    }
+  }
+}
+
+@mixin __li_colorized() {
+  @include __li_color(success);
+  @include __li_color(warn);
+  @include __li_color(info);
+  @include __li_color(danger);
+  @include __li_color(track);
+  @include __li_color(disable);
+  @include __li_color(text);
+  @include __li_color(number);
+  @include __li_color(primary);
+  @include __li_color(secondary);
+}
+
+// 为列表项添加颜色
+@include __li_colorized();

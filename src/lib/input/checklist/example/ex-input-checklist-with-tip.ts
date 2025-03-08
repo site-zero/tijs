@@ -1,5 +1,5 @@
 import { ComPropExample } from '../../../../_type';
-import { getListData } from '../../../view/list/example/mock_date';
+import { getListData } from '../../../view/list/example/mock_data';
 import { CheckListProps } from '../ti-check-list-types';
 
 export default {

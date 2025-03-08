@@ -1,7 +1,13 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed, onUnmounted } from 'vue';
-  import { BlockProps, TiActionBar, TiIcon, useEmitAdaptor } from '../../';
+  import {
+    BlockProps,
+    EmitAdaptorOptions,
+    TiActionBar,
+    TiIcon,
+    useEmitAdaptor,
+  } from '../../';
   import { EmitAdaptorPayload } from '../../../_type';
   import { COM_TYPES } from '../../lib-com-types';
   import { BlockEmitter, BlockEvent } from './ti-block-types';
@@ -27,7 +33,7 @@
           block: _.pick(props, 'title', 'name'),
         });
       },
-    })
+    } as EmitAdaptorOptions)
   );
 
   function onBlock(event: BlockEvent) {

@@ -1,10 +1,10 @@
 import { ComPropExample } from '../../../../_type';
-import { getListData } from '../../../view/list/example/mock_data';
+import { getListData } from '../../../view/list/example/mock_date';
 import { CheckListProps } from '../ti-check-list-types';
 
 export default {
-  name: 'with-icon',
-  text: 'i18n:ti-check-list-example-with-icon',
+  name: 'with-tip',
+  text: 'i18n:ti-check-list-example-with-tip',
   comConf: {
     size: 'b',
     value: [1, 3],

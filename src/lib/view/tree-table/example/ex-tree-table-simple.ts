@@ -1,5 +1,5 @@
 import { ComPropExample } from '../../../../_type';
-import { ListProps } from '../ti-list-types';
+import { TreeTableProps } from '../ti-tree-table-types';
 import { Chance } from 'chance';
 import { getListData } from './mock_data';
 
@@ -10,6 +10,7 @@ export default {
   name: 'simple',
   text: 'i18n:simple',
   comConf: {
+    columns: [],
     className: 'border-solid fit-parent',
     size: 'b',
     currentId: 3,
@@ -17,5 +18,5 @@ export default {
       '3': true,
     },
     data: getListData({ icon: false, tip: false }),
-  } as ListProps,
+  } as TreeTableProps,
 } as ComPropExample;

@@ -54,7 +54,7 @@ export type ListAspect = {
   /**
    * 列表项边线样式
    */
-  borderStyle?: CssBorderStyle;
+  borderStyle?: CssBorderStyle | null;
 
   /**
    * 默认 true 表示选择的项目将会显示一个突出的背景

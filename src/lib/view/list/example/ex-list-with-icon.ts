@@ -1,6 +1,6 @@
 import { ComPropExample } from '../../../../_type';
 import { ListProps } from '../ti-list-types';
-import { getListData } from './mock_date';
+import { getListData } from './mock_data';
 
 export default {
   name: 'with_icon',

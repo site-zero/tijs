@@ -1,5 +1,5 @@
 import { ComPropExample } from '../../../../_type';
-import { ListProps } from '../ti-list-types';
+import { TreeProps } from '../ti-tree-types';
 import { Chance } from 'chance';
 import { getListData } from './mock_data';
 
@@ -17,5 +17,5 @@ export default {
       '3': true,
     },
     data: getListData({ icon: false, tip: false }),
-  } as ListProps,
+  } as TreeProps,
 } as ComPropExample;

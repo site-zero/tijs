@@ -1,10 +1,10 @@
 import { ComPropExample } from '../../../../_type';
-import { ListProps } from '../ti-list-types';
+import { TreeProps } from '../ti-tree-types';
 import { getListData } from './mock_data';
 
 export default {
   name: 'multi_with_icon',
-  text: 'i18n:ti-list-example-multi-with-icon',
+  text: 'i18n:ti-tree-example-multi-with-icon',
   comConf: {
     className: 'border-dotted fit-parent',
     multi: true,
@@ -14,5 +14,5 @@ export default {
     canSelect: false,
     canCheck: true,
     data: getListData({ icon: true, tip: false }),
-  } as ListProps,
+  } as TreeProps,
 } as ComPropExample;
