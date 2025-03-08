@@ -6,7 +6,6 @@ import { TiGridFieldsInfo } from './grid-fields/ti-grid-fields-index';
 import { TiLayoutGridInfo } from './layout/grid/ti-layout-grid-index';
 import { TiLayoutTabsInfo } from './layout/tabs/ti-layout-tabs-index';
 import { TiMainFrameInfo } from './main-frame/ti-main-frame-index';
-import TiPlayground from './playground/TiPlayground.vue';
 
 export default {
   TiForm: TiFormInfo,
@@ -29,4 +28,3 @@ export * from './main-frame/ti-main-frame-index';
 export * from './layout/layout-support';
 
 export * from './layout/layout-types';
-export { TiPlayground };

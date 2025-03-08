@@ -13,9 +13,7 @@ export default {
     className: 'border-solid fit-parent',
     size: 'b',
     currentId: 3,
-    checkedIds: {
-      '3': true,
-    },
+    checkedIds: [3],
     data: getListData({ icon: false, tip: false }),
   } as ListProps,
 } as ComPropExample;

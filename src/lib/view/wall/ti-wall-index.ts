@@ -33,6 +33,18 @@ const TiWallInfo: TiComInfo = {
   },
   defaultProps: 'simple',
   exampleProps: [example.simple, example.selectable],
+  exampleModel: {
+    select: [
+      {
+        key: 'currentId',
+        val: '=currentId',
+      },
+      {
+        key: 'checkedIds',
+        val: '=checkedIds',
+      },
+    ],
+  },
 };
 
 export * from './ti-wall-types';

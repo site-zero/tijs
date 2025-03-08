@@ -26,6 +26,6 @@ export default {
         text: '=item.name',
       },
     } as ThumbProps,
-    data: mockWallData(30),
+    data: mockWallData(8),
   } as WallProps,
 } as ComPropExample;

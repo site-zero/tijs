@@ -85,7 +85,7 @@ export type SelectableFeature<ID extends TableRowID> = ReturnType<
 export function useSelectable<ID extends TableRowID>(
   props: SelectableProps<ID>
 ) {
-  let { getId = (data) => data.id ?? data.value } = props;
+  let { getId = (data: any) => data?.id ?? data?.value } = props ?? {};
   //console.log('use selectable', props.currentId, props.checkedIds);
   /**
    * 获取数据的 ID
@@ -248,7 +248,10 @@ export function useSelectable<ID extends TableRowID>(
           idMap = Util.objToMap(checkedIds);
         }
         // 准备判断函数
-        _is_checked = (id: ID) => idMap.get(id) ?? false;
+        _is_checked = (id: ID) => {
+          let key = `${id}` as ID;
+          return idMap.get(key) ?? false;
+        };
       }
 
       for (let id of selection.ids) {

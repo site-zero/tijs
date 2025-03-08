@@ -12,12 +12,14 @@
   import { CssUtils } from '../../../core';
   import { WallEmitter, WallProps } from './ti-wall-types';
   import { useWall } from './use-wall';
+  import { useWallSelect } from './use-wall-select';
   //-------------------------------------------------
   const emit = defineEmits<WallEmitter>();
   //-----------------------------------------------------
   const props = withDefaults(defineProps<WallProps>(), {
     dftIdPrefix: 'item',
     layout: () => ({ gap: '1em' }),
+    conStyle: () => ({ padding: '2em' }),
   });
   //-------------------------------------------------
   const $el = useTemplateRef<HTMLElement>('$el');
@@ -34,7 +36,8 @@
     lastSelectIndex: -1,
   } as SelectableState<TableRowID>);
   //-----------------------------------------------------
-  const Wall = useWall(props, emit);
+  let _wall_select = useWallSelect(props, emit);
+  const _wall = useWall(props, _wall_select);
   //-----------------------------------------------------
   let GridLayoutStyle = computed(() =>
     useGridLayout(props, _viewport.size.width)
@@ -48,7 +51,7 @@
   });
   //-----------------------------------------------------
   const TopStyle = computed(() => {
-    return CssUtils.mergeStyles([{ padding: '2em' }, props.style]);
+    return CssUtils.toStyle(props.style);
   });
   //-----------------------------------------------------
   const WallConStyle = computed(() => {
@@ -57,10 +60,21 @@
   //-----------------------------------------------------
   watch(
     () => props.data,
-    () => Wall.resetSelection(selection, props.data),
-    {
-      immediate: true,
-    }
+    () => _wall_select.resetSelection(selection, props.data),
+    { immediate: true }
+  );
+  //-----------------------------------------------------
+  watch(
+    () => [props.currentId, props.checkedIds],
+    () => {
+      _wall_select.updateSelection(
+        selection,
+        props.data ?? [],
+        props.currentId,
+        props.checkedIds
+      );
+    },
+    { immediate: true }
   );
   //-----------------------------------------------------
 </script>
@@ -68,16 +82,17 @@
   <div
     class="ti-wall"
     :class="TopClass"
-    :style="TopStyle">
+    :style="TopStyle"
+    @click.left="_wall_select.resetSelection(selection, props.data)">
     <div
-      class="wall-con fit-parent"
+      class="wall-con"
       :style="WallConStyle"
       :hello="_viewport.size.width"
       ref="$el">
       <div
-        v-for="wit in Wall.Items.value"
+        v-for="wit in _wall.Items.value"
         class="wall-item"
-        :class="Wall.getItemClass(selection, wit)"
+        :class="_wall_select.getItemClass(selection, wit)"
         :style="wit.style"
         :it-index="wit.index"
         :it-type="wit.type">
@@ -85,7 +100,9 @@
           class="wall-item-con"
           :class="wit.conClass"
           :style="wit.conStyle"
-          @click="Wall.OnItemSelect(selection, { event: $event, item: wit })"
+          @click.left.stop="
+            _wall_select.OnItemSelect(selection, { event: $event, item: wit })
+          "
           @dblclick="emit('open', wit)">
           <component
             :is="wit.comType"

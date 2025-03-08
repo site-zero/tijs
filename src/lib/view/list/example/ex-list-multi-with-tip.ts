@@ -9,8 +9,12 @@ export default {
     className: 'tip-block border-dotted fit-parent',
     size: 'm',
     multi: true,
-    currentId: null,
-    checkedIds: {},
+    currentId: 4,
+    checkedIds: {
+      '1': true,
+      '4': true,
+      '5': true,
+    },
     data: getListData({ icon: true, tip: true }),
   } as ListProps,
 } as ComPropExample;

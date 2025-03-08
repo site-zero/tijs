@@ -27,12 +27,12 @@
     lastSelectIndex: -1,
   } as SelectableState<TableRowID>);
   //-----------------------------------------------------
-  const List = computed(() => useList(props, emit));
+  const _list = computed(() => useList(props, emit));
   //-----------------------------------------------------
-  const roadblock = computed(() => List.value.getRoadblock());
-  const Items = computed(() => List.value.buildOptionItems(selection));
+  const roadblock = computed(() => _list.value.getRoadblock());
+  const Items = computed(() => _list.value.buildOptionItems(selection));
   const NotItems = computed(() => _.isEmpty(Items.value));
-  const isItemsHasIcon = computed(() => List.value.itemsHasIcon(Items.value));
+  const isItemsHasIcon = computed(() => _list.value.itemsHasIcon(Items.value));
   //-----------------------------------------------------
   const TopClass = computed(() => {
     let names: string[] = [];
@@ -62,7 +62,7 @@
     );
   });
   //-----------------------------------------------------
-  const MarkerIcons = computed(() => List.value.getMarkerIcons());
+  const MarkerIcons = computed(() => _list.value.getMarkerIcons());
   //-----------------------------------------------------
   const ListItemStyle = computed(() => {
     let cols = [];
@@ -80,13 +80,13 @@
   //-----------------------------------------------------
   function onListItemClick(item: ListItem, event: MouseEvent) {
     //console.log('onListItemClick', item);
-    List.value.OnItemSelect(selection, { event, item });
+    _list.value.OnItemSelect(selection, { event, item });
   }
   //-----------------------------------------------------
   watch(
     () => [props.currentId, props.checkedIds],
     () => {
-      List.value.updateSelection(
+      _list.value.updateSelection(
         selection,
         props.data ?? [],
         props.currentId,
@@ -96,6 +96,19 @@
     {
       immediate: true,
     }
+  );
+  //-----------------------------------------------------
+  watch(
+    () => [props.currentId, props.checkedIds],
+    () => {
+      _list.value.updateSelection(
+        selection,
+        props.data ?? [],
+        props.currentId,
+        props.checkedIds
+      );
+    },
+    { immediate: true }
   );
   //-----------------------------------------------------
 </script>
@@ -126,7 +139,7 @@
           v-if="MarkerIcons"
           class="list-part as-check"
           @click.stop="
-            List.OnItemCheck(selection, { event: $event, item: it })
+            _list.OnItemCheck(selection, { event: $event, item: it })
           ">
           <TiIcon
             v-if="it.checked"

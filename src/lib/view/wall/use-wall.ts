@@ -1,13 +1,13 @@
+import _ from 'lodash';
 import { computed } from 'vue';
-import { TiRoadblock, Vars } from '../../..';
+import { SelectableState, TableRowID, TiRoadblock, Vars } from '../../..';
 import { CssUtils, tiGetComponent, Util } from '../../../core';
-import { WallEmitter, WallItem, WallProps } from './ti-wall-types';
-import { useWallSelect } from './use-wall-select';
+import { WallItem, WallProps } from './ti-wall-types';
+import { WallSelectApi } from './use-wall-select';
 
 export type WallFeature = ReturnType<typeof useWall>;
 
-export function useWall(props: WallProps, emit: WallEmitter) {
-  let _wall_select = useWallSelect(props, emit);
+export function useWall(props: WallProps, _wall_select: WallSelectApi) {
   //-----------------------------------------------------
   let {
     data = [],
@@ -62,12 +62,7 @@ export function useWall(props: WallProps, emit: WallEmitter) {
         itVars,
         props.comType ?? 'TiThumb'
       ) as string;
-      let comConf = Util.explainObj(
-        itVars,
-        props.comConf ?? {
-          width: '100%',
-        }
-      ) as Vars;
+      let comConf = Util.explainObj(itVars, props.comConf ?? {}) as Vars;
 
       re.push({
         index: i,
@@ -85,12 +80,32 @@ export function useWall(props: WallProps, emit: WallEmitter) {
 
     return re;
   });
+  // //-----------------------------------------------------
+  // function updateSelection(selection: SelectableState<TableRowID>) {
+  //   selection.currentId = props.currentId;
+
+  //   // 没有选择
+  //   if (_.isNil(props.checkedIds)) {
+  //     selection.checkedIds = new Map();
+  //   }
+  //   // 数组
+  //   else if (_.isArray(props.checkedIds)) {
+  //     selection.checkedIds = Util.arrayToMap(props.checkedIds);
+  //   }
+  //   // 本身就是 Map
+  //   else if (props.checkedIds instanceof Map) {
+  //     selection.checkedIds = props.checkedIds;
+  //   }
+  //   // 普通对象
+  //   else {
+  //     selection.checkedIds = Util.objToMap(props.checkedIds);
+  //   }
+  // }
 
   //-----------------------------------------------------
   // 返回特性
   //-----------------------------------------------------
   return {
     Items,
-    ..._wall_select,
   };
 }

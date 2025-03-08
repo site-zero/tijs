@@ -9,6 +9,8 @@ import {
   WallSelectEmitInfo,
 } from './ti-wall-types';
 
+export type WallSelectApi = ReturnType<typeof useWallSelect>;
+
 export function useWallSelect(props: WallProps, emit: WallEmitter) {
   let selectable = useSelectable<TableRowID>(props);
   //-----------------------------------------------------
@@ -92,5 +94,6 @@ export function useWallSelect(props: WallProps, emit: WallEmitter) {
     getItemClass,
     OnItemSelect,
     OnItemCheck,
+    updateSelection: selectable.updateSelection,
   };
 }
