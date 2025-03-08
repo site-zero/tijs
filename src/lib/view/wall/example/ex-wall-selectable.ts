@@ -10,16 +10,7 @@ export default {
     canSelect: true,
     canCheck: true,
     multi: true,
-    style: {
-      padding: 'var(--ti-gap-b)',
-    },
-    itemConStyle: {
-      padding: 'var(--ti-gap-b)',
-    },
     layoutHint: '<120>',
-    layout: {
-      gap: 'var(--ti-gap-h)',
-    },
     comConf: {
       preview: {
         src: {

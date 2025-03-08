@@ -31,7 +31,10 @@ export function useTextSnippet(props: TextSnippetProps) {
     TopAttrs[k] = v;
   });
   //-----------------------------------------------------
-  let text = props.autoI18n ? I18n.text(props.text) : props.text;
+  let text: string | undefined = undefined;
+  if (props.text) {
+    text = props.autoI18n ? I18n.text(props.text) : props.text;
+  }
   let customized = false;
 
   // 自定义
@@ -43,7 +46,7 @@ export function useTextSnippet(props: TextSnippetProps) {
     _.assign(TopAttrs, CustomizedCom.comConf);
   }
   // 纯文本
-  else if (props.dynamic) {
+  else if (props.dynamic && text) {
     text = Tmpl.exec(text, props.vars ?? {});
   }
 

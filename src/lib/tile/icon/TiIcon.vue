@@ -1,10 +1,10 @@
 <script setup lang="ts">
+  import _ from 'lodash';
   import { computed } from 'vue';
+  import { LogicType } from '../../../_type/core-types';
   import { CssUtils, Icons } from '../../../core';
   import { IconProps } from './ti-icon-types';
   import { getIconStyle } from './use-icon';
-  import { LogicType } from 'src/_type/core-types';
-  import _ from 'lodash';
   defineOptions({
     name: 'TiIcon',
     inheritAttrs: true,

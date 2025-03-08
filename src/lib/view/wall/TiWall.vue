@@ -17,6 +17,7 @@
   //-----------------------------------------------------
   const props = withDefaults(defineProps<WallProps>(), {
     dftIdPrefix: 'item',
+    layout: () => ({ gap: '1em' }),
   });
   //-------------------------------------------------
   const $el = useTemplateRef<HTMLElement>('$el');
@@ -47,7 +48,7 @@
   });
   //-----------------------------------------------------
   const TopStyle = computed(() => {
-    return CssUtils.toStyle(props.style);
+    return CssUtils.mergeStyles([{ padding: '2em' }, props.style]);
   });
   //-----------------------------------------------------
   const WallConStyle = computed(() => {

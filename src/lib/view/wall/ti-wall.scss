@@ -21,15 +21,17 @@
         width: 100%;
         height: 100%;
         border: 1px dotted transparent;
+        border-radius: var(--ti-measure-r-s);
+        padding:0.5em 0;
       }
       //-------------------------------------------------
       &.is-current > .wall-item-con {
-        border-color: var(--ti-color-highlight-f);
+        border-color: var(--ti-color-primary);
       }
       //-------------------------------------------------
       &.is-checked > .wall-item-con {
-        background-color: var(--ti-color-highlight);
-        color: var(--ti-color-highlight-f);
+        background-color: var(--ti-color-primary-r);
+        color: var(--ti-color-primary);
       }
       //-------------------------------------------------
     }

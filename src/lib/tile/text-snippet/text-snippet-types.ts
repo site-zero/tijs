@@ -29,7 +29,7 @@ export type TextSnippetProps = FieldComProps & {
   /**
    * 元素的文本内容
    */
-  text: string;
+  text?: string;
   /**
    * 元素的文本类型：
    * - html
