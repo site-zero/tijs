@@ -60,11 +60,19 @@ function defineObjColumns(featureName: string): ObjColumnsFeature {
       _.omit(column, 'comConf', 'activatedComConf', 'readonlyComConf')
     );
     re.comConf = re.comConf ?? {};
-    _.assign(re.comConf, column?.comConf);
+    _.assign(re.comConf, { boxRadius: 'none' }, column?.comConf);
     re.activatedComConf = re.activatedComConf ?? {};
-    _.assign(re.activatedComConf, column?.activatedComConf);
+    _.assign(
+      re.activatedComConf,
+      { boxRadius: 'none' },
+      column?.activatedComConf
+    );
     re.readonlyComConf = re.readonlyComConf ?? {};
-    _.assign(re.readonlyComConf, column?.readonlyComConf);
+    _.assign(
+      re.readonlyComConf,
+      { boxRadius: 'none' },
+      column?.readonlyComConf
+    );
 
     // 如果不是可编辑的，那么就需要去掉活动控件定义
     if (col_info.readonly || !editable) {

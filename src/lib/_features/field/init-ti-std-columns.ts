@@ -21,6 +21,7 @@ export function init_ti_std_columns() {
     comType: 'TiLabel',
     comConf: {
       placeholder: 'i18n:nil',
+      boxRadius: 'none',
     } as LabelProps,
   });
 
@@ -28,6 +29,7 @@ export function init_ti_std_columns() {
     comType: 'TiLabel',
     comConf: {
       placeholder: 'i18n:nil',
+      boxRadius: 'none',
     } as LabelProps,
   });
 
@@ -85,10 +87,12 @@ export function init_ti_std_columns() {
     readonlyComConf: {
       align: 'right',
       type: 'disable',
+      boxRadius: 'none',
     } as LabelProps,
     comType: 'TiInputNum',
     comConf: {
       precision: 1,
+      boxRadius: 'none',
     } as InputNumProps,
   });
 
@@ -100,11 +104,13 @@ export function init_ti_std_columns() {
       valuePiping: '$F2',
       showBorder: false,
       type: 'disable',
+      boxRadius: 'none',
     } as LabelProps,
     comType: 'TiInputNum',
     comConf: {
       precision: 100,
       decimalPlaces: 2,
+      boxRadius: 'none',
     } as InputNumProps,
   });
 
@@ -116,11 +122,13 @@ export function init_ti_std_columns() {
       valuePiping: '$F3',
       showBorder: false,
       type: 'disable',
+      boxRadius: 'none',
     } as LabelProps,
     comType: 'TiInputNum',
     comConf: {
       precision: 1000,
       decimalPlaces: 3,
+      boxRadius: 'none',
     } as InputNumProps,
   });
 
@@ -132,11 +140,13 @@ export function init_ti_std_columns() {
       valuePiping: '$F6',
       showBorder: false,
       type: 'disable',
+      boxRadius: 'none',
     } as LabelProps,
     comType: 'TiInputNum',
     comConf: {
       precision: 1000000,
       decimalPlaces: 6,
+      boxRadius: 'none',
     } as InputNumProps,
   });
 
@@ -145,6 +155,7 @@ export function init_ti_std_columns() {
     readonlyComType: 'TiLabel',
     readonlyComConf: {
       valuePiping: 'BOOL',
+      boxRadius:'none',
       pipeProcessers: {
         BOOL: (v: any) => {
           if (v && v > 0) {
@@ -190,6 +201,7 @@ export function init_ti_std_columns() {
     comConf: {
       className: 'is-nowrap',
       valuePiping: 'DATE',
+      boxRadius: 'none',
       pipeProcessers: {
         DATETIME: (v: any) => {
           let format = tiGetDefaultComPropValue(
@@ -209,6 +221,7 @@ export function init_ti_std_columns() {
       hideBorder: true,
       autoSelect: true,
       boxFocused: true,
+      boxRadius: 'none',
       trimed: true,
     } as InputDatetimeProps,
   });
@@ -219,6 +232,7 @@ export function init_ti_std_columns() {
     comConf: {
       className: 'is-nowrap',
       valuePiping: 'DATETIME',
+      boxRadius: 'none',
       pipeProcessers: {
         DATETIME: (v: any) => {
           let format = tiGetDefaultComPropValue(
@@ -239,6 +253,7 @@ export function init_ti_std_columns() {
       autoSelect: true,
       boxFocused: true,
       trimed: true,
+      boxRadius: 'none',
     } as InputDatetimeProps,
   });
 
