@@ -3,7 +3,7 @@
   //-----------------------------------------------------
 </script>
 <template>
-  <div class="ti-tree">TiTree</div>
+  <div class="ti-tree-table">TiTree</div>
 </template>
 <style lang="scss">
   @use './ti-tree-table.scss';
