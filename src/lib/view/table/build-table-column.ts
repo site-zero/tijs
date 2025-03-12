@@ -10,7 +10,7 @@ export function buildTableColumnsMap(props: TableProps) {
   if (props.columns) {
     for (let i = 0; i < props.columns.length; i++) {
       let ref = props.columns[i];
-      let col = _ocs.getColumnBy(ref);
+      let col = _ocs.getColumnBy(ref, props.editable);
       // if (col.candidate) {
       //   continue;
       // }

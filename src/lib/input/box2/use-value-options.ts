@@ -32,7 +32,7 @@ export type ValueOptionsProps = ItemLookupProps & {
    */
   optionFilterVars?: Vars;
   /**
-   * 获取的的 option 结果集，菜蔬原生数据还是转换为标准数据
+   * 获取的的 option 结果集，采用原生数据还是转换为标准数据
    */
   optionKeepRaw?: boolean;
 

@@ -73,7 +73,9 @@
   //-------------------------------------------------
   const TitleAlign = computed(() => getFieldTitleAlign(props));
   //-------------------------------------------------
-  const FieldText = computed(() => getFieldTextInfo(props, props.vars));
+  const FieldText = computed(() =>
+    getFieldTextInfo(props, FieldDynamicContext.value)
+  );
   const FieldIcon = computed(() =>
     getFieldIcon(props, hasTitle.value, hasTip.value, FieldStatus.value)
   );

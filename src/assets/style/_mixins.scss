@@ -382,6 +382,8 @@ $BARLINE: 1px;
   @include __color_fborder(disable, $prefix);
   @include __color_fborder(text, $prefix);
   @include __color_fborder(number, $prefix);
+  @include __color_fborder(primary, $prefix);
+  @include __color_fborder(secondary, $prefix);
 }
 
 //-------------------------------------------------------------

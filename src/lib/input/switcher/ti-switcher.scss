@@ -18,15 +18,25 @@
       border-width: 1px;
       border-style: solid;
       gap: 0.5em;
+      opacity: 0.4;
     }
     > .it-text {
       line-height: 2em;
+    }
+
+    &.is-checked {
+      opacity: 1;
     }
   }
   //---------------------------------------
   &.is-editable {
     .sw-item {
       cursor: pointer;
+      transition: opacity 0.5s;
+      &:hover {
+        opacity: 0.8;
+        background-color: var(--ti-color-highlight);
+      }
     }
   }
   //---------------------------------------

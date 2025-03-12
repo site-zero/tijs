@@ -247,7 +247,7 @@ export function convertChangesToMeta(changed: Vars | FieldChange[]): Vars {
   return changed ?? {};
 }
 
-export function useFieldChangeDiff(
+export function applyFieldChangeDiff(
   changes: FieldChange[] | Vars,
   data: Vars = {}
 ) {

@@ -20,8 +20,15 @@ import {
 const log = getLogger('TiList.use-list');
 
 export function useList(props: ListProps, emit: ListEmitter) {
-  // 启用特性
-  let selectable = useSelectable<TableRowID>(props);
+  // 启用特性: 选择行，对于列表 getId 与 getValue 通常用户只会指定一个
+  let _get_id: undefined | string | ((it: Vars, index: number) => TableRowID) =
+    undefined;
+  if (props.getId) {
+    _get_id = props.getId;
+  } else if (props.getValue) {
+    _get_id = props.getValue;
+  }
+  let selectable = useSelectable<TableRowID>({ ...props, getId: _get_id });
   const getRowType = useDataLogicType(props.getRowType);
   //-----------------------------------------------------
   // 标准列表

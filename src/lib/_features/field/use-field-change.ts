@@ -15,18 +15,17 @@ import {
   Vars,
 } from '../../../_type';
 import { I18n, Util } from '../../../core';
-import { getLogger } from '../../../core/log/ti-log';
 import { Alert } from '../../_modal';
 
-const log = getLogger('ti.use-field-change');
+const debug = false;
 
-export type FieldChangeValidateEvent = FieldStatus &
-  Pick<AbstractField, 'name'>;
+export type FieldChangeValidateResult = FieldStatus &
+  Pick<AbstractField, 'name' | 'uniqKey'>;
 
 export type FieldChangeEmitter = {
   (eventName: 'change', payload: Vars): void;
   (eventName: 'change-fields', payload: FieldChange[]): void;
-  (eventName: 'change-validate', payload: FieldChangeValidateEvent): void;
+  (eventName: 'change-validate', payload: FieldChangeValidateResult): void;
 };
 
 /**
@@ -93,6 +92,10 @@ export type HandleValueChangeOptions = {
   data: Vars;
   checkEquals?: boolean;
 };
+
+export type FieldChangeApi<T extends AbstractField> = ReturnType<
+  typeof useFieldChange<T>
+>;
 /*
 --------------------------------------------------------------
 
@@ -225,7 +228,11 @@ export function useFieldChange<T extends AbstractField>(
               moreField = MakeVirtualField.value(morFld);
             }
             if (!props.allowUndefinedFields) {
-              log.trace(`Fail to found field defination [${morUniqKey}]`, more);
+              if (debug)
+                console.trace(
+                  `Fail to found field defination [${morUniqKey}]`,
+                  more
+                );
               continue;
             }
           }
@@ -304,7 +311,7 @@ export function useFieldChange<T extends AbstractField>(
       }
       return;
     }
-    log.debug('field=', field);
+    if (debug) console.log('field=', field);
 
     // 转换字段值
     if (field.serializer) {
@@ -348,27 +355,74 @@ export function useFieldChange<T extends AbstractField>(
 
     // 应用连接字段
     let changes = await applyFieldChange(change, data);
-    log.debug('changes=', changes);
+    if (debug) console.log('changes=', changes);
 
     // 生成数据
     let changedData = makeChangeData(changes, data);
-    log.debug('changedData=', changedData);
+    if (debug) console.log('changedData=', changedData);
 
     // 通知改动: 防守检查相同
     if (checkEquals && !_.isEmpty(data)) {
       let diff = getDiffData(data, changedData);
       if (_.isEmpty(diff)) {
-        log.debug('Empty Diff then return');
+        if (debug) console.log('Empty Diff then return');
         return;
       }
-      log.debug('notify diff=', diff);
+      if (debug) console.log('notify diff=', diff);
       notifyChange(changedData, changes, field);
     }
     // 通知改动
     else {
-      log.debug('notify change', changedData);
+      if (debug) console.log('notify change', changedData);
       notifyChange(changedData, changes, field);
     }
+  }
+
+  function getValidationErrorMessage(
+    validation: ValidateResult,
+    change: FieldValueChange,
+    data: Vars,
+    field?: T
+  ): FieldChangeValidateResult | undefined {
+    // 没错
+    if (validation.type == 'OK') {
+      return;
+    }
+
+    // 生成错误信息
+    let msg_vars: Vars = {
+      key: change.uniqKey,
+      val: change.value,
+      title: _.get(field, 'title') ?? field?.uniqKey,
+      tip: _.get(field, 'tip'),
+      data,
+    };
+    let msg: string | undefined = undefined;
+    let type: FieldStatusType = 'ok';
+    // 字段未定义： 似乎不太可能出现
+    if (!field || validation.type == 'FIELD_UNDEFINED') {
+      type = 'error';
+      msg =
+        validation.message ?? I18n.textf('i18n:e-field-undefined', msg_vars);
+    }
+    // 必选值为空
+    else if (validation.type == 'VALUE_NIL') {
+      type = 'error';
+      msg = validation.message ?? I18n.textf('i18n:e-val-nil', msg_vars);
+    }
+    // 值非法
+    else if (validation.type == 'VALUE_INVALID') {
+      type = 'error';
+      msg =
+        validation.message ?? I18n.textf('i18n:e-field-val-invalid', msg_vars);
+    }
+
+    return {
+      name: field?.name ?? '-unknown-',
+      uniqKey: change.uniqKey,
+      type,
+      text: msg,
+    };
   }
 
   //...................................................
@@ -391,43 +445,13 @@ export function useFieldChange<T extends AbstractField>(
         emit('change-fields', changes);
       },
       async (validation, change, data, field) => {
-        let msg_vars: Vars = {
-          key: change.uniqKey,
-          val: change.value,
-          title: _.get(field, 'title') ?? field?.uniqKey,
-          tip: _.get(field, 'tip'),
-          data,
-        };
-        let msg: string | undefined = undefined;
-        let type: FieldStatusType = 'ok';
-        // 字段未定义： 似乎不太可能出现
-        if (!field || validation.type == 'FIELD_UNDEFINED') {
-          type = 'error';
-          msg =
-            validation.message ??
-            I18n.textf('i18n:e-field-undefined', msg_vars);
+        let errMsg = getValidationErrorMessage(validation, change, data, field);
+        if (errMsg) {
+          emit('change-validate', errMsg);
         }
-        // 必选值为空
-        else if (validation.type == 'VALUE_NIL') {
-          type = 'error';
-          msg = validation.message ?? I18n.textf('i18n:e-val-nil', msg_vars);
-        }
-        // 值非法
-        else if (validation.type == 'VALUE_INVALID') {
-          type = 'error';
-          msg =
-            validation.message ??
-            I18n.textf('i18n:e-field-val-invalid', msg_vars);
-        }
-        emit('change-validate', {
-          name: field?.name ?? '-unknown-',
-          type,
-          text: msg,
-        });
       }
     );
   }
-
   //...................................................
   // 返回特性
   return {
@@ -439,6 +463,7 @@ export function useFieldChange<T extends AbstractField>(
     getDiffData, // 根据改动列表获取与原始数据的差异数据
     tidyValueChange,
     handleValueChange,
+    getValidationErrorMessage,
   };
 }
 

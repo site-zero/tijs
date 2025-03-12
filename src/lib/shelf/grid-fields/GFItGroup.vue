@@ -65,8 +65,16 @@
     return GridLayoutStyle.value.mergetStyle(css);
   });
   //-------------------------------------------------
+  const FieldDynamicContext = computed(() => {
+    return {
+      ...(props.vars ?? {}),
+      uniqKey: props.uniqKey,
+      data: props.data,
+    };
+  });
+  //-------------------------------------------------
   const GroupText = computed(() => {
-    return getFieldTextInfo(props, props.vars);
+    return getFieldTextInfo(props, FieldDynamicContext.value);
   });
   //-------------------------------------------------
   const GroupTextTitle = computed(() => {

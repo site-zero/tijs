@@ -5,12 +5,13 @@
   import { CssUtils } from '../../../core';
   import { GridFieldsStrictLabel } from './ti-grid-fields-types';
   import { getFieldTextInfo, getGridItemStyle } from './use-field-style';
-
+  //-------------------------------------------------
   defineOptions({
     inheritAttrs: false,
   });
-
+  //-------------------------------------------------
   const props = defineProps<GridFieldsStrictLabel>();
+  //-------------------------------------------------
   const TopClass = computed(() => {
     let _is_empty =
       !props.title && !props.comType && !props.tip && !props.tipBy;
@@ -22,12 +23,24 @@
       props.className
     );
   });
+  //-------------------------------------------------
   const TopStyle = computed(() => {
     let css_1 = getGridItemStyle(props);
     return _.assign({}, props.style, css_1);
   });
-
-  const LabelText = computed(() => getFieldTextInfo(props, props.vars));
+  //-------------------------------------------------
+  const FieldDynamicContext = computed(() => {
+    return {
+      ...(props.vars ?? {}),
+      uniqKey: props.uniqKey,
+      data: props.data,
+    };
+  });
+  //-------------------------------------------------
+  const LabelText = computed(() =>
+    getFieldTextInfo(props, FieldDynamicContext.value)
+  );
+  //-------------------------------------------------
 </script>
 <template>
   <div
