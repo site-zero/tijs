@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { KeyboardStatus, TableRowID, Vars } from '../../_type';
+import { isTableRowID, KeyboardStatus, TableRowID, Vars } from '../../_type';
 import { Util } from '../../core';
 // -----------------------------------------------------
 //  Types
@@ -228,28 +228,34 @@ export function useSelectable<ID extends TableRowID>(
 
     // allow multi
     if (props.multi) {
-      if (!_.isNil(currentId)) {
+      if (isTableRowID(currentId)) {
         ids.set(currentId, true);
       }
 
       let _is_checked = (_id: ID) => false;
       if (checkedIds) {
-        let idMap: Map<ID, boolean>;
+        let idMap: Map<string, boolean>;
         // Use Array
         if (_.isArray(checkedIds)) {
-          idMap = Util.arrayToMap(checkedIds);
+          idMap = Util.arrayToMap(_.map(checkedIds, (id) => `${id}`));
         }
         // Use Map
         else if (checkedIds instanceof Map) {
-          idMap = checkedIds;
+          idMap = new Map<string, boolean>();
+          for (let [k, v] of checkedIds.entries()) {
+            idMap.set(`${k}`, v);
+          }
         }
         // Use Record
         else {
-          idMap = Util.objToMap(checkedIds);
+          //idMap = Util.objToMap(checkedIds);
+          _.forEach(checkedIds, (v, k) => {
+            idMap.set(`${k}`, v);
+          });
         }
         // 准备判断函数
         _is_checked = (id: ID) => {
-          let key = `${id}` as ID;
+          let key = `${id}`;
           return idMap.get(key) ?? false;
         };
       }
