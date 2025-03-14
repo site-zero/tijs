@@ -18,7 +18,6 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.MultiDroplist;
 
 const TiMultiDroplistInfo: TiComInfo = {
-  tags: ['ing'],
   icon: 'fas-check-double',
   race: TiComRace.INPUT,
   name: COM_TYPE,
