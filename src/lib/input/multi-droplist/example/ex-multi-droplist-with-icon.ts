@@ -1,5 +1,5 @@
 import { ComPropExample } from '../../../../_type';
-import { MultiMultiDroplistProps } from '../ti-multi-droplist-types';
+import { MultiDroplistProps } from '../ti-multi-droplist-types';
 
 export default {
   name: 'with_icon',
@@ -7,8 +7,7 @@ export default {
   comConf: {
     value: 'otter',
     placeholder: 'Choose one Animal',
-    prefixIconFor: 'clear',
-    showCleanOption: true,
+    readonly: true,
     options: [
       { value: 'hippo', text: 'Hippo', icon: 'fas-hippo' },
       { value: 'cow', text: 'Cow', icon: 'fas-cow' },
@@ -28,5 +27,5 @@ export default {
       { value: 'horse', text: 'Horse', icon: 'fas-horse' },
       { value: 'cat', text: 'Cat', icon: 'fas-cat' },
     ],
-  } as MultiMultiDroplistProps,
+  } as MultiDroplistProps,
 } as ComPropExample;

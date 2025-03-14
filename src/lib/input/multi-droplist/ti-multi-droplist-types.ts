@@ -1,15 +1,26 @@
-import { DictProps, ListProps, PlaceholderProps, TagsProps } from '../../';
-import { CommonProps, Vars } from '../../../_type';
+import {
+  DictProps,
+  ListProps,
+  PlaceholderProps,
+  ReadonlyProps,
+  TagsProps,
+} from '../../';
+import { CommonProps, TableRowID, Vars } from '../../../_type';
 import { ValueOptionsProps } from '../box2/use-value-options';
 
-export type MultiMultiDroplistProps = CommonProps &
+export type MultiDroplistEmitter = {
+  (event: 'change', vals: null | TableRowID[]): void;
+};
+
+export type MultiDroplistProps = CommonProps &
   PlaceholderProps &
+  ReadonlyProps &
   DictProps &
   ValueOptionsProps & {
     /**
      * 值，通常应该是数组，如果不是，会被转换为数组处理
      */
-    value?: any;
+    value?: TableRowID | TableRowID[] | null;
 
     //-----------------------------------------------------
     // 标签和列表
@@ -20,8 +31,8 @@ export type MultiMultiDroplistProps = CommonProps &
     tags?: TagsProps;
 
     /**
-         * 提示列表的配置
-         */
+     * 提示列表的配置
+     */
     tipList?: Omit<ListProps, 'data'>;
 
     /**

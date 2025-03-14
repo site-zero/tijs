@@ -31,6 +31,7 @@ const TiMultiDroplistInfo: TiComInfo = {
   },
   com: TiMultiDroplist,
   liveStyle: {
+    display: 'block',
     width: '80%',
     minWidth: '120px',
     maxWidth: '300px',

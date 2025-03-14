@@ -1,5 +1,9 @@
 import { CommonProps, IconInput, LogicType, Vars } from '../../../_type';
-import { PlaceholderProps, ValueTranslatorProps } from '../../../lib';
+import {
+  ActionBarProps,
+  PlaceholderProps,
+  ValueTranslatorProps,
+} from '../../../lib';
 
 /**
  * 标题翻译器，这个转换器使用的场景是当 value 是 `Vars` 的时候，
@@ -17,10 +21,16 @@ export type TagNameInfo = {
 export type TagItem = {
   icon?: IconInput;
   text?: string;
+  tip?: string;
   type?: LogicType;
   className?: any;
-  name?: string;
   value: any;
+  /**
+   * 我们支持通过 props.value:Vars 来渲染标签列表。
+   *
+   * 那么每个 tag 都需要一个 name 来从输入的对象里获取值
+   */
+  name?: string;
 };
 
 export type TagsProps = CommonProps &
@@ -30,6 +40,9 @@ export type TagsProps = CommonProps &
 
     defaultTagType?: LogicType;
     defaultTagClass?: any;
+    defaultTagStyle?: Vars;
+
+    actions?: ActionBarProps;
 
     /**
      * 前缀标题

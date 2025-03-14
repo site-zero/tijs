@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed, ref, watch } from 'vue';
-  import { TiLabel, usePlaceholder } from '../../';
+  import { TiActionBar, TiLabel, usePlaceholder } from '../../';
   import { Vars } from '../../../_type';
   import { I18n } from '../../../core';
   import { TagItem, TagsProps } from './ti-tags-types';
@@ -36,6 +36,7 @@
   }
   //-----------------------------------------------------
   function onRemoveItem(it: TagItem) {
+    console.log('onRemoveItem', it);
     if (props.editable) {
       // 对于 TagItem[] 型的 value
       if (_.isArray(props.value)) {
@@ -77,9 +78,11 @@
       {{ I18n.text(props.title) }}
     </div>
     <template v-if="hasTagItems">
+      <!--======<Tab Labels>======-->
       <TiLabel
         v-for="it in tagItems"
         class="show-border"
+        :style="props.defaultTagStyle"
         :type="it.type"
         :clickable="props.tagClickable"
         :className="it.className"
@@ -97,6 +100,10 @@
       class="as-empty"
       >{{ Placeholder }}</span
     >
+    <!--======<Tab Actions>======-->
+    <template v-if="props.actions">
+      <TiActionBar v-bind="props.actions" />
+    </template>
   </div>
 </template>
 <style lang="scss" scoped>

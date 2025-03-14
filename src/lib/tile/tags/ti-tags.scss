@@ -1,7 +1,7 @@
 @use '@site0/tijs/sass/_all.scss' as *;
 
 .ti-tags {
-  @include flex-align($ai: center, $ac: center);
+  @include flex-align($ai: stretch, $ac: stretch);
   &[nowrap] {
     flex-wrap: nowrap;
   }
@@ -15,6 +15,15 @@
   > .ti-label {
     margin: SZ(1);
     flex: 0 0 auto;
+  }
+  > hr {
+    opacity: 0;
+    flex: 1 1 auto;
+  }
+  > .ti-actionbar {
+    flex: 1 1 auto;
+    margin: 0;
+    padding: 0;
   }
   > .as-empty {
     color: var(--ti-color-disable);

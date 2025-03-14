@@ -1,12 +1,70 @@
 @use '../../../assets/style/_all.scss' as *;
 
 .ti-multi-droplist {
-  --box-color-border: var(--ti-color-border-dark);
+  --box-color-border: var(--ti-color-border-thin);
+  --box-color-border-focus: var(--ti-color-primary);
+  --box-padding: var(--ti-gap-s);
   //-----------------------------------------------------
-  display: block;
-  cursor: pointer;
-  //-----------------------------------------------------
-  &:focus {
-    background: RED;
+  > .part-main {
+    display: block;
+
+    padding: var(--box-padding);
+    border: 1px solid var(--box-color-border);
+    border-radius: var(--ti-measure-r-s);
   }
+  //-----------------------------------------------------
+  &.is-editable {
+    > .part-main {
+      cursor: pointer;
+      &:focus {
+        border-color: var(--box-color-border-focus);
+      }
+    }
+  }
+  //-----------------------------------------------------
+  > .part-mask {
+    position: fixed;
+    z-index: $z-mask;
+    inset: 0;
+  }
+  //-----------------------------------------------------
+  > .part-options {
+    @include flex-align-v-nowrap;
+    position: fixed;
+    z-index: $z-mask + 2;
+    padding: SZ(2) 0;
+    background-color: var(--ti-color-card);
+    border: 1px solid var(--ti-color-primary);
+    border-radius: var(--ti-measure-r-s);
+    box-shadow: -1px -1px var(--ti-color-light), 1px 1px var(--ti-color-dark),
+      4px 4px 12px var(--ti-color-mask-thin);
+    //---------------------------------------------------
+    > .part-options-con {
+      //box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      overflow: auto;
+    }
+    > footer {
+      @include flex-align-nowrap;
+      border-top: 1px solid var(--ti-color-primary);
+      padding: var(--ti-gap-s);
+      font-size: var(--ti-fontsz-s);
+      > a {
+        @include flex-align-nowrap;
+        padding: 0 0.5em;
+        border-radius: var(--ti-measure-r-s);
+        > i {
+          font-size: 16px;
+        }
+        > span {
+          margin: 0 0.5em;
+        }
+        &:hover {
+          text-decoration: none;
+          background-color: var(--ti-color-primary-r);
+        }
+      }
+    }
+    //---------------------------------------------------
+  }
+  //-----------------------------------------------------
 }
