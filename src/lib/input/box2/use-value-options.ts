@@ -40,7 +40,7 @@ export type ValueOptionsProps = ItemLookupProps & {
    * 开启了这个选项，在 reloadOptionsData 时，无论 hint 是否为空
    * 都强制采用 dict.queryData 进行查询
    *
-   * 涉及的主要场景，是查询 starte 时候，服务器可能需要 cookHint
+   * 涉及的主要场景，是查询 state 时候，服务器可能需要 cookHint
    * 的结果带上国家代码，而不是单纯的关键词
    */
   forceCookHint?: boolean;

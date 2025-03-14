@@ -48,7 +48,6 @@ export type InputBoxProps = CommonProps &
   DictProps &
   ValueOptionsProps &
   ValueHintCookingProps &
-  ItemLookupProps &
   PlaceholderProps &
   InputBoxAspect &
   ReadonlyProps &

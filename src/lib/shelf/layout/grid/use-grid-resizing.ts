@@ -164,7 +164,7 @@ const Moving = {
       ta = Num.round(ta, 100);
       resizing.columns[myIndex] = `${my}px`;
       resizing.columns[taIndex] = `${ta}px`;
-      //console.log(`bar_row_next: my=${my} + ta=${ta}  == ${my + ta}`);
+      //console.log(`bar_column_next: my=${my} + ta=${ta}  == ${my + ta}`);
     };
   },
   bar_column_next(
@@ -181,19 +181,19 @@ const Moving = {
       ta = Num.round(ta, 100);
       resizing.columns[myIndex] = `${my}px`;
       resizing.columns[taIndex] = `${ta}px`;
-      //console.log(`bar_row_next: my=${my} + ta=${ta}  == ${my + ta}`);
+      //console.log(`bar_column_next,scope:${JSON.stringify(scope)}: my[${myIndex}]=${my} + ta[${taIndex}]=${ta}  == ${my + ta}`);
     };
   },
 };
 
-function toPercent(ns: number[], mea: ResizeMeasure) {
+function toTrackSize(ns: number[], mea: ResizeMeasure) {
   let { gap, tracks } = mea;
   let tota = _.sum(ns) + Math.max(0, ns.length - 1) * gap;
   let re = [];
   for (let i = 0; i < ns.length; i++) {
     // 对于 auto/1fr 等，采用原来的值
     let track = tracks[i];
-    if (/^(auto|\d+fr)$/.test(track) && i != mea.taIndex) {
+    if (/^(auto|\d+fr)$/.test(track) && i == mea.taIndex) {
       re.push(track);
       continue;
     }
@@ -203,8 +203,8 @@ function toPercent(ns: number[], mea: ResizeMeasure) {
       continue;
     }
     // 默认转化为百分比
-    let per = Str.toPercent(ns[i] / tota);
-    re.push(per);
+    let tksz = Str.toPercent(ns[i] / tota);
+    re.push(tksz);
   }
   return re;
 }
@@ -214,13 +214,13 @@ const MoveEnd = {
     return () => {
       let ns = _.map(resizing.columns, (s) => CssUtils.toPixel(s));
       //console.log('column ns', ns);
-      resizing.columns = toPercent(ns, mea);
+      resizing.columns = toTrackSize(ns, mea);
     };
   },
   row: function (resizing: GridResizingState, mea: ResizeMeasure) {
     return () => {
       let ns = _.map(resizing.rows, (s) => CssUtils.toPixel(s));
-      resizing.rows = toPercent(ns, mea);
+      resizing.rows = toTrackSize(ns, mea);
     };
   },
 };
@@ -257,7 +257,7 @@ export function useGridResizing(
       // 获取整个格子的布局
       // 因为采用了计算属性，所以直接获得就是 '300.578px 541.047px' 这样的数组
       let mea = getGridMeasure(bar, $view);
-      //console.log('mea', mea);
+      console.log('mea', mea);
       mea.myIndex = bar.adjustIndex;
 
       // 我需要知道调整哪两个列
@@ -286,8 +286,8 @@ export function useGridResizing(
       // console.log("onStart", bar, mea);
     },
     onMoving: (ing: Dragging) => {
-      //console.log('onMoving', ing);
       let moving = ing.getVar('moving');
+      //console.log('onMoving', _.isFunction(moving), ing);
       if (_.isFunction(moving)) {
         moving();
       }

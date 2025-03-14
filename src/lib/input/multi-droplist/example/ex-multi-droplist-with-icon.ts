@@ -1,5 +1,5 @@
 import { ComPropExample } from '../../../../_type';
-import { MulTiMultiDroplistProps } from '../ti-multi-droplist-types';
+import { MultiMultiDroplistProps } from '../ti-multi-droplist-types';
 
 export default {
   name: 'with_icon',
@@ -28,5 +28,5 @@ export default {
       { value: 'horse', text: 'Horse', icon: 'fas-horse' },
       { value: 'cat', text: 'Cat', icon: 'fas-cat' },
     ],
-  } as MulTiMultiDroplistProps,
+  } as MultiMultiDroplistProps,
 } as ComPropExample;

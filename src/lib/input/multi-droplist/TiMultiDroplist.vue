@@ -1,51 +1,23 @@
 <script lang="ts" setup>
-  import { TiInput } from '../../';
-  import { MulTiMultiDroplistProps } from './ti-multi-droplist-types';
-  //-----------------------------------------------------
-  defineOptions({
-    inheritAttrs: false,
-  });
+  import { TiTags } from '../../';
+  import { MultiMultiDroplistProps } from './ti-multi-droplist-types';
   //-----------------------------------------------------
   let emit = defineEmits<{
     (event: 'change', payload: string): void;
   }>();
   //-----------------------------------------------------
-  let props = withDefaults(defineProps<MulTiMultiDroplistProps>(), {
-    autoI18n: true,
-    tipShowTime: 'focus',
-    tipUseHint: false,
-    tipTidyBy: () => ['main'],
-    suffixIconFor: 'load-options',
-    autoPrefixIcon: true,
-    autoSelect: false,
-    lookup: () => ['=text', '=value'],
+  let props = withDefaults(defineProps<MultiMultiDroplistProps>(), {
+    placeholder: 'i18n:no-selected'
   });
   //-----------------------------------------------------
-  // type CleansSetup = Pick<InputBoxProps, 'prefixIconFor' | 'showCleanOption'>;
-  // const Cleans = computed((): CleansSetup => {
-  //   let re = {
-  //     prefixIconFor: props.prefixIconFor,
-  //     showCleanOption: props.showCleanOption,
-  //   } as CleansSetup;
-  //   if ('clear' != re.prefixIconFor && !re.showCleanOption) {
-  //     re.showCleanOption = true;
-  //   }
-  //   return re;
-  // });
-  //-----------------------------------------------------
-  function onInputChange(val: any) {
+  function onChange(val: any) {
     //console.log('onInputChange', val);
     emit('change', val);
   }
   //-----------------------------------------------------
 </script>
 <template>
-  <TiInput
-    v-bind="props"
-    :canInput="false"
-    :trimed="false"
-    :mustInOptions="true"
-    @change="onInputChange" />
+  <TiTags :placeholder="props.placeholder" :value="[]"/>
 </template>
 <style lang="scss" scoped>
   @use './ti-multi-droplist.scss';

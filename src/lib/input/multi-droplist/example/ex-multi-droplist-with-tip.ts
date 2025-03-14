@@ -1,5 +1,5 @@
 import { ComPropExample } from '../../../../_type';
-import { MulTiMultiDroplistProps } from '../ti-multi-droplist-types';
+import { MultiMultiDroplistProps } from '../ti-multi-droplist-types';
 
 export default {
   name: 'with_tip',
@@ -118,5 +118,5 @@ export default {
         tip: 'Cats are independent animals',
       },
     ],
-  } as MulTiMultiDroplistProps,
+  } as MultiMultiDroplistProps,
 } as ComPropExample;
