@@ -1,4 +1,12 @@
 @use '../../../assets/style/_all.scss' as *;
 
 .ti-multi-droplist {
+  --box-color-border: var(--ti-color-border-dark);
+  //-----------------------------------------------------
+  display: block;
+  cursor: pointer;
+  //-----------------------------------------------------
+  &:focus {
+    background: RED;
+  }
 }

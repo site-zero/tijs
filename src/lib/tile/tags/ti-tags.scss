@@ -16,4 +16,9 @@
     margin: SZ(1);
     flex: 0 0 auto;
   }
+  > .as-empty {
+    color: var(--ti-color-disable);
+    font-size: 0.8em;
+    opacity: 0.63;
+  }
 }

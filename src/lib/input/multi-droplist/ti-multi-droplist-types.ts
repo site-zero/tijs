@@ -1,5 +1,5 @@
 import { DictProps, ListProps, PlaceholderProps, TagsProps } from '../../';
-import { CommonProps } from '../../../_type';
+import { CommonProps, Vars } from '../../../_type';
 import { ValueOptionsProps } from '../box2/use-value-options';
 
 export type MultiMultiDroplistProps = CommonProps &
@@ -11,6 +11,9 @@ export type MultiMultiDroplistProps = CommonProps &
      */
     value?: any;
 
+    //-----------------------------------------------------
+    // 标签和列表
+    //-----------------------------------------------------
     /**
      * 显示标签配置
      */
@@ -30,4 +33,12 @@ export type MultiMultiDroplistProps = CommonProps &
      * 展出提示框最小宽度，如果不声明，则采用与 box 相同的宽度
      */
     tipListMinWidth?: string;
+
+    //-----------------------------------------------------
+    // 外观与样式
+    //-----------------------------------------------------
+    hideBorder?: boolean;
+
+    style?: Vars;
+    tagsStyle?: Vars;
   };
