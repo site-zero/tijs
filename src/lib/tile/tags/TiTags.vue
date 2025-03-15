@@ -30,20 +30,18 @@
   const _tags = computed(() => useTags(props, tagItems));
   const _placeholder = computed(() => usePlaceholder(props));
   //-----------------------------------------------------
-  const _sorting = computed(() =>
-    useTagsSortable({
-      getView: () => $el.value,
-      enabled: props.editable,
-      getTagItems: () => {
-        if (_.isArray(props.value)) {
-          return props.value;
-        }
-        return tagItems.value;
-      },
-      setDragging: (v) => (_dragging.value = v),
-      emit,
-    })
-  );
+  const _sorting = useTagsSortable({
+    getView: () => $el.value,
+    enabled: props.editable,
+    getTagItems: () => {
+      if (_.isArray(props.value)) {
+        return props.value;
+      }
+      return tagItems.value;
+    },
+    setDragging: (v) => (_dragging.value = v),
+    emit,
+  });
   //-----------------------------------------------------
   const hasTagItems = computed(() => tagItems.value.length > 0);
   //-----------------------------------------------------
@@ -96,19 +94,19 @@
     () => props.editable,
     () => {
       if (props.editable) {
-        _sorting.value.startWatching();
+        _sorting.startWatching();
       } else {
-        _sorting.value.clearWatching();
+        _sorting.clearWatching();
       }
     }
   );
   //-----------------------------------------------------
   onMounted(() => {
-    _sorting.value.startWatching();
+    _sorting.startWatching();
   });
   //-----------------------------------------------------
   onUnmounted(() => {
-    _sorting.value.clearWatching();
+    _sorting.clearWatching();
   });
   //-----------------------------------------------------
 </script>

@@ -99,6 +99,9 @@ export function useMultiDroplist(
   }
   //-----------------------------------------------------
   async function openOptions() {
+    if (props.readonly) {
+      return;
+    }
     await _options.reloadOptioinsData();
   }
   //-----------------------------------------------------
