@@ -5,6 +5,12 @@
   &[nowrap] {
     flex-wrap: nowrap;
   }
+  &.is-editable {
+    user-select: none;
+    > .ti-label {
+      cursor: pointer;
+    }
+  }
   > .as-title {
     font-weight: bold;
     font-size: var(--ti-fontsz-s);
@@ -15,6 +21,11 @@
   > .ti-label {
     margin: SZ(1);
     flex: 0 0 auto;
+  }
+  > .as-sorting-ghost {
+    opacity: 0.5;
+    color: red;
+    background-color: yellow;
   }
   > hr {
     opacity: 0;

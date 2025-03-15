@@ -1,11 +1,21 @@
 <script lang="ts" setup>
   import _ from 'lodash';
-  import { computed, ref, watch } from 'vue';
+  import {
+    computed,
+    onMounted,
+    onUnmounted,
+    ref,
+    useTemplateRef,
+    watch,
+  } from 'vue';
   import { TiActionBar, TiLabel, usePlaceholder } from '../../';
   import { Vars } from '../../../_type';
-  import { I18n } from '../../../core';
+  import { CssUtils, I18n } from '../../../core';
   import { TagItem, TagsProps } from './ti-tags-types';
   import { useTags } from './use-tags';
+  import { useTagsSortable } from './use-tags-sortable';
+  //-----------------------------------------------------
+  const $el = useTemplateRef<HTMLElement>('el');
   //-----------------------------------------------------
   const emit = defineEmits<{
     // 对于 TagItem[] 型的 value
@@ -22,12 +32,26 @@
     valueIsMatcher: undefined,
   });
   //-----------------------------------------------------
+  const _sorting = computed(() =>
+    useTagsSortable({
+      getView: () => $el.value,
+      enabled: props.editable,
+    })
+  );
+  //-----------------------------------------------------
   const tagItems = ref<TagItem[]>([]);
   //-----------------------------------------------------
-  const Tags = computed(() => useTags(props, tagItems));
-  const Placeholder = computed(() => usePlaceholder(props));
+  const _tags = computed(() => useTags(props, tagItems));
+  const _placeholder = computed(() => usePlaceholder(props));
   //-----------------------------------------------------
   const hasTagItems = computed(() => tagItems.value.length > 0);
+  //-----------------------------------------------------
+  const TopClass = computed(() =>
+    CssUtils.mergeClassName({
+      'is-readonly': !props.editable,
+      'is-editable': props.editable,
+    })
+  );
   //-----------------------------------------------------
   function onClickItem(it: TagItem) {
     if (props.tagClickable) {
@@ -62,16 +86,37 @@
     ],
     async () => {
       //console.log('Tags change');
-      await Tags.value.loadTagItems();
+      await _tags.value.loadTagItems();
     },
     { immediate: true }
   );
+  //-----------------------------------------------------
+  watch(
+    () => props.editable,
+    () => {
+      if (props.editable) {
+        _sorting.value.startWatching();
+      } else {
+        _sorting.value.clearWatching();
+      }
+    }
+  );
+  //-----------------------------------------------------
+  onMounted(() => {
+    _sorting.value.startWatching();
+  });
+  //-----------------------------------------------------
+  onUnmounted(() => {
+    _sorting.value.clearWatching();
+  });
   //-----------------------------------------------------
 </script>
 <template>
   <div
     class="ti-tags"
-    :nowrap="props.nowrap || undefined">
+    :class="TopClass"
+    :nowrap="props.nowrap || undefined"
+    ref="el">
     <div
       class="as-title"
       v-if="props.title">
@@ -81,7 +126,7 @@
       <!--======<Tab Labels>======-->
       <TiLabel
         v-for="it in tagItems"
-        class="show-border"
+        class="show-border as-tag-item"
         :style="props.defaultTagStyle"
         :type="it.type"
         :clickable="props.tagClickable"
@@ -98,7 +143,7 @@
     <span
       v-else
       class="as-empty"
-      >{{ Placeholder }}</span
+      >{{ _placeholder }}</span
     >
     <!--======<Tab Actions>======-->
     <template v-if="props.actions">
