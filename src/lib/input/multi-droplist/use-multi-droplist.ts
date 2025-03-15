@@ -70,9 +70,13 @@ export function useMultiDroplist(
     vals: TableRowID[] | undefined | null = _it_values.value
   ) {
     console.log('tryNotifyChange', vals);
-    if (!_.isEqual(vals, props.value)) {
-      emit('change', vals ?? null);
+    if (_.isUndefined(vals)) {
+      return;
     }
+    if (_.isEqual(vals, props.value)) {
+      return;
+    }
+    emit('change', vals ?? null);
   }
   //-----------------------------------------------------
   // 异步方法
