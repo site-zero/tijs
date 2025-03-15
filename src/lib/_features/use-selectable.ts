@@ -248,7 +248,7 @@ export function useSelectable<ID extends TableRowID>(
         }
         // Use Record
         else {
-          //idMap = Util.objToMap(checkedIds);
+          idMap = new Map<string, boolean>();
           _.forEach(checkedIds, (v, k) => {
             idMap.set(`${k}`, v);
           });

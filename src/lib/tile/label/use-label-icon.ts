@@ -15,6 +15,8 @@ export type LabelIconOptions = {
   emit: LabelEmitter;
 };
 
+export type LabelIconApi = ReturnType<typeof useLabelIcon>;
+
 export function useLabelIcon(options: LabelIconOptions) {
   const { _api, href, icon, hoverIcon, iconFor, autoIcon, emit } = options;
   //--------------------------------------------------

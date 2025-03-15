@@ -9,22 +9,14 @@
     watch,
   } from 'vue';
   import { TiActionBar, TiLabel, usePlaceholder } from '../../';
-  import { Vars } from '../../../_type';
   import { CssUtils, I18n } from '../../../core';
-  import { TagItem, TagsProps } from './ti-tags-types';
+  import { TagItem, TagsEmitter, TagsProps } from './ti-tags-types';
   import { useTags } from './use-tags';
   import { useTagsSortable } from './use-tags-sortable';
   //-----------------------------------------------------
   const $el = useTemplateRef<HTMLElement>('el');
   //-----------------------------------------------------
-  const emit = defineEmits<{
-    // 对于 TagItem[] 型的 value
-    (event: 'click-tag', payload: TagItem): void;
-    // 对于 TagItem[] 型的 value
-    (event: 'remove', payload: TagItem): void;
-    // 对于 Vars 型的 value
-    (event: 'change', payload: Vars): void;
-  }>();
+  const emit = defineEmits<TagsEmitter>();
   //-----------------------------------------------------
   const props = withDefaults(defineProps<TagsProps>(), {
     placeholder: 'i18n:nil-content',
@@ -32,17 +24,26 @@
     valueIsMatcher: undefined,
   });
   //-----------------------------------------------------
+  const tagItems = ref<TagItem[]>([]);
+  const _dragging = ref(false);
+  //-----------------------------------------------------
+  const _tags = computed(() => useTags(props, tagItems));
+  const _placeholder = computed(() => usePlaceholder(props));
+  //-----------------------------------------------------
   const _sorting = computed(() =>
     useTagsSortable({
       getView: () => $el.value,
       enabled: props.editable,
+      getTagItems: () => {
+        if (_.isArray(props.value)) {
+          return props.value;
+        }
+        return tagItems.value;
+      },
+      setDragging: (v) => (_dragging.value = v),
+      emit,
     })
   );
-  //-----------------------------------------------------
-  const tagItems = ref<TagItem[]>([]);
-  //-----------------------------------------------------
-  const _tags = computed(() => useTags(props, tagItems));
-  const _placeholder = computed(() => usePlaceholder(props));
   //-----------------------------------------------------
   const hasTagItems = computed(() => tagItems.value.length > 0);
   //-----------------------------------------------------
@@ -129,12 +130,12 @@
         class="show-border as-tag-item"
         :style="props.defaultTagStyle"
         :type="it.type"
+        :capture-click="true"
         :clickable="props.tagClickable"
         :className="it.className"
         :prefixIcon="it.icon"
         :suffixIcon="props.editable ? 'zmdi-close' : undefined"
-        :suffixIconFor="props.editable ? 'click' : undefined"
-        suffixIconClass="hover-rotate"
+        :suffixIconFor="props.editable && !_dragging ? 'click' : undefined"
         :value="it.text"
         @click-suffix-icon="onRemoveItem(it)"
         @click-prefix-icon="onClickItem(it)"

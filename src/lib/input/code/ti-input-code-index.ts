@@ -26,6 +26,7 @@ const TiInputCodeInfo: TiComInfo = {
   },
   com: TiInputCode,
   liveStyle: {
+    display: 'block',
     width: '80%',
     minWidth: '120px',
     maxWidth: '300px',

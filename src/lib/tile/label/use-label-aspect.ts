@@ -2,8 +2,13 @@ import _ from 'lodash';
 import { computed } from 'vue';
 import { CssUtils } from '../../../core';
 import { LabelProps } from './ti-label-types';
+import { LabelIconApi } from './use-label-icon';
 
-export function useLabelAspect(props: LabelProps) {
+export function useLabelAspect(
+  props: LabelProps,
+  _prefix: LabelIconApi,
+  _suffix: LabelIconApi
+) {
   //--------------------------------------------------
   const TopClass = computed(() => {
     let hasValue = !_.isNil(props.value) && '' != props.value;
@@ -14,6 +19,10 @@ export function useLabelAspect(props: LabelProps) {
       'is-nowrap': props.nowrap,
       'show-border': props.showBorder,
       'can-click': props.clickable,
+      'nil-prefix-icon': !_prefix.hasIcon.value,
+      'has-prefix-icon': _prefix.hasIcon.value,
+      'nil-suffix-icon': !_suffix.hasIcon.value,
+      'has-suffix-icon': _suffix.hasIcon.value,
     });
   });
   //--------------------------------------------------

@@ -51,6 +51,11 @@ export function useMultiDroplist(
   //-----------------------------------------------------
   // 同步方法
   //-----------------------------------------------------
+  function changeItems(items: TagItem[]) {
+    let vals = _.map(items, (it) => it.value);
+    tryNotifyChange(vals);
+  }
+  //-----------------------------------------------------
   function removeItem(it: TagItem) {
     let vals: TableRowID[] = [];
     for (let val of TagValues.value) {
@@ -135,6 +140,7 @@ export function useMultiDroplist(
     TagValues,
 
     // 同步方法
+    changeItems,
     removeItem,
     clearOptionsData,
     tryNotifyChange,

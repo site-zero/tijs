@@ -8,7 +8,7 @@ const en_us = {
   'com-name': 'InputColor',
 };
 const zh_cn = {
-  'com-name': '颜色选择',
+  'com-name': '颜色框',
 };
 
 const COM_TYPE = COM_TYPES.InputColor;

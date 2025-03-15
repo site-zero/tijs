@@ -25,8 +25,6 @@
   const _pipe = computed(() => useValuePipe(props));
   const _dict = computed(() => useDict(props));
   //-----------------------------------------------------
-  const _aspect = useLabelAspect(props);
-  //-----------------------------------------------------
   const _api = useLabel(props, {
     _state,
     _pipe: _pipe.value,
@@ -58,6 +56,10 @@
     })
   );
   //-----------------------------------------------------
+  const _aspect = computed(() =>
+    useLabelAspect(props, _prefix.value, _suffix.value)
+  );
+  //-----------------------------------------------------
   const LabelText = computed(() => {
     let re = _state.text || usePlaceholder(props);
     if (props.autoI18n) {
@@ -65,6 +67,12 @@
     }
     return re;
   });
+  //-----------------------------------------------------
+  function onClickLabel(event: MouseEvent) {
+    if (props.captureClick) {
+      event.stopPropagation();
+    }
+  }
   //-----------------------------------------------------
   // 看看是否满足选项列表的打开条件
   watch(
@@ -81,7 +89,8 @@
     class="ti-label"
     :class="_aspect.TopClass.value"
     :style="_aspect.TopStyle.value"
-    ref="el">
+    ref="el"
+    @click.left="onClickLabel">
     <!--====================================-->
     <div
       v-if="_prefix.hasIcon.value"

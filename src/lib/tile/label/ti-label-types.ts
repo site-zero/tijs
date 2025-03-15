@@ -73,6 +73,10 @@ export type LabelProps = CommonProps &
      */
     vars?: Vars;
 
+    /**
+     * 指定是否捕获点击，设置为 true 会导致事件不会冒泡到父组件
+     */
+    captureClick?: boolean;
     clickable?: boolean;
     nowrap?: boolean;
     disable?: boolean;

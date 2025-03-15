@@ -3,7 +3,7 @@
 .ti-label {
   @include flex-align-nowrap($ai: center);
   overflow: hidden;
-  flex:1 1 auto;
+  flex: 1 1 auto;
   //-----------------------------------------------
   //min-height: var(--ti-measure-box-height);
   font-size: var(--box-fontsz);
@@ -45,10 +45,17 @@
     //@include flex-align-nowrap($ai: center);
     flex: 1 1 auto;
     text-align: var(--box-align);
-    line-height: 1.2em;
-    padding: 0 0.5em;
-    padding: var(--box-padding);
+    line-height: 2em;
+    padding: 0 0 0.3em 0;
     margin: 0;
+  }
+  //-----------------------------------------------
+  &.nil-prefix-icon {
+    padding-left: 0.618em;
+  }
+  //-----------------------------------------------
+  &.nil-suffix-icon {
+    padding-right: 0.618em;
   }
   //-----------------------------------------------
   // 前后图标

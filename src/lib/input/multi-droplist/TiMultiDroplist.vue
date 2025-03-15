@@ -38,7 +38,7 @@
   //-----------------------------------------------------
   const TopClass = computed(() => {
     let readonly = _api.value.isReadonly.value;
-    CssUtils.mergeClassName({
+    return CssUtils.mergeClassName({
       'is-readonly': readonly,
       'is-editable': !readonly,
     });
@@ -77,7 +77,8 @@
       :tabindex="_api.isReadonly.value ? undefined : '0'"
       class="part-main"
       :style="props.style"
-      ref="el">
+      ref="el"
+      @click.left="_api.openOptions()">
       <TiTags
         :style="props.tagsStyle"
         :placeholder="props.placeholder"
@@ -86,7 +87,8 @@
         :actions="TagActions"
         v-bind="props.tags"
         :value="_api.TagItems.value"
-        @remove="_api.removeItem($event)" />
+        @remove="_api.removeItem($event)"
+        @sorted="_api.changeItems" />
     </div>
     <template v-if="_tip_box.TipBoxStyleReady.value">
       <!--遮罩层：展开选项后，会用这个来捕获全局 click-->

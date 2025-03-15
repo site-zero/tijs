@@ -18,6 +18,17 @@ export type TagNameInfo = {
   name: string | string[];
 };
 
+export type TagsEmitter = {
+  // 对于 TagItem[] 型的 value
+  (event: 'click-tag', payload: TagItem): void;
+  // 对于 TagItem[] 型的 value
+  (event: 'remove', payload: TagItem): void;
+  // 对于 Vars 型的 value
+  (event: 'change', payload: Vars): void;
+  // 支持排序
+  (event: 'sorted', payload: TagItem[]): void;
+};
+
 export type TagItem = {
   icon?: IconInput;
   text?: string;

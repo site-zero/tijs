@@ -36,6 +36,9 @@ const TiTagsInfo: TiComInfo = {
   install: (app: App) => {
     app.component(COM_TYPE, TiTags);
   },
+  exampleModel: {
+    sorted: 'value',
+  },
   defaultProps: 'simple',
   exampleProps: [
     example.simple,
