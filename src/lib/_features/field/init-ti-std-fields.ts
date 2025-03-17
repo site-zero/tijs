@@ -411,4 +411,7 @@ export function init_ti_std_fields() {
       valuePiping: '$DT',
     } as LabelProps,
   });
+  //--------------------------------------------------
+  // 标准RDS字段
+  //--------------------------------------------------
 } // export function init_ti_std_fields() {
