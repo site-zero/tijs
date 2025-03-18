@@ -6,7 +6,6 @@ import {
   LabelProps,
   ToggleProps,
 } from '../../';
-import { DateTime, tiGetDefaultComPropValue } from '../../../';
 import { useObjColumns } from './use-obj-columns';
 
 export function init_ti_std_columns() {
@@ -155,7 +154,7 @@ export function init_ti_std_columns() {
     readonlyComType: 'TiLabel',
     readonlyComConf: {
       valuePiping: 'BOOL',
-      boxRadius:'none',
+      boxRadius: 'none',
       pipeProcessers: {
         BOOL: (v: any) => {
           if (v && v > 0) {
@@ -197,24 +196,11 @@ export function init_ti_std_columns() {
   //--------------------------------------------------
   _ofs.addColumn('#INPUT-DATE', {
     type: 'String',
-    comType: 'TiLabel',
-    comConf: {
+    readonlyComType: 'TiLabel',
+    readonlyComConf: {
       className: 'is-nowrap',
-      valuePiping: 'DATE',
+      valuePiping: '$DATE',
       boxRadius: 'none',
-      pipeProcessers: {
-        DATETIME: (v: any) => {
-          let format = tiGetDefaultComPropValue(
-            'TiInputDatetime',
-            'format',
-            'yyyy-MM-dd'
-          );
-          if (v) {
-            return DateTime.format(v, { fmt: format });
-          }
-          return '';
-        },
-      },
     } as LabelProps,
     activatedComType: 'TiInputDate',
     activatedComConf: {
@@ -233,19 +219,6 @@ export function init_ti_std_columns() {
       className: 'is-nowrap',
       valuePiping: 'DATETIME',
       boxRadius: 'none',
-      pipeProcessers: {
-        DATETIME: (v: any) => {
-          let format = tiGetDefaultComPropValue(
-            'TiInputDatetime',
-            'format',
-            'yyyy-MM-dd HH:mm'
-          );
-          if (v) {
-            return DateTime.format(v, { fmt: format });
-          }
-          return '';
-        },
-      },
     } as LabelProps,
     activatedComType: 'TiInputDatetime',
     activatedComConf: {

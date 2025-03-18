@@ -99,6 +99,10 @@ function defineObjColumns(featureName: string): ObjColumnsFeature {
     if (_.isNumber(col_info.width)) {
       re.width = col_info.width;
     }
+    // 没有宽度的话，给个默认宽度
+    else if (_.isNil(re.width)) {
+      re.width = 100;
+    }
 
     // 字段的名称和标题
     re.name = col_info.name ?? re.name ?? col_info._key;
