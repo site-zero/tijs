@@ -25,3 +25,4 @@ export * as Util from './util';
 export * from './util';
 export * from './web';
 export * as Be from './web/behaviors';
+export * as Features from '../lib/_features';

@@ -88,9 +88,10 @@ export function init_ti_std_columns() {
       type: 'disable',
       boxRadius: 'none',
     } as LabelProps,
-    comType: 'TiInputNum',
-    comConf: {
+    activatedComType: 'TiInputNum',
+    activatedComConf: {
       precision: 1,
+      hideBorder: true,
       boxRadius: 'none',
     } as InputNumProps,
   });
@@ -105,8 +106,8 @@ export function init_ti_std_columns() {
       type: 'disable',
       boxRadius: 'none',
     } as LabelProps,
-    comType: 'TiInputNum',
-    comConf: {
+    activatedComType: 'TiInputNum',
+    activatedComConf: {
       precision: 100,
       decimalPlaces: 2,
       boxRadius: 'none',
@@ -123,8 +124,8 @@ export function init_ti_std_columns() {
       type: 'disable',
       boxRadius: 'none',
     } as LabelProps,
-    comType: 'TiInputNum',
-    comConf: {
+    activatedComType: 'TiInputNum',
+    activatedComConf: {
       precision: 1000,
       decimalPlaces: 3,
       boxRadius: 'none',
@@ -141,8 +142,8 @@ export function init_ti_std_columns() {
       type: 'disable',
       boxRadius: 'none',
     } as LabelProps,
-    comType: 'TiInputNum',
-    comConf: {
+    activatedComType: 'TiInputNum',
+    activatedComConf: {
       precision: 1000000,
       decimalPlaces: 6,
       boxRadius: 'none',
@@ -164,8 +165,8 @@ export function init_ti_std_columns() {
         },
       },
     } as LabelProps,
-    comType: 'TiToggle',
-    comConf: {
+    activatedComType: 'TiToggle',
+    activatedComConf: {
       texts: ['i18n:no', 'i18n:yes'],
     } as ToggleProps,
   });
@@ -184,8 +185,8 @@ export function init_ti_std_columns() {
         },
       },
     } as LabelProps,
-    comType: 'TiCheck',
-    comConf: {
+    activatedComType: 'TiCheck',
+    activatedComConf: {
       texts: ['i18n:no', 'i18n:yes'],
       values: [0, 1],
     } as CheckProps,

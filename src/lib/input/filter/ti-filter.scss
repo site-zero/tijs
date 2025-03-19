@@ -3,6 +3,12 @@
 .ti-filter {
   @include flex-align-nowrap($ai: stretch);
   //---------------------------------------
+  &.auto-stretch > .part-left {
+    > .part-major {
+      position: static;
+    }
+  }
+  //---------------------------------------
   > .part-left {
     flex: 1 1 auto;
     display: grid;

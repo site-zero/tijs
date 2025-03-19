@@ -12,6 +12,7 @@
     }
   }
   > .as-title {
+    @include flex-center;
     font-weight: bold;
     font-size: var(--ti-fontsz-s);
     white-space: nowrap;
