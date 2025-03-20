@@ -138,28 +138,26 @@
     ></span>
   </div>
   <!--正式列单元格-->
-  <template
+  <div
     v-for="(cell, i) in props.columns"
-    :key="cell.uniqKey">
+    :key="cell.uniqKey"
+    class="table-cell as-body"
+    :row-id="props.row.id"
+    :row-index="props.row.index"
+    :col="i"
+    :class="getRowCellClass(cell.uniqKey)"
+    ref="$cells"
+    @click.stop="onCell('cell-select', cell.uniqKey, $event)"
+    @dblclick.stop="onCell('cell-open', cell.uniqKey, $event)">
+    <!--首列，这里有可能插入缩进占位块-->
     <div
-      class="table-cell as-body"
-      :row-id="props.row.id"
-      :row-index="props.row.index"
-      :col="i"
-      :class="getRowCellClass(cell.uniqKey)"
-      ref="$cells"
-      @click.stop="onCell('cell-select', cell.uniqKey, $event)"
-      @dblclick.stop="onCell('cell-open', cell.uniqKey, $event)">
-      <!--首列，这里有可能插入缩进占位块-->
-      <div
-        v-if="0 === i && ShowIndentor"
-        class="row-indent"
-        :style="RowIndentStyle"></div>
-      <!--插入单元格控件-->
-      <TableCell v-bind="cell" :rowIndex="props.row.index" :colIndex="i"
-      :data="props.row.rawData" :vars="props.vars" :activated="props.activated
-      && cell.uniqKey == props.activedColUniqKey"" :editable="props.editable"
-      @cell-change="emit('cell-change', $event)" />
-    </div>
-  </template>
+      v-if="0 === i && ShowIndentor"
+      class="row-indent"
+      :style="RowIndentStyle"></div>
+    <!--插入单元格控件-->
+    <TableCell v-bind="cell" :rowIndex="props.row.index" :colIndex="i"
+    :data="props.row.rawData" :vars="props.vars" :activated="props.activated &&
+    cell.uniqKey == props.activedColUniqKey"" :editable="props.editable"
+    @cell-change="emit('cell-change', $event)" />
+  </div>
 </template>

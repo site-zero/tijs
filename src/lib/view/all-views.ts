@@ -11,7 +11,7 @@ import { TiWallInfo } from './wall/ti-wall-index';
 export default {
   TiTable: TiTableInfo,
   TiList: TiListInfo,
-  TiTreeInfo: TiTreeInfo,
+  TiTree: TiTreeInfo,
   TiTreeTable: TiTreeTableInfo,
   TiFalls: TiFallsInfo,
   TiWall: TiWallInfo,

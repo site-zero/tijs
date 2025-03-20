@@ -1,0 +1,31 @@
+<mxfile host="65bd71144e">
+    <diagram id="VJcu8HwKF5IeIZzvctOQ" name="第 1 页">
+        <mxGraphModel dx="746" dy="549" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="List Data" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;" vertex="1" parent="1">
+                    <mxGeometry x="190" y="120" width="200" height="30" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="Row Indents&lt;br&gt;Map&amp;lt;TableRowId, number&amp;gt;&lt;br&gt;每一行缩进多少, 默认 0" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;" vertex="1" parent="1">
+                    <mxGeometry x="190" y="170" width="200" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="status Icon&lt;br&gt;【选】前缀图标，打开关闭的状态图" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;" vertex="1" parent="1">
+                    <mxGeometry x="270" y="370" width="120" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" value="markerIcon&lt;br&gt;标记图标，打开关闭的加减号" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;" vertex="1" parent="1">
+                    <mxGeometry x="270" y="300" width="120" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="6" target="5">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" style="edgeStyle=orthogonalEdgeStyle;html=1;exitX=0.25;exitY=1;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="6" target="4">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="Row Prefix Icons&lt;br&gt;Map&amp;lt;TableRowId, IconInput&amp;gt;&lt;br&gt;行前缀图标" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;" vertex="1" parent="1">
+                    <mxGeometry x="190" y="240" width="200" height="50" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
