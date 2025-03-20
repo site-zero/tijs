@@ -9,6 +9,7 @@ import {
   CommonProps,
   CssBorderStyle,
   IconInput,
+  RowIndentProps,
   TableRowID,
   Vars,
 } from '../../../_type';
@@ -96,7 +97,8 @@ export type ListAspect = {
 export type ListProps = CommonProps &
   ListAspect &
   SelectableProps<TableRowID> &
-  StdListItemProps & {
+  StdListItemProps &
+  RowIndentProps & {
     /**
      * 传入的数据对象
      */

@@ -5,5 +5,7 @@ export * from './core-types';
 export * from './lib-type-columns';
 export * from './lib-type-fields';
 export * from './lib-type-grid-layout';
+export * from './lib-type-row-indent';
 export * from './lib-types';
 export * from './log-types';
+
