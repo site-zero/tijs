@@ -5,11 +5,15 @@
   background-color: var(--ti-color-card);
   //background-color: blue;
   &.is-checked {
-    color: var(--ti-color-selected-r);
-    background-color: var(--ti-color-selected);
+    > .table-cell-wrapper {
+      color: var(--ti-color-selected-r);
+      background-color: var(--ti-color-selected);
+    }
     &.is-actived.has-actived-com {
-      color: var(--ti-color-box-f);
-      background-color: var(--ti-color-box);
+      > .table-cell-wrapper {
+        color: var(--ti-color-box-f);
+        background-color: var(--ti-color-box);
+      }
     }
   }
 
@@ -84,6 +88,7 @@
         overflow: hidden;
         white-space: nowrap;
         text-overflow: ellipsis;
+        font-weight: bold;
       }
     } // > .head-cell-con {
     //---------------------------------

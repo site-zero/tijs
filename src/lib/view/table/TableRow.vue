@@ -51,6 +51,7 @@
       // 如果本行是激活的，那么 undefined 表示 marker 列，以及内容列需要判断一下
       isActived = !uniqKey || uniqKey == props.activedColUniqKey;
     }
+    let odd = props.row.index % 2 == 1;
     let col = uniqKey ? props.columnMap.get(uniqKey) : undefined;
     return CssUtils.mergeClassName({
       'is-actived': isActived,
@@ -58,6 +59,8 @@
       'has-actived-com': col?.activatedComType ? true : false,
       'can-hover': props.canHover,
       [`is-${props.row.type ?? ''}`]: props.row.type ? true : false,
+      'is-odd': odd,
+      'is-even': !odd,
     });
   }
   //-------------------------------------------------------

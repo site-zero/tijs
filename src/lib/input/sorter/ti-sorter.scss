@@ -1,7 +1,8 @@
 @use '@site0/tijs/sass/_all.scss' as *;
 
 .ti-sorter {
-  @include flex-align-nowrap($ai: flex-start);
+  @include flex-align-nowrap($ai: center);
+  padding: var(--ti-gap-s);
   > .part-items {
     @include flex-align($ai: center, $ac: center);
     > .ti-label {
@@ -16,8 +17,8 @@
   > .part-setup {
     @include flex-center;
     margin-left: SZ(4);
-    min-width: SZ(32);
-    min-height: SZ(32);
+    min-width: SZ(28);
+    min-height: SZ(28);
     border-radius: var(--ti-measure-r-s);
     > a {
       text-decoration: none;

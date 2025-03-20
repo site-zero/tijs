@@ -6,7 +6,6 @@ import {
   LabelProps,
   ToggleProps,
 } from '../../';
-import { DateTime, tiGetDefaultComPropValue } from '../../../';
 import { useObjColumns } from './use-obj-columns';
 
 export function init_ti_std_columns() {
@@ -89,9 +88,10 @@ export function init_ti_std_columns() {
       type: 'disable',
       boxRadius: 'none',
     } as LabelProps,
-    comType: 'TiInputNum',
-    comConf: {
+    activatedComType: 'TiInputNum',
+    activatedComConf: {
       precision: 1,
+      hideBorder: true,
       boxRadius: 'none',
     } as InputNumProps,
   });
@@ -106,8 +106,8 @@ export function init_ti_std_columns() {
       type: 'disable',
       boxRadius: 'none',
     } as LabelProps,
-    comType: 'TiInputNum',
-    comConf: {
+    activatedComType: 'TiInputNum',
+    activatedComConf: {
       precision: 100,
       decimalPlaces: 2,
       boxRadius: 'none',
@@ -124,8 +124,8 @@ export function init_ti_std_columns() {
       type: 'disable',
       boxRadius: 'none',
     } as LabelProps,
-    comType: 'TiInputNum',
-    comConf: {
+    activatedComType: 'TiInputNum',
+    activatedComConf: {
       precision: 1000,
       decimalPlaces: 3,
       boxRadius: 'none',
@@ -142,8 +142,8 @@ export function init_ti_std_columns() {
       type: 'disable',
       boxRadius: 'none',
     } as LabelProps,
-    comType: 'TiInputNum',
-    comConf: {
+    activatedComType: 'TiInputNum',
+    activatedComConf: {
       precision: 1000000,
       decimalPlaces: 6,
       boxRadius: 'none',
@@ -155,7 +155,7 @@ export function init_ti_std_columns() {
     readonlyComType: 'TiLabel',
     readonlyComConf: {
       valuePiping: 'BOOL',
-      boxRadius:'none',
+      boxRadius: 'none',
       pipeProcessers: {
         BOOL: (v: any) => {
           if (v && v > 0) {
@@ -165,8 +165,8 @@ export function init_ti_std_columns() {
         },
       },
     } as LabelProps,
-    comType: 'TiToggle',
-    comConf: {
+    activatedComType: 'TiToggle',
+    activatedComConf: {
       texts: ['i18n:no', 'i18n:yes'],
     } as ToggleProps,
   });
@@ -185,8 +185,8 @@ export function init_ti_std_columns() {
         },
       },
     } as LabelProps,
-    comType: 'TiCheck',
-    comConf: {
+    activatedComType: 'TiCheck',
+    activatedComConf: {
       texts: ['i18n:no', 'i18n:yes'],
       values: [0, 1],
     } as CheckProps,
@@ -197,24 +197,11 @@ export function init_ti_std_columns() {
   //--------------------------------------------------
   _ofs.addColumn('#INPUT-DATE', {
     type: 'String',
-    comType: 'TiLabel',
-    comConf: {
+    readonlyComType: 'TiLabel',
+    readonlyComConf: {
       className: 'is-nowrap',
-      valuePiping: 'DATE',
+      valuePiping: '$DATE',
       boxRadius: 'none',
-      pipeProcessers: {
-        DATETIME: (v: any) => {
-          let format = tiGetDefaultComPropValue(
-            'TiInputDatetime',
-            'format',
-            'yyyy-MM-dd'
-          );
-          if (v) {
-            return DateTime.format(v, { fmt: format });
-          }
-          return '';
-        },
-      },
     } as LabelProps,
     activatedComType: 'TiInputDate',
     activatedComConf: {
@@ -233,19 +220,6 @@ export function init_ti_std_columns() {
       className: 'is-nowrap',
       valuePiping: 'DATETIME',
       boxRadius: 'none',
-      pipeProcessers: {
-        DATETIME: (v: any) => {
-          let format = tiGetDefaultComPropValue(
-            'TiInputDatetime',
-            'format',
-            'yyyy-MM-dd HH:mm'
-          );
-          if (v) {
-            return DateTime.format(v, { fmt: format });
-          }
-          return '';
-        },
-      },
     } as LabelProps,
     activatedComType: 'TiInputDatetime',
     activatedComConf: {

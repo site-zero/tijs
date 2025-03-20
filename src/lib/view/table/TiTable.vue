@@ -501,4 +501,5 @@
   @use './style/table-resize.scss';
   @use './style/table-color.scss';
   @use './style/table-debug.scss';
+  @use './style/table-zebra.scss';
 </style>
