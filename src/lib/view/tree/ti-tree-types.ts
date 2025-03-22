@@ -3,6 +3,7 @@ import {
   ListProps
 } from '../../';
 import {
+  RowIndentProps,
   Vars
 } from '../../../_type';
 import {
@@ -15,8 +16,10 @@ export type TreeEmitter = {
 };
 
 
-export type TreeProps = ListProps & {
-
+export type TreeProps = ListProps
+  & Pick<RowIndentProps, 'rowIndicators' | 'rowMarkers'>
+  & {
+    
 };
 
 export type TreeNode = ListItem & {
