@@ -13,8 +13,10 @@ export default {
     size: 'b',
     data: [
       { id: 0, text: "I am Root" },
-      { id: 1, text: "I am Child 1", pid: 1 },
-      { id: 2, text: "I am Child 2", pid: 1 },
+      { id: 1, text: "I am Child 1", pid: 0 },
+      { id: 2, text: "I am Child 2", pid: 0 },
+      { id: 3, text: "I am Child 1", pid: 1 },
+      { id: 4, text: "I am Child 2", pid: 2 },
     ],
   } as TreeProps,
 } as ComPropExample;

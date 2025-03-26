@@ -69,9 +69,11 @@ export type TreeDataProps = {
      * - `Vars|Vars[]` : 一组 AutoMatch 的判断条件
      * - `Function`: 自定义判断
      * 
+     * 判断的上下文为 `{hie,data}` @see type NodeTestPayload
+     * 
      * 如果不指定，那么所有的数据行都不是叶子节点
      */
-    isLeafNode?: Vars | Vars[] | ((data: Vars) => boolean)
+    isLeafNode?: Vars | Vars[] | ((payload: NodeTestPayload) => boolean)
 
     /**
      * 如果是树的根节点，如何从树中获取子节点。
@@ -126,7 +128,7 @@ type HierarchyNode = {
     virtual?: boolean;
     // 叶子节点，就表示肯定没有 children，否则肯定有 children
     // 即使是 `[]`
-    leaf: boolean;
+    leaf?: boolean;
     // 在本层的下标， 0base
     index: number;
     // 根节点为 0 ，顶层节点为 1， 以此类推
@@ -143,6 +145,11 @@ type BuildResult = {
     nodes: Map<TableRowID, Vars>,
 }
 
+export type NodeTestPayload = {
+    hie: HierarchyNode,
+    data: Vars,
+}
+
 /**
  * 遍历树的节点
  * 
@@ -154,7 +161,7 @@ type BuildResult = {
   * @return 'down' | 'next' | 'stop', 默认为 'down'
  * 
  */
-export type TreeWalking = (hie: HierarchyNode, data: Vars, walkDepth: number, walkIndex: number) => undefined | TreeWalkAction;
+export type TreeWalking = (hie: HierarchyNode, data: Vars, walkDepth: number, walkIndex: number) => undefined | void | TreeWalkAction;
 
 /**
 * - `"down"`: 继续遍历自己的子节点,对于叶子节点，相当于 'next'
@@ -212,16 +219,20 @@ export function useTreeData(props: TreeDataProps) {
     } else if (props.getParntNodeId) {
         getParntNodeId = props.getParntNodeId
     } else {
-        getParntNodeId = (() => undefined)
+        getParntNodeId = ((data: Vars) => data.parentId ?? data.pid)
     }
 
     // 判断是否是叶子节点
-    let isLeafNode: (data: Vars) => boolean;
-    if (_.isString(props.isLeafNode)) {
+    let isLeafNode: (payload: NodeTestPayload) => boolean;
+    if (_.isFunction(props.isLeafNode)) {
+        isLeafNode = props.isLeafNode
+    } else if (!_.isNil(props.isLeafNode)) {
         let am = Match.parse(props.isLeafNode);
-        isLeafNode = (data: Vars) => am.test(data)
+        isLeafNode = (payload) => am.test(payload)
     } else {
-        isLeafNode = (() => false)
+        isLeafNode = ({ hie }) => {
+            return !hie.children || hie.children.length == 0
+        }
     }
 
     // 虚拟根节点
@@ -418,10 +429,19 @@ export function useTreeData(props: TreeDataProps) {
                 console.warn('Can not find hierarchy node:', nodeId);
                 return;
             }
-            let data = tree.nodes.get(nodeId);
-            if (!data) {
-                console.trace('Can not find data node:', nodeId, hie);
-                return;
+            let data: Vars | undefined;
+            // 虚节点
+            if (hie.virtual) {
+                data = {}
+                data.id = tree.rootId;
+            }
+            // 真实节点
+            else {
+                data = tree.nodes.get(nodeId);
+                if (!data) {
+                    console.trace('Can not find data node:', nodeId, hie);
+                    return;
+                }
             }
             // 无视这个节点
             let act = filter(hie, data);
@@ -477,6 +497,19 @@ export function useTreeData(props: TreeDataProps) {
             buildTreeFromRoot(data, re);
         }
 
+        // 深度优先遍历更新叶子节点状态
+        walkDFS((hie, data, depth, index) => {
+            hie.index = index;
+            hie.depth = depth;
+            hie.leaf = isLeafNode({ hie, data })
+            if (hie.leaf) {
+                if (!_.isEmpty(hie.children)) {
+                    console.warn('Tree Leaf Node has children:', _.cloneDeep(hie))
+                }
+                hie.children = undefined
+            }
+        }, re.rootId, re)
+
         // 更新状态
         _tree.value = re;
     }
@@ -489,7 +522,7 @@ export function useTreeData(props: TreeDataProps) {
         for (let meta of data) {
             // 初次构建，因此 depth 与 index 都是 -1
             let hie = _gen_hierarchy(meta);
-            if (!hie.id) { continue; }
+            if (_.isNil(hie.id)) { continue; }
 
             // 计入详细数据
             re.nodes.set(hie.id, _.omit(meta, _children_key));
@@ -500,7 +533,7 @@ export function useTreeData(props: TreeDataProps) {
             }
 
             // 没有父节点的话，就认为是顶层节点
-            if (!hie.parentId) {
+            if (_.isNil(hie.parentId)) {
                 if (!tops.has(hie.id)) {
                     tops.set(hie.id, hie);
                 }
@@ -510,9 +543,9 @@ export function useTreeData(props: TreeDataProps) {
                 let parent = re.hierarchy.get(hie.parentId);
                 // 加入它的子
                 if (parent) {
-                    if (!parent.children || parent.leaf) {
-                        console.trace('Parent node must be a non-leaf node, and should has children array', parent);
-                        throw new Error('Parent node must be a non-leaf node, and should has children array: ' + JSON.stringify(parent));
+                    if (!parent.children) {
+                        console.trace('Parent node children array not defined', parent);
+                        throw new Error('Parent node children array not defined: ' + JSON.stringify(parent));
                     }
                     parent.children.push(hie.id);
                 }
@@ -542,13 +575,6 @@ export function useTreeData(props: TreeDataProps) {
         else {
             re.rootId = tops.keys().next().value!;
         }
-
-        // 采用深度优先遍历，重新指派 index 与 depth
-        walkDFS((hie, _data, depth, index) => {
-            hie.index = index;
-            hie.depth = depth;
-            return hie.leaf ? 'next' : 'down';
-        }, re.rootId, re);
     }
 
     function buildTreeFromRoot(data: Vars, re: BuildResult) {
@@ -562,14 +588,11 @@ export function useTreeData(props: TreeDataProps) {
 
             let sub_ids: TableRowID[] | undefined = undefined;
             // 递归子节点
-            if (!hie.leaf) {
-                sub_ids = []
-                let children = _.get(meta, _children_key) as Vars[];
-                _.forEach(children, (childData, index) => {
-                    let child = _build_node(index, childData, depth + 1, hie.id);
-                    sub_ids!.push(child.id);
-                })
-            }
+            let children = _.get(meta, _children_key) as Vars[];
+            _.forEach(children, (childData, index) => {
+                let child = _build_node(index, childData, depth + 1, hie.id);
+                sub_ids!.push(child.id);
+            })
 
             // 准备本次构建的层级
             hie.index = index;
@@ -607,15 +630,13 @@ export function useTreeData(props: TreeDataProps) {
         }
         // 获取节点信息
         pid = pid ?? getParntNodeId(meta);
-        let leaf = isLeafNode(meta);
 
         // 保存节点信息
         return {
             index: -1, depth: -1,
             id,
-            leaf,
             parentId: pid,
-            children: leaf ? undefined : []
+            children: []
         }
     }
 
@@ -641,7 +662,5 @@ export function useTreeData(props: TreeDataProps) {
 
         // 构建数据
         buildTree,
-        buildTreeFromList,
-        buildTreeFromRoot
     }
 }

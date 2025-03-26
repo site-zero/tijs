@@ -20,7 +20,7 @@
 <template>
   <div class="ti-tree">
     TiTree
-    <pre>{{ TreeFlatenData }}</pre>
+    <pre style="font-size:10px; line-height: 1.2em;">{{ TreeFlatenData }}</pre>
   </div>
 </template>
 <style lang="scss">
