@@ -499,15 +499,14 @@ function toBoolean(input: any) {
 }
 
 function toAMS(input: any) {
+  if (_.isNumber(input)) {
+    return input as number;
+  }
   let dt = DateTime.parse(input as DateInput);
   if (_.isDate(dt)) {
     return dt.getTime();
   }
   return null;
-}
-
-function toDate(input: any) {
-  return DateTime.parse(input);
 }
 
 export const TI_DFT_DATETIME_FORMAT = '';
