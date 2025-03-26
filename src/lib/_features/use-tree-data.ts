@@ -3,6 +3,7 @@ import { ref } from "vue";
 import { isTableRowID, TableRowID, Vars } from "../../_type";
 import { Match } from "../../core";
 
+
 /**
  * 这个特性用来封装对于树型数据的操作
  * 
@@ -32,6 +33,8 @@ import { Match } from "../../core";
  * - 数据转换
  *     + 将数据扁平化为一个列表
  *     + 将数据树型化，返回数据的根节点
+ * - 构建操作
+ *     + 根据传入的数据（列表或节点）构建树型数据
  * 
  * ### 详细设计
  * 
@@ -115,6 +118,8 @@ export type TreeDataProps = {
     forceUseVirtualRoot?: 'list' | 'node' | 'both' | null;
 }
 
+
+
 type HierarchyNode = {
     id: TableRowID;
     // 虚的，就表示在 nodes 表里没有记录
@@ -145,8 +150,43 @@ type BuildResult = {
  * @param data 当前节点的数据
  * @param walkDepth 当前遍历的深度
  * @param walkIndex 当前遍历的下标
+ * 
+  * @return 'down' | 'next' | 'stop', 默认为 'down'
+ * 
  */
-export type TreeWalking = (hie: HierarchyNode, data: Vars, walkDepth: number, walkIndex: number) => void;
+export type TreeWalking = (hie: HierarchyNode, data: Vars, walkDepth: number, walkIndex: number) => undefined | TreeWalkAction;
+
+/**
+* - `"down"`: 继续遍历自己的子节点,对于叶子节点，相当于 'next'
+* - `"next"`: 跳过当前节点，继续遍历同层下一个节点
+* - `"stop"`: 完全停止遍历，直接退出
+* - `undefined` 默认采用 'yes'
+*/
+export type TreeWalkAction = 'down' | 'next' | 'stop';
+
+/**
+ * 扁平化树的回调
+ * 
+ * @param hie 当前节点的层级信息
+ * @param data 当前节点的数据
+ * 
+ * @return 'down' | 'next' | 'stop', 默认为 'down'
+ */
+export type TreeFlattenFilter = (hie: HierarchyNode, data: Vars, results: Vars[]) => undefined | TreeWalkAction;
+
+/**
+ * 组织树型数据的回调
+ * 
+ * @param hie 当前节点的层级信息
+ * @param data 当前节点的数据
+ * 
+ * @return 'self' | 'all' | 'ignore', 默认为 'all'
+* - `self`: 只保留自己，忽略子节点
+* - `all`: 保留自己以及自己全部子节点
+* - `ignore`: 忽略这个节点，也忽略全部子节点
+
+ */
+export type TreeDataFilter = (hie: HierarchyNode, data: Vars) => 'self' | 'all' | 'ignore';
 
 export function useTreeData(props: TreeDataProps) {
     const _children_key = props.childrenKey || 'children';
@@ -159,7 +199,7 @@ export function useTreeData(props: TreeDataProps) {
     } else if (props.getNodeId) {
         getNodeId = props.getNodeId
     } else {
-        getNodeId = (() => undefined)
+        getNodeId = ((data: Vars) => data.id ?? data.value)
     }
 
 
@@ -228,9 +268,67 @@ export function useTreeData(props: TreeDataProps) {
         }
     }
 
+    function removeNode(nodeId: TableRowID) {
+        let hie = _tree.value.hierarchy.get(nodeId);
+        if (!hie) {
+            return
+        }
+        // 从自己父节点中删除
+        let phie = hie.parentId ? _tree.value.hierarchy.get(hie.parentId) : undefined;
+        if (phie && phie.children) {
+            phie.children = _.without(phie.children, nodeId);
+        }
+
+        // 删除层级关系
+        _tree.value.hierarchy.delete(nodeId);
+
+        // 删除节点数据
+        _tree.value.nodes.delete(nodeId);
+    }
+
     //-----------------------------------------------------
     // 读操作
     //-----------------------------------------------------
+    function getSelf(nodeId: TableRowID) {
+        return _tree.value.nodes.get(nodeId);
+    }
+
+    function getAncestors(nodeId: TableRowID): Vars[] {
+        let re: Vars[] = [];
+        let hie = _tree.value.hierarchy.get(nodeId);
+        if (!hie) {
+            return re;
+        }
+        while (hie.parentId) {
+            let parent = _tree.value.hierarchy.get(hie.parentId);
+            if (!parent) {
+                break;
+            }
+            let data = _tree.value.nodes.get(hie.parentId);
+            if (data) {
+                re.unshift(data);
+            }
+            hie = parent;
+        }
+        return re;
+    }
+
+    function getChildren(nodeId: TableRowID): Vars[] {
+        let re: Vars[] = [];
+        let hie = _tree.value.hierarchy.get(nodeId);
+        if (!hie || hie.leaf || !hie.children) {
+            return re;
+        }
+
+        for (let cid of hie.children) {
+            let data = _tree.value.nodes.get(cid);
+            if (data) {
+                re.push(data);
+            }
+        }
+        return re;
+    }
+
 
     //-----------------------------------------------------
     // 遍历操作
@@ -257,29 +355,102 @@ export function useTreeData(props: TreeDataProps) {
                 throw new Error('Can not find data node:' + nodeId);
             }
             // 调用回调
-            callback(hie, data, walkDepth, walkIndex);
+            let act: TreeWalkAction = callback(hie, data, walkDepth, walkIndex) ?? 'down';
 
-            // 递归子节点
-            if (!hie.leaf) {
+            // 退出
+            if ('stop' == act) {
+                throw 'stop';
+            }
+
+            // 递归子节点: 也就是说，回调必须返回 'down' 才会进入子节点
+            if (!hie.leaf && 'down' == act) {
                 let children = hie.children;
                 if (!children) {
                     console.trace('Non-leaf node must has children:', hie);
                     throw new Error('Non-leaf node must has children:' + JSON.stringify(hie));
                 }
-                for(let i=0;i<children.length;i++) {
+                for (let i = 0; i < children.length; i++) {
                     let childId = children[i];
                     _walk(childId, walkDepth + 1, i);
                 }
             }
         }
 
-        // 开始遍历
-        _walk(id, 0, 0);
+        // 
+        try {
+            _walk(id, 0, 0);
+        } catch (err) {
+            // 正常结束
+            if ("stop" == err) {
+                return;
+            }
+            throw err;
+        }
+
     }
     //-----------------------------------------------------
     // 数据转换
     //-----------------------------------------------------
+    function getFlattenData(filter?: TreeFlattenFilter): Vars[] {
+        if (!filter) {
+            filter = (hie, data, re) => {
+                if (!hie.virtual) {
+                    re.push(data);
+                }
+                return hie.leaf ? 'next' : 'down';
+            }
+        }
+        let re: Vars[] = [];
+        walkDFS((hie, data) => filter(hie, data, re));
+        return re;
+    }
 
+    function getTreeData(filter?: TreeDataFilter, nodeId?: TableRowID) {
+        // 默认的过滤器，全都要
+        if (!filter) {
+            filter = () => 'all';
+        }
+        // 准备一个递归逻辑
+        let tree = _tree.value;
+        const _make_tree_data = (nodeId: TableRowID): Vars | undefined => {
+            let hie = tree.hierarchy.get(nodeId);
+            if (!hie) {
+                console.warn('Can not find hierarchy node:', nodeId);
+                return;
+            }
+            let data = tree.nodes.get(nodeId);
+            if (!data) {
+                console.trace('Can not find data node:', nodeId, hie);
+                return;
+            }
+            // 无视这个节点
+            let act = filter(hie, data);
+            if ('ignore' == act) {
+                return undefined;
+            }
+            // 仅仅添加自己
+            let re = _.cloneDeep(data);
+            if ('self' == act) {
+                return re;
+            }
+
+            // 添加自己和所有子节点
+            if (!hie.leaf && hie.children) {
+                let children: Vars[] = [];
+                for (let childId of hie.children) {
+                    let child = _make_tree_data(childId);
+                    if (child) {
+                        children.push(child);
+                    }
+                }
+                re[_children_key] = children;
+            }
+            return re;
+        }
+
+        // 默认从根节点开始构建
+        return _make_tree_data(nodeId ?? tree.rootId);
+    }
 
     //-----------------------------------------------------
     // 构建数据
@@ -297,7 +468,14 @@ export function useTreeData(props: TreeDataProps) {
             nodes: new Map<TableRowID, Vars>(),
         }
 
-        // 
+        // 从列表构建
+        if (_.isArray(data)) {
+            buildTreeFromList(data, re);
+        }
+        // 从根节点构建
+        else {
+            buildTreeFromRoot(data, re);
+        }
 
         // 更新状态
         _tree.value = re;
@@ -369,6 +547,7 @@ export function useTreeData(props: TreeDataProps) {
         walkDFS((hie, _data, depth, index) => {
             hie.index = index;
             hie.depth = depth;
+            return hie.leaf ? 'next' : 'down';
         }, re.rootId, re);
     }
 
@@ -422,7 +601,7 @@ export function useTreeData(props: TreeDataProps) {
     function _gen_hierarchy(meta: Vars, pid?: TableRowID): HierarchyNode {
         // 获取 ID
         let id = getNodeId(meta)
-        if (!id) {
+        if (!isTableRowID(id)) {
             console.trace('Can not get ID from data:', meta);
             throw new Error('Can not get ID from data');
         }
@@ -443,4 +622,26 @@ export function useTreeData(props: TreeDataProps) {
     //-----------------------------------------------------
     // 输出接口
     //-----------------------------------------------------
+    return {
+        // 写操作
+        clear,
+        removeNode,
+
+        // 读操作
+        getSelf,
+        getAncestors,
+        getChildren,
+
+        // 遍历操作
+        walkDFS,
+
+        // 数据转换
+        getFlattenData,
+        getTreeData,
+
+        // 构建数据
+        buildTree,
+        buildTreeFromList,
+        buildTreeFromRoot
+    }
 }

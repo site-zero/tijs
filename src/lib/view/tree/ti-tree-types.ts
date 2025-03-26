@@ -1,25 +1,15 @@
 import {
   ListItem,
-  ListProps
+  ListProps,
+  SelectEmitInfo,
+  TreeDataProps,
 } from '../../';
-import {
-  RowIndentProps,
-  Vars
-} from '../../../_type';
-import {
-  SelectEmitInfo
-} from '../../../lib/_features/use-selectable';
+import { RowIndentProps, Vars } from '../../../_type/';
+
 
 export type TreeEmitter = {
   (event: 'select', payload: TreeSelectEmitInfo): void;
   (event: 'open', payload: TreeNode): void;
-};
-
-
-export type TreeProps = ListProps
-  & Pick<RowIndentProps, 'rowIndicators' | 'rowMarkers'>
-  & {
-    
 };
 
 export type TreeNode = ListItem & {
@@ -34,3 +24,14 @@ export type TreeSelectEmitInfo = SelectEmitInfo<string> & {
   depth: number;
   path: string[];
 };
+
+
+export type TreeProps = ListProps
+  & Pick<RowIndentProps, 'rowIndicators' | 'rowMarkers'>
+  & TreeDataProps & {
+    data: Vars | Vars[] | null | undefined;
+  };
+
+
+
+
