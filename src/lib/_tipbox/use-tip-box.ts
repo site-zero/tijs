@@ -163,7 +163,7 @@ function __prepre_box_dom(
 }
 
 export function drawTipBox(tip: TipTarget): TipInstance | undefined {
-  console.log('draw tip', tip.target, tip);
+  //console.log('draw tip', tip.target, tip);
   const arrowSize = 10;
   const space = 0;
   const axis_space = arrowSize + space;
@@ -177,7 +177,7 @@ export function drawTipBox(tip: TipTarget): TipInstance | undefined {
   // 获取一下参考对象的矩形区域
   let win = Rects.createBy(tip.target.ownerDocument);
   let ref = Rects.createBy(tip.target);
-  console.log('target:', ref.toString())
+  //console.log('target:', ref.toString())
 
   // 构建初始的样式
   let { boxSty, conSty } = __prepare_box_style(tip, win);
@@ -276,7 +276,7 @@ export function drawTipBox(tip: TipTarget): TipInstance | undefined {
       };
     },
   }[dockPos];
-  console.log('docPos', dockPos);
+  // console.log('docPos', dockPos);
   adjust_style();
 
   // 调整完毕了，重新为 box 设置 Style
@@ -290,7 +290,7 @@ export function drawTipBox(tip: TipTarget): TipInstance | undefined {
   });
 
   // 设置箭头位置
-  console.log('arrowCss', arrowCss);
+  // console.log('arrowCss', arrowCss);
   Dom.updateStyle($tiparrow, arrowCss);
 
   // 然后马上设置一下入场位置
