@@ -18,7 +18,7 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.Tree;
 
 const TiTreeInfo: TiComInfo = {
-  tags: ['scaffold'],
+  tags: ['ing'],
   icon: 'fas-sitemap',
   race: TiComRace.VIEW,
   name: COM_TYPE,
