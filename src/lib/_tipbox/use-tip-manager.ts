@@ -108,7 +108,6 @@ export function useTipManager() {
       // 看看是否要开启新的 tips
       let src = ev.target as HTMLElement;
       let tip = getTipByElement(src);
-      //console.log('mouseover', src.tagName);
       if (tip) {
         let tipObj = drawTipBox(tip);
         if (tipObj) {
@@ -126,11 +125,13 @@ export function useTipManager() {
     }
 
     // 看看转场时间
-    let { conTransform, tr_du, $tipbox } = tipObj;
+    let { conTransform, tr_du, $tipbox, app } = tipObj;
     Dom.updateStyle($tipbox, {
       transform: conTransform,
       opacity: 0,
     });
+
+    app.unmount();
 
     // 最后移除 tip 的定义和 DOM
     _.delay(() => {

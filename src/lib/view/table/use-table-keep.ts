@@ -24,6 +24,7 @@ export function keepColumns(
   _display_column_keys: Ref<string[]>,
   Keep: TableKeepFeature
 ) {
+  // console.log('keepColumns', _column_sizes.value);
   let info: Vars = _.cloneDeep(_column_sizes.value) ?? {};
   info[KK_DISPLAY_COL_KEYS] = _display_column_keys.value || [];
   Keep.KeepColumns.save(info);

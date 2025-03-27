@@ -18,7 +18,7 @@ function __prepare_body_wrapper(tip: TipTarget) {
   return wrap;
 }
 
-function __prepare_box_style(tip: TipTarget, win: Rect) {
+function __prepare_box_style(tip: TipTarget, _win: Rect) {
   // 分析一下样式
   let fontsz = tip.fontSize ?? 's';
   let padding = tip.padding ?? 'm';
@@ -38,9 +38,9 @@ function __prepare_box_style(tip: TipTarget, win: Rect) {
   // 内容容器的样式
   let conSty = {
     position: 'relative',
-    background: '#FF0',
-    maxHeight: tip.maxHeight ?? `${Math.round(win.height * 0.4)}px`,
-    maxWidth: tip.maxWidth ?? `${Math.round(win.width * 0.4)}px`,
+    //background: '#FF0',
+    // maxHeight: tip.maxHeight ?? `${Math.round(win.height * 0.4)}px`,
+    // maxWidth: tip.maxWidth ?? `${Math.round(win.width * 0.4)}px`,
     minHeight: tip.minHeight ?? '10px',
     minWidth: tip.minWidth ?? '50px',
     width: tip.width,
@@ -191,7 +191,7 @@ export function drawTipBox(tip: TipTarget): TipInstance | undefined {
   if (!re) {
     return;
   }
-  let { $tipbox, $tipcon, $tiparrow } = re;
+  let { $tipbox, $tipcon, $tiparrow, app } = re;
 
   // 很好，现在显示了对象，需要针对显示的对象进行调整
   let box = Rects.createBy($tipbox);
@@ -307,6 +307,7 @@ export function drawTipBox(tip: TipTarget): TipInstance | undefined {
 
   // 返回必要信息给调用者
   return {
+    app,
     tip,
     box,
     ref,

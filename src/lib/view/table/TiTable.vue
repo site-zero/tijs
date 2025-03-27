@@ -3,6 +3,7 @@
   import {
     Ref,
     computed,
+    inject,
     onMounted,
     onUnmounted,
     reactive,
@@ -15,7 +16,7 @@
     useFieldChange,
     useLargeScrolling,
   } from '../../';
-  import { Size2D, TableRowID } from '../../../_type';
+  import { Size2D, TI_TIPS_API, TableRowID } from '../../../_type';
   import { CssUtils } from '../../../core';
   import TableRow from './TableRow.vue';
   import { buildTableColumnsMap } from './build-table-column';
@@ -36,9 +37,18 @@
   import { useTableHeadMenu } from './use-table-head-menu';
   import { loadColumns, useKeepTable } from './use-table-keep';
   import { useViewMeasure } from './use-view-measure';
-
   //-------------------------------------------------------
   const debug = false;
+  //-------------------------------------------------------
+  const $main: Ref<HTMLElement> = ref() as Ref<HTMLElement>;
+  //-------------------------------------------------------
+  const _app_tips = inject(TI_TIPS_API);
+  const _tips = _app_tips?.createComTips({
+    getScope: () => $main.value,
+    onMounted,
+    onUnmounted,
+  });
+  console.log('TiTable _tips:', _tips);
   //-------------------------------------------------------
   const showDebugScrolling = false;
   const showDebugResizing = false;
@@ -81,8 +91,6 @@
   //-------------------------------------------------------
   const Keep = computed(() => useKeepTable(props));
   let Table = computed(() => useTable(props, emit));
-  //-------------------------------------------------------
-  const $main: Ref<HTMLElement> = ref() as Ref<HTMLElement>;
   //-------------------------------------------------------
   // 如果采用 IntersectionObserver 就没必要监控 scrolling 的变化了
   const scrolling: TableScrolling = reactive({
@@ -406,7 +414,9 @@
             :cols-count="TableColumns.length"
             :col-key="col.uniqKey"
             :col-prev-key="i == 0 ? HEAD_MARKER : TableColumns[i - 1]?.uniqKey"
-            :title="col.tip">
+            :data-tip-id="col.tip ? col.uniqKey : undefined"
+            :data-tip-content="col.tip || undefined"
+            data-tip-tran-speed="fast">
             <div class="head-cell-con">
               <!-- 调整列宽的控制柄 -->
               <div class="column-resize-hdl for-prev"></div>

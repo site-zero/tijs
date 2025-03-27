@@ -1,3 +1,4 @@
+import { App } from 'vue';
 import {
   AspectSize,
   LogicType,
@@ -123,6 +124,7 @@ export type TipTarget = TipBoxProps & {
 };
 
 export type TipInstance = {
+  app: App<Element>;
   tip: TipTarget;
   box: Rect;
   ref: Rect;
