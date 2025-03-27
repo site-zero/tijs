@@ -131,10 +131,9 @@ export function useTipManager() {
       opacity: 0,
     });
 
-    app.unmount();
-
     // 最后移除 tip 的定义和 DOM
     _.delay(() => {
+      app.unmount();
       Dom.remove($tipbox);
     }, tr_du);
   }
