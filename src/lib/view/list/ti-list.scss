@@ -26,28 +26,56 @@
   //--------------------------------
   > main {
     > .list-item {
-      display: grid;
-      grid-template-columns: 1fr;
-      grid-template-rows: auto;
-      gap: 1px;
+      @include flex-align-nowrap($ai: stretch);
       //------------------------------
       > .list-part {
+        @include flex-center;
+        flex: 0 0 auto;
+        width: 2em;
         //----------------------------
-        &.as-check {
-          @include flex-center;
-          &:hover {
-            color: var(--ti-color-secondary);
+        &.as-indents {
+          @include flex-align-nowrap;
+          width: auto;
+          &:empty{
+            display: none;
+          }
+          > b {
+            display: block;
+            width: 1.8em;
           }
         }
         //----------------------------
+        &.as-indicator {
+          font-size: 0.8em;
+          &:empty{
+            display: none;
+          }
+          > i {
+            @include flex-center;
+            width: 1.1em;
+            height: 1.1em;
+            border: 1px solid var(--ti-color-border-dark);
+          }
+        }
+        //----------------------------
+        &.as-check {
+          &:hover {
+            color: var(--ti-color-secondary);
+            background-color: var(--ti-color-mask-weak);
+          }
+        }
+        //----------------------------
+        &.as-status {
+        }
+        //----------------------------
         &.as-icon {
-          @include flex-center;
         }
         //----------------------------
         &.as-text {
           @include flex-align;
           padding: 0.7em 0.5em;
           line-height: 1.2em;
+          flex: 1 1 auto;
           em {
             font-style: normal;
             flex: 1 1 auto;

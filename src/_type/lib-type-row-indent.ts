@@ -13,7 +13,7 @@ export type RowIndentStatus = 'open' | 'closed';
  *  V
  * [+] [C] node title
  *      ^
- *      +------ | marker 标记图标
+ *      +------ | statusIcons 状态图标
  *              | 可能有两种状态或者固定一种状态，
  *              | 也可能没有
  * ```
@@ -41,5 +41,14 @@ export type RowIndentProps = {
   /**
    * 行状态图标
    */
-  rowMarkers?: string | Record<RowIndentStatus, string>;
+  rowStatusIcons?: string | Record<RowIndentStatus, string>;
 };
+
+export type ToggleRowStatusPayload = {
+  id: TableRowID,
+  currentStatus?: RowIndentStatus
+}
+
+export type ToggleRowStatusEmitter = {
+  (event: 'toggle:status', payload: ToggleRowStatusPayload): void;
+}

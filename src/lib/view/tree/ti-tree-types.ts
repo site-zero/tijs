@@ -27,7 +27,7 @@ export type TreeSelectEmitInfo = SelectEmitInfo<string> & {
 
 
 export type TreeProps = ListProps
-  & Pick<RowIndentProps, 'rowIndicators' | 'rowMarkers'>
+  & Pick<RowIndentProps, 'rowIndicators' | 'rowStatusIcons'>
   & TreeDataProps & {
     data: Vars | Vars[] | null | undefined;
   };

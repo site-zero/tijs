@@ -64,19 +64,40 @@
   //-----------------------------------------------------
   const MarkerIcons = computed(() => _list.value.getMarkerIcons());
   //-----------------------------------------------------
-  const ListItemStyle = computed(() => {
-    let cols = [];
-    if (MarkerIcons.value) {
-      cols.push('2em');
+  function getRowStatus(itemId: TableRowID) {
+    return props.rowStauts?.get(itemId);
+  }
+  //-----------------------------------------------------
+  function getListItemIndent(itemId: TableRowID) {
+    return props.rowIndents?.get(itemId) ?? 0;
+  }
+  //-----------------------------------------------------
+  function getListItemIndicator(itemId: TableRowID) {
+    if (!props.rowIndicators) {
+      return;
     }
-    if (isItemsHasIcon.value) {
-      cols.push('2em');
+    let icons = props.rowIndicators;
+    let st = props.rowStauts?.get(itemId);
+    if (_.isNil(st)) {
+      return;
     }
-    cols.push('1fr');
-    return {
-      'grid-template-columns': cols.join(' '),
-    };
-  });
+    return icons[st];
+  }
+  //-----------------------------------------------------
+  function getListItemStatusIcon(itemId: TableRowID) {
+    if (!props.rowStatusIcons) {
+      return;
+    }
+    let icons = props.rowStatusIcons;
+    if (_.isString(icons)) {
+      return icons;
+    }
+    let st = props.rowStauts?.get(itemId);
+    if (_.isNil(st)) {
+      return;
+    }
+    return icons[st];
+  }
   //-----------------------------------------------------
   function onListItemClick(item: ListItem, event: MouseEvent) {
     //console.log('onListItemClick', item);
@@ -130,11 +151,27 @@
         v-for="it in Items"
         class="list-item"
         :class="it.className"
-        :style="ListItemStyle"
         @click="onListItemClick(it, $event)"
         @dblclick="emit('open', it)">
         <!--***********************************-->
-        <!--=Check=-->
+        <!--=Indent placeholder=-->
+        <div
+          class="list-part as-indents"
+          v-if="props.rowIndents">
+          <b v-for="_ii in getListItemIndent(it.value)"></b>
+        </div>
+        <!--=Status Icons=-->
+        <div
+          v-if="props.rowIndicators && props.rowStauts"
+          class="list-part as-indicator"
+          v-html="getListItemIndicator(it.value)"
+          @click.stop="
+            emit('toggle:status', {
+              id: it.value,
+              currentStatus: getRowStatus(it.value),
+            })
+          "></div>
+        <!--=Check Maker=-->
         <div
           v-if="MarkerIcons"
           class="list-part as-check"
@@ -148,6 +185,11 @@
             v-else
             :value="MarkerIcons[0]" />
         </div>
+        <!--=Status Icons=-->
+        <div
+          v-if="props.rowStatusIcons && props.rowStauts"
+          class="list-part as-status"
+          v-html="getListItemStatusIcon(it.value)"></div>
         <!--=Icon=-->
         <div
           v-if="isItemsHasIcon"

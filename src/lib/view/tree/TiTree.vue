@@ -1,12 +1,58 @@
 <script lang="ts" setup>
-  import { TreeProps, useTreeData } from '@site0/tijs';
+  import {
+    TiList,
+    ToggleRowStatusPayload,
+    TreeProps,
+    useTreeData,
+  } from '@site0/tijs';
+  import _ from 'lodash';
   import { computed, watch } from 'vue';
   //-----------------------------------------------------
-  const props = defineProps<TreeProps>();
+  const props = withDefaults(defineProps<TreeProps>(), {
+    size: 'm',
+    canSelect: true,
+    canHover: true,
+    allowUserSelect: false,
+    autoI18n: true,
+    textAsHtml: true,
+    highlightChecked: true,
+    rowIndicators: () => ({
+      open: '<i class="zmdi zmdi-minus"></i>',
+      closed: '<i class="zmdi zmdi-plus"></i>',
+    }),
+    rowStatusIcons: () => ({
+      open: '<i class="fas fa-folder-open"></i>',
+      closed: '<i class="fas fa-folder"></i>',
+    }),
+  });
+  //-----------------------------------------------------
+  const ListProps = computed(() => {
+    return _.omit(
+      props,
+      'data',
+      // TreeDataProps
+      'isLeafNode',
+      'isNodeOpen',
+      'childrenKey',
+      'getNodeId',
+      'getParntNodeId',
+      'virtualRootNode',
+      'forceUseVirtualRoot',
+      // RowIndentProps
+      'rowIndents',
+      'rowStauts'
+    );
+  });
   //-----------------------------------------------------
   const _tree = computed(() => useTreeData(props));
   //-----------------------------------------------------
-  const TreeFlatenData = computed(() => _tree.value.getTreeData());
+  const TreeFlatenData = computed(() => _tree.value.getFlattenData());
+  const TreeIndents = computed(() => _tree.value.getTreeIndents());
+  const RowStatus = computed(() => _tree.value.getNodeStatus());
+  //-----------------------------------------------------
+  function onToggleRowStatus(payload: ToggleRowStatusPayload) {
+    _tree.value.toggleNodeStatus(payload.id);
+  }
   //-----------------------------------------------------
   watch(
     () => props.data,
@@ -18,10 +64,13 @@
   //-----------------------------------------------------
 </script>
 <template>
-  <div class="ti-tree">
-    TiTree
-    <pre style="font-size:10px; line-height: 1.2em;">{{ TreeFlatenData }}</pre>
-  </div>
+  <!--pre>{{ TreeFlatenData }}</pre-->
+  <TiList
+    v-bind="ListProps"
+    :data="TreeFlatenData"
+    :row-indents="TreeIndents"
+    :row-stauts="RowStatus"
+    @toggle:status="onToggleRowStatus" />
 </template>
 <style lang="scss">
   @use './ti-tree.scss';

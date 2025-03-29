@@ -26,13 +26,13 @@ export function useRowIndent(props: RowIndentProps) {
 
     // 准备标记图标的方法
     let __get_marker: MarkupGetter;
-    if (_.isString(props.rowMarkers)) {
+    if (_.isString(props.rowStatusIcons)) {
         __get_marker = () => {
-            return props.rowMarkers as string;
+            return props.rowStatusIcons as string;
         }
-    } else if (props.rowMarkers) {
+    } else if (props.rowStatusIcons) {
         __get_marker = (row_st) => {
-            let mks = props.rowMarkers as Record<RowIndentStatus, string>;
+            let mks = props.rowStatusIcons as Record<RowIndentStatus, string>;
             return mks[row_st]
         }
     } else {
@@ -44,10 +44,10 @@ export function useRowIndent(props: RowIndentProps) {
         if (props.rowStauts) {
             let row_st = props.rowStauts.get(id) ?? 'closed';
             let marker: string | undefined = undefined
-            if (_.isString(props.rowMarkers)) {
-                marker = props.rowMarkers
+            if (_.isString(props.rowStatusIcons)) {
+                marker = props.rowStatusIcons
             } else {
-                marker = props.rowMarkers?.[row_st]
+                marker = props.rowStatusIcons?.[row_st]
             }
             return {
                 indent: props.rowIndents?.get(id) ?? 0,

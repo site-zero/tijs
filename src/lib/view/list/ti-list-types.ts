@@ -11,7 +11,8 @@ import {
   IconInput,
   RowIndentProps,
   TableRowID,
-  Vars,
+  ToggleRowStatusEmitter,
+  Vars
 } from '../../../_type';
 import {
   SelectEmitInfo,
@@ -122,8 +123,11 @@ export type ListEvent = {
   item: ListItem;
 };
 
+
 export type ListSelectEmitInfo = SelectEmitInfo<TableRowID>;
-export type ListEmitter = {
+
+export type ListEmitter = ToggleRowStatusEmitter & {
   (event: 'select', payload: ListSelectEmitInfo): void;
   (event: 'open', payload: ListItem): void;
+
 };

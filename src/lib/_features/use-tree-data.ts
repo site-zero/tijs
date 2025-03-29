@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { ref } from "vue";
-import { isTableRowID, TableRowID, Vars } from "../../_type";
+import { isTableRowID, RowIndentStatus, TableRowID, Vars } from "../../_type";
 import { Match } from "../../core";
 
 
@@ -73,7 +73,23 @@ export type TreeDataProps = {
      * 
      * 如果不指定，那么所有的数据行都不是叶子节点
      */
-    isLeafNode?: Vars | Vars[] | ((payload: NodeTestPayload) => boolean)
+    isLeafNode?: Vars | Vars[] | ((payload: NodeTestPayload) => boolean);
+
+    /**
+     * 判断节点默认是否是打开状态，每次构建树都会调用一次。
+     * 
+     * - `number` 指定只有小于给定深度级别的才打开。
+     *      + `0` 表示根节点是关闭的
+     *      + `1` 根节点打开，第一层节点是关闭的
+     *      +  ... 以此类推
+     * - `Vars|Vars[]` : 一组 AutoMatch 的判断条件
+     * - `Function`: 自定义判断
+     * 
+     * 判断的上下文为 `{hie,data}` @see type NodeTestPayload
+     * 
+     * @default `1` - 仅仅打开根节点
+     */
+    isNodeOpen?: number | Vars | Vars[] | ((payload: NodeTestPayload) => boolean);
 
     /**
      * 如果是树的根节点，如何从树中获取子节点。
@@ -235,6 +251,20 @@ export function useTreeData(props: TreeDataProps) {
         }
     }
 
+    // 判断节点是否打开
+    let isNodeOpen: ((payload: NodeTestPayload) => boolean);
+    if (_.isFunction(props.isNodeOpen)) {
+        isNodeOpen = props.isNodeOpen
+    } else if (_.isNumber(props.isNodeOpen) || _.isNil(props.isNodeOpen)) {
+        let the_depth = props.isNodeOpen ?? 1
+        isNodeOpen = (payload) => payload.hie.depth < the_depth;
+    } else if (!_.isNil(props.isNodeOpen)) {
+        let am = Match.parse(props.isNodeOpen);
+        isNodeOpen = (payload) => am.test(payload)
+    } else {
+        isNodeOpen = (payload) => payload.hie.leaf ? false : true;
+    }
+
     // 虚拟根节点
     let _vir_root: HierarchyNode;
     if (isTableRowID(props.virtualRootNode)) {
@@ -267,6 +297,26 @@ export function useTreeData(props: TreeDataProps) {
         hierarchy: new Map<TableRowID, HierarchyNode>(),
         nodes: new Map<TableRowID, Vars>(),
     })
+    const _node_status = ref(new Map<TableRowID, RowIndentStatus>());
+
+    //-----------------------------------------------------
+    // 节点状态
+    //-----------------------------------------------------
+    function toggleNodeStatus(id: TableRowID) {
+        let st = _node_status.value.get(id);
+        if (_.isNil(st)) {
+            return;
+        }
+        let newSt = {
+            'open': 'closed',
+            'closed': 'open'
+        }[st] as RowIndentStatus;
+        _node_status.value.set(id, newSt);
+    }
+
+    function getNodeStatus() {
+        return _node_status.value;
+    }
 
     //-----------------------------------------------------
     // 写操作
@@ -341,6 +391,7 @@ export function useTreeData(props: TreeDataProps) {
     }
 
 
+
     //-----------------------------------------------------
     // 遍历操作
     //-----------------------------------------------------
@@ -348,7 +399,7 @@ export function useTreeData(props: TreeDataProps) {
         let tree = tr ?? _tree.value;
         let id = startNodeId ?? tree.rootId;
         // 防空
-        if (!id) {
+        if (_.isNil(id)) {
             return
         }
         // 准备递归遍历逻辑
@@ -405,15 +456,30 @@ export function useTreeData(props: TreeDataProps) {
     function getFlattenData(filter?: TreeFlattenFilter): Vars[] {
         if (!filter) {
             filter = (hie, data, re) => {
+                //console.log(hie.id, hie)
                 if (!hie.virtual) {
                     re.push(data);
                 }
-                return hie.leaf ? 'next' : 'down';
+                if (hie.leaf) {
+                    return 'next';
+                }
+                if ("open" == _node_status.value.get(hie.id)) {
+                    return 'down';
+                }
+                return 'next';
             }
         }
         let re: Vars[] = [];
         walkDFS((hie, data) => filter(hie, data, re));
         return re;
+    }
+
+    function getTreeIndents() {
+        let indents = new Map<TableRowID, number>();
+        walkDFS((hie) => {
+            indents.set(hie.id, hie.depth);
+        })
+        return indents;
     }
 
     function getTreeData(filter?: TreeDataFilter, nodeId?: TableRowID) {
@@ -498,6 +564,7 @@ export function useTreeData(props: TreeDataProps) {
         }
 
         // 深度优先遍历更新叶子节点状态
+        const nd_status = new Map<TableRowID, RowIndentStatus>();
         walkDFS((hie, data, depth, index) => {
             hie.index = index;
             hie.depth = depth;
@@ -508,10 +575,16 @@ export function useTreeData(props: TreeDataProps) {
                 }
                 hie.children = undefined
             }
+            // 对于中间节点，判断初始的打开状态
+            else {
+                let is_open = isNodeOpen({ hie, data })
+                nd_status.set(hie.id, is_open ? 'open' : 'closed');
+            }
         }, re.rootId, re)
 
         // 更新状态
         _tree.value = re;
+        _node_status.value = nd_status;
     }
 
     function buildTreeFromList(data: Vars[], re: BuildResult) {
@@ -644,6 +717,10 @@ export function useTreeData(props: TreeDataProps) {
     // 输出接口
     //-----------------------------------------------------
     return {
+        // 节点状态
+        getNodeStatus,
+        toggleNodeStatus,
+
         // 写操作
         clear,
         removeNode,
@@ -658,6 +735,7 @@ export function useTreeData(props: TreeDataProps) {
 
         // 数据转换
         getFlattenData,
+        getTreeIndents,
         getTreeData,
 
         // 构建数据
