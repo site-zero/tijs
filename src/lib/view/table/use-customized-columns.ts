@@ -72,7 +72,7 @@ export async function doCustomizeColumn(
       'reset:all': async (api: AppModelApi) => {
         _display_column_keys.value = [];
         _column_sizes.value = getDefaultColumnSizes(AllTableColumns);
-        keepColumns(_column_sizes, _display_column_keys, Keep);
+        Keep.KeepColumns.remove();
         api.close(false);
       },
       'reset:size': async (api: AppModelApi) => {

@@ -102,11 +102,15 @@ export function parse(
 
     // 符合标准，可以直接创建日期对象
     //      | year   | month | day     T    HH      mm       ss    .    ms    Z
-    if (
-      /^\d{4}[/-]\d{2}[/-]\d{2}([ T]\d{1,2}:\d{1,2}:\d{1,2})?(\.\d{1,3})(Z|\d{1,2}(:\d{2})?)$/.test(
+    let std_m =
+      /^\d{4}[/-]\d{2}[/-]\d{2}([ T]\d{1,2}:\d{1,2}:\d{1,2})?(\.\d{1,3})?(Z|[+-]\d{1,2}(:\d{2})?)?$/.exec(
         str
-      )
-    ) {
+      );
+    if (std_m) {
+      // 没有时区，补一个 Z
+      if (!std_m[3]) {
+        str += 'Z';
+      }
       return new Date(str);
     }
 
@@ -135,7 +139,7 @@ export function parse(
       info.input = info.input.substring(0, m.index + 1).trim();
     }
 
-    // 处理日期部分: 
+    // 处理日期部分:
     // 250312 -> 2025-03-12
     // 20250312 -> 2025-03-12
     m = /^(\d?\d?\d\d)([01]\d)([0123]\d)$/.exec(info.input);
@@ -153,7 +157,7 @@ export function parse(
       );
       if (m) {
         let yy = m[1];
-        if(yy.length == 2){
+        if (yy.length == 2) {
           yy = info.yy.substring(0, 2) + yy;
         }
         info.yy = yy;
@@ -495,7 +499,7 @@ export function genFormatContext(_d: any, timezone?: DateParseOptionsZone) {
   // Format by pattern
   let M = m_i + 1;
   let Mmm = MONTH_ABBR[m_i];
-  let MMM = Mmm.toUpperCase();
+  let MMM = Mmm ? Mmm.toUpperCase() : '---';
   let MMMM = I18n ? I18n.get(`month-${Mmm}`) : MONTH_NAME[m_i];
 
   let day = date.getDay();
