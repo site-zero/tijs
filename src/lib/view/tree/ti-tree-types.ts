@@ -1,11 +1,5 @@
-import {
-  ListItem,
-  ListProps,
-  SelectEmitInfo,
-  TreeDataProps,
-} from '../../';
+import { ListItem, ListProps, SelectEmitInfo, TreeDataProps } from '../../';
 import { RowIndentProps, Vars } from '../../../_type/';
-
 
 export type TreeEmitter = {
   (event: 'select', payload: TreeSelectEmitInfo): void;
@@ -25,13 +19,8 @@ export type TreeSelectEmitInfo = SelectEmitInfo<string> & {
   path: string[];
 };
 
-
-export type TreeProps = ListProps
-  & Pick<RowIndentProps, 'rowIndicators' | 'rowStatusIcons'>
-  & TreeDataProps & {
+export type TreeProps = ListProps &
+  Pick<RowIndentProps, 'rowIndicators' | 'getRowIcon'> &
+  TreeDataProps & {
     data: Vars | Vars[] | null | undefined;
   };
-
-
-
-

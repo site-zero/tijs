@@ -37,7 +37,6 @@
   const roadblock = computed(() => _list.value.getRoadblock());
   const Items = computed(() => _list.value.buildOptionItems(selection));
   const NotItems = computed(() => _.isEmpty(Items.value));
-  const isItemsHasIcon = computed(() => _list.value.itemsHasIcon(Items.value));
   //-----------------------------------------------------
   const _indent = computed(() => useRowIndent(props));
   //-----------------------------------------------------
@@ -46,11 +45,15 @@
     for (let it of Items.value) {
       re.push({
         ...it,
-        ..._indent.value.getRowIndentation(it.value),
+        ..._indent.value.getRowIndentation(it.value, it, it.icon),
       });
     }
     return re;
   });
+  //-----------------------------------------------------
+  const isItemsHasIcon = computed(() =>
+    _list.value.itemsHasIcon(IndentlyItems.value)
+  );
   //-----------------------------------------------------
   const TopClass = computed(() => {
     let names: string[] = [];
@@ -146,7 +149,7 @@
         <!--=Indicator=-->
         <div
           v-if="it.indicator"
-          class="list-part as-indicator"
+          class="list-part as-indicator for-node"
           v-html="it.indicator"
           @click.stop="
             emit('toggle:status', {
@@ -154,6 +157,9 @@
               currentStatus: it.rowStatus,
             })
           "></div>
+        <div
+          v-else-if="props.rowIndents"
+          class="list-part as-indicator for-leaf"></div>
         <!--=Check Maker=-->
         <div
           v-if="MarkerIcons"
@@ -168,18 +174,13 @@
             v-else
             :value="MarkerIcons[0]" />
         </div>
-        <!--=Status Icons=-->
-        <div
-          v-if="it.statusIcon"
-          class="list-part as-status"
-          v-html="it.statusIcon"></div>
         <!--=Icon=-->
         <div
           v-if="isItemsHasIcon"
           class="list-part as-icon">
           <TiIcon
-            v-if="it.icon"
-            :value="it.icon" />
+            v-if="it.rowIcon"
+            :value="it.rowIcon" />
         </div>
         <!--=Text: AS HTML=-->
         <div

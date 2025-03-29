@@ -17,8 +17,8 @@
     textAsHtml: true,
     highlightChecked: true,
     rowIndicators: () => ({
-      open: '<i class="zmdi zmdi-minus"></i>',
-      closed: '<i class="zmdi zmdi-plus"></i>',
+      open: '<i class="zmdi zmdi-chevron-down"></i>',
+      closed: '<i class="zmdi zmdi-chevron-right"></i>',
     }),
     rowStatusIcons: () => ({
       open: '<i class="fas fa-folder-open"></i>',

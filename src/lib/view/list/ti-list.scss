@@ -31,12 +31,12 @@
       > .list-part {
         @include flex-center;
         flex: 0 0 auto;
-        width: 2em;
+        width: 1.8em;
         //----------------------------
         &.as-indents {
           @include flex-align-nowrap;
           width: auto;
-          &:empty{
+          &:empty {
             display: none;
           }
           > b {
@@ -46,16 +46,23 @@
         }
         //----------------------------
         &.as-indicator {
-          font-size: 0.8em;
-          &:empty{
-            display: none;
+          &.for-node{
+            width: 1.5em;
           }
-          > i {
-            @include flex-center;
-            width: 1.1em;
-            height: 1.1em;
-            border: 1px solid var(--ti-color-border-dark);
+          &.for-node:hover {
+            background-color: var(--ti-color-mask-weak);
+            color: var(--ti-color-secondary);
           }
+          &.for-leaf {
+            width: 1em;
+          }
+          // > i {
+          //   @include flex-center;
+          //   width: 1.1em;
+          //   height: 1.1em;
+          //   border: 1px solid var(--ti-color-border-dark);
+          //   line-height: 1px;
+          // }
         }
         //----------------------------
         &.as-check {

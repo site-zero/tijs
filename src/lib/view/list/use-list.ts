@@ -10,6 +10,7 @@ import {
 } from '../../_features';
 import { RoadblockProps } from '../../tile/roadblock/ti-roadblock-types';
 import {
+  IndentlyItem,
   ListEmitter,
   ListEvent,
   ListItem,
@@ -164,9 +165,9 @@ export function useList(props: ListProps, emit: ListEmitter) {
     return items;
   }
   //-----------------------------------------------------
-  function itemsHasIcon(items: ListItem[]) {
+  function itemsHasIcon(items: IndentlyItem[]) {
     for (let it of items) {
-      if (it.icon) {
+      if (it.rowIcon) {
         return true;
       }
     }

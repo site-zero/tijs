@@ -171,6 +171,19 @@ export type IconObj = {
   topClass?: any;
 };
 
+export function isIconInput(input: any): input is IconInput {
+  if (_.isString(input)) return true;
+  if (_.isObject(input)) {
+    for (let key of _.keys(input)) {
+      if (!/^(type|src|logicType|className|value|style|topClass)$/.test(key)) {
+        return false;
+      }
+    }
+    return true;
+  }
+  return false;
+}
+
 export interface Iconable {
   tp?: string;
   type?: string;
@@ -750,16 +763,15 @@ export type ComInfoFilter = (info: TiComInfo) => boolean;
 
 export type TiRawCom = DefineComponent<any, any, any>;
 
-
-export type DeltaUpdateMode = 'merge' | 'assign'
+export type DeltaUpdateMode = 'merge' | 'assign';
 export type TiComExampleModelTarget =
   | string
   | ((val: any, comConf: Vars) => void)
   | {
-    key: string;
-    val: any;
-    mode?: 'set' | 'merge' | 'assign';
-  };
+      key: string;
+      val: any;
+      mode?: 'set' | 'merge' | 'assign';
+    };
 
 export interface TiComInfo {
   icon?: string;
