@@ -1,6 +1,7 @@
 import {
   GetDataLogicTypeOptions,
   RoadblockProps,
+  RowIndentation,
   StdListItemProps,
 } from '../../';
 import {
@@ -117,6 +118,8 @@ export type ListItem = AnyOptionItem & {
   index: number;
   displayText: string;
 };
+
+export type IndentlyItem = ListItem & RowIndentation;
 
 export type ListEvent = {
   event: Event;

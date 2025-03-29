@@ -1,10 +1,15 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed, reactive, watch } from 'vue';
-  import { SelectableState, TiIcon, TiRoadblock } from '../../';
+  import { SelectableState, TiIcon, TiRoadblock, useRowIndent } from '../../';
   import { TableRowID } from '../../../_type';
   import { CssUtils } from '../../../core';
-  import { ListEmitter, ListItem, ListProps } from './ti-list-types';
+  import {
+    IndentlyItem,
+    ListEmitter,
+    ListItem,
+    ListProps,
+  } from './ti-list-types';
   import { useList } from './use-list';
   //-----------------------------------------------------
   const props = withDefaults(defineProps<ListProps>(), {
@@ -33,6 +38,19 @@
   const Items = computed(() => _list.value.buildOptionItems(selection));
   const NotItems = computed(() => _.isEmpty(Items.value));
   const isItemsHasIcon = computed(() => _list.value.itemsHasIcon(Items.value));
+  //-----------------------------------------------------
+  const _indent = computed(() => useRowIndent(props));
+  //-----------------------------------------------------
+  const IndentlyItems = computed(() => {
+    let re: IndentlyItem[] = [];
+    for (let it of Items.value) {
+      re.push({
+        ...it,
+        ..._indent.value.getRowIndentation(it.value),
+      });
+    }
+    return re;
+  });
   //-----------------------------------------------------
   const TopClass = computed(() => {
     let names: string[] = [];
@@ -63,41 +81,6 @@
   });
   //-----------------------------------------------------
   const MarkerIcons = computed(() => _list.value.getMarkerIcons());
-  //-----------------------------------------------------
-  function getRowStatus(itemId: TableRowID) {
-    return props.rowStauts?.get(itemId);
-  }
-  //-----------------------------------------------------
-  function getListItemIndent(itemId: TableRowID) {
-    return props.rowIndents?.get(itemId) ?? 0;
-  }
-  //-----------------------------------------------------
-  function getListItemIndicator(itemId: TableRowID) {
-    if (!props.rowIndicators) {
-      return;
-    }
-    let icons = props.rowIndicators;
-    let st = props.rowStauts?.get(itemId);
-    if (_.isNil(st)) {
-      return;
-    }
-    return icons[st];
-  }
-  //-----------------------------------------------------
-  function getListItemStatusIcon(itemId: TableRowID) {
-    if (!props.rowStatusIcons) {
-      return;
-    }
-    let icons = props.rowStatusIcons;
-    if (_.isString(icons)) {
-      return icons;
-    }
-    let st = props.rowStauts?.get(itemId);
-    if (_.isNil(st)) {
-      return;
-    }
-    return icons[st];
-  }
   //-----------------------------------------------------
   function onListItemClick(item: ListItem, event: MouseEvent) {
     //console.log('onListItemClick', item);
@@ -148,7 +131,7 @@
     <!---------------Show List------------------->
     <main v-else>
       <div
-        v-for="it in Items"
+        v-for="it in IndentlyItems"
         class="list-item"
         :class="it.className"
         @click="onListItemClick(it, $event)"
@@ -157,18 +140,18 @@
         <!--=Indent placeholder=-->
         <div
           class="list-part as-indents"
-          v-if="props.rowIndents">
-          <b v-for="_ii in getListItemIndent(it.value)"></b>
+          v-if="it.indent > 0">
+          <b v-for="_ii in it.indent"></b>
         </div>
-        <!--=Status Icons=-->
+        <!--=Indicator=-->
         <div
-          v-if="props.rowIndicators && props.rowStauts"
+          v-if="it.indicator"
           class="list-part as-indicator"
-          v-html="getListItemIndicator(it.value)"
+          v-html="it.indicator"
           @click.stop="
             emit('toggle:status', {
-              id: it.value,
-              currentStatus: getRowStatus(it.value),
+              id: it.id,
+              currentStatus: it.rowStatus,
             })
           "></div>
         <!--=Check Maker=-->
@@ -187,9 +170,9 @@
         </div>
         <!--=Status Icons=-->
         <div
-          v-if="props.rowStatusIcons && props.rowStauts"
+          v-if="it.statusIcon"
           class="list-part as-status"
-          v-html="getListItemStatusIcon(it.value)"></div>
+          v-html="it.statusIcon"></div>
         <!--=Icon=-->
         <div
           v-if="isItemsHasIcon"

@@ -22,7 +22,7 @@ export default {
       { id: 6, text: "I am Child 6", pid: 4 },
       { id: 7, text: "I am Child 7", pid: 5 },
       { id: 8, text: "I am Child 8", pid: 6 },
-      { id: 11, text: "I am Child 11", pid: 7 },
+      { id: 11, text: "I am Child 11", pid: 3 },
       { id: 111, text: "I am Child 111", pid: 11 },
       { id: 112, text: "I am Child 112", pid: 11 },
       { id: 113, text: "I am Child 113", pid: 11 },
