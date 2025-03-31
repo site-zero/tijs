@@ -1,16 +1,12 @@
-import { Chance } from 'chance';
 import { ComPropExample } from '../../../../_type';
 import { TreeProps } from '../ti-tree-types';
-
-// 创建一个 Chance 实例
-const cha = new Chance();
 
 export default {
   name: 'simple',
   text: 'i18n:simple',
   comConf: {
     className: 'fit-parent',
-    size: 'b',
+    size: 't',
     borderStyle: 'dotted',
     isNodeOpen: 5,
     data: [

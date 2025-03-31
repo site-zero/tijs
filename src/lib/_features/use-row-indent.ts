@@ -8,6 +8,7 @@ import {
   TableRowID,
   Vars,
 } from '../../_type/';
+import { Util } from '../../core';
 
 export type RowIndentation = {
   id: TableRowID;
@@ -39,29 +40,41 @@ export function useRowIndent(props: RowIndentProps) {
   // 准备标记图标的方法
   let __get_row_icon: RowIconGetter;
   if (isIconInput(props.getRowIcon)) {
-    __get_row_icon = (_0, _1, _2, dftIcon) => {
-      return dftIcon ?? (props.getRowIcon as IconInput);
+    __get_row_icon = ({ rowIcon }) => {
+      return rowIcon ?? (props.getRowIcon as IconInput);
+    };
+  } else if (_.isArray(props.getRowIcon) && !_.isEmpty(props.getRowIcon)) {
+    let arms = Util.buildSelectArms(props.getRowIcon);
+    __get_row_icon = (payload) => {
+      return arms(payload) ?? payload.rowIcon;
     };
   } else if (_.isFunction(props.getRowIcon)) {
     __get_row_icon = props.getRowIcon;
   } else {
-    __get_row_icon = (_0, _1, _2, dftIcon) => dftIcon;
+    __get_row_icon = ({ rowIcon }) => rowIcon;
   }
 
   //-----------------------------------------------------
   function getRowIndentation(
     id: TableRowID,
     rawData: Vars,
-    dftIcon?: IconInput
+    rowIcon?: IconInput
   ): RowIndentation {
     if (props.rowStauts) {
       let row_st = props.rowStauts.get(id) ?? undefined;
+      let indent = props.rowIndents?.get(id) ?? 0;
       return {
         id,
-        indent: props.rowIndents?.get(id) ?? 0,
+        indent,
         rowStatus: row_st,
         indicator: __get_indicator(row_st),
-        rowIcon: __get_row_icon(id, row_st, rawData, dftIcon),
+        rowIcon: __get_row_icon({
+          rowId: id,
+          rowStatus: row_st,
+          rawData,
+          rowIndent: indent,
+          rowIcon
+        }),
       };
     }
     // 返回默认

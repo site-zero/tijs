@@ -1,13 +1,17 @@
+import { SelectValueArm } from './core-type-util';
 import { IconInput, TableRowID, Vars } from './core-types';
 
 export type RowIndentStatus = 'open' | 'closed';
 
-export type RowIconGetter = (
-  id: TableRowID,
-  row_st: RowIndentStatus | undefined,
+export type RowIconGetterPayload = {
+  rowId: TableRowID,
+  rowStatus: RowIndentStatus | undefined,
   rawData: Vars,
-  dftIcon?: IconInput
-) => IconInput | undefined;
+  rowIndent: number,
+  rowIcon?: IconInput
+}
+
+export type RowIconGetter = (payload: RowIconGetterPayload) => IconInput | undefined;
 
 /**
  * 通过这个类型， `List` 与 `Table` 就很容易扩展为支持树型数据的显示。
@@ -48,7 +52,7 @@ export type RowIndentProps = {
   /**
    * 行状态图标
    */
-  getRowIcon?: IconInput | RowIconGetter;
+  getRowIcon?: IconInput | SelectValueArm<IconInput, any> | RowIconGetter;
 };
 
 export type ToggleRowStatusPayload = {

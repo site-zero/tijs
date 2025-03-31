@@ -48,6 +48,18 @@ export type ListAspect = {
   markerIcons?: [IconInput, IconInput] | 'auto';
 
   /**
+   * 是否强制显示列表项的图标部分
+   * 
+   * - `auto`：自动判断，树模式下不强制显示，普通模式下只要有一个项目
+   *           有图标，就整个列表都强制显示图标部分
+   * - `no`：不强制显示图标部分
+   * - `yes`：强制显示图标部分
+   * 
+   * @default 'auto'
+   */
+  forceShowRowIconPart?: 'auto' | 'no' | 'yes';
+
+  /**
    * 如果开启了这个选项，那么显示的文本被认为是一个 HTML
    */
   textAsHtml?: boolean;

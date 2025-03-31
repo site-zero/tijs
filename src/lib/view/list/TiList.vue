@@ -14,6 +14,7 @@
   //-----------------------------------------------------
   const props = withDefaults(defineProps<ListProps>(), {
     data: () => [],
+    forceShowRowIconPart: 'auto',
     size: 'm',
     canSelect: true,
     canHover: true,
@@ -51,9 +52,22 @@
     return re;
   });
   //-----------------------------------------------------
-  const isItemsHasIcon = computed(() =>
-    _list.value.itemsHasIcon(IndentlyItems.value)
-  );
+  const isAlwaysShowItemIcon = computed(() => {
+    if('yes' == props.forceShowRowIconPart) {
+      return true;
+    }
+    if('no' == props.forceShowRowIconPart) {
+      return false;
+    }
+    // 那么就会是自动模式
+    // 树模式下，就不强制显示
+    if (props.rowIndents) {
+      return false;
+    }
+    // 纯列表的话，只要有一个项目有图标就强制显示图标部分
+    // 这样列表看起来会比较整齐
+    return _list.value.itemsHasIcon(IndentlyItems.value);
+  });
   //-----------------------------------------------------
   const TopClass = computed(() => {
     let names: string[] = [];
@@ -176,7 +190,7 @@
         </div>
         <!--=Icon=-->
         <div
-          v-if="isItemsHasIcon"
+          v-if="isAlwaysShowItemIcon || it.rowIcon"
           class="list-part as-icon">
           <TiIcon
             v-if="it.rowIcon"
