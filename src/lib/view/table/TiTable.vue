@@ -48,7 +48,7 @@
     onMounted,
     onUnmounted,
   });
-  console.log('TiTable _tips:', _tips);
+  //console.log('TiTable _tips:', _tips);
   //-------------------------------------------------------
   const showDebugScrolling = false;
   const showDebugResizing = false;
