@@ -3,10 +3,10 @@ import { createApp } from 'vue';
 import { TextSnippetProps } from '../../';
 import { Rect, TiRawCom, Vars } from '../../_type';
 import { Dom, Rects, tiCheckComponent } from '../../core';
-import { TipDockPosition, TipInstance, TipTarget } from './lib-tip-types';
+import { TipBoxProps, TipDockPosition, TipInstance } from './lib-tip-types';
 
-function __prepare_body_wrapper(tip: TipTarget) {
-  let body = tip.target.ownerDocument.body;
+function __prepare_body_wrapper(src: HTMLElement) {
+  let body = src.ownerDocument.body;
   let wrap = Dom.find('div.ti-tip-wrapper', body);
   if (!wrap) {
     wrap = Dom.createElement({
@@ -18,7 +18,7 @@ function __prepare_body_wrapper(tip: TipTarget) {
   return wrap;
 }
 
-function __prepare_box_style(tip: TipTarget, _win: Rect) {
+function __prepare_box_style(tip: TipBoxProps, _win: Rect) {
   // 分析一下样式
   let fontsz = tip.fontSize ?? 's';
   let padding = tip.padding ?? 'm';
@@ -59,7 +59,7 @@ function __prepare_box_style(tip: TipTarget, _win: Rect) {
 }
 
 function __eval_dock_position(
-  tip: TipTarget,
+  tip: TipBoxProps,
   win: Rect,
   ref: Rect,
   box: Rect
@@ -87,29 +87,17 @@ function __eval_dock_position(
 }
 
 function __prepre_box_dom(
-  tip: TipTarget,
+  tip: TipBoxProps,
   wrap: HTMLElement,
   boxSty: Vars,
   conSty: Vars,
   arrowSize: number
 ) {
-  // 准备一个 HTML
-  let uniqId = [tip.appId, tip.comId, tip.id].join(':');
-  let $tipbox = Dom.find(`[tip-uniq-id='${uniqId}']`, wrap);
-
-  // 已经有了
-  if ($tipbox) {
-    return;
-  }
-
   // 那么就创建对应的元素
   // 包裹区域
-  $tipbox = Dom.createElement({
+  let $tipbox = Dom.createElement({
     tagName: 'DIV',
     className: 'ti-tipbox',
-    attrs: {
-      'tip-uniq-id': uniqId,
-    },
     style: boxSty,
     $p: wrap,
   });
@@ -162,7 +150,10 @@ function __prepre_box_dom(
   };
 }
 
-export function drawTipBox(tip: TipTarget): TipInstance | undefined {
+export function drawTipBox(
+  tip: TipBoxProps,
+  src: HTMLElement
+): TipInstance | undefined {
   //console.log('draw tip', tip.target, tip);
   const arrowSize = 10;
   const space = 0;
@@ -175,8 +166,8 @@ export function drawTipBox(tip: TipTarget): TipInstance | undefined {
   }[tip.tranSpeed ?? 'normal'];
 
   // 获取一下参考对象的矩形区域
-  let win = Rects.createBy(tip.target.ownerDocument);
-  let ref = Rects.createBy(tip.target);
+  let win = Rects.createBy(src.ownerDocument);
+  let ref = Rects.createBy(src);
   //console.log('target:', ref.toString())
 
   // 构建初始的样式
@@ -184,7 +175,7 @@ export function drawTipBox(tip: TipTarget): TipInstance | undefined {
   //console.log('css', boxSty);
 
   // 确保 body 下面有 tip 的插槽
-  let wrap = __prepare_body_wrapper(tip);
+  let wrap = __prepare_body_wrapper(src);
 
   // 准备初始化的 DOM
   let re = __prepre_box_dom(tip, wrap, boxSty, conSty, arrowSize);
@@ -313,22 +304,28 @@ export function drawTipBox(tip: TipTarget): TipInstance | undefined {
     ref,
     conTransform,
     tr_du,
+    $src: src,
     $tipbox,
     $tipcon,
   };
 }
 
 export function eraseTip(tipObj: TipInstance) {
-    // 看看转场时间
-    let { conTransform, tr_du, $tipbox, app } = tipObj;
-    Dom.updateStyle($tipbox, {
-      transform: conTransform,
-      opacity: 0,
-    });
+  // 看看转场时间
+  let { conTransform, tr_du, $tipbox, app } = tipObj;
+  // Dom.updateStyle($tipbox, {
+  //   transform: conTransform,
+  //   opacity: 0,
+  // });
 
-    // 最后移除 tip 的定义和 DOM
-    _.delay(() => {
-      app.unmount();
-      Dom.remove($tipbox);
-    }, tr_du);
-  }
+  // // 最后移除 tip 的定义和 DOM
+  // _.delay(() => {
+  //   app.unmount();
+  //   Dom.remove($tipbox);
+  //   delete (tipObj.$src as any).__tip_obj;
+  // }, tr_du);
+
+  app.unmount();
+  Dom.remove($tipbox);
+  delete (tipObj.$src as any).__tip_obj;
+}

@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { App, DefineComponent, InjectionKey, Ref } from 'vue';
-import { ActionBarProps, AppTipSetApi, BlockOverflowMode } from '../lib';
+import { ActionBarProps, BlockOverflowMode, TipsApi } from '../lib';
 
 export type DocumentIconType = 'emoji' | 'image/png' | 'image/x-icon';
 /*---------------------------------------------------`
@@ -911,7 +911,7 @@ export type TiAppBus = TiBus<any>;
 
 export const BUS_KEY: InjectionKey<TiAppBus> = Symbol('EVENT_BUS');
 
-export const TI_TIPS_API: InjectionKey<AppTipSetApi> = Symbol('TIPSET_API');
+export const TI_TIPS_API: InjectionKey<TipsApi> = Symbol('TIPS_API');
 
 /**
  *  如果仅仅是名称适配

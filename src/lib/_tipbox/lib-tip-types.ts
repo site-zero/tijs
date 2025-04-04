@@ -51,27 +51,27 @@ type TipAspect = PopItemMeasure & {
   dockMode?: TipDockMode;
   tranSpeed?: TranSpeed;
 
-  selector?: HTMLElement | string;
-
   // 默认 s
   fontSize?: AspectSize;
+
   // 默认 m
   padding?: AspectSize;
+
   // 默认 s
   radius?: AspectSize | 'none';
+
   // 默认 primary
   type?: LogicType;
 };
 
+export type ModifierKey = 'ALT' | 'CTRL' | 'SHIFT' | 'META';
+
 export type TipBoxProps = TipAspect & {
   /**
-   * 一个 tip 的唯一 ID，如果调用者不指定
-   * 那么，会被自动分配一个
+   * 指定了只有这些键被按下时，才会触发 tip 的显示
    */
-  id: string;
-  appId: string;
-  comId: string;
-
+  modifier?: ModifierKey | ModifierKey[];
+  
   /**
    * 当前对象是否可以被用户主动取消。
    * 默认的，如果用户声明了 tip-id 那么这个值就是 true
@@ -91,12 +91,12 @@ export type TipBoxProps = TipAspect & {
    *    管理对应 tip  的属性，譬如打开关闭本属性
    * 2. `ALT+CTRL+SHIFT+Mouse Hover`将会强制打开提示
    */
-  disabled: boolean;
+  disabled?: boolean;
 
   /**
    * 指定了变量上下文，因此 content 会根据这个上下文动态渲染
    */
-  vars: Vars | (() => Vars);
+  vars?: Vars | (() => Vars);
 
   /**
    * 这个是一个内容模板，或者就是内容本身
@@ -105,7 +105,7 @@ export type TipBoxProps = TipAspect & {
    */
   content: string;
 
-  contentType: TextContentType;
+  contentType?: TextContentType;
 
   /**
    * 这个 tip 非常复杂，需要指定一个控件来显示
@@ -119,17 +119,14 @@ export type TipBoxProps = TipAspect & {
   comConf?: Vars;
 };
 
-export type TipTarget = TipBoxProps & {
-  target: HTMLElement;
-};
-
 export type TipInstance = {
   app: App<Element>;
-  tip: TipTarget;
+  tip: TipBoxProps;
   box: Rect;
   ref: Rect;
   conTransform: string;
   tr_du: number;
+  $src: HTMLElement;
   $tipbox: HTMLElement;
   $tipcon: HTMLElement;
 };
