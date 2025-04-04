@@ -317,3 +317,18 @@ export function drawTipBox(tip: TipTarget): TipInstance | undefined {
     $tipcon,
   };
 }
+
+export function eraseTip(tipObj: TipInstance) {
+    // 看看转场时间
+    let { conTransform, tr_du, $tipbox, app } = tipObj;
+    Dom.updateStyle($tipbox, {
+      transform: conTransform,
+      opacity: 0,
+    });
+
+    // 最后移除 tip 的定义和 DOM
+    _.delay(() => {
+      app.unmount();
+      Dom.remove($tipbox);
+    }, tr_du);
+  }
