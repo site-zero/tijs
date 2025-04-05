@@ -154,10 +154,14 @@ export function drawTipBox(
   tip: TipBoxProps,
   target: HTMLElement
 ): TipInstance | undefined {
+  // 指示箭头尺寸
   const arrowSize = 10;
   const space = 0;
+  // Tip 盒子与目标元素距离
   const axis_space = arrowSize + space;
-  const tr_dis = 10;
+  // 动画位移距离
+  const tr_dis = 10; 
+  // 动画速度
   const tr_du = {
     fast: 300,
     normal: 500,
@@ -242,7 +246,7 @@ export function drawTipBox(
       });
       // 设置箭头位置
       let x = box.width;
-      let y = box.top - ref.y + arrowSize;
+      let y = ref.y - box.bottom + arrowSize;
       arrowCss = {
         transform: `translate(${x}px, ${y}px)`,
         borderLeftColor: 'var(--tip-color)',
@@ -260,7 +264,7 @@ export function drawTipBox(
       });
       // 设置箭头位置
       let x = arrowSize * -2 + 2;
-      let y = box.top - ref.y + arrowSize;
+      let y = ref.y - box.bottom + arrowSize;
       arrowCss = {
         transform: `translate(${x}px, ${y}px)`,
         borderRightColor: 'var(--tip-color)',
