@@ -152,22 +152,22 @@ function __prepre_box_dom(
 
 export function drawTipBox(
   tip: TipBoxProps,
-  src: HTMLElement
+  target: HTMLElement
 ): TipInstance | undefined {
-  //console.log('draw tip', tip.target, tip);
   const arrowSize = 10;
   const space = 0;
   const axis_space = arrowSize + space;
-  const tr_dis = 5;
+  const tr_dis = 10;
   const tr_du = {
     fast: 300,
     normal: 500,
     slow: 800,
   }[tip.tranSpeed ?? 'normal'];
+  // console.log('draw tip', tr_du, tip);
 
   // 获取一下参考对象的矩形区域
-  let win = Rects.createBy(src.ownerDocument);
-  let ref = Rects.createBy(src);
+  let win = Rects.createBy(target.ownerDocument);
+  let ref = Rects.createBy(target);
   //console.log('target:', ref.toString())
 
   // 构建初始的样式
@@ -175,7 +175,7 @@ export function drawTipBox(
   //console.log('css', boxSty);
 
   // 确保 body 下面有 tip 的插槽
-  let wrap = __prepare_body_wrapper(src);
+  let wrap = __prepare_body_wrapper(target);
 
   // 准备初始化的 DOM
   let re = __prepre_box_dom(tip, wrap, boxSty, conSty, arrowSize);
@@ -304,7 +304,7 @@ export function drawTipBox(
     ref,
     conTransform,
     tr_du,
-    $src: src,
+    $target: target,
     $tipbox,
     $tipcon,
   };
@@ -322,10 +322,11 @@ export function eraseTip(tipObj: TipInstance) {
   // _.delay(() => {
   //   app.unmount();
   //   Dom.remove($tipbox);
-  //   delete (tipObj.$src as any).__tip_obj;
+  //   delete (tipObj.$target as any).__tip_obj;
   // }, tr_du);
 
+  Dom.updateStyle($tipbox, { display: 'none' });
   app.unmount();
   Dom.remove($tipbox);
-  delete (tipObj.$src as any).__tip_obj;
+  delete (tipObj.$target as any).__tip_obj;
 }

@@ -73,6 +73,11 @@ export type TipBoxProps = TipAspect & {
   modifier?: ModifierKey | ModifierKey[];
 
   /**
+   * Tip 延迟多长时间后显示，默认为 800ms, 如果指定了 modifier 则默认 0ms
+   */
+  delay?: number;
+
+  /**
    * 当前对象是否可以被用户主动取消。
    * 默认的，如果用户声明了 tip-id 那么这个值就是 true
    * 否则就是 false。
@@ -126,7 +131,7 @@ export type TipInstance = {
   ref: Rect;
   conTransform: string;
   tr_du: number;
-  $src: HTMLElement;
+  $target: HTMLElement;
   $tipbox: HTMLElement;
   $tipcon: HTMLElement;
 };

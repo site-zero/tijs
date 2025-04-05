@@ -404,14 +404,17 @@
             :col-index="i"
             :cols-count="TableColumns.length"
             :col-key="col.uniqKey"
-            :col-prev-key="i == 0 ? HEAD_MARKER : TableColumns[i - 1]?.uniqKey"
-            :data-tip="col.tip"
-            data-tip-tran-speed="fast">
+            :col-prev-key="i == 0 ? HEAD_MARKER : TableColumns[i - 1]?.uniqKey">
             <div class="head-cell-con">
               <!-- 调整列宽的控制柄 -->
               <div class="column-resize-hdl for-prev"></div>
               <!-- 列标题 -->
-              <span class="head-text">{{ col.title || col.name }}</span>
+              <span
+                class="head-text"
+                :data-tip="col.tip"
+                :data-tip-delay="500"
+                >{{ col.title || col.name }}</span
+              >
               <!-- 调整列宽的控制柄: 最后一列 -->
               <div
                 v-if="i == TableColumns.length - 1"
