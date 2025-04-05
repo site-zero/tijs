@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Point2D } from '../..//_type';
+import { Point2D } from '../../_type';
 import { TipInstance } from './lib-tip-types';
 import { drawTipBox, eraseTip } from './use-tip-box';
 import { useTipsApi } from './use-tips';
@@ -69,4 +69,4 @@ export function useTipsWatcher() {
   };
 }
 
-export const TIPS = useTipsWatcher();
+export const TI_APP_TIPS = useTipsWatcher();

@@ -10,10 +10,21 @@ export default {
   name: 'with_tip',
   text: 'i18n:ti-tree-example-with-tip',
   comConf: {
-    className: 'tip-block fit-parent',
+    className: 'fit-parent',
     size: 'm',
-    currentId: null,
-    checkedIds: {},
-    data: getListData({icon:false, tip:true}),
+    borderStyle: 'dotted',
+    isNodeOpen: 5,
+    data: [
+      { id: 1, text: 'Mammal', tip: cha.sentence() },
+      { id: 11, text: 'DOG', icon: 'fas-dog', pid: 1, tip: cha.animal() },
+      { id: 12, text: 'CAT', icon: 'fas-cat', pid: 1, tip: cha.address() },
+      { id: 13, text: 'HIPPO', icon: "fas-hippo", pid: 1, tip: cha.company() },
+      { id: 2, text: 'Amphibian', tip: cha.sentence(), },
+      { id: 21, text: 'FROG', icon: "fas-frog", pid: 2, tip: cha.sentence() },
+      { id: 22, text: 'LIZARD', icon: "fas-dragon", pid: 2 },
+      { id: 3, text: 'Birds', tip: cha.sentence(), },
+      { id: 31, text: 'CROW', icon: 'fas-crow', pid: 3 },
+      { id: 32, text: 'DOVE', icon: 'fas-dove', pid: 3, tip: cha.animal() },
+    ]
   } as TreeProps,
 } as ComPropExample;

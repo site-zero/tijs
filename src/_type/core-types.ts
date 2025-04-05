@@ -768,10 +768,10 @@ export type TiComExampleModelTarget =
   | string
   | ((val: any, comConf: Vars) => void)
   | {
-      key: string;
-      val: any;
-      mode?: 'set' | 'merge' | 'assign';
-    };
+    key: string;
+    val: any;
+    mode?: 'set' | 'merge' | 'assign';
+  };
 
 export interface TiComInfo {
   icon?: string;
@@ -911,7 +911,7 @@ export type TiAppBus = TiBus<any>;
 
 export const BUS_KEY: InjectionKey<TiAppBus> = Symbol('EVENT_BUS');
 
-export const TI_TIPS_API: InjectionKey<TipsApi> = Symbol('TIPS_API');
+export const TI_TIP_API_KEY: InjectionKey<TipsApi> = Symbol('TIP_API');
 
 /**
  *  如果仅仅是名称适配

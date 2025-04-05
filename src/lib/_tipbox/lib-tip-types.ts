@@ -71,7 +71,7 @@ export type TipBoxProps = TipAspect & {
    * 指定了只有这些键被按下时，才会触发 tip 的显示
    */
   modifier?: ModifierKey | ModifierKey[];
-  
+
   /**
    * 当前对象是否可以被用户主动取消。
    * 默认的，如果用户声明了 tip-id 那么这个值就是 true
@@ -103,7 +103,7 @@ export type TipBoxProps = TipAspect & {
    * 主要取决于 vars，如果声明了 vars ，每次显示
    * 都需要渲染一遍
    */
-  content: string;
+  content?: string;
 
   contentType?: TextContentType;
 

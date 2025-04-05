@@ -111,8 +111,8 @@ export function useList(props: ListProps, emit: ListEmitter) {
     if (!props.data) {
       return items;
     }
-    let index = 0;
-    for (let li of props.data) {
+    for (let index = 0; index < props.data.length; index++) {
+      let li = props.data[index]
       let is_current = selectable.isDataActived(selection, index, li);
       let is_checked = selectable.isDataChecked(selection, index, li);
       let className: Vars = {
@@ -149,6 +149,7 @@ export function useList(props: ListProps, emit: ListEmitter) {
         current: is_current,
         checked: is_checked,
         displayText: text ?? '',
+        rawData: li
       };
 
       // 生成显示文字内容
@@ -184,9 +185,17 @@ export function useList(props: ListProps, emit: ListEmitter) {
     itemEvent: ListEvent
   ) {
     log.debug('OnItemSelect', itemEvent);
+    let { item, event } = itemEvent;
+    if (selectable.canSelectItem({
+      id: item.value,
+      rawData: item.rawData,
+      index: item.index
+    })) {
+
+    }
     let oldCurrentId = _.cloneDeep(selection.currentId);
     let oldCheckedIds = _.cloneDeep(selection.checkedIds);
-    let se = EventUtils.getKeyboardStatus(itemEvent.event);
+    let se = EventUtils.getKeyboardStatus(event);
     if (props.multi) {
       selectable.select(selection, itemEvent.item.value, se);
     } else {

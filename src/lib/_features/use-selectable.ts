@@ -4,6 +4,11 @@ import { Util } from '../../core';
 // -----------------------------------------------------
 //  Types
 export type CheckStatus = 'all' | 'none' | 'part';
+export type SelectableItem<ID> = {
+  rawData: Vars;
+  id: ID;
+  index: number;
+}
 // -----------------------------------------------------
 export type SelectableState<ID> = {
   currentId?: ID | null;
@@ -27,7 +32,7 @@ export type CheckedIds<ID extends string | number> =
   | Map<ID, boolean>
   | ID[];
 // -----------------------------------------------------
-export type SelectableProps<ID extends string | number> = {
+export type SelectableProps<ID extends TableRowID> = {
   /**
    * 传入的数据对象
    */
@@ -72,6 +77,20 @@ export type SelectableProps<ID extends string | number> = {
   canSelect?: boolean;
 
   canCheck?: boolean;
+
+  /**
+   * @param itemData 行数据
+   * @param itemId 行标准 ID
+   * @returns  本行是否可以选中
+   */
+  canSelectItem?: (item: SelectableItem<ID>) => void
+
+  /**
+   * @param itemData 行数据
+   * @param itemId 行标准 ID
+   * @returns  本行是否可以勾选
+   */
+  canCheckItem?: (item: SelectableItem<ID>) => void
 };
 
 // -----------------------------------------------------
@@ -604,6 +623,38 @@ export function useSelectable<ID extends TableRowID>(
     }
   }
 
+  function canSelectItem(item: SelectableItem<ID>) {
+    if (props.canSelectItem) {
+      return props.canSelectItem(item);
+    }
+    if (props.canSelect) {
+      if (_.isNil(item.id) || !item.rawData) {
+        return false;
+      }
+      if (item.index < 0) {
+        return false;
+      }
+      return true;
+    }
+    return false;
+  }
+
+  function canCheckItem(item: SelectableItem<ID>) {
+    if (props.canCheckItem) {
+      return props.canCheckItem(item);
+    }
+    if (props.canCheck) {
+      if (_.isNil(item.id) || !item.rawData) {
+        return false;
+      }
+      if (item.index < 0) {
+        return false
+      }
+      return true;
+    }
+    return false;
+  }
+
   return {
     getDataIds,
     ////createSelection,
@@ -629,5 +680,8 @@ export function useSelectable<ID extends TableRowID>(
     selectId,
     toggleId,
     selectRange,
+
+    canCheckItem,
+    canSelectItem,
   };
 }

@@ -475,9 +475,19 @@ export function useTreeData(props: TreeDataProps) {
     }
 
     function getTreeIndents() {
+        // 如果树的根节点为虚节点，那么显然需要将所有的节点
+        // 的 depth 减 1，这样绘制的时候， indent 块数量才能
+        // 贴合实际
+        let startDepth = 0
+        let tree = _tree.value
+        let root = tree.hierarchy.get(tree.rootId)
+        if (root?.virtual) {
+            startDepth = 1;
+        }
+        // 收集每个节点的缩进数量
         let indents = new Map<TableRowID, number>();
         walkDFS((hie) => {
-            indents.set(hie.id, hie.depth);
+            indents.set(hie.id, hie.depth - startDepth);
         })
         return indents;
     }

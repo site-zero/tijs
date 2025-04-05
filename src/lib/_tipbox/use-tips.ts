@@ -76,144 +76,154 @@ import { ModifierKey, TipBoxProps, TipInstance } from './lib-tip-types';
 
 export type TipUnmounted = (hook: Callback) => void;
 export type TipsApi = ReturnType<typeof useTipsApi>;
-export type TipRegister = (tip: TipBoxProps) => number;
+export type TipRegister = {
+    addTip: (tip: TipBoxProps) => number;
+    removeTips: (...tipIds: number[]) => void;
+}
 
 export function useTipsApi() {
-  let _tip_seq_id = 0;
-  /**
-   * 注册是提示信息
-   */
-  const _all_tips = new Map<number, TipBoxProps>();
-  /**
-   * 页面上显示的提示信息对象
-   */
-  const _instances: TipInstance[] = [];
+    let _tip_seq_id = 0;
+    /**
+     * 注册是提示信息
+     */
+    const _all_tips = new Map<number, TipBoxProps>();
+    /**
+     * 页面上显示的提示信息对象
+     */
+    const _instances: TipInstance[] = [];
 
-  function getTip(id: number) {
-    return _all_tips.get(id);
-  }
+    function getTip(id: number) {
+        return _all_tips.get(id);
+    }
 
-  function addTip(tip: TipBoxProps, onUnmounted: TipUnmounted) {
-    let id = _tip_seq_id++;
-    _all_tips.set(id, tip);
-    // 注册一个自动清除的钩子
-    onUnmounted(() => {
-      _all_tips.delete(id);
-    });
-    return id;
-  }
+    function addTip(tip: TipBoxProps, onUnmounted: TipUnmounted) {
+        let id = _tip_seq_id++;
+        _all_tips.set(id, tip);
+        // 注册一个自动清除的钩子
+        onUnmounted(() => {
+            _all_tips.delete(id);
+        });
+        return id;
+    }
 
-  function createRegister(onUnmounted: TipUnmounted): TipRegister {
-    return (tip: TipBoxProps) => {
-      return addTip(tip, onUnmounted);
+    function createRegister(onUnmounted: TipUnmounted): TipRegister {
+        return {
+            addTip: (tip: TipBoxProps) => {
+                return addTip(tip, onUnmounted);
+            },
+            removeTips: (...tipIds: number[]) => {
+                for (let tipId of tipIds) {
+                    _all_tips.delete(tipId)
+                }
+            }
+        };
+    }
+
+    function removeTip(id: number) {
+        _all_tips.delete(id);
+    }
+
+    function clearTips() {
+        _all_tips.clear();
+    }
+
+    function addInstance(tipObj: TipInstance) {
+        _instances.push(tipObj);
+    }
+
+    function findTipsNeedToErase(p: Point2D) {
+        let re: TipInstance[] = [];
+        for (let tipObj of _instances) {
+            if (!tipObj.box.hasPoint(p) && !tipObj.ref.hasPoint(p)) {
+                re.push(tipObj);
+            }
+        }
+        return re;
+    }
+
+    function isMatchModifier(
+        ev: MouseEvent,
+        modifier?: ModifierKey | ModifierKey[]
+    ) {
+        if (!modifier) {
+            return true;
+        }
+        let keys = _.castArray(modifier).sort();
+
+        for (let key of keys) {
+            if (key === 'CTRL' && !ev.ctrlKey) {
+                return false;
+            } else if (key === 'SHIFT' && !ev.shiftKey) {
+                return false;
+            } else if (key === 'ALT' && !ev.altKey) {
+                return false;
+            } else if (key === 'META' && !ev.metaKey) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    function getTipBoxPropxByElement(src: HTMLElement): TipBoxProps | undefined {
+        let tipEl = Dom.closest(
+            src,
+            (el: HTMLElement) => {
+                return el.getAttribute('data-tip') ? true : false;
+            },
+            { includeSelf: true }
+        );
+        if (!tipEl) {
+            return;
+        }
+        // 首先根据 Element 找到 tip  的信息
+        let dataTip = tipEl.getAttribute('data-tip') || '';
+
+        // 准备返回值
+        let re: TipBoxProps = {
+            content: dataTip,
+            contentType: 'text',
+        };
+
+        // 复杂 tip 的配置
+        let m = /^::(.+)$/.exec(dataTip);
+        if (m) {
+            let tipId = parseInt(m[1]);
+            let props = _all_tips.get(tipId);
+            if (props) {
+                _.assign(re, _.cloneDeep(props));
+            }
+        }
+
+        // 根据元素设置最后覆盖一下属性
+        let vars = Dom.getData(tipEl, (name) => {
+            let m = /^tip(.+)$/.exec(name);
+            if (m) {
+                return _.lowerFirst(m[1]);
+            }
+        });
+        if (vars && vars.modifier) {
+            vars.modifier = vars.modifier.toUpperCase().split(/[,+]/g);
+        }
+
+        _.assign(re, vars);
+
+        // 搞定
+        return re;
+    }
+
+    // -----------------------------------------------------
+    // 返回特性
+    // -----------------------------------------------------
+    return {
+        // 对于 Tip 的管理
+        getTip,
+        addTip,
+        createRegister,
+        removeTip,
+        clearTips,
+        addInstance,
+        findTipsNeedToErase,
+        isMatchModifier,
+        getTipBoxPropxByElement,
     };
-  }
-
-  function removeTip(id: number) {
-    _all_tips.delete(id);
-  }
-
-  function clearTips() {
-    _all_tips.clear();
-  }
-
-  function addInstance(tipObj: TipInstance) {
-    _instances.push(tipObj);
-  }
-
-  function findTipsNeedToErase(p: Point2D) {
-    let re: TipInstance[] = [];
-    for (let tipObj of _instances) {
-      if (!tipObj.box.hasPoint(p) && !tipObj.ref.hasPoint(p)) {
-        re.push(tipObj);
-      }
-    }
-    return re;
-  }
-
-  function isMatchModifier(
-    ev: MouseEvent,
-    modifier?: ModifierKey | ModifierKey[]
-  ) {
-    if (!modifier) {
-      return true;
-    }
-    let keys = _.castArray(modifier).sort();
-
-    for (let key of keys) {
-      if (key === 'CTRL' && !ev.ctrlKey) {
-        return false;
-      } else if (key === 'SHIFT' && !ev.shiftKey) {
-        return false;
-      } else if (key === 'ALT' && !ev.altKey) {
-        return false;
-      } else if (key === 'META' && !ev.metaKey) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  function getTipBoxPropxByElement(src: HTMLElement): TipBoxProps | undefined {
-    let tipEl = Dom.closest(
-      src,
-      (el: HTMLElement) => {
-        return el.getAttribute('data-tip') ? true : false;
-      },
-      { includeSelf: true }
-    );
-    if (!tipEl) {
-      return;
-    }
-    // 首先根据 Element 找到 tip  的信息
-    let dataTip = tipEl.getAttribute('data-tip') || '';
-
-    // 准备返回值
-    let re: TipBoxProps = {
-      content: dataTip,
-      contentType: 'text',
-    };
-
-    // 复杂 tip 的配置
-    let m = /^::(.+)$/.exec(dataTip);
-    if (m) {
-      let tipId = parseInt(m[1]);
-      let props = _all_tips.get(tipId);
-      if (props) {
-        _.assign(re, _.cloneDeep(props));
-      }
-    }
-
-    // 根据元素设置最后覆盖一下属性
-    let vars = Dom.getData(tipEl, (name) => {
-      let m = /^tip(.+)$/.exec(name);
-      if (m) {
-        return _.lowerFirst(m[1]);
-      }
-    });
-    if (vars && vars.modifier) {
-      vars.modifier = vars.modifier.toUpperCase().split(/[,+]/g);
-    }
-
-    _.assign(re, vars);
-
-    // 搞定
-    return re;
-  }
-
-  // -----------------------------------------------------
-  // 返回特性
-  // -----------------------------------------------------
-  return {
-    // 对于 Tip 的管理
-    getTip,
-    addTip,
-    createRegister,
-    removeTip,
-    clearTips,
-    addInstance,
-    findTipsNeedToErase,
-    isMatchModifier,
-    getTipBoxPropxByElement,
-  };
 }

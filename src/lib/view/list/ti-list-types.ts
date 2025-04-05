@@ -129,6 +129,7 @@ export type ListItem = AnyOptionItem & {
   className: Vars;
   index: number;
   displayText: string;
+  rawData: Vars;
 };
 
 export type IndentlyItem = ListItem & RowIndentation;

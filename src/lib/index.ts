@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { Alert, Confirm, Prompt, openAppModal } from './_modal';
-import { TIPS } from './_tipbox';
+import { TI_APP_TIPS } from './_tipbox';
 
 // console.log('ti lib index');
 //
@@ -15,7 +15,7 @@ _.assign(G.Ti, {
   Confirm,
   Prompt,
   openAppModal,
-  TIPS,
+  TI_APP_TIPS,
 });
 
 export * from './_features';
