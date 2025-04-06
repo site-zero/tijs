@@ -12,7 +12,7 @@ export default {
     currentId: null,
     checkedIds: {},
     canSelect: false,
-    canCheck: true,
+    showChecker: true,
     data: getListData({ icon: true, tip: false }),
   } as TreeTableProps,
 } as ComPropExample;

@@ -80,9 +80,6 @@
     }),
   });
   //-------------------------------------------------------
-  const Keep = computed(() => useKeepTable(props));
-  let Table = computed(() => useTable(props, emit));
-  //-------------------------------------------------------
   // 如果采用 IntersectionObserver 就没必要监控 scrolling 的变化了
   const scrolling: TableScrolling = reactive({
     viewport: { width: 0, height: 0 },
@@ -93,6 +90,7 @@
     cacheZoneHeight: 600,
     lineMarkers: [] as number[],
   });
+  //-------------------------------------------------------
   const selection = reactive({
     currentId: undefined,
     checkedIds: new Map<TableRowID, boolean>(),
@@ -100,6 +98,9 @@
     uniqKey: null,
     lastSelectIndex: -1,
   } as TableSelection);
+  //-------------------------------------------------------
+  const _keep = computed(() => useKeepTable(props));
+  let _table = computed(() => useTable(props, selection, emit));
   //-------------------------------------------------------
   /**
    * 定制每个列的宽高，0 表示这个行是自动 `1fr`
@@ -158,9 +159,7 @@
     return re;
   });
   //-------------------------------------------------------
-  const TableData = computed(() => {
-    return Table.value.getTableData();
-  });
+  const TableData = computed(() => _table.value.TableData.value);
   const hasData = computed(() => TableData.value.length > 0);
   //-------------------------------------------------------
   const ShowRowMarker = computed(
@@ -169,12 +168,11 @@
   //-------------------------------------------------------
   const HeadMenu = computed(() =>
     useTableHeadMenu(
-      selection,
-      Table.value,
+      _table.value,
       AllTableColumns,
       _column_sizes,
       _display_column_keys,
-      Keep.value
+      _keep.value
     )
   );
   //-------------------------------------------------------
@@ -268,7 +266,7 @@
   //                Event Cell Changed
   //-------------------------------------------------------
   function onClickMain() {
-    Table.value.selectNone(selection);
+    _table.value.selectNone();
   }
   //-------------------------------------------------------
   function onCellChange(changed: TableCellChanged) {
@@ -307,7 +305,7 @@
       scrolling.lineCount = props.data.length;
       scrolling.lineHeights = [];
       scrolling.lineMarkers = [];
-      selection.ids = Table.value.getRowIds(props.data ?? []);
+      selection.ids = _table.value.getRowIds(props.data ?? []);
       if (!_mea.isMainWatched()) {
         _mea.watchMain();
       }
@@ -320,7 +318,7 @@
     () => [props.currentId, props.checkedIds],
     () => {
       //console.log('updateSelection before:', props.currentId, props.checkedIds);
-      Table.value.updateSelection(
+      _table.value.updateSelection(
         selection,
         props.data ?? [],
         props.currentId,
@@ -351,23 +349,23 @@
         AllTableColumns,
         _column_sizes,
         _display_column_keys,
-        Keep.value
+        _keep.value
       );
       _mea.updateMeasure();
     }
   );
   //-------------------------------------------------------
   onMounted(() => {
-    Table.value.bindTableResizing(
+    _table.value.bindTableResizing(
       $main.value,
       _col_resizing,
       _column_sizes,
       _display_column_keys,
       ShowRowMarker.value,
       onUnmounted,
-      Keep
+      _keep
     );
-    loadColumns(TableColumns, _column_sizes, _display_column_keys, Keep.value);
+    loadColumns(TableColumns, _column_sizes, _display_column_keys, _keep.value);
     _mea.watchMain();
   });
   //-------------------------------------------------------
@@ -400,7 +398,7 @@
           :key="col.uniqKey">
           <div
             class="table-cell as-head"
-            :class="Table.getTableHeadClass(selection, col)"
+            :class="_table.getTableHeadClass(selection, col)"
             :col-index="i"
             :cols-count="TableColumns.length"
             :col-key="col.uniqKey"
@@ -443,18 +441,16 @@
           :row="row"
           :vars="vars"
           :activated="row.id == selection.currentId"
-          :checked="Table.selectable.isIDChecked(selection, row.id)"
+          :checked="_table.selectable.isIDChecked(selection, row.id)"
           :indent="row.indent"
           :editable="props.editable"
           :activedColUniqKey="getRowActivedColUniqKey(selection, row)"
           :updateRowHeight="updateRowHeight"
-          @row-select="Table.OnRowSelect(selection, $event)"
-          @row-check="Table.OnRowCheck(selection, $event)"
-          @row-open="Table.OnRowOpen(selection, $event)"
-          @cell-select="
-            Table.OnCellSelect(selection, $event, _table_column_map)
-          "
-          @cell-open="Table.OnCellOpen(selection, $event)"
+          @row-select="_table.OnRowSelect($event)"
+          @row-check="_table.OnRowCheck($event)"
+          @row-open="_table.OnRowOpen($event)"
+          @cell-select="_table.OnCellSelect($event, _table_column_map)"
+          @cell-open="_table.OnCellOpen($event)"
           @cell-change="onCellChange" />
       </template>
       <!-- 显示空数据提示 -->

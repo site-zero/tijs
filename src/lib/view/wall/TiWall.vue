@@ -12,7 +12,6 @@
   import { CssUtils } from '../../../core';
   import { WallEmitter, WallProps } from './ti-wall-types';
   import { useWall } from './use-wall';
-  import { useWallSelect } from './use-wall-select';
   //-------------------------------------------------
   const emit = defineEmits<WallEmitter>();
   //-----------------------------------------------------
@@ -36,8 +35,7 @@
     lastSelectIndex: -1,
   } as SelectableState<TableRowID>);
   //-----------------------------------------------------
-  let _wall_select = useWallSelect(props, emit);
-  const _wall = useWall(props, _wall_select);
+  const _wall = computed(() => useWall(props, selection, emit));
   //-----------------------------------------------------
   let GridLayoutStyle = computed(() =>
     useGridLayout(props, _viewport.size.width)
@@ -46,7 +44,7 @@
   const TopClass = computed(() => {
     return CssUtils.mergeClassName(props.className, {
       'can-select': props.canSelect,
-      'can-check': props.canCheck,
+      'can-check': props.showChecker,
     });
   });
   //-----------------------------------------------------
@@ -60,14 +58,14 @@
   //-----------------------------------------------------
   watch(
     () => props.data,
-    () => _wall_select.resetSelection(selection, props.data),
+    () => _wall.value.resetSelection(selection, props.data),
     { immediate: true }
   );
   //-----------------------------------------------------
   watch(
     () => [props.currentId, props.checkedIds],
     () => {
-      _wall_select.updateSelection(
+      _wall.value.updateSelection(
         selection,
         props.data ?? [],
         props.currentId,
@@ -83,7 +81,7 @@
     class="ti-wall"
     :class="TopClass"
     :style="TopStyle"
-    @click.left="_wall_select.resetSelection(selection, props.data)">
+    @click.left="_wall.resetSelection(selection, props.data)">
     <div
       class="wall-con"
       :style="WallConStyle"
@@ -92,7 +90,7 @@
       <div
         v-for="wit in _wall.Items.value"
         class="wall-item"
-        :class="_wall_select.getItemClass(selection, wit)"
+        :class="_wall.getWallItemClass(wit)"
         :style="wit.style"
         :it-index="wit.index"
         :it-type="wit.type">
@@ -100,9 +98,7 @@
           class="wall-item-con"
           :class="wit.conClass"
           :style="wit.conStyle"
-          @click.left.stop="
-            _wall_select.OnItemSelect(selection, { event: $event, item: wit })
-          "
+          @click.left.stop="_wall.OnItemSelect({ event: $event, item: wit })"
           @dblclick="emit('open', wit)">
           <component
             :is="wit.comType"

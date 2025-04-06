@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import { computed, ref } from 'vue';
 import {
-  AnyOptionItem,
   KeyboardStatus,
   LogicType,
+  OptionItem,
   TableRowID,
   Vars,
 } from '../../../_type';
@@ -15,11 +15,12 @@ export type SwitcherEmitter = {
   (event: 'change', payload: null | TableRowID | TableRowID[]): void;
 };
 
-export type OptionDisplayItem = AnyOptionItem & {
+export type OptionDisplayItem = OptionItem<TableRowID> & {
   type?: LogicType;
   className?: any;
   style?: Vars;
   checked?: boolean;
+  index: number;
 };
 
 export function useSwitcher(
@@ -27,6 +28,7 @@ export function useSwitcher(
   props: SwitcherProps,
   emit: SwitcherEmitter
 ) {
+  //-----------------------------------------------------
   //console.log('useSwitcher')
   const _sw_options = computed(() =>
     useOptions({
@@ -35,13 +37,19 @@ export function useSwitcher(
       mustInOptions: true,
     })
   );
+  //-----------------------------------------------------
   const options = ref<OptionDisplayItem[]>([]);
-
-  function getDisplayItems() {
+  //-----------------------------------------------------
+  const _id_index = new Map<TableRowID, number>();
+  //-----------------------------------------------------
+  function _build_display_items(): OptionDisplayItem[] {
+    _id_index.clear();
     let items = _.cloneDeep(options.value);
     let dftStyle = CssUtils.toCssStyle(props.itemStyle);
-    for (let it of items) {
+    for (let i = 0; i < items.length; i++) {
+      let it = items[i];
       it.checked = isChecked(it);
+      _id_index.set(it.value, i);
       //.......................................
       if (!it.type) {
         it.type = props.defaultItemType;
@@ -67,7 +75,21 @@ export function useSwitcher(
     }
     return items;
   }
-
+  //-----------------------------------------------------
+  const DisplayItems = computed(() => _build_display_items());
+  //-----------------------------------------------------
+  function getItemByIndex(index: number): OptionDisplayItem | undefined {
+    return _.nth(DisplayItems.value, index);
+  }
+  //-----------------------------------------------------
+  function getItemById(id: TableRowID): OptionDisplayItem | undefined {
+    let index = _id_index.get(id);
+    if (_.isNil(index)) {
+      return;
+    }
+    return _.nth(DisplayItems.value, index);
+  }
+  //-----------------------------------------------------
   const SwitcherValueInArray = computed(() => {
     if (_.isNil(props.value)) {
       return [];
@@ -77,31 +99,46 @@ export function useSwitcher(
     }
     return [props.value];
   });
-
+  //-----------------------------------------------------
   const SwitcherValue = computed(() => {
     if (props.multi) {
       return SwitcherValueInArray.value;
     }
     return _.first(SwitcherValueInArray.value);
   });
-
+  //-----------------------------------------------------
   const SwitcherCheckedIds = computed(() => {
     let vals = _.concat(SwitcherValueInArray.value);
     return Util.arrayToMap(vals);
   });
-
+  //-----------------------------------------------------
   const selectable = computed(() =>
-    useSelectable<any>({
-      getId: 'value',
-      multi: props.multi,
-      checkedIds: SwitcherCheckedIds.value,
-      canSelect: props.readonly ? false : true,
-      canCheck: props.readonly ? false : true,
-      minChecked: props.minChecked,
-      maxChecked: props.maxChecked,
-    })
+    useSelectable<TableRowID>(
+      {
+        getId: 'value',
+        multi: props.multi,
+        checkedIds: SwitcherCheckedIds.value,
+        canSelect: props.readonly ? false : true,
+        showChecker: props.readonly ? false : true,
+        minChecked: props.minChecked,
+        maxChecked: props.maxChecked,
+      },
+      {
+        getItem: (id: TableRowID) => {
+          let it = getItemById(id);
+          if (!it) {
+            return;
+          }
+          return {
+            id: it.value,
+            rawData: it,
+            index: it.index,
+          };
+        },
+      }
+    )
   );
-
+  //-----------------------------------------------------
   async function loadOptions() {
     //console.log('loadOptions');
     let dict = _sw_options.value.dict;
@@ -109,9 +146,11 @@ export function useSwitcher(
     let ids = [] as TableRowID[];
     let items = await dict?.getData();
     if (items) {
-      for (let item of items) {
+      for (let i = 0; i < items.length; i++) {
+        let item = items[i];
         let it = {
           ...dict!.toStdItem(item).toOptionItem(),
+          index: i,
         } as OptionDisplayItem;
         //.......................................
         _.assign(it, _.pick(item, 'style', 'className', 'type'));
@@ -125,11 +164,11 @@ export function useSwitcher(
     //selection.ids = ids;
     updateSelection(props.value);
   }
-
+  //-----------------------------------------------------
   function isChecked(it: OptionDisplayItem) {
     return selectable.value.isIDChecked(selection, it.value);
   }
-
+  //-----------------------------------------------------
   function onSelect(itemId: TableRowID, event?: Event) {
     if (props.readonly) {
       return;
@@ -173,7 +212,7 @@ export function useSwitcher(
       }
     }
   }
-
+  //-----------------------------------------------------
   function updateSelection(value?: TableRowID | TableRowID[]) {
     //console.log('updateSelection', _.cloneDeep(value));
     if (_.isNil(value)) {
@@ -222,15 +261,20 @@ export function useSwitcher(
       );
     }
   }
-
+  //-----------------------------------------------------
+  // 输出特性
+  //-----------------------------------------------------
   return {
     options,
+    DisplayItems,
+    getItemByIndex,
+    getItemById,
+
     SwitcherValueInArray,
     SwitcherValue,
     SwitcherCheckedIds,
     selection,
     loadOptions,
-    getDisplayItems,
     onSelect,
     updateSelection,
   };

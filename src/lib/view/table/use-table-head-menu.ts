@@ -1,13 +1,12 @@
 import { ComputedRef, Ref } from 'vue';
-import { ActionBarProps, TableSelection, TableStrictColumn } from '../../';
+import { ActionBarProps, TableStrictColumn } from '../../';
 import { ActionBarItem, Vars } from '../../../_type';
 import { doCustomizeColumn } from './use-customized-columns';
 import { TableFeature } from './use-table';
 import { TableKeepFeature } from './use-table-keep';
 
 export function useTableHeadMenu(
-  selection: TableSelection,
-  Table: TableFeature,
+  _table: TableFeature,
   AllTableColumns: ComputedRef<TableStrictColumn[]>,
   _column_sizes: Ref<Record<string, number>>,
   _display_column_keys: Ref<string[]>,
@@ -18,14 +17,14 @@ export function useTableHeadMenu(
       icon: 'zmdi-check-all',
       text: 'i18n:ti-table-select-all',
       action: () => {
-        Table.checkAll(selection);
+        _table.checkAll();
       },
     },
     {
       icon: 'zmdi-minus',
       text: 'i18n:ti-table-select-none',
       action: () => {
-        Table.selectNone(selection);
+        _table.selectNone();
       },
     },
     {},
@@ -44,7 +43,7 @@ export function useTableHeadMenu(
   ] as ActionBarItem[];
 
   // 获取选中状态以及对应图标
-  let rowCheckedStatus = Table.getCheckStatus(selection);
+  let rowCheckedStatus = _table.getCheckStatus();
   //   let statusIcon = {
   //     all: 'zmdi-check-square',
   //     part: 'zmdi-minus-square',
@@ -72,9 +71,9 @@ export function useTableHeadMenu(
         ],
         action: (payload: Vars) => {
           if ('all' == payload.checked) {
-            Table.selectNone(selection);
+            _table.selectNone();
           } else {
-            Table.checkAll(selection);
+            _table.checkAll();
           }
         },
         items,

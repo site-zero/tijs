@@ -8,7 +8,7 @@ export default {
   text: 'i18n:ti-wall-example-selectable',
   comConf: {
     canSelect: true,
-    canCheck: true,
+    showChecker: true,
     multi: true,
     layoutHint: '<120>',
     comConf: {

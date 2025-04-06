@@ -27,9 +27,7 @@
     nowrap: false,
   });
   //-----------------------------------------------------
-  const Swt = useSwitcher(selection, props, emit);
-  //-----------------------------------------------------
-  const DisplayItems = computed(() => Swt.getDisplayItems());
+  const _swt = useSwitcher(selection, props, emit);
   //-----------------------------------------------------
   const TopClass = computed(() =>
     CssUtils.mergeClassName(
@@ -48,8 +46,8 @@
   watch(
     () => [props.options],
     async () => {
-      Swt.loadOptions();
-      Swt.updateSelection(props.value);
+      _swt.loadOptions();
+      _swt.updateSelection(props.value);
     },
     {
       immediate: true,
@@ -60,7 +58,7 @@
   watch(
     () => [props.value],
     () => {
-      Swt.updateSelection(props.value);
+      _swt.updateSelection(props.value);
     },
     {
       immediate: true,
@@ -74,13 +72,13 @@
     :class="TopClass"
     :style="TopStyle">
     <div
-      v-for="it in DisplayItems"
+      v-for="it in _swt.DisplayItems.value"
       class="sw-item"
       :class="it.className"
       :style="it.style"
       :data-type="it.type"
       :title="it.tip"
-      @click.left="Swt.onSelect(it.value, $event)">
+      @click.left="_swt.onSelect(it.value, $event)">
       <div
         class="it-icon"
         v-if="it.icon">

@@ -32,17 +32,16 @@
     lastSelectIndex: -1,
   } as SelectableState<TableRowID>);
   //-----------------------------------------------------
-  const _list = computed(() => useList(props, emit));
+  const _list = computed(() => useList(props, selection, emit));
   //-----------------------------------------------------
   const roadblock = computed(() => _list.value.getRoadblock());
-  const Items = computed(() => _list.value.buildOptionItems(selection));
-  const NotItems = computed(() => _.isEmpty(Items.value));
+  const NotItems = computed(() => _.isEmpty(_list.value.Items.value));
   //-----------------------------------------------------
   const _indent = computed(() => useRowIndent(props));
   //-----------------------------------------------------
   const IndentlyItems = computed(() => {
     let re: IndentlyItem[] = [];
-    for (let it of Items.value) {
+    for (let it of _list.value.Items.value) {
       re.push({
         ...it,
         ..._indent.value.getRowIndentation(it.value, it, it.icon),
@@ -52,10 +51,10 @@
   });
   //-----------------------------------------------------
   const isAlwaysShowItemIcon = computed(() => {
-    if('yes' == props.forceShowRowIconPart) {
+    if ('yes' == props.forceShowRowIconPart) {
       return true;
     }
-    if('no' == props.forceShowRowIconPart) {
+    if ('no' == props.forceShowRowIconPart) {
       return false;
     }
     // 那么就会是自动模式
@@ -77,7 +76,7 @@
       props.className,
       {
         'is-hoverable': props.canHover,
-        'is-selectable': props.canSelect || props.canCheck,
+        'is-selectable': props.canSelect || props.showChecker,
         'is-highlight-checked': props.highlightChecked,
         'none-user-select': !props.allowUserSelect,
       },
@@ -100,23 +99,8 @@
   //-----------------------------------------------------
   function onListItemClick(item: ListItem, event: MouseEvent) {
     //console.log('onListItemClick', item);
-    _list.value.OnItemSelect(selection, { event, item });
+    _list.value.OnItemSelect({ event, item });
   }
-  //-----------------------------------------------------
-  // watch(
-  //   () => [props.currentId, props.checkedIds],
-  //   () => {
-  //     _list.value.updateSelection(
-  //       selection,
-  //       props.data ?? [],
-  //       props.currentId,
-  //       props.checkedIds
-  //     );
-  //   },
-  //   {
-  //     immediate: true,
-  //   }
-  // );
   //-----------------------------------------------------
   watch(
     () => [props.currentId, props.checkedIds],
@@ -177,9 +161,7 @@
         <div
           v-if="MarkerIcons && it.canCheck"
           class="list-part as-check"
-          @click.stop="
-            _list.OnItemCheck(selection, { event: $event, item: it })
-          ">
+          @click.stop="_list.OnItemCheck({ event: $event, item: it })">
           <TiIcon
             v-if="it.checked"
             :value="MarkerIcons[1]" />

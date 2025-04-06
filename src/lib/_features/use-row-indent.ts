@@ -73,13 +73,13 @@ export function useRowIndent(props: RowIndentProps) {
           rowStatus: row_st,
           rawData,
           rowIndent: indent,
-          rowIcon
+          rowIcon,
         }),
       };
     }
     // 返回默认
     else {
-      return { id, indent: 0 };
+      return { id, indent: 0, rowIcon };
     }
   }
   //-----------------------------------------------------

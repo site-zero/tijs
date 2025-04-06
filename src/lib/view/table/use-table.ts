@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { ComputedRef, Ref } from 'vue';
-import { SelectableFeature, useDataLogicType, useSelectable } from '../../';
+import { computed, ComputedRef, Ref } from 'vue';
+import { SelectableApi, useDataLogicType, useSelectable } from '../../';
 import {
   Callback,
   Callback1,
@@ -65,12 +65,15 @@ export type ColResizingState = {
  * @returns 整理后的表格数据
  */
 function _get_table_data(
-  selectable: SelectableFeature<TableRowID>,
+  selectable: SelectableApi<TableRowID>,
   data: Vars[],
+  _id_index: Map<TableRowID, number>,
   getRowType?: (data: Vars) => LogicType | undefined
 ): TableRowData[] {
   // 启用特性
   let { getDataId } = selectable;
+
+  _id_index.clear();
 
   // 处理数据
   let list: TableRowData[] = [];
@@ -78,6 +81,7 @@ function _get_table_data(
   for (let index = 0; index < N; index++) {
     let rawData = data[index];
     let id = getDataId(rawData, index);
+    _id_index.set(id, index);
     let row: TableRowData = {
       id: id ?? `row-${index}`,
       index,
@@ -97,10 +101,46 @@ function _get_table_data(
                    Use Feature
                 
 -----------------------------------------------------*/
-export function useTable(props: TableProps, emit: TableEmitter) {
+export function useTable(
+  props: TableProps,
+  selection: TableSelection,
+  emit: TableEmitter
+) {
   // 启用特性
-  let selectable = useSelectable<TableRowID>(props);
-
+  let selectable = useSelectable<TableRowID>(props, {
+    getItem: (id: TableRowID) => {
+      let row = getRowDataById(id);
+      if (!row) {
+        return;
+      }
+      return {
+        id: row.id,
+        rawData: row.rawData,
+        index: row.index,
+      };
+    },
+  });
+  //-----------------------------------------------------
+  const getRowType = useDataLogicType(props.getRowType);
+  //-----------------------------------------------------
+  const _id_index = new Map<TableRowID, number>();
+  //-----------------------------------------------------
+  const TableData = computed(() =>
+    _get_table_data(selectable, props.data, _id_index, getRowType)
+  );
+  //-----------------------------------------------------
+  function getRowDataByIndex(index: number): TableRowData | undefined {
+    return _.nth(TableData.value, index);
+  }
+  //-----------------------------------------------------
+  function getRowDataById(id: TableRowID): TableRowData | undefined {
+    let index = _id_index.get(id);
+    if (_.isNil(index)) {
+      return;
+    }
+    return _.nth(TableData.value, index);
+  }
+  //-----------------------------------------------------
   function getCurrentRow(selection: TableSelection, rows: TableRowData[]) {
     if (!_.isNil(selection.currentId)) {
       for (let row of rows) {
@@ -110,7 +150,7 @@ export function useTable(props: TableProps, emit: TableEmitter) {
       }
     }
   }
-
+  //-----------------------------------------------------
   function getCheckedRows(
     selection: TableSelection,
     rows: TableRowData[]
@@ -125,19 +165,20 @@ export function useTable(props: TableProps, emit: TableEmitter) {
     }
     return checked;
   }
-
-  const getRowType = useDataLogicType(props.getRowType);
-
+  //-----------------------------------------------------
+  // 返回特性
+  //-----------------------------------------------------
   return {
     selectable,
+    TableData,
+    getRowDataByIndex,
+    getRowDataById,
+
     getTableHeadClass: (selection: TableSelection, col: TableStrictColumn) => {
       return {
         'is-actived-column': selection.uniqKey == col.uniqKey,
         'has-tip': col.tip ? true : false,
       };
-    },
-    getTableData: () => {
-      return _get_table_data(selectable, props.data, getRowType);
     },
     bindTableResizing: (
       $main: HTMLElement,
@@ -170,14 +211,14 @@ export function useTable(props: TableProps, emit: TableEmitter) {
 
     getRowIds: selectable.getDataIds,
 
-    getCheckStatus(selection: TableSelection) {
+    getCheckStatus() {
       return selectable.getCheckStatus(selection);
     },
 
     getCurrentRow,
     getCheckedRows,
 
-    checkAll(selection: TableSelection) {
+    checkAll() {
       let oldCurrentId = _.cloneDeep(selection.currentId);
       let oldCheckedIds = _.cloneDeep(selection.checkedIds);
       console.log('selectAll', selection.ids);
@@ -193,7 +234,7 @@ export function useTable(props: TableProps, emit: TableEmitter) {
       emit('select', info);
     },
 
-    selectNone(selection: TableSelection) {
+    selectNone() {
       let oldCurrentId = _.cloneDeep(selection.currentId);
       let oldCheckedIds = _.cloneDeep(selection.checkedIds);
       selectable.selectNone(selection);
@@ -207,7 +248,7 @@ export function useTable(props: TableProps, emit: TableEmitter) {
       emit('select', info);
     },
 
-    OnRowSelect(selection: TableSelection, rowEvent: TableEventPayload) {
+    OnRowSelect(rowEvent: TableEventPayload) {
       selection.uniqKey = null;
       // Guard actived
       if (selection.currentId == rowEvent.row.id) {
@@ -238,7 +279,7 @@ export function useTable(props: TableProps, emit: TableEmitter) {
       emit('select', info);
     },
 
-    OnRowCheck(selection: TableSelection, rowEvent: TableEventPayload) {
+    OnRowCheck(rowEvent: TableEventPayload) {
       log.debug('OnRowCheck', rowEvent);
       let oldCurrentId = _.cloneDeep(selection.currentId);
       let oldCheckedIds = _.cloneDeep(selection.checkedIds);
@@ -263,7 +304,6 @@ export function useTable(props: TableProps, emit: TableEmitter) {
     },
 
     OnCellSelect(
-      selection: TableSelection,
       rowEvent: TableEventPayload,
       columnMap: Map<string, TableStrictColumn>
     ) {
@@ -311,12 +351,12 @@ export function useTable(props: TableProps, emit: TableEmitter) {
 
     updateSelection: selectable.updateSelection,
 
-    OnRowOpen(_selection: TableSelection, rowEvent: TableEventPayload) {
+    OnRowOpen(rowEvent: TableEventPayload) {
       log.debug('OnRowOpen', rowEvent);
       emit('open', rowEvent.row);
     },
 
-    OnCellOpen(_selection: TableSelection, rowEvent: TableEventPayload) {
+    OnCellOpen(rowEvent: TableEventPayload) {
       log.debug('OnCellOpen', rowEvent);
       emit('cell-open', rowEvent);
     },

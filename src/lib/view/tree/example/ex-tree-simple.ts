@@ -9,6 +9,7 @@ export default {
     size: 't',
     borderStyle: 'dotted',
     isNodeOpen: 5,
+    autoOpen: 1,
     data: [
       { id: 0, text: 'I am Root' },
       { id: 1, text: 'I am Child 1', pid: 0 },

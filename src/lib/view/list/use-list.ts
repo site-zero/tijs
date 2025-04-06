@@ -1,7 +1,7 @@
 import _ from 'lodash';
+import { computed } from 'vue';
 import { AnyOptionItem, IconInput, TableRowID, Vars } from '../../../_type';
 import { EventUtils, I18n, Tmpl, Util } from '../../../core';
-import { getLogger } from '../../../core/log/ti-log';
 import {
   SelectableState,
   useDataLogicType,
@@ -18,18 +18,42 @@ import {
   ListSelectEmitInfo,
 } from './ti-list-types';
 
-const log = getLogger('TiList.use-list');
+const debug = false;
 
-export function useList(props: ListProps, emit: ListEmitter) {
+export function useList(
+  props: ListProps,
+  selection: SelectableState<TableRowID>,
+  emit: ListEmitter
+) {
   // 启用特性: 选择行，对于列表 getId 与 getValue 通常用户只会指定一个
   let _get_id: undefined | string | ((it: Vars, index: number) => TableRowID) =
     undefined;
+  //-----------------------------------------------------
+  // 指定了获取 ID 的方式
   if (props.getId) {
     _get_id = props.getId;
-  } else if (props.getValue) {
+  }
+  // 指定了获取值的方式，也可以用来获取
+  else if (props.getValue) {
     _get_id = props.getValue;
   }
-  let selectable = useSelectable<TableRowID>({ ...props, getId: _get_id });
+  //-----------------------------------------------------
+  const selectable = useSelectable<TableRowID>(
+    { ...props, getId: _get_id },
+    {
+      getItem: (id: TableRowID) => {
+        let it = getItemById(id);
+        if (!it) {
+          return;
+        }
+        return {
+          id: it.value,
+          rawData: it.rawData,
+          index: it.index,
+        };
+      },
+    }
+  );
   const getRowType = useDataLogicType(props.getRowType);
   //-----------------------------------------------------
   // 标准列表
@@ -104,15 +128,16 @@ export function useList(props: ListProps, emit: ListEmitter) {
     _format_display_text = _text_format;
   }
   //-----------------------------------------------------
-  function buildOptionItems(
-    selection: SelectableState<TableRowID>
-  ): ListItem[] {
+  const _id_index = new Map<TableRowID, number>();
+  //-----------------------------------------------------
+  function __build_option_items(): ListItem[] {
+    _id_index.clear();
     let items = [] as ListItem[];
     if (!props.data) {
       return items;
     }
     for (let index = 0; index < props.data.length; index++) {
-      let li = props.data[index]
+      let li = props.data[index];
       let is_current = selectable.isDataActived(selection, index, li);
       let is_checked = selectable.isDataChecked(selection, index, li);
       let className: Vars = {
@@ -137,6 +162,9 @@ export function useList(props: ListProps, emit: ListEmitter) {
         }
       }
 
+      // 归纳映射表
+      _id_index.set(value, index);
+
       // 准备判断是否可以选择
       let sIt = { id: value, rawData: li, index };
       let canCheck = selectable.canCheckItem(sIt);
@@ -156,7 +184,7 @@ export function useList(props: ListProps, emit: ListEmitter) {
         displayText: text ?? '',
         rawData: li,
         canCheck,
-        canSelect
+        canSelect,
       };
 
       // 生成显示文字内容
@@ -164,13 +192,24 @@ export function useList(props: ListProps, emit: ListEmitter) {
 
       // 记入列表
       items.push(it);
-
-      // 计数
-      index++;
     } // ~ for (let li of props.data) {
 
     // 搞定返回
     return items;
+  }
+  //-----------------------------------------------------
+  const Items = computed(() => __build_option_items());
+  //-----------------------------------------------------
+  function getItemByIndex(index: number): ListItem | undefined {
+    return _.nth(Items.value, index);
+  }
+  //-----------------------------------------------------
+  function getItemById(id: TableRowID): ListItem | undefined {
+    let index = _id_index.get(id);
+    if (_.isNil(index)) {
+      return;
+    }
+    return _.nth(Items.value, index);
   }
   //-----------------------------------------------------
   function itemsHasIcon(items: IndentlyItem[]) {
@@ -187,17 +226,16 @@ export function useList(props: ListProps, emit: ListEmitter) {
     return false;
   }
   //-----------------------------------------------------
-  function OnItemSelect(
-    selection: SelectableState<TableRowID>,
-    itemEvent: ListEvent
-  ) {
-    log.debug('OnItemSelect', itemEvent);
+  function OnItemSelect(itemEvent: ListEvent) {
+    if (debug) console.log('OnItemSelect', itemEvent);
     let { item, event } = itemEvent;
-    if (!selectable.canSelectItem({
-      id: item.value,
-      rawData: item.rawData,
-      index: item.index
-    })) {
+    if (
+      !selectable.canSelectItem({
+        id: item.value,
+        rawData: item.rawData,
+        index: item.index,
+      })
+    ) {
       return;
     }
     let oldCurrentId = _.cloneDeep(selection.currentId);
@@ -218,17 +256,16 @@ export function useList(props: ListProps, emit: ListEmitter) {
     emit('select', info);
   }
   //-----------------------------------------------------
-  function OnItemCheck(
-    selection: SelectableState<TableRowID>,
-    itemEvent: ListEvent
-  ) {
-    log.debug('OnItemCheck', itemEvent);
+  function OnItemCheck(itemEvent: ListEvent) {
+    if (debug) console.log('OnItemCheck', itemEvent);
     let { item } = itemEvent;
-    if (!selectable.canCheckItem({
-      id: item.value,
-      rawData: item.rawData,
-      index: item.index
-    })) {
+    if (
+      !selectable.canCheckItem({
+        id: item.value,
+        rawData: item.rawData,
+        index: item.index,
+      })
+    ) {
       return;
     }
     let oldCurrentId = _.cloneDeep(selection.currentId);
@@ -251,8 +288,11 @@ export function useList(props: ListProps, emit: ListEmitter) {
   // 输出特性
   //-----------------------------------------------------
   return {
+    Items,
+    getItemByIndex,
+    getItemById,
+
     getRoadblock,
-    buildOptionItems,
     itemsHasIcon,
     itemsHasTip,
     getMarkerIcons,

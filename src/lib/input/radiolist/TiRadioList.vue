@@ -47,7 +47,7 @@
     :marker-icons="['zmdi-circle-o', 'zmdi-dot-circle']"
     :max-checked="1"
     :can-select="false"
-    :can-check="true"
+    :showChecker="true"
     :checked-ids="checkedIds"
     @select="onSelect" />
 </template>

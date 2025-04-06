@@ -4,7 +4,7 @@ import {
   KeepInfo,
   RoadblockProps,
   SelectEmitInfo,
-  SelectableFeature,
+  SelectableApi,
   SelectableProps,
   SelectableState,
 } from '../..';
@@ -26,7 +26,7 @@ import {
 export const KK_DISPLAY_COL_KEYS = '$table$display_column_keys';
 export const HEAD_MARKER = '$table$HEAD_MARKER';
 
-export type TableSelectable = SelectableFeature<TableRowID>;
+export type TableSelectable = SelectableApi<TableRowID>;
 
 export type TableRowData = {
   index: number;

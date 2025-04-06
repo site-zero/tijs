@@ -43,7 +43,7 @@
     :max-checked="props.maxChecked"
     :min-checked="props.minChecked"
     :can-select="false"
-    :can-check="true"
+    :showChecker="true"
     :checked-ids="checkedIds"
     @select="onSelect" />
 </template>
