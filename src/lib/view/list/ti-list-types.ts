@@ -126,6 +126,8 @@ export type ListProps = CommonProps &
 export type ListItem = AnyOptionItem & {
   current: boolean;
   checked: boolean;
+  canCheck: boolean;
+  canSelect: boolean;
   className: Vars;
   index: number;
   displayText: string;

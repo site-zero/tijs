@@ -18,7 +18,6 @@
     size: 'm',
     canSelect: true,
     canHover: true,
-    allowUserSelect: false,
     autoI18n: true,
     textAsHtml: true,
     highlightChecked: true,
@@ -104,20 +103,20 @@
     _list.value.OnItemSelect(selection, { event, item });
   }
   //-----------------------------------------------------
-  watch(
-    () => [props.currentId, props.checkedIds],
-    () => {
-      _list.value.updateSelection(
-        selection,
-        props.data ?? [],
-        props.currentId,
-        props.checkedIds
-      );
-    },
-    {
-      immediate: true,
-    }
-  );
+  // watch(
+  //   () => [props.currentId, props.checkedIds],
+  //   () => {
+  //     _list.value.updateSelection(
+  //       selection,
+  //       props.data ?? [],
+  //       props.currentId,
+  //       props.checkedIds
+  //     );
+  //   },
+  //   {
+  //     immediate: true,
+  //   }
+  // );
   //-----------------------------------------------------
   watch(
     () => [props.currentId, props.checkedIds],
@@ -176,7 +175,7 @@
           class="list-part as-indicator for-leaf"></div>
         <!--=Check Maker=-->
         <div
-          v-if="MarkerIcons"
+          v-if="MarkerIcons && it.canCheck"
           class="list-part as-check"
           @click.stop="
             _list.OnItemCheck(selection, { event: $event, item: it })

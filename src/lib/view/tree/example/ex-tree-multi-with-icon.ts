@@ -8,6 +8,11 @@ export default {
     className: 'fit-parent',
     size: 's',
     multi: true,
+    canCheck: true,
+    canCheckItem: {
+      pid: "![BLANK]"
+    },
+    checkedIds: { 12: true },
     borderStyle: 'dotted',
     isNodeOpen: 5,
     getRowIcon: [

@@ -137,6 +137,11 @@ export function useList(props: ListProps, emit: ListEmitter) {
         }
       }
 
+      // 准备判断是否可以选择
+      let sIt = { id: value, rawData: li, index };
+      let canCheck = selectable.canCheckItem(sIt);
+      let canSelect = selectable.canSelectItem(sIt);
+
       // 准备列表项
       let it: ListItem = {
         className,
@@ -149,7 +154,9 @@ export function useList(props: ListProps, emit: ListEmitter) {
         current: is_current,
         checked: is_checked,
         displayText: text ?? '',
-        rawData: li
+        rawData: li,
+        canCheck,
+        canSelect
       };
 
       // 生成显示文字内容
@@ -186,12 +193,12 @@ export function useList(props: ListProps, emit: ListEmitter) {
   ) {
     log.debug('OnItemSelect', itemEvent);
     let { item, event } = itemEvent;
-    if (selectable.canSelectItem({
+    if (!selectable.canSelectItem({
       id: item.value,
       rawData: item.rawData,
       index: item.index
     })) {
-
+      return;
     }
     let oldCurrentId = _.cloneDeep(selection.currentId);
     let oldCheckedIds = _.cloneDeep(selection.checkedIds);
@@ -216,6 +223,14 @@ export function useList(props: ListProps, emit: ListEmitter) {
     itemEvent: ListEvent
   ) {
     log.debug('OnItemCheck', itemEvent);
+    let { item } = itemEvent;
+    if (!selectable.canCheckItem({
+      id: item.value,
+      rawData: item.rawData,
+      index: item.index
+    })) {
+      return;
+    }
     let oldCurrentId = _.cloneDeep(selection.currentId);
     let oldCheckedIds = _.cloneDeep(selection.checkedIds);
     if (props.multi) {

@@ -27,7 +27,7 @@
   });
   //-----------------------------------------------------
   const ListProps = computed(() => {
-    return _.omit(
+    let re =  _.omit(
       props,
       'data',
       // TreeDataProps
@@ -42,6 +42,8 @@
       'rowIndents',
       'rowStauts'
     );
+    
+    return re;
   });
   //-----------------------------------------------------
   const _tree = computed(() => useTreeData(props));

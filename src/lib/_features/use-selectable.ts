@@ -1,14 +1,15 @@
 import _ from 'lodash';
 import { isTableRowID, KeyboardStatus, TableRowID, Vars } from '../../_type';
-import { Util } from '../../core';
+import { Match, Util } from '../../core';
 // -----------------------------------------------------
 //  Types
 export type CheckStatus = 'all' | 'none' | 'part';
 export type SelectableItem<ID> = {
-  rawData: Vars;
-  id: ID;
+  rawData?: Vars;
+  id?: ID;
   index: number;
 }
+export type CanItemMatch<ID> = (item: SelectableItem<ID>) => boolean;
 // -----------------------------------------------------
 export type SelectableState<ID> = {
   currentId?: ID | null;
@@ -83,14 +84,14 @@ export type SelectableProps<ID extends TableRowID> = {
    * @param itemId 行标准 ID
    * @returns  本行是否可以选中
    */
-  canSelectItem?: (item: SelectableItem<ID>) => void
+  canSelectItem?: Vars | Vars[] | CanItemMatch<ID>
 
   /**
    * @param itemData 行数据
    * @param itemId 行标准 ID
    * @returns  本行是否可以勾选
    */
-  canCheckItem?: (item: SelectableItem<ID>) => void
+  canCheckItem?: Vars | Vars[] | CanItemMatch<ID>
 };
 
 // -----------------------------------------------------
@@ -623,36 +624,68 @@ export function useSelectable<ID extends TableRowID>(
     }
   }
 
+  let __can_select_item: CanItemMatch<ID> | undefined = undefined;
+  if (props.canSelectItem) {
+    if (_.isFunction(props.canSelectItem)) {
+      __can_select_item = props.canSelectItem;
+    } else {
+      let am = Match.parse(props.canSelectItem);
+      __can_select_item = (item) => {
+        // TODO 是不是有个属性，能让匹配的时候
+        // 匹配 item 而不是 item.rawData
+        // 这样在非常稀有的情况下，譬如需要间隔一行
+        // 显示选择框（虽然这个场景非常滑稽）
+        // 我们还有有办法通过对象来描述判断规则的
+        return am.test(item.rawData);
+      }
+    }
+  }
+
+
   function canSelectItem(item: SelectableItem<ID>) {
-    if (props.canSelectItem) {
-      return props.canSelectItem(item);
+    if (_.isNil(item.id) || !item.rawData) {
+      return false;
     }
-    if (props.canSelect) {
-      if (_.isNil(item.id) || !item.rawData) {
-        return false;
-      }
-      if (item.index < 0) {
-        return false;
-      }
-      return true;
+    if (item.index < 0) {
+      return false;
     }
-    return false;
+
+    if (__can_select_item) {
+      return __can_select_item(item);
+    }
+
+    return props.canSelect ? true : false;
+  }
+
+  let __can_chcek_item: CanItemMatch<ID> | undefined = undefined;
+  if (props.canCheckItem) {
+    if (_.isFunction(props.canCheckItem)) {
+      __can_chcek_item = props.canCheckItem;
+    } else {
+      let am = Match.parse(props.canCheckItem);
+      __can_chcek_item = (item) => {
+        // TODO 是不是有个属性，能让匹配的时候
+        // 匹配 item 而不是 item.rawData
+        // 这样在非常稀有的情况下，譬如需要间隔一行
+        // 显示选择框（虽然这个场景非常滑稽）
+        // 我们还有有办法通过对象来描述判断规则的
+        return am.test(item.rawData);
+      }
+    }
   }
 
   function canCheckItem(item: SelectableItem<ID>) {
-    if (props.canCheckItem) {
-      return props.canCheckItem(item);
+    if (_.isNil(item.id) || !item.rawData) {
+      return false;
     }
-    if (props.canCheck) {
-      if (_.isNil(item.id) || !item.rawData) {
-        return false;
-      }
-      if (item.index < 0) {
-        return false
-      }
-      return true;
+    if (item.index < 0) {
+      return false
     }
-    return false;
+
+    if (__can_chcek_item) {
+      return __can_chcek_item(item);
+    }
+    return props.canCheck ? true : false;
   }
 
   return {
