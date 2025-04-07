@@ -36,11 +36,19 @@
           v-if="'html' == props.textType"
           class="as-snippet-text"
           :style="props.textStyle"
-          v-html="_text.text"></div>
+          v-html="_text.text"
+          :data-tip="props.ctrlTip"
+          data-tip-modifier="CTRL"
+          data-tip-content-type="html"
+          data-tip-dock-mode="H"></div>
         <div
           v-else
           class="as-snippet-text"
-          :style="props.textStyle">
+          :style="props.textStyle"
+          :data-tip="props.ctrlTip"
+          data-tip-modifier="CTRL"
+          data-tip-content-type="html"
+          data-tip-dock-mode="H">
           {{ _text.text }}
         </div>
       </template>
@@ -52,6 +60,4 @@
     </template>
   </component>
 </template>
-<style lang="scss">
-
-</style>
+<style lang="scss"></style>

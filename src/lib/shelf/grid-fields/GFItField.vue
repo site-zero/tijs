@@ -80,6 +80,30 @@
     getFieldIcon(props, hasTitle.value, hasTip.value, FieldStatus.value)
   );
   //-------------------------------------------------
+  const FieldCtrlTip = computed(() => {
+    let html = ['<table>'];
+    html.push(`<tr>
+      <td>Title:</td>
+      <td style="color:var(--ti-color-info-r)">${FieldText.value.title}</td>
+    </tr>`);
+    html.push(`<tr>
+      <td>Name:</td>
+      <td style="color:var(--ti-color-success-r)">${JSON.stringify(
+        props.name
+      )}</td>
+    </tr>`);
+    html.push(`<tr>
+      <td>UniqKey:</td>
+      <td style="color:var(--ti-color-text-r)">${props.uniqKey}</td>
+    </tr>`);
+    html.push(`<tr>
+      <td>Type:</td>
+      <td style="color:var(--ti-color-primary-r)">${props.type || 'String'}</td>
+    </tr>`);
+    html.push('</table>');
+    return html.join('');
+  });
+  //-------------------------------------------------
   const FieldValue = computed(() => {
     let val = getFieldValue(props.name, props.data) ?? props.defaultAs;
     if (props.transformer) {
@@ -160,6 +184,7 @@
       :suffixIcon="FieldIcon?.titleSuffixIcon"
       :suffixTip="FieldIcon?.titleSuffixTip"
       :vars="FieldTitleVars"
+      :ctrlTip="FieldCtrlTip"
       @change="onTitleChange" />
     <!--===============: 字段值 :===================-->
     <div

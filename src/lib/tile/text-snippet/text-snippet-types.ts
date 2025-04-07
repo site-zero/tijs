@@ -49,4 +49,6 @@ export type TextSnippetProps = FieldComProps & {
   prefixTip?: string;
   suffixIcon?: IconInput;
   suffixTip?: string;
+
+  ctrlTip?: string;
 };

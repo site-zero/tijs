@@ -324,14 +324,14 @@ export function eraseTip(tipObj: TipInstance) {
   });
 
   // 最后移除 tip 的定义和 DOM
-  _.delay(() => {
-    app.unmount();
-    Dom.remove($tipbox);
-    delete (tipObj.$target as any).__tip_obj;
-  }, tr_du);
+  // _.delay(() => {
+  //   app.unmount();
+  //   Dom.remove($tipbox);
+  //   delete (tipObj.$target as any).__tip_obj;
+  // }, tr_du);
 
-  // Dom.updateStyle($tipbox, { display: 'none' });
-  // app.unmount();
-  // Dom.remove($tipbox);
-  // delete (tipObj.$target as any).__tip_obj;
+  Dom.updateStyle($tipbox, { display: 'none' });
+  app.unmount();
+  Dom.remove($tipbox);
+  delete (tipObj.$target as any).__tip_obj;
 }

@@ -68,6 +68,13 @@
     return re;
   });
   //-----------------------------------------------------
+  const LabelTipText = computed(() => {
+    if (props.value == LabelText.value) {
+      return null;
+    }
+    return [props.value, LabelText.value].join(': ');
+  });
+  //-----------------------------------------------------
   function onClickLabel(event: MouseEvent) {
     if (props.captureClick) {
       event.stopPropagation();
@@ -106,9 +113,14 @@
         v-if="_api.Href.value"
         :href="_api.Href.value"
         target="_blank"
+        :data-tip="LabelTipText"
+        data-tip-modifier="CTRL"
         >{{ LabelText }}</a
       >
-      <span v-else>
+      <span
+        v-else
+        :data-tip="LabelTipText"
+        data-tip-modifier="CTRL">
         {{ LabelText }}
       </span>
     </div>
