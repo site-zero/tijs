@@ -160,7 +160,7 @@ export function drawTipBox(
   // Tip 盒子与目标元素距离
   const axis_space = arrowSize + space;
   // 动画位移距离
-  const tr_dis = 10; 
+  const tr_dis = 10;
   // 动画速度
   const tr_du = {
     fast: 300,
@@ -317,20 +317,21 @@ export function drawTipBox(
 export function eraseTip(tipObj: TipInstance) {
   // 看看转场时间
   let { conTransform, tr_du, $tipbox, app } = tipObj;
-  // Dom.updateStyle($tipbox, {
-  //   transform: conTransform,
-  //   opacity: 0,
-  // });
+  Dom.updateStyle($tipbox, {
+    transication: '200mx',
+    transform: conTransform,
+    opacity: 0,
+  });
 
-  // // 最后移除 tip 的定义和 DOM
-  // _.delay(() => {
-  //   app.unmount();
-  //   Dom.remove($tipbox);
-  //   delete (tipObj.$target as any).__tip_obj;
-  // }, tr_du);
+  // 最后移除 tip 的定义和 DOM
+  _.delay(() => {
+    app.unmount();
+    Dom.remove($tipbox);
+    delete (tipObj.$target as any).__tip_obj;
+  }, tr_du);
 
-  Dom.updateStyle($tipbox, { display: 'none' });
-  app.unmount();
-  Dom.remove($tipbox);
-  delete (tipObj.$target as any).__tip_obj;
+  // Dom.updateStyle($tipbox, { display: 'none' });
+  // app.unmount();
+  // Dom.remove($tipbox);
+  // delete (tipObj.$target as any).__tip_obj;
 }
