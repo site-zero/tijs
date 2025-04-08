@@ -492,7 +492,7 @@ export function useSelectable<ID extends TableRowID>(
     if (selection.checkedIds.size > 0) {
       for (let key of selection.checkedIds.keys()) {
         let item = getItem(key);
-        if (!item || !canCheckItem(item)) {
+        if (!item || (props.multi && !canCheckItem(item))) {
           selection.checkedIds.delete(key);
         }
       }
@@ -572,7 +572,7 @@ export function useSelectable<ID extends TableRowID>(
     se: KeyboardStatus
   ) {
     let need_clamp = false;
-    if (!props.showChecker && !props.canSelect) {
+    if (!props.multi && !props.canSelect) {
       return;
     }
     // shiftKey
@@ -585,7 +585,7 @@ export function useSelectable<ID extends TableRowID>(
       need_clamp = true;
     }
     // 只能选择的话，优先用 toggle
-    else if (!props.canSelect && props.showChecker) {
+    else if (!props.canSelect && props.multi) {
       // 除非按下了 ctrl，就变成单选模式·
       if (se.ctrlKey) {
         selectId(selection, rowId);
