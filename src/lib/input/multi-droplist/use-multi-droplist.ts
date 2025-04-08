@@ -16,7 +16,7 @@ export function useMultiDroplist(
   props: MultiDroplistProps,
   emit: MultiDroplistEmitter
 ) {
-  console.log('useMultiDroplist');
+  //console.log('useMultiDroplist');
   //-----------------------------------------------------
   // 数据模型
   //-----------------------------------------------------
@@ -74,7 +74,7 @@ export function useMultiDroplist(
   function tryNotifyChange(
     vals: TableRowID[] | undefined | null = _it_values.value
   ) {
-    console.log('tryNotifyChange', vals);
+    // console.log('tryNotifyChange', vals);
     if (_.isUndefined(vals)) {
       return;
     }
@@ -88,7 +88,7 @@ export function useMultiDroplist(
   //-----------------------------------------------------
   async function onOptionSelect(payload: ListSelectEmitInfo) {
     let ids = Util.mapTruthyKeys(payload.checkedIds);
-    //console.log('onOptionSelect', payload.checkedIds);
+    // console.log('onOptionSelect', payload.checkedIds);
     _it_values.value = ids;
     await _load_items(ids);
   }
@@ -128,7 +128,7 @@ export function useMultiDroplist(
   }
   //-----------------------------------------------------
   async function onPropsValueChange() {
-    console.log('onPropsValueChange', props.value);
+    // console.log('onPropsValueChange', props.value);
     _load_items(TagValues.value);
   }
   //-----------------------------------------------------

@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { Str } from '../';
+import { getGUIExplainContext, Str } from '../';
 import { Invoke, InvokeOptions } from '../../_type';
 
 /**
@@ -56,6 +56,11 @@ export function genInvokingBy(
 
   // 获取函数对象
   let func = _.get(funcSet, callPath);
+
+  // 从专门的函数集去获取
+  if (!func) {
+    func = _.get(getGUIExplainContext(), callPath);
+  }
 
   // 防守
   if (!_.isFunction(func)) {

@@ -61,7 +61,7 @@ export function useTagsSortable(setup: TagsSortableSetup) {
 
         items[oldIndex] = it_ta;
         items[newIndex] = it_me;
-        console.log('onEnd:>  ', items.map((it) => it.value).join(','));
+        //console.log('onEnd:>  ', items.map((it) => it.value).join(','));
         setup.emit('sorted', items);
       },
     });
