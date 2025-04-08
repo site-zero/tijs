@@ -230,6 +230,7 @@ export function useList(
     if (debug) console.log('OnItemSelect', itemEvent);
     let { item, event } = itemEvent;
     if (
+      !props.multi &&
       !selectable.canSelectItem({
         id: item.value,
         rawData: item.rawData,

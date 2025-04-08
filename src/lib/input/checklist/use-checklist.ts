@@ -4,13 +4,13 @@ import { ListProps, useOptions, useStdListItem } from '../../../lib';
 import { CheckListProps } from './ti-check-list-types';
 
 export function useChecklist(props: CheckListProps) {
-  let { dict } = useOptions(props);
-  let { toStdItems } = useStdListItem(props);
-  let _options = ref<StdOptionItem[]>([]);
+  let _options = computed(() => useOptions(props));
+  let _std_lis = computed(() => useStdListItem(props));
+  let _options_data = ref<StdOptionItem[]>([]);
 
   async function reloadOptions() {
-    let list = await dict?.getData();
-    _options.value = toStdItems(list ?? []);
+    let list = await _options.value.dict?.getData();
+    _options_data.value = _std_lis.value.toStdItems(list ?? []);
   }
 
   const ListConfig = computed((): ListProps => {
@@ -33,12 +33,11 @@ export function useChecklist(props: CheckListProps) {
       getIcon: props.getIcon,
       getText: props.getText,
       getTip: props.getTip,
-      getId: props.getValue,
     };
   });
 
   return {
-    optionsData: _options,
+    optionsData: _options_data,
     reloadOptions,
     ListConfig,
   };

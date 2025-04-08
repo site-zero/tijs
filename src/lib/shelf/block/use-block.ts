@@ -58,6 +58,7 @@ export function useBlock(props: BlockProps, _options: BlockOptions) {
 
   const TopClass = CssUtils.mergeClassName(
     props.className,
+    props.blockClass,
     `overflow-${props.overflowMode ?? 'auto'}`
   );
   const TopStyle = CssUtils.mergeStyles([

@@ -103,7 +103,7 @@
   }
   //-----------------------------------------------------
   watch(
-    () => [props.currentId, props.checkedIds],
+    () => [props.currentId, props.checkedIds, props.data],
     () => {
       _list.value.updateSelection(
         selection,

@@ -15,12 +15,13 @@
     canHover: true,
   });
   //-----------------------------------------------------
-  const _list = computed(() => useChecklist(props));
+  const _list = useChecklist(props);
   //-----------------------------------------------------
   const checkedIds = computed(() => Util.arrayToMap(props.value));
   //-----------------------------------------------------
   function onSelect(payload: ListSelectEmitInfo) {
     let ids = Util.mapTruthyKeys(payload.checkedIds);
+    //console.log('onSelect', ids);
     if (!_.isEqual(ids, props.value)) {
       emit('change', ids);
     }
@@ -28,8 +29,15 @@
   //-----------------------------------------------------
   watch(
     () => props.options,
-    () => {
-      _list.value.reloadOptions();
+    (newVal, oldVal) => {
+      // console.log(
+      //   'CheckList options changed',
+      //   _.isEqual(newVal, oldVal),
+      //   newVal
+      // );
+      if (!_.isEqual(newVal, oldVal)) {
+        _list.reloadOptions();
+      }
     },
     { immediate: true }
   );
