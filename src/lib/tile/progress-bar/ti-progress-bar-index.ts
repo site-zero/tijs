@@ -20,7 +20,7 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.ProgressBar;
 
 const TiProgressBarInfo: TiComInfo = {
-  icon: 'fas-wine-glass',
+  icon: 'fas-bars-progress',
   race: TiComRace.TILE,
   name: COM_TYPE,
   text: 'i18n:ti-progress-bar-com-name',
@@ -70,5 +70,5 @@ const TiProgressBarInfo: TiComInfo = {
   ],
 };
 
-export { TiProgressBar, TiProgressBarInfo };
 export * from './ti-progress-bar-types';
+export { TiProgressBar, TiProgressBarInfo };

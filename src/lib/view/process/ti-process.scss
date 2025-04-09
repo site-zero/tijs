@@ -31,6 +31,15 @@
     padding: 0.4em;
   }
   //-------------------------------------------------------
+  > .part-list {
+    flex: 1 1 auto;
+    height: 100%;
+    margin-top:1em;
+    border-top: 1px dashed var(--ti-color-border-weak);
+    overflow: hidden;
+    position: relative;
+  }
+  //-------------------------------------------------------
   > .part-logs {
     @include font-fixed;
     margin-top:1em;

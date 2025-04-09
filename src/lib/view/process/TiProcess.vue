@@ -1,9 +1,8 @@
 <script lang="ts" setup>
   import _ from 'lodash';
-  import { computed, onMounted, onUnmounted, useTemplateRef } from 'vue';
-  import { TiTextSnippet } from '../../';
+  import { computed, onMounted, onUnmounted, useTemplateRef, watch } from 'vue';
+  import { ListProps, TiList, TiProgressBar, TiTextSnippet } from '../../';
   import { CssUtils, TiButton } from '../../../';
-  import { TiProgressBar } from '../../tile/progress-bar/ti-progress-bar-index';
   import { ProcessProps } from './ti-process-types';
   //-------------------------------------------------------
   defineOptions({ inheritAttrs: false });
@@ -52,6 +51,22 @@
     }
   });
   //-----------------------------------------------------
+  const ListConifg = computed(() => {
+    if (props.listData) {
+      let re = _.cloneDeep(props.listConf ?? {});
+      _.defaults(re, {
+        className: 'cover-parent',
+        canSelect: false,
+        showChecker: false,
+        canHover: false,
+        multi: false,
+        allowUserSelect: true,
+        borderStyle: 'dashed',
+      } as ListProps);
+      return re;
+    }
+  });
+  //-----------------------------------------------------
   const observer = new MutationObserver(() => {
     if (!$logs.value) {
       return;
@@ -79,6 +94,17 @@
     observer.disconnect();
   });
   //-------------------------------------------------------
+  const $list = useTemplateRef<InstanceType<typeof TiList>>('list');
+  watch(
+    () => props.listCurrentRowIndex,
+    (index) => {
+      console.log('listCurrentRowIndex', index, $list.value);
+      if ($list.value && _.isNumber(index)) {
+        $list.value.scrollIntoViewByIndex(index);
+      }
+    }
+  );
+  //-------------------------------------------------------
 </script>
 <template>
   <div
@@ -102,6 +128,16 @@
         @click="onClickAbortButton" />
     </div>
     <div
+      v-if="props.listData"
+      class="part-list">
+      <TiList
+        ref="list"
+        v-bind="ListConifg"
+        :style="props.listPartStyle"
+        :data="props.listData" />
+    </div>
+    <div
+      v-if="props.logs"
       class="part-logs"
       :style="LogPartStyle"
       ref="logs">

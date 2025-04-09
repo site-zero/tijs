@@ -102,6 +102,10 @@
     _list.value.OnItemSelect({ event, item });
   }
   //-----------------------------------------------------
+  function scrollIntoViewByIndex(index: number) {
+    console.log('scrollIntoViewByIndex', index);
+  }
+  //-----------------------------------------------------
   watch(
     () => [props.currentId, props.checkedIds, props.data],
     () => {
@@ -114,6 +118,10 @@
     },
     { immediate: true }
   );
+  //-----------------------------------------------------
+  defineExpose({
+    scrollIntoViewByIndex,
+  });
   //-----------------------------------------------------
 </script>
 <template>
