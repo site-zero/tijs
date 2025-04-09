@@ -2,7 +2,7 @@ import { App } from 'vue';
 import { TiComInfo, TiComRace } from '../../../_type';
 import { COM_TYPES } from '../../lib-com-types';
 import TiLabelTags from './TiLabelTags.vue';
-import { LabelTagsProps } from 'index';
+import { LabelTagsProps } from './ti-label-tags-types';
 
 const en_us = {
   'com-name': 'LabelTags',

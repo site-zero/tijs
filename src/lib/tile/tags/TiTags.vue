@@ -52,6 +52,8 @@
     })
   );
   //-----------------------------------------------------
+  const TopStyle = computed(() => CssUtils.toStyle(props.style));
+  //-----------------------------------------------------
   function onClickItem(it: TagItem) {
     if (props.tagClickable) {
       emit('click-tag', it);
@@ -114,6 +116,7 @@
   <div
     class="ti-tags"
     :class="TopClass"
+    :style="TopStyle"
     :nowrap="props.nowrap || undefined"
     ref="el">
     <div
@@ -126,6 +129,7 @@
       <TiLabel
         v-for="it in tagItems"
         class="show-border as-tag-item"
+        v-bind="props.defaultTagAspect"
         :style="props.defaultTagStyle"
         :type="it.type"
         :capture-click="true"

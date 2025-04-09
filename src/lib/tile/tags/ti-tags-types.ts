@@ -1,6 +1,7 @@
 import { CommonProps, IconInput, LogicType, Vars } from '../../../_type';
 import {
   ActionBarProps,
+  LabelAspectProps,
   PlaceholderProps,
   ValueTranslatorProps,
 } from '../../../lib';
@@ -52,6 +53,7 @@ export type TagsProps = CommonProps &
     defaultTagType?: LogicType;
     defaultTagClass?: any;
     defaultTagStyle?: Vars;
+    defaultTagAspect?: LabelAspectProps;
 
     actions?: ActionBarProps;
 
