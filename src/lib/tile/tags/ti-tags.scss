@@ -38,8 +38,10 @@
     padding: 0;
   }
   > .as-empty {
+    @include flex-center;
     color: var(--ti-color-disable);
     font-size: 0.8em;
     opacity: 0.63;
+    padding:0 .5em;
   }
 }

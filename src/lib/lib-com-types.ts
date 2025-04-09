@@ -15,6 +15,7 @@ export const COM_TYPES = {
   HtmlPage: 'TiHtmlPage',
   Icon: 'TiIcon',
   Label: 'TiLabel',
+  LabelTags: 'TiLabelTags',
   Loading: 'TiLoading',
   ProgressBar: 'TiProgressBar',
   Roadblock: 'TiRoadblock',

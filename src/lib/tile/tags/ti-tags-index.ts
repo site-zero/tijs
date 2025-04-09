@@ -22,7 +22,7 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.Tags;
 
 const TiTagsInfo: TiComInfo = {
-  icon: 'zmdi-labels',
+  icon: 'fas-tags',
   race: TiComRace.TILE,
   name: COM_TYPE,
   text: 'i18n:ti-tags-com-name',
