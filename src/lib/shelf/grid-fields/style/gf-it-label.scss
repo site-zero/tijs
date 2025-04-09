@@ -23,4 +23,7 @@
       font-weight: bold;
     }
   }
+  &.no-border .as-label-title {
+    border-bottom: 0;
+  }
 }

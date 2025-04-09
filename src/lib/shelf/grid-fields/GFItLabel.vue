@@ -20,7 +20,8 @@
         //'as-info-box': !_is_empty,
         'as-sep-line': _is_empty,
       },
-      props.className
+      props.className,
+      props.titleClass
     );
   });
   //-------------------------------------------------
@@ -50,7 +51,7 @@
     <!--===: 标题 :===-->
     <TiTextSnippet
       v-if="props.title || props.comType"
-      className="as-label-title"
+      class="as-label-title"
       :style="props.titleStyle"
       :text="LabelText.title"
       :textType="LabelText.titleType"

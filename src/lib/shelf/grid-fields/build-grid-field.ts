@@ -59,6 +59,7 @@ export function buildOneGridField(
     titleIcon: field.titleIcon,
     titleStyle: field.titleStyle,
     titleAlign: field.titleAlign ?? dft.fieldTitleAlign,
+    titleTextStyle: field.titleTextStyle,
     titleClass: field.titleClass,
     tip: field.tip,
     tipType: field.tipType ?? 'text',

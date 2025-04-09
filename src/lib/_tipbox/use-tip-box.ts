@@ -31,7 +31,7 @@ function __prepare_box_style(tip: TipBoxProps, _win: Rect) {
     'position': 'fixed',
     'left': 0,
     'top': 0,
-    'zIndex': 99999,
+    'zIndex': 9999999,
     'opacity': 0,
   } as Vars;
 

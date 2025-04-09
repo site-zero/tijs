@@ -8,6 +8,7 @@ import {
   DomSelector,
   EleFilter,
   EleIteratee,
+  ElementScrollIntoViewOptions,
   EleOptions,
   ElePredicate,
   FontSizeCallback,
@@ -1418,17 +1419,16 @@ export function scrollBarSize() {
 export function scrollIntoView(
   $view: HTMLElement,
   $row: HTMLElement,
-  {
-    to = 'auto', // top | bottom | center | auto
-    axis = 'xy', // x | y | xy
-  } = {} as {
-    to: 'top' | 'bottom' | 'center' | 'auto';
-    axis: 'x' | 'y' | 'xy';
-  }
+  options: ElementScrollIntoViewOptions = {}
 ) {
   if (!_.isElement($view) || !_.isElement($row)) {
     return;
   }
+  let {
+    to = 'auto', // top | bottom | center | auto
+    axis = 'xy', // x | y | xy
+    smooth = true,
+  } = options;
   let r_view = Rects.createBy($view);
   let r_row = Rects.createBy($row);
   //let scrollTop = $view.scrollTop;
@@ -1470,7 +1470,11 @@ export function scrollIntoView(
     }[toMode];
 
     let off = offset();
-    $view.scrollTop += off;
+    //$view.scrollTop = $view.scrollTop + off
+    $view.scrollTo({
+      top: $view.scrollTop + off,
+      behavior: smooth ? 'smooth' : 'instant',
+    });
   }
 }
 //----------------------------------------------------

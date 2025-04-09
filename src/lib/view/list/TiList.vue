@@ -1,9 +1,9 @@
 <script lang="ts" setup>
   import _ from 'lodash';
-  import { computed, reactive, watch } from 'vue';
+  import { computed, reactive, useTemplateRef, watch } from 'vue';
   import { SelectableState, TiIcon, TiRoadblock, useRowIndent } from '../../';
-  import { TableRowID } from '../../../_type';
-  import { CssUtils } from '../../../core';
+  import { ElementScrollIntoViewOptions, TableRowID } from '../../../_type';
+  import { CssUtils, Dom } from '../../../core';
   import {
     IndentlyItem,
     ListEmitter,
@@ -32,6 +32,7 @@
     lastSelectIndex: -1,
   } as SelectableState<TableRowID>);
   //-----------------------------------------------------
+  const $main = useTemplateRef<HTMLElement>('main');
   const _list = computed(() => useList(props, selection, emit));
   //-----------------------------------------------------
   const roadblock = computed(() => _list.value.getRoadblock());
@@ -102,8 +103,24 @@
     _list.value.OnItemSelect({ event, item });
   }
   //-----------------------------------------------------
-  function scrollIntoViewByIndex(index: number) {
-    console.log('scrollIntoViewByIndex', index);
+  function scrollIntoViewByIndex(
+    index: number,
+    options?: ElementScrollIntoViewOptions
+  ) {
+    // 防空
+    if (!$main.value) {
+      return;
+    }
+    // 找到对应的的元素
+    let $item = Dom.find(
+      `main>.list-item:nth-child(${index + 1})`,
+      $main.value
+    );
+    console.log('scrollIntoViewByIndex', index, $item);
+    if ($item && $item.parentElement) {
+      let $main = $item.parentElement;
+      Dom.scrollIntoView($main, $item, options);
+    }
   }
   //-----------------------------------------------------
   watch(
@@ -137,7 +154,9 @@
       <TiRoadblock v-bind="roadblock" />
     </div>
     <!---------------Show List------------------->
-    <main v-else>
+    <main
+      v-else
+      ref="main">
       <div
         v-for="it in IndentlyItems"
         class="list-item"

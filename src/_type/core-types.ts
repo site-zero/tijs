@@ -700,6 +700,12 @@ export type FontSizeCallback = {
   (opt: FontSizeCallbackOptions): void;
 };
 
+export type ElementScrollIntoViewOptions = {
+  to?: 'top' | 'bottom' | 'center' | 'auto';
+  axis?: 'x' | 'y' | 'xy';
+  smooth?: boolean;
+};
+
 /*---------------------------------------------------
 
                       控件
@@ -768,10 +774,10 @@ export type TiComExampleModelTarget =
   | string
   | ((val: any, comConf: Vars) => void)
   | {
-    key: string;
-    val: any;
-    mode?: 'set' | 'merge' | 'assign';
-  };
+      key: string;
+      val: any;
+      mode?: 'set' | 'merge' | 'assign';
+    };
 
 export interface TiComInfo {
   icon?: string;

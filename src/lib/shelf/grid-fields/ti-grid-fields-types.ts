@@ -317,6 +317,7 @@ export type GridFieldsStrictAbstractItem = FieldComProps &
     titleIcon?: IconInput;
     titleType: TextContentType; // 默认 text
     titleStyle?: Vars;
+    titleTextStyle?: Vars;
     titleAlign?: CssTextAlign;
     titleClass?: any;
     tip?: TextArm;
