@@ -34,6 +34,40 @@ export function getRecordDiff(
   return diff;
 }
 
+export function getRecordDiffDeeply(
+  org: Vars,
+  data: Vars,
+  options: RecordDiffOptions = {}
+): Vars {
+  let { checkRemoveFromOrgin = true } = options;
+  let diff: Vars = {};
+  // 看看哪些被修改了
+  _.forEach(data, (v0, k) => {
+    let v_old = _.get(org, k);
+    // 都是对象，递归
+    if (_.isPlainObject(v_old) && _.isPlainObject(v0)) {
+      let v_diff = getRecordDiffDeeply(v_old, v0, options);
+      if (!_.isEmpty(v_diff)) {
+        _.set(diff, k, v_diff);
+        return;
+      }
+    }
+    // 否则直判一下是否相等
+    if (!_.isEqual(v_old, v0)) {
+      _.set(diff, k, v0);
+    }
+  });
+  // 看看哪些被删掉了
+  if (checkRemoveFromOrgin) {
+    _.forEach(org, (_v, k) => {
+      if (_.isUndefined(data[k])) {
+        diff[k] = null;
+      }
+    });
+  }
+  return diff;
+}
+
 export function setRecordEmptyToNull(obj: Vars) {
   _.forEach(obj, (v, k) => {
     if (_.isEmpty(v)) {

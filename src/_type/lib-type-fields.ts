@@ -137,7 +137,7 @@ const FIELD_CONVERTERS: FieldConvertorSet = {
   Float: { transform: toFloat, serialize: toFloat },
   Boolean: { transform: toBoolean, serialize: toBoolean },
   Timestamp: { transform: toDatetimeText, serialize: toAMS },
-  AMS: { transform: toDatetimeText, serialize: toAMS },
+  AMS: { transform: toDateTime, serialize: toAMS },
 };
 
 export function isFieldType(type: string): type is FieldValueType {
@@ -509,7 +509,11 @@ function toAMS(input: any) {
   return null;
 }
 
-export const TI_DFT_DATETIME_FORMAT = '';
+function toDateTime(input: any) {
+  return DateTime.parse(input as DateInput);
+}
+
+// export const TI_DFT_DATETIME_FORMAT = '';
 
 function toDatetimeText(input: any) {
   if (_.isNil(input)) {

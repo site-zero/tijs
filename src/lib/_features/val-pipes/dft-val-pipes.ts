@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { ValueProcesser } from '../../../_type';
-import { Bank, DateTime, ENV_KEYS, getEnv, Str } from '../../../core';
+import { ValueProcesser, Vars } from '../../../_type';
+import { Alg, Bank, DateTime, ENV_KEYS, getEnv, Str } from '../../../core';
 
 export function getDefaultValPipes(): Record<string, ValueProcesser> {
   return {
@@ -80,7 +80,41 @@ export function getDefaultValPipes(): Record<string, ValueProcesser> {
       return _.repeat('*', s);
     },
     //----------------------------------------------
+    $ELLIPSIS: (v: any, options: Vars = {}) => {
+      if (_.isNil(v)) {
+        return '';
+      }
+      let s = Str.anyToStr(v);
+      let { maxLen = 10, ellipsis = '...', at = 'center' } = options;
+      if (s.length <= maxLen) {
+        return s;
+      }
+      // 省略号加在头部
+      if ('head' == at) {
+        return ellipsis + s.substring(s.length - maxLen, s.length);
+      }
+      // 省略号加在中间
+      else if ('center' == at) {
+        let len = Math.floor(maxLen / 2);
+        return (
+          s.substring(0, len) + ellipsis + s.substring(s.length - len, s.length)
+        );
+      }
+      // 默认省略号加在尾部
+      else {
+        return s.substring(0, maxLen) + ellipsis;
+      }
+    },
     //----------------------------------------------
+    $MOD_OCT: (v: any) => {
+      let info = Alg.parseObjMode(parseInt(v));
+      return info.oct;
+    },
+    //----------------------------------------------
+    $MOD_STR: (v: any) => {
+      let info = Alg.parseObjMode(parseInt(v));
+      return info.mod;
+    },
     //----------------------------------------------
     //----------------------------------------------
     //----------------------------------------------
