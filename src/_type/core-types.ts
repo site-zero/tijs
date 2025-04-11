@@ -51,19 +51,6 @@ export type BusDeposer = {
 };
 
 export interface TiBus<T> {
-  createSubBus: (
-    name: string,
-    eventNames?: string[],
-    adaptor?: BusListenerHanlder<T>
-  ) => TiBus<T>;
-
-  connectTo: (
-    srcBus: TiBus<T>,
-    eventNames?: string[],
-    adaptor?: BusListenerHanlder<T>
-  ) => void;
-
-  tryDisconnect: () => void;
   emit: (name: string, payload?: T) => void;
   send: (msg: BusMsg<T>) => void;
   on: (

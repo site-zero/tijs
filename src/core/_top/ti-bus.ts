@@ -70,85 +70,17 @@ export class TiBusImpl<T> implements TiBus<T> {
   private _lis_match: BusListener<T>[] = [];
 
   /**
-   * 如果链接了一个父 BUS，那么一定会创建一个适配函数
+   * @param name 总线名称，默认为 'BUS'。
+   *
+   * @remarks
+   * 构造函数，用于创建 TiBus 实例。
+   * 每个实例都会被赋予一个唯一的 key，并存储在全局的 ALL_BUS Map 中。
    */
-  private _bus_adaptor?: BusListenerHanlder<T>;
-
-  private _src_bus?: TiBus<T>;
-
   constructor(name = 'BUS') {
     this._uniqKey = `${name}-${BUS_NB++}`;
 
     let ALL_BUS = getEnv('ALL_BUS') as Map<string, TiBus<any>>;
     ALL_BUS.set(this._uniqKey, this);
-  }
-
-  /**
-   * 创建一个与自己关联的子总线
-   *
-   * @param name 总线名称
-   * @param eventNames 要关联的事件名
-   * @param adaptor 与子总线的适配方式
-   * @returns  子总线
-   */
-  createSubBus(
-    name: string,
-    eventNames?: string[],
-    adaptor?: BusListenerHanlder<T>
-  ): TiBus<T> {
-    let subBus = new TiBusImpl<T>(name);
-    subBus.connectTo(this, eventNames, adaptor);
-    return subBus;
-  }
-
-  /**
-   * 将自己连接到一个源总线，并将该总线的事件转发到本总线
-   *
-   * @param srcBus 父总线
-   * @param eventNames 要关联的事件名
-   * @param adaptor 与子总线的适配方式
-   */
-  connectTo(
-    srcBus: TiBus<T>,
-    eventNames?: string[],
-    adaptor?: BusListenerHanlder<T>
-  ) {
-    // 一定要断开连接
-    this.tryDisconnect();
-
-    // 尝试连接到新的父总线
-    if (adaptor) {
-      this._bus_adaptor = adaptor;
-    }
-    // 采用默认适配逻辑
-    else {
-      this._bus_adaptor = (msg: BusMsg<T>) => {
-        //console.log("_bus_adaptor", this._uniqKey);
-        this.send(msg);
-      };
-    }
-    this._src_bus = srcBus;
-    // 适配全部消息
-    if (!eventNames || eventNames.length == 0) {
-      srcBus.onAny(this._bus_adaptor);
-    }
-    // 连接有限事件
-    else {
-      for (let eventName of eventNames) {
-        srcBus.on(eventName, this._bus_adaptor);
-      }
-    }
-  }
-
-  /**
-   * 如果连接了父总线，就断开连接
-   */
-  tryDisconnect() {
-    if (this._src_bus && this._bus_adaptor) {
-      this._src_bus.off(this._bus_adaptor);
-    }
-    this._src_bus = undefined;
-    this._bus_adaptor = undefined;
   }
 
   /**
@@ -319,7 +251,6 @@ export class TiBusImpl<T> implements TiBus<T> {
   }
 
   depose() {
-    this.tryDisconnect();
     let ALL_BUS = getEnv('ALL_BUS') as Map<string, TiBus<any>>;
     ALL_BUS.delete(this._uniqKey);
   }
