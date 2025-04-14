@@ -103,7 +103,6 @@
   //-----------------------------------------------------
 </script>
 <template>
-  <!--pre>{{ TreeFlatenData }}</pre-->
   <TiList
     v-bind="ListProps"
     :data="TreeFlatenData"
@@ -113,6 +112,3 @@
     @select="onRowSelect"
     @open="onRowOpen" />
 </template>
-<style lang="scss">
-  @use './ti-tree.scss';
-</style>
