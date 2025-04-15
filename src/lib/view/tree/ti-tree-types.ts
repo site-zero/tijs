@@ -12,7 +12,7 @@ export type TreeSelectEmitInfo = SelectEmitInfo<TableRowID> & {
   checkedNodes: TreeNode[];
 };
 
-export type TreeProps = ListProps &
+export type TreeProps = Omit<ListProps, 'data'> &
   Pick<RowIndentProps, 'rowIndicators' | 'getRowIcon'> &
   TreeDataProps & {
     data: Vars | Vars[] | null | undefined;
