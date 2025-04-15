@@ -39,6 +39,7 @@
           v-html="_text.text"
           :data-tip="props.ctrlTip"
           data-tip-modifier="CTRL"
+          data-tip-max-width="640px"
           data-tip-content-type="html"
           data-tip-dock-mode="H"></div>
         <div
@@ -47,6 +48,7 @@
           :style="props.textStyle"
           :data-tip="props.ctrlTip"
           data-tip-modifier="CTRL"
+          data-tip-max-width="640px"
           data-tip-content-type="html"
           data-tip-dock-mode="H">
           {{ _text.text }}

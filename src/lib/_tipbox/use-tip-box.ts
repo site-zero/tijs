@@ -43,6 +43,8 @@ function __prepare_box_style(tip: TipBoxProps, _win: Rect) {
     // maxWidth: tip.maxWidth ?? `${Math.round(win.width * 0.4)}px`,
     minHeight: tip.minHeight ?? '10px',
     minWidth: tip.minWidth ?? '50px',
+    maxHeight: tip.maxHeight,
+    maxWidth: tip.maxWidth,
     width: tip.width,
     height: tip.height,
     overflow: tip.overflow,

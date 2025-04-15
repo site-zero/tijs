@@ -21,7 +21,6 @@ export function useChecklist(props: CheckListProps) {
       textFormat: props.textFormat,
       textAsHtml: props.textAsHtml,
       tipWidth: props.tipWidth,
-      tipStyle: props.tipStyle,
       size: props.size,
       borderStyle: props.borderStyle,
       highlightChecked: props.highlightChecked,

@@ -272,45 +272,96 @@ export function toCssStyle(input?: null | Vars | string): Vars {
 }
 //----------------------------------------------------
 export function parseCssRule(
-  rule: undefined | null | string,
-  flt: AttrFilter = true
+  rulesStr: undefined | null | string,
+  flt?: AttrFilter
 ): Vars {
-  let re = {} as Vars;
-  if (!rule) {
-    return re;
-  }
-
-  rule = _.trim(rule);
-  if (Str.isBlank(rule)) {
+  if (!rulesStr) {
     return {};
   }
-  let filter = Dom.attrFilter(flt);
 
-  let ss = rule.split(';');
-  for (let s of ss) {
-    if (Str.isBlank(s)) continue;
-    let pos = s.indexOf(':');
-    if (pos <= 0) {
+  //
+  let filter = flt ? Dom.attrFilter(flt) : () => true;
+
+  // 解析CSS规则
+  const rules: Record<string, string> = {};
+
+  // 使用状态机处理规则字符串，以正确处理引号内的分号
+  let buffer = '';
+  let inQuotes = false;
+  let quoteChar = '';
+  let propertyName = '';
+
+  for (let i = 0; i < rulesStr.length; i++) {
+    const char = rulesStr[i];
+
+    // 处理引号
+    if (
+      (char === '"' || char === "'") &&
+      (i === 0 || rulesStr[i - 1] !== '\\')
+    ) {
+      if (!inQuotes) {
+        inQuotes = true;
+        quoteChar = char;
+      } else if (char === quoteChar) {
+        inQuotes = false;
+      }
+      buffer += char;
       continue;
     }
-    let name = _.trim(s.substring(0, pos));
-    let value = _.trim(s.substring(pos + 1));
-    let fre = filter(name, value);
-    let key: string;
-    if (fre) {
-      if (_.isBoolean(fre)) {
-        key = _.camelCase(name);
-      } else if (_.isString(fre)) {
-        key = fre;
+
+    // 如果在引号内，继续添加字符
+    if (inQuotes) {
+      buffer += char;
+      continue;
+    }
+
+    // 处理分号（规则分隔符）
+    if (char === ';') {
+      // 处理完整的属性-值对
+      const colonIndex = buffer.indexOf(':');
+      if (colonIndex !== -1) {
+        propertyName = buffer.substring(0, colonIndex).trim();
+        const value = buffer.substring(colonIndex + 1).trim();
+
+        // 转换CSS属性名为驼峰命名
+        const camelCaseProp = _.camelCase(propertyName);
+        let fre = filter(camelCaseProp, value);
+        let key: string;
+        if (fre) {
+          if (_.isBoolean(fre)) {
+            key = camelCaseProp;
+          } else if (_.isString(fre)) {
+            key = fre;
+          }
+          // convert name and value
+          else {
+            key = fre.name;
+          }
+          rules[key] = value;
+        }
       }
-      // convert name and value
-      else {
-        key = fre.name;
-      }
-      re[key] = value;
+      buffer = '';
+    } else {
+      buffer += char;
     }
   }
-  return re;
+
+  // 处理最后一个规则（没有分号结尾）
+  if (buffer.trim() !== '') {
+    const colonIndex = buffer.indexOf(':');
+    if (colonIndex !== -1) {
+      propertyName = buffer.substring(0, colonIndex).trim();
+      const value = buffer.substring(colonIndex + 1).trim();
+
+      // 转换CSS属性名为驼峰命名
+      const camelCaseProp = propertyName.replace(/-([a-z])/g, (_, letter) =>
+        letter.toUpperCase()
+      );
+
+      rules[camelCaseProp] = value;
+    }
+  }
+  return rules;
 }
 //----------------------------------------------------
 export type ParseAndTidyCssOptions = {
@@ -500,18 +551,81 @@ export function renderCssRule(css = {}) {
  *
  * @param sheet{Array} : style selecor and rules
  */
-export function renderCssStyleSheet(sheet = [] as CssSheet[]) {
+export function renderCssStyleSheet(sheet = [] as CssSheet[], scope?: string) {
   sheet = _.concat(sheet);
   let re = [];
   for (let it of sheet) {
     let { selectors, rules } = it;
     selectors = _.concat(selectors);
+
     if (_.isEmpty(selectors) || _.isEmpty(rules)) {
       continue;
     }
+
+    // 添加前缀
+    if (scope) {
+      selectors = _.map(selectors, (s) => {
+        return scope + ' ' + s;
+      });
+    }
+
     re.push(selectors.join(',') + '{');
     re.push(renderCssRule(rules));
     re.push('}');
   }
   return re.join('\n');
+}
+
+/**
+ * 将 CSS 样式表字符串解析为 CssSheet 对象数组。
+ *
+ * @param input 包含 CSS 规则的字符串。
+ * @returns  CssSheet 对象的数组，每个对象代表一个 CSS 规则集。
+ *
+ * @example
+ * ```typescript
+ * const cssString = `
+ * .c0 uk[a=9] {color:red; padding:2em 12em; font-size:16px}
+ * .c2-2345,#cx > .title {margin-left:12px; background: url("a.png") no-repeat;}
+ * `;
+ * const cssSheets = parseCssStyleSheet(cssString);
+ * console.log(cssSheets);
+ * // Expected output:
+ * // [
+ * //   {
+ * //     selectors: [".c0 uk[a=9]"],
+ * //     rules: { color: "red", padding: "2em 12em", fontSize:"16px" }
+ * //   },
+ * //   {
+ * //     selectors: [".c2-2345", "#cx > .title"],
+ * //     rules: { mrginLeft: "12px",  background: "url(\"a.png\"") no-repeat"}
+ * //   }
+ * // ]
+ * ```
+ */
+export function parseCssStyleSheet(input: string): CssSheet[] {
+  const result: CssSheet[] = [];
+
+  // 正则表达式匹配CSS规则块
+  // 这个正则表达式匹配选择器部分和大括号内的规则部分
+  const ruleRegex = /([^{]+)\s*\{\s*([^}]+)\s*\}/g;
+
+  // 匹配所有规则块
+  let match;
+  while ((match = ruleRegex.exec(input)) !== null) {
+    const selectorsStr = match[1].trim();
+    const rulesStr = match[2].trim();
+
+    // 分割多个选择器（逗号分隔）
+    const selectors = selectorsStr.split(',').map((s) => s.trim());
+    const rules = parseCssRule(rulesStr);
+
+    // 添加到结果数组
+    result.push({
+      selectors,
+      rules,
+    });
+  }
+
+  return result;
 }

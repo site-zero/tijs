@@ -15,6 +15,7 @@
     getFieldTitleStyle,
     getFieldTopStyle,
   } from './use-field-style';
+  import JSON5 from 'json5';
   //-------------------------------------------------
   defineOptions({
     inheritAttrs: false,
@@ -99,6 +100,12 @@
     html.push(`<tr>
       <td>Type:</td>
       <td style="color:var(--ti-color-primary-r)">${props.type || 'String'}</td>
+    </tr>`);
+    html.push(`<tr>
+      <td>Value:</td>
+      <td style="color:var(--ti-color-secondary-r)">${JSON5.stringify(
+        FieldValue.value
+      )}</td>
     </tr>`);
     html.push('</table>');
     return html.join('');

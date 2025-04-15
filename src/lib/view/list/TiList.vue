@@ -2,8 +2,12 @@
   import _ from 'lodash';
   import { computed, reactive, useTemplateRef, watch } from 'vue';
   import { SelectableState, TiIcon, TiRoadblock, useRowIndent } from '../../';
-  import { ElementScrollIntoViewOptions, TableRowID } from '../../../_type';
-  import { CssUtils, Dom } from '../../../core';
+  import {
+    CssSheet,
+    ElementScrollIntoViewOptions,
+    TableRowID,
+  } from '../../../_type';
+  import { Alg, CssUtils, Dom } from '../../../core';
   import {
     IndentlyItem,
     ListEmitter,
@@ -96,6 +100,25 @@
     );
   });
   //-----------------------------------------------------
+  const TagScope = computed(() => Alg.genSnowQ(10));
+  //-----------------------------------------------------
+  const StyleSheetHTML = computed(() => {
+    let scope = `.ti-list[data-ti-scope="${TagScope.value}"]`;
+    if (props.styleSheet) {
+      let ss: CssSheet[];
+      if (_.isString(props.styleSheet)) {
+        ss = CssUtils.parseCssStyleSheet(props.styleSheet);
+      } else {
+        ss = props.styleSheet as CssSheet[];
+      }
+      return [
+        '<style>',
+        CssUtils.renderCssStyleSheet(ss, scope),
+        '</style>',
+      ].join('\n');
+    }
+  });
+  //-----------------------------------------------------
   const MarkerIcons = computed(() => _list.value.getMarkerIcons());
   //-----------------------------------------------------
   function onListItemClick(item: ListItem, event: MouseEvent) {
@@ -145,7 +168,12 @@
   <div
     class="ti-list"
     :class="TopClass"
-    :style="TopStyle">
+    :style="TopStyle"
+    :data-ti-scope="TagScope">
+    <div
+      style="display: content"
+      v-if="StyleSheetHTML"
+      v-html="StyleSheetHTML"></div>
     <slot name="head"></slot>
     <!--------------Empty Items------------------>
     <div

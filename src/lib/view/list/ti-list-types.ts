@@ -9,11 +9,12 @@ import {
   AspectSize,
   CommonProps,
   CssBorderStyle,
+  CssSheet,
   IconInput,
   RowIndentProps,
   TableRowID,
   ToggleRowStatusEmitter,
-  Vars
+  Vars,
 } from '../../../_type';
 import {
   SelectEmitInfo,
@@ -49,12 +50,12 @@ export type ListAspect = {
 
   /**
    * 是否强制显示列表项的图标部分
-   * 
+   *
    * - `auto`：自动判断，树模式下不强制显示，普通模式下只要有一个项目
    *           有图标，就整个列表都强制显示图标部分
    * - `no`：不强制显示图标部分
    * - `yes`：强制显示图标部分
-   * 
+   *
    * @default 'auto'
    */
   forceShowRowIconPart?: 'auto' | 'no' | 'yes';
@@ -74,8 +75,6 @@ export type ListAspect = {
    */
   tipWidth?: string;
 
-  tipStyle?: Vars;
-
   /**
    * 列表文字大小
    */
@@ -85,6 +84,8 @@ export type ListAspect = {
    * 列表项边线样式
    */
   borderStyle?: CssBorderStyle | null;
+
+  styleSheet?: string | CssSheet[];
 
   /**
    * 默认 true 表示选择的项目将会显示一个突出的背景
@@ -141,11 +142,9 @@ export type ListEvent = {
   item: ListItem;
 };
 
-
 export type ListSelectEmitInfo = SelectEmitInfo<TableRowID>;
 
 export type ListEmitter = ToggleRowStatusEmitter & {
   (event: 'select', payload: ListSelectEmitInfo): void;
   (event: 'open', payload: ListItem): void;
-
 };
