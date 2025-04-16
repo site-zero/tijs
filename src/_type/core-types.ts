@@ -909,7 +909,7 @@ export const TI_TIP_API_KEY: InjectionKey<TipsApi> = Symbol('TIP_API');
 /**
  *  如果仅仅是名称适配
  */
-export type EmitAdaptorPayload = {
+export type EmitAdaptorEvent = {
   // 适配后名称
   eventName: string;
   // 原始名称
@@ -919,7 +919,7 @@ export type EmitAdaptorPayload = {
 };
 
 // 这个适配函数，接收捕获的事件以及事件参数，然后自行决定 emit 什么
-export type EmitAdaptorHandler = (payload: EmitAdaptorPayload) => void;
+export type EmitAdaptorHandler = (payload: EmitAdaptorEvent) => void;
 
 // export function isCustomizedEmitAdaptor(
 //   input: any

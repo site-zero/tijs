@@ -8,7 +8,7 @@
     TiIcon,
     useEmitAdaptor,
   } from '../../';
-  import { EmitAdaptorPayload } from '../../../_type';
+  import { EmitAdaptorEvent } from '../../../_type';
   import { COM_TYPES } from '../../lib-com-types';
   import { BlockEmitter, BlockEvent } from './ti-block-types';
   import { useBlock } from './use-block';
@@ -26,7 +26,7 @@
   let emit = defineEmits<BlockEmitter>();
   const OnAllEvents = computed(() =>
     useEmitAdaptor(COM_TYPE, props, {
-      handler: (payload: EmitAdaptorPayload) => {
+      handler: (payload: EmitAdaptorEvent) => {
         //console.log('OnAllEvents.handler', payload);
         emit('happen', {
           ...payload,

@@ -8,8 +8,8 @@ export type DropFileOptions = {
 
 export function useDropping(options: DropFileOptions) {
   let { enter, leave, over, drop } = options;
-  let dropZone = options.target();
-  let body_watched = false;
+  let _drop_target = options.target();
+  let _body_watched = false;
 
   function preventDefaults(e: Event) {
     e.preventDefault();
@@ -17,9 +17,9 @@ export function useDropping(options: DropFileOptions) {
   }
 
   function depose() {
-    if (dropZone) {
-      dropZone.ownerDocument?.body.removeEventListener('dragover', onDragOver);
-      dropZone.ownerDocument?.body.removeEventListener(
+    if (_drop_target) {
+      _drop_target.ownerDocument?.body.removeEventListener('dragover', onDragOver);
+      _drop_target.ownerDocument?.body.removeEventListener(
         'pointerup',
         onPointerUp
       );
@@ -28,41 +28,41 @@ export function useDropping(options: DropFileOptions) {
 
   function onEnter(e: Event) {
     preventDefaults(e);
-    if (enter && dropZone) {
-      if (!body_watched) {
-        dropZone.ownerDocument?.body.addEventListener('dragover', onDragOver);
-        dropZone.ownerDocument?.body.addEventListener('pointerup', onPointerUp);
-        body_watched = true;
+    if (enter && _drop_target) {
+      if (!_body_watched) {
+        _drop_target.ownerDocument?.body.addEventListener('dragover', onDragOver);
+        _drop_target.ownerDocument?.body.addEventListener('pointerup', onPointerUp);
+        _body_watched = true;
       }
-      enter(dropZone, e.target as HTMLElement);
+      enter(_drop_target, e.target as HTMLElement);
     }
   }
 
   function onDrop(e: DragEvent) {
     preventDefaults(e);
     depose();
-    if (drop && dropZone) {
+    if (drop && _drop_target) {
       const dt = e.dataTransfer;
       const files = dt?.files;
       drop(files);
     }
-    if (dropZone && leave) {
-      leave(dropZone, e.target as HTMLElement);
+    if (_drop_target && leave) {
+      leave(_drop_target, e.target as HTMLElement);
     }
   }
 
   function onDragOver(e: MouseEvent) {
-    if (dropZone) {
+    if (_drop_target) {
       // 还在上面
-      if (dropZone.contains(e.target as HTMLElement)) {
+      if (_drop_target.contains(e.target as HTMLElement)) {
         if (over) {
-          over(dropZone, e.target as HTMLElement);
+          over(_drop_target, e.target as HTMLElement);
         }
       }
       // 已经离开了
       else {
         if (leave) {
-          leave(dropZone, e.target as HTMLElement);
+          leave(_drop_target, e.target as HTMLElement);
         }
       }
     }
@@ -71,23 +71,24 @@ export function useDropping(options: DropFileOptions) {
   function onPointerUp(e: MouseEvent) {
     preventDefaults(e);
     depose();
-    if (dropZone && leave) {
-      leave(dropZone, e.target as HTMLElement);
+    if (_drop_target && leave) {
+      leave(_drop_target, e.target as HTMLElement);
     }
   }
 
   return () => {
-    if (dropZone) {
+    _drop_target = options.target();
+    if (_drop_target) {
       ['dragenter', 'dragover', 'drop'].forEach((eventName: string) => {
-        dropZone.removeEventListener(eventName, preventDefaults);
-        dropZone.addEventListener(eventName, preventDefaults);
+        _drop_target!.removeEventListener(eventName, preventDefaults);
+        _drop_target!.addEventListener(eventName, preventDefaults);
       });
 
-      dropZone.removeEventListener('dragenter', onEnter);
-      dropZone.addEventListener('dragenter', onEnter);
+      _drop_target.removeEventListener('dragenter', onEnter);
+      _drop_target.addEventListener('dragenter', onEnter);
 
-      dropZone.removeEventListener('drop', onDrop);
-      dropZone.addEventListener('drop', onDrop);
+      _drop_target.removeEventListener('drop', onDrop);
+      _drop_target.addEventListener('drop', onDrop);
     }
   };
 }

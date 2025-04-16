@@ -1,4 +1,10 @@
-import { FieldRefer, GridFieldsInput, LabelProps, Str } from '@site0/tijs';
+import {
+  FieldRefer,
+  GridFieldsInput,
+  I18n,
+  LabelProps,
+  Str,
+} from '@site0/tijs';
 import _ from 'lodash';
 
 //const log = getLogger('wn.obj-fields');
@@ -275,6 +281,13 @@ export function parseNameForObjField(key: string) {
         re.name = m2[1] || undefined;
         re.title = m2[3];
         re.tip = m2[5];
+      }
+    }
+    // 这里翻译一下，可以支持 '#{key}' 或者 'i18n:{key}'
+    if (re.title) {
+      let m = /^(#|i18n:)(.+)$/.exec(re.title);
+      if (m) {
+        re.title = I18n.get(m[2]);
       }
     }
   }

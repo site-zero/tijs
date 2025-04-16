@@ -112,7 +112,7 @@ export default {
   'debug': 'Debug',
   'default': 'Default',
   'del': 'Delete',
-  'del-checked': 'Delete selected',
+  'del-checked': 'Delete Selected',
   'del-hard':
     'The selected item will be deleted directly. this operation is irrevocable. are you sure you want to continue?',
   'del-ing': 'Deleting...',
@@ -528,7 +528,8 @@ export default {
   'unzip-target-name': 'Unzip target directory name',
   'upload': 'Upload',
   'upload-done': 'Done for upload',
-  'upload-file': 'Uploading files ...',
+  'upload-file': 'Upload Files',
+  'upload-file-ing': 'Uploading files ...',
   'upload-forbidden': 'Upload forbidden',
   'upload-nofinished': 'Upload not finished',
   'upload-notarget': 'Upload target not set!',
