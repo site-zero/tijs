@@ -10,13 +10,13 @@ import {
 } from '../../_features';
 import { RoadblockProps } from '../../tile/roadblock/ti-roadblock-types';
 import {
-  TreeTableEmitter,
   TreeTableProps
 } from './ti-tree-table-types';
+import { TreeEmitter } from '../tree/ti-tree-types';
 
 const log = getLogger('TiList.use-list');
 
-export function useList(_props: TreeTableProps, _emit: TreeTableEmitter) {
+export function useList(_props: TreeTableProps, _emit: TreeEmitter) {
 
   //-----------------------------------------------------
   // 输出特性

@@ -8,7 +8,6 @@ export default {
   comConf: {
     className: 'border-dotted fit-parent',
     multi: true,
-    size: 'b',
     currentId: null,
     checkedIds: {},
     canSelect: false,

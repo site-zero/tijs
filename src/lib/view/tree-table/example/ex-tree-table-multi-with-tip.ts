@@ -7,7 +7,6 @@ export default {
   text: 'i18n:ti-tree-table-example-multi-with-tip',
   comConf: {
     className: 'tip-block border-dotted fit-parent',
-    size: 'm',
     multi: true,
     currentId: null,
     checkedIds: {},
