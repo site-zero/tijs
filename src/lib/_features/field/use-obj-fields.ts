@@ -67,6 +67,8 @@ function defineObjFields(featureName: string) {
     if (finfo.readonly) {
       re.readonly = true;
       re.comConf.readonly = true;
+      re.activatedComType = undefined;
+      re.activatedComConf = undefined;
     }
 
     if (finfo.required) {

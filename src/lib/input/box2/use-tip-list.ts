@@ -41,8 +41,9 @@ export function useTipList(props: InputBoxProps) {
         T: `<em>\${text}</em>`,
         VT: `<code>\${value}:</code><em>\${text}</em>`,
         TV: `<em>\${text}</em><code>:\${value}</code>`,
-        TT: `<em>\${text}</em><abbr>\${tip}</abbr>`,
-        VTT: `<code>\${value}:</code><em>\${text}</em><abbr>\${tip}</abbr>`,
+        TP: `<em>\${text}</em><abbr>\${tip}</abbr>`,
+        PT: `<code>\${tip}</code><em>\${text}</em>`,
+        VTP: `<code>\${value}:</code><em>\${text}</em><abbr>\${tip}</abbr>`,
       }[props.tipFormat];
     }
 

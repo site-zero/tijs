@@ -15,7 +15,6 @@ import {
 } from '../../_features';
 import { ListProps } from '../../view/all-views';
 import { useInputBox2 } from './use-input-box2';
-import { ItemLookupProps } from './use-item-lookup';
 import { ValueHintCookingProps } from './use-value-hint-cooking';
 import { ValueOptionsProps } from './use-value-options';
 //--------------------------------------------------
@@ -202,11 +201,12 @@ export type TipShowTime = 'focus' | 'auto';
  * - `T`   : `<em>${text}</em>`
  * - `VT`  : `<code>${value}</code><em>${text}</em>`
  * - `TV`  : `<em>${text}</em><code>${value}</code>`
- * - `Tt`  : `<em>${text}</em><span>${tip}</span>`
- * - `VTt` : `<code>${value}</code><em>${text}</em><span>${tip}</span>`
+ * - `TP`  : `<em>${text}</em><span>${tip}</span>`
+ * - `PT`  : `<code>${tip}</code><em>${text}</em>`
+ * - `VTP` : `<code>${value}</code><em>${text}</em><span>${tip}</span>`
  *
  * 在没有声明  tipList.textFormat 的前提下，它可以为其快速设置格式化方式
  */
-export type TipOptionFormat = 'T' | 'VT' | 'TV' | 'VTT' | 'TT';
+export type TipOptionFormat = 'T' | 'VT' | 'TV' | 'VTP' | 'TP' | 'PT';
 //--------------------------------------------------
 export type InputBoxApi = ReturnType<typeof useInputBox2>;
