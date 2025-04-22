@@ -139,7 +139,9 @@ export type FieldInfo = [
 export type FieldRefer = GridFieldsInput | FieldInfo | string;
 //-----------------------------------------------
 export type GridFieldsInput = CommonProps &
-  Partial<Omit<AbstractField, 'required' | 'validate'>> &
+  Partial<
+    Omit<AbstractField, 'required' | 'validate' | 'transformer' | 'serializer'>
+  > &
   FieldComProps &
   VisibilityProps &
   GridLayoutProps &
