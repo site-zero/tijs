@@ -11,7 +11,8 @@ import { TiRoadblockInfo } from './roadblock/ti-roadblock-index';
 import { TiTagsInfo } from './tags/ti-tags-index';
 import { TiTextSnippetInfo } from './text-snippet/text-snippet-index';
 import { TiThumbInfo } from './thumb/ti-thumb-index';
-import { TiUploadBarInfo } from './upload-bar/ti-upload-bar-index';
+import { TiUploadBarInfo } from './upload/bar/ti-upload-bar-index';
+import { TiUploadTileInfo } from './upload/tile/ti-upload-tile-index';
 
 export default {
   TiIcon: TiIconInfo,
@@ -27,6 +28,7 @@ export default {
   TiThumb: TiThumbInfo,
   TiProgressBar: TiProgressBarInfo,
   TiUploadBar: TiUploadBarInfo,
+  TiUploadTile: TiUploadTileInfo,
 } as TiComSet;
 
 export * from '../tile/unknown/ti-unknown-index';
@@ -41,4 +43,5 @@ export * from './roadblock/ti-roadblock-index';
 export * from './tags/ti-tags-index';
 export * from './text-snippet/text-snippet-index';
 export * from './thumb/ti-thumb-index';
-export * from './upload-bar/ti-upload-bar-index';
+export * from './upload/bar/ti-upload-bar-index';
+export * from './upload/tile/ti-upload-tile-index';

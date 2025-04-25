@@ -90,4 +90,5 @@
   @include __color_by_name(number);
   @include __color_by_name(primary);
   @include __color_by_name(secondary);
+  @include __color_by_name(tip);
 }

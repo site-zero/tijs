@@ -1,11 +1,11 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed, onMounted, ref, useTemplateRef } from 'vue';
-  import { ActionBarEvent, TiActionBar } from '../../';
-  import { Vars } from '../../../_type';
-  import { CssUtils } from '../../../core';
-  import { TiImage, TiProgressBar, TiTextSnippet } from '../../../lib';
-  import { useDropping } from '../../_features';
+  import { ActionBarEvent, TiActionBar } from '../../../';
+  import { Vars } from '../../../../_type';
+  import { CssUtils } from '../../../../core';
+  import { TiImage, TiProgressBar, TiTextSnippet } from '../../../../lib';
+  import { useDropping } from '../../../_features';
   import { UploadBarEmitter, UploadBarProps } from './ti-upload-bar-types';
   import { useUploadBar } from './use-upload-bar';
   //-----------------------------------------------------
@@ -22,7 +22,7 @@
     // type: 'danger',
   });
   //-----------------------------------------------------
-  const Bar = useUploadBar(props);
+  const _bar = useUploadBar(props);
   //-----------------------------------------------------
   const TopClass = computed(() =>
     CssUtils.mergeClassName(props.className, {
@@ -54,7 +54,7 @@
   const ConClass = computed(() =>
     CssUtils.mergeClassName(
       {
-        'hover-prefix-for-clear': Bar.isPrefixForClean.value,
+        'hover-prefix-for-clear': _bar.isPrefixForClean.value,
       },
       `bar-pad-${props.textPadding}`,
       `text-size-${props.textSize}`,
@@ -150,9 +150,9 @@
       <div
         class="part-icon"
         :title="props.tip">
-        <TiImage v-bind="Bar.Preview.value" />
+        <TiImage v-bind="_bar.Preview.value" />
         <div
-          v-if="Bar.isPrefixForClean.value && !props.nilValue"
+          v-if="_bar.isPrefixForClean.value && !props.nilValue"
           class="prefix-cleaner"
           @click.left="emit('clear')">
           <i class="zmdi zmdi-close"></i>
@@ -161,13 +161,13 @@
       <!--============= Text =============-->
       <TiTextSnippet
         class="part-text"
-        v-bind="Bar.Text.value" />
+        v-bind="_bar.Text.value" />
       <!--============= Actions =============-->
       <TiActionBar
-        v-if="Bar.ActionBar.value"
+        v-if="_bar.ActionBar.value"
         item-size="t"
         bar-pad="s"
-        v-bind="Bar.ActionBar.value"
+        v-bind="_bar.ActionBar.value"
         class="part-actions"
         @fire="onActionFire" />
       <!--============= Processor =============-->

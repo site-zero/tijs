@@ -1,5 +1,5 @@
-import { ComPropExample } from '../../../../_type';
-import { UploadBarProps } from '../ti-upload-bar-types';
+import { ComPropExample } from '../../../../../_type';
+import { UploadTileProps } from '../ti-upload-tile-types';
 
 export default {
   name: 'simple',
@@ -13,5 +13,5 @@ export default {
         action: 'open',
       },
     ],
-  } as UploadBarProps,
+  } as UploadTileProps,
 } as ComPropExample;

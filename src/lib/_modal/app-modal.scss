@@ -19,35 +19,3 @@
     }
   }
 }
-
-//-------------------------------------------------------------
-@mixin __color_by_name($name) {
-  &.is-#{$name} {
-    > footer {
-      .ti-actionbar > .bar-top-group {
-        > .bar-item[item-depth="0"] > .bar-item-head {
-          color: var(--ti-color-#{$name}-r);
-          background-color: var(--ti-color-#{$name});
-          transition:
-            background-color 0.5s,
-            color 0.3s;
-          &:hover {
-            color: var(--ti-color-#{$name});
-            background-color: var(--ti-color-#{$name}-r);
-          }
-        }
-      }
-    }
-  }
-}
-//-------------------------------------------------------------
-.ti-app-modal {
-  @include __color_by_name(success);
-  @include __color_by_name(warn);
-  @include __color_by_name(info);
-  @include __color_by_name(danger);
-  @include __color_by_name(track);
-  @include __color_by_name(disable);
-  @include __color_by_name(text);
-  @include __color_by_name(number);
-}
