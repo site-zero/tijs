@@ -25,6 +25,11 @@ function concludeIndicator(
   // 准备一个值
   let ts = buildText(ind.text) ?? ({} as TextSnippetProps);
 
+  // 默认自动 I18n
+  if (_.isNil(ts.autoI18n)) {
+    ts.autoI18n = true;
+  }
+
   // 根据位置，自动设置图标
   // at left 用 prefixIcon
   // at right 用 suffixIcon

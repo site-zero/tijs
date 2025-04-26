@@ -1,4 +1,4 @@
-import { ComPropExample } from '../../../../_type';
+import { ComPropExample } from '../../../../../_type';
 import { UploadBarProps } from '../ti-upload-bar-types';
 
 export default {

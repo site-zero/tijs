@@ -47,17 +47,21 @@ export type ThumbProps = CommonProps & {
   more?: string | TextSnippetProps;
   indicators?: ThumbIndicator[];
 
+  // Aspect: measure
   width?: string | number;
   height?: string | number;
   style?: Vars;
 
+  // Aspect: texting
   textSize?: AspectSize;
   textPadding?: AspectSize;
   textAlign?: CssAlignment;
 
+  // Aspect: more
   moreSize?: AspectSize;
   morePadding?: AspectSize;
   moreAlign?: CssAlignment;
 
+  // Flex Layout
   flexGrow?: 'text' | 'more' | 'none';
 };

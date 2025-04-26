@@ -1,6 +1,6 @@
 import { App } from 'vue';
-import { TiComInfo, TiComRace } from '../../../_type';
-import { COM_TYPES } from '../../lib-com-types';
+import { TiComInfo, TiComRace } from '../../../../_type';
+import { COM_TYPES } from '../../../lib-com-types';
 import TiUploadBar from './TiUploadBar.vue';
 import example from './example';
 
@@ -22,7 +22,7 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.UploadBar;
 
 const TiUploadBarInfo: TiComInfo = {
-  icon: 'fas-cloud-arrow-up',
+  icon: 'fas-upload',
   race: TiComRace.TILE,
   name: COM_TYPE,
   text: 'i18n:ti-upload-bar-com-name',
