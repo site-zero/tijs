@@ -11,7 +11,7 @@
     flex: 1 1 auto;
     height: 3em;
     border: 1px solid var(--bar-c0);
-    overflow: hidden;
+    // 不能添加 overflow: hidden; 因为 drag enter 样式需要超出边界
     //-----------------------------------------------
     > .part-icon {
       @include flex-center;
@@ -90,10 +90,19 @@
     }
   } // > .bar-con {
   //-----------------------------------------------
+  &.in-progress {
+    > .bar-con {
+      > .part-actions {
+        background-color: transparent;
+        z-index: 100;
+      }
+    }
+  }
+  //-----------------------------------------------
   &.nil-value {
     user-select: none;
     color: var(--ti-color-track);
-    > .bar-con > .part-text .as-snippet-text{
+    > .bar-con > .part-text .as-snippet-text {
       font-style: italic;
     }
   }
@@ -101,13 +110,14 @@
   &.drag-enter {
     > .bar-con::after {
       pointer-events: none;
+      // background-color: yellow;
+      // opacity: 0.4;
       content: '';
       display: block;
       position: absolute;
       inset: -10px;
-      border-color: var(--ti-color-secondary);
-      border-style: dashed;
-      border-width: 3px;
+      border: 3px dashed var(--ti-color-secondary);
+      backdrop-filter: blur(3px);
     }
     // > .bar-con {
     //   border-color: var(--ti-color-secondary);

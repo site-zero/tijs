@@ -18,6 +18,7 @@ import {
 export type AbstracUploadEmitter = ActionBarEmitter & {
   (event: 'upload', payload: File): void;
   (event: 'clear'): void;
+  (event: 'stop-upload'): void;
 };
 
 export type AbstractUploaderProps = CommonProps & {

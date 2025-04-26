@@ -18,11 +18,15 @@ export function useDropping(options: DropFileOptions) {
 
   function depose() {
     if (_drop_target) {
-      _drop_target.ownerDocument?.body.removeEventListener('dragover', onDragOver);
+      _drop_target.ownerDocument?.body.removeEventListener(
+        'dragover',
+        onDragOver
+      );
       _drop_target.ownerDocument?.body.removeEventListener(
         'pointerup',
         onPointerUp
       );
+      _body_watched = false;
     }
   }
 
@@ -30,8 +34,14 @@ export function useDropping(options: DropFileOptions) {
     preventDefaults(e);
     if (enter && _drop_target) {
       if (!_body_watched) {
-        _drop_target.ownerDocument?.body.addEventListener('dragover', onDragOver);
-        _drop_target.ownerDocument?.body.addEventListener('pointerup', onPointerUp);
+        _drop_target.ownerDocument?.body.addEventListener(
+          'dragover',
+          onDragOver
+        );
+        _drop_target.ownerDocument?.body.addEventListener(
+          'pointerup',
+          onPointerUp
+        );
         _body_watched = true;
       }
       enter(_drop_target, e.target as HTMLElement);

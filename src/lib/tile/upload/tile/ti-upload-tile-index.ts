@@ -37,12 +37,16 @@ const TiUploadTileInfo: TiComInfo = {
     app.component(COM_TYPE, TiUploadTile);
   },
   liveStyle: {
-    width: '62%',
-    minWidth: '260px',
-    maxWidth: '500px',
+    padding: '20px',
   },
   defaultProps: 'simple',
   exampleProps: [example.simple, example.inProgress, example.nil],
+  exampleModel: {
+    'upload': 'upload',
+    'clear': 'clear',
+    'fire': 'fire',
+    'stop-upload': 'stop-upload',
+  },
 };
 
 export * from './ti-upload-tile-types';

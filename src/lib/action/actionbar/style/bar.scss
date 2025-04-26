@@ -53,6 +53,11 @@
     > .bar-item-wrapper {
       @include flex-align-v-nowrap($ai: stretch);
     }
+    &.top-as-button {
+      .bar-item[aspect='top'] {
+        margin: 0.2em 0;
+      }
+    }
   }
 } // .ti-actionbar {
 

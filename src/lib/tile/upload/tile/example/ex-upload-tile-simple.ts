@@ -13,5 +13,7 @@ export default {
         action: 'open',
       },
     ],
+    width: '140px',
+    height: '200px',
   } as UploadTileProps,
 } as ComPropExample;

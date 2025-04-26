@@ -10,6 +10,7 @@ const en_us = {
   'example-nil': 'Nil Value',
   'upload': 'Upload',
   'clean': 'Clean',
+  'stop': 'Stop',
 };
 const zh_cn = {
   'com-name': '上传条',
@@ -17,6 +18,7 @@ const zh_cn = {
   'example-nil': '空值',
   'upload': '上传',
   'clean': '清除',
+  'stop': '停止',
 };
 
 const COM_TYPE = COM_TYPES.UploadBar;
@@ -38,11 +40,18 @@ const TiUploadBarInfo: TiComInfo = {
   },
   liveStyle: {
     width: '62%',
-    minWidth: '260px',
+    minWidth: '300px',
     maxWidth: '500px',
+    padding: '20px',
   },
   defaultProps: 'simple',
   exampleProps: [example.simple, example.inProgress, example.nil],
+  exampleModel: {
+    'upload': 'upload',
+    'clear': 'clear',
+    'fire': 'fire',
+    'stop-upload': 'stop-upload',
+  },
 };
 
 export * from './ti-upload-bar-types';
