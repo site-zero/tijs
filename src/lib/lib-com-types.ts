@@ -63,6 +63,7 @@ export const COM_TYPES = {
   MainFrame: 'TiMainFrame',
   //------------------- VIEW
   Falls: 'TiFalls',
+  LbsMap: 'TiLbsMap',
   List: 'TiList',
   Tree: 'TiTree',
   TreeTable: 'TiTreeTable',
