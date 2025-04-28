@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import { computed } from 'vue';
-import { Icons } from '../../../../core';
+import { CssUtils, Icons } from '../../../../core';
 import { ThumbProps } from '../../all-tiles';
 import { getActionBarProps } from '../use-uploader';
 import { UploadTileProps } from './ti-upload-tile-types';
@@ -8,6 +8,7 @@ import { UploadTileProps } from './ti-upload-tile-types';
 export function useUploadTile(props: UploadTileProps) {
   // 构建主要显示文本
   const ObjThumb = computed(() => {
+    let width = CssUtils.toSize(props.width ?? 100);
     let re: ThumbProps = {
       width: '100%',
       height: '100%',
@@ -15,8 +16,8 @@ export function useUploadTile(props: UploadTileProps) {
       preview: {
         width: '100%',
         height: '100%',
-        dftSrc: Icons.parseIcon(Icons.getIcon(props.type, 'far-file')),
-        iconFontSize: 'var(--ti-fontsz-b)',
+        dftSrc: Icons.parseIcon(Icons.getIcon(props.type, 'zmdi-plus')),
+        iconFontSize: `calc(${width} / 3)`,
       },
     };
 
