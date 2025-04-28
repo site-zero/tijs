@@ -1,4 +1,4 @@
-import { ThumbProps, Vars } from '../../../../';
+import { CssBorderStyle, ThumbProps, Vars } from '../../../../';
 import { AbstractUploaderProps, AbstracUploadEmitter } from '../upload-types';
 
 export type UploadTileEmitter = AbstracUploadEmitter;
@@ -22,4 +22,13 @@ export type UploadTileProps = AbstractUploaderProps & {
    * 内部的 `TiThumb` 控件的自定义样式
    */
   thumbStyle?: Vars;
+
+  /**
+   * 边款样式，默认 solid
+   */
+  borderStyle?:CssBorderStyle;
+  /**
+   * 边款宽度
+   */
+  borderWidth?: string | number;
 };

@@ -1,9 +1,10 @@
 <script lang="ts" setup>
   import _ from 'lodash';
   import { computed, onMounted, ref, useTemplateRef } from 'vue';
-  import { ActionBarEvent, TiThumb } from '../../../';
+  import { ActionBarEvent, TiActionBar, TiThumb } from '../../../';
   import { CssUtils } from '../../../../core';
   import { useDropping } from '../../../_features';
+  import { onUploadActionFire, useUploadDropping } from '../use-uploader';
   import { UploadTileEmitter, UploadTileProps } from './ti-upload-tile-types';
   import { useUploadTile } from './use-upload-tile';
   //-----------------------------------------------------
@@ -14,8 +15,11 @@
     textPadding: 's',
     textAlign: 'center',
     boxRadius: 's',
+    borderStyle: 'solid',
     uploadButton: true,
-    clearButton: false,
+    clearButton: true,
+    width: '120px',
+    height: '120px',
     // tip: '点击或拖拽文件到此处上传',
     // type: 'danger',
   });
@@ -26,66 +30,43 @@
     CssUtils.mergeClassName(props.className, {
       'drag-enter': _drag_enter.value,
       'nil-value': props.nilValue,
+      'in-progress': _tile.InProgress.value,
       [`is-${props.type}`]: !!props.type,
     })
   );
   //-----------------------------------------------------
   const TopStyle = computed(() => {
-    return CssUtils.toStyle(props.style);
+    let css = {
+      '--tile-color-border': `var(--ti-color-border-thin)`,
+      '--tile-color-text': `var(--ti-color-card-f)`,
+      '--tile-color-bg': `var(--ti-color-card)`,
+    };
+    if (props.type) {
+      css['--tile-color-border'] = `var(--ti-color-${props.type})`;
+      css['--tile-color-text'] = `var(--ti-color-${props.type})`;
+      css['--tile-color-bg'] = `var(--ti-color-${props.type}-r)`;
+    }
+    return CssUtils.mergeStyles([css, props.style]);
   });
   //-----------------------------------------------------
-  let $file = useTemplateRef<HTMLInputElement>('file');
+  const MainStyle = computed(() => {
+    return CssUtils.mergeStyles([
+      {
+        width: CssUtils.toSize(props.width) ?? '120px',
+        height: CssUtils.toSize(props.height) ?? '120px',
+      },
+      props.style,
+    ]);
+  });
   //-----------------------------------------------------
   function onActionFire(event: ActionBarEvent) {
-    let fn = {
-      'choose-file': () => {
-        if ($file.value) {
-          $file.value.click();
-        }
-      },
-      'clear': () => {
-        emit('clear');
-      },
-    }[event.name as string];
-    if (fn) {
-      fn();
-    } else {
-      emit('fire', event.payload);
-    }
-  }
-  //-----------------------------------------------------
-  function onSelectLocalFilesToUpload(event: Event) {
-    let files = (event.target as HTMLInputElement).files;
-    if (files) {
-      let f = _.first(files);
-      if (f) {
-        emit('upload', f);
-      }
-    }
+    onUploadActionFire(event, emit);
   }
   //-----------------------------------------------------
   const _drag_enter = ref(false);
   const $main = useTemplateRef<HTMLElement>('main');
   const dropping = computed(() =>
-    useDropping({
-      target: () => $main.value,
-      enter: () => {
-        _drag_enter.value = true;
-      },
-      over: () => {
-        _drag_enter.value = true;
-      },
-      leave: () => {
-        _drag_enter.value = false;
-      },
-      drop: (files) => {
-        //console.log(files);
-        let f = _.first(files);
-        if (f) {
-          emit('upload', f);
-        }
-      },
-    })
+    useUploadDropping(_drag_enter, $main, emit, _tile.InProgress)
   );
   //-----------------------------------------------------
   onMounted(() => {
@@ -98,8 +79,20 @@
     class="ti-upload-tile"
     :class="TopClass"
     :style="TopStyle">
-    <main ref="main">
+    <main
+      ref="main"
+      :style="MainStyle"
+      :border="props.borderStyle"
+      :radius="props.boxRadius">
       <TiThumb v-bind="_tile.ObjThumb.value" />
+      <div class="part-actions">
+        <TiActionBar
+          layout-mode="V"
+          topItemAspectMode="button"
+          item-size="t"
+          v-bind="_tile.ActionBar.value"
+          @fire="onActionFire" />
+      </div>
     </main>
   </div>
 </template>

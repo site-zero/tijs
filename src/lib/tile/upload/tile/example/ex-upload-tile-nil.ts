@@ -13,5 +13,8 @@ export default {
     },
     text: 'Empty Bar',
     nilValue: true,
+    placeholder: {
+      text: 'hahaha'
+    }
   } as UploadTileProps,
 } as ComPropExample;

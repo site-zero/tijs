@@ -44,6 +44,10 @@ export function useUploadBar(props: UploadBarProps) {
     return preview;
   });
 
+  const InProgress = computed(() => {
+    return (props.progress?.value ?? 0) > 0;
+  });
+
   //-------------------------------------------------
   // 输出特性
   //-------------------------------------------------
@@ -52,5 +56,6 @@ export function useUploadBar(props: UploadBarProps) {
     Preview,
     Text,
     ActionBar,
+    InProgress,
   };
 }

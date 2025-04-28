@@ -1,11 +1,10 @@
 <script lang="ts" setup>
-  import _ from 'lodash';
   import { computed, onMounted, ref, useTemplateRef } from 'vue';
   import { ActionBarEvent, TiActionBar } from '../../../';
   import { Vars } from '../../../../_type';
   import { CssUtils } from '../../../../core';
   import { TiImage, TiProgressBar, TiTextSnippet } from '../../../../lib';
-  import { useDropping } from '../../../_features';
+  import { onUploadActionFire, useUploadDropping } from '../use-uploader';
   import { UploadBarEmitter, UploadBarProps } from './ti-upload-bar-types';
   import { useUploadBar } from './use-upload-bar';
   //-----------------------------------------------------
@@ -28,6 +27,7 @@
     CssUtils.mergeClassName(props.className, {
       'drag-enter': _drag_enter.value,
       'nil-value': props.nilValue,
+      'in-progress': _bar.InProgress.value,
       [`is-${props.type}`]: !!props.type,
     })
   );
@@ -70,57 +70,14 @@
     ]);
   });
   //-----------------------------------------------------
-  let $file = useTemplateRef<HTMLInputElement>('file');
   function onActionFire(event: ActionBarEvent) {
-    let fn = {
-      'choose-file': () => {
-        if ($file.value) {
-          $file.value.click();
-        }
-      },
-      'clear': () => {
-        emit('clear');
-      },
-    }[event.name];
-    if (fn) {
-      fn();
-    } else {
-      emit('fire', event.payload);
-    }
-  }
-  //-----------------------------------------------------
-  function onSelectLocalFilesToUpload(event: Event) {
-    let files = (event.target as HTMLInputElement).files;
-    if (files) {
-      let f = _.first(files);
-      if (f) {
-        emit('upload', f);
-      }
-    }
+    onUploadActionFire(event, emit);
   }
   //-----------------------------------------------------
   const _drag_enter = ref(false);
   const $bar = useTemplateRef('bar');
   const dropping = computed(() =>
-    useDropping({
-      target: () => $bar.value as unknown as HTMLElement,
-      enter: () => {
-        _drag_enter.value = true;
-      },
-      over: () => {
-        _drag_enter.value = true;
-      },
-      leave: () => {
-        _drag_enter.value = false;
-      },
-      drop: (files) => {
-        //console.log(files);
-        let f = _.first(files);
-        if (f) {
-          emit('upload', f);
-        }
-      },
-    })
+    useUploadDropping(_drag_enter, $bar, emit, _bar.InProgress)
   );
   //-----------------------------------------------------
   onMounted(() => {
@@ -133,14 +90,6 @@
     class="ti-upload-bar"
     :class="TopClass"
     :style="TopStyle">
-    <!--
-    Hidden input file to choose files
-    -->
-    <input
-      type="file"
-      ref="file"
-      style="display: none"
-      @change="onSelectLocalFilesToUpload" />
     <div
       class="bar-con"
       :class="ConClass"

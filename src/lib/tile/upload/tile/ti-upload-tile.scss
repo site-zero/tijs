@@ -1,6 +1,74 @@
 @use '@site0/tijs/sass/_all.scss' as *;
 
 .ti-upload-tile {
-  
+  color: var(--tile-color-text);
+  @include flex-align-nowrap($ai: flex-start);
+  //-----------------------------------------------
+  > main {
+    background-color: var(--tile-color-bg);
+    border-color: var(--tile-color-border);
+    border-width: 1px;
+    border-radius: var(--tile-radius);
+    position: relative;
+    //---------------------------------------------
+    &[border='solid'] {
+      border-style: solid;
+    }
+    &[border='dashed'] {
+      border-style: dashed;
+    }
+    &[border='dotted'] {
+      border-style: dotted;
+    }
+    //---------------------------------------------
+    &[radius='h'] {
+      border-radius: var(--ti-measure-r-h);
+    }
+    &[radius='b'] {
+      border-radius: var(--ti-measure-r-b);
+    }
+    &[radius='m'] {
+      border-radius: var(--ti-measure-r-m);
+    }
+    &[radius='s'] {
+      border-radius: var(--ti-measure-r-s);
+    }
+    &[radius='t'] {
+      border-radius: var(--ti-measure-r-t);
+    }
+    &[radius='none'] {
+      border-radius: var(--ti-measure-r-none);
+    }
+    //---------------------------------------------
+    > .part-actions {
+      @include flex-align-nowrap($ai: flex-start, $jc: flex-end);
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 500ms;
+      &:hover {
+        opacity: 1;
+        backdrop-filter: blur(3px);
+      }
+    }
+    //---------------------------------------------
+  }
+  //-----------------------------------------------
+  // &.in-progress {
+  //   > main > .part-actions {
+  //     display: none;
+  //   }
+  // }
+  //-----------------------------------------------
+  &.drag-enter {
+    > main::after {
+      pointer-events: none;
+      content: '';
+      position: absolute;
+      inset: -10px;
+      border: 3px dashed var(--ti-color-secondary);
+      backdrop-filter: blur(3px);
+    }
+  }
   //-----------------------------------------------
 }

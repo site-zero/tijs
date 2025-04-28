@@ -10,5 +10,7 @@ export default {
     progress: {
       value: 0.64,
     },
+    width: '200px',
+    height: '150px',
   } as UploadTileProps,
 } as ComPropExample;
