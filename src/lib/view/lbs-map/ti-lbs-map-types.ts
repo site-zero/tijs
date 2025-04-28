@@ -55,12 +55,34 @@ export type LBSMapMakerPopupOptions = {
     offset: [number, number]
 }
 
+export type LBSMakerOptions = {
+    /**
+         * 定制大头针图标，仅在`editPoint`为`pin`模式下才有效
+         */
+    markerIcon?: IconInput;
+
+    /**
+     * 图标更多配置，仅在 makrerIcon 生效时生效
+     */
+    markerIconOptions?: LBSMapEditMarkerIconOptions;
+
+    /**
+     * 指定 Marker 弹出层的渲染方式
+     */
+    markerPopup?: LBSMapMakerPopup;
+
+    /**
+     * 弹出层设置
+     */
+    markerPopupOptions?: LBSMapMakerPopupOptions
+}
+
 
 /**
  * 定义了一个图层的显示方式。实际上， LBSMap 就从这个类型继承
  * 它自身代表了【主图层】所有的编辑行为都是针对这个【主图层】的
  */
-export type LBSMapMarkerLayer = {
+export type LBSMapMarkerLayer = LBSMakerOptions & {
     /**
      * 输入值的类型
      */
@@ -81,31 +103,13 @@ export type LBSMapMarkerLayer = {
      */
     showMarker?: boolean;
 
-    /**
-     * 定制大头针图标，仅在`editPoint`为`pin`模式下才有效
-     */
-    markerIcon?: IconInput;
 
-    /**
-     * 图标更多配置，仅在 makrerIcon 生效时生效
-     */
-    markerIconOptions?: Partial<LBSMapEditMarkerIconOptions>;
-
-    /**
-     * 指定 Marker 弹出层的渲染方式
-     */
-    markerPopup?: LBSMapMakerPopup;
-
-    /**
-     * 弹出层设置
-     */
-    markerPopupOptions: LBSMapMakerPopupOptions
 }
 
 /**
  * 一个瓦片图层的具体设置
  */
-export type LBSMapTileSetup = {
+export type LBSMapTileLayer = {
     /**
      * 瓦片图层的 URL 模板
      * 这个是一个字符串，里面包含了 `{x}`, `{y}`, `{z}` 这样的占位符
@@ -125,13 +129,6 @@ export type LBSMapTileSetup = {
     coords?: LBSMapValueCoords;
 }
 
-/**
- * 瓦片图层
- */
-export type LBSMapTileLayer = {
-    tileLayer: LBSMapTileStdType
-}
-
 
 /**
  * 地图点编辑模式
@@ -142,29 +139,22 @@ export type LBSMapTileLayer = {
 export type LBSMapEditPointMode = "none" | "drag" | "pin";
 
 
-export type LBSMapEditMarkerIconOptions = {
+export type LBSMapEditMarkerIconOptions = Partial<{
+    // 整体大小，默认 32
+    size: number,
+    className: any,
     color: LogicType;
-    /**
-     * 默认 `[24,41]`
-     */
-    iconSize: [number, number];
-    /**
-     * 默认 `[12,41]`
-     */
-    iconAnchor: [number, number];
-    /**
-     * 是否显示阴影
-     */
-    shadow: true;
-    /**
-     * 默认 `[41, 41]`
-     */
-    shadowSize: [number, number];
-    /**
-     * 默认 `[12,41]`
-     */
-    shadowAnchor: [12, 41];
-};
+    // 图标大小: [24, 41]
+    iconSize: [number, number],
+    // 锚点位置: [12, 41]
+    iconAnchor: [number, number],
+    // 显示阴影
+    shadow: boolean | string,
+    // 阴影大小: [41, 41]
+    shadowSize: [number, number],
+    // 阴影锚点: [12, 41]
+    shadowAnchor: [number, number],
+}>;
 
 /**
  *  类型         | 说明           | `valueType`         | 补充
@@ -196,6 +186,17 @@ export type LbsMapProps = LBSMapMarkerLayer & {
      * 更多的显示图层。地图主图层拥有最高的遮盖等级
      */
     layers?: LBSMapMarkerLayer | LBSMapMarkerLayer[];
+
+    //--------------------------------------------
+    // 瓦片图层
+    //--------------------------------------------
+    /**
+     * 地图瓦片图层，默认根据坐标系，采用一个默认的瓦片层
+     * - `GCJ02` => `GAODE_ROADMAP`
+     * - `BD09` => `GAODE_ROADMAP`
+     * - `WGS84` => `TIANDITU_VECTOR_NOTE`
+     */
+    tileLayer?: LBSMapTileLayerInput | LBSMapTileLayerInput[]
 
     //--------------------------------------------
     // 通用行为设置
@@ -341,127 +342,127 @@ const LBS_MAP_DFT_TILES = {
         url: "https://wprd0{s}.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang={lang}&size=1&scl=2&style={style}&ltype={type}",
         options: { subdomains: "1234", style: "8", type: "11", lang: "zh_cn" },
         coords: "GCJ02"
-    },
+    } as LBSMapTileLayer,
     // 高德卫星：
     "GAODE_SATElITE": {
         url: "https://webst0{s}.is.autonavi.com/appmaptile?style={style}&x={x}&y={y}&z={z}",
         options: { subdomains: "1234", style: "6" },
         coords: "GCJ02"
-    },
+    } as LBSMapTileLayer,
     // 高德矢量：
     "GAODE_VECTOR": {
         url: "http://wprd0{s}.is.autonavi.com/appmaptile?lang={lang}&size=1&style={style}&x={x}&y={y}&z={z}",
         options: { subdomains: "1234", style: "7", lang: "zh_cn" },
         coords: "GCJ02"
-    },
+    } as LBSMapTileLayer,
     // 腾讯矢量标注：
     "QQ_VECTOR_NOTE": {
         url: "http://rt{s}.map.gtimg.com/realtimerender?z={z}&x={x}&y={-y}&type={type}&style={style}",
         options: { subdomains: "0123", style: "0", type: "vector" },
         coords: "GCJ02"
-    },
+    } as LBSMapTileLayer,
     // 谷歌矢量中文：
     "GOOGLE_VECTOR_CN": {
         url: "http://mt{s}.google.cn/vt/lyrs=m&scale=2&hl={lang}&gl=cn&x={x}&y={y}&z={z}",
         options: { subdomains: "0123", lang: "zh-CN" },
         coords: "WGS84"
-    },
+    } as LBSMapTileLayer,
     // 谷歌矢量：
     "GOOGLE_VECTOR": {
         url: "http://mt{s}.google.com/vt/lyrs=m&scale=2&hl={lang}&gl=cn&x={x}&y={y}&z={z}",
         options: { subdomains: "0123", lang: "en-US" },
         coords: "WGS84"
-    },
+    } as LBSMapTileLayer,
     // 谷歌路网：
     "GOOGLE_ROADMAP": {
         url: "https://mt{s}.google.com/vt/lyrs=h&x={x}&y={y}&z={z}",
         options: { subdomains: "0123" },
         coords: "WGS84"
-    },
+    } as LBSMapTileLayer,
     // 谷歌卫星：
     "GOOGLE_SATElITE": {
         url: "http://www.google.cn/maps/vt?lyrs=s@189&gl=${lang}&x={x}&y={y}&z={z}",
         options: { subdomains: "0123", lang: "cn" },
         coords: "WGS84"
-    },
+    } as LBSMapTileLayer,
     // 谷歌卫星标注：
     "GOOGLE_SATElITE_NOTE": {
         url: "https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",
         options: { subdomains: "0123" },
         coords: "WGS84"
-    },
+    } as LBSMapTileLayer,
     // 谷歌地形：
     "GOOGLE_TERRAIN": {
         url: "https://mt{s}.google.com/vt/lyrs=t&x={x}&y={y}&z={z}",
         options: { subdomains: "0123" },
         coords: "WGS84"
-    },
+    } as LBSMapTileLayer,
     // 谷歌矢量（带地形渲染）：
     "GOOGLE_VECTOR_TERRAIN": {
         url: "https://mt{s}.google.com/vt/lyrs=r&x={x}&y={y}&z={z}",
         options: { subdomains: "0123" },
         coords: "WGS84"
-    },
+    } as LBSMapTileLayer,
     // 街景地图：
     "OPENSTREAT": {
         url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
         options: {},
         coords: "WGS84"
-    },
+    } as LBSMapTileLayer,
     // Carto-标准
     "CARTO": {
         url: "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png",
         options: {},
         coords: "WGS84"
-    },
+    } as LBSMapTileLayer,
     // Carto-全部
     "CARTO_ALL": {
         url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
         options: {},
         coords: "WGS84"
-    },
+    } as LBSMapTileLayer,
     // Carto-标注
     "CARTO_LABEL": {
         url: "https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png",
         options: {},
         coords: "WGS84"
-    },
+    } as LBSMapTileLayer,
     // 天地图卫星：
     "TIANDITU_SATElITE": {
         url: "http://t7.tianditu.gov.cn/img_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=e3b434f191257368fc43c5b011ab5911",
         options: {},
         coords: "WGS84"
-    },
+    } as LBSMapTileLayer,
     // 天地图卫星注记：
     "TIANDITU_SATElITE_NOTE": {
         url: "http://t7.tianditu.gov.cn/cia_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cia&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=e3b434f191257368fc43c5b011ab5911",
         options: {},
         coords: "WGS84"
-    },
+    } as LBSMapTileLayer,
     // 天地图矢量：
     "TIANDITU_VECTOR": {
         url: "http://t7.tianditu.gov.cn/vec_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=vec&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=e3b434f191257368fc43c5b011ab5911",
         options: {},
         coords: "WGS84"
-    },
+    } as LBSMapTileLayer,
     // 天地图矢量注记：
     "TIANDITU_VECTOR_NOTE": {
         url: "http://t7.tianditu.gov.cn/cva_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cva&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=e3b434f191257368fc43c5b011ab5911",
         options: {},
         coords: "WGS84"
-    },
+    } as LBSMapTileLayer,
     // 天地图地形：
     "TIANDITU_TERRAIN": {
         url: "http://t7.tianditu.gov.cn/ter_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ter&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=e3b434f191257368fc43c5b011ab5911",
         options: {},
         coords: "WGS84"
-    },
+    } as LBSMapTileLayer,
     // 天地图地形注记：
     "TIANDITU_TERRAIN_NOTE": {
         url: "http://t7.tianditu.gov.cn/cta_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cta&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=e3b434f191257368fc43c5b011ab5911",
         options: {},
         coords: "WGS84"
-    }
+    } as LBSMapTileLayer,
 }
 /**
  * 内部配置对象详细列表如下：
@@ -490,7 +491,12 @@ const LBS_MAP_DFT_TILES = {
  * | TIANDITU_TERRAIN   | WGS84   | 天地图地形           
  * | TIANDITU_TERRAIN_NOTE | WGS84 | 天地图地形注记      
  */
-export type LBSMapTileStdType = keyof typeof LBS_MAP_DFT_TILES;
-export function isLBSMapTileStdType(type: any): type is LBSMapTileStdType {
+export type LBSMapStdTileType = keyof typeof LBS_MAP_DFT_TILES;
+export function isLBSMapStdTileType(type: any): type is LBSMapStdTileType {
     return type in LBS_MAP_DFT_TILES;
 }
+export function getLBSMapStdTileLayer(type: LBSMapStdTileType) {
+    return LBS_MAP_DFT_TILES[type]
+}
+
+export type LBSMapTileLayerInput = LBSMapStdTileType | LBSMapTileLayer;
