@@ -55,12 +55,34 @@ export type LBSMapMakerPopupOptions = {
     offset: [number, number]
 }
 
+export type LBSMakerOptions = {
+    /**
+         * 定制大头针图标，仅在`editPoint`为`pin`模式下才有效
+         */
+    markerIcon?: IconInput;
+
+    /**
+     * 图标更多配置，仅在 makrerIcon 生效时生效
+     */
+    markerIconOptions?: LBSMapEditMarkerIconOptions;
+
+    /**
+     * 指定 Marker 弹出层的渲染方式
+     */
+    markerPopup?: LBSMapMakerPopup;
+
+    /**
+     * 弹出层设置
+     */
+    markerPopupOptions?: LBSMapMakerPopupOptions
+}
+
 
 /**
  * 定义了一个图层的显示方式。实际上， LBSMap 就从这个类型继承
  * 它自身代表了【主图层】所有的编辑行为都是针对这个【主图层】的
  */
-export type LBSMapMarkerLayer = {
+export type LBSMapMarkerLayer = LBSMakerOptions & {
     /**
      * 输入值的类型
      */
@@ -81,25 +103,7 @@ export type LBSMapMarkerLayer = {
      */
     showMarker?: boolean;
 
-    /**
-     * 定制大头针图标，仅在`editPoint`为`pin`模式下才有效
-     */
-    markerIcon?: IconInput;
 
-    /**
-     * 图标更多配置，仅在 makrerIcon 生效时生效
-     */
-    markerIconOptions?: Partial<LBSMapEditMarkerIconOptions>;
-
-    /**
-     * 指定 Marker 弹出层的渲染方式
-     */
-    markerPopup?: LBSMapMakerPopup;
-
-    /**
-     * 弹出层设置
-     */
-    markerPopupOptions: LBSMapMakerPopupOptions
 }
 
 /**
@@ -135,29 +139,22 @@ export type LBSMapTileLayer = {
 export type LBSMapEditPointMode = "none" | "drag" | "pin";
 
 
-export type LBSMapEditMarkerIconOptions = {
+export type LBSMapEditMarkerIconOptions = Partial<{
+    // 整体大小，默认 32
+    size: number,
+    className: any,
     color: LogicType;
-    /**
-     * 默认 `[24,41]`
-     */
-    iconSize: [number, number];
-    /**
-     * 默认 `[12,41]`
-     */
-    iconAnchor: [number, number];
-    /**
-     * 是否显示阴影
-     */
-    shadow: true;
-    /**
-     * 默认 `[41, 41]`
-     */
-    shadowSize: [number, number];
-    /**
-     * 默认 `[12,41]`
-     */
-    shadowAnchor: [12, 41];
-};
+    // 图标大小: [24, 41]
+    iconSize: [number, number],
+    // 锚点位置: [12, 41]
+    iconAnchor: [number, number],
+    // 显示阴影
+    shadow: boolean | string,
+    // 阴影大小: [41, 41]
+    shadowSize: [number, number],
+    // 阴影锚点: [12, 41]
+    shadowAnchor: [number, number],
+}>;
 
 /**
  *  类型         | 说明           | `valueType`         | 补充
