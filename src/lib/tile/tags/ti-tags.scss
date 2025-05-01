@@ -2,15 +2,20 @@
 
 .ti-tags {
   @include flex-align($ai: stretch, $ac: stretch);
+  font-size: var(--box-fontsz);
+  padding:var(--box-padding);
+  //-----------------------------------------------
   &[nowrap] {
     flex-wrap: nowrap;
   }
+  //-----------------------------------------------
   &.is-editable {
     user-select: none;
     > .ti-label {
       cursor: pointer;
     }
   }
+  //-----------------------------------------------
   > .as-title {
     @include flex-center;
     font-weight: bold;
@@ -19,29 +24,41 @@
     padding: 0 var(--ti-gap-s);
     margin-right: var(--ti-gap-s);
   }
+  //-----------------------------------------------
   > .ti-label {
     margin: SZ(1);
     flex: 0 0 auto;
   }
+  //-----------------------------------------------
   > .as-sorting-ghost {
     opacity: 0.5;
     color: var(--ti-color-highlight-f);
     background-color: var(--ti-color-highlight);
   }
+  //-----------------------------------------------
   > hr {
     opacity: 0;
     flex: 1 1 auto;
   }
+  //-----------------------------------------------
   > .ti-actionbar {
     flex: 1 1 auto;
     margin: 0;
     padding: 0;
   }
+  //-----------------------------------------------
   > .as-empty {
     @include flex-center;
     color: var(--ti-color-disable);
     font-size: 0.8em;
     opacity: 0.63;
-    padding:0 .5em;
+    padding: 0 0.5em;
   }
+  //-----------------------------------------------
+  &.show-border {
+    padding: var(--box-padding);
+    border-radius: var(--box-radius);
+    border: 1px var(--box-border) var(--ti-color-border-dark);
+  }
+  //-----------------------------------------------
 }

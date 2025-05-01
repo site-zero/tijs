@@ -1,13 +1,13 @@
 import _ from 'lodash';
-import { computed } from 'vue';
+import { computed, ComputedRef } from 'vue';
 import { Str, TiDict, Tmpl } from '../../../core';
-import { useDisplayText } from '../../_features';
+import { useDisplayText, ValuePipeFeature } from '../../_features';
 import { LabelEmitter, LabelProps, LabelState } from './ti-label-types';
 
 export type LabelOptions = {
   _state: LabelState;
-  _pipe?: (val: any) => any;
-  _dict?: TiDict;
+  _pipe: ComputedRef<ValuePipeFeature>;
+  _dict: ComputedRef<TiDict | undefined>;
   getElement: () => HTMLElement;
   emit: LabelEmitter;
 };
@@ -45,11 +45,11 @@ export function useLabel(props: LabelProps, options: LabelOptions) {
     }
 
     let v0 = props.value;
-    let v1 = _pipe ? _pipe(v0) : v0;
+    let v1 = _pipe.value ? _pipe.value(v0) : v0;
 
-    if (_dict) {
+    if (_dict.value) {
       lastAbort = new AbortController();
-      let item = await _dict.getStdItem(v1, lastAbort.signal);
+      let item = await _dict.value.getStdItem(v1, lastAbort.signal);
       if (item) {
         _state.icon = item.icon;
         _state.text = getDisplay.value(item.toOptionItem());

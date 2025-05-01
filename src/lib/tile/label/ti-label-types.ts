@@ -62,6 +62,8 @@ export type LabelProps = CommonProps &
   DisplayTextProps & {
     value?: any;
 
+    tip?: string;
+
     /**
      * 指定超链接
      */

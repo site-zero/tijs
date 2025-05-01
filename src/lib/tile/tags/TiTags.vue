@@ -22,6 +22,9 @@
     placeholder: 'i18n:nil-content',
     autoI18n: true,
     valueIsMatcher: undefined,
+    boxFontSize: 't',
+    boxPadding: 's',
+    boxRadius: 's',
   });
   //-----------------------------------------------------
   const tagItems = ref<TagItem[]>([]);
@@ -49,10 +52,26 @@
     CssUtils.mergeClassName({
       'is-readonly': !props.editable,
       'is-editable': props.editable,
+      'show-border': props.showBoreder ? true : false,
     })
   );
   //-----------------------------------------------------
-  const TopStyle = computed(() => CssUtils.toStyle(props.style));
+  const TopStyle = computed(() => {
+    let re = CssUtils.toStyle(props.style);
+    if (props.showBoreder) {
+      re['--box-border'] = props.showBoreder;
+    }
+    if (props.boxFontSize) {
+      re['--box-fontsz'] = `var(--ti-fontsz-${props.boxFontSize})`;
+    }
+    if (props.boxPadding) {
+      re['--box-padding'] = `var(--ti-box-pad-${props.boxPadding})`;
+    }
+    if (props.boxRadius) {
+      re['--box-radius'] = `var(--ti-measure-r-${props.boxRadius})`;
+    }
+    return re;
+  });
   //-----------------------------------------------------
   function onClickItem(it: TagItem) {
     if (props.tagClickable) {
@@ -139,6 +158,7 @@
         :suffixIcon="props.editable ? 'zmdi-close' : undefined"
         :suffixIconFor="props.editable && !_dragging ? 'click' : undefined"
         :value="it.text"
+        :tip="it.tip"
         @click-suffix-icon="onRemoveItem(it)"
         @click-prefix-icon="onClickItem(it)"
         @click="onClickItem(it)" />
