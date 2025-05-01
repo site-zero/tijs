@@ -7,6 +7,12 @@ const en_us = {
   'com-name': 'Roadblock',
   'example-simple': 'Simple',
   'example-color': 'Color',
+  'example-large': 'Large',
+  'example-warn': 'Warning',
+  'example-cover': 'Cover',
+  'example-shadow': 'Shadow',
+  'example-customized': 'Customized',
+  'example-links': 'Links',
 };
 const zh_cn = {
   'com-name': '路障牌',

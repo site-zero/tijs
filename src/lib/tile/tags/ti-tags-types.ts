@@ -1,4 +1,11 @@
-import { CommonProps, IconInput, LogicType, Vars } from '../../../_type';
+import {
+  AspectSize,
+  CommonProps,
+  CssBorderStyle,
+  IconInput,
+  LogicType,
+  Vars,
+} from '../../../_type';
 import {
   ActionBarProps,
   LabelAspectProps,
@@ -86,4 +93,16 @@ export type TagsProps = CommonProps &
      * 记录的键，如果是 `*` 表示针对所有的字段
      */
     nameTranslator?: Record<string, string | TagNameInfo | TagNameTranslator>;
+
+    //--------------------------------------------------
+    // Aspect
+    //--------------------------------------------------
+    /**
+     * 整体显示框
+     */
+    showBoreder?: CssBorderStyle;
+
+    boxFontSize?: AspectSize;
+    boxPadding?: AspectSize;
+    boxRadius?: AspectSize | 'none';
   };

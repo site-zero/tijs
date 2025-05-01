@@ -5,6 +5,11 @@
   @include aspect_pad('&.bar-pad');
   @include aspect_fontsize('&.item-size');
   $BR: var(--ti-measure-r-s);
+  --ti-fontsz-t: 8px; // tiny
+  --ti-fontsz-s: 10px; // small
+  --ti-fontsz-m: 12px; // middle
+  --ti-fontsz-b: 14px; // big
+  --ti-fontsz-h: 16px; // hug
   // 菜单项
   .bar-item {
     display: grid;

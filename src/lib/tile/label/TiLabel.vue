@@ -27,8 +27,8 @@
   //-----------------------------------------------------
   const _api = useLabel(props, {
     _state,
-    _pipe: _pipe.value,
-    _dict: _dict.value,
+    _pipe: _pipe,
+    _dict: _dict,
     emit,
     getElement: () => $el.value! as unknown as HTMLElement,
   });
@@ -83,7 +83,7 @@
   //-----------------------------------------------------
   // 看看是否满足选项列表的打开条件
   watch(
-    () => [props.value],
+    () => [props.value, props.options],
     async () => {
       await _api.updateDisplay();
     },
@@ -96,6 +96,7 @@
     class="ti-label"
     :class="_aspect.TopClass.value"
     :style="_aspect.TopStyle.value"
+    :data-tip="props.tip"
     ref="el"
     @click.left="onClickLabel">
     <!--====================================-->

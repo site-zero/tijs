@@ -52,6 +52,7 @@ export function useTags(props: TagsProps, tagItems: Ref<TagItem[]>) {
           icon: it.icon,
           text: it.text ?? `${value}`,
           name: it.name,
+          tip: it.tip,
           value,
         });
       }

@@ -52,7 +52,7 @@
     layoutMode: 'H',
     topItemAspectMode: 'normal',
     barPad: 's',
-    itemSize: 's',
+    itemSize: 'm',
     itemRadius: 's',
     itemAlign: 'left',
   });

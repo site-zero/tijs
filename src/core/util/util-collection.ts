@@ -177,7 +177,7 @@ export function moveChecked<T>(
   list: T[],
   isChecked: (it: T) => boolean,
   dir: MoveDirection
-) {
+): T[] {
   // 寻找开始以及结束下标
   let I_start = -1;
   let I_end = -1;
@@ -201,7 +201,7 @@ export function moveChecked<T>(
 
   // 木有找到
   if (I_start < 0) {
-    return;
+    return list;
   }
 
   // 开始移动

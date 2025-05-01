@@ -18,8 +18,8 @@
     borderStyle: 'solid',
     uploadButton: true,
     clearButton: true,
-    width: '120px',
-    height: '120px',
+    width: '100px',
+    height: '100px',
     // tip: '点击或拖拽文件到此处上传',
     // type: 'danger',
   });

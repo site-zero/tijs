@@ -169,7 +169,8 @@
     class="ti-list"
     :class="TopClass"
     :style="TopStyle"
-    :data-ti-scope="TagScope">
+    :data-ti-scope="TagScope"
+    @click="_list.OnItemCancel">
     <div
       style="display: content"
       v-if="StyleSheetHTML"
@@ -189,7 +190,7 @@
         v-for="it in IndentlyItems"
         class="list-item"
         :class="it.className"
-        @click="onListItemClick(it, $event)"
+        @click.stop="onListItemClick(it, $event)"
         @dblclick="emit('open', it)">
         <!--***********************************-->
         <!--=Indent placeholder=-->

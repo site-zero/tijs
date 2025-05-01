@@ -5,7 +5,7 @@
   .bar-item[aspect='top'] {
     > .bar-item-info {
       @include flex-align-nowrap($ai: stretch);
-      padding: 0;
+      padding: 0 0.2em;
       border: 1px solid var(--item-color);
       text-align: center;
       //------------------------------------

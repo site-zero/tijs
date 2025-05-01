@@ -226,6 +226,19 @@ export function useList(
     return false;
   }
   //-----------------------------------------------------
+  function OnItemCancel() {
+    let oldCurrentId = _.cloneDeep(selection.currentId);
+    let oldCheckedIds = _.cloneDeep(selection.checkedIds);
+    selectable.selectNone(selection);
+    let info = selectable.getSelectionEmitInfo(
+      selection,
+      props.data || [],
+      oldCheckedIds,
+      oldCurrentId
+    ) as ListSelectEmitInfo;
+    emit('select', info);
+  }
+  //-----------------------------------------------------
   function OnItemSelect(itemEvent: ListEvent) {
     if (debug) console.log('OnItemSelect', itemEvent);
     let { item, event } = itemEvent;
@@ -300,6 +313,7 @@ export function useList(
 
     updateSelection: selectable.updateSelection,
 
+    OnItemCancel,
     OnItemSelect,
     OnItemCheck,
   };
