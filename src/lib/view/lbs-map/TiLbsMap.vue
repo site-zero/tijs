@@ -1,19 +1,82 @@
 <script setup lang="ts">
   import { LbsMapEmitter, LbsMapProps } from './ti-lbs-map-types';
+  import L from 'leaflet';
   //--------------------------------------------
   const emit = defineEmits<LbsMapEmitter>();
   //--------------------------------------------
   const props = withDefaults(defineProps<LbsMapProps>(), {});
   //--------------------------------------------
+  
 </script>
 
 <template>
-  <div class="ti-lbs-map">
-    <main>
-      <!-- 地图容器 -->
-      I am LBS Map
-    </main>
+<div class="web-gsi-leaflet ti-fill-parent"
+  :class="TopClass"
+  :style="TopStyle">
+  <!--
+    Main for the map
+  -->
+  <div class="wgl-map-main ti-fill-parent" ref="main"></div>
+  <!--
+    Tip Info
+  -->
+  <div 
+    v-if="isShowInfo"
+      class="wgl-map-info">
+      <!--
+        Zoom
+      -->
+      <div class="info-ele" v-if="ShowInfo.zoom">
+        <i class="fas fa-search-location"></i>
+        <span>{{geo.zoom}}</span>
+      </div>
+      <!--
+        Center
+      -->
+      <div class="info-ele" v-if="ShowInfo.center">
+        <i class="fas fa-arrows-alt"></i>
+        <span>{{GeoStr(geo.center.lat)}}, {{GeoStr(geo.center.lng)}}</span>
+      </div>
+      <!--
+        Latitude range
+      -->
+      <div class="info-ele" v-if="ShowInfo.latRange">
+        <i class="fas fa-arrows-alt-v"></i>
+        <span>{{GeoStr(geo.N)}}</span>/<span>{{GeoStr(geo.S)}}</span>
+      </div>
+      <!--
+        Longitude range
+      -->
+      <div class="info-ele" v-if="ShowInfo.lngRange">
+        <i class="fas fa-arrows-alt-h"></i>
+        <span>{{GeoStr(geo.W)}}</span>/<span>{{GeoStr(geo.E)}}</span>
+      </div>
+      <!--
+        Pointer Hover
+      -->
+      <div 
+        v-if="ShowInfo.pointerHover && !_.isEmpty(pointerHover)"
+          class="info-ele">
+          <i class="fas fa-map-marker"></i>
+          <span>{{GeoStr(pointerHover.lat)}}, {{GeoStr(pointerHover.lng)}}</span>
+      </div>
+      <!--
+        Pointer Click
+      -->
+      <div 
+        v-if="ShowInfo.pointerClick && !_.isEmpty(pointerClick)"
+          class="info-ele">
+          <i class="fas fa-mouse" @click.left="pointerClick={}"></i>
+          <span>{{GeoStr(pointerClick.lat)}}, {{GeoStr(pointerClick.lng)}}</span>
+      </div>
   </div>
+  <!--
+    Loading Info
+  -->
+  <TiLoading
+    v-if="loading"
+      v-bind="loadingAs"/>
+</div>
 </template>
 
 <style lang="scss" scoped></style>

@@ -1,7 +1,8 @@
+import L from "leaflet";
 import _ from "lodash";
 import { IconInput, LogicType } from "../../../_type";
 import { Icons } from "../../../core";
-import { LBSMapEditMarkerIconOptions, LbsMapProps } from "./ti-lbs-map-types";
+import { LBSMapDrawContext, LBSMapEditMarkerIconOptions, LbsMapProps } from "./ti-lbs-map-types";
 
 
 export type LBSMapIconOptions = Partial<{
@@ -22,12 +23,12 @@ export type LBSMapIconOptions = Partial<{
 }>;
 
 export function Icon(
-    props: LbsMapProps,
-    LL: any,
+    _dc: LBSMapDrawContext,
     urlOrIcon: IconInput,
     options: LBSMapEditMarkerIconOptions = {}) {
+    let { props } = _dc;
     if (!urlOrIcon)
-        return new LL.Icon.Default()
+        return new L.Icon.Default()
 
     let {
         size = 32,
@@ -47,7 +48,7 @@ export function Icon(
     if ("font" == icon.type) {
         let html = Icons.fontIconHtml(icon);
         let ansz = size / 2
-        return LL.divIcon({
+        return L.divIcon({
             className: `ti-gsi-mark-icon 
                     is-size-${size} 
                     is-color-${color}
@@ -70,7 +71,7 @@ export function Icon(
             }
             shadowUrl = GetIconSrc(props, shadowUrl)
         }
-        return LL.icon({
+        return L.icon({
             iconUrl: GetIconSrc(props, icon.src),
             className,
             iconSize, iconAnchor,
@@ -79,7 +80,7 @@ export function Icon(
     }
 
     // Keep original input
-    return LL.icon(urlOrIcon)
+    throw `Invalid icon type: ${urlOrIcon}`
 }
 
 //--------------------------------------
@@ -88,4 +89,9 @@ function GetIconSrc(props: LbsMapProps, src: string) {
         return src
     }
     return `${props.imageIconBase}${src}`
+}
+
+//--------------------------------------
+function updateGeoInfo(_dc:LBSMapDrawContext){
+
 }

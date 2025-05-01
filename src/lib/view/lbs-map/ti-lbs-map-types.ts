@@ -1,7 +1,25 @@
+import { KeepInfo } from '../../../lib/_features';
 import { IconInput, LogicType, Vars } from '../../../_type';
 
 export type LbsMapEmitter = {
     (event: 'change', data: any): void
+}
+
+/**
+ * 各个辅助函数的上下文对象
+ */
+export type LBSMapDrawContext = {
+    props: LbsMapProps;
+    // 当前地图实例
+    $map: any;
+
+    // 当前活动图层
+    $live: any;
+
+    pointerClick: LatLngObj;
+    pointerHover: LatLngObj;
+
+    lastMove: number;
 }
 
 /**
@@ -34,10 +52,10 @@ export type LBSMapValueCoords = 'WGS84' | 'GCJ02' | 'BD09'
  */
 export type LBSMapValueType = 'obj' | 'obj-list' | 'pair' | 'pair-list' | 'geojson'
 
-export type LBSMapValueAsObj = { lat: number, lng: number };
-export type LBSMapValueAsPair = [number, number];
-export type LBSMapValueAsGeoJson = Vars;
-export type LBSMapValue = LBSMapValueAsObj | LBSMapValueAsPair;
+export type LatLngObj = { lat: number, lng: number };
+export type LatLngTuple = [number, number];
+export type GeoJson = Vars;
+export type LBSMapValue = LatLngObj | LatLngTuple;
 
 /**
  * `string` : html template
@@ -86,7 +104,7 @@ export type LBSMapMarkerLayer = LBSMakerOptions & {
     /**
      * 输入值的类型
      */
-    value?: LBSMapValue | LBSMapValue[] | LBSMapValueAsGeoJson;
+    value?: LBSMapValue | LBSMapValue[] | GeoJson;
     /**
      * 值类型，默认为 'obj'
      */
@@ -222,7 +240,7 @@ export type LbsMapProps = LBSMapMarkerLayer & {
     /**
      * 本地记录最后缩放大小的键
      */
-    keepZoomBy?: string;
+    keepZoomBy?: KeepInfo;
 
     /**
      * 地图更多自定义设置
