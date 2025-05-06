@@ -1,5 +1,6 @@
+import { RoadblockProps } from 'src/lib/tile/all-tiles';
+import { CommonProps, IconInput, LogicType, Vars } from '../../../_type';
 import { KeepInfo } from '../../../lib/_features';
-import { IconInput, LogicType, Vars } from '../../../_type';
 
 export type LbsMapEmitter = {
     (event: 'change', data: any): void
@@ -9,18 +10,40 @@ export type LbsMapEmitter = {
  * 各个辅助函数的上下文对象
  */
 export type LBSMapDrawContext = {
-    props: LbsMapProps;
+    // props: LbsMapProps;
     // 当前地图实例
     $map: any;
 
     // 当前活动图层
     $live: any;
 
-    pointerClick: LatLngObj;
-    pointerHover: LatLngObj;
+    pointerClick?: LatLngObj;
+    pointerHover?: LatLngObj;
+
+    geo: LBSMapGeo;
 
     lastMove: number;
+    loading: boolean;
 }
+
+export type LBSMapGeo = Partial<LBSMapBound & {
+    zoom: number
+}>;
+
+export type LBSMapBound = LBSMapBoundInput & {
+    center: LatLngObj;
+    SW: LatLngObj;
+    SE: LatLngObj;
+    NE: LatLngObj;
+    NW: LatLngObj;
+};
+
+export type LBSMapBoundInput = {
+    W: number;
+    E: number;
+    S: number;
+    N: number;
+};
 
 /**
  * - `WGS84`: 国际通用坐标系
@@ -46,11 +69,11 @@ export type LBSMapValueCoords = 'WGS84' | 'GCJ02' | 'BD09'
 * --------------|-----------------
 * `obj`         | `{lat, lng}`
 * `obj-list`    | `[{lat, lng}..]`
-* `pair`        | `[lat, lng]`
-* `pair-list`   | `[[lat, lng]..]`
+* `tuple`       | `[lat, lng]`
+* `tuple-list`  | `[[lat, lng]..]`
 * `geojson`     | `{type:"Point"...}`
  */
-export type LBSMapValueType = 'obj' | 'obj-list' | 'pair' | 'pair-list' | 'geojson'
+export type LBSMapValueType = 'obj' | 'obj-list' | 'tuple' | 'tuple-list' | 'geojson'
 
 export type LatLngObj = { lat: number, lng: number };
 export type LatLngTuple = [number, number];
@@ -190,7 +213,7 @@ export type LBSMapDisplayType = 'Point' | 'Polyline' | 'Polygon' | 'Rectangle' |
 /**
  * 位置地图组件属性定义
  */
-export type LbsMapProps = LBSMapMarkerLayer & {
+export type LbsMapProps = CommonProps & LBSMapMarkerLayer & {
     //--------------------------------------------
     // 整体设置
     //--------------------------------------------
@@ -204,6 +227,11 @@ export type LbsMapProps = LBSMapMarkerLayer & {
      * 更多的显示图层。地图主图层拥有最高的遮盖等级
      */
     layers?: LBSMapMarkerLayer | LBSMapMarkerLayer[];
+
+    /**
+     * 值显示精度
+     */
+    latlngPrecise?: number;
 
     //--------------------------------------------
     // 瓦片图层
@@ -276,6 +304,11 @@ export type LbsMapProps = LBSMapMarkerLayer & {
      * 貌似是编辑地图时，的防抖设置
      */
     cooling?: number;
+
+    /**
+     * 加载中的指示牌
+     */
+    loadingRoadblock?: RoadblockProps;
 
     //--------------------------------------------
     // Point 行为设置

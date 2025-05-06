@@ -1,10 +1,13 @@
 import _ from "lodash";
 import { Vars } from "../../../..";
 import { I18n, Util } from "../../../../core";
-import { LBSMakerOptions, LatLngObj ,LBSMapDrawContext} from "../ti-lbs-map-types";
-import { Icon } from "../__support";
+import { LatLngObj, LBSMakerOptions } from "../ti-lbs-map-types";
+import { LbsMapApi } from "../use-lbs-map";
 
-export function __customize_marker_behaviors(_dc: LBSMapDrawContext, $marker: any, obj: LatLngObj, options: LBSMakerOptions = {}) {
+
+export function __customize_marker_behaviors(
+    _api: LbsMapApi,
+    $marker: any, obj: LatLngObj, options: LBSMakerOptions = {}) {
     let {
         markerIcon,
         markerIconOptions = {},
@@ -19,7 +22,8 @@ export function __customize_marker_behaviors(_dc: LBSMapDrawContext, $marker: an
         })
         //console.log({icon})
         if (icon) {
-            $marker.setIcon(Icon(_dc, icon, markerIconOptions))
+            let ii = _api.Icon(icon, markerIconOptions);
+            $marker.setIcon(ii)
         }
     }
     // Customized popup
