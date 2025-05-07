@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import { I18n, Str } from '../';
-import { TiCurrency } from '../../_type';
-import { PartitionOptions } from '../text/ti-str';
+import { TiCurrency, ToBankTextOptions } from '../../_type';
 
 ///////////////////////////////////////
 const CURRENCIES = {
@@ -384,14 +383,6 @@ export function toChineseText(cent = 0.0, capitalized = false): string {
   }
   return re.join('');
 }
-
-export type ToBankTextOptions = PartitionOptions & {
-  /**
-   * 显示到小数点后几位，默认的则是自动不补零
-   * 如果指定了这个位数，后面需要补零
-   */
-  decimalPlaces?: number;
-};
 
 /**
  * 将输入的数字，分段显示。变成便于人类阅读的数字

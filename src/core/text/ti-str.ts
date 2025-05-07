@@ -2,7 +2,7 @@ import JSON5 from 'json5';
 import _ from 'lodash';
 import { Tmpl, Util } from '../';
 import {
-  HDirecton,
+  PartitionOptions,
   StrCaseFunc,
   StrCaseMode,
   StrConvertor,
@@ -172,24 +172,6 @@ export function splitQuote(str: string, options: SplitOptions = {}): string[] {
                 字符串分段显示
 
 ---------------------------------------------------*/
-export type PartitionOptions = {
-  /**
-   * 每段有多长
-   */
-  width?: number;
-  /**
-   * 分隔字符串
-   */
-  sep?: string;
-  /**
-   * 分隔的方向：
-   *
-   * - `left` 从右向左分隔，通常用来格式化金额
-   * - `right` 从左至右分隔，通常用来格式化银行账号，或者软件激活码
-   */
-  to?: HDirecton;
-};
-
 /**
  * 将输入的文本，分段显示。便于人类阅读。
  *
