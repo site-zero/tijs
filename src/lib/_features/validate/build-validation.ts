@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { buildFieldValidatorGroup, useVisibility } from '../..';
-import { makeFieldUniqKey } from '../../../_type';
-import { Str } from '../../../core';
+import { makeFieldUniqKey, Vars } from '../../../_type';
+import { Match, Str } from '../../../core';
 import { TiObjFieldsFeature } from '../field/use-obj-fields';
 import {
   DataValidatableField,
@@ -24,6 +24,21 @@ export function _build_validatable_field(
     visiblity.isDisabled = () => true;
   }
 
+  // 必选字段
+  let isRequired: undefined | ((data: Vars) => boolean) = undefined;
+  if (field.required) {
+    if (_.isBoolean(field.required)) {
+      isRequired = () => true;
+    }
+    // 复杂判断
+    else {
+      let _is_required = Match.parse(field.required, false);
+      isRequired = (data: Vars) => {
+        return _is_required.test(data);
+      };
+    }
+  }
+
   // 逐个编制字段详情
   return {
     uniqKey,
@@ -34,6 +49,7 @@ export function _build_validatable_field(
     srcValidation: field.validation,
     ...visiblity,
     readonly: field.readonly,
+    isRequired,
   };
 }
 
