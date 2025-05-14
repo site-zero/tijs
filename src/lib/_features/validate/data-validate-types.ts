@@ -20,6 +20,8 @@ export type ValidatableField = VisibilityProps &
     title: TextArm;
     required?: any;
     validation?: FieldValidation | FieldValidation[];
+    minLen?: number;
+    maxLen?: number;
   };
 
 export type ValidatableFieldInfo = [
@@ -40,4 +42,7 @@ export type DataValidatableField = AbstractField &
      * 存储一下源校验配置，以便动态可以展示校验规则
      */
     srcValidation?: any;
+
+    minLen?: number;
+    maxLen?: number;
   };

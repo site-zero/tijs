@@ -112,15 +112,20 @@ export function useMultiDroplist(
       for (let val of vals) {
         let it = await _dict.getStdItem(val);
         if (!it) {
-          console.warn('Fail to found item for value=${val}');
-          continue;
+          items.push({
+            text: `${val}`,
+            value: val,
+          });
         }
-        items.push({
-          icon: it.icon,
-          text: it.text,
-          value: it.value,
-          tip: it.tip,
-        });
+        // 显示标准项目
+        else {
+          items.push({
+            icon: it.icon,
+            text: it.text,
+            value: it.value,
+            tip: it.tip,
+          });
+        }
       }
     }
     // 设置

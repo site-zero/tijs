@@ -1,7 +1,8 @@
 <script lang="ts" setup>
+  import JSON5 from 'json5';
   import { computed, inject } from 'vue';
   import { TiTextSnippet, useFieldCom, useReadonly } from '../../';
-  import { ValueChange, getFieldValue } from '../../../_type';
+  import { LogicType, ValueChange, getFieldValue } from '../../../_type';
   import { CssUtils } from '../../../core';
   import {
     FIELD_STATUS_KEY,
@@ -15,7 +16,6 @@
     getFieldTitleStyle,
     getFieldTopStyle,
   } from './use-field-style';
-  import JSON5 from 'json5';
   //-------------------------------------------------
   defineOptions({
     inheritAttrs: false,
@@ -56,6 +56,15 @@
   const FieldTitleStyle = computed(() =>
     getFieldTitleStyle(props, FieldStatus.value)
   );
+  //-------------------------------------------------
+  const FieldLogicType = computed((): LogicType | undefined => {
+    if ('warn' == FieldStatus.value?.type) {
+      return 'warn';
+    }
+    if ('error' == FieldStatus.value?.type) {
+      return 'danger';
+    }
+  });
   //-------------------------------------------------
   const FieldDynamicContext = computed(() => {
     return {
@@ -185,6 +194,7 @@
       :attrs="{ dataAlign: TitleAlign }"
       :text="FieldText.title"
       :textType="FieldText.titleType"
+      :logicType="FieldLogicType"
       :autoI18n="false"
       :prefixIcon="FieldIcon?.titlePrefixIcon"
       :prefixTip="FieldIcon?.titlePrefixTip"
@@ -213,6 +223,7 @@
       :attrs="{ dataAlign: props.tipAlign }"
       :text="FieldText.tip ?? ''"
       :textType="FieldText.tipType"
+      :logicType="FieldLogicType"
       :comType="props.tipBy?.comType"
       :comConf="props.tipBy?.comConf"
       :autoValue="props.tipBy?.autoValue"

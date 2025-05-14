@@ -1,4 +1,10 @@
-import { ComRef, FieldComProps, IconInput, TextContentType, Vars } from '../../../_type';
+import {
+  FieldComProps,
+  IconInput,
+  LogicType,
+  TextContentType,
+  Vars,
+} from '../../../_type';
 
 export type TextSnippetProps = FieldComProps & {
   /**
@@ -26,6 +32,10 @@ export type TextSnippetProps = FieldComProps & {
    */
   props?: Vars;
 
+  /**
+   * 逻辑类型
+   */
+  logicType?: LogicType;
   /**
    * 元素的文本内容
    */

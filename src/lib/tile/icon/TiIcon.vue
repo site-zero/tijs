@@ -58,7 +58,9 @@
     class="ti-icon"
     :class="TopClass"
     :style="TopStyle"
-    :title="props.tip">
+    :data-tip="props.tip"
+    :data-tip-type="props.logicType"
+    data-tip-font-size="m">
     <!-- Emoji Icon-->
     <div
       class="part-main as-emoji"

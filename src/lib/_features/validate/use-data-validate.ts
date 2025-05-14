@@ -94,6 +94,7 @@ export function useDataValidate(props: DataValidationProps) {
       return;
     }
 
+    // 检查空值
     if (_.isNil(val)) {
       if (!options.checkRequired) {
         return;
@@ -110,6 +111,37 @@ export function useDataValidate(props: DataValidationProps) {
       return;
     }
 
+    // 检查值的长度
+    if (fld.minLen || fld.maxLen) {
+      let s = `${val}`;
+
+      // 检查最小长度
+      if (fld.minLen) {
+        if (s.length < fld.minLen) {
+          let title = Util.selectValue(data, fld.title);
+          status[key] = {
+            type: 'error',
+            text: `Field '${title}' value too short, it should be at least ${fld.minLen} characters`,
+          };
+          return;
+        }
+      }
+
+      // 检查最大长度
+      if (fld.maxLen) {
+        let s = `${val}`;
+        if (s.length > fld.maxLen) {
+          let title = Util.selectValue(data, fld.title);
+          status[key] = {
+            type: 'error',
+            text: `Field '${title}' value too long, it should be at most ${fld.maxLen} characters`,
+          };
+          return;
+        }
+      }
+    }
+
+    // 检查值内容
     if (fld.validate) {
       let re = (await fld.validate(val, fld, data)) ?? { type: 'OK' };
       if ('OK' == re.type) {

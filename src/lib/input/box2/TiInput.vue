@@ -94,8 +94,13 @@
       getElement: () => $el.value,
       hideBoxTip: () => _box.value.clearOptionsData(),
       getTipBoxDockStyle: (box: Rect) => {
+        let boxWidth = `${box.width}px`;
+        let minWidth = boxWidth;
+        if (props.tipListMinWidth) {
+          minWidth = `max(${props.tipListMinWidth}, ${boxWidth})`;
+        }
         return {
-          minWidth: props.tipListMinWidth ?? `${box.width}px`,
+          minWidth,
           width: props.tipListWidth,
         };
       },

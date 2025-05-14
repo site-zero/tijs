@@ -47,6 +47,8 @@ export function _build_validatable_field(
     type: field.type,
     validate: buildFieldValidatorGroup(field.validation),
     srcValidation: field.validation,
+    minLen: field.minLen,
+    maxLen: field.maxLen,
     ...visiblity,
     readonly: field.readonly,
     isRequired,

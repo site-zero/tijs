@@ -29,6 +29,7 @@
       <TiIcon
         v-if="props.prefixIcon"
         className="at-prefix"
+        :logicType="props.logicType"
         :value="props.prefixIcon"
         :tip="props.prefixTip" />
       <template v-if="_text.text">
@@ -57,6 +58,7 @@
       <TiIcon
         v-if="props.suffixIcon"
         className="at-suffix"
+        :logicType="props.logicType"
         :value="props.suffixIcon"
         :tip="props.suffixTip" />
     </template>
