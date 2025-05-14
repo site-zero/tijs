@@ -236,6 +236,14 @@ export function getDynamicDict(
  * 获取一个动态字典，如果这个字典不存在，就创建它。
  * 如果不能创建就抛错，以便确保调用者会得到一个非空实例
  *
+ * 通常，获取动态字典会这么调用:
+ *
+ * ```
+ * let d = checkDynamicDict('Pets', 'dog', { race:'dog' });
+ * // 第二个参数 'dog' 被认为是字典键，它会生成一个 `Pets.dog` 的字典实例
+ * // 第三个参数作为动态字典的查询函数的输入，以便生成服务器端读取逻辑
+ * ```
+ *
  * @param name 动态字典名称
  * @param key 字典键
  * @param vars 上下文变量
