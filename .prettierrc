@@ -2,12 +2,13 @@
   "useEditorConfig": false,
   "printWidth": 80,
   "htmlWhitespaceSensitivity": "css",
-  "singleQuote": true,
+  "singleQuote": false,
   "semi": true,
   "proseWrap": "always",
   "quoteProps": "consistent",
   "bracketSameLine": true,
   "vueIndentScriptAndStyle": true,
-  "jsxSingleQuote": true,
-  "singleAttributePerLine": true
+  "scriptIndent": false,
+  "jsxSingleQuote": false,
+  "trailingComma": "es5"
 }

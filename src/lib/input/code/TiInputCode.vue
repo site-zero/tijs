@@ -102,7 +102,7 @@
   //-----------------------------------------------------
   const InputText = computed(() => {
     if (!_item.value) {
-      return '';
+      return props.descriptionPlaceholder ?? '';
     }
     return GetDescription.value(_item.value);
   });
