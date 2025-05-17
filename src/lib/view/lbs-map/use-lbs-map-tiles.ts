@@ -1,7 +1,8 @@
+import L from 'leaflet';
 import _ from "lodash";
-import { getLBSMapStdTileLayer, isLBSMapStdTileType, LbsMapProps, LBSMapTileLayer, LBSMapTileLayerInput, LBSMapStdTileType, LBSMapValueCoords } from "./ti-lbs-map-types";
+import { getLBSMapStdTileLayer, isLBSMapStdTileType, LbsMapProps, LBSMapStdTileType, LBSMapTileLayer, LBSMapTileLayerInput, LBSMapValueCoords } from "./ti-lbs-map-types";
 
-export function useLLTileLayer(LL: any, props: Pick<LbsMapProps, 'valueCoords' | 'tileLayer'>) {
+export function useLLTileLayer(props: Pick<LbsMapProps, 'valueCoords' | 'tileLayer'>) {
     let coords = props.valueCoords ?? 'WGS84';
     let tileLayerList: LBSMapTileLayerInput[] = [];
     if (!props.tileLayer || _.isEmpty(props.tileLayer)) {
@@ -22,16 +23,16 @@ export function useLLTileLayer(LL: any, props: Pick<LbsMapProps, 'valueCoords' |
 
     // 循环处理瓦片层
     for (let it of tileLayerList) {
-        createLLTileLayer(LL, it)
+        createLLTileLayer(it)
     }
 }
 
-function createLLTileLayer(LL: any, tileLayer: LBSMapTileLayerInput) {
+function createLLTileLayer(tileLayer: LBSMapTileLayerInput) {
     let tile: LBSMapTileLayer;
     if (isLBSMapStdTileType(tileLayer)) {
         tile = getLBSMapStdTileLayer(tileLayer)
     } else {
         tile = _.cloneDeep(tileLayer);
     }
-    return LL.tileLayer(tile.url, tile.options ?? {});
+    return L.tileLayer(tile.url, tile.options ?? {});
 }

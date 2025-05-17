@@ -1,14 +1,14 @@
 import _ from 'lodash'
 import { latlngObjToTuple, translateCoordsForLatlngObj, translateCoordsForLatlngTuple } from "./gis"
-import { GeoJson, LatLngObj, LatLngTuple, LbsMapProps, LBSMapValue, LBSMapValueCoords, LBSMapValueType } from "./ti-lbs-map-types"
+import { GeoJson, LatLngObj, LatLngTuple, LBSMapData, LbsMapProps, LBSMapValueCoords, LBSMapValueType } from "./ti-lbs-map-types"
 
-export function getMapData(props: LbsMapProps, baseTileCoords: LBSMapValueCoords) {
+export function getMapData(props: LbsMapProps, baseTileCoords: LBSMapValueCoords): LBSMapData | null {
   let val = props.value
   if (_.isEmpty(val)) {
     val = undefined
   }
   // Guard
-  if (val && !props.defaultLocation) {
+  if (!val && !props.defaultLocation) {
     return null
   }
 
@@ -29,7 +29,7 @@ function evalMapData(
   value: any,
   valType: LBSMapValueType = 'obj',
   // SAME as value
-  dftLo?: any): LBSMapValue | LBSMapValue[] | GeoJson {
+  dftLo?: any): LBSMapData {
 
   // 处理对象
   if ('obj' == valType) {

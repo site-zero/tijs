@@ -1,8 +1,9 @@
-import L, { LatLng } from "leaflet";
+import L from "leaflet";
 import _ from "lodash";
 import { IconInput, LogicType } from "../../../_type";
 import { Icons, Num } from "../../../core";
-import { LatLngObj, LBSMapDrawContext, LBSMapEditMarkerIconOptions, LbsMapProps } from "./ti-lbs-map-types";
+import { translateCoordsForLatlngObj } from "./gis/use-lbs-coords";
+import { getLBSMapStdTileLayer, isLBSMapStdTileType, LatLngObj, LBSMapData, LBSMapDrawContext, LBSMapEditMarkerIconOptions, LbsMapEmitter, LbsMapProps, LBSMapTileLayer, LBSMapValueCoords } from "./ti-lbs-map-types";
 
 export type LbsMapApi = ReturnType<typeof useLbsMap>
 
@@ -23,7 +24,9 @@ export type LbsMapIconOptions = {
     shadowAnchor?: [number, number],
 };
 
-export function useLbsMap(props: LbsMapProps, _dc: LBSMapDrawContext) {
+export function useLbsMap(props: LbsMapProps, _dc: LBSMapDrawContext, emit: LbsMapEmitter) {
+    // 初始化设置基础瓦片层坐标系
+    _dc.baseTileCoords = getBaseTileCoords(props);
     //--------------------------------------------
     // 帮助方法
     //--------------------------------------------
@@ -119,14 +122,58 @@ export function useLbsMap(props: LbsMapProps, _dc: LBSMapDrawContext) {
         return ss.join(", ");
     }
     //--------------------------------------
+    // 数据转换方法
+    //--------------------------------------
+    const _val_coords = props.valueCoords ?? 'WGS84'
+    //--------------------------------------
+    function trans_obj_from_tiles_to_value(obj: LatLngObj) {
+        return translateCoordsForLatlngObj(_dc.baseTileCoords, _val_coords, obj);
+    }
+    function trans_obj_from_value_to_tiles(obj: LatLngObj) {
+        return translateCoordsForLatlngObj(_val_coords, _dc.baseTileCoords, obj);
+    }
+    //--------------------------------------
+
+    //--------------------------------------
     // 初始化地图组件
     //--------------------------------------
-    
+
+    //--------------------------------------
+    // 通知改动
+    //--------------------------------------
+    function notifyChange(change: LBSMapData) {
+        if (!_.isEqual(change, props.value)) {
+            emit('change', change);
+        }
+    }
+
     //--------------------------------------
     // 返回特性
     //--------------------------------------
     return {
         Icon, GetIconSrc, updateGeoInfo,
-        GeoStr, GeoPointStr
+        GeoStr, GeoPointStr,
+        // 数据转换方法
+        trans_obj_from_tiles_to_value,
+        trans_obj_from_value_to_tiles,
+        // 通知改动
+        notifyChange
     }
+}
+
+export function getBaseTileCoords(props: LbsMapProps): LBSMapValueCoords {
+    if (_.isEmpty(props.tileLayer)) {
+        return 'WGS84';
+    }
+    let tl = _.first(_.concat(props.tileLayer ?? []))
+    if (!tl) {
+        return 'WGS84';
+    }
+    let tile: LBSMapTileLayer;
+    if (isLBSMapStdTileType(tl)) {
+        tile = getLBSMapStdTileLayer(tl);
+    } else {
+        tile = tl;
+    }
+    return tile.coords ?? 'WGS84'
 }

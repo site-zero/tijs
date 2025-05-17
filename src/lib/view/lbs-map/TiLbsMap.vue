@@ -10,20 +10,23 @@
   //--------------------------------------------
   const props = withDefaults(defineProps<LbsMapProps>(), {});
   //--------------------------------------------
-  const _dc = reactive({
+  const _dc: LBSMapDrawContext = reactive({
     $map: undefined,
     $live: undefined,
+
+    geo: {},
+
+    baseTileCoords: 'WGS84',
+
+    lastMove: 0,
+    loading: false,
 
     pointerClick: undefined,
     pointerHover: undefined,
 
-    geo: {},
-
-    lastMove: 0,
-    loading: false,
-  } as LBSMapDrawContext);
+  });
   //--------------------------------------------
-  const _api = useLbsMap(props, _dc);
+  const _api = computed(() => useLbsMap(props, _dc, emit));
   //--------------------------------------------
   const TopClass = computed(() => {
     return CssUtils.mergeClassName(props.className);

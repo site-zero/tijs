@@ -171,12 +171,12 @@ export function getLatlngObjBounds(latlngObjs: LatLngObj[]) {
     return __build_bounds(bo)
 }
 //------------------------------------------------
-export function latlngTupleToObj(lal: LatLngTuple) {
-    let [lat, lng] = lal;
-    return { lat, lng }
+export function latlngTupleToObj(lal: LatLngTuple): LatLngObj {
+    let [lat, lng, alt] = lal;
+    return { lat, lng, alt }
 }
 //------------------------------------------------
-export function latlngObjToTuple(lal: LatLngObj) {
-    let { lat, lng } = lal;
-    return [lat, lng]
+export function latlngObjToTuple(lal: LatLngObj): LatLngTuple {
+    let { lat, lng, alt } = lal;
+    return [lat, lng, alt]
 }
