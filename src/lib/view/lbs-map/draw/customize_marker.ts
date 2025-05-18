@@ -2,20 +2,18 @@ import L from 'leaflet';
 import _ from "lodash";
 import { Vars } from "../../../..";
 import { I18n, Util } from "../../../../core";
-import { LatLngObj, LBSMakerOptions, LBSMapDrawContext } from "../ti-lbs-map-types";
-import { LbsMapApi } from "../use-lbs-map";
+import { LatLngObj } from "../ti-lbs-map-types";
+import { DrawPointSetup } from './draw-types';
 
 
-export function __customize_marker_behaviors(
-    _dc: LBSMapDrawContext,
-    _api: LbsMapApi,
-    $marker: L.Marker, obj: LatLngObj, options: LBSMakerOptions = {}) {
+export function __customize_marker_behaviors($marker: L.Marker, obj: LatLngObj, setup: DrawPointSetup) {
+    let { _dc, api } = setup;
     let {
         markerIcon,
         markerIconOptions = {},
         markerPopup,
         markerPopupOptions = {}
-    } = options;
+    } = setup;
 
     // Customized Icon
     if (markerIcon) {
@@ -24,7 +22,7 @@ export function __customize_marker_behaviors(
         })
         //console.log({icon})
         if (icon) {
-            let ii = _api.Icon(icon, markerIconOptions);
+            let ii = api.Icon(icon, markerIconOptions);
             $marker.setIcon(ii)
         }
     }

@@ -116,7 +116,7 @@ export function useLbsMap(
   }
 
   //--------------------------------------
-  function updateGeoInfo() {}
+  function updateGeoInfo() { }
 
   //--------------------------------------
   function GeoStr(v?: number) {
@@ -184,9 +184,9 @@ export function useLbsMap(
     this.lastMove = now;
   }
   //--------------------------------------
-  function OnMapPointerClick(evt: L.LeafletMouseEvent) {}
+  function OnMapPointerClick(evt: L.LeafletMouseEvent) { }
   //--------------------------------------
-  function OnMapPointerMove(evt: L.LeafletMouseEvent) {}
+  function OnMapPointerMove(evt: L.LeafletMouseEvent) { }
 
   //--------------------------------------
   // 通知改动

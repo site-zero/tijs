@@ -364,6 +364,7 @@ export type LbsMapProps = CommonProps &
          */
         imageIconBase?: string;
 
+
         //--------------------------------------------
         // Circle 行为设置
         //--------------------------------------------
@@ -372,6 +373,14 @@ export type LbsMapProps = CommonProps &
          * 默认为`10`*米*
          */
         circleRadius?: number;
+
+        //--------------------------------------------
+        // 绘制相关的配置
+        //--------------------------------------------
+        fitBoundsOptions?: L.FitBoundsOptions;
+        markerOptions?: L.MarkerOptions;
+        polylineOptions?: L.PolylineOptions;
+        polygonOptions?: L.PolylineOptions;
 
         //--------------------------------------------
         // Measure
