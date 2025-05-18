@@ -1,8 +1,8 @@
 import _ from 'lodash'
 import { latlngObjToTuple, translateCoordsForLatlngObj, translateCoordsForLatlngTuple } from "./gis"
-import { GeoJson, LatLngObj, LatLngTuple, LBSMapData, LbsMapProps, LBSMapValueCoords, LBSMapValueType } from "./ti-lbs-map-types"
+import { GeoJson, LatLngObj, LatLngTuple, LBSMapData, LbsMapProps, LbsMapValueCoords, LbsMapValueType } from "./ti-lbs-map-types"
 
-export function getMapData(props: LbsMapProps, baseTileCoords: LBSMapValueCoords): LBSMapData | null {
+export function getMapData(props: LbsMapProps, baseTileCoords: LbsMapValueCoords): LBSMapData | null {
   let val = props.value
   if (_.isEmpty(val)) {
     val = undefined
@@ -23,11 +23,11 @@ export function getMapData(props: LbsMapProps, baseTileCoords: LBSMapValueCoords
 }
 
 function evalMapData(
-  baseTileCoords: LBSMapValueCoords,
-  valueCoords: LBSMapValueCoords,
+  baseTileCoords: LbsMapValueCoords,
+  valueCoords: LbsMapValueCoords,
   // LBSMapValue | LBSMapValue[] | GeoJson
   value: any,
-  valType: LBSMapValueType = 'obj',
+  valType: LbsMapValueType = 'obj',
   // SAME as value
   dftLo?: any): LBSMapData {
 

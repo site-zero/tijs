@@ -1,5 +1,5 @@
-@use '@site0/tijs/sass/_all.scss' as *;
-
-.ti-lbs-map {
-    
+.ti-lbl-map {
+  > main {
+    background-color: var(--ti-color-mask-bushy);
+  }
 }

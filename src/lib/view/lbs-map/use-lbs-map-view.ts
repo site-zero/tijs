@@ -1,5 +1,5 @@
 import L, { LatLngTuple } from "leaflet";
-import _ from "lodash";
+import { draw_map_data } from "./draw";
 import {
   getLatlngObjBounds,
   getLatlngTupleBounds,
@@ -12,16 +12,16 @@ import {
   isLatLngTuple,
   LatLngObj,
   LBSMapData,
-  LBSMapDrawContext,
+  LbsMapDrawContext,
   LbsMapProps,
 } from "./ti-lbs-map-types";
 import { LbsMapApi } from "./use-lbs-map";
-import { useLLTileLayer } from "./use-lbs-map-tiles";
+import { useTileLayer } from "./use-lbs-map-tiles";
 
 export function initMap(
   getMainElement: () => HTMLElement | null,
   props: LbsMapProps,
-  _dc: LBSMapDrawContext,
+  _dc: LbsMapDrawContext,
   api: LbsMapApi,
   mapData: LBSMapData | null
 ) {
@@ -57,7 +57,7 @@ export function initMap(
     .addTo(_dc.$map);
 
   // Create the main bg-layer
-  useLLTileLayer(props);
+  useTileLayer(props);
 
   // Events
   _dc.$map.on("move", (evt) => {
@@ -77,24 +77,24 @@ export function initMap(
   initMapView(props, _dc, mapData);
 
   // Then Render the data
-  redrawMap(props, _dc, mapData);
+  redrawMap(props, _dc, api, mapData);
 }
 
 export function initMapView(
   props: LbsMapProps,
-  _dc: LBSMapDrawContext,
+  _dc: LbsMapDrawContext,
   mapData: LBSMapData | null
 ) {
   //console.log("initMapView")
   // Get current zoom, keep the last user zoom state
-  let zoom = _dc.geo.zoom || props.zoom;
+  let zoom = _dc.geo.zoom ?? props.zoom;
 
   let fromCoords = props.valueCoords ?? "WGS84";
   let toCoords = _dc.baseTileCoords;
 
   // Default view
-  if (mapData && _dc.$map) {
-    // 采用北京作为默认的位置
+  if (_dc.$map) {
+    // 采用【北京】作为默认的位置
     let lal: LatLngObj = {
       lat: 39.97773512677837,
       lng: 116.3385673945887,
@@ -159,7 +159,8 @@ export function initMapView(
 
 function redrawMap(
   props: LbsMapProps,
-  _dc: LBSMapDrawContext,
+  _dc: LbsMapDrawContext,
+  api: LbsMapApi,
   mapData: LBSMapData | null
 ) {
   let { $map, $live } = _dc;
@@ -175,18 +176,16 @@ function redrawMap(
 
   // Draw data
   if (mapData) {
-    let func = this[this.RedrawFuncName];
-    if (_.isFunction(func)) {
-      func(mapData, {
-        autoFitBounds: props.autoFitBounds,
-        showMarker: props.showMarker,
-        markerIcon: props.markerIcon,
-        markerIconOptions: props.markerIconOptions,
-        markerPopup: props.markerPopup,
-        markerPopupOptions: props.markerPopupOptions,
-      });
-    } else {
-      throw `Invalid RedrawFuncName="${this.RedrawFuncName}"`;
-    }
+    draw_map_data(mapData, {
+      _dc,
+      props,
+      api,
+      autoFitBounds: props.autoFitBounds,
+      showMarker: props.showMarker,
+      markerIcon: props.markerIcon,
+      markerIconOptions: props.markerIconOptions,
+      markerPopup: props.markerPopup,
+      markerPopupOptions: props.markerPopupOptions,
+    });
   }
 }

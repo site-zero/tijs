@@ -1,4 +1,4 @@
-import { LatLngObj, LatLngTuple, LBSMapValueCoords } from "../ti-lbs-map-types";
+import { LatLngObj, LatLngTuple, LbsMapValueCoords } from "../ti-lbs-map-types";
 
 const pi = 3.1415926535897932384626;
 const a = 6378245.0;
@@ -72,21 +72,21 @@ export function SAME_COORDS(lat: number, lng: number) {
 // 准备转换映射
 //---------------------------------------------
 type COORDS_TRANS = (lat: number, lng: number) => LatLngObj
-const COORDS_TO: Map<LBSMapValueCoords, Map<LBSMapValueCoords, COORDS_TRANS>> =
-    new Map<LBSMapValueCoords, Map<LBSMapValueCoords, COORDS_TRANS>>();
+const COORDS_TO: Map<LbsMapValueCoords, Map<LbsMapValueCoords, COORDS_TRANS>> =
+    new Map<LbsMapValueCoords, Map<LbsMapValueCoords, COORDS_TRANS>>();
 
 //---------------------------------------------
-const WGS84_TO = new Map<LBSMapValueCoords, COORDS_TRANS>();
+const WGS84_TO = new Map<LbsMapValueCoords, COORDS_TRANS>();
 WGS84_TO.set('WGS84', SAME_COORDS);
 WGS84_TO.set('BD09', WGS84_TO_BD09);
 WGS84_TO.set('GCJ02', WGS84_TO_GCJ02);
 //---------------------------------------------
-const GCJ02_TO = new Map<LBSMapValueCoords, COORDS_TRANS>();
+const GCJ02_TO = new Map<LbsMapValueCoords, COORDS_TRANS>();
 GCJ02_TO.set('WGS84', GCJ02_TO_WGS84);
 GCJ02_TO.set('BD09', GCJ02_TO_BD09);
 GCJ02_TO.set('GCJ02', SAME_COORDS);
 //---------------------------------------------
-const BD09_TO = new Map<LBSMapValueCoords, COORDS_TRANS>();
+const BD09_TO = new Map<LbsMapValueCoords, COORDS_TRANS>();
 BD09_TO.set('WGS84', BD09_TO_WGS84);
 BD09_TO.set('BD09', SAME_COORDS);
 BD09_TO.set('GCJ02', SAME_COORDS);
@@ -105,7 +105,7 @@ COORDS_TO.set('BD09', BD09_TO);
  * @param lal 源坐标
  * @returns 目标坐标
  */
-export function translateCoordsForLatlngObj(from: LBSMapValueCoords, to: LBSMapValueCoords, lal: LatLngObj): LatLngObj {
+export function translateCoordsForLatlngObj(from: LbsMapValueCoords, to: LbsMapValueCoords, lal: LatLngObj): LatLngObj {
     let trans = COORDS_TO.get(from)?.get(to);
     let { lat, lng } = lal;
     if (!trans) {
@@ -114,7 +114,7 @@ export function translateCoordsForLatlngObj(from: LBSMapValueCoords, to: LBSMapV
     return trans(lat, lng);
 }
 
-export function translateCoordsForLatlngTuple(from: LBSMapValueCoords, to: LBSMapValueCoords, lal: LatLngTuple): LatLngTuple {
+export function translateCoordsForLatlngTuple(from: LbsMapValueCoords, to: LbsMapValueCoords, lal: LatLngTuple): LatLngTuple {
     let trans = COORDS_TO.get(from)?.get(to);
     let [lat, lng] = lal;
     if (!trans) {

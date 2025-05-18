@@ -2,18 +2,19 @@ import L from "leaflet";
 import _ from "lodash";
 import { IconInput, LogicType } from "../../../_type";
 import { Icons, Num } from "../../../core";
+import { useKeep } from "../../_features";
 import { translateCoordsForLatlngObj } from "./gis/use-lbs-coords";
 import {
-  getLBSMapStdTileLayer,
-  isLBSMapStdTileType,
+  getLbsMapStdTileLayer,
+  isLbsMapStdTileType,
   LatLngObj,
   LBSMapData,
-  LBSMapDrawContext,
-  LBSMapEditMarkerIconOptions,
+  LbsMapDrawContext,
+  LbsMapEditMarkerIconOptions,
   LbsMapEmitter,
   LbsMapProps,
   LBSMapTileLayer,
-  LBSMapValueCoords,
+  LbsMapValueCoords,
 } from "./ti-lbs-map-types";
 
 export type LbsMapApi = ReturnType<typeof useLbsMap>;
@@ -35,19 +36,33 @@ export type LbsMapIconOptions = {
   shadowAnchor?: [number, number];
 };
 
+/**
+ * 该函数用于初始化 LBS 地图相关功能，处理地图的图标、坐标转换、事件响应等操作。
+ *
+ * @param props - LBS 地图的属性配置
+ * @param _dc - LBS 地图的绘制上下文
+ * @param emit - 用于触发事件函数
+ * @returns 返回一个包含各种地图操作方法的接口对象
+ */
 export function useLbsMap(
   props: LbsMapProps,
-  _dc: LBSMapDrawContext,
+  _dc: LbsMapDrawContext,
   emit: LbsMapEmitter
 ) {
+  //--------------------------------------------
   // 初始化设置基础瓦片层坐标系
   _dc.baseTileCoords = getBaseTileCoords(props);
+  //--------------------------------------------
+  // 持久化
+  //--------------------------------------------
+  const _keep = useKeep(props.keepZoomBy);
+  _dc.geo.zoom = _keep.loadNumber(props.zoom);
   //--------------------------------------------
   // 帮助方法
   //--------------------------------------------
   function Icon(
     urlOrIcon: IconInput,
-    options: LBSMapEditMarkerIconOptions = {}
+    options: LbsMapEditMarkerIconOptions = {}
   ) {
     if (!urlOrIcon) return new L.Icon.Default();
 
@@ -116,7 +131,7 @@ export function useLbsMap(
   }
 
   //--------------------------------------
-  function updateGeoInfo() { }
+  function updateGeoInfo() {}
 
   //--------------------------------------
   function GeoStr(v?: number) {
@@ -149,7 +164,7 @@ export function useLbsMap(
   //--------------------------------------
   // 响应事件
   //--------------------------------------
-  function OnMapMove(evt: L.LeafletEvent) {
+  function OnMapMove(_evt: L.LeafletEvent) {
     let { $map } = _dc;
     if (!$map) {
       return;
@@ -170,26 +185,44 @@ export function useLbsMap(
       N: bou.getNorth(),
     };
     // Keep zoom in local
-    if (props.keepZoomBy) {
-      Ti.Storage.local.set(this.keepZoomBy, this.geo.zoom);
+    if (_keep.enabled) {
+      _keep.save(_dc.geo.zoom);
     }
     // If cooling, notify
-    if (!this.__check_cooling && this.cooling > 0) {
-      this.__check_cooling = true;
+    if (!_dc.is_check_cooling && _dc.cooling > 0) {
+      _dc.is_check_cooling = true;
       window.setTimeout(() => {
-        this.checkMoveCooling();
-      }, this.cooling + 10);
+        checkMoveCooling();
+      }, _dc.cooling + 10);
     }
     // lastMove for cooling
-    this.lastMove = now;
+    _dc.lastMove = now;
   }
   //--------------------------------------
-  function OnMapPointerClick(evt: L.LeafletMouseEvent) { }
+  function OnMapPointerClick(evt: L.LeafletMouseEvent) {
+    _dc.pointerClick = evt.latlng;
+  }
   //--------------------------------------
-  function OnMapPointerMove(evt: L.LeafletMouseEvent) { }
+  function OnMapPointerMove(evt: L.LeafletMouseEvent) {
+    _dc.pointerHover = evt.latlng;
+  }
 
   //--------------------------------------
   // 通知改动
+  //--------------------------------------
+  function checkMoveCooling() {
+    let now = Date.now();
+    let isCooling = now - _dc.lastMove > _dc.cooling;
+    if (isCooling || !_dc.lastMove) {
+      _dc.is_check_cooling = false;
+      //console.log("notify map move", this.geo)
+      emit("map:move", _dc.geo);
+    } else {
+      window.setTimeout(() => {
+        checkMoveCooling();
+      }, _dc.cooling / 2);
+    }
+  }
   //--------------------------------------
   function notifyChange(change: LBSMapData) {
     if (!_.isEqual(change, props.value)) {
@@ -214,11 +247,12 @@ export function useLbsMap(
     OnMapPointerClick,
     OnMapPointerMove,
     // 通知改动
+    checkMoveCooling,
     notifyChange,
   };
 }
 
-export function getBaseTileCoords(props: LbsMapProps): LBSMapValueCoords {
+export function getBaseTileCoords(props: LbsMapProps): LbsMapValueCoords {
   if (_.isEmpty(props.tileLayer)) {
     return "WGS84";
   }
@@ -227,8 +261,8 @@ export function getBaseTileCoords(props: LbsMapProps): LBSMapValueCoords {
     return "WGS84";
   }
   let tile: LBSMapTileLayer;
-  if (isLBSMapStdTileType(tl)) {
-    tile = getLBSMapStdTileLayer(tl);
+  if (isLbsMapStdTileType(tl)) {
+    tile = getLbsMapStdTileLayer(tl);
   } else {
     tile = tl;
   }

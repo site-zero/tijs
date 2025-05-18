@@ -1,6 +1,6 @@
 import { LatLngTuple } from 'leaflet';
 import _ from 'lodash';
-import { LatLngObj, LBSMapBound, LBSMapBoundInput } from "../ti-lbs-map-types";
+import { LatLngObj, LbsMapBound, LbsMapBoundInput } from "../ti-lbs-map-types";
 
 
 export function getLngToWest(lng: number, west: number) {
@@ -104,7 +104,7 @@ export function getCenter(lalList: LatLngObj[] = []) {
 }
 
 //------------------------------------------------
-export function isInBounds(lat: number, lng: number, bounds: LBSMapBound) {
+export function isInBounds(lat: number, lng: number, bounds: LbsMapBound) {
     let { N, S, E, W } = bounds
     if (lat > N || lat < S)
         return false
@@ -114,17 +114,17 @@ export function isInBounds(lat: number, lng: number, bounds: LBSMapBound) {
     return true
 }
 //------------------------------------------------
-export function isLatLngObjInBounds(lal: LatLngObj, bounds: LBSMapBound) {
+export function isLatLngObjInBounds(lal: LatLngObj, bounds: LbsMapBound) {
     let { lat, lng } = lal;
     return isInBounds(lat, lng, bounds)
 }
 //------------------------------------------------
-export function isLatLngTupleInBounds(lal: LatLngTuple, bounds: LBSMapBound) {
+export function isLatLngTupleInBounds(lal: LatLngTuple, bounds: LbsMapBound) {
     let [lat, lng] = lal;
     return isInBounds(lat, lng, bounds)
 }
 //------------------------------------------------
-function __build_bounds(bounds: LBSMapBoundInput) {
+function __build_bounds(bounds: LbsMapBoundInput) {
     let { N, S, E, W } = bounds;
     return {
         N, S, E, W,
