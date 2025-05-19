@@ -21,7 +21,7 @@ export function useTileLayer(
         {
           GCJ02: "GAODE_ROADMAP",
           BD09: "GAODE_ROADMAP",
-          WGS84: "TIANDITU_VECTOR_NOTE",
+          WGS84: "OPENSTREAT",
         } as Record<LbsMapValueCoords, LbsMapStdTileType>
       )[coords],
     ];
