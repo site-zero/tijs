@@ -16,7 +16,7 @@ export function draw_list_as_cluster(
     return;
   }
 
-  var $cluster = L.markerClusterGroup();
+  var $cluster = (L as any).markerClusterGroup();
   for (let lal of latlngs) {
     if (isLatLngObj(lal)) {
       draw_obj_as_point(lal, setup)?.addTo($cluster);
