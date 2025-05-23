@@ -1,21 +1,21 @@
 <script lang="ts" setup>
-  import JSON5 from 'json5';
-  import { computed, inject } from 'vue';
-  import { TiTextSnippet, useFieldCom, useReadonly } from '../../';
-  import { LogicType, ValueChange, getFieldValue } from '../../../_type';
-  import { CssUtils } from '../../../core';
+  import JSON5 from "json5";
+  import { computed, inject } from "vue";
+  import { TiTextSnippet, useFieldCom, useReadonly } from "../../";
+  import { LogicType, ValueChange, getFieldValue } from "../../../_type";
+  import { CssUtils } from "../../../core";
   import {
     FIELD_STATUS_KEY,
     GridFieldsStrictField,
     GridItemEmitter,
-  } from './ti-grid-fields-types';
+  } from "./ti-grid-fields-types";
   import {
     getFieldIcon,
     getFieldTextInfo,
     getFieldTitleAlign,
     getFieldTitleStyle,
     getFieldTopStyle,
-  } from './use-field-style';
+  } from "./use-field-style";
   //-------------------------------------------------
   defineOptions({
     inheritAttrs: false,
@@ -36,11 +36,11 @@
   //-------------------------------------------------
   const TopClass = computed(() => {
     return CssUtils.mergeClassName(props.className, props.fieldLayoutMode, {
-      'with-title': hasTitle.value,
-      'with-tip': hasTip.value,
-      'no-title': !hasTitle.value,
-      'no-tip': !hasTip.value,
-      'is-disabled': props.isDisabled(props.data),
+      "with-title": hasTitle.value,
+      "with-tip": hasTip.value,
+      "no-title": !hasTitle.value,
+      "no-tip": !hasTip.value,
+      "is-disabled": props.isDisabled(props.data),
     });
   });
   //-------------------------------------------------
@@ -58,11 +58,11 @@
   );
   //-------------------------------------------------
   const FieldLogicType = computed((): LogicType | undefined => {
-    if ('warn' == FieldStatus.value?.type) {
-      return 'warn';
+    if ("warn" == FieldStatus.value?.type) {
+      return "warn";
     }
-    if ('error' == FieldStatus.value?.type) {
-      return 'danger';
+    if ("error" == FieldStatus.value?.type) {
+      return "danger";
     }
   });
   //-------------------------------------------------
@@ -91,7 +91,7 @@
   );
   //-------------------------------------------------
   const FieldCtrlTip = computed(() => {
-    let html = ['<table>'];
+    let html = ["<table>"];
     html.push(`<tr>
       <td>Title:</td>
       <td style="color:var(--ti-color-info-r)">${FieldText.value.title}</td>
@@ -108,7 +108,7 @@
     </tr>`);
     html.push(`<tr>
       <td>Type:</td>
-      <td style="color:var(--ti-color-primary-r)">${props.type || 'String'}</td>
+      <td style="color:var(--ti-color-primary-r)">${props.type || "String"}</td>
     </tr>`);
     html.push(`<tr>
       <td>Value:</td>
@@ -116,8 +116,8 @@
         FieldValue.value
       )}</td>
     </tr>`);
-    html.push('</table>');
-    return html.join('');
+    html.push("</table>");
+    return html.join("");
   });
   //-------------------------------------------------
   const FieldValue = computed(() => {
@@ -155,11 +155,11 @@
   });
   //-------------------------------------------------
   const ListenValueChange = computed(() => {
-    let key = props.changeEventName ?? 'change';
+    let key = props.changeEventName ?? "change";
     return {
       [key]: (val: any) => {
         //console.log('value-chagne!!!', val);
-        emit('value-change', {
+        emit("value-change", {
           uniqKey: props.uniqKey,
           name: props.name,
           value: val,
@@ -170,8 +170,8 @@
   });
   //-------------------------------------------------
   function onTitleChange(payload: ValueChange<string>) {
-    console.log('onTitleChange', payload);
-    emit('name-change', {
+    console.log("onTitleChange", payload);
+    emit("name-change", {
       value: payload.value,
       oldVal: props.uniqKey,
     });
@@ -204,9 +204,7 @@
       :ctrlTip="FieldCtrlTip"
       @change="onTitleChange" />
     <!--===============: 字段值 :===================-->
-    <div
-      class="field-part as-value"
-      :style="props.fieldValueStyle">
+    <div class="field-part as-value" :style="props.fieldValueStyle">
       <component
         :is="FieldCom.rawCom"
         v-bind="FieldCom.comConf"
@@ -224,6 +222,7 @@
       :text="FieldText.tip ?? ''"
       :textType="FieldText.tipType"
       :logicType="FieldLogicType"
+      :autoI18n="true"
       :comType="props.tipBy?.comType"
       :comConf="props.tipBy?.comConf"
       :autoValue="props.tipBy?.autoValue"
@@ -238,5 +237,5 @@
   </div>
 </template>
 <style lang="scss">
-  @use './style/gf-it-field.scss';
+  @use "./style/gf-it-field.scss";
 </style>
