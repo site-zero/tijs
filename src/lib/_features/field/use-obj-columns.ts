@@ -1,6 +1,7 @@
-import _ from 'lodash';
-import { InputBoxProps, LabelProps } from '../../';
-import { ColumnRefer, TableInputColumn } from '../../../_type';
+import _ from "lodash";
+import { InputBoxProps, LabelProps } from "../../";
+import { ColumnRefer, TableInputColumn } from "../../../_type";
+import { I18n } from "../../../core";
 //-----------------------------------------------
 type QuickColumnInfo = {
   _key: string;
@@ -57,12 +58,12 @@ function defineObjColumns(featureName: string): ObjColumnsFeature {
     let re = _.cloneDeep(_column);
     _.assign(
       re,
-      _.omit(column, 'comConf', 'activatedComConf', 'readonlyComConf')
+      _.omit(column, "comConf", "activatedComConf", "readonlyComConf")
     );
 
     // 默认字段
     re.comConf = _.assign(
-      { boxRadius: 'none', hideBorder: true },
+      { boxRadius: "none", hideBorder: true },
       re.comConf,
       column?.comConf
     );
@@ -71,7 +72,7 @@ function defineObjColumns(featureName: string): ObjColumnsFeature {
     if (re.activatedComConf) {
       re.activatedComConf = _.assign(
         {
-          boxRadius: 'none',
+          boxRadius: "none",
           hideBorder: true,
           autoSelect: true,
           autoFocus: true,
@@ -84,7 +85,7 @@ function defineObjColumns(featureName: string): ObjColumnsFeature {
     // 只读字段
     if (re.readonlyComConf) {
       re.readonlyComConf = _.assign(
-        { boxRadius: 'none', hideBorder: true },
+        { boxRadius: "none", hideBorder: true },
         re.readonlyComConf,
         column?.readonlyComConf
       );
@@ -98,8 +99,8 @@ function defineObjColumns(featureName: string): ObjColumnsFeature {
     }
 
     if (col_info.disabled) {
-      if (!re.comType || 'TiLabel' === re.comType) {
-        re.comConf.type = 'disable';
+      if (!re.comType || "TiLabel" === re.comType) {
+        re.comConf.type = "disable";
       } else {
         re.comConf.disable = true;
       }
@@ -174,22 +175,22 @@ function defineObjColumns(featureName: string): ObjColumnsFeature {
       column.name = uniqKey;
     }
     // 表格内，如果是标签，那么默认是没有圆角的
-    if (column.comType == 'TiLabel' || !column.comType) {
+    if (column.comType == "TiLabel" || !column.comType) {
       column.comConf = column.comConf ?? {};
-      _.defaults(column.comConf, { boxRadius: 'none' } as LabelProps);
+      _.defaults(column.comConf, { boxRadius: "none" } as LabelProps);
     }
     // 表格内，如果是输入框，那么默认是没有圆角和边框的
-    if (/^(Ti(Input|Droplist))/.test(column.comType ?? '')) {
+    if (/^(Ti(Input|Droplist))/.test(column.comType ?? "")) {
       column.comConf = column.comConf ?? {};
       _.defaults(column.comConf, {
-        boxRadius: 'none',
+        boxRadius: "none",
         hideBorder: true,
       } as InputBoxProps);
     }
-    if (/^(Ti(Input|Droplist))/.test(column.activatedComType ?? '')) {
+    if (/^(Ti(Input|Droplist))/.test(column.activatedComType ?? "")) {
       column.activatedComConf = column.activatedComConf ?? {};
       _.defaults(column.activatedComConf, {
-        boxRadius: 'none',
+        boxRadius: "none",
         hideBorder: true,
       } as InputBoxProps);
     }
@@ -210,7 +211,7 @@ function defineObjColumns(featureName: string): ObjColumnsFeature {
 //-----------------------------------------------
 const _OBJ_COLUMN_INSTANCES = new Map<string, ObjColumnsFeature>();
 //-----------------------------------------------
-export function useObjColumns(name = '_DEFAULT_COLUMN_SET'): ObjColumnsFeature {
+export function useObjColumns(name = "_DEFAULT_COLUMN_SET"): ObjColumnsFeature {
   let re = _OBJ_COLUMN_INSTANCES.get(name);
   if (!re) {
     re = defineObjColumns(name);
@@ -241,17 +242,17 @@ export function useObjColumns(name = '_DEFAULT_COLUMN_SET'): ObjColumnsFeature {
  */
 function parseNameColumn(key: string): QuickColumnInfo {
   let candidate = false;
-  if (key.startsWith('~')) {
+  if (key.startsWith("~")) {
     candidate = true;
     key = key.substring(1).trim();
   }
 
-  let parts = key.split(':');
+  let parts = key.split(":");
   let name = parts[0];
   let re = { candidate } as QuickColumnInfo;
   if (parts[1]) {
-    re.readonly = parts[1].indexOf('read') >= 0;
-    re.disabled = parts[1].indexOf('disable') >= 0;
+    re.readonly = parts[1].indexOf("read") >= 0;
+    re.disabled = parts[1].indexOf("disable") >= 0;
   }
   if (parts[2]) {
     re.width = parseInt(parts[2]);
@@ -269,6 +270,13 @@ function parseNameColumn(key: string): QuickColumnInfo {
         re.name = m2[1];
         re.title = m2[3];
         re.tip = m2[5];
+      }
+    }
+    // 这里翻译一下，可以支持 '#{key}' 或者 'i18n:{key}'
+    if (re.title) {
+      let m = /^(#|i18n:)(.+)$/.exec(re.title);
+      if (m) {
+        re.title = I18n.get(m[2]);
       }
     }
   }
