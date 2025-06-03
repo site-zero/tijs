@@ -1,6 +1,6 @@
 <script setup lang="ts">
-  import _ from 'lodash';
-  import { computed, onUnmounted, provide, ref } from 'vue';
+  import _ from "lodash";
+  import { computed, onUnmounted, provide, ref } from "vue";
   import {
     ActionBarItem,
     AppModalInitProps,
@@ -11,9 +11,8 @@
     Callback,
     EmitAdaptor,
     Vars,
-  } from '../../_type';
-  import { CssUtils } from '../../core';
-  import { getLogger } from '../../core/log/ti-log';
+  } from "../../_type";
+  import { CssUtils } from "../../core";
   import {
     ActionBarEvent,
     Alert,
@@ -27,10 +26,9 @@
     makeAppModelEventListeners,
     positionToTransName,
     watchAppResize,
-  } from '../../lib';
+  } from "../../lib";
 
-  const log = getLogger('TiAppModal');
-
+  const debug = false;
   //
   // Global Bus
   //
@@ -39,17 +37,17 @@
   watchAppResize(bus);
 
   const props = withDefaults(defineProps<AppModalInitProps>(), {
-    position: 'center',
-    textOk: 'i18n:ok',
-    textCancel: 'i18n:cancel',
-    minWidth: '200px',
-    minHeight: '125px',
+    position: "center",
+    textOk: "i18n:ok",
+    textCancel: "i18n:cancel",
+    minWidth: "200px",
+    minHeight: "125px",
     showMask: true,
   });
 
   const model: AppModelBinding = props.model || {
-    event: 'change',
-    data: 'value',
+    event: "change",
+    data: "value",
   };
 
   const _result = ref<any>(props.result);
@@ -94,15 +92,15 @@
   });
 
   const TransName = computed(() => {
-    let pos = props.position || 'center';
+    let pos = props.position || "center";
     return positionToTransName(pos);
   });
 
   const TopClass = computed(() =>
     CssUtils.mergeClassName(
       {
-        'show-mask': props.showMask,
-        'hide-mask': !props.showMask,
+        "show-mask": props.showMask,
+        "hide-mask": !props.showMask,
       },
       `origin-${props.position}`
     )
@@ -111,22 +109,22 @@
   const BlockConfig = computed(() => {
     let conf: BlockProps = _.pick(
       props,
-      'icon',
-      'title',
-      'blockClass',
-      'headStyle',
-      'mainStyle',
-      'comType'
+      "icon",
+      "title",
+      "blockClass",
+      "headStyle",
+      "mainStyle",
+      "comType"
     );
-    conf.overflowMode = 'fit';
-    conf.className = ['fit-parent'];
+    conf.overflowMode = "fit";
+    conf.className = ["fit-parent"];
     if (props.type) {
       conf.className.push(`is-${props.type}`);
     }
     conf.actions = [
       {
-        icon: 'zmdi-close',
-        className: { 'hover-rotate': true, 'bg-transparent': true },
+        icon: "zmdi-close",
+        className: { "hover-rotate": true, "bg-transparent": true },
         action: () => _do_close_modal(false),
       },
     ];
@@ -136,7 +134,7 @@
   // 监控控件的事件以便更新 result
   const Listeners = computed(() =>
     makeAppModelEventListeners({
-      COM_TYPE: 'TiAppModal',
+      COM_TYPE: "TiAppModal",
       bindingEvent: model?.event,
       setResult: (result: any) => {
         _result.value = result;
@@ -176,7 +174,7 @@
         icon: props.iconOk,
         text: props.textOk,
         className,
-        action: 'ok',
+        action: "ok",
       });
     }
     if (props.textCancel) {
@@ -184,7 +182,7 @@
         icon: props.iconCancel,
         text: props.textCancel,
         className,
-        action: 'cancel',
+        action: "cancel",
       });
     }
     return list;
@@ -200,30 +198,30 @@
 
   const ModalClass = computed(() =>
     CssUtils.mergeClassName(props.className, `is-${props.type}`, {
-      'show-footer': hasModalRightActions.value,
+      "show-footer": hasModalRightActions.value,
     })
   );
   const ModalStyle = computed(() => {
     let style = _.pick(
       props,
-      'width',
-      'height',
-      'maxWidth',
-      'maxHeight',
-      'minWidth',
-      'minHeight',
-      'left',
-      'right',
-      'top',
-      'bottom',
-      'overflow'
+      "width",
+      "height",
+      "maxWidth",
+      "maxHeight",
+      "minWidth",
+      "minHeight",
+      "left",
+      "right",
+      "top",
+      "bottom",
+      "overflow"
     );
     return CssUtils.toStyle(style);
   });
 
   function _do_close_modal(withResult?: boolean) {
-    if (log.isDebugEnabled()) {
-      log.debug(
+    if (debug) {
+      console.log(
         `_do_close_modal(withResult=${withResult})`,
         `_result="${_result.value}"::`,
         _result.value
@@ -272,7 +270,7 @@
     }
     // 警告一下
     else {
-      Alert(`Fail to handle action [${name}]`, { type: 'warn' });
+      Alert(`Fail to handle action [${name}]`, { type: "warn" });
     }
   }
 
@@ -322,17 +320,13 @@
           @happen="onBlockEvent" />
         <!------------------------------>
         <footer v-if="hasModalLeftActions || hasModalRightActions">
-          <div
-            class="at-left"
-            v-if="hasModalLeftActions && props.actions">
+          <div class="at-left" v-if="hasModalLeftActions && props.actions">
             <TiActionBar
               :items="props.actions"
               top-item-aspect-mode="button"
               @fire="onActionFire" />
           </div>
-          <div
-            class="at-right"
-            v-if="hasModalRightActions">
+          <div class="at-right" v-if="hasModalRightActions">
             <TiActionBar
               :items="ModalRightActions"
               top-item-aspect-mode="button"
@@ -348,7 +342,7 @@
   </Transition>
 </template>
 <style lang="scss">
-  @use './app-modal.scss';
-  @use './app-modal-mask.scss';
-  @use './app-modal-radius.scss';
+  @use "./app-modal.scss";
+  @use "./app-modal-mask.scss";
+  @use "./app-modal-radius.scss";
 </style>

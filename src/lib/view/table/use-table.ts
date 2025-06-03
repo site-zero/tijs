@@ -221,7 +221,7 @@ export function useTable(
     checkAll() {
       let oldCurrentId = _.cloneDeep(selection.currentId);
       let oldCheckedIds = _.cloneDeep(selection.checkedIds);
-      console.log('selectAll', selection.ids);
+      //console.log('selectAll', selection.ids);
       selectable.checkAll(selection);
 
       let info = selectable.getSelectionEmitInfo(
