@@ -1,20 +1,22 @@
 <script lang="ts" setup>
-  import _ from 'lodash';
-  import { computed, onMounted, onUnmounted, reactive, ref, watch } from 'vue';
-  import { TabDisplayItem, TiIcon } from '../../';
-  import { CssUtils } from '../../../core';
-  import { TabsEmitter, TabsProps } from './ti-tabs-types';
-  import { useTabsItem } from './use-tabs-item';
-  import { TabsOverflow, useTabsOverflowObserver } from './use-tabs-overflow';
+  import _ from "lodash";
+  import { computed, onMounted, onUnmounted, reactive, ref, watch } from "vue";
+  import { TabDisplayItem, TiIcon, useKeep } from "../../";
+  import { CssUtils } from "../../../core";
+  import { TabsEmitter, TabsProps } from "./ti-tabs-types";
+  import { useTabsItem } from "./use-tabs-item";
+  import { TabsOverflow, useTabsOverflowObserver } from "./use-tabs-overflow";
   //-------------------------------------------------------
   const emit = defineEmits<TabsEmitter>();
   //-------------------------------------------------------
   const props = withDefaults(defineProps<TabsProps>(), {
     wrapTabs: false,
-    tabItemSpace: 'm',
-    tabsAt: 'top',
-    tabsAlign: 'left',
+    tabItemSpace: "m",
+    tabsAt: "top",
+    tabsAlign: "left",
   });
+  //-------------------------------------------------------
+  const _keep_tab = computed(() => useKeep(props.keepTab));
   //-------------------------------------------------------
   const $el = ref<HTMLElement>();
   const $ul = ref<HTMLElement>();
@@ -34,7 +36,7 @@
     CssUtils.mergeClassName(
       props.className,
       {
-        'wrap-tabs': props.wrapTabs,
+        "wrap-tabs": props.wrapTabs,
       },
       `tabs-at-${props.tabsAt}`,
       `tabs-align-${props.tabsAlign}`,
@@ -67,7 +69,14 @@
   function onClickItem(it: TabDisplayItem) {
     let old = _.cloneDeep(_.find(TabItems.value, (it) => it.current));
     let current = _.cloneDeep(it);
-    emit('change', current, old);
+    if (_keep_tab.value.enabled) {
+      _keep_tab.value.save(current.value);
+    }
+    emit("change", current, old);
+  }
+  //-------------------------------------------------------
+  function getTabItemByValue(val: any) {
+    return _.find(TabItems.value, (it) => it.value == val);
   }
   //-------------------------------------------------------
   watch(
@@ -81,6 +90,13 @@
   //-------------------------------------------------------
   onMounted(() => {
     TabOverflow.tryWatch();
+    if (_keep_tab.value.enabled) {
+      let localValue = _keep_tab.value.load();
+      let it = getTabItemByValue(localValue);
+      if (it) {
+        emit("change", it);
+      }
+    }
   });
   //-------------------------------------------------------
   onUnmounted(() => {
@@ -89,13 +105,8 @@
   //-------------------------------------------------------
 </script>
 <template>
-  <div
-    class="ti-tabs"
-    :class="TopClass"
-    ref="$el">
-    <div
-      class="tab-items-con"
-      ref="$ul">
+  <div class="ti-tabs" :class="TopClass" ref="$el">
+    <div class="tab-items-con" ref="$ul">
       <div class="items-wrapper">
         <div
           class="tab-item"
@@ -104,38 +115,24 @@
           :style="it.style"
           :data-index="index"
           @click="onClickItem(it)">
-          <span
-            class="as-icon"
-            v-if="it.icon"
+          <span class="as-icon" v-if="it.icon"
             ><TiIcon :value="it.icon"
           /></span>
-          <span
-            class="as-text"
-            v-if="it.text"
-            >{{ it.text }}</span
-          >
+          <span class="as-text" v-if="it.text">{{ it.text }}</span>
         </div>
       </div>
     </div>
-    <div
-      class="scroller-con"
-      v-if="_overflow.left || _overflow.right">
-      <a
-        class="to-left"
-        v-if="_overflow.left"
-        @click="onClickScroller(-1)"
+    <div class="scroller-con" v-if="_overflow.left || _overflow.right">
+      <a class="to-left" v-if="_overflow.left" @click="onClickScroller(-1)"
         ><i class="zmdi zmdi-caret-left"></i
       ></a>
       <div class="sep"></div>
-      <a
-        class="to-right"
-        v-if="_overflow.right"
-        @click="onClickScroller(1)"
+      <a class="to-right" v-if="_overflow.right" @click="onClickScroller(1)"
         ><i class="zmdi zmdi-caret-right"></i
       ></a>
     </div>
   </div>
 </template>
 <style lang="scss" scoped>
-  @use './ti-tabs.scss';
+  @use "./ti-tabs.scss";
 </style>

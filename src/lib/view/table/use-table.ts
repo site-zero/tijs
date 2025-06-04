@@ -121,12 +121,12 @@ export function useTable(
     },
   });
   //-----------------------------------------------------
-  const getRowType = useDataLogicType(props.getRowType);
+  const getRowType = computed(()=>useDataLogicType(props.getRowType));
   //-----------------------------------------------------
   const _id_index = new Map<TableRowID, number>();
   //-----------------------------------------------------
   const TableData = computed(() =>
-    _get_table_data(selectable, props.data, _id_index, getRowType)
+    _get_table_data(selectable, props.data, _id_index, getRowType.value)
   );
   //-----------------------------------------------------
   function getRowDataByIndex(index: number): TableRowData | undefined {
