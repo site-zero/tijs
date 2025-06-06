@@ -1,11 +1,11 @@
 import L from "leaflet";
-import { isLatLngObj, LBSMapValue } from "../ti-lbs-map-types";
+import { isLatLngObj, LbsMapValue } from "../ti-lbs-map-types";
 import { draw_obj_as_point, draw_tuple_as_point } from "./draw-point";
 import { LbsMapDrawingSetup } from "./draw-types";
 
 //--------------------------------------
 export function draw_point_as_circle(
-  latlng: LBSMapValue,
+  latlng: LbsMapValue,
   setup: LbsMapDrawingSetup,
   autoFitBounds?: boolean
 ) {
@@ -41,7 +41,7 @@ export function draw_point_as_circle(
 
 //--------------------------------------
 export function draw_list_as_circle(
-  latlngs: LBSMapValue[],
+  latlngs: LbsMapValue[],
   setup: LbsMapDrawingSetup
 ) {
   let { _dc, props, api } = setup;

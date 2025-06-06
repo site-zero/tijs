@@ -6,7 +6,7 @@ import {
   LbsMapDrawContext,
   LbsMapProps,
   LbsMapStdTileType,
-  LBSMapTileLayer,
+  LbsMapTileLayer,
   LbsMapTileLayerInput,
   LbsMapValueCoords,
 } from "./ti-lbs-map-types";
@@ -27,8 +27,8 @@ export function useTileLayer(
       (
         {
           GCJ02: "QQ_VECTOR_NOTE",
-          BD09: "GOOGLE_VECTOR_CN",
-          WGS84: "CARTO_ALL",
+          BD09: "GAODE_VECTOR",
+          WGS84: "GOOGLE_VECTOR_CN",
         } as Record<LbsMapValueCoords, LbsMapStdTileType>
       )[coords],
     ];
@@ -49,7 +49,7 @@ export function useTileLayer(
 }
 
 function createTileLayer(tileLayer: LbsMapTileLayerInput) {
-  let tile: LBSMapTileLayer;
+  let tile: LbsMapTileLayer;
   if (isLbsMapStdTileType(tileLayer)) {
     tile = getLbsMapStdTileLayer(tileLayer);
   } else {

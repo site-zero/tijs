@@ -8,12 +8,12 @@ import {
   getLbsMapStdTileLayer,
   isLbsMapStdTileType,
   LatLngObj,
-  LBSMapData,
+  LbsMapData,
   LbsMapDrawContext,
   LbsMapEditMarkerIconOptions,
   LbsMapEmitter,
   LbsMapProps,
-  LBSMapTileLayer,
+  LbsMapTileLayer,
   LbsMapValueCoords,
 } from "./ti-lbs-map-types";
 
@@ -56,7 +56,9 @@ export function useLbsMap(
   // 持久化
   //--------------------------------------------
   const _keep = useKeep(props.keepZoomBy);
-  _dc.geo.zoom = _keep.loadNumber(props.zoom);
+  function loadLocalZoom() {
+    _dc.geo.value.zoom = _keep.loadNumber(props.zoom);
+  }
   //--------------------------------------------
   // 帮助方法
   //--------------------------------------------
@@ -137,14 +139,17 @@ export function useLbsMap(
   function GeoStr(v?: number) {
     if (_.isUndefined(v)) return "";
 
-    let p = props.latlngPrecise;
+    let p = props.displayPrecision ?? 6;
     let s = "" + Num.precise(v, p);
     let ss = s.split(".");
     ss[1] = _.padEnd(ss[1], p, "0");
     return ss.join(".");
   }
   //--------------------------------------
-  function GeoPointStr(obj: LatLngObj) {
+  function GeoPointStr(obj?: LatLngObj) {
+    if (!obj) {
+      return "";
+    }
     let ss = [GeoStr(obj.lat), GeoStr(obj.lng)];
     return ss.join(", ");
   }
@@ -169,10 +174,10 @@ export function useLbsMap(
     if (!$map) {
       return;
     }
-    //console.log("map move", evt)
+    console.log("map move", $map.getZoom());
     let now = Date.now();
     let bou = $map.getBounds();
-    _dc.geo = {
+    _dc.geo.value = {
       zoom: $map.getZoom(),
       center: bou.getCenter(),
       SW: bou.getSouthWest(),
@@ -186,7 +191,7 @@ export function useLbsMap(
     };
     // Keep zoom in local
     if (_keep.enabled) {
-      _keep.save(_dc.geo.zoom);
+      _keep.save(_dc.geo.value.zoom);
     }
     // If cooling, notify
     if (!_dc.is_check_cooling && _dc.cooling > 0) {
@@ -200,11 +205,11 @@ export function useLbsMap(
   }
   //--------------------------------------
   function OnMapPointerClick(evt: L.LeafletMouseEvent) {
-    _dc.pointerClick = evt.latlng;
+    _dc.pointerClick.value = evt.latlng;
   }
   //--------------------------------------
   function OnMapPointerMove(evt: L.LeafletMouseEvent) {
-    _dc.pointerHover = evt.latlng;
+    _dc.pointerHover.value = evt.latlng;
   }
 
   //--------------------------------------
@@ -216,7 +221,7 @@ export function useLbsMap(
     if (isCooling || !_dc.lastMove) {
       _dc.is_check_cooling = false;
       //console.log("notify map move", this.geo)
-      emit("map:move", _dc.geo);
+      emit("map:move", _dc.geo.value);
     } else {
       window.setTimeout(() => {
         checkMoveCooling();
@@ -224,7 +229,7 @@ export function useLbsMap(
     }
   }
   //--------------------------------------
-  function notifyChange(change: LBSMapData) {
+  function notifyChange(change: LbsMapData) {
     if (!_.isEqual(change, props.value)) {
       emit("change", change);
     }
@@ -234,6 +239,7 @@ export function useLbsMap(
   // 返回特性
   //--------------------------------------
   return {
+    loadLocalZoom,
     Icon,
     GetIconSrc,
     updateGeoInfo,
@@ -260,7 +266,7 @@ export function getBaseTileCoords(props: LbsMapProps): LbsMapValueCoords {
   if (!tl) {
     return "WGS84";
   }
-  let tile: LBSMapTileLayer;
+  let tile: LbsMapTileLayer;
   if (isLbsMapStdTileType(tl)) {
     tile = getLbsMapStdTileLayer(tl);
   } else {

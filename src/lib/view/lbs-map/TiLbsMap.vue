@@ -1,9 +1,13 @@
 <script setup lang="ts">
   import _ from "lodash";
-  import { computed, onMounted, reactive, useTemplateRef, watch } from "vue";
+  import { computed, onMounted, ref, useTemplateRef, watch } from "vue";
   import { TiLoading } from "../../";
-  import { CssUtils, LbsMapDrawContext, Vars } from "../../../";
-  import { LbsMapEmitter, LbsMapProps } from "./ti-lbs-map-types";
+  import { CssUtils, LbsMapDrawContext } from "../../../";
+  import {
+    LbsMapEmitter,
+    LbsMapProps,
+    LbsMapShowInfo,
+  } from "./ti-lbs-map-types";
   import { useLbsMap } from "./use-lbs-map";
   import { getMapData } from "./use-lbs-map-data";
   import { initMap } from "./use-lbs-map-view";
@@ -14,25 +18,30 @@
   const props = withDefaults(defineProps<LbsMapProps>(), {
     zoom: 10,
     maxZoom: 18,
+    valuePrecision: 6,
+    valueCoords: "WGS84",
   });
   //--------------------------------------------
-  const _dc: LbsMapDrawContext = reactive({
+  const _dc: LbsMapDrawContext = {
+    // 当前地图实例/活动图层
     $map: undefined,
     $live: undefined,
-
-    geo: {},
-
+    // 当前地图地理信息摘要
+    geo: ref({}),
+    // 基础图层坐标系
     baseTileCoords: "WGS84",
-
-    lastMove: 0,
+    // 用户交互状态
+    lastMove: 0, // 最后一次移动的时间
     loading: false,
-
-    pointerClick: undefined,
-    pointerHover: undefined,
-
+    // 鼠标经纬度坐标
+    pointerClick: ref(),
+    pointerHover: ref(),
+    // 冷却状态
     cooling: 0,
     is_check_cooling: false,
-  });
+    // 监控器
+    resizeObserver: null,
+  };
   //--------------------------------------------
   const _api = computed(() => useLbsMap(props, _dc, emit));
   const _map_data = computed(() => getMapData(props, _dc.baseTileCoords));
@@ -50,8 +59,6 @@
   });
   //--------------------------------------------
   const ShowInfo = computed(() => {
-    if (!props.showInfo) return {} as Vars;
-
     return _.assign(
       {
         zoom: true,
@@ -60,10 +67,10 @@
         lngRange: false,
         pointerHover: false,
         pointerClick: false,
-      },
+      } as LbsMapShowInfo,
       props.showInfo
     );
-  }) as Vars;
+  });
   //--------------------------------------------
   function _init_map() {
     initMap(() => $main.value, props, _dc, _api.value, _map_data.value);
@@ -73,7 +80,9 @@
   watch(
     () => [props.value, props.valueCoords, props.tileLayer],
     () => {
-      _init_map();
+      if (props.watchForInit) {
+        _init_map();
+      }
     }
   );
   //--------------------------------------------
@@ -98,30 +107,30 @@
       -->
       <div class="info-ele" v-if="ShowInfo.zoom">
         <i class="fas fa-search-location"></i>
-        <span>{{ _dc.geo.zoom }}</span>
+        <span>{{ _dc.geo.value.zoom }}</span>
       </div>
       <!--
         Center
       -->
-      <div class="info-ele" v-if="ShowInfo.center && _dc.geo.center">
+      <div class="info-ele" v-if="ShowInfo.center && _dc.geo.value.center">
         <i class="fas fa-arrows-alt"></i>
-        <span>{{ _api.GeoPointStr(_dc.geo.center) }}</span>
+        <span>{{ _api.GeoPointStr(_dc.geo.value.center) }}</span>
       </div>
       <!--
         Latitude range
       -->
       <div class="info-ele" v-if="ShowInfo.latRange">
         <i class="fas fa-arrows-alt-v"></i>
-        <span>{{ _api.GeoStr(_dc.geo.N) }}</span
-        >/<span>{{ _api.GeoStr(_dc.geo.S) }}</span>
+        <span>{{ _api.GeoStr(_dc.geo.value.N) }}</span
+        >/<span>{{ _api.GeoStr(_dc.geo.value.S) }}</span>
       </div>
       <!--
         Longitude range
       -->
       <div class="info-ele" v-if="ShowInfo.lngRange">
         <i class="fas fa-arrows-alt-h"></i>
-        <span>{{ _api.GeoStr(_dc.geo.W) }}</span
-        >/<span>{{ _api.GeoStr(_dc.geo.E) }}</span>
+        <span>{{ _api.GeoStr(_dc.geo.value.W) }}</span
+        >/<span>{{ _api.GeoStr(_dc.geo.value.E) }}</span>
       </div>
       <!--
         Pointer Hover
@@ -131,8 +140,8 @@
         class="info-ele">
         <i class="fas fa-map-marker"></i>
         <span
-          >{{ _api.GeoStr(_dc.pointerHover.lat) }},
-          {{ _api.GeoStr(_dc.pointerHover.lng) }}</span
+          >{{ _api.GeoStr(_dc.pointerHover.value?.lat) }},
+          {{ _api.GeoStr(_dc.pointerHover.value?.lng) }}</span
         >
       </div>
       <!--
@@ -141,8 +150,10 @@
       <div
         v-if="ShowInfo.pointerClick && !_.isEmpty(_dc.pointerClick)"
         class="info-ele">
-        <i class="fas fa-mouse" @click.left="_dc.pointerClick = undefined"></i>
-        <span>{{ _api.GeoPointStr(_dc.pointerClick) }}</span>
+        <i
+          class="fas fa-mouse"
+          @click.left="_dc.pointerClick.value = undefined"></i>
+        <span>{{ _api.GeoPointStr(_dc.pointerClick.value) }}</span>
       </div>
     </div>
     <!--

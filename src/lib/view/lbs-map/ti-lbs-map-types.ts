@@ -1,11 +1,12 @@
 import { PopupOptions } from "leaflet";
 import _ from "lodash";
+import { Ref } from "vue";
 import { CommonProps, IconInput, LogicType, Vars } from "../../../_type";
 import { KeepInfo } from "../../../lib/_features";
 import { RoadblockProps } from "../../tile/all-tiles";
 
 export type LbsMapEmitter = {
-  (event: "change", data: LBSMapData): void;
+  (event: "change", data: LbsMapData): void;
   (event: "map:move", payload: LBSMapGeo): void;
 };
 
@@ -13,7 +14,6 @@ export type LbsMapEmitter = {
  * 各个辅助函数的上下文对象
  */
 export type LbsMapDrawContext = {
-  // props: LbsMapProps;
   // 当前地图实例
   $map: L.Map | undefined;
 
@@ -21,7 +21,7 @@ export type LbsMapDrawContext = {
   $live: L.LayerGroup | undefined;
 
   // 当前地图地理信息摘要
-  geo: LBSMapGeo;
+  geo: Ref<LBSMapGeo>;
 
   // 基础图层坐标系
   baseTileCoords: LbsMapValueCoords;
@@ -30,12 +30,16 @@ export type LbsMapDrawContext = {
   lastMove: number;
   loading: boolean;
 
-  pointerClick: LatLngObj | undefined;
-  pointerHover: LatLngObj | undefined;
+  // 鼠标经纬度坐标
+  pointerClick: Ref<LatLngObj | undefined>;
+  pointerHover: Ref<LatLngObj | undefined>;
 
   // 冷却状态
   cooling: number; // 冷却的绝对时间戳
   is_check_cooling: boolean; // 是否正在检查冷却
+
+  // 监控器
+  resizeObserver: ResizeObserver | null;
 };
 
 export type LBSMapGeo = Partial<
@@ -97,8 +101,8 @@ export type LbsMapValueType =
 export type LatLngObj = { lat: number; lng: number; alt?: number };
 export type LatLngTuple = [number, number, number?];
 export type GeoJson = Vars;
-export type LBSMapValue = LatLngObj | LatLngTuple;
-export type LBSMapData = LBSMapValue | LBSMapValue[] | GeoJson;
+export type LbsMapValue = LatLngObj | LatLngTuple;
+export type LbsMapData = LbsMapValue | LbsMapValue[] | GeoJson;
 
 export function isLatLngObj(input: any): input is LatLngObj {
   return input && _.isNumber(input.lat) && _.isNumber(input.lng);
@@ -158,11 +162,11 @@ export type LbsMakerOptions = {
  * 定义了一个图层的显示方式。实际上， LBSMap 就从这个类型继承
  * 它自身代表了【主图层】所有的编辑行为都是针对这个【主图层】的
  */
-export type LBSMapMarkerLayer = LbsMakerOptions & {
+export type LbsMapMarkerLayer = LbsMakerOptions & {
   /**
    * 输入值的类型
    */
-  value?: LBSMapData;
+  value?: LbsMapData;
   /**
    * 值类型，默认为 'obj'
    */
@@ -170,7 +174,7 @@ export type LBSMapMarkerLayer = LbsMakerOptions & {
   /**
    * 显示的类型，默认为 `Point`
    */
-  displayType?: LBSMapDisplayType;
+  displayType?: LbsMapDisplayType;
 
   /**
    * 绘制本层标记
@@ -183,7 +187,7 @@ export type LBSMapMarkerLayer = LbsMakerOptions & {
 /**
  * 一个瓦片图层的具体设置
  */
-export type LBSMapTileLayer = {
+export type LbsMapTileLayer = {
   /**
    * 瓦片图层的 URL 模板
    * 这个是一个字符串，里面包含了 `{x}`, `{y}`, `{z}` 这样的占位符
@@ -209,7 +213,7 @@ export type LBSMapTileLayer = {
  * - `drag` : 拖拽点定位
  * - `pin`  : 移动地图，用地图中心点定位
  */
-export type LBSMapEditPointMode = "none" | "drag" | "pin";
+export type LbsMapEditPointMode = "none" | "drag" | "pin";
 
 export type LbsMapEditMarkerIconOptions = Partial<{
   // 整体大小，默认 32
@@ -239,7 +243,7 @@ export type LbsMapEditMarkerIconOptions = Partial<{
  * `GeoJson`     | 复杂显示       | `geojson`           | *无*
  * `Cluster`     | 自动聚合点     | `(obj|pair)-list`   | *无*
  */
-export type LBSMapDisplayType =
+export type LbsMapDisplayType =
   | "Point"
   | "Polyline"
   | "Polygon"
@@ -249,13 +253,31 @@ export type LBSMapDisplayType =
   | "Cluster";
 
 /**
+ * 地图右下角显示信息的配置
+ */
+export type LbsMapShowInfo = {
+  zoom?: boolean;
+  center?: boolean;
+  latRange?: boolean;
+  lngRange?: boolean;
+  pointerHover?: boolean;
+  pointerClick?: boolean;
+};
+
+/**
  * 位置地图组件属性定义
  */
 export type LbsMapProps = CommonProps &
-  LBSMapMarkerLayer & {
+  LbsMapMarkerLayer & {
     //--------------------------------------------
     // 整体设置
     //--------------------------------------------
+    /**
+     * 在修改模式 `editPoint:true` 下，
+     * 编辑的点的精度，默认为 `6`
+     * 这个值越大，编辑的点越精确
+     */
+    valuePrecision?: number;
     /**
      * 值坐标系，默认为 `WGS84`
      * 这个需要瓦片与值能对应上，才能显示准确坐标
@@ -265,12 +287,12 @@ export type LbsMapProps = CommonProps &
     /**
      * 更多的显示图层。地图主图层拥有最高的遮盖等级
      */
-    layers?: LBSMapMarkerLayer | LBSMapMarkerLayer[];
+    layers?: LbsMapMarkerLayer | LbsMapMarkerLayer[];
 
     /**
      * 值显示精度
      */
-    latlngPrecise?: number;
+    displayPrecision?: number;
 
     //--------------------------------------------
     // 瓦片图层
@@ -327,14 +349,13 @@ export type LbsMapProps = CommonProps &
 
     /**
      * 指定地图中心点
-     * TODO 是不是应该叫 Center ?
      */
-    defaultLocation?: LBSMapValue;
+    center?: LbsMapValue;
 
     /**
-     * 好像是弹出框？ 还是鼠标移动时显示鼠标点位？
+     * 显示当前地图信息点位，可以指定下面的值
      */
-    showInfo?: Vars;
+    showInfo?: LbsMapShowInfo;
 
     /**
      * 编辑地图的冷却时间(毫秒)
@@ -349,6 +370,13 @@ export type LbsMapProps = CommonProps &
      */
     loadingRoadblock?: RoadblockProps;
 
+    /**
+     * 当 `[value,valueCoords,tileLayer]` 属性变化的时候，
+     * 是否需要自动初始化地图，以便重置设置
+     * 默认 `false`
+     */
+    watchForInit?: boolean;
+
     //--------------------------------------------
     // Point 行为设置
     //--------------------------------------------
@@ -356,7 +384,7 @@ export type LbsMapProps = CommonProps &
      * 地图点编辑模式，仅在`valueType`为`obj|pair`模式有效，
      * 默认 `none`
      */
-    editPoint?: LBSMapEditPointMode;
+    editPoint?: LbsMapEditPointMode;
 
     /**
      * 图标基础路径
@@ -391,12 +419,6 @@ export type LbsMapProps = CommonProps &
     polygonOptions?: L.PolylineOptions;
     rectangleOptions?: L.PolylineOptions;
     circleOptions?: L.CircleOptions;
-
-    //--------------------------------------------
-    // Measure
-    //--------------------------------------------
-    width?: number | string;
-    height?: number | string;
   };
 
 const TIANDITU_URL =
@@ -441,92 +463,92 @@ const LBS_MAP_DFT_TILES = {
     url: "https://wprd0{s}.is.autonavi.com/appmaptile?x={x}&y={y}&z={z}&lang={lang}&size=1&scl=2&style={style}&ltype={type}",
     options: { subdomains: "1234", style: "8", type: "11", lang: "zh_cn" },
     coords: "GCJ02",
-  } as LBSMapTileLayer,
+  } as LbsMapTileLayer,
   // 高德卫星：
   GAODE_SATElITE: {
     url: "https://webst0{s}.is.autonavi.com/appmaptile?style={style}&x={x}&y={y}&z={z}",
     options: { subdomains: "1234", style: "6" },
     coords: "GCJ02",
-  } as LBSMapTileLayer,
+  } as LbsMapTileLayer,
   // 高德矢量：
   GAODE_VECTOR: {
     url: "http://wprd0{s}.is.autonavi.com/appmaptile?lang={lang}&size=1&style={style}&x={x}&y={y}&z={z}",
     options: { subdomains: "1234", style: "7", lang: "zh_cn" },
     coords: "GCJ02",
-  } as LBSMapTileLayer,
+  } as LbsMapTileLayer,
   // 腾讯矢量标注：
   QQ_VECTOR_NOTE: {
     url: "http://rt{s}.map.gtimg.com/realtimerender?z={z}&x={x}&y={-y}&type={type}&style={style}",
     options: { subdomains: "0123", style: "0", type: "vector" },
     coords: "GCJ02",
-  } as LBSMapTileLayer,
+  } as LbsMapTileLayer,
   // 谷歌矢量中文：
   // 尝试使用可能可用的 Google 中国地图服务 URL，实际使用时需确认其有效性
   GOOGLE_VECTOR_CN: {
     url: "http://www.google.cn/maps/vt?lyrs=m@189&gl=cn&x={x}&y={y}&z={z}",
     options: {},
     coords: "WGS84",
-  } as LBSMapTileLayer,
+  } as LbsMapTileLayer,
   // 谷歌矢量：
   GOOGLE_VECTOR: {
     url: "http://mt{s}.google.com/vt/lyrs=m&scale=2&hl={lang}&gl=cn&x={x}&y={y}&z={z}",
     options: { subdomains: "0123", lang: "en-US" },
     coords: "WGS84",
-  } as LBSMapTileLayer,
+  } as LbsMapTileLayer,
   // 谷歌路网：
   GOOGLE_ROADMAP: {
     url: "https://mt{s}.google.com/vt/lyrs=h&x={x}&y={y}&z={z}",
     options: { subdomains: "0123" },
     coords: "WGS84",
-  } as LBSMapTileLayer,
+  } as LbsMapTileLayer,
   // 谷歌卫星：
   GOOGLE_SATElITE: {
     url: "http://www.google.cn/maps/vt?lyrs=s@189&gl=${lang}&x={x}&y={y}&z={z}",
     options: { subdomains: "0123", lang: "cn" },
     coords: "WGS84",
-  } as LBSMapTileLayer,
+  } as LbsMapTileLayer,
   // 谷歌卫星标注：
   GOOGLE_SATElITE_NOTE: {
     url: "https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}",
     options: { subdomains: "0123" },
     coords: "WGS84",
-  } as LBSMapTileLayer,
+  } as LbsMapTileLayer,
   // 谷歌地形：
   GOOGLE_TERRAIN: {
     url: "https://mt{s}.google.com/vt/lyrs=t&x={x}&y={y}&z={z}",
     options: { subdomains: "0123" },
     coords: "WGS84",
-  } as LBSMapTileLayer,
+  } as LbsMapTileLayer,
   // 谷歌矢量（带地形渲染）：
   GOOGLE_VECTOR_TERRAIN: {
     url: "https://mt{s}.google.com/vt/lyrs=r&x={x}&y={y}&z={z}",
     options: { subdomains: "0123" },
     coords: "WGS84",
-  } as LBSMapTileLayer,
+  } as LbsMapTileLayer,
   // 街景地图：
   OPENSTREAT: {
     url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
     options: {},
     coords: "WGS84",
-  } as LBSMapTileLayer,
+  } as LbsMapTileLayer,
   // Carto-标准
   CARTO: {
     url: "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png",
     options: {},
     coords: "WGS84",
-  } as LBSMapTileLayer,
+  } as LbsMapTileLayer,
   // Carto-全部
   CARTO_ALL: {
     url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png",
     options: {},
     coords: "WGS84",
-  } as LBSMapTileLayer,
+  } as LbsMapTileLayer,
   // Carto-标注
   CARTO_LABEL: {
     url: "https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}.png",
     options: {},
     coords: "WGS84",
-  } as LBSMapTileLayer,
+  } as LbsMapTileLayer,
   // 天地图卫星：
   TIANDITU_SATElITE: {
     url: TIANDITU_URL,
@@ -540,7 +562,7 @@ const LBS_MAP_DFT_TILES = {
       tk: "615bea2dd55491ea9e7b1e994b60a014",
     },
     coords: "WGS84",
-  } as LBSMapTileLayer,
+  } as LbsMapTileLayer,
   // 天地图卫星注记：
   TIANDITU_SATElITE_NOTE: {
     url: TIANDITU_URL,
@@ -555,7 +577,7 @@ const LBS_MAP_DFT_TILES = {
       tk: "615bea2dd55491ea9e7b1e994b60a014",
     },
     coords: "WGS84",
-  } as LBSMapTileLayer,
+  } as LbsMapTileLayer,
   // 天地图矢量：
   TIANDITU_VECTOR: {
     url: TIANDITU_URL,
@@ -570,7 +592,7 @@ const LBS_MAP_DFT_TILES = {
       tk: "615bea2dd55491ea9e7b1e994b60a014",
     },
     coords: "WGS84",
-  } as LBSMapTileLayer,
+  } as LbsMapTileLayer,
   // 天地图矢量注记：
   TIANDITU_VECTOR_NOTE: {
     url: TIANDITU_URL,
@@ -585,7 +607,7 @@ const LBS_MAP_DFT_TILES = {
       tk: "615bea2dd55491ea9e7b1e994b60a014",
     },
     coords: "WGS84",
-  } as LBSMapTileLayer,
+  } as LbsMapTileLayer,
   // 天地图地形：
   TIANDITU_TERRAIN: {
     url: TIANDITU_URL,
@@ -600,7 +622,7 @@ const LBS_MAP_DFT_TILES = {
       tk: "615bea2dd55491ea9e7b1e994b60a014",
     },
     coords: "WGS84",
-  } as LBSMapTileLayer,
+  } as LbsMapTileLayer,
   // 天地图地形注记：
   TIANDITU_TERRAIN_NOTE: {
     url: TIANDITU_URL,
@@ -615,7 +637,7 @@ const LBS_MAP_DFT_TILES = {
       tk: "615bea2dd55491ea9e7b1e994b60a014",
     },
     coords: "WGS84",
-  } as LBSMapTileLayer,
+  } as LbsMapTileLayer,
 };
 
 /**
@@ -653,4 +675,4 @@ export function getLbsMapStdTileLayer(type: LbsMapStdTileType) {
   return LBS_MAP_DFT_TILES[type];
 }
 
-export type LbsMapTileLayerInput = LbsMapStdTileType | LBSMapTileLayer;
+export type LbsMapTileLayerInput = LbsMapStdTileType | LbsMapTileLayer;

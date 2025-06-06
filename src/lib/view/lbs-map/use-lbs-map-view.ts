@@ -1,4 +1,5 @@
 import L, { LatLngTuple } from "leaflet";
+import _ from "lodash";
 import { draw_map_data } from "./draw";
 import {
   getLatlngObjBounds,
@@ -11,7 +12,7 @@ import {
   isLatLngObj,
   isLatLngTuple,
   LatLngObj,
-  LBSMapData,
+  LbsMapData,
   LbsMapDrawContext,
   LbsMapProps,
 } from "./ti-lbs-map-types";
@@ -23,7 +24,7 @@ export function initMap(
   props: LbsMapProps,
   _dc: LbsMapDrawContext,
   api: LbsMapApi,
-  mapData: LBSMapData | null
+  mapData: LbsMapData | null
 ) {
   console.log("initMap", props.valueCoords, props.tileLayer);
   let $main = getMainElement();
@@ -43,15 +44,20 @@ export function initMap(
     _dc.$map.remove();
     _dc.$map = undefined;
   }
+  // 回复本地 zoom
+  api.loadLocalZoom();
+
   // Create Map
   _dc.$map = L.map($main, {
     ...(props.mapOptions || {}),
     zoomControl: true,
     attributionControl: false,
+    zoom: _dc.geo.value.zoom ?? props.zoom,
     minZoom: props.minZoom,
     maxZoom: props.maxZoom,
   });
 
+  // Create consol
   L.control
     .scale({
       metric: true,
@@ -65,6 +71,7 @@ export function initMap(
 
   // Events
   _dc.$map.on("move", (evt) => {
+    // Zoom/Move 会触发这个
     api.OnMapMove(evt);
   });
   _dc.$map.on("click", (evt) => {
@@ -82,16 +89,25 @@ export function initMap(
 
   // Then Render the data
   redrawMap(props, _dc, api, mapData);
+
+  // 监控容器尺寸变化
+  if (_dc.resizeObserver) {
+    _dc.resizeObserver.disconnect();
+  }
+  _dc.resizeObserver = new ResizeObserver(() => {
+    _dc.$map?.invalidateSize();
+  });
+  _dc.resizeObserver.observe($main);
 }
 
 export function initMapView(
   props: LbsMapProps,
   _dc: LbsMapDrawContext,
-  mapData: LBSMapData | null
+  mapData: LbsMapData | null
 ) {
-  //console.log("initMapView")
+  console.log("initMapView");
   // Get current zoom, keep the last user zoom state
-  let zoom = _dc.geo.zoom ?? props.zoom;
+  let zoom = _dc.geo.value.zoom ?? props.zoom;
 
   let fromCoords = props.valueCoords ?? "WGS84";
   let toCoords = _dc.baseTileCoords;
@@ -100,16 +116,30 @@ export function initMapView(
   if (_dc.$map) {
     // 采用【北京】作为默认的位置
     let lal: LatLngObj = {
-      lat: 39.97773512677837,
-      lng: 116.3385673945887,
+      lat: 39.907576,
+      lng: 116.391275,
     };
-    if (props.defaultLocation) {
-      if (isLatLngObj(props.defaultLocation)) {
-        lal = props.defaultLocation;
-      } else if (isLatLngTuple(props.defaultLocation)) {
-        lal = latlngTupleToObj(props.defaultLocation);
+    if (props.center) {
+      if (isLatLngObj(props.center)) {
+        lal = props.center;
+      } else if (isLatLngTuple(props.center)) {
+        lal = latlngTupleToObj(props.center);
       } else {
-        throw "Invalid defaultLocation: " + props.defaultLocation;
+        throw "Invalid defaultLocation: " + props.center;
+      }
+    }
+    // 自动采用值
+    else if (
+      props.value &&
+      (props.valueType == "obj" || props.valueType == "tuple")
+    ) {
+      // 元组值
+      if (_.isArray(props.value)) {
+        lal = latlngTupleToObj(props.value as LatLngTuple);
+      }
+      // 那么必然就是对象值
+      else {
+        lal = props.value as LatLngObj;
       }
     }
     let dftCenter = translateCoordsForLatlngObj(fromCoords, toCoords, lal);
@@ -165,7 +195,7 @@ function redrawMap(
   props: LbsMapProps,
   _dc: LbsMapDrawContext,
   api: LbsMapApi,
-  mapData: LBSMapData | null
+  mapData: LbsMapData | null
 ) {
   let { $map, $live } = _dc;
   if (!$map || !$live) {

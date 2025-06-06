@@ -257,7 +257,7 @@ export function useGridResizing(
       // 获取整个格子的布局
       // 因为采用了计算属性，所以直接获得就是 '300.578px 541.047px' 这样的数组
       let mea = getGridMeasure(bar, $view);
-      console.log('mea', mea);
+      // console.log('mea', mea);
       mea.myIndex = bar.adjustIndex;
 
       // 我需要知道调整哪两个列

@@ -3,9 +3,9 @@ import _ from "lodash";
 import {
   isLatLngObj,
   LatLngObj,
-  LBSMapData,
-  LBSMapDisplayType,
-  LBSMapValue,
+  LbsMapData,
+  LbsMapDisplayType,
+  LbsMapValue,
   LbsMapValueType,
 } from "../ti-lbs-map-types";
 import { draw_list_as_circle, draw_point_as_circle } from "./draw-circle";
@@ -30,10 +30,10 @@ import {
 } from "./draw-rectangle";
 import { LbsMapDrawingSetup } from "./draw-types";
 
-type MapDataRender = (data: LBSMapData, setup: LbsMapDrawingSetup) => void;
+type MapDataRender = (data: LbsMapData, setup: LbsMapDrawingSetup) => void;
 const drawing: Record<
   LbsMapValueType,
-  Record<LBSMapDisplayType, MapDataRender>
+  Record<LbsMapDisplayType, MapDataRender>
 > = {
   //-------------------------------------<obj>
   "obj": {
@@ -74,7 +74,7 @@ const drawing: Record<
       throw `Rectangle not support for valueType=[tuple]`;
     },
     Circle: (data, setup) => {
-      draw_point_as_circle(data as LBSMapValue, setup);
+      draw_point_as_circle(data as LbsMapValue, setup);
     },
     GeoJson: () => {
       throw `GeoJson not support for valueType=[tuple]`;
@@ -98,13 +98,13 @@ const drawing: Record<
       draw_obj_list_as_rectangle(data as LatLngObj[], setup);
     },
     Circle: (data, setup) => {
-      draw_list_as_circle(data as LBSMapValue[], setup);
+      draw_list_as_circle(data as LbsMapValue[], setup);
     },
     GeoJson: () => {
       throw `GeoJson not support for valueType=[tuple]`;
     },
     Cluster: (data, setup) => {
-      draw_list_as_cluster(data as LBSMapValue[], setup);
+      draw_list_as_cluster(data as LbsMapValue[], setup);
     },
   },
   //-------------------------------------<tuple-list>
@@ -122,13 +122,13 @@ const drawing: Record<
       draw_tuple_list_as_rectangle(data as LatLngTuple[], setup);
     },
     Circle: (data, setup) => {
-      draw_list_as_circle(data as LBSMapValue[], setup);
+      draw_list_as_circle(data as LbsMapValue[], setup);
     },
     GeoJson: () => {
       throw `GeoJson not support for valueType=[tuple]`;
     },
     Cluster: (data, setup) => {
-      draw_list_as_cluster(data as LBSMapValue[], setup);
+      draw_list_as_cluster(data as LbsMapValue[], setup);
     },
   },
   //-------------------------------------<geojson>
@@ -157,7 +157,7 @@ const drawing: Record<
   },
 };
 
-export function draw_map_data(mapData: LBSMapData, setup: LbsMapDrawingSetup) {
+export function draw_map_data(mapData: LbsMapData, setup: LbsMapDrawingSetup) {
   let { valueType, displayType = "Point" } = setup.props;
 
   // 自动判断值的类型

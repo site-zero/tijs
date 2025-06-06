@@ -1,20 +1,20 @@
 import _ from 'lodash'
 import { latlngObjToTuple, translateCoordsForLatlngObj, translateCoordsForLatlngTuple } from "./gis"
-import { GeoJson, LatLngObj, LatLngTuple, LBSMapData, LbsMapProps, LbsMapValueCoords, LbsMapValueType } from "./ti-lbs-map-types"
+import { GeoJson, LatLngObj, LatLngTuple, LbsMapData, LbsMapProps, LbsMapValueCoords, LbsMapValueType } from "./ti-lbs-map-types"
 
-export function getMapData(props: LbsMapProps, baseTileCoords: LbsMapValueCoords): LBSMapData | null {
+export function getMapData(props: LbsMapProps, baseTileCoords: LbsMapValueCoords): LbsMapData | null {
   let val = props.value
   if (_.isEmpty(val)) {
     val = undefined
   }
   // Guard
-  if (!val && !props.defaultLocation) {
+  if (!val && !props.center) {
     return null
   }
 
   return evalMapData(
     baseTileCoords, props.valueCoords ?? 'WGS84',
-    val, props.valueType, props.defaultLocation)
+    val, props.valueType, props.center)
   //   return this.evalMapData({
   //     val,
   //     valType: this.valueType,
@@ -29,7 +29,7 @@ function evalMapData(
   value: any,
   valType: LbsMapValueType = 'obj',
   // SAME as value
-  dftLo?: any): LBSMapData {
+  dftLo?: any): LbsMapData {
 
   // 处理对象
   if ('obj' == valType) {
