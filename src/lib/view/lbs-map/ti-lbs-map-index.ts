@@ -33,7 +33,9 @@ const TiLbsMapInfo: TiComInfo = {
     {
       name: "simple",
       text: "i18n:simple",
-      comConf: {} as LbsMapProps,
+      comConf: {
+        valueCoords: "WGS84",
+      } as LbsMapProps,
     },
   ],
 };

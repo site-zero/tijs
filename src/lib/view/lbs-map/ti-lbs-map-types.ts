@@ -399,6 +399,8 @@ export type LbsMapProps = CommonProps &
     height?: number | string;
   };
 
+const TIANDITU_URL =
+  "http://t{s}.tianditu.gov.cn/{layer}_w/wmts?SERVICE={service}&REQUEST={req}&VERSION={ver}&LAYER={layer}&STYLE={style}&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk={tk}";
 /**
  * LBS_MAP_DFT_TILES 是一个默认地图瓦片服务配置对象。
  *
@@ -459,9 +461,10 @@ const LBS_MAP_DFT_TILES = {
     coords: "GCJ02",
   } as LBSMapTileLayer,
   // 谷歌矢量中文：
+  // 尝试使用可能可用的 Google 中国地图服务 URL，实际使用时需确认其有效性
   GOOGLE_VECTOR_CN: {
-    url: "http://mt{s}.google.cn/vt/lyrs=m&scale=2&hl={lang}&gl=cn&x={x}&y={y}&z={z}",
-    options: { subdomains: "0123", lang: "zh-CN" },
+    url: "http://www.google.cn/maps/vt?lyrs=m@189&gl=cn&x={x}&y={y}&z={z}",
+    options: {},
     coords: "WGS84",
   } as LBSMapTileLayer,
   // 谷歌矢量：
@@ -526,41 +529,95 @@ const LBS_MAP_DFT_TILES = {
   } as LBSMapTileLayer,
   // 天地图卫星：
   TIANDITU_SATElITE: {
-    url: "http://t7.tianditu.gov.cn/img_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=img&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=e3b434f191257368fc43c5b011ab5911",
-    options: {},
+    url: TIANDITU_URL,
+    options: {
+      subdomains: "01234567",
+      service: "WMTS",
+      req: "GetTile",
+      ver: "1.0.0",
+      layer: "img",
+      style: "default",
+      tk: "615bea2dd55491ea9e7b1e994b60a014",
+    },
     coords: "WGS84",
   } as LBSMapTileLayer,
   // 天地图卫星注记：
   TIANDITU_SATElITE_NOTE: {
-    url: "http://t7.tianditu.gov.cn/cia_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cia&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=e3b434f191257368fc43c5b011ab5911",
-    options: {},
+    url: TIANDITU_URL,
+    //url: "http://t7.tianditu.gov.cn/cia_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cia&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=615bea2dd55491ea9e7b1e994b60a014",
+    options: {
+      subdomains: "01234567",
+      service: "WMTS",
+      req: "GetTile",
+      ver: "1.0.0",
+      layer: "cia",
+      style: "default",
+      tk: "615bea2dd55491ea9e7b1e994b60a014",
+    },
     coords: "WGS84",
   } as LBSMapTileLayer,
   // 天地图矢量：
   TIANDITU_VECTOR: {
-    url: "http://t7.tianditu.gov.cn/vec_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=vec&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=e3b434f191257368fc43c5b011ab5911",
-    options: {},
+    url: TIANDITU_URL,
+    //url: "http://t7.tianditu.gov.cn/vec_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=vec&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=615bea2dd55491ea9e7b1e994b60a014",
+    options: {
+      subdomains: "01234567",
+      service: "WMTS",
+      req: "GetTile",
+      ver: "1.0.0",
+      layer: "vec",
+      style: "default",
+      tk: "615bea2dd55491ea9e7b1e994b60a014",
+    },
     coords: "WGS84",
   } as LBSMapTileLayer,
   // 天地图矢量注记：
   TIANDITU_VECTOR_NOTE: {
-    url: "http://t7.tianditu.gov.cn/cva_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cva&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=e3b434f191257368fc43c5b011ab5911",
-    options: {},
+    url: TIANDITU_URL,
+    //url: "http://t7.tianditu.gov.cn/cva_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cva&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=615bea2dd55491ea9e7b1e994b60a014",
+    options: {
+      subdomains: "01234567",
+      service: "WMTS",
+      req: "GetTile",
+      ver: "1.0.0",
+      layer: "cva",
+      style: "default",
+      tk: "615bea2dd55491ea9e7b1e994b60a014",
+    },
     coords: "WGS84",
   } as LBSMapTileLayer,
   // 天地图地形：
   TIANDITU_TERRAIN: {
-    url: "http://t7.tianditu.gov.cn/ter_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ter&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=e3b434f191257368fc43c5b011ab5911",
-    options: {},
+    url: TIANDITU_URL,
+    //url: "http://t7.tianditu.gov.cn/ter_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=ter&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=615bea2dd55491ea9e7b1e994b60a014",
+    options: {
+      subdomains: "01234567",
+      service: "WMTS",
+      req: "GetTile",
+      ver: "1.0.0",
+      layer: "ter",
+      style: "default",
+      tk: "615bea2dd55491ea9e7b1e994b60a014",
+    },
     coords: "WGS84",
   } as LBSMapTileLayer,
   // 天地图地形注记：
   TIANDITU_TERRAIN_NOTE: {
-    url: "http://t7.tianditu.gov.cn/cta_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cta&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=e3b434f191257368fc43c5b011ab5911",
-    options: {},
+    url: TIANDITU_URL,
+    //url: "http://t7.tianditu.gov.cn/cta_w/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&LAYER=cta&STYLE=default&TILEMATRIXSET=w&FORMAT=tiles&TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&tk=615bea2dd55491ea9e7b1e994b60a014",
+    options: {
+      subdomains: "01234567",
+      service: "WMTS",
+      req: "GetTile",
+      ver: "1.0.0",
+      layer: "cta",
+      style: "default",
+      tk: "615bea2dd55491ea9e7b1e994b60a014",
+    },
     coords: "WGS84",
   } as LBSMapTileLayer,
 };
+
 /**
  * 内部配置对象详细列表如下：
  *

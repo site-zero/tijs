@@ -3,6 +3,7 @@ import _ from "lodash";
 import {
   getLbsMapStdTileLayer,
   isLbsMapStdTileType,
+  LbsMapDrawContext,
   LbsMapProps,
   LbsMapStdTileType,
   LBSMapTileLayer,
@@ -11,17 +12,23 @@ import {
 } from "./ti-lbs-map-types";
 
 export function useTileLayer(
-  props: Pick<LbsMapProps, "valueCoords" | "tileLayer">
+  props: Pick<LbsMapProps, "valueCoords" | "tileLayer">,
+  _dc: LbsMapDrawContext
 ) {
+  // 防空
+  if (!_dc.$map) {
+    console.warn("Map is not initialized, cannot add tile layers.");
+    return;
+  }
   let coords = props.valueCoords ?? "WGS84";
   let tileLayerList: LbsMapTileLayerInput[] = [];
   if (!props.tileLayer || _.isEmpty(props.tileLayer)) {
     tileLayerList = [
       (
         {
-          GCJ02: "GAODE_ROADMAP",
-          BD09: "GAODE_ROADMAP",
-          WGS84: "OPENSTREAT",
+          GCJ02: "QQ_VECTOR_NOTE",
+          BD09: "GOOGLE_VECTOR_CN",
+          WGS84: "CARTO_ALL",
         } as Record<LbsMapValueCoords, LbsMapStdTileType>
       )[coords],
     ];
@@ -37,7 +44,7 @@ export function useTileLayer(
 
   // 循环处理瓦片层
   for (let it of tileLayerList) {
-    createTileLayer(it);
+    createTileLayer(it).addTo(_dc.$map!);
   }
 }
 

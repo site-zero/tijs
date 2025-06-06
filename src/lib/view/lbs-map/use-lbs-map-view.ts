@@ -25,10 +25,13 @@ export function initMap(
   api: LbsMapApi,
   mapData: LBSMapData | null
 ) {
+  console.log("initMap", props.valueCoords, props.tileLayer);
   let $main = getMainElement();
   if (!$main) {
+    console.warn("Map main element is not found, cannot initialize map.");
     return;
   }
+
   // 注销已经存在的 Map
   if (_dc.$live) {
     _dc.$live.off();
@@ -42,7 +45,8 @@ export function initMap(
   }
   // Create Map
   _dc.$map = L.map($main, {
-    ...props.mapOptions,
+    ...(props.mapOptions || {}),
+    zoomControl: true,
     attributionControl: false,
     minZoom: props.minZoom,
     maxZoom: props.maxZoom,
@@ -57,7 +61,7 @@ export function initMap(
     .addTo(_dc.$map);
 
   // Create the main bg-layer
-  useTileLayer(props);
+  useTileLayer(props, _dc);
 
   // Events
   _dc.$map.on("move", (evt) => {

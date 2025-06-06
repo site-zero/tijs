@@ -13,6 +13,7 @@
   //--------------------------------------------
   const props = withDefaults(defineProps<LbsMapProps>(), {
     zoom: 10,
+    maxZoom: 18,
   });
   //--------------------------------------------
   const _dc: LbsMapDrawContext = reactive({
@@ -68,8 +69,9 @@
     initMap(() => $main.value, props, _dc, _api.value, _map_data.value);
   }
   //--------------------------------------------
+  // 不能 immediate ，因为 $main 容器还没创建
   watch(
-    () => props.value,
+    () => [props.value, props.valueCoords, props.tileLayer],
     () => {
       _init_map();
     }
@@ -150,6 +152,6 @@
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
   @use "./ti-lbs-map.scss";
 </style>

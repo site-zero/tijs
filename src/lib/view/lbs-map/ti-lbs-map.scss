@@ -2,4 +2,10 @@
   > main {
     background-color: var(--ti-color-mask-bushy);
   }
+  a {
+    text-decoration: none;
+    &:hover {
+      text-decoration: none;
+    }
+  }
 }
