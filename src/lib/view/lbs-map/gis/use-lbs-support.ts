@@ -1,6 +1,7 @@
 import { LatLngTuple } from 'leaflet';
 import _ from 'lodash';
-import { LatLngObj, LbsMapBound, LbsMapBoundInput, LbsMapValue } from "../ti-lbs-map-types";
+import { Num } from '../../../../core';
+import { isLatLngTuple, LatLngObj, LbsMapBound, LbsMapBoundInput, LbsMapValue } from "../ti-lbs-map-types";
 
 
 export function getLngToWest(lng: number, west: number) {
@@ -181,6 +182,15 @@ export function latlngObjToTuple(lal: LatLngObj): LatLngTuple {
     return [lat, lng, alt]
 }
 //------------------------------------------------
-export function tidyLatLng(_lal:LbsMapValue, _precision: number = 6) {
-    
+export function tidyLatLng(lal: LbsMapValue, precision: number = 6) {
+    if (isLatLngTuple(lal)) {
+        let [lat, lng] = lal;
+        return [Num.precise(lat, precision), Num.precise(lng, precision)];
+    }
+    let { lat, lng } = lal;
+    return {
+        lat: Num.precise(lat, precision),
+        lng: Num.precise(lng, precision)
+    };
 }
+//------------------------------------------------
