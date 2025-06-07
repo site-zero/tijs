@@ -18,19 +18,30 @@ import {
 } from "./ti-lbs-map-types";
 import { LbsMapApi } from "./use-lbs-map";
 import { useTileLayer } from "./use-lbs-map-tiles";
+import markerIcon  from './icon/marker-icon.png'
+import markerShadow from './icon/marker-shadow.png'
+import markerIcon2x from './icon/marker-icon-2x.png'
+
+console.log(markerIcon)
 
 // 修复默认图标路径问题
 function fixLeafletIcons() {
-  const iconRetinaUrl = new URL("/icon/marker-icon-2x.png", import.meta.url)
-    .href;
-  const iconUrl = new URL("/icon/marker-icon.png", import.meta.url).href;
-  const shadowUrl = new URL("/icon/marker-shadow.png", import.meta.url).href;
+  // const iconRetinaUrl = new URL(
+  //   "assets/img/marker-icon-2x.png",
+  //   import.meta.url
+  // ).href;
+  // const iconUrl = new URL("assets/img/marker-icon.png", import.meta.url)
+  //   .href;
+  // const shadowUrl = new URL(
+  //   "assets/img/marker-shadow.png",
+  //   import.meta.url
+  // ).href;
 
   delete (L.Icon.Default.prototype as any)._getIconUrl;
   L.Icon.Default.mergeOptions({
-    iconRetinaUrl,
-    iconUrl,
-    shadowUrl,
+    iconRetinaUrl: markerIcon2x,
+    iconUrl:markerIcon,
+    shadowUrl:markerShadow,
   });
 }
 
