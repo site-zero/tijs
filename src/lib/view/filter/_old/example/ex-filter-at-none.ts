@@ -1,4 +1,4 @@
-import { ComPropExample } from '../../../../_type';
+import { ComPropExample } from '../../../../../_type';
 import { FilterProps } from '../ti-filter-types';
 import { getFilterExampleFields } from './ex-fields';
 

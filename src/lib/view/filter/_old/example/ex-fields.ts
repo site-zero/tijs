@@ -1,4 +1,4 @@
-import { DroplistProps, GridFieldsInput } from '../../../';
+import { DroplistProps, GridFieldsInput } from '../../../../';
 
 export function getFilterExampleFields(): GridFieldsInput[] {
   return [

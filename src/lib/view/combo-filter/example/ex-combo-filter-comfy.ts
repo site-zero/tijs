@@ -1,5 +1,5 @@
 import { ComPropExample } from '../../../../_type';
-import { getFilterExampleFields } from '../../filter/example/ex-fields';
+import { getFilterExampleFields } from '../../filter/_old/example/ex-fields';
 import { ComboFilterProps } from '../ti-combo-filter-types';
 
 export default {

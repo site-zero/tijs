@@ -1,7 +1,7 @@
 import _ from 'lodash';
-import { FieldRefer, GridFieldsInput, TiObjFieldsFeature } from '../../';
-import { getFieldUniqKey } from '../../../_type';
-import { I18n, Util } from '../../../core';
+import { FieldRefer, GridFieldsInput, TiObjFieldsFeature } from '../../../';
+import { getFieldUniqKey } from '../../../../_type';
+import { I18n, Util } from '../../../../core';
 
 export function getFieldsNames(fields: GridFieldsInput[] = []) {
   let re = new Set<string>();

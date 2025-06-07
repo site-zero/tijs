@@ -5,9 +5,9 @@ import {
   useObjFields,
   useValueTranslator,
   useVisibility,
-} from '../../';
-import { Vars, makeFieldUniqKey } from '../../../_type';
-import { Util } from '../../../core';
+} from '../../../';
+import { Vars, makeFieldUniqKey } from '../../../../_type';
+import { Util } from '../../../../core';
 import {
   FilterFeature,
   FilterMoreItem,

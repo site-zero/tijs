@@ -1,86 +1,85 @@
-import { ComPropExample } from '../../../../_type';
-import { getFilterExampleFields } from '../../filter/example/ex-fields';
-import { ComboFilterProps } from '../ti-combo-filter-types';
+import { ComPropExample } from "../../../../_type";
+import { ComboFilterProps } from "../ti-combo-filter-types";
 
 export default {
-  name: 'oneline',
-  text: 'i18n:ti-combo-filter-example-oneline',
+  name: "oneline",
+  text: "i18n:ti-combo-filter-example-oneline",
   comConf: {
     value: {
       filter: {
-        name: 'foxa',
-        age: '[3,89)',
+        name: "foxa",
+        age: "[3,89)",
       },
       sorter: {
         ct: 1,
         name: -1,
       },
     },
-    keepMajor: 'local: Ti-Demo-TiComboFilter-Major-oneline',
-    layout: 'oneline',
+    keepMajor: "local: Ti-Demo-TiComboFilter-Major-oneline",
+    layout: "oneline",
     filterConfig: {
-      majorFields: ['type', 'age', 'name'],
+      majorFields: ["type", "age", "name"],
       canCustomizedMajor: true,
       actionCollapse: true,
-      actionAt: 'right',
+      actionAt: "right",
       majorForm: {
         layoutHint: 3,
-        layoutGridTracks: '100px,160px,1fr',
+        layoutGridTracks: "100px,160px,1fr",
       },
       fields: [
         {
-          title: 'Name',
-          name: 'name',
+          title: "Name",
+          name: "name",
         },
         {
-          title: 'Age',
-          name: 'age',
+          title: "Age",
+          name: "age",
         },
         {
-          title: 'Type',
-          name: 'type',
-          comType: 'TiDroplist',
+          title: "Type",
+          name: "type",
+          comType: "TiDroplist",
           comConf: {
             options: [
               {
-                value: 'hippo',
-                text: 'Hippo',
-                icon: 'fas-hippo',
+                value: "hippo",
+                text: "Hippo",
+                icon: "fas-hippo",
               },
               {
-                value: 'cow',
-                text: 'Cow',
-                icon: 'fas-cow',
+                value: "cow",
+                text: "Cow",
+                icon: "fas-cow",
               },
               {
-                value: 'spider',
-                text: 'Spider',
-                icon: 'fas-spider',
+                value: "spider",
+                text: "Spider",
+                icon: "fas-spider",
               },
               {
-                value: 'frog',
-                text: 'Frog',
-                icon: 'fas-frog',
+                value: "frog",
+                text: "Frog",
+                icon: "fas-frog",
               },
               {
-                value: 'bugs',
-                text: 'Bugs',
-                icon: 'fas-bugs',
+                value: "bugs",
+                text: "Bugs",
+                icon: "fas-bugs",
               },
               {
-                value: 'otter',
-                text: 'Otter',
-                icon: 'fas-otter',
+                value: "otter",
+                text: "Otter",
+                icon: "fas-otter",
               },
               {
-                value: 'feather',
-                text: 'Feather',
-                icon: 'fas-feather',
+                value: "feather",
+                text: "Feather",
+                icon: "fas-feather",
               },
               {
-                value: 'fish',
-                text: 'Fish',
-                icon: 'fas-fish',
+                value: "fish",
+                text: "Fish",
+                icon: "fas-fish",
               },
             ],
           },
@@ -89,8 +88,8 @@ export default {
     },
     sorterConfig: {
       options: [
-        { value: 'ct', text: 'Created Time' },
-        { value: 'name', text: 'Name' },
+        { value: "ct", text: "Created Time" },
+        { value: "name", text: "Name" },
       ],
     },
   } as ComboFilterProps,

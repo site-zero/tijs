@@ -1,7 +1,8 @@
 import { TiComSet } from "../../_type";
 import { TiComboFilterInfo } from "./combo-filter/ti-combo-filter-index";
 import { TiFallsInfo } from "./falls/ti-falls-index";
-import { TiFilterInfo } from "./filter/ti-filter-index";
+import { TiFilterInfo } from "./filter/_old/ti-filter-index";
+import { TiFilterBarInfo } from "./filter/bar/ti-filter-bar-index";
 import { TiHtmlPageInfo } from "./html-page/html-page-index";
 import { TiLbsMapInfo } from "./lbs-map/ti-lbs-map-index";
 import { TiListInfo } from "./list/ti-list-index";
@@ -17,6 +18,7 @@ export default {
   TiComboFilter: TiComboFilterInfo,
   TiFalls: TiFallsInfo,
   TiFilter: TiFilterInfo,
+  TiFilterBar: TiFilterBarInfo,
   TiHtmlPage: TiHtmlPageInfo,
   TiLbsMap: TiLbsMapInfo,
   TiList: TiListInfo,
@@ -31,7 +33,8 @@ export default {
 
 export * from "./combo-filter/ti-combo-filter-index";
 export * from "./falls/ti-falls-index";
-export * from "./filter/ti-filter-index";
+export * from "./filter/_old/ti-filter-index";
+export * from "./filter/bar/ti-filter-bar-index";
 export * from "./html-page/html-page-index";
 export * from "./lbs-map/ti-lbs-map-index";
 export * from "./list/ti-list-index";

@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import { openAppModal, TiObjFieldsFeature, TransferProps } from '../../';
-import { StrOptionItem } from '../../../_type';
+import { openAppModal, TiObjFieldsFeature, TransferProps } from '../../../';
+import { StrOptionItem } from '../../../../_type';
 import { FilterProps } from './ti-filter-types';
 import { FilterEmitter } from './use-filter';
 import { joinFieldsTitle, makeFieldsMap } from './use-filter-fields';

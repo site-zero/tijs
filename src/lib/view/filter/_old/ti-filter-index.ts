@@ -1,6 +1,6 @@
 import { App } from 'vue';
-import { TiComInfo, TiComRace } from '../../../_type';
-import { COM_TYPES } from '../../lib-com-types';
+import { TiComInfo, TiComRace } from '../../../../_type';
+import { COM_TYPES } from '../../../lib-com-types';
 import TiFilter from './TiFilter.vue';
 import example from './example';
 

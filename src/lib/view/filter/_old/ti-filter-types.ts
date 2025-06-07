@@ -4,7 +4,7 @@ import {
   GridFieldsInput,
   TiObjFieldsFeature,
   ValueTranslatorProps,
-} from '../../';
+} from '../../../';
 import {
   ActionBarItem,
   AppModalProps,
@@ -12,7 +12,7 @@ import {
   IconInput,
   StrCaseMode,
   Vars,
-} from '../../../_type';
+} from '../../../../_type';
 
 export type FilterExportApi = {
   setupFilterMajorFields: () => Promise<void>;

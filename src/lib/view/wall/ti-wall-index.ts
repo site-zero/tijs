@@ -17,7 +17,6 @@ const COM_TYPE = COM_TYPES.Wall;
 
 const TiWallInfo: TiComInfo = {
   icon: 'zmdi-view-module',
-  //icon: '🚜',
   race: TiComRace.VIEW,
   name: COM_TYPE,
   text: 'i18n:ti-wall-com-name',

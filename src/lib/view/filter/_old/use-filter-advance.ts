@@ -1,9 +1,9 @@
-import { openAppModal } from '../../';
+import { openAppModal } from '../../../';
 import { FilterProps, FilterValue } from './ti-filter-types';
 import _ from 'lodash';
-import { FormProps } from '../../';
+import { FormProps } from '../../../';
 import { FilterEmitter } from './use-filter';
-import { AppModalProps } from '../../../_type';
+import { AppModalProps } from '../../../../_type';
 
 export async function openAdvanceForm(props: FilterProps, emit: FilterEmitter) {
   let re = await openAppModal(
