@@ -1,3 +1,48 @@
+@use "@site0/tijs/sass/_all.scss" as *;
+
 .ti-input-latlng {
-  background-color: red;
+  @include flex-align-nowrap;
+  //-----------------------------------------------------
+  > .prefix-actions {
+    align-self: stretch;
+    > a {
+      color: var(--ti-color-primary);
+      display: block;
+      width: 1.8em;
+      height: 100%;
+      position: relative;
+      > i {
+        position: absolute;
+        inset: 0;
+        transition: transform 0.3s, opacity 0.6s;
+        opacity: 0;
+        @include flex-center;
+      }
+      > i:first-child {
+        opacity: 1;
+      }
+    }
+    &:hover {
+      > a {
+        color: var(--ti-color-secondary);
+        background-color: var(--ti-color-highlight);
+        > i:first-child {
+          opacity: 0;
+          transform: rotate(360deg);
+        }
+        > i:last-child {
+          opacity: 1;
+          transform: rotate(360deg) scale(1.2);
+        }
+      }
+    }
+  }
+  //-----------------------------------------------------
+  .main-head {
+    @include flex-center;
+    font-size: 0.8em;
+    padding: 0 0.5em;
+    white-space: nowrap;
+  }
+  //-----------------------------------------------------
 }

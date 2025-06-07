@@ -1,8 +1,13 @@
 import { CommonProps } from "../../../_type";
-import { LbsMapEditPointMode, LbsMapProps, LbsMapValue, LbsMapValueCoords, LbsMapValueType } from "../../view/all-views";
+import {
+  LbsMapProps,
+  LbsMapValue,
+  LbsMapValueCoords,
+} from "../../view/all-views";
+import { InputBoxAspect } from "../all-input";
 
 export type InputLatLngEmitter = {
-  (event: "change", payload: any): void;
+  (event: "change", payload: LbsMapValue | null): void;
 };
 
 export type InputLatLngProps = CommonProps & {
@@ -15,7 +20,7 @@ export type InputLatLngProps = CommonProps & {
    * 对于没有值的清空，初次编辑值将会生成 Obj 还是 Tuple
    * 在这里可以指定。
    */
-  valueType?: LbsMapValueType;
+  valueType?: "obj" | "tuple";
   /**
    * 修改时，处理值的精度，默认`6`
    */
@@ -26,12 +31,12 @@ export type InputLatLngProps = CommonProps & {
   valueCoords?: LbsMapValueCoords;
 
   /**
-   * 地图编辑模式: 'drag' | 'pin' 
+   * 地图编辑模式: 'drag' | 'pin'
    */
-  editPoint?: Omit<LbsMapEditPointMode, 'none'>;
+  editPoint?: "drag" | "pin";
 
-  /** 
-   * 是否只读 
+  /**
+   * 是否只读
    */
   readonly?: boolean;
 
@@ -44,4 +49,6 @@ export type InputLatLngProps = CommonProps & {
    * 地图编辑器的定制属性
    */
   mapOptions?: LbsMapProps;
+
+  boxAspect?: InputBoxAspect;
 };

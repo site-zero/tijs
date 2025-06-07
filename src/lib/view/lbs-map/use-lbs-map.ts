@@ -4,6 +4,7 @@ import { IconInput, LogicType } from "../../../_type";
 import { Icons, Num } from "../../../core";
 import { useKeep } from "../../_features";
 import { translateCoordsForLatlngObj } from "./gis/use-lbs-coords";
+import { tidyLatLngData } from "./gis/use-lbs-support";
 import {
   getLbsMapStdTileLayer,
   isLbsMapStdTileType,
@@ -174,7 +175,7 @@ export function useLbsMap(
     if (!$map) {
       return;
     }
-    console.log("map move", $map.getZoom());
+    //console.log("map move", $map.getZoom());
     let now = Date.now();
     let bou = $map.getBounds();
     _dc.geo.value = {
@@ -230,8 +231,9 @@ export function useLbsMap(
   }
   //--------------------------------------
   function notifyChange(change: LbsMapData) {
-    if (!_.isEqual(change, props.value)) {
-      emit("change", change);
+    let delta = tidyLatLngData(change, props.valuePrecision);
+    if (!_.isEqual(delta, props.value)) {
+      emit("change", delta);
     }
   }
 
