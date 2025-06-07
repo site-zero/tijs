@@ -72,6 +72,7 @@ export function useInputLatLngApi(
       minHeight: "480px",
       clickMaskToClose: true,
       result: lal ?? { lat: 39.9987, lng: 116.4026 },
+      //model: { event: "change", data: "value" },
       comType: "TiLbsMap",
       comConf: {
         valueType: "obj",
@@ -102,6 +103,29 @@ export function useInputLatLngApi(
     emit("change", null);
   }
   //-----------------------------------------------------
+  function onUpdate(key: keyof LatLngObj, val: any) {
+    if (_.isNil(val)) {
+      update({ [key]: 0 });
+    }
+    // 确保是合法的值
+    else {
+      let v = val * 1;
+      if (isNaN(v)) {
+        v = -1;
+      }
+      update({ [key]: v });
+    }
+  }
+  //-----------------------------------------------------
+  function update(delta: Partial<LatLngObj>) {
+    if (!_.isEmpty(delta)) {
+      let lal = getLatLngObj() ?? { lat: 0, lng: 0 };
+      _.assign(lal, delta);
+      let val = toLatLngValue(lal);
+      notifyChange(val);
+    }
+  }
+  //-----------------------------------------------------
   function notifyChange(val: LbsMapValue) {
     if (!_.isEqual(props.value, val)) {
       emit("change", val);
@@ -113,6 +137,7 @@ export function useInputLatLngApi(
   return {
     doEditPoint,
     doClearValue,
+    onUpdate,
     notifyChange,
   };
 }

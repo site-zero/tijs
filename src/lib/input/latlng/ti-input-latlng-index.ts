@@ -50,6 +50,9 @@ const TiInputLatLngInfo: TiComInfo = {
       comConf: {
         editPoint: "drag",
         canInput: false,
+        mapOptions: {
+          flyToOptions: true,
+        },
       } as InputLatLngProps,
     },
     {
@@ -57,7 +60,12 @@ const TiInputLatLngInfo: TiComInfo = {
       text: "i18n:ti-input-lat-lng-example-pin",
       comConf: {
         editPoint: "pin",
-        canInput: true,
+        canInput: false,
+        valueCoords: "GCJ02",
+        valuePrecision: 8,
+        mapOptions: {
+          zoom: 15,
+        },
       } as InputLatLngProps,
     },
     {
@@ -66,6 +74,9 @@ const TiInputLatLngInfo: TiComInfo = {
       comConf: {
         editPoint: "drag",
         canInput: true,
+        mapOptions: {
+          keepZoomBy: "Demo-InputLatLng-Zoom",
+        },
       } as InputLatLngProps,
     },
   ],

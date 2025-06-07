@@ -1,10 +1,10 @@
-import { LatLngTuple } from "leaflet";
 import _ from "lodash";
 import { Num } from "../../../../core";
 import {
   isLatLngObj,
   isLatLngTuple,
   LatLngObj,
+  LatLngTuple,
   LbsMapBound,
   LbsMapBoundInput,
   LbsMapData,

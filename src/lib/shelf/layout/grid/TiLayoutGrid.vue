@@ -38,15 +38,6 @@
   import { getLayoutGridItems, isLayoutAdjustable } from './use-grid-items';
   import { getTopStyle } from './use-grid-util';
   //-------------------------------------------------
-  // const TiLayoutTabs = defineAsyncComponent({
-  //   loader: () => import('../tabs/TiLayoutTabs.vue'),
-  //   loadingComponent: {
-  //     template: '<div>Loading AsyncComponent...</div>',
-  //   },
-  //   errorComponent: {
-  //     template: '<div>Fail to async load TiLayoutTabs.vue</div>',
-  //   },
-  // });
   import { TiLayoutTabs } from '../tabs/ti-layout-tabs-index';
   //-------------------------------------------------
   const props = withDefaults(defineProps<LayoutGridProps>(), {

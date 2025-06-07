@@ -77,19 +77,27 @@
 <template>
   <div class="ti-input-latlng">
     <div class="prefix-actions" v-if="!props.readonly">
-      <a data-tip="i18n:ti-input-lat-lng-clear" @click.left.stop="_api.doClearValue()">
+      <a
+        data-tip="i18n:ti-input-lat-lng-clear"
+        @click.left.stop="_api.doClearValue()">
         <i class="fa-solid fa-map-location-dot"></i>
         <i class="zmdi zmdi-close"></i>
       </a>
     </div>
-    <TiInput v-bind="InputBoxConfig" :value="LatLng.lat">
+    <TiInput
+      v-bind="InputBoxConfig"
+      :value="LatLng.lat"
+      @change="_api.onUpdate('lat', $event)">
       <template v-slot:head
         ><div class="main-head">
           {{ I18n.get("ti-input-lat-lng-k-lat") }}:
         </div></template
       >
     </TiInput>
-    <TiInput v-bind="InputBoxConfig" :value="LatLng.lng">
+    <TiInput
+      v-bind="InputBoxConfig"
+      :value="LatLng.lng"
+      @change="_api.onUpdate('lng', $event)">
       <template v-slot:head
         ><div class="main-head">
           {{ I18n.get("ti-input-lat-lng-k-lng") }}:

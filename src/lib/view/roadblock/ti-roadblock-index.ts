@@ -30,7 +30,7 @@ const COM_TYPE = COM_TYPES.Roadblock;
 
 const TiRoadblockInfo: TiComInfo = {
   icon: 'fas-road-barrier',
-  race: TiComRace.TILE,
+  race: TiComRace.VIEW,
   name: COM_TYPE,
   text: 'i18n:ti-roadblock-com-name',
   i18n: {

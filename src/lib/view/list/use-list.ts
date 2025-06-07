@@ -1,14 +1,14 @@
-import _ from 'lodash';
-import { computed } from 'vue';
-import { AnyOptionItem, IconInput, TableRowID, Vars } from '../../../_type';
-import { EventUtils, I18n, Tmpl, Util } from '../../../core';
+import _ from "lodash";
+import { computed } from "vue";
+import { RoadblockProps } from "../../";
+import { AnyOptionItem, IconInput, TableRowID, Vars } from "../../../_type";
+import { EventUtils, I18n, Tmpl, Util } from "../../../core";
 import {
   SelectableState,
   useDataLogicType,
   useSelectable,
   useStdListItem,
-} from '../../_features';
-import { RoadblockProps } from '../../tile/roadblock/ti-roadblock-types';
+} from "../../_features";
 import {
   IndentlyItem,
   ListEmitter,
@@ -16,7 +16,7 @@ import {
   ListItem,
   ListProps,
   ListSelectEmitInfo,
-} from './ti-list-types';
+} from "./ti-list-types";
 
 const debug = false;
 
@@ -66,13 +66,13 @@ export function useList(
   //-----------------------------------------------------
   function getRoadblock() {
     let re = {
-      icon: 'fas-list',
-      text: 'i18n:empty-data',
+      icon: "fas-list",
+      text: "i18n:empty-data",
       autoI18n: true,
-      mode: 'auto',
-      layout: 'B',
-      size: 'small',
-      opacity: 'faint',
+      mode: "auto",
+      layout: "B",
+      size: "small",
+      opacity: "faint",
     };
     _.assign(re, props.emptyRoadblock);
     return re as RoadblockProps;
@@ -80,17 +80,17 @@ export function useList(
   //-----------------------------------------------------
   function getMarkerIcons(): [IconInput, IconInput] | undefined {
     if (props.markerIcons) {
-      if ('auto' == props.markerIcons) {
+      if ("auto" == props.markerIcons) {
         if (props.multi) {
-          return ['zmdi-square-o', 'zmdi-check-square'];
+          return ["zmdi-square-o", "zmdi-check-square"];
         }
-        return ['zmdi-circle-o', 'zmdi-dot-circle'];
+        return ["zmdi-circle-o", "zmdi-dot-circle"];
       }
       return props.markerIcons;
     }
     // 如果是多选，但是没有指定 markerIcon
     else if (_.isNil(props.markerIcons) && props.multi) {
-      return ['zmdi-square-o', 'zmdi-check-square'];
+      return ["zmdi-square-o", "zmdi-check-square"];
     }
     return undefined;
   }
@@ -113,7 +113,7 @@ export function useList(
   };
   let _format_display_text: (it: AnyOptionItem, raw: Vars) => string;
   // 默认的渲染方式用文本
-  let _text_format = props.textFormat ?? '<em>${text}</em><abbr>${tip}</abbr>';
+  let _text_format = props.textFormat ?? "<em>${text}</em><abbr>${tip}</abbr>";
 
   // 字符串格式化模板
   if (_.isString(_text_format)) {
@@ -141,8 +141,8 @@ export function useList(
       let is_current = selectable.isDataActived(selection, index, li);
       let is_checked = selectable.isDataChecked(selection, index, li);
       let className: Vars = {
-        'is-current': is_current,
-        'is-checked': is_checked,
+        "is-current": is_current,
+        "is-checked": is_checked,
       };
       let type = getRowType ? getRowType(li) : undefined;
       if (type) {
@@ -181,7 +181,7 @@ export function useList(
         index,
         current: is_current,
         checked: is_checked,
-        displayText: text ?? '',
+        displayText: text ?? "",
         rawData: li,
         canCheck,
         canSelect,
@@ -236,11 +236,11 @@ export function useList(
       oldCheckedIds,
       oldCurrentId
     ) as ListSelectEmitInfo;
-    emit('select', info);
+    emit("select", info);
   }
   //-----------------------------------------------------
   function OnItemSelect(itemEvent: ListEvent) {
-    if (debug) console.log('OnItemSelect', itemEvent);
+    if (debug) console.log("OnItemSelect", itemEvent);
     let { item, event } = itemEvent;
     if (
       !props.multi &&
@@ -267,11 +267,11 @@ export function useList(
       oldCheckedIds,
       oldCurrentId
     ) as ListSelectEmitInfo;
-    emit('select', info);
+    emit("select", info);
   }
   //-----------------------------------------------------
   function OnItemCheck(itemEvent: ListEvent) {
-    if (debug) console.log('OnItemCheck', itemEvent);
+    if (debug) console.log("OnItemCheck", itemEvent);
     let { item } = itemEvent;
     if (
       !selectable.canCheckItem({
@@ -296,7 +296,7 @@ export function useList(
       oldCheckedIds,
       oldCurrentId
     ) as ListSelectEmitInfo;
-    emit('select', info);
+    emit("select", info);
   }
   //-----------------------------------------------------
   // 输出特性

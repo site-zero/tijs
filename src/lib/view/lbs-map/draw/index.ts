@@ -1,7 +1,5 @@
 import { LatLngTuple } from "leaflet";
-import _ from "lodash";
 import {
-  isLatLngObj,
   LatLngObj,
   LbsMapData,
   LbsMapDisplayType,
@@ -157,29 +155,15 @@ const drawing: Record<
   },
 };
 
-export function draw_map_data(mapData: LbsMapData, setup: LbsMapDrawingSetup) {
-  let { valueType, displayType = "Point" } = setup.props;
-
-  // 自动判断值的类型
-  if (!valueType) {
-    if (isLatLngObj(mapData)) {
-      valueType = "obj";
-    }
-    // 数组的话，深入看一看是那种类型
-    else if (_.isArray(mapData)) {
-      if (isLatLngObj(mapData[0])) {
-        valueType = "obj-list";
-      } else if (_.isArray(mapData[0])) {
-        valueType = "tuple-list";
-      } else {
-        valueType = "tuple";
-      }
-    }
-    // 其他无法自动判断值类型
-    else {
-        throw `Cannot auto detect valueType for mapData`;
-    }
+export function draw_map_data(setup: LbsMapDrawingSetup) {
+  let mapData = setup._dc.mapData.value;
+  if (!mapData) {
+    return;
   }
+
+  let { displayType = "Point" } = setup.props;
+  let valueType = setup.api.getValueType();
+
   let render = drawing[valueType][displayType];
   render(mapData, setup);
 }

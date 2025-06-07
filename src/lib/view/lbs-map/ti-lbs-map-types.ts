@@ -1,9 +1,9 @@
 import { PopupOptions } from "leaflet";
 import _ from "lodash";
-import { Ref } from "vue";
+import { ComputedRef, Ref } from "vue";
+import { RoadblockProps } from "../../";
 import { CommonProps, IconInput, LogicType, Vars } from "../../../_type";
 import { KeepInfo } from "../../../lib/_features";
-import { RoadblockProps } from "../../tile/all-tiles";
 
 export type LbsMapEmitter = {
   (event: "change", data: LbsMapData): void;
@@ -19,6 +19,9 @@ export type LbsMapDrawContext = {
 
   // 当前活动图层
   $live: L.LayerGroup | undefined;
+
+  // 地图处理后的值计算属性
+  mapData: ComputedRef<LbsMapData | null>;
 
   // 当前地图地理信息摘要
   geo: Ref<LBSMapGeo>;
@@ -371,11 +374,22 @@ export type LbsMapProps = CommonProps &
     loadingRoadblock?: RoadblockProps;
 
     /**
-     * 当 `[value,valueCoords,tileLayer]` 属性变化的时候，
-     * 是否需要自动初始化地图，以便重置设置
-     * 默认 `false`
+     * 如果值的改动导致地图自动移动，声明这个属性将会显示为飞行动画
      */
-    watchForInit?: boolean;
+    flyToOptions?: L.ZoomPanOptions | boolean;
+
+    /**
+     * 如果值的改动导致地图自动移动，声明这个属性将会设置移动动画
+     * 如果声明了 flyToOptions 这个属性将会被无视
+     */
+    moveToOptions?: L.ZoomPanOptions;
+
+    // /**
+    //  * 当 `[value,valueCoords,tileLayer]` 属性变化的时候，
+    //  * 是否需要自动初始化地图，以便重置设置
+    //  * 默认 `false`
+    //  */
+    // watchForInit?: boolean;
 
     //--------------------------------------------
     // Point 行为设置

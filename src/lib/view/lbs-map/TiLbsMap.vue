@@ -1,4 +1,5 @@
 <script setup lang="ts">
+  import "leaflet/dist/leaflet.css";
   import _ from "lodash";
   import { computed, onMounted, ref, useTemplateRef, watch } from "vue";
   import { TiLoading } from "../../";
@@ -10,7 +11,7 @@
   } from "./ti-lbs-map-types";
   import { useLbsMap } from "./use-lbs-map";
   import { getMapData } from "./use-lbs-map-data";
-  import { initMap } from "./use-lbs-map-view";
+  import { initMap, redrawMap } from "./use-lbs-map-view";
   //--------------------------------------------
   const $main = useTemplateRef<HTMLDivElement>("main");
   const emit = defineEmits<LbsMapEmitter>();
@@ -26,6 +27,8 @@
     // 当前地图实例/活动图层
     $map: undefined,
     $live: undefined,
+    // 地图处理后的值计算属性
+    mapData: computed(() => getMapData(props, _dc.baseTileCoords)),
     // 当前地图地理信息摘要
     geo: ref({}),
     // 基础图层坐标系
@@ -44,7 +47,6 @@
   };
   //--------------------------------------------
   const _api = computed(() => useLbsMap(props, _dc, emit));
-  const _map_data = computed(() => getMapData(props, _dc.baseTileCoords));
   //--------------------------------------------
   const TopClass = computed(() => {
     return CssUtils.mergeClassName(props.className);
@@ -73,16 +75,26 @@
   });
   //--------------------------------------------
   function _init_map() {
-    initMap(() => $main.value, props, _dc, _api.value, _map_data.value);
+    initMap(() => $main.value, props, _dc, _api.value);
   }
   //--------------------------------------------
   // 不能 immediate ，因为 $main 容器还没创建
   watch(
-    () => [props.value, props.valueCoords, props.tileLayer],
+    () => [props.valueCoords, props.tileLayer, props.editPoint],
     () => {
-      if (props.watchForInit) {
-        _init_map();
+      _init_map();
+    }
+  );
+  //--------------------------------------------
+  watch(
+    () => props.value,
+    () => {
+      // console.log("watch value", props.value);
+      if (!_.isEqual(props.value, _dc.mapData.value)) {
+        // console.log("redraw map")
+        redrawMap(props, _dc, _api.value);
       }
+      _api.value.fitView();
     }
   );
   //--------------------------------------------

@@ -7,6 +7,8 @@ import { translateCoordsForLatlngObj } from "./gis/use-lbs-coords";
 import { tidyLatLngData } from "./gis/use-lbs-support";
 import {
   getLbsMapStdTileLayer,
+  isLatLngObj,
+  isLatLngTuple,
   isLbsMapStdTileType,
   LatLngObj,
   LbsMapData,
@@ -16,6 +18,7 @@ import {
   LbsMapProps,
   LbsMapTileLayer,
   LbsMapValueCoords,
+  LbsMapValueType,
 } from "./ti-lbs-map-types";
 
 export type LbsMapApi = ReturnType<typeof useLbsMap>;
@@ -124,7 +127,6 @@ export function useLbsMap(
     // Keep original input
     throw `Invalid icon type: ${urlOrIcon}`;
   }
-
   //--------------------------------------
   function GetIconSrc(src: string) {
     if (/^(https?:\/\/|\/)/.test(src)) {
@@ -132,10 +134,6 @@ export function useLbsMap(
     }
     return `${props.imageIconBase}${src}`;
   }
-
-  //--------------------------------------
-  function updateGeoInfo() {}
-
   //--------------------------------------
   function GeoStr(v?: number) {
     if (_.isUndefined(v)) return "";
@@ -155,6 +153,35 @@ export function useLbsMap(
     return ss.join(", ");
   }
   //--------------------------------------
+  function getValueType(): LbsMapValueType {
+    if (props.valueType) {
+      return props.valueType;
+    }
+    let mapData = _dc.mapData.value;
+    // 默认采用 obj
+    if (!mapData) {
+      return "obj";
+    }
+    // 自动判断值的类型
+    if (isLatLngObj(mapData)) {
+      return "obj";
+    }
+    if (isLatLngTuple(mapData)) {
+      return "tuple";
+    }
+    // 数组的话，深入看一看是那种类型
+    else if (_.isArray(mapData)) {
+      if (isLatLngObj(mapData[0])) {
+        return "obj-list";
+      }
+      if (isLatLngTuple(mapData[0])) {
+        return "tuple-list";
+      }
+    }
+    // 其他就认为 GEOJSON
+    return "geojson";
+  }
+  //--------------------------------------
   // 数据转换方法
   //--------------------------------------
   const _val_coords = props.valueCoords ?? "WGS84";
@@ -166,6 +193,41 @@ export function useLbsMap(
     return translateCoordsForLatlngObj(_val_coords, _dc.baseTileCoords, obj);
   }
   //--------------------------------------
+  // 地图控制方法
+  //--------------------------------------
+  function fitView() {
+    const { $map } = _dc;
+    if (!$map) return;
+
+    // 准备地图数据
+    let mapData = _dc.mapData.value;
+    let valueType = getValueType();
+
+    // 获取当前缩放
+    let mapZoom = $map.getZoom();
+
+    // 准备移动地图的方法
+    const __move_to = (center: L.LatLngExpression) => {
+      if (props.flyToOptions) {
+        $map.flyTo(
+          center,
+          mapZoom,
+          _.assign({ animate: true, duration: 0.5 }, props.flyToOptions)
+        );
+      } else {
+        $map.setView(
+          center,
+          mapZoom,
+          _.assign({ animate: true, duration: 0.5 }, props.moveToOptions)
+        );
+      }
+    };
+
+    // 根据类型自动移动地图中心点
+    if ("obj" == valueType) {
+      __move_to(mapData as LatLngObj);
+    }
+  }
 
   //--------------------------------------
   // 响应事件
@@ -244,12 +306,14 @@ export function useLbsMap(
     loadLocalZoom,
     Icon,
     GetIconSrc,
-    updateGeoInfo,
     GeoStr,
     GeoPointStr,
+    getValueType,
     // 数据转换方法
     trans_obj_from_tiles_to_value,
     trans_obj_from_value_to_tiles,
+    // 地图控制方法
+    fitView,
     // 响应事件
     OnMapMove,
     OnMapPointerClick,

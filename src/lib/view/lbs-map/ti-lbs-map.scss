@@ -8,12 +8,12 @@
     background-color: var(--ti-color-mask-bushy);
   }
   //-------------------------------------------------------
-  a {
-    text-decoration: none;
-    &:hover {
-      text-decoration: none;
-    }
-  }
+  // a {
+  //   text-decoration: none;
+  //   &:hover {
+  //     text-decoration: none;
+  //   }
+  // }
   //-------------------------------------------------------
   > .wgl-map-info {
     @include flex-align($jc: space-between);
@@ -28,7 +28,7 @@
     .info-ele {
       white-space: nowrap;
       padding: 0.2em;
-      background: rgba(255, 255, 255, 0.5);
+      background: rgba(255, 255, 255, 0.7);
       > i {
         display: inline-block;
         font-size: inherit;

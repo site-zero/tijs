@@ -1,8 +1,18 @@
-import { App } from "vue";
+import { App, defineAsyncComponent } from "vue";
 import { TiComInfo, TiComRace } from "../../../_type";
 import { COM_TYPES } from "../../lib-com-types";
 import { LbsMapProps } from "./ti-lbs-map-types";
 import TiLbsMap from "./TiLbsMap.vue";
+const COM_TYPE = COM_TYPES.LbsMap;
+// const TiLbsMap = defineAsyncComponent({
+//   loader: () => import("./TiLbsMap.vue"),
+//   loadingComponent: {
+//     template: `<div>Loading ${COM_TYPE}.vue...</div>`,
+//   },
+//   errorComponent: {
+//     template: `<div>Fail to async load ${COM_TYPE}.vue</div>`,
+//   },
+// });
 
 const en_us = {
   "com-name": "Map",
@@ -14,8 +24,6 @@ const zh_cn = {
   "example-dragpoint": "可拖拽点",
   "example-multi-markers": "多个标记点",
 };
-
-const COM_TYPE = COM_TYPES.LbsMap;
 
 const TiLbsMapInfo: TiComInfo = {
   icon: "fas-map-location-dot",
@@ -41,12 +49,16 @@ const TiLbsMapInfo: TiComInfo = {
       comConf: {
         valueCoords: "WGS84",
         zoom: 12,
-        watchForInit: true,
         value: {
           lat: 39.907576,
           lng: 116.391275,
         },
         valueType: "obj",
+        showInfo: {
+          zoom: true,
+          center: true,
+          pointerHover: true,
+        },
       } as LbsMapProps,
     },
     //------------------- 可拖拽点
@@ -57,10 +69,8 @@ const TiLbsMapInfo: TiComInfo = {
         valueCoords: "GCJ02",
         zoom: 12,
         value: {
-          // lat: 39.907576,
-          // lng: 116.391275,
-          lat: 40.03235902939368,
-          lng: 116.33976545657697,
+          lat: 39.962606,
+          lng: 116.46331,
         },
         valueType: "obj",
         editPoint: "drag",
@@ -69,6 +79,7 @@ const TiLbsMapInfo: TiComInfo = {
           center: true,
           pointerHover: true,
         },
+        flyToOptions: true,
       } as LbsMapProps,
     },
     //------------------- 多个标记点
@@ -91,10 +102,7 @@ const TiLbsMapInfo: TiComInfo = {
         valueType: "obj-list",
         displayType: "Point",
         // 这里用来设置marker 图标具体样式
-        markerOptions: {
-
-        },
-        watchForInit: true,
+        markerOptions: {},
         autoFitBounds: true,
         showInfo: {
           zoom: true,

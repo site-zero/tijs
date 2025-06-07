@@ -1,4 +1,4 @@
-import L, { LatLngTuple } from "leaflet";
+import L from "leaflet";
 import _ from "lodash";
 import { draw_map_data } from "./draw";
 import {
@@ -12,26 +12,42 @@ import {
   isLatLngObj,
   isLatLngTuple,
   LatLngObj,
-  LbsMapData,
+  LatLngTuple,
   LbsMapDrawContext,
   LbsMapProps,
 } from "./ti-lbs-map-types";
 import { LbsMapApi } from "./use-lbs-map";
 import { useTileLayer } from "./use-lbs-map-tiles";
 
+// 修复默认图标路径问题
+function fixLeafletIcons() {
+  const iconRetinaUrl = new URL("/icon/marker-icon-2x.png", import.meta.url)
+    .href;
+  const iconUrl = new URL("/icon/marker-icon.png", import.meta.url).href;
+  const shadowUrl = new URL("/icon/marker-shadow.png", import.meta.url).href;
+
+  delete (L.Icon.Default.prototype as any)._getIconUrl;
+  L.Icon.Default.mergeOptions({
+    iconRetinaUrl,
+    iconUrl,
+    shadowUrl,
+  });
+}
+
 export function initMap(
   getMainElement: () => HTMLElement | null,
   props: LbsMapProps,
   _dc: LbsMapDrawContext,
-  api: LbsMapApi,
-  mapData: LbsMapData | null
+  api: LbsMapApi
 ) {
-  console.log("initMap", props.valueCoords, props.tileLayer);
+  //console.log("initMap", props.valueCoords, props.tileLayer);
   let $main = getMainElement();
   if (!$main) {
     console.warn("Map main element is not found, cannot initialize map.");
     return;
   }
+
+  fixLeafletIcons();
 
   // 注销已经存在的 Map
   if (_dc.$live) {
@@ -85,10 +101,10 @@ export function initMap(
   _dc.$live = L.layerGroup().addTo(_dc.$map);
 
   // Init map view
-  initMapView(props, _dc, mapData);
+  initMapView(props, _dc);
 
   // Then Render the data
-  redrawMap(props, _dc, api, mapData);
+  redrawMap(props, _dc, api);
 
   // 监控容器尺寸变化
   if (_dc.resizeObserver) {
@@ -100,13 +116,10 @@ export function initMap(
   _dc.resizeObserver.observe($main);
 }
 
-export function initMapView(
-  props: LbsMapProps,
-  _dc: LbsMapDrawContext,
-  mapData: LbsMapData | null
-) {
-  console.log("initMapView");
+export function initMapView(props: LbsMapProps, _dc: LbsMapDrawContext) {
+  // console.log("initMapView");
   // Get current zoom, keep the last user zoom state
+  let mapData = _dc.mapData.value;
   let zoom = _dc.geo.value.zoom ?? props.zoom;
 
   let fromCoords = props.valueCoords ?? "WGS84";
@@ -191,11 +204,10 @@ export function initMapView(
   //..................................
 }
 
-function redrawMap(
+export function redrawMap(
   props: LbsMapProps,
   _dc: LbsMapDrawContext,
-  api: LbsMapApi,
-  mapData: LbsMapData | null
+  api: LbsMapApi
 ) {
   let { $map, $live } = _dc;
   if (!$map || !$live) {
@@ -206,11 +218,11 @@ function redrawMap(
   // Prepare the function name
 
   // Clear live layer
-  //$live.clearLayers()
+  $live.clearLayers();
 
   // Draw data
-  if (mapData) {
-    draw_map_data(mapData, {
+  if (_dc.mapData.value) {
+    draw_map_data({
       _dc,
       props,
       api,

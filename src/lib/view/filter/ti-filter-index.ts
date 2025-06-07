@@ -25,7 +25,7 @@ const COM_TYPE = COM_TYPES.Filter;
 
 const TiFilterInfo: TiComInfo = {
   icon: 'zmdi-filter-list',
-  race: TiComRace.INPUT,
+  race: TiComRace.VIEW,
   name: COM_TYPE,
   text: 'i18n:ti-filter-com-name',
   i18n: {
@@ -39,6 +39,9 @@ const TiFilterInfo: TiComInfo = {
     width: '100%',
     height: '100%',
     padding: '20px',
+    maxWidth: "unset",
+    position: "unset",
+    display: "block",
   },
   install: (app: App) => {
     app.component(COM_TYPE, TiFilter);

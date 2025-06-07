@@ -29,6 +29,13 @@ const TiRadioListInfo: TiComInfo = {
     zh_hk: zh_cn,
   },
   com: TiRadioList,
+  liveStyle: {
+    width: "100%",
+    height: "100%",
+    maxWidth: "unset",
+    position: "unset",
+    display: "block",
+  },
   install: (app: App) => {
     app.component(COM_TYPE, TiRadioList);
   },

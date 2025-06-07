@@ -19,15 +19,6 @@
     buildOneTab,
   } from './use-layout-tabs';
   //-------------------------------------------------
-  // const TiLayoutGrid = defineAsyncComponent({
-  //   loader: () => import('../grid/TiLayoutGrid.vue'),
-  //   loadingComponent: {
-  //     template: '<div>Loading AsyncComponent...</div>',
-  //   },
-  //   errorComponent: {
-  //     template: '<div>Fail to async load TilaLayoutGrid.vue</div>',
-  //   },
-  // });
   import { TiLayoutGrid } from '../grid/ti-layout-grid-index';
   //-------------------------------------------------
   const COM_TYPE = COM_TYPES.LayoutTabs;
