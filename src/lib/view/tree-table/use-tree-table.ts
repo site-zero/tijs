@@ -8,7 +8,7 @@ import {
   useSelectable,
   useStdListItem,
 } from '../../_features';
-import { RoadblockProps } from '../../tile/roadblock/ti-roadblock-types';
+import { RoadblockProps } from '../../view/roadblock/ti-roadblock-types';
 import {
   TreeTableProps
 } from './ti-tree-table-types';

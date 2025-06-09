@@ -68,6 +68,7 @@
     "@types/leaflet": "^1.9.17",
     "@types/leaflet.markercluster": "^1.5.5",
     "@types/sortablejs": "^1.15.8",
+    "@types/tinymce": "^5.5.0",
     "@vitejs/plugin-vue": "^5.1.4",
     "sass": "^1.80.3",
     "ts-node": "^10.9.2",
