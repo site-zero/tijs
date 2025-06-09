@@ -9,7 +9,7 @@ export const COM_TYPES = {
   //------------------- EDIT
   CodeEditor: "TiCodeEditor",
   PairEditor: "TiPairEditor",
-  TinyMCEditor:"TiTinyMCEditor",
+  RichTinyMCEditor:"TiRichTinyMCEditor",
   //------------------- TILE
   HtmlSnippet: "TiHtmlSnippet",
   TextSnippet: "TiTextSnippet",

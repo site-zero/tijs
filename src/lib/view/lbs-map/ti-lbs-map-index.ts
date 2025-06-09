@@ -2,17 +2,17 @@ import { App, defineAsyncComponent } from "vue";
 import { TiComInfo, TiComRace } from "../../../_type";
 import { COM_TYPES } from "../../lib-com-types";
 import { LbsMapProps } from "./ti-lbs-map-types";
-import TiLbsMap from "./TiLbsMap.vue";
+// import TiLbsMap from "./TiLbsMap.vue";
 const COM_TYPE = COM_TYPES.LbsMap;
-// const TiLbsMap = defineAsyncComponent({
-//   loader: () => import("./TiLbsMap.vue"),
-//   loadingComponent: {
-//     template: `<div>Loading ${COM_TYPE}.vue...</div>`,
-//   },
-//   errorComponent: {
-//     template: `<div>Fail to async load ${COM_TYPE}.vue</div>`,
-//   },
-// });
+const TiLbsMap = defineAsyncComponent({
+  loader: () => import("./TiLbsMap.vue"),
+  loadingComponent: {
+    template: `<div>Loading ${COM_TYPE}.vue...</div>`,
+  },
+  errorComponent: {
+    template: `<div>Fail to async load ${COM_TYPE}.vue</div>`,
+  },
+});
 
 const en_us = {
   "com-name": "Map",

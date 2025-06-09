@@ -34,14 +34,7 @@ export default defineConfig({
     },
     sourcemap: true,
     rollupOptions: {
-      external: [
-        "vue",
-        "tinymce",
-        /^tinymce\/plugins\//,
-        /^tinymce\/themes\//,
-        /^tinymce\/icons\//,
-        /^tinymce\/models\//,
-      ],
+      external: ["vue"],
       output: {
         // 提供全局变量到外部依赖
         globals: {
