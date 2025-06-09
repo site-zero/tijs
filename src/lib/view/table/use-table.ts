@@ -1,15 +1,14 @@
-import _ from 'lodash';
-import { computed, ComputedRef, Ref } from 'vue';
-import { SelectableApi, useDataLogicType, useSelectable } from '../../';
+import _ from "lodash";
+import { computed, ComputedRef, Ref } from "vue";
+import { SelectableApi, useDataLogicType, useSelectable } from "../../";
 import {
   Callback,
   Callback1,
   LogicType,
   TableRowID,
   Vars,
-} from '../../../_type';
-import { EventUtils } from '../../../core';
-import { getLogger } from '../../../core/log/ti-log';
+} from "../../../_type";
+import { EventUtils } from "../../../core";
 import {
   TableEmitter,
   TableEventPayload,
@@ -18,12 +17,12 @@ import {
   TableSelectEmitInfo,
   TableSelection,
   TableStrictColumn,
-} from './ti-table-types';
+} from "./ti-table-types";
 
-import { TableKeepFeature } from './use-table-keep';
-import { useTableResizing } from './use-table-resizing';
+import { TableKeepFeature } from "./use-table-keep";
+import { useTableResizing } from "./use-table-resizing";
 
-const log = getLogger('TiTable.use-table');
+const debug = false;
 
 export type TableFeature = ReturnType<typeof useTable>;
 
@@ -121,7 +120,7 @@ export function useTable(
     },
   });
   //-----------------------------------------------------
-  const getRowType = computed(()=>useDataLogicType(props.getRowType));
+  const getRowType = computed(() => useDataLogicType(props.getRowType));
   //-----------------------------------------------------
   const _id_index = new Map<TableRowID, number>();
   //-----------------------------------------------------
@@ -176,8 +175,8 @@ export function useTable(
 
     getTableHeadClass: (selection: TableSelection, col: TableStrictColumn) => {
       return {
-        'is-actived-column': selection.uniqKey == col.uniqKey,
-        'has-tip': col.tip ? true : false,
+        "is-actived-column": selection.uniqKey == col.uniqKey,
+        "has-tip": col.tip ? true : false,
       };
     },
     bindTableResizing: (
@@ -231,7 +230,7 @@ export function useTable(
         oldCurrentId
       ) as TableSelectEmitInfo;
 
-      emit('select', info);
+      emit("select", info);
     },
 
     selectNone() {
@@ -245,7 +244,7 @@ export function useTable(
         oldCurrentId
       ) as TableSelectEmitInfo;
 
-      emit('select', info);
+      emit("select", info);
     },
 
     OnRowSelect(rowEvent: TableEventPayload) {
@@ -254,7 +253,7 @@ export function useTable(
       if (selection.currentId == rowEvent.row.id) {
         return;
       }
-      log.debug('OnRowSelect', rowEvent);
+      if (debug) console.log("OnRowSelect", rowEvent);
       let oldCurrentId = _.cloneDeep(selection.currentId);
       let oldCheckedIds = _.cloneDeep(selection.checkedIds);
 
@@ -276,11 +275,11 @@ export function useTable(
         oldCurrentId
       ) as TableSelectEmitInfo;
 
-      emit('select', info);
+      emit("select", info);
     },
 
     OnRowCheck(rowEvent: TableEventPayload) {
-      log.debug('OnRowCheck', rowEvent);
+      if (debug) console.log("OnRowCheck", rowEvent);
       let oldCurrentId = _.cloneDeep(selection.currentId);
       let oldCheckedIds = _.cloneDeep(selection.checkedIds);
       if (props.multi) {
@@ -300,7 +299,7 @@ export function useTable(
         oldCurrentId
       ) as TableSelectEmitInfo;
 
-      emit('select', info);
+      emit("select", info);
     },
 
     OnCellSelect(
@@ -322,7 +321,7 @@ export function useTable(
       if (selection.currentId != row.id) {
         let oldCurrentId = _.cloneDeep(selection.currentId);
         let oldCheckedIds = _.cloneDeep(selection.checkedIds);
-        log.debug('OnCellSelect', rowEvent);
+        if (debug) console.log("OnCellSelect", rowEvent);
         selectable.selectId(selection, row.id);
 
         //
@@ -345,20 +344,20 @@ export function useTable(
             info.column = col;
           }
         }
-        emit('select', info);
+        emit("select", info);
       }
     },
 
     updateSelection: selectable.updateSelection,
 
     OnRowOpen(rowEvent: TableEventPayload) {
-      log.debug('OnRowOpen', rowEvent);
-      emit('open', rowEvent.row);
+      if (debug) console.log("OnRowOpen", rowEvent);
+      emit("open", rowEvent.row);
     },
 
     OnCellOpen(rowEvent: TableEventPayload) {
-      log.debug('OnCellOpen', rowEvent);
-      emit('cell-open', rowEvent);
+      if (debug) console.log("OnCellOpen", rowEvent);
+      emit("cell-open", rowEvent);
     },
   };
 }
