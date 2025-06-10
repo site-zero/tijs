@@ -1,40 +1,88 @@
-@use '@site0/tijs/sass/_all.scss' as *;
+@use "@site0/tijs/sass/_all.scss" as *;
 
-.ti-html-snippet .ti-msg-box {
-  padding: SZ(10);
-  display: grid;
-  &.with-msg-icon {
-    grid-template-columns: 100px 1fr;
-    grid-template-rows: 1fr;
+.ti-html-snippet {
+  //-----------------------------------------------
+  &.overflow-scroll {
+    overflow: auto;
+    max-height: 100%;
   }
-  &.no-msg-icon {
-    grid-template-columns: 1fr;
-    grid-template-rows: 1fr;
+  //-----------------------------------------------
+  &.info-article {
+    padding: 0;
   }
-  // msg icon
-  > aside {
-    @include flex-center;
-    font-size: 4em;
-    min-height: 1.2em;
-    max-height: 2em;
-  }
-  // msg body
-  > main {
-    font-size: var(--ti-fontsz-alert);
-    padding: 1em;
-    color: var(--ti-color-box-f);
-
-    > .part-input {
-      padding: 1em 0;
-      input {
-        @include font-fixed;
-        border-radius: var(--ti-measure-r-s);
-        outline: none;
-        border: 1px solid var(--ti-color-border-dark);
-        padding: 0.8em 1em;
-        font-size: 1.3em;
-        width: 100%;
-      }
+  //-----------------------------------------------
+  &.info-article > article {
+    margin: 0;
+    padding: 2em;
+    font-size: var(--ti-fontsz-m);
+    line-height: 2em;
+    //---------------------------------------------
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      margin: 0.5em 0;
     }
+    h1 {
+      font-size: 2em;
+    }
+    h2 {
+      font-size: 1.8em;
+    }
+    h3 {
+      font-size: 1.6em;
+    }
+    h4 {
+      font-size: 1.4em;
+    }
+    h5 {
+      font-size: 1.2em;
+    }
+    h6 {
+      font-size: 1em;
+    }
+    //---------------------------------------------
   }
+  //-----------------------------------------------
+  .ti-msg-box {
+    padding: SZ(10);
+    display: grid;
+    &.with-msg-icon {
+      grid-template-columns: 100px 1fr;
+      grid-template-rows: 1fr;
+    }
+    &.no-msg-icon {
+      grid-template-columns: 1fr;
+      grid-template-rows: 1fr;
+    }
+    // msg icon
+    > aside {
+      @include flex-center;
+      font-size: 4em;
+      min-height: 1.2em;
+      max-height: 2em;
+    } // > aside
+    // msg body
+    > main {
+      font-size: var(--ti-fontsz-alert);
+      padding: 1em;
+      color: var(--ti-color-box-f);
+
+      > .part-input {
+        padding: 1em 0;
+        input {
+          @include font-fixed;
+          border-radius: var(--ti-measure-r-s);
+          outline: none;
+          border: 1px solid var(--ti-color-border-dark);
+          padding: 0.8em 1em;
+          font-size: 1.3em;
+          width: 100%;
+        }
+      } // > .part-input
+    } // > main
+  } // .ti-msg-box
+  //-----------------------------------------------
 }
