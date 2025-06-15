@@ -1,0 +1,14 @@
+@use '@site0/tijs/sass/_all.scss' as *;
+
+.ti-edit-rich-prose {
+  @include flex-align-v-nowrap;
+  > article {
+    flex:1 1 auto;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr;
+    > .ProseMirror{
+      padding: 1em q;
+    }
+  }
+}
