@@ -1,4 +1,4 @@
-@use '../../../../assets/style/_all.scss' as *;
+@use "../../../../assets/style/_all.scss" as *;
 
 @mixin __table_color($prefix, $name) {
   #{$prefix}.is-#{$name} {
@@ -7,6 +7,9 @@
     &.is-checked {
       color: var(--ti-color-#{$name}-r);
       background-color: var(--ti-color-#{$name});
+      &.is-actived {
+        background-color: var(--ti-color-#{$name}-b);
+      }
     }
   }
 }
@@ -25,7 +28,7 @@
 }
 
 // 表格头
-@include __table_colorized('.table-row-marker');
+@include __table_colorized(".table-row-marker");
 
 // 表格·单元格
-@include __table_colorized('.ti-table > main > .table-cell');
+@include __table_colorized(".ti-table > main > .table-cell");

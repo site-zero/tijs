@@ -1,14 +1,14 @@
-@use '../../../../assets/style/_all.scss' as *;
+@use "../../../../assets/style/_all.scss" as *;
 
 .ti-table > main > .table-cell {
   display: grid;
   background-color: var(--ti-color-card);
   //background-color: blue;
   &.is-checked {
-    > .table-cell-wrapper {
-      color: var(--ti-color-selected-r);
-      background-color: var(--ti-color-selected);
-    }
+    //> .table-cell-wrapper {
+    color: var(--ti-color-selected-r);
+    background-color: var(--ti-color-selected);
+    //}
     &.is-actived.has-actived-com {
       > .table-cell-wrapper {
         color: var(--ti-color-box-f);
@@ -67,7 +67,7 @@
         &::before {
           width: 2px;
           display: block;
-          content: '';
+          content: "";
           background-color: var(--ti-color-mask-thin);
           transition: opacity 300ms;
           opacity: 0;
