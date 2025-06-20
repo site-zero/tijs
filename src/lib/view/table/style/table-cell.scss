@@ -5,10 +5,10 @@
   background-color: var(--ti-color-card);
   //background-color: blue;
   &.is-checked {
-    //> .table-cell-wrapper {
-    color: var(--ti-color-selected-r);
-    background-color: var(--ti-color-selected);
-    //}
+    > .table-cell-wrapper {
+      color: var(--ti-color-selected-r);
+      background-color: var(--ti-color-selected);
+    }
     &.is-actived.has-actived-com {
       > .table-cell-wrapper {
         color: var(--ti-color-box-f);

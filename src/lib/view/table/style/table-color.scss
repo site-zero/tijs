@@ -5,9 +5,11 @@
     color: var(--ti-color-#{$name});
 
     &.is-checked {
-      color: var(--ti-color-#{$name}-r);
-      background-color: var(--ti-color-#{$name});
-      &.is-actived {
+      > .table-cell-wrapper {
+        color: var(--ti-color-#{$name}-r);
+        background-color: var(--ti-color-#{$name});
+      }
+      &.is-actived > .table-cell-wrapper {
         background-color: var(--ti-color-#{$name}-b);
       }
     }

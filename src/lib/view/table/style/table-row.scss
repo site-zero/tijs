@@ -1,4 +1,4 @@
-@use '../../../../assets/style/_all.scss' as *;
+@use "../../../../assets/style/_all.scss" as *;
 
 .table-row-marker {
   @include flex-align-nowrap($ai: stretch);
@@ -56,6 +56,8 @@
   &.is-checked {
     color: var(--ti-color-selected-f);
     background-color: var(--ti-color-selected);
+    //...............................................
+    // 第一列的指示器
     > .as-active-indicator:hover {
       > i:nth-child(1) {
         opacity: 0;
@@ -66,6 +68,7 @@
         transform: scale(1);
       }
     }
+    //...............................................
   }
   //.................................................
 } // > .table-row-marker

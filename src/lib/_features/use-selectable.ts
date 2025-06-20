@@ -1,9 +1,9 @@
-import _ from 'lodash';
-import { isTableRowID, KeyboardStatus, TableRowID, Vars } from '../../_type';
-import { Match, Util } from '../../core';
+import _ from "lodash";
+import { isTableRowID, KeyboardStatus, TableRowID, Vars } from "../../_type";
+import { Match, Util } from "../../core";
 // -----------------------------------------------------
 //  Types
-export type CheckStatus = 'all' | 'none' | 'part';
+export type CheckStatus = "all" | "none" | "part";
 export type SelectableItem<ID> = {
   rawData?: Vars;
   id?: ID;
@@ -25,7 +25,7 @@ export type SelectEmitInfo<ID> = {
   checked: Vars[];
   index: number;
   oldCurrentId?: ID | null;
-  oldCheckedIds: Map<ID, boolean>;
+  oldCheckedIds?: Map<ID, boolean>;
 };
 // -----------------------------------------------------
 export type CheckedIds<ID extends string | number> =
@@ -120,7 +120,7 @@ export function useSelectable<ID extends TableRowID>(
    * 获取数据的 ID
    */
   function getDataId(it: Vars, index: number): ID {
-    let prefix = props.dftIdPrefix ?? 'row';
+    let prefix = props.dftIdPrefix ?? "row";
     if (getId) {
       if (_.isString(getId)) {
         return _.get(it, getId) ?? (`${prefix}-${index}` as ID);
@@ -224,7 +224,7 @@ export function useSelectable<ID extends TableRowID>(
   function getSelectionEmitInfo(
     selection: SelectableState<ID>,
     list: Vars[],
-    oldCheckedIds: Map<ID, boolean>,
+    oldCheckedIds?: Map<ID, boolean>,
     oldCurrentId?: ID | null
   ): SelectEmitInfo<ID> {
     let currentId = selection.currentId ?? null;
@@ -394,13 +394,13 @@ export function useSelectable<ID extends TableRowID>(
       let checkedIds = selection.checkedIds;
       for (let id of selection.ids) {
         if (!checkedIds.get(id)) {
-          return 'part';
+          return "part";
         }
       }
       // 通过了，那就是全选
-      return 'all';
+      return "all";
     }
-    return 'none';
+    return "none";
   }
 
   let __can_select_item: CanItemMatch<ID> | undefined = undefined;
@@ -696,7 +696,7 @@ export function useSelectable<ID extends TableRowID>(
     // 这种特殊模式，需要与起始条目设置相同
     let yes = true;
     if (!props.canSelect && props.showChecker && toId) {
-      console.log('toId=', toId);
+      //console.log('toId=', toId);
       yes = selection.checkedIds.get(toId) ? true : false;
     }
 

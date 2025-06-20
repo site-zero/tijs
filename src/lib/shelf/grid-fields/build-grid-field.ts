@@ -1,11 +1,11 @@
-import _ from 'lodash';
-import { makeFieldUniqKey, parseFieldConverter, Vars } from '../../../_type';
-import { CssUtils, Match } from '../../../core';
+import _ from "lodash";
+import { makeFieldUniqKey, parseFieldConverter, Vars } from "../../../_type";
+import { CssUtils, Match } from "../../../core";
 import {
   buildFieldValidatorGroup,
   TiObjFieldsFeature,
   useVisibility,
-} from '../../_features';
+} from "../../_features";
 import {
   FieldRefer,
   GridFieldsInput,
@@ -14,7 +14,7 @@ import {
   GridFieldsStrictField,
   GridFieldsStrictGroup,
   GridFieldsStrictItem,
-} from './ti-grid-fields-types';
+} from "./ti-grid-fields-types";
 
 export function buildOneGridField(
   fieldSet: TiObjFieldsFeature,
@@ -38,7 +38,7 @@ export function buildOneGridField(
     uniqKey,
     // 下标
     index: _.nth(indexes, -1) ?? 0,
-    race: 'field',
+    race: "field",
     // 数据
     data: dft.data!,
     dynamic: field.dynamic ?? dft.dynamic,
@@ -55,14 +55,14 @@ export function buildOneGridField(
 
     // 标题 & 提示
     title: field.title,
-    titleType: field.titleType ?? 'text',
+    titleType: field.titleType ?? "text",
     titleIcon: field.titleIcon,
     titleStyle: field.titleStyle,
     titleAlign: field.titleAlign ?? dft.fieldTitleAlign,
     titleTextStyle: field.titleTextStyle,
     titleClass: field.titleClass,
     tip: field.tip,
-    tipType: field.tipType ?? 'text',
+    tipType: field.tipType ?? "text",
     tipBy: field.tipBy,
     tipStyle: field.tipStyle,
     tipAlign: field.tipAlign,
@@ -86,11 +86,11 @@ export function buildOneGridField(
 
   // ---------------: 普通字段 :---------------
   if (field.name) {
-    re.race = 'field';
+    re.race = "field";
     let fld = re as GridFieldsStrictField;
 
     fld.name = field.name;
-    fld.type = field.type ?? dft.defaultFieldType ?? 'String';
+    fld.type = field.type ?? dft.defaultFieldType ?? "String";
     fld.typeTransformOptions =
       fld.typeTransformOptions ?? dft.defaultFieldTypeTransformOptions;
     fld.typeSerializeOptions =
@@ -103,13 +103,23 @@ export function buildOneGridField(
       comConf: dft.defaultComConf,
     });
 
-    let isRequired = Match.parse(field.required, false);
-    fld.isRequired = (data: Vars) => isRequired.test(data);
+    if (field.required) {
+      let _is_required = Match.parse(field.required, false);
+      fld.isRequired = (data: Vars) => {
+        // console.log(
+        //   `[${fld.uniqKey}] isRequired`,
+        //   _is_required,
+        //   _.cloneDeep(data)
+        // );
+        // 如果
+        return _is_required.test(data);
+      };
+    }
 
     fld.checkEquals = field.checkEquals ?? true;
     fld.emptyAs = field.emptyAs ?? null;
     fld.defaultAs = field.defaultAs ?? null;
-    fld.changeEventName = field.changeEventName ?? 'change';
+    fld.changeEventName = field.changeEventName ?? "change";
 
     if (field.validation) {
       fld.validate = buildFieldValidatorGroup(field.validation);
@@ -117,7 +127,7 @@ export function buildOneGridField(
 
     fld.transformer = parseFieldConverter(
       fld.type,
-      'transform',
+      "transform",
       fld.typeTransformOptions,
       dft.vars || {},
       field.transformer,
@@ -126,7 +136,7 @@ export function buildOneGridField(
     );
     fld.serializer = parseFieldConverter(
       fld.type,
-      'serialize',
+      "serialize",
       fld.typeSerializeOptions,
       dft.vars || {},
       field.serializer,
@@ -135,16 +145,16 @@ export function buildOneGridField(
     );
 
     fld.maxFieldNameWidth = field.maxFieldNameWidth ?? dft.maxFieldNameWidth;
-    fld.tipIcon = field.tipIcon || 'zmdi-help-outline';
+    fld.tipIcon = field.tipIcon || "zmdi-help-outline";
     fld.fieldLayoutMode =
-      field.fieldLayoutMode ?? dft.fieldLayoutMode ?? 'h-title-icon-suffix';
+      field.fieldLayoutMode ?? dft.fieldLayoutMode ?? "h-title-icon-suffix";
     fld.titleTextStyle = field.titleTextStyle;
     fld.fieldValueStyle = field.fieldValueStyle;
     fld.tipTextStyle = field.tipTextStyle;
   }
   // ---------------: 分组 :---------------
   else if (field.fields) {
-    re.race = 'group';
+    re.race = "group";
     let grp = re as GridFieldsStrictGroup;
     grp.maxFieldNameWidth = field.maxFieldNameWidth ?? dft.maxFieldNameWidth;
     grp.layout = field.layout;
@@ -180,7 +190,7 @@ export function buildOneGridField(
   }
   // ---------------: 标签 :---------------
   else {
-    re.race = 'label';
+    re.race = "label";
   }
 
   return re as GridFieldsStrictItem;

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import _ from 'lodash';
+  import _ from "lodash";
   import {
     Ref,
     computed,
@@ -8,17 +8,17 @@
     reactive,
     ref,
     watch,
-  } from 'vue';
+  } from "vue";
   import {
     TiActionBar,
     TiRoadblock,
     useFieldChange,
     useLargeScrolling,
-  } from '../../';
-  import { Size2D, TableRowID } from '../../../_type';
-  import { CssUtils } from '../../../core';
-  import TableRow from './TableRow.vue';
-  import { buildTableColumnsMap } from './build-table-column';
+  } from "../../";
+  import { Size2D, TableRowID } from "../../../_type";
+  import { CssUtils } from "../../../core";
+  import TableRow from "./TableRow.vue";
+  import { buildTableColumnsMap } from "./build-table-column";
   import {
     HEAD_MARKER,
     TableCellChanged,
@@ -26,16 +26,16 @@
     TableProps,
     TableSelection,
     TableStrictColumn,
-  } from './ti-table-types';
+  } from "./ti-table-types";
   import {
     ColResizingState,
     getRowActivedColUniqKey,
     useTable,
-  } from './use-table';
-  import { TableScrolling, getTableDebugInfo } from './use-table-debug-info';
-  import { useTableHeadMenu } from './use-table-head-menu';
-  import { loadColumns, useKeepTable } from './use-table-keep';
-  import { useViewMeasure } from './use-view-measure';
+  } from "./use-table";
+  import { TableScrolling, getTableDebugInfo } from "./use-table-debug-info";
+  import { useTableHeadMenu } from "./use-table-head-menu";
+  import { loadColumns, useKeepTable } from "./use-table-keep";
+  import { useViewMeasure } from "./use-view-measure";
   //-------------------------------------------------------
   const debug = false;
   //-------------------------------------------------------
@@ -46,7 +46,7 @@
   const showDebug = showDebugScrolling || showDebugResizing;
   //-------------------------------------------------------
   defineOptions({
-    name: 'TiTable',
+    name: "TiTable",
     inheritAttrs: true,
   });
   //-------------------------------------------------------
@@ -62,21 +62,21 @@
     canSelect: true,
     canCheck: true,
     editable: true,
-    getId: 'id',
+    getId: "id",
     columnResizeInTime: 25,
     rowMinHeight: 32,
     rowGap: 1,
     colGap: 1,
-    changeMode: 'diff',
+    changeMode: "diff",
     colDefaultWidth: 0,
     data: () => [],
     emptyRoadblock: () => ({
-      text: 'i18n:empty-data',
-      mode: 'auto',
-      layout: 'A',
-      size: 'normal',
-      opacity: 'shadowy',
-      icon: 'zmdi-apps',
+      text: "i18n:empty-data",
+      mode: "auto",
+      layout: "A",
+      size: "normal",
+      opacity: "shadowy",
+      icon: "zmdi-apps",
     }),
   });
   //-------------------------------------------------------
@@ -91,7 +91,7 @@
     lineMarkers: [] as number[],
   });
   //-------------------------------------------------------
-  const selection = reactive({
+  const selection = ref({
     currentId: undefined,
     checkedIds: new Map<TableRowID, boolean>(),
     ids: [],
@@ -100,7 +100,9 @@
   } as TableSelection);
   //-------------------------------------------------------
   const _keep = computed(() => useKeepTable(props));
-  let _table = computed(() => useTable(props, selection, emit));
+  let _table = computed(() =>
+    useTable(props, selection, _table_column_map, emit)
+  );
   //-------------------------------------------------------
   /**
    * 定制每个列的宽高，0 表示这个行是自动 `1fr`
@@ -195,13 +197,13 @@
       } else if (_.isString(sz)) {
         cols.push(sz);
       } else {
-        cols.push('1fr');
+        cols.push("1fr");
       }
     };
 
     // 如果需要显示行头标记列 ...
     if (ShowRowMarker.value) {
-      let w = _column_sizes.value[HEAD_MARKER] ?? '60px';
+      let w = _column_sizes.value[HEAD_MARKER] ?? "60px";
       __push_col_size(w);
     }
     // 每列都需要看看是否被定制了
@@ -214,14 +216,14 @@
     //console.log('re-computed MainStyle', cols.join(' '));
 
     let re = _.assign({}, props.mainStyle, {
-      'grid-template-columns': cols.join(' '),
-      'grid-auto-rows': `minmax(${props.rowMinHeight - props.rowGap}px, auto)`,
-      'row-gap': `${props.rowGap}px`,
-      'column-gap': `${props.colGap}px`,
+      "grid-template-columns": cols.join(" "),
+      "grid-auto-rows": `minmax(${props.rowMinHeight - props.rowGap}px, auto)`,
+      "row-gap": `${props.rowGap}px`,
+      "column-gap": `${props.colGap}px`,
     });
 
     if (props.columnResizable || !_.isNil(props.rightPadding)) {
-      re.paddingRight = CssUtils.toSize(props.rightPadding ?? '100px');
+      re.paddingRight = CssUtils.toSize(props.rightPadding ?? "100px");
     }
 
     return re;
@@ -236,7 +238,7 @@
       N++;
     }
     return {
-      'grid-column': `1 / ${N + 1}`,
+      "grid-column": `1 / ${N + 1}`,
     };
   });
   //-------------------------------------------------------
@@ -270,10 +272,10 @@
   }
   //-------------------------------------------------------
   function onCellChange(changed: TableCellChanged) {
-    if (debug) console.log('OnCellChange', changed);
+    if (debug) console.log("OnCellChange", changed);
 
     // 首先通知单元格改动
-    emit('cell-change', changed);
+    emit("cell-change", changed);
 
     // 尝试通知行改动
     let { colIndex, rowIndex } = changed;
@@ -285,7 +287,7 @@
       changed,
       { checkEquals: true, data: oldRowData || {} },
       (rowData, _changes, field) => {
-        emit('row-change', {
+        emit("row-change", {
           colIndex,
           rowIndex,
           uniqKey: field.uniqKey,
@@ -305,7 +307,7 @@
       scrolling.lineCount = props.data.length;
       scrolling.lineHeights = [];
       scrolling.lineMarkers = [];
-      selection.ids = _table.value.getRowIds(props.data ?? []);
+      selection.value.ids = _table.value.getRowIds(props.data ?? []);
       if (!_mea.isMainWatched()) {
         _mea.watchMain();
       }
@@ -319,7 +321,7 @@
     () => {
       //console.log('updateSelection before:', props.currentId, props.checkedIds);
       _table.value.updateSelection(
-        selection,
+        selection.value,
         props.data ?? [],
         props.currentId,
         props.checkedIds
@@ -344,7 +346,7 @@
   watch(
     () => props.keepColumns,
     () => {
-      if (debug) console.log('keepColumns changed', props.keepColumns);
+      if (debug) console.log("keepColumns changed", props.keepColumns);
       loadColumns(
         AllTableColumns,
         _column_sizes,
@@ -375,13 +377,8 @@
   //-------------------------------------------------------
 </script>
 <template>
-  <div
-    class="ti-table"
-    :class="TopClass">
-    <main
-      ref="$main"
-      :style="MainStyle"
-      @click="onClickMain">
+  <div class="ti-table" :class="TopClass">
+    <main ref="$main" :style="MainStyle" @click="onClickMain">
       <!-- 表格头 -->
       <template v-if="showHeader">
         <!-- 表头: 标记块 -->
@@ -393,9 +390,7 @@
           <TiActionBar v-bind="HeadMenu" />
         </div>
         <!-- 表头: 列 -->
-        <template
-          v-for="(col, i) in TableColumns"
-          :key="col.uniqKey">
+        <template v-for="(col, i) in TableColumns" :key="col.uniqKey">
           <div
             class="table-cell as-head"
             :class="_table.getTableHeadClass(selection, col)"
@@ -423,9 +418,7 @@
       </template>
       <!-- 表格体 -->
 
-      <template
-        v-for="row in TableData"
-        :key="row.id">
+      <template v-for="row in TableData" :key="row.id">
         <!--================== < 表格行 > ================-->
         <div
           v-if="!isInRenderZone(row.index)"
@@ -449,15 +442,12 @@
           @row-select="_table.OnRowSelect($event)"
           @row-check="_table.OnRowCheck($event)"
           @row-open="_table.OnRowOpen($event)"
-          @cell-select="_table.OnCellSelect($event, _table_column_map)"
+          @cell-select="_table.OnCellSelect($event)"
           @cell-open="_table.OnCellOpen($event)"
           @cell-change="onCellChange" />
       </template>
       <!-- 显示空数据提示 -->
-      <div
-        v-if="!hasData"
-        class="empty-tip"
-        :style="VirtualRowStyle">
+      <div v-if="!hasData" class="empty-tip" :style="VirtualRowStyle">
         <TiRoadblock v-bind="props.emptyRoadblock" />
       </div>
     </main>
@@ -467,9 +457,7 @@
       :style="ResizingBarStyle"
       v-if="_col_resizing.activated"></div>
     <!-- vvvvvvvvvvvvv 下面是调试信息，无需在意 vvvvvvvvvvvvv-->
-    <div
-      class="table-debug-info"
-      v-if="showDebug">
+    <div class="table-debug-info" v-if="showDebug">
       <template v-if="showDebugResizing">
         {{ _column_sizes }} <br />
         [{{ _col_resizing.colIndex }}] -> {{ _col_resizing.left }}
@@ -485,7 +473,7 @@
         </ul>
         <div class="scroll-marker">
           {{
-            _.map(scrolling.lineMarkers, (v: any) => (v ? 'x' : '-')).join('')
+            _.map(scrolling.lineMarkers, (v: any) => (v ? "x" : "-")).join("")
           }}
         </div>
       </template>
@@ -494,11 +482,11 @@
   </div>
 </template>
 <style lang="scss">
-  @use './style/ti-table.scss';
-  @use './style/table-row.scss';
-  @use './style/table-cell.scss';
-  @use './style/table-resize.scss';
-  @use './style/table-color.scss';
-  @use './style/table-debug.scss';
-  @use './style/table-zebra.scss';
+  @use "./style/ti-table.scss";
+  @use "./style/table-row.scss";
+  @use "./style/table-cell.scss";
+  @use "./style/table-resize.scss";
+  @use "./style/table-color.scss";
+  @use "./style/table-debug.scss";
+  @use "./style/table-zebra.scss";
 </style>
