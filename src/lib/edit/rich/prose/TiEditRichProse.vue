@@ -15,15 +15,19 @@
 
   //-----------------------------------------------------
   onMounted(() => {
+    console.log("TiEditRichProse mounted");
     _api.initEditor();
   });
   //-----------------------------------------------------
 </script>
 <template>
   <div class="ti-edit-rich-prose fit-parent">
+    <header>Toolbars</header>
     <article ref="main" class="fit-parent"></article>
+    <aside>Props</aside>
   </div>
 </template>
 <style lang="scss">
   @use "./ti-edit-rich-prose.scss";
+  @import "prosemirror-view/style/prosemirror.css";
 </style>

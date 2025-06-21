@@ -13,7 +13,7 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.EditRichProse;
 
 const TiEditRichProseInfo: TiComInfo = {
-  icon: "zmdi-edit",
+  icon: "fas-pen-to-square",
   race: TiComRace.EDIT,
   name: COM_TYPE,
   text: 'i18n:ti-edit-rich-prose-com-name',
