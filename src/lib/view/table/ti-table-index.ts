@@ -21,9 +21,9 @@ const TiTableInfo: TiComInfo = {
   exampleProps: [simple, d300, d1k, d10k, editable],
   exampleModel: {
     "row-change": {
-      key: "data.${rowIndex}",
+      scope: "data.${rowIndex}",
+      key: "...",
       val: "=changed",
-      mode: "assign",
     },
     "select": [
       {

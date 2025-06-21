@@ -102,7 +102,8 @@ function _get_table_data(
 -----------------------------------------------------*/
 export function useTable(
   props: TableProps,
-  selection: TableSelection,
+  selection: Ref<TableSelection>,
+  _table_column_map: ComputedRef<Map<string, TableStrictColumn>>,
   emit: TableEmitter
 ) {
   // 启用特性
@@ -165,6 +166,53 @@ export function useTable(
     return checked;
   }
   //-----------------------------------------------------
+  // 操作函数
+  //-----------------------------------------------------
+  function trySelect(newSelection: TableSelection) {
+    // 当前选区
+    let oldSelection = _.cloneDeep(selection.value);
+    // 新选区
+
+    // 准备构建事件数据
+    let info = selectable.getSelectionEmitInfo(
+      newSelection,
+      props.data,
+      oldSelection.checkedIds,
+      oldSelection.currentId
+    ) as TableSelectEmitInfo;
+
+    // 没有列信息
+    info.colIndex = -1;
+    // 获取列信息
+    if (newSelection.uniqKey) {
+      let col = _table_column_map.value.get(newSelection.uniqKey);
+      if (col) {
+        info.colIndex = col?.index;
+        info.column = col;
+      }
+    }
+
+    // 改动了 rowId
+    if (!_.isEqual(oldSelection, newSelection)) {
+      // 检查改动
+      if (props.canChangeSelection) {
+        let old = selectable.getSelectionEmitInfo(
+          oldSelection,
+          props.data
+        ) as TableSelectEmitInfo;
+        if (!props.canChangeSelection(info, old)) {
+          return;
+        }
+      }
+
+      // 修改本地状态
+      selection.value = newSelection;
+
+      // 通知改动
+      emit("select", info);
+    }
+  }
+  //-----------------------------------------------------
   // 返回特性
   //-----------------------------------------------------
   return {
@@ -211,101 +259,59 @@ export function useTable(
     getRowIds: selectable.getDataIds,
 
     getCheckStatus() {
-      return selectable.getCheckStatus(selection);
+      return selectable.getCheckStatus(selection.value);
     },
 
     getCurrentRow,
     getCheckedRows,
 
     checkAll() {
-      let oldCurrentId = _.cloneDeep(selection.currentId);
-      let oldCheckedIds = _.cloneDeep(selection.checkedIds);
       //console.log('selectAll', selection.ids);
-      selectable.checkAll(selection);
+      let newSelection = _.cloneDeep(selection.value);
+      selectable.checkAll(newSelection);
 
-      let info = selectable.getSelectionEmitInfo(
-        selection,
-        props.data,
-        oldCheckedIds,
-        oldCurrentId
-      ) as TableSelectEmitInfo;
-
-      emit("select", info);
+      trySelect(newSelection);
     },
 
     selectNone() {
-      let oldCurrentId = _.cloneDeep(selection.currentId);
-      let oldCheckedIds = _.cloneDeep(selection.checkedIds);
-      selectable.selectNone(selection);
-      let info = selectable.getSelectionEmitInfo(
-        selection,
-        props.data,
-        oldCheckedIds,
-        oldCurrentId
-      ) as TableSelectEmitInfo;
+      let newSelection = _.cloneDeep(selection.value);
+      selectable.selectNone(newSelection);
 
-      emit("select", info);
+      trySelect(newSelection);
     },
 
     OnRowSelect(rowEvent: TableEventPayload) {
-      selection.uniqKey = null;
-      // Guard actived
-      if (selection.currentId == rowEvent.row.id) {
+      if (selection.value.currentId == rowEvent.row.id) {
         return;
       }
       if (debug) console.log("OnRowSelect", rowEvent);
-      let oldCurrentId = _.cloneDeep(selection.currentId);
-      let oldCheckedIds = _.cloneDeep(selection.checkedIds);
+      let newSelection = _.cloneDeep(selection.value);
+      newSelection.uniqKey = null; // 清除列选择状态
 
       if (props.multi) {
         let { event, row } = rowEvent;
         let se = EventUtils.getKeyboardStatus(event);
-        selectable.select(selection, row.id, se);
+        selectable.select(newSelection, row.id, se);
       } else {
-        selectable.selectId(selection, rowEvent.row.id);
+        selectable.selectId(newSelection, rowEvent.row.id);
       }
-
-      //
-      // Prepare the emit info
-      //
-      let info = selectable.getSelectionEmitInfo(
-        selection,
-        props.data,
-        oldCheckedIds,
-        oldCurrentId
-      ) as TableSelectEmitInfo;
-
-      emit("select", info);
+      trySelect(newSelection);
     },
 
     OnRowCheck(rowEvent: TableEventPayload) {
       if (debug) console.log("OnRowCheck", rowEvent);
-      let oldCurrentId = _.cloneDeep(selection.currentId);
-      let oldCheckedIds = _.cloneDeep(selection.checkedIds);
+      let newSelection = _.cloneDeep(selection.value);
       if (props.multi) {
-        selectable.toggleId(selection, rowEvent.row.id);
+        selectable.toggleId(newSelection, rowEvent.row.id);
       } else {
-        selectable.selectId(selection, rowEvent.row.id);
+        selectable.selectId(newSelection, rowEvent.row.id);
       }
-      selection.uniqKey = null;
+      newSelection.uniqKey = null;
 
-      //
-      // Prepare the emit info
-      //
-      let info = selectable.getSelectionEmitInfo(
-        selection,
-        props.data,
-        oldCheckedIds,
-        oldCurrentId
-      ) as TableSelectEmitInfo;
-
-      emit("select", info);
+      trySelect(newSelection);
     },
 
-    OnCellSelect(
-      rowEvent: TableEventPayload,
-      columnMap: Map<string, TableStrictColumn>
-    ) {
+    OnCellSelect(rowEvent: TableEventPayload) {
       let { row, colUniqKey } = rowEvent;
       // console.log(
       //   'OnCellSelect',
@@ -314,38 +320,14 @@ export function useTable(
       //   'cols：',
       //   columns.length
       // );
-
+      let newSelection = _.cloneDeep(selection.value);
       //console.log('colIndex', colUniqKey);
-      selection.uniqKey = colUniqKey;
-      //if (!selection.checkedIds.get(row.id)) {
-      if (selection.currentId != row.id) {
-        let oldCurrentId = _.cloneDeep(selection.currentId);
-        let oldCheckedIds = _.cloneDeep(selection.checkedIds);
-        if (debug) console.log("OnCellSelect", rowEvent);
-        selectable.selectId(selection, row.id);
 
-        //
-        // Prepare the emit info
-        //
-        let info = selectable.getSelectionEmitInfo(
-          selection,
-          props.data,
-          oldCheckedIds,
-          oldCurrentId
-        ) as TableSelectEmitInfo;
+      if (debug) console.log("OnCellSelect", rowEvent);
+      selectable.selectId(newSelection, row.id);
+      newSelection.uniqKey = colUniqKey;
 
-        info.colIndex = -1;
-
-        // add Column info
-        if (colUniqKey) {
-          let col = columnMap.get(colUniqKey);
-          if (col) {
-            info.colIndex = col.index;
-            info.column = col;
-          }
-        }
-        emit("select", info);
-      }
+      trySelect(newSelection);
     },
 
     updateSelection: selectable.updateSelection,

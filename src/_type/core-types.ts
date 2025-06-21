@@ -759,11 +759,12 @@ export type TiRawCom = DefineComponent<any, any, any>;
 export type DeltaUpdateMode = 'merge' | 'assign';
 export type TiComExampleModelTarget =
   | string
-  | ((val: any, comConf: Vars) => void)
+  | ((val: any, oldComConf: Vars) => Vars)
   | {
       key: string;
       val: any;
-      mode?: 'set' | 'merge' | 'assign';
+      mode?: 'merge' | 'assign';
+      scope?:string;
     };
 
 export interface TiComInfo {

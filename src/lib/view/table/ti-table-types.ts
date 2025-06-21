@@ -7,7 +7,7 @@ import {
   SelectableApi,
   SelectableProps,
   SelectableState,
-} from '../..';
+} from "../..";
 import {
   AbstractField,
   Callback2,
@@ -21,10 +21,10 @@ import {
   TableRowID,
   TiMatch,
   Vars,
-} from '../../../_type';
+} from "../../../_type";
 
-export const KK_DISPLAY_COL_KEYS = '$table$display_column_keys';
-export const HEAD_MARKER = '$table$HEAD_MARKER';
+export const KK_DISPLAY_COL_KEYS = "$table$display_column_keys";
+export const HEAD_MARKER = "$table$HEAD_MARKER";
 
 export type TableSelectable = SelectableApi<TableRowID>;
 
@@ -49,21 +49,21 @@ export type TableSelection = SelectableState<TableRowID> & {
  * - `cell`  : 点击行单元格
  */
 export type TableEventName =
-  | 'select'
-  | 'open'
-  | 'cell-select'
-  | 'cell-open'
-  | 'row-change';
+  | "select"
+  | "open"
+  | "cell-select"
+  | "cell-open"
+  | "row-change";
 export type TableRowEventName =
-  | 'row-check'
-  | 'row-select'
-  | 'row-open'
-  | 'cell-select'
-  | 'cell-open'
-  | 'cell-change';
-export type TableCellEventName = 'cell-change';
+  | "row-check"
+  | "row-select"
+  | "row-open"
+  | "cell-select"
+  | "cell-open"
+  | "cell-change";
+export type TableCellEventName = "cell-change";
 export type TableCellChanged = FieldChange &
-  Omit<TableCellEventPayload, 'event'>;
+  Omit<TableCellEventPayload, "event">;
 
 export type TableEventPayload = {
   colUniqKey: string | null;
@@ -88,21 +88,21 @@ export type TableRowChanagePayload = {
 };
 
 export type TableEmitter = {
-  (eventName: 'select', payload: TableSelectEmitInfo): void;
-  (eventName: 'open', payload: TableRowData): void;
-  (eventName: 'cell-open', payload: TableEventPayload): void;
-  (eventName: 'row-change', payload: TableRowChanagePayload): void;
-  (event: 'cell-change', payload: TableCellChanged): void;
+  (eventName: "select", payload: TableSelectEmitInfo): void;
+  (eventName: "open", payload: TableRowData): void;
+  (eventName: "cell-open", payload: TableEventPayload): void;
+  (eventName: "row-change", payload: TableRowChanagePayload): void;
+  (event: "cell-change", payload: TableCellChanged): void;
 };
 
 export type TableRowEmitter = {
   (event: TableRowEventName, payload: TableEventPayload): void;
-  (event: 'cell-change', payload: TableCellChanged): void;
+  (event: "cell-change", payload: TableCellChanged): void;
 };
 
 export type TableCellEmitter = {
   (event: TableCellEventName, payload: TableCellEventPayload): void;
-  (event: 'cell-change', payload: TableCellChanged): void;
+  (event: "cell-change", payload: TableCellChanged): void;
 };
 
 export type TableKeepProps = {
@@ -226,6 +226,14 @@ export type TableProps = CommonProps &
      * @default true
      */
     showHeader?: boolean;
+
+    /**
+     * @returns 是否可以改变当前的选中状态
+     */
+    canChangeSelection?: (
+      selection: TableSelectEmitInfo,
+      old: TableSelectEmitInfo
+    ) => boolean;
     /*......................................
 
                   Aspect
@@ -263,7 +271,7 @@ export type TableProps = CommonProps &
   };
 
 export type TableRowProps = CommonProps &
-  Omit<TableBehaviorsProps, 'columns'> & {
+  Omit<TableBehaviorsProps, "columns"> & {
     /**
      * 显示行首
      */
@@ -293,18 +301,18 @@ export type TableRowProps = CommonProps &
 
 export type TableCellProps = Omit<
   TableStrictColumn,
-  | 'title'
-  | 'titleType'
-  | 'titleIcon'
-  | 'titleStyle'
-  | 'titleAlign'
-  | 'tip'
-  | 'tipType'
-  | 'tipBy'
-  | 'tipStyle'
-  | 'tipAlign'
-  | 'tipIcon'
-  | 'candidate'
+  | "title"
+  | "titleType"
+  | "titleIcon"
+  | "titleStyle"
+  | "titleAlign"
+  | "tip"
+  | "tipType"
+  | "tipBy"
+  | "tipStyle"
+  | "tipAlign"
+  | "tipIcon"
+  | "candidate"
 > & {
   activated?: boolean;
   editable?: boolean;
