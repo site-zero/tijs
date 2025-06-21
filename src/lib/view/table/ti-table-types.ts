@@ -234,6 +234,14 @@ export type TableProps = CommonProps &
       selection: TableSelectEmitInfo,
       old: TableSelectEmitInfo
     ) => boolean;
+
+    /**
+     * 指定一个保险丝，当切换行时会尝试引爆它
+     * 如果引爆成功，那么就阻止后续选择行为
+     *
+     * 如果为 true，则采用默认保险丝
+     */
+    fuse?: string | boolean;
     /*......................................
 
                   Aspect
