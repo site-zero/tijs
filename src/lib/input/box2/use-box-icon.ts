@@ -1,8 +1,8 @@
-import _ from 'lodash';
-import { computed } from 'vue';
-import { IconInput } from '../../../_type/core-types';
-import { Be, Icons } from '../../../core';
-import { BoxIconFor, InputBoxApi } from './ti-input-box-types';
+import _ from "lodash";
+import { computed } from "vue";
+import { IconInput } from "../../../_type/core-types";
+import { Be, Icons } from "../../../core";
+import { BoxIconFor, InputBoxApi } from "./ti-input-box-types";
 
 export type BoxIconOptions = {
   _box: InputBoxApi;
@@ -23,9 +23,9 @@ export function useBoxIcon(options: BoxIconOptions) {
     if (_.isFunction(iconFor)) return;
     if (iconFor) {
       return {
-        'clear': 'zmdi-minus',
-        'copy': 'zmdi-copy',
-        'load-options': 'zmdi-caret-down',
+        "clear": "zmdi-minus",
+        "copy": "zmdi-copy",
+        "load-options": "zmdi-caret-down",
       }[iconFor];
     }
   });
@@ -36,9 +36,9 @@ export function useBoxIcon(options: BoxIconOptions) {
     if (_.isFunction(iconFor)) return _icon.value;
     if (iconFor) {
       return {
-        'clear': 'zmdi-close',
-        'copy': 'zmdi-copy',
-        'load-options': 'zmdi-caret-down',
+        "clear": "zmdi-close",
+        "copy": "zmdi-copy",
+        "load-options": "zmdi-caret-down",
       }[iconFor];
     }
   });
@@ -47,19 +47,22 @@ export function useBoxIcon(options: BoxIconOptions) {
   //--------------------------------------------------
   const IconPartClass = computed(() => {
     //console.log("IconPartClass", iconFor, 'clear' == iconFor)
+    if (iconFor != "copy" && _box.isReadonly.value) {
+      return {};
+    }
     return {
-      'can-hover': iconFor ? true : false,
-      'can-rotate': 'clear' == iconFor,
+      "can-hover": iconFor ? true : false,
+      "can-rotate": "clear" == iconFor,
     };
   });
   //--------------------------------------------------
   const IconPartHtml = computed(() => {
-    if (!_icon.value) return '';
+    if (!_icon.value) return "";
     let html = [Icons.fontIconHtml(_icon.value)];
     if (_hover_icon.value) {
       html.push(Icons.fontIconHtml(_hover_icon.value));
     }
-    return html.join('');
+    return html.join("");
   });
   //--------------------------------------------------
   function onClick() {
@@ -69,7 +72,7 @@ export function useBoxIcon(options: BoxIconOptions) {
       iconFor(_box);
     }
     // 清除值
-    else if ('clear' === iconFor) {
+    else if ("clear" === iconFor) {
       _box.clearOptionsData();
       _box.updateBoxState({
         box_value: null,
@@ -81,19 +84,19 @@ export function useBoxIcon(options: BoxIconOptions) {
       _box.emitIfChanged();
     }
     // 写入剪贴板
-    else if ('copy' === iconFor) {
-      Be.Clipboard.write(_box.Text.value ?? '');
+    else if ("copy" === iconFor) {
+      Be.Clipboard.write(_box.Text.value ?? "");
       let el = _box.getElement();
       if (el) {
         Be.BlinkIt(el);
       }
     }
     // 加载选项
-    else if ('load-options' === iconFor) {
+    else if ("load-options" === iconFor) {
       _box.setFocused(true);
       _box.showOptions();
       let $input = options.getInputElement();
-      if($input) {
+      if ($input) {
         $input.focus();
       }
     }

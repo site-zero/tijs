@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import _ from 'lodash';
+  import _ from "lodash";
   import {
     computed,
     onMounted,
@@ -7,24 +7,24 @@
     ref,
     useTemplateRef,
     watch,
-  } from 'vue';
-  import { TiList } from '../../';
-  import { Rect, Vars } from '../../../_type';
-  import { ListSelectEmitInfo } from '../../../lib';
-  import { useDict, useValuePipe } from '../../_features';
-  import { InputBoxEmitter, InputBoxProps } from './ti-input-box-types';
-  import { useBoxAspect } from './use-box-aspect';
-  import { useBoxIcon } from './use-box-icon';
-  import { useBoxTips } from './use-box-tips';
-  import { InputBoxState, useInputBox2 } from './use-input-box2';
-  import { useInputComposition } from './use-input-composition';
-  import { useTipList } from './use-tip-list';
-  import { useValueHintCooking } from './use-value-hint-cooking';
-  import { useValueOptions, ValueOptions } from './use-value-options';
+  } from "vue";
+  import { TiList } from "../../";
+  import { Rect, Vars } from "../../../_type";
+  import { ListSelectEmitInfo } from "../../../lib";
+  import { useDict, useValuePipe } from "../../_features";
+  import { InputBoxEmitter, InputBoxProps } from "./ti-input-box-types";
+  import { useBoxAspect } from "./use-box-aspect";
+  import { useBoxIcon } from "./use-box-icon";
+  import { useBoxTips } from "./use-box-tips";
+  import { InputBoxState, useInputBox2 } from "./use-input-box2";
+  import { useInputComposition } from "./use-input-composition";
+  import { useTipList } from "./use-tip-list";
+  import { useValueHintCooking } from "./use-value-hint-cooking";
+  import { useValueOptions, ValueOptions } from "./use-value-options";
   //-----------------------------------------------------
   const emit = defineEmits<InputBoxEmitter>();
-  const $el = useTemplateRef<HTMLElement>('el');
-  const $input = useTemplateRef<HTMLInputElement>('input');
+  const $el = useTemplateRef<HTMLElement>("el");
+  const $input = useTemplateRef<HTMLInputElement>("input");
   //-----------------------------------------------------
   const _box_state = reactive({
     usr_text: null,
@@ -37,23 +37,23 @@
   const _options_data = ref<Vars[]>();
   //-----------------------------------------------------
   // 最后一个按键，主要用来监控 blur 的时候是不是 tab 触发的
-  let __last_down_key = ''; // 譬如 'Tab|Enter|ArraowUp ...''
+  let __last_down_key = ""; // 譬如 'Tab|Enter|ArraowUp ...''
   let __last_down_at = 0; // 最后按下的时间戳
   // 最后一个选择的项目时间
   let __last_select_at = 0;
   //-----------------------------------------------------
   const props = withDefaults(defineProps<InputBoxProps>(), {
-    value: '',
+    value: "",
     autoI18n: true,
-    tipShowTime: 'focus',
+    tipShowTime: "focus",
     tipShowDelay: 500,
     tipUseHint: false,
     canInput: true,
     trimed: true,
     autoSelect: true,
-    boxFontSize: 'm',
-    boxPadding: 'm',
-    boxRadius: 's',
+    boxFontSize: "m",
+    boxPadding: "m",
+    boxRadius: "s",
   });
   //-----------------------------------------------------
   const _pipe = computed(() => useValuePipe(props));
@@ -112,7 +112,12 @@
   );
   //-----------------------------------------------------
   const _comp = useInputComposition({
+    isReadonly: () => _box.value.isReadonly.value,
     onChange: (val) => {
+      // 只读防守
+      if (_box.value.isReadonly.value) {
+        return;
+      }
       //确保当前状态是 focused
       _box.value.setFocused(true);
       _box.value.applyPipe(val);
@@ -143,6 +148,7 @@
   //-----------------------------------------------------
   function onKeyDown(event: KeyboardEvent) {
     if (_box.value.isReadonly.value) {
+      // console.log("skip onKeyDown");
       return;
     }
     __last_down_key = event.key;
@@ -150,21 +156,21 @@
     //console.log('onKeyDown', event.key);
     _comp.onKeyPress(event);
     // 选择高亮项目
-    if ('ArrowUp' == event.key) {
+    if ("ArrowUp" == event.key) {
       event.preventDefault();
       _box.value.onKeyUpOrDown(-1);
-    } else if ('ArrowDown' == event.key) {
+    } else if ("ArrowDown" == event.key) {
       event.preventDefault();
       _box.value.onKeyUpOrDown(1);
     }
     // 取消
-    else if ('Escape' == event.key) {
+    else if ("Escape" == event.key) {
       _box.value.debouncePropsValueChange();
       _box.value.clearOptionsData();
       _box_state.usr_text = null;
     }
     // 确认
-    else if ('Enter' == event.key) {
+    else if ("Enter" == event.key) {
       event.preventDefault();
       _box.value.emitIfChanged();
       _box.value.clearOptionsData();
@@ -184,6 +190,7 @@
   //-----------------------------------------------------
   function onInputFocused() {
     if (_box.value.isReadonly.value) {
+      // console.log("skip onInputFocused");
       return;
     }
     // 原本没有 focus ，现在需要通知全局： 我要 focus 了
@@ -198,7 +205,7 @@
   }
   //-----------------------------------------------------
   function onClickMask() {
-    if (_box.value.shouldWhenEmit('close')) {
+    if (_box.value.shouldWhenEmit("close")) {
       _box.value.emitIfChanged();
     }
     _box.value.setFocused(false);
@@ -217,7 +224,7 @@
     // );
     _options.value?.abortOptonsLoading();
     let key_du = Date.now() - __last_down_at;
-    let isBlurByTab = 'Tab' == __last_down_key && key_du < 50;
+    let isBlurByTab = "Tab" == __last_down_key && key_du < 50;
     //console.log(`onInputBlur: isBlurByTab=${isBlurByTab}, key_du=${key_du}`);
     _.delay(() => {
       // 如果有选项，那么需要等待一会，看看用户是否已经选择了选项
@@ -262,9 +269,9 @@
     (focused, oldVal) => {
       if (focused != oldVal || _.isUndefined(oldVal)) {
         if (focused) {
-          emit('focus');
+          emit("focus");
         } else {
-          emit('blur');
+          emit("blur");
         }
       }
     }
@@ -323,9 +330,7 @@
       :style="_aspect.PartMainStyle.value">
       <slot name="head"> </slot>
       <!--主体框-->
-      <div
-        class="main-body"
-        :style="_aspect.MainBodyStyle.value">
+      <div class="main-body" :style="_aspect.MainBodyStyle.value">
         <!--====================================-->
         <div
           v-if="_prefix.hasIcon.value"
@@ -364,19 +369,13 @@
       占位支撑框。 当展开选项时，主体框会浮动到最顶层
       这就需要一个占位框来保证页面布局不会变化
       -->
-      <div
-        class="part-brace"
-        :style="_tip_box.BoxBraceStyle.value">
+      <div class="part-brace" :style="_tip_box.BoxBraceStyle.value">
         <!--纯占位而已，似乎不需要内容-->
       </div>
       <!--遮罩层：展开选项后，会用这个来捕获全局 click-->
-      <div
-        class="part-mask"
-        @click.left.stop="onClickMask"></div>
+      <div class="part-mask" @click.left.stop="onClickMask"></div>
       <!--选项层：展开的选项存放的地方-->
-      <div
-        class="part-options"
-        :style="_tip_box.TipWrapperStyle.value">
+      <div class="part-options" :style="_tip_box.TipWrapperStyle.value">
         <div class="part-options-con">
           <TiList
             v-bind="_tip_list.TipListConfig.value"
@@ -389,5 +388,5 @@
   </div>
 </template>
 <style lang="scss">
-  @use './ti-input-box.scss';
+  @use "./ti-input-box.scss";
 </style>

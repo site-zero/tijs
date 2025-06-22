@@ -1,6 +1,6 @@
-import _ from 'lodash';
-import { computed, ref } from 'vue';
-import { Str } from '../../../core';
+import _ from "lodash";
+import { computed, ref } from "vue";
+import { Str } from "../../../core";
 
 export type CoolingKeyMatcher = (key: string) => boolean;
 
@@ -15,6 +15,7 @@ type InnerCooling = {
 };
 
 export type InputCompositionOptions = {
+  isReadonly: () => boolean;
   onChange: (value: string) => void;
   /**
    * 声明了这个选项，相当说，在某个键按下后一段时间不响应 __update_value
@@ -31,7 +32,7 @@ export function useInputComposition(options: InputCompositionOptions) {
   let { onChange } = options;
   const _compositing = ref(false);
   const _keypress = {
-    key: '', // 按键的值 ArrowUp|ArrowDown|Escape|Enter...
+    key: "", // 按键的值 ArrowUp|ArrowDown|Escape|Enter...
     pressAt: 0, // 按键的时间戳
   };
 
@@ -50,7 +51,7 @@ export function useInputComposition(options: InputCompositionOptions) {
   const _cooling = computed(() => {
     let re: InnerCooling[] = [];
     let _input = options.waitCooling || [
-      { key: 'Escape|Enter|Escape', cooling: 300 },
+      { key: "Escape|Enter|Escape", cooling: 300 },
       { key: (k) => /^Arrow/.test(k), cooling: 300 },
     ];
     for (let _in of _input) {
@@ -112,6 +113,10 @@ export function useInputComposition(options: InputCompositionOptions) {
   }
 
   function __update_value($input: HTMLInputElement) {
+    // 只读防守
+    if (options.isReadonly()) {
+      return;
+    }
     if (_compositing.value) {
       return;
     }

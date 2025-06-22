@@ -1,17 +1,17 @@
-import _ from 'lodash';
-import { computed, nextTick, Ref, ref } from 'vue';
-import { AnyOptionItem, IconInput, Vars } from '../../../_type';
-import { Dicts, I18n } from '../../../core';
-import { anyToStr } from '../../../core/text/ti-str';
-import { usePlaceholder, useReadonly, ValuePipeFeature } from '../../_features';
+import _ from "lodash";
+import { computed, nextTick, Ref, ref } from "vue";
+import { AnyOptionItem, IconInput, Vars } from "../../../_type";
+import { Dicts, I18n } from "../../../core";
+import { anyToStr } from "../../../core/text/ti-str";
+import { usePlaceholder, useReadonly, ValuePipeFeature } from "../../_features";
+import { useDisplayText } from "./../../_features";
 import {
   BoxEmitTime,
   InputBoxEmitter,
   InputBoxProps,
-} from './ti-input-box-types';
-import { useDisplayText } from './../../_features';
-import { ValueHintCooking } from './use-value-hint-cooking';
-import { ValueOptions } from './use-value-options';
+} from "./ti-input-box-types";
+import { ValueHintCooking } from "./use-value-hint-cooking";
+import { ValueOptions } from "./use-value-options";
 //--------------------------------------------------
 export type InputBoxState = {
   /**
@@ -96,7 +96,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     // 显示清除选项
     if (props.showCleanOption) {
       re.push({
-        text: I18n.text('i18n:clear'),
+        text: I18n.text("i18n:clear"),
         value: null,
       });
     }
@@ -222,7 +222,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
 
       // 如果查询的结果为空，那么就不显示选项
       if (
-        'auto' == props.tipShowTime &&
+        "auto" == props.tipShowTime &&
         _options &&
         _options.isDataEmpty.value
       ) {
@@ -352,7 +352,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
   async function onPropsValueChange() {
     let val = anyToStr(props.value);
     let amend: InputBoxState = {
-      usr_text: val ?? '',
+      usr_text: val ?? "",
       box_value: null,
       box_icon: null,
       box_text: null,
@@ -368,7 +368,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
       var hint = cookHint(val);
       let item = await _dict.getStdItem(hint);
       if (item) {
-        amend.usr_text = _display.value(item) ?? '';
+        amend.usr_text = _display.value(item) ?? "";
         amend.box_value = item.value;
         amend.box_icon = item.icon ?? null;
         amend.box_text = item.text ?? null;
@@ -473,7 +473,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     // 聚焦下一个项目
     let nextItem = getOptionItemAt(itIndex, offset);
     if (nextItem) {
-      amend.usr_text = _display.value(nextItem) ?? '';
+      amend.usr_text = _display.value(nextItem) ?? "";
       amend.box_value = nextItem.value;
       amend.box_icon = nextItem.icon ?? null;
       amend.box_text = nextItem.text ?? null;
@@ -485,12 +485,16 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
   }
   //------------------------------------------------
   function setFocused(focused: boolean) {
-    _focused.value = focused;
+    if (isReadonly.value) {
+      _focused.value = false;
+    } else {
+      _focused.value = focused;
+    }
   }
   //------------------------------------------------
   function whenFocused() {
-    if (_focused.value) {
-      if (props.autoSelect && !isInputReadonly.value) {
+    if (_focused.value && !isReadonly.value) {
+      if (props.autoSelect) {
         nextTick(() => {
           let $input = getInputElement();
           if ($input && _focused.value) {
@@ -500,7 +504,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
       }
 
       // 如果需要展示选项
-      if (props.tipShowTime == 'focus' && _options) {
+      if (props.tipShowTime == "focus" && _options) {
         let { reloadOptioinsData } = _options;
         reloadOptioinsData();
       }
@@ -515,34 +519,37 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
   }
   //------------------------------------------------
   function emitIfChanged() {
+    if(isReadonly.value){
+      return;
+    }
     let val = _box_state.box_value;
-    let emitType = props.emitType || 'value';
+    let emitType = props.emitType || "value";
     if (!_.isEqual(val, props.value)) {
       // 空值
-      if (_.isNil(val) || '' === val) {
-        emit('change', null);
+      if (_.isNil(val) || "" === val) {
+        emit("change", null);
       }
       // 原始对象
-      else if ('raw-item' == emitType && _dict) {
+      else if ("raw-item" == emitType && _dict) {
         let hint = cookHint(val);
         _dict.getStdItem(hint).then((it) => {
           let item = it?.toOptionItem();
-          emit('change', item ?? null);
+          emit("change", item ?? null);
         });
       }
       // 标准对象
-      else if ('std-item' == emitType && _dict) {
+      else if ("std-item" == emitType && _dict) {
         let item: AnyOptionItem = {
           value: _box_state.box_value,
           text: _box_state.box_text ?? undefined,
           icon: _box_state.box_icon ?? undefined,
           tip: _box_state.box_tip ?? undefined,
         };
-        emit('change', item);
+        emit("change", item);
       }
       // 采用值
       else {
-        emit('change', val);
+        emit("change", val);
       }
     }
   }
@@ -582,7 +589,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     clearOptionsData,
     getItemByValue,
     showOptions: async () => {
-      if (!hasTips.value) {
+      if (!hasTips.value && !isInputReadonly.value) {
         await _options?.reloadOptioinsData();
       }
     },
