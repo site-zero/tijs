@@ -8,7 +8,7 @@ import {
   TableRowID,
   Vars,
 } from "../../../_type";
-import { EventUtils } from "../../../core";
+import { EventUtils, useFuse } from "../../../core";
 import {
   TableEmitter,
   TableEventPayload,
@@ -205,11 +205,25 @@ export function useTable(
         }
       }
 
-      // 修改本地状态
-      selection.value = newSelection;
-
-      // 通知改动
-      emit("select", info);
+      // 尝试熔断保险丝
+      if (props.fuse) {
+        let key: string | undefined = _.isString(props.fuse)
+          ? props.fuse
+          : undefined;
+        let fuse = useFuse();
+        fuse.fire(key).then((fired) => {
+          if (!fired) {
+            selection.value = newSelection;
+            emit("select", info);
+          }
+        });
+        return;
+      }
+      // 不用保险丝
+      else {
+        selection.value = newSelection;
+        emit("select", info);
+      }
     }
   }
   //-----------------------------------------------------
