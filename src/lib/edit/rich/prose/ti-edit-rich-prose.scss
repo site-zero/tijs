@@ -2,15 +2,21 @@
 
 .ti-edit-rich-prose {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
   grid-template-rows: auto 1fr;
   grid-template-areas:
-    "menu menu"
-    "main props";
+    "menu menu menu"
+    "nav main props"
+    "nav foot foot";
   //-----------------------------------------------------
   > header {
     grid-area: menu;
     background-color: pink;
+  }
+  //-----------------------------------------------------
+  > nav {
+    grid-area: nav;
+    background-color: #CCC;
   }
   //-----------------------------------------------------
   > article {
@@ -29,6 +35,11 @@
   > aside {
     grid-area: props;
     background-color: red;
+  }
+  //-----------------------------------------------------
+  > footer {
+    grid-area: foot;
+    background-color: #CDF;
   }
   //-----------------------------------------------------
 }

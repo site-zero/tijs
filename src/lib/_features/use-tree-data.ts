@@ -1,7 +1,7 @@
-import _ from 'lodash';
-import { ref } from 'vue';
-import { isTableRowID, RowIndentStatus, TableRowID, Vars } from '../../_type';
-import { Match, Util } from '../../core';
+import _ from "lodash";
+import { ref } from "vue";
+import { isTableRowID, RowIndentStatus, TableRowID, Vars } from "../../_type";
+import { Match, Util } from "../../core";
 
 /**
  * 这个特性用来封装对于树型数据的操作
@@ -131,7 +131,7 @@ export type TreeDataProps = {
    *  - `null` : 默认模式，即，不强制使用虚拟根节点，
    *                  仅在有必要的时候才会使用虚拟根节点
    */
-  forceUseVirtualRoot?: 'list' | 'node' | 'both' | null;
+  forceUseVirtualRoot?: "list" | "node" | "both" | null;
 };
 
 export type TreeHierarchyNode = {
@@ -185,7 +185,7 @@ export type TreeWalking = (
  * - `"stop"`: 完全停止遍历，直接退出
  * - `undefined` 默认采用 'yes'
  */
-export type TreeWalkAction = 'down' | 'next' | 'stop';
+export type TreeWalkAction = "down" | "next" | "stop";
 
 /**
  * 扁平化树的回调
@@ -222,13 +222,13 @@ type ResetNodeStatusOptions = {
 export type TreeDataFilter = (
   hie: TreeHierarchyNode,
   data: Vars
-) => 'self' | 'all' | 'ignore';
+) => "self" | "all" | "ignore";
 
 export function useTreeData(
   props: TreeDataProps,
   _node_status: Map<TableRowID, RowIndentStatus>
 ) {
-  const _children_key = props.childrenKey || 'children';
+  const _children_key = props.childrenKey || "children";
 
   // 获取 ID
   let getNodeId: (data: Vars) => TableRowID | undefined;
@@ -293,7 +293,7 @@ export function useTreeData(
   } else {
     let nodeId =
       (props.virtualRootNode ? getNodeId(props.virtualRootNode) : undefined) ||
-      '%VIRTUAL-ROOT%';
+      "%VIRTUAL-ROOT%";
     _vir_root = {
       ...props.virtualRootNode,
       id: nodeId,
@@ -309,7 +309,7 @@ export function useTreeData(
   // 数据结构
   //-----------------------------------------------------
   const _tree = ref<TreeBuildResult>({
-    rootId: '???',
+    rootId: "???",
     hierarchy: new Map<TableRowID, TreeHierarchyNode>(),
     nodes: new Map<TableRowID, Vars>(),
   });
@@ -323,8 +323,8 @@ export function useTreeData(
       return;
     }
     let newSt = {
-      open: 'closed',
-      closed: 'open',
+      open: "closed",
+      closed: "open",
     }[st] as RowIndentStatus;
     _node_status.set(id, newSt);
   }
@@ -354,7 +354,7 @@ export function useTreeData(
   //-----------------------------------------------------
   function clear() {
     _tree.value = {
-      rootId: '???',
+      rootId: "???",
       hierarchy: new Map<TableRowID, TreeHierarchyNode>(),
       nodes: new Map<TableRowID, Vars>(),
     };
@@ -521,31 +521,31 @@ export function useTreeData(
       // 层级关系
       let hie = tree.hierarchy.get(nodeId);
       if (!hie) {
-        console.trace('Can not find hierarchy node:', nodeId);
-        throw new Error('Can not find hierarchy node:' + nodeId);
+        console.trace("Can not find hierarchy node:", nodeId);
+        throw new Error("Can not find hierarchy node:" + nodeId);
       }
       // 节点数据，如果是虚节点，那么就弄个空数据
       let data = hie.virtual ? {} : tree.nodes.get(nodeId);
       if (!data) {
-        console.trace('Can not find data node:', nodeId);
-        throw new Error('Can not find data node:' + nodeId);
+        console.trace("Can not find data node:", nodeId);
+        throw new Error("Can not find data node:" + nodeId);
       }
       // 调用回调
       let act: TreeWalkAction =
-        callback(hie, data, walkDepth, walkIndex) ?? 'down';
+        callback(hie, data, walkDepth, walkIndex) ?? "down";
 
       // 退出
-      if ('stop' == act) {
-        throw 'stop';
+      if ("stop" == act) {
+        throw "stop";
       }
 
       // 递归子节点: 也就是说，回调必须返回 'down' 才会进入子节点
-      if (!hie.leaf && 'down' == act) {
+      if (!hie.leaf && "down" == act) {
         let children = hie.children;
         if (!children) {
-          console.trace('Non-leaf node must has children:', hie);
+          console.trace("Non-leaf node must has children:", hie);
           throw new Error(
-            'Non-leaf node must has children:' + JSON.stringify(hie)
+            "Non-leaf node must has children:" + JSON.stringify(hie)
           );
         }
         for (let i = 0; i < children.length; i++) {
@@ -560,7 +560,7 @@ export function useTreeData(
       _walk(id, 0, 0);
     } catch (err) {
       // 正常结束
-      if ('stop' == err) {
+      if ("stop" == err) {
         return;
       }
       throw err;
@@ -589,12 +589,12 @@ export function useTreeData(
           re.push(data);
         }
         if (hie.leaf) {
-          return 'next';
+          return "next";
         }
-        if ('open' == _node_status.get(hie.id)) {
-          return 'down';
+        if ("open" == _node_status.get(hie.id)) {
+          return "down";
         }
-        return 'next';
+        return "next";
       };
     }
     let re: Vars[] = [];
@@ -642,14 +642,14 @@ export function useTreeData(
   function getTreeData(filter?: TreeDataFilter, nodeId?: TableRowID) {
     // 默认的过滤器，全都要
     if (!filter) {
-      filter = () => 'all';
+      filter = () => "all";
     }
     // 准备一个递归逻辑
     let tree = _tree.value;
     const _make_tree_data = (nodeId: TableRowID): Vars | undefined => {
       let hie = tree.hierarchy.get(nodeId);
       if (!hie) {
-        console.warn('Can not find hierarchy node:', nodeId);
+        console.warn("Can not find hierarchy node:", nodeId);
         return;
       }
       let data: Vars | undefined;
@@ -662,18 +662,18 @@ export function useTreeData(
       else {
         data = tree.nodes.get(nodeId);
         if (!data) {
-          console.trace('Can not find data node:', nodeId, hie);
+          console.trace("Can not find data node:", nodeId, hie);
           return;
         }
       }
       // 无视这个节点
       let act = filter(hie, data);
-      if ('ignore' == act) {
+      if ("ignore" == act) {
         return undefined;
       }
       // 仅仅添加自己
       let re = _.cloneDeep(data);
-      if ('self' == act) {
+      if ("self" == act) {
         return re;
       }
 
@@ -721,7 +721,7 @@ export function useTreeData(
   function buildTree(data: Vars | Vars[]) {
     // 准备要构建的数据
     const re = {
-      rootId: '???',
+      rootId: "???",
       hierarchy: new Map<TableRowID, TreeHierarchyNode>(),
       nodes: new Map<TableRowID, Vars>(),
     };
@@ -743,7 +743,7 @@ export function useTreeData(
         hie.leaf = isLeafNode({ ...hie, data });
         if (hie.leaf) {
           if (!_.isEmpty(hie.children)) {
-            console.warn('Tree Leaf Node has children:', _.cloneDeep(hie));
+            console.warn("Tree Leaf Node has children:", _.cloneDeep(hie));
           }
           hie.children = undefined;
         }
@@ -767,7 +767,7 @@ export function useTreeData(
     walkDFS((hie, data) => {
       if (!hie.leaf) {
         let is_open = isNodeOpen({ ...hie, data });
-        nd_status.set(hie.id, is_open ? 'open' : 'closed');
+        nd_status.set(hie.id, is_open ? "open" : "closed");
       }
       tree.rootId, tree;
     });
@@ -843,9 +843,9 @@ export function useTreeData(
         // 加入它的子
         if (parent) {
           if (!parent.children) {
-            console.trace('Parent node children array not defined', parent);
+            console.trace("Parent node children array not defined", parent);
             throw new Error(
-              'Parent node children array not defined: ' +
+              "Parent node children array not defined: " +
                 JSON.stringify(parent)
             );
           }
@@ -868,7 +868,7 @@ export function useTreeData(
     // 当然，如果用户强制指定必须采用虚根，即使一个也加入
     if (
       tops.size > 1 ||
-      /^(list|both)$/.test(props.forceUseVirtualRoot ?? '')
+      /^(list|both)$/.test(props.forceUseVirtualRoot ?? "")
     ) {
       re.hierarchy.set(_vir_root.id, {
         ..._vir_root,
@@ -929,7 +929,7 @@ export function useTreeData(
     let root: TreeHierarchyNode = _build_node(0, data, 0);
 
     // 强制采用虚拟根节点
-    if (/^(node|both)$/.test(props.forceUseVirtualRoot ?? '')) {
+    if (/^(node|both)$/.test(props.forceUseVirtualRoot ?? "")) {
       re.hierarchy.set(_vir_root.id, _vir_root);
       root = _build_node(0, data, 1, _vir_root.id);
     }
@@ -954,8 +954,8 @@ export function useTreeData(
     // 获取 ID
     let id = getNodeId(meta);
     if (!isTableRowID(id)) {
-      console.trace('Can not get ID from data:', meta);
-      throw new Error('Can not get ID from data');
+      console.trace("Can not get ID from data:", meta);
+      throw new Error("Can not get ID from data");
     }
     // 获取节点信息
     pid = pid ?? getParntNodeId(meta);
@@ -985,6 +985,7 @@ export function useTreeData(
     // 读操作
     getNode,
     getNodes,
+    getNodeData,
     getHierarchy,
     getAxis,
     getAncestorNodes,

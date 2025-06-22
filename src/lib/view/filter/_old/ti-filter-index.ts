@@ -1,33 +1,33 @@
-import { App } from 'vue';
-import { TiComInfo, TiComRace } from '../../../../_type';
-import { COM_TYPES } from '../../../lib-com-types';
-import TiFilter from './TiFilter.vue';
-import example from './example';
+import { App } from "vue";
+import { TiComInfo, TiComRace } from "../../../../_type";
+import { COM_TYPES } from "../../../lib-com-types";
+import TiFilter from "./TiFilter.vue";
+import example from "./example";
 
 const en_us = {
-  'com-name': 'Filter',
-  'customize': 'Customize',
-  'advance': 'Advance',
-  'example-at-bottom': 'Menu At Bottom',
-  'example-at-right': 'Menu At Right',
-  'example-at-none': 'Not Menu',
+  "com-name": "Filter",
+  "customize": "Customize",
+  "advance": "Advance",
+  "example-at-bottom": "Menu At Bottom",
+  "example-at-right": "Menu At Right",
+  "example-at-none": "Not Menu",
 };
 const zh_cn = {
-  'com-name': '过滤器',
-  'customize': '定制条件',
-  'advance': '高级搜索',
-  'example-at-bottom': '菜单在底部',
-  'example-at-right': '菜单在右侧',
-  'example-at-none': '无菜单',
+  "com-name": "过滤器",
+  "customize": "定制条件",
+  "advance": "高级搜索",
+  "example-at-bottom": "菜单在底部",
+  "example-at-right": "菜单在右侧",
+  "example-at-none": "无菜单",
 };
 
 const COM_TYPE = COM_TYPES.Filter;
 
 const TiFilterInfo: TiComInfo = {
-  icon: 'zmdi-filter-list',
+  icon: "zmdi-filter-list",
   race: TiComRace.VIEW,
   name: COM_TYPE,
-  text: 'i18n:ti-filter-com-name',
+  text: "i18n:ti-filter-com-name",
   i18n: {
     en_us: en_us,
     en_uk: en_us,
@@ -36,9 +36,9 @@ const TiFilterInfo: TiComInfo = {
   },
   com: TiFilter,
   liveStyle: {
-    width: '100%',
-    height: '100%',
-    padding: '20px',
+    width: "100%",
+    height: "100%",
+    padding: "20px",
     maxWidth: "unset",
     position: "unset",
     display: "block",
@@ -46,18 +46,17 @@ const TiFilterInfo: TiComInfo = {
   install: (app: App) => {
     app.component(COM_TYPE, TiFilter);
   },
-  defaultProps: 'at_right',
+  defaultProps: "at_right",
   exampleProps: [example.atRight, example.atBottom, example.atNone],
   exampleModel: {
-    'change': 'value',
-    'reset': {
-      key: 'value',
+    "change": "value",
+    "reset": {
+      key: "value",
       val: {},
-      mode: 'set',
     },
-    'change-major': 'majorFields',
+    "change-major": "majorFields",
   },
 };
 
-export * from './ti-filter-types';
+export * from "./ti-filter-types";
 export { TiFilter, TiFilterInfo };

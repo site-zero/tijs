@@ -1,4 +1,9 @@
 import { CommonProps } from "@site0/tijs";
+import { InjectionKey } from "vue";
+import { TiEditRichProseApi } from "./use-ti-edit-rich-prose-api";
+
+export const TI_RICH_EDITOR_API_KEY: InjectionKey<TiEditRichProseApi> =
+  Symbol("TI_RICH_EDITOR_API");
 
 export type TiEditRichProseEmitter = {
   (event: "change", payload: any): void;
@@ -6,4 +11,29 @@ export type TiEditRichProseEmitter = {
 
 export type TiEditRichProseProps = CommonProps & {
   // 这里放置控件支持的属性
+};
+
+export type RichEditorGUIState = {
+  /**
+   * 导航窗格的显示
+   * - false : 不显示导航窗格
+   * - "tree": 显示为文档结构树
+   * - "outline": 显示为大纲层级
+   */
+  nav: false | "tree" | "outline";
+
+  /**
+   * 是否显示属性窗格
+   */
+  props: boolean;
+
+  /**
+   * 是否显示脚注区
+   */
+  footer: boolean;
+
+  /**
+   * 是否显示工具条
+   */
+  toolbar: boolean;
 };
