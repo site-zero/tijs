@@ -555,6 +555,12 @@ export function useSelectable<ID extends TableRowID>(
 
   function checkAll(selection: SelectableState<ID>) {
     for (let id of selection.ids) {
+      // 跳过无效 ID 项或者不可选中项
+      let item = getItem(id);
+      if (!item || !canCheckItem(item)) {
+        continue;
+      }
+      // 计入选中 ID
       selection.checkedIds.set(id, true);
     }
     clampSelect(selection);
@@ -608,6 +614,13 @@ export function useSelectable<ID extends TableRowID>(
   }
 
   function selectId(selection: SelectableState<ID>, id: ID) {
+    // 防守无效 ID 或者不能选中项目
+    let item = getItem(id);
+    if (!item || !canSelectItem(item)) {
+      return;
+    }
+
+    // 重置选区
     selection.checkedIds.clear();
     if (props.canSelect) {
       selection.currentId = id;
@@ -621,6 +634,13 @@ export function useSelectable<ID extends TableRowID>(
   }
 
   function toggleId(selection: SelectableState<ID>, id: ID) {
+    // 防守无效 ID 或者不能选中项目
+    let item = getItem(id);
+    if (!item || !canSelectItem(item) || !canCheckItem(item)) {
+      return;
+    }
+
+    // 重置选区
     let checked: boolean = selection.checkedIds.get(id) ?? false;
     checked = checked ? false : true;
     selection.checkedIds.set(id, checked);
@@ -704,6 +724,10 @@ export function useSelectable<ID extends TableRowID>(
     let idMap = new Map<ID, boolean>();
     for (let i = fromIndex; i <= toIndex; i++) {
       let id = ids[i];
+      let item = getItem(id);
+      if (!item || !canCheckItem(item)) {
+        continue;
+      }
       idMap.set(id, yes);
     }
 
