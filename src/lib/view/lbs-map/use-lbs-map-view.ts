@@ -22,7 +22,7 @@ import markerIcon  from './icon/marker-icon.png'
 import markerShadow from './icon/marker-shadow.png'
 import markerIcon2x from './icon/marker-icon-2x.png'
 
-console.log(markerIcon)
+//console.log(markerIcon)
 
 // 修复默认图标路径问题
 function fixLeafletIcons() {

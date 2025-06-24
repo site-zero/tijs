@@ -1,12 +1,12 @@
-import _ from 'lodash';
-import { Match, getEnv } from '../';
+import _ from "lodash";
+import { Match, getEnv } from "../";
 import {
   BusDeposer,
   BusListenerHanlder,
   BusMsg,
   TiBus,
   TiMatch,
-} from '../../_type';
+} from "../../_type";
 
 class BusListener<T> {
   _name: string;
@@ -33,7 +33,7 @@ class BusListener<T> {
 }
 
 function name_is_conditional(name: string) {
-  return name.startsWith('^') || /[?*+{}]/.test(name);
+  return name.startsWith("^") || /[?*+{}]/.test(name);
 }
 
 let BUS_NB = 0;
@@ -76,10 +76,10 @@ export class TiBusImpl<T> implements TiBus<T> {
    * 构造函数，用于创建 TiBus 实例。
    * 每个实例都会被赋予一个唯一的 key，并存储在全局的 ALL_BUS Map 中。
    */
-  constructor(name = 'BUS') {
+  constructor(name = "BUS") {
     this._uniqKey = `${name}-${BUS_NB++}`;
 
-    let ALL_BUS = getEnv('ALL_BUS') as Map<string, TiBus<any>>;
+    let ALL_BUS = getEnv("ALL_BUS") as Map<string, TiBus<any>>;
     ALL_BUS.set(this._uniqKey, this);
   }
 
@@ -145,7 +145,7 @@ export class TiBusImpl<T> implements TiBus<T> {
    */
   on(name: string, handler: BusListenerHanlder<T>, deposer?: BusDeposer) {
     // 任意监听
-    if ('*' === name) {
+    if ("*" === name) {
       this.onAny(handler, deposer);
     }
     // 条件监听
@@ -159,7 +159,7 @@ export class TiBusImpl<T> implements TiBus<T> {
   }
 
   onAny(handler: BusListenerHanlder<T>, deposer?: BusDeposer) {
-    this._lis_any.push(new BusListener('*', handler));
+    this._lis_any.push(new BusListener("*", handler));
     if (deposer) {
       deposer(() => {
         this.offAny(handler);
@@ -197,7 +197,7 @@ export class TiBusImpl<T> implements TiBus<T> {
       this.offAll(handler);
     }
     // 任意监听
-    else if ('*' === name) {
+    else if ("*" === name) {
       this.offAny(handler);
     }
     // 条件监听
@@ -212,21 +212,25 @@ export class TiBusImpl<T> implements TiBus<T> {
 
   offAny(handler: BusListenerHanlder<T>) {
     // console.log("offAny");
-    _.remove(this._lis_any, (li) => li.isMyHandler(handler));
+    //_.remove(this._lis_any, (li) => li.isMyHandler(handler));
+    this._lis_any = _.filter(this._lis_any, (li) => !li.isMyHandler(handler));
   }
 
   offMatch(handler: BusListenerHanlder<T>, name?: string) {
     // console.log("offMatch");
-    if (!name) {
-      _.remove(this._lis_match, (li) => li.isMyHandler(handler));
-    }
-    // 还要指定名称
-    else {
-      _.remove(
-        this._lis_match,
-        (li) => name == li._name && li.isMyHandler(handler)
-      );
-    }
+    this._lis_any = _.filter(this._lis_match, (li) => {
+      return li._name != name && !li.isMyHandler(handler);
+    });
+    // if (!name) {
+    //   _.remove(this._lis_match, (li) => li.isMyHandler(handler));
+    // }
+    // // 还要指定名称
+    // else {
+    //   _.remove(
+    //     this._lis_match,
+    //     (li) => name == li._name && li.isMyHandler(handler)
+    //   );
+    // }
   }
 
   offName(name: string, handler: BusListenerHanlder<T>) {
@@ -234,7 +238,9 @@ export class TiBusImpl<T> implements TiBus<T> {
     let listeners = this._lis_name.get(name);
     if (listeners) {
       //console.log("before", listeners.length)
-      _.remove(listeners, (li) => li.isMyHandler(handler));
+      let listeners2 = _.filter(listeners, (li) => !li.isMyHandler(handler));
+      this._lis_name.set(name, listeners2);
+      //_.remove(listeners, (li) => li.isMyHandler(handler));
       //console.log("after", listeners.length)
     }
   }
@@ -245,13 +251,15 @@ export class TiBusImpl<T> implements TiBus<T> {
     for (let key of this._lis_name.keys()) {
       let listeners = this._lis_name.get(key);
       if (listeners) {
-        _.remove(listeners, (li) => li.isMyHandler(handler));
+        let listeners2 = _.filter(listeners, (li) => !li.isMyHandler(handler));
+        this._lis_name.set(key, listeners2);
+        //_.remove(listeners, (li) => li.isMyHandler(handler));
       }
     }
   }
 
   depose() {
-    let ALL_BUS = getEnv('ALL_BUS') as Map<string, TiBus<any>>;
+    let ALL_BUS = getEnv("ALL_BUS") as Map<string, TiBus<any>>;
     ALL_BUS.delete(this._uniqKey);
   }
 }
