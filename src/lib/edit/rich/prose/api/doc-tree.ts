@@ -1,13 +1,13 @@
+import { EditorView } from "prosemirror-view";
 import { Ref } from "vue";
 import { Vars } from "../../../../../_type";
-import { EditorView } from "prosemirror-view";
 
 export function useEditorDocTree(
   getView: () => EditorView | undefined,
   _doc_tree_data: Ref<Vars[]>
 ) {
   //-----------------------------------------------------
-  function updateTreeRoot() {
+  function updateTreeRoot(from: number, to: number) {
     let doc = getView()?.state.doc;
 
     // 防空
@@ -25,16 +25,23 @@ export function useEditorDocTree(
         id: `N${n++}`,
         parentId: idStack[depth],
         type: node.type.name,
+        leaf: node.isAtom || node.isText,
       };
       // 文字节点
       if (node.isText) {
-        nodeItem.text = node.text ?? "";
-        nodeItem.icon = 'fas-font'
+        let texts = [] as string[];
+        let marks = node.marks.map((mark) => mark.type.name);
+        if (marks.length > 0) {
+          texts.push(`[${marks.join(",")}]`);
+        }
+        texts.push(node.text ?? "");
+        nodeItem.text = texts.join("");
+        nodeItem.icon = "fas-font";
       }
       // 其他节点
       else {
         nodeItem.text = `<${node.type.name}>`;
-        nodeItem.icon = 'fas-paragraph'
+        nodeItem.icon = "fas-paragraph";
         if (!node.isAtom && !node.isLeaf) {
           idStack[depth + 1] = nodeItem.id;
         }

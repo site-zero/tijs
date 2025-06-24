@@ -144,9 +144,10 @@ export function useTiEditRichProseApi(
         view.updateState(newState);
 
         // 检查选择范围是否变化
-        _doc_tree.updateTreeRoot();
-        let str = _doc_tree.dumpTree();
-        console.log(str);
+        let { from, to } = tr.selection;
+        _doc_tree.updateTreeRoot(from, to);
+        // let str = _doc_tree.dumpTree();
+        // console.log(str);
       },
     });
   }
