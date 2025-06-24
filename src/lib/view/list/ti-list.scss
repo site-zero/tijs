@@ -2,6 +2,7 @@
 
 .ti-list {
   font-size: var(--ti-fontsz-m);
+  line-height: 1.2em;
   //--------------------------------
   &.none-user-select {
     user-select: none;
@@ -81,7 +82,6 @@
         &.as-text {
           @include flex-align;
           padding: 0.7em 0.5em;
-          line-height: 1.2em;
           flex: 1 1 auto;
           em {
             font-style: normal;

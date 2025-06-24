@@ -1,25 +1,25 @@
 <script lang="ts" setup>
-  import _ from 'lodash';
-  import { computed, reactive, useTemplateRef, watch } from 'vue';
-  import { SelectableState, TiIcon, TiRoadblock, useRowIndent } from '../../';
+  import _ from "lodash";
+  import { computed, reactive, useTemplateRef, watch } from "vue";
+  import { SelectableState, TiIcon, TiRoadblock, useRowIndent } from "../../";
   import {
     CssSheet,
     ElementScrollIntoViewOptions,
     TableRowID,
-  } from '../../../_type';
-  import { Alg, CssUtils, Dom } from '../../../core';
+  } from "../../../_type";
+  import { Alg, CssUtils, Dom } from "../../../core";
   import {
     IndentlyItem,
     ListEmitter,
     ListItem,
     ListProps,
-  } from './ti-list-types';
-  import { useList } from './use-list';
+  } from "./ti-list-types";
+  import { useList } from "./use-list";
   //-----------------------------------------------------
   const props = withDefaults(defineProps<ListProps>(), {
     data: () => [],
-    forceShowRowIconPart: 'auto',
-    size: 'm',
+    forceShowRowIconPart: "auto",
+    size: "m",
     canSelect: true,
     canHover: true,
     autoI18n: true,
@@ -36,7 +36,7 @@
     lastSelectIndex: -1,
   } as SelectableState<TableRowID>);
   //-----------------------------------------------------
-  const $main = useTemplateRef<HTMLElement>('main');
+  const $main = useTemplateRef<HTMLElement>("main");
   const _list = computed(() => useList(props, selection, emit));
   //-----------------------------------------------------
   const roadblock = computed(() => _list.value.getRoadblock());
@@ -56,10 +56,10 @@
   });
   //-----------------------------------------------------
   const isAlwaysShowItemIcon = computed(() => {
-    if ('yes' == props.forceShowRowIconPart) {
+    if ("yes" == props.forceShowRowIconPart) {
       return true;
     }
-    if ('no' == props.forceShowRowIconPart) {
+    if ("no" == props.forceShowRowIconPart) {
       return false;
     }
     // 那么就会是自动模式
@@ -80,10 +80,10 @@
     return CssUtils.mergeClassName(
       props.className,
       {
-        'is-hoverable': props.canHover,
-        'is-selectable': props.canSelect || props.showChecker,
-        'is-highlight-checked': props.highlightChecked,
-        'none-user-select': !props.allowUserSelect,
+        "is-hoverable": props.canHover,
+        "is-selectable": props.canSelect || props.showChecker,
+        "is-highlight-checked": props.highlightChecked,
+        "none-user-select": !props.allowUserSelect,
       },
       names
     );
@@ -91,12 +91,12 @@
   //-----------------------------------------------------
   const TopStyle = computed(() => {
     return CssUtils.toStyle(
-      CssUtils.mergeStyles(
+      CssUtils.mergeStyles([
         {
-          'font-size': `var(--ti-fontsz-${props.size ?? 'm'})`,
+          "font-size": `var(--ti-fontsz-${props.size ?? "m"})`,
         },
-        props.style
-      )
+        props.style,
+      ])
     );
   });
   //-----------------------------------------------------
@@ -112,10 +112,10 @@
         ss = props.styleSheet as CssSheet[];
       }
       return [
-        '<style>',
+        "<style>",
         CssUtils.renderCssStyleSheet(ss, scope),
-        '</style>',
-      ].join('\n');
+        "</style>",
+      ].join("\n");
     }
   });
   //-----------------------------------------------------
@@ -139,7 +139,7 @@
       `main>.list-item:nth-child(${index + 1})`,
       $main.value
     );
-    console.log('scrollIntoViewByIndex', index, $item);
+    console.log("scrollIntoViewByIndex", index, $item);
     if ($item && $item.parentElement) {
       let $main = $item.parentElement;
       Dom.scrollIntoView($main, $item, options);
@@ -177,15 +177,11 @@
       v-html="StyleSheetHTML"></div>
     <slot name="head"></slot>
     <!--------------Empty Items------------------>
-    <div
-      class="empty-tip"
-      v-if="NotItems">
+    <div class="empty-tip" v-if="NotItems">
       <TiRoadblock v-bind="roadblock" />
     </div>
     <!---------------Show List------------------->
-    <main
-      v-else
-      ref="main">
+    <main v-else ref="main">
       <div
         v-for="it in IndentlyItems"
         class="list-item"
@@ -194,9 +190,7 @@
         @dblclick="emit('open', it)">
         <!--***********************************-->
         <!--=Indent placeholder=-->
-        <div
-          class="list-part as-indents"
-          v-if="it.indent > 0">
+        <div class="list-part as-indents" v-if="it.indent > 0">
           <b v-for="_ii in it.indent"></b>
         </div>
         <!--=Indicator=-->
@@ -218,20 +212,14 @@
           v-if="MarkerIcons && it.canCheck"
           class="list-part as-check"
           @click.stop="_list.OnItemCheck({ event: $event, item: it })">
-          <TiIcon
-            v-if="it.checked"
-            :value="MarkerIcons[1]" />
-          <TiIcon
-            v-else
-            :value="MarkerIcons[0]" />
+          <TiIcon v-if="it.checked" :value="MarkerIcons[1]" />
+          <TiIcon v-else :value="MarkerIcons[0]" />
         </div>
         <!--=Icon=-->
         <div
           v-if="isAlwaysShowItemIcon || it.rowIcon"
           class="list-part as-icon">
-          <TiIcon
-            v-if="it.rowIcon"
-            :value="it.rowIcon" />
+          <TiIcon v-if="it.rowIcon" :value="it.rowIcon" />
         </div>
         <!--=Text: AS HTML=-->
         <div
@@ -239,9 +227,7 @@
           class="list-part as-text"
           v-html="it.displayText"></div>
         <!--=Text: AS PureText=-->
-        <div
-          class="list-part as-text"
-          v-else>
+        <div class="list-part as-text" v-else>
           {{ it.displayText }}
         </div>
         <!--=Tip=-->
@@ -259,5 +245,5 @@
   </div>
 </template>
 <style lang="scss">
-  @use './ti-list.scss';
+  @use "./ti-list.scss";
 </style>

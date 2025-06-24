@@ -29,10 +29,12 @@ export function useEditorDocTree(
       // 文字节点
       if (node.isText) {
         nodeItem.text = node.text ?? "";
+        nodeItem.icon = 'fas-font'
       }
       // 其他节点
       else {
         nodeItem.text = `<${node.type.name}>`;
+        nodeItem.icon = 'fas-paragraph'
         if (!node.isAtom && !node.isLeaf) {
           idStack[depth + 1] = nodeItem.id;
         }
