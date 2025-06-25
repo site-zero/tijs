@@ -83,7 +83,7 @@
       :bar-layout-mode="props.layoutMode"
       :style="props.style"
       :aspect="props.aspect"
-      @click.left="onClikeItem"
+      @click.left.stop="onClikeItem"
       @mouseenter="OnEnter">
       <div
         class="item-icon"

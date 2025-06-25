@@ -1,69 +1,68 @@
-import _ from 'lodash';
-import { Ref } from 'vue';
+import _ from "lodash";
+import { ComputedRef, Ref } from "vue";
 import {
   ActionBarItem,
   IconInput,
   StdOptionItem,
   TableRowID,
-} from '../../../_type';
-import { Util } from '../../../core';
-import { getLogger } from '../../../core/log/ti-log';
-import { ListProps, RoadblockProps } from '../../../lib';
-import { useOptions, useStdListItem } from '../../../lib/_features';
-import { TransferProps, TransferState } from './ti-transfer-types';
+} from "../../../_type";
+import { Util } from "../../../core";
+import { getLogger } from "../../../core/log/ti-log";
+import { ListProps, RoadblockProps } from "../../../lib";
+import { OptionsFeature, StdListItemFeature } from "../../../lib/_features";
+import { TransferProps, TransferState } from "./ti-transfer-types";
 
-const log = getLogger('ti-use-transfer');
+const log = getLogger("ti-use-transfer");
 
 export type TransferEmitter = {
-  (event: 'change', payload: TableRowID[]): void;
+  (event: "change", payload: TableRowID[]): void;
 };
 
 export function useTransfer(
   state: TransferState,
   props: TransferProps,
+  _options: ComputedRef<OptionsFeature>,
+  _std_list: ComputedRef<StdListItemFeature>,
   emit: TransferEmitter
 ) {
-  let { dict } = useOptions(props);
-  let { toStdItems } = useStdListItem(props);
-
   function getSelMenuItems() {
     return [
       {
-        icon: 'fas-arrow-up-long',
-        text: 'i18n:ti-transfer-move-up',
+        icon: "fas-arrow-up-long",
+        text: "i18n:ti-transfer-move-up",
         enabled: { hasSelChecked: true },
         action: () => {
           let val = Util.moveCheckedById(
             props.value ?? [],
             state.sel_checked_ids,
-            'prev'
+            "prev"
           );
           if (!_.isNil(val)) {
-            emit('change', val);
+            emit("change", val);
           }
         },
       },
       {
-        icon: 'fas-arrow-down-long',
-        text: 'i18n:ti-transfer-move-down',
+        icon: "fas-arrow-down-long",
+        text: "i18n:ti-transfer-move-down",
         enabled: { hasSelChecked: true },
         action: () => {
           let val = Util.moveCheckedById(
             props.value ?? [],
             state.sel_checked_ids,
-            'next'
+            "next"
           );
           if (!_.isNil(val)) {
-            emit('change', val);
+            emit("change", val);
           }
         },
       },
       {
-        icon: 'fas-trash-can',
-        text: 'i18n:clear',
+        icon: "fas-trash-can",
+        text: "i18n:clear",
         enabled: { hasValues: true },
         action: () => {
-          emit('change', []);
+          emit("change", []);
         },
       },
     ] as ActionBarItem[];
@@ -71,7 +70,7 @@ export function useTransfer(
 
   function getListConfig(): ListProps {
     return {
-      borderStyle: 'solid',
+      borderStyle: "solid",
       getIcon: props.getIcon,
       getText: props.getText,
       getTip: props.getTip,
@@ -83,15 +82,17 @@ export function useTransfer(
     return {
       text,
       icon,
-      mode: 'cover',
-      size: 'normal',
-      layout: 'A',
+      mode: "cover",
+      size: "normal",
+      layout: "A",
     } as RoadblockProps;
   }
 
   async function reloadOptions(force?: boolean): Promise<void> {
+    let { dict } = _options.value;
+    let { toStdItems } = _std_list.value;
     if (!dict) {
-      log.warn('NOT dict, unable to relodOptons!');
+      log.warn("NOT dict, unable to relodOptons!");
       state.options = [];
     } else {
       let list = await dict.getData(force);
@@ -100,6 +101,8 @@ export function useTransfer(
   }
 
   async function queryOptions(input: any): Promise<void> {
+    let { dict } = _options.value;
+    let { toStdItems } = _std_list.value;
     if (!dict) {
       state.options = [];
     } else {
@@ -141,28 +144,32 @@ export function useTransfer(
     return list;
   }
 
-  async function loadSelectedList(list: Ref<StdOptionItem[]>) {
-    let re = [] as StdOptionItem[];
-    if (props.value && dict) {
-      let loading = [] as Promise<void>[];
+  function buildOptionsMap(): Map<TableRowID, StdOptionItem> {
+    let re = new Map<TableRowID, StdOptionItem>();
+    for (let it of state.options) {
+      re.set(it.value, it);
+    }
+    return re;
+  }
+
+  async function loadSelectedList(
+    list: Ref<StdOptionItem[]>,
+    optionsMap: Map<TableRowID, StdOptionItem>
+  ) {
+    // 编制选项索引
+
+    let new_list = [] as StdOptionItem[];
+    if (props.value) {
       for (let v of props.value) {
-        loading.push(
-          new Promise<void>((resolve) => {
-            dict!.getStdItem(v).then((it) => {
-              let std = it?.toOptionItem();
-              if (std) {
-                re.push(std);
-              } else {
-                re.push({ value: v });
-              }
-              resolve();
-            });
-          })
+        new_list.push(
+          optionsMap.get(v) || {
+            text: `${v}`,
+            value: v,
+          }
         );
       }
-      await Promise.all(loading);
     }
-    list.value = re;
+    list.value = new_list;
   }
 
   return {
@@ -172,6 +179,7 @@ export function useTransfer(
     valueSet,
     reloadOptions,
     queryOptions,
+    buildOptionsMap,
     getCandidateList,
     loadSelectedList,
   };

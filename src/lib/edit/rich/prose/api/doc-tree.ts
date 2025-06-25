@@ -7,7 +7,7 @@ export function useEditorDocTree(
   _doc_tree_data: Ref<Vars[]>
 ) {
   //-----------------------------------------------------
-  function updateTreeRoot(from: number, to: number) {
+  function updateTreeRoot(_from: number, _to: number) {
     let doc = getView()?.state.doc;
 
     // 防空
