@@ -45,6 +45,36 @@ export function useEditorDocTree(
   }
   //-----------------------------------------------------
   /**
+   * 根据文档光标位置，搜索文档节点列表 `_doc_tree_data.value`
+   * 根据节点的 from 和 to 属性判断光标是否落到这个节点上
+   * 查找的方式采用二分法查找
+   *
+   * @param pos 文档光标的绝对位置
+   */
+  function findTreeNodeAt(pos: number): DocTreeNode | undefined {
+    // 所有的中间节点
+    let nodes = _doc_tree_data.value.filter((nd) => !nd.leaf);
+
+    let left = 0;
+    let right = nodes.length - 1;
+
+    while (left <= right) {
+      const mid = Math.floor((left + right) / 2);
+      const node = nodes[mid];
+
+      if (pos >= node.from && pos <= node.to) {
+        return _.cloneDeep(node);
+      } else if (pos < node.from) {
+        right = mid - 1;
+      } else {
+        left = mid + 1;
+      }
+    }
+
+    return undefined;
+  }
+  //-----------------------------------------------------
+  /**
    * 更新文档树的根节点。
    * 该函数根据给定的选区和已选中的节点 ID 列表，递归遍历文档节点，
    * 重新构建文档树数据，并更新选中的节点 ID 列表。
@@ -187,6 +217,7 @@ export function useEditorDocTree(
     DocTreeNodeMap,
     getTreeNode,
     getTreeNodes,
+    findTreeNodeAt,
     updateTreeRoot,
     dumpTree,
   };

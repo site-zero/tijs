@@ -90,6 +90,10 @@ export function useTiEditRichProseApi(
     _view = init_prose_editor(props, $con, (tr) => {
       // 检查选择范围是否变化
       _doc_tree.updateTreeRoot(tr.selection, _checked_node_ids);
+
+      // 获取锚点所在的节点
+      let node = _doc_tree.findTreeNodeAt(tr.selection.anchor);
+      console.log(node);
     });
   }
   //-----------------------------------------------------
