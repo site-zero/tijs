@@ -49,7 +49,7 @@ export function useTiEditRichProseApi(
   //-----------------------------------------------------
   // 动态操作编辑器
   //-----------------------------------------------------
-  function select(from: number, to: number) {
+  function select(_from: number, _to: number) {
     // 防空
     if (!_view) return;
 
