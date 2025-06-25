@@ -7,21 +7,22 @@ import { keymap } from "prosemirror-keymap"; // 键盘映射
 import { Schema } from "prosemirror-model";
 import { schema as basicSchema } from "prosemirror-schema-basic";
 import { addListNodes } from "prosemirror-schema-list";
-import { EditorState } from "prosemirror-state";
+import { EditorState, TextSelection, Transaction } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
 import { computed, reactive, ref } from "vue";
-import { Vars } from "../../../../_type/core-types";
-import { useEditorDocTree } from "./api/doc-tree";
+import { DocTreeNode, useEditorDocTree } from "./api/use-editor-doc-tree";
+import { paragraphBr } from "./command/paragraph-br";
 import {
   RichEditorGUIState,
   TiEditRichProseEmitter,
   TiEditRichProseProps,
 } from "./ti-edit-rich-prose-types";
+import { init_prose_editor } from "./init-prose-editor";
 
 export type TiEditRichProseApi = ReturnType<typeof useTiEditRichProseApi>;
 
 export function useTiEditRichProseApi(
-  _props: TiEditRichProseProps,
+  props: TiEditRichProseProps,
   getContainerElement: () => HTMLElement | null,
   _emit: TiEditRichProseEmitter
 ) {
@@ -30,7 +31,7 @@ export function useTiEditRichProseApi(
   //-----------------------------------------------------
   let _view: EditorView | undefined = undefined;
   // 文档结构树的数据
-  let _doc_tree_data = ref<Vars[]>([]);
+  let _doc_tree_data = ref<DocTreeNode[]>([]);
   // 界面模块显示开关
   let _gui_state = reactive<RichEditorGUIState>({
     nav: "tree",
@@ -39,12 +40,34 @@ export function useTiEditRichProseApi(
     toolbar: true,
   });
   //-----------------------------------------------------
+  // 已经选择的树节点
+  let _checked_node_ids = ref<string[]>([]);
+  //-----------------------------------------------------
   // 内置子模型
   //-----------------------------------------------------
   let _doc_tree = useEditorDocTree(() => _view, _doc_tree_data);
-
   //-----------------------------------------------------
-  // 界面状态数据
+  // 动态操作编辑器
+  //-----------------------------------------------------
+  function select(from: number, to: number) {
+    // 防空
+    if (!_view) return;
+
+    // 1. 获取状态接口
+    const state = _view.state;
+
+    // 2. 创建 TextSelection（文本选区）
+    //const selection = TextSelection.create(state.doc, from, to);
+    const selection = TextSelection.create(state.doc, 2, 3);
+
+    // 3. 创建事务并设置选区
+    const tr: Transaction = state.tr.setSelection(selection);
+
+    // 4. 提交事务，更新编辑器状态
+    _view.dispatch(tr);
+  }
+  //-----------------------------------------------------
+  // 初始化操作
   //-----------------------------------------------------
   function releaseEditor() {
     if (_view) {
@@ -62,93 +85,11 @@ export function useTiEditRichProseApi(
     // 确保释放所有已经分配的编辑器资源
     releaseEditor();
 
-    const mySchema = new Schema({
-      nodes: addListNodes(basicSchema.spec.nodes, "paragraph block*", "block"),
-      marks: basicSchema.spec.marks,
-    });
-
-    //console.log(exampleSetup({ schema: mySchema, menuBar: false }));
-    // ---------------------- 手工配置插件 ---------------------- //
-
-    // 1. 输入规则（Input Rules）：智能引号、Markdown块引用等
-    const inputRulesPlugin = inputRules({
-      rules: [
-        // 示例：智能引号（可根据需求添加更多规则）
-        // new InputRule(/^(")([^""]*)(")$/, (state, match, start, end) => { ... }),
-        // 示例：Markdown块引用（输入">"触发）
-        // new InputRule(/^>(\s+)?$/, (state, match, start, end) => { ... })
-        // 注：实际项目中可使用预设规则或扩展社区规则
-      ],
-    });
-
-    // 2. 键盘映射（Keymaps）：基础绑定 + 自定义绑定
-    const customKeymaps = {
-      // 基础绑定（如复制、粘贴等）
-      ...baseKeymap,
-      // 撤销
-      "Mod-z": undo,
-      "Mod-y": redo,
-      // 自定义绑定
-      "Mod-i": toggleMark(mySchema.marks.emphasis), // Ctrl/Cmd + I 启用斜体
-      "Mod-b": toggleMark(mySchema.marks.strong), // Ctrl/Cmd + B 启用加粗
-      // 快速设置标题
-      "Ctrl-Shift-1": setBlockType(mySchema.nodes.heading, { level: 1 }), // 标题1
-      "Ctrl-Shift-2": setBlockType(mySchema.nodes.heading, { level: 2 }), // 标题2
-      "Ctrl-Shift-3": setBlockType(mySchema.nodes.heading, { level: 3 }), // 标题3
-      "Ctrl-Shift-4": setBlockType(mySchema.nodes.heading, { level: 4 }), // 标题4
-      "Ctrl-Shift-5": setBlockType(mySchema.nodes.heading, { level: 5 }), // 标题5
-      "Ctrl-Shift-6": setBlockType(mySchema.nodes.heading, { level: 6 }), // 标题6
-    };
-    const keymapPlugin = keymap(customKeymaps);
-
-    // 3. Drop Cursor 插件
-    const dropCursorPlugin = dropCursor();
-
-    // 4. Gap Cursor 插件
-    const gapCursorPlugin = gapCursor();
-
-    // 5. 撤销历史插件
-    const historyPlugin = history();
-
-    //
-    // 初始化编辑器
-    _view = new EditorView($con, {
-      state: EditorState.create({
-        schema: mySchema,
-        // plugins: [
-        //   history(),
-        //   keymap({ "Mod-z": undo, "Mod-y": redo }),
-        //   keymap(baseKeymap),
-        // ],
-        plugins: [
-          inputRulesPlugin,
-          keymapPlugin,
-          dropCursorPlugin,
-          gapCursorPlugin,
-          historyPlugin,
-        ],
-        //plugins: exampleSetup({ schema: mySchema, menuBar: false }),
-      }),
-      // 在这里监听编辑器所有的变化
-      dispatchTransaction(tr) {
-        // 这个函数的 this 实际上就是 _view
-        // 之前，我将 _view 作为 Ref<EditView> 为了获得最大响应性
-        // 但是我发现，调用 _view.value.updateState 的时候
-        // 控制台会报错:
-        //  > Applying a mismatched transaction
-        // 因为 _view.value 本质上是一个 Proxy 对象，
-        // 它并不是 EditorView 对象本身，而去掉 _view 响应性的包裹的确没有问题了
-        // 看来这种异常复杂的对象还是不能随意的用响应式来包裹
-        let view = this as unknown as EditorView;
-        const newState = view.state.apply(tr);
-        view.updateState(newState);
-
-        // 检查选择范围是否变化
-        let { from, to } = tr.selection;
-        _doc_tree.updateTreeRoot(from, to);
-        // let str = _doc_tree.dumpTree();
-        // console.log(str);
-      },
+    // 通过一个回调函数，结合 _doc_tree 子模型
+    // TODO 思考一下，是不是把 _doc_tree 传递过去改动更小呢？
+    _view = init_prose_editor(props, $con, (tr) => {
+      // 检查选择范围是否变化
+      _doc_tree.updateTreeRoot(tr.selection, _checked_node_ids);
     });
   }
   //-----------------------------------------------------
@@ -156,6 +97,15 @@ export function useTiEditRichProseApi(
   //-----------------------------------------------------
   return {
     TreeData: computed(() => _doc_tree_data.value),
+    TreeCheckedIds: computed(() => _checked_node_ids.value),
+
+    // 内置子模型
+    Tree: _doc_tree,
+
+    // 动态操作编辑器
+    select,
+
+    // 初始化操作
     initEditor,
     releaseEditor,
   };

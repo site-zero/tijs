@@ -149,7 +149,7 @@ export type TableBehaviorsProps = {
    */
   indentSize?: string | number;
 
-  showCheckbox?: boolean;
+  showChecker?: boolean;
   showRowIndex?: boolean;
 
   canHover?: boolean;

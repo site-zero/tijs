@@ -57,7 +57,7 @@
     showHeader: true,
     columnResizable: true,
     multi: true,
-    showCheckbox: true,
+    showChecker: true,
     canHover: true,
     canSelect: true,
     canCheck: true,
@@ -165,7 +165,7 @@
   const hasData = computed(() => TableData.value.length > 0);
   //-------------------------------------------------------
   const ShowRowMarker = computed(
-    () => props.showCheckbox || props.showRowIndex
+    () => props.showChecker || props.showRowIndex
   );
   //-------------------------------------------------------
   const HeadMenu = computed(() =>
@@ -429,7 +429,7 @@
           :columns="TableColumns"
           :columnMap="_table_column_map"
           :showRowMarker="ShowRowMarker"
-          :showCheckbox="showCheckbox"
+          :showChecker="showChecker"
           :showRowIndex="showRowIndex"
           :row="row"
           :vars="vars"

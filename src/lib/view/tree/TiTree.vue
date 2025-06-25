@@ -10,14 +10,14 @@
     TreeProps,
     TreeSelectEmitInfo,
     useTreeData,
-  } from '@site0/tijs';
-  import _ from 'lodash';
-  import { computed, reactive, watch } from 'vue';
+  } from "@site0/tijs";
+  import _ from "lodash";
+  import { computed, reactive, watch } from "vue";
   //-----------------------------------------------------
   const emit = defineEmits<TreeEmitter>();
   //-----------------------------------------------------
   const props = withDefaults(defineProps<TreeProps>(), {
-    size: 'm',
+    size: "m",
     canSelect: true,
     canHover: true,
     allowUserSelect: false,
@@ -38,18 +38,18 @@
   const ListProps = computed(() => {
     let re = _.omit(
       props,
-      'data',
+      "data",
       // TreeDataProps
-      'isLeafNode',
-      'isNodeOpen',
-      'childrenKey',
-      'getNodeId',
-      'getParntNodeId',
-      'virtualRootNode',
-      'forceUseVirtualRoot',
+      "isLeafNode",
+      "isNodeOpen",
+      "childrenKey",
+      "getNodeId",
+      "getParntNodeId",
+      "virtualRootNode",
+      "forceUseVirtualRoot",
       // RowIndentProps
-      'rowIndents',
-      'rowStauts'
+      "rowIndents",
+      "rowStauts"
     );
 
     return re;
@@ -71,7 +71,7 @@
     if (!_.isNil(id) && props.autoOpen > 0) {
       let hie = _tree.value.getHierarchy(id);
       if (hie) {
-        _tree.value.setNodeStatus(hie.id, 'open', props.autoOpen - 1);
+        _tree.value.setNodeStatus(hie.id, "open", props.autoOpen - 1);
       }
     }
 
@@ -82,12 +82,12 @@
       currentNode: _tree.value.getNode(id),
       checkedNodes: _tree.value.getNodes(...payload.checkedIds.keys()),
     };
-    emit('select', re);
+    emit("select", re);
   }
   //-----------------------------------------------------
   function onRowOpen(payload: ListItem) {
     let node = _tree.value.getNode(payload.value);
-    emit('open', node!);
+    emit("open", node!);
   }
   //-----------------------------------------------------
   watch(

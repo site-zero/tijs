@@ -89,8 +89,10 @@ export function useList(
       return props.markerIcons;
     }
     // 如果是多选，但是没有指定 markerIcon
-    else if (_.isNil(props.markerIcons) && props.multi) {
-      return ["zmdi-square-o", "zmdi-check-square"];
+    else if (_.isNil(props.markerIcons)) {
+      if (props.showChecker ?? props.multi) {
+        return ["zmdi-square-o", "zmdi-check-square"];
+      }
     }
     return undefined;
   }

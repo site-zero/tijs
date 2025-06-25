@@ -18,7 +18,7 @@
   //-------------------------------------------------------
   const props = withDefaults(defineProps<TableRowProps>(), {
     showRowMarker: true,
-    showCheckbox: true,
+    showChecker: true,
     showRowIndex: true,
     editable: true,
     // canHover: true,
@@ -114,7 +114,7 @@
     @click.stop="onRow('row-select', $event)"
     @dblclick="onRow('row-open', $event)">
     <!--选择框-->
-    <template v-if="props.showCheckbox">
+    <template v-if="props.showChecker">
       <span
         class="as-checker"
         @click.stop="onRow('row-check', $event)">

@@ -75,12 +75,12 @@ export type SelectableProps<ID extends TableRowID> = {
   checkedIds?: CheckedIds<ID>;
 
   // 列表是否可以选择
-  canSelect?: boolean;
+  canSelect?: boolean | undefined;
 
   /**
    * 是否需要显示选择
    */
-  showChecker?: boolean;
+  showChecker?: boolean | undefined;
 
   /**
    * @param itemData 行数据

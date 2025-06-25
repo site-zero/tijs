@@ -24,6 +24,7 @@
     canHover: true,
     autoI18n: true,
     textAsHtml: true,
+    showChecker: undefined,
     highlightChecked: true,
   });
   //-----------------------------------------------------
@@ -230,15 +231,6 @@
         <div class="list-part as-text" v-else>
           {{ it.displayText }}
         </div>
-        <!--=Tip=-->
-        <!--
-        我看，不需要这个部分了，用自定义 textFormat as HTML 会更加灵活
-        div
-          v-if="isItemsHasTip"
-          class="list-part as-tip">
-          <div v-if="it.tip">{{ it.tip }}</div>
-        </div-->
-        <!--=Endl-->
       </div>
     </main>
     <slot name="tail"></slot>

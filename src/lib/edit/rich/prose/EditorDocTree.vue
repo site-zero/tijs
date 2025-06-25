@@ -1,9 +1,11 @@
 <script lang="ts" setup>
+  import _ from "lodash";
   import { computed, inject } from "vue";
-  import { TiTree, TreeNode } from "../../../";
+  import { TableSelectEmitInfo, TiTree } from "../../../";
+  import { Util } from "../../../../core";
   import { TI_RICH_EDITOR_API_KEY } from "./ti-edit-rich-prose-types";
   //-----------------------------------------------------
-  const _api = inject(TI_RICH_EDITOR_API_KEY);
+  const api = inject(TI_RICH_EDITOR_API_KEY);
   //-----------------------------------------------------
   const TreeStyle = computed(() => {
     return {
@@ -19,9 +21,11 @@
 <template>
   <TiTree
     :style="TreeStyle"
-    :data="_api?.TreeData.value"
+    :data="api?.TreeData.value"
+    :checkedIds="api?.TreeCheckedIds.value"
+    :canSelect="false"
     :multi="true"
     :isNodeOpen="3"
     :isLeafNode="isLeafNode"
-    size="t" />
+    size="t"/>
 </template>
