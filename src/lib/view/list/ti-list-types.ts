@@ -91,17 +91,22 @@ export type ListAspect = {
    * 默认 true 表示选择的项目将会显示一个突出的背景
    * 对于 checklist 等控件，默认会关闭这个选项
    */
-  highlightChecked?: boolean;
+  highlightChecked?: boolean|undefined;
 
   /**
    * 是否显示列表鼠标 hover 高亮
    */
-  canHover?: boolean;
+  canHover?: boolean|undefined;
 
   /**
    * 可以鼠标选择文字，默认是 false
    */
-  allowUserSelect?: boolean;
+  allowUserSelect?: boolean|undefined;
+
+  /**
+   * 当选区变化，自动滚动
+   */
+  autoScrollIntoView?:boolean|undefined;
 
   /**
    * 列表文字是否需要自动翻译为多国语言

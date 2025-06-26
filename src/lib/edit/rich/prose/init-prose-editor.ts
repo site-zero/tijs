@@ -9,7 +9,7 @@ import { schema as basicSchema } from "prosemirror-schema-basic";
 import { addListNodes } from "prosemirror-schema-list";
 import { EditorState, Transaction } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
-import { paragraphBr } from "./command/paragraph-br";
+import { br_command } from "./command/br-command";
 import { TiEditRichProseProps } from "./ti-edit-rich-prose-types";
 
 export function init_prose_editor(
@@ -47,7 +47,7 @@ export function init_prose_editor(
     "Mod-i": toggleMark(mySchema.marks.emphasis), // Ctrl/Cmd + I 启用斜体
     "Mod-b": toggleMark(mySchema.marks.strong), // Ctrl/Cmd + B 启用加粗
     // Shift+Enter 生成段内回车
-    "Shift-Enter": paragraphBr,
+    "Shift-Enter": br_command,
     // 快速设置标题
     "Ctrl-Shift-1": setBlockType(mySchema.nodes.heading, { level: 1 }), // 标题1
     "Ctrl-Shift-2": setBlockType(mySchema.nodes.heading, { level: 2 }), // 标题2

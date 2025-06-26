@@ -29,7 +29,11 @@
     </nav>
     <article ref="main" class="fit-parent"></article>
     <aside>Props</aside>
-    <footer>Footer</footer>
+    <footer>
+      <div class="as-cursor">
+        <span>{{ _api.CursorInfo.value }}</span>
+      </div>
+    </footer>
   </div>
 </template>
 <style lang="scss">

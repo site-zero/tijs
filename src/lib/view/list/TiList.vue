@@ -1,13 +1,13 @@
 <script lang="ts" setup>
   import _ from "lodash";
-  import { computed, reactive, useTemplateRef, watch } from "vue";
+  import { computed, nextTick, reactive, useTemplateRef, watch } from "vue";
   import { SelectableState, TiIcon, TiRoadblock, useRowIndent } from "../../";
   import {
     CssSheet,
     ElementScrollIntoViewOptions,
     TableRowID,
   } from "../../../_type";
-  import { Alg, CssUtils, Dom } from "../../../core";
+  import { Alg, CssUtils, Dom, Util } from "../../../core";
   import {
     IndentlyItem,
     ListEmitter,
@@ -140,22 +140,38 @@
       `main>.list-item:nth-child(${index + 1})`,
       $main.value
     );
-    console.log("scrollIntoViewByIndex", index, $item);
+    // console.log("scrollIntoViewByIndex", index, $item);
     if ($item && $item.parentElement) {
       let $main = $item.parentElement;
       Dom.scrollIntoView($main, $item, options);
     }
   }
   //-----------------------------------------------------
+  function scrollCheckedIntoView() {
+    //console.log("scrollCheckedIntoView");
+    let checkedIds = Util.mapTruthyKeys(selection.checkedIds);
+    if (checkedIds.length > 0) {
+      let fstId = checkedIds[0];
+      let index = _list.value.getItemIndex(fstId);
+      if (index >= 0) {
+        scrollIntoViewByIndex(index, { to: "center" });
+      }
+    }
+  }
+  //-----------------------------------------------------
   watch(
     () => [props.currentId, props.checkedIds, props.data],
     () => {
+      //console.log("selection changed");
       _list.value.updateSelection(
         selection,
         props.data ?? [],
         props.currentId,
         props.checkedIds
       );
+      nextTick(() => {
+        scrollCheckedIntoView();
+      });
     },
     { immediate: true }
   );

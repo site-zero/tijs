@@ -1,8 +1,8 @@
-@use '@site0/tijs/sass/_all.scss' as *;
+@use "@site0/tijs/sass/_all.scss" as *;
 
 .ti-list {
   font-size: var(--ti-fontsz-m);
-  line-height: 1.2em;
+  line-height: 2.5em;
   //--------------------------------
   &.none-user-select {
     user-select: none;
@@ -47,7 +47,7 @@
         }
         //----------------------------
         &.as-indicator {
-          &.for-node{
+          &.for-node {
             width: 1.5em;
           }
           &.for-node:hover {
@@ -80,14 +80,19 @@
         }
         //----------------------------
         &.as-text {
-          @include flex-align;
-          padding: 0.7em 0.5em;
+          @include flex-align-nowrap;
+          padding: 0 0.5em;
           flex: 1 1 auto;
+          //gap: 1em;
           em {
             font-style: normal;
             flex: 1 1 auto;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
           }
           abbr {
+            white-space: nowrap;
             font-size: 0.8em;
             opacity: 0.62;
           }

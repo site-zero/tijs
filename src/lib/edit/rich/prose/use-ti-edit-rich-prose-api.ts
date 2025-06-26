@@ -1,25 +1,19 @@
-import { baseKeymap, setBlockType, toggleMark } from "prosemirror-commands"; // 基础键盘绑定
-import { dropCursor } from "prosemirror-dropcursor"; // Drop Cursor
-import { gapCursor } from "prosemirror-gapcursor"; // Gap Cursor
-import { history, redo, undo } from "prosemirror-history"; // 撤销历史
-import { inputRules } from "prosemirror-inputrules"; // 输入规则
-import { keymap } from "prosemirror-keymap"; // 键盘映射
-import { Schema } from "prosemirror-model";
-import { schema as basicSchema } from "prosemirror-schema-basic";
-import { addListNodes } from "prosemirror-schema-list";
-import { EditorState, TextSelection, Transaction } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
 import { computed, reactive, ref } from "vue";
 import { DocTreeNode, useEditorDocTree } from "./api/use-editor-doc-tree";
-import { paragraphBr } from "./command/paragraph-br";
+import { init_prose_editor } from "./init-prose-editor";
 import {
   RichEditorGUIState,
   TiEditRichProseEmitter,
   TiEditRichProseProps,
 } from "./ti-edit-rich-prose-types";
-import { init_prose_editor } from "./init-prose-editor";
 
 export type TiEditRichProseApi = ReturnType<typeof useTiEditRichProseApi>;
+
+export type EditorCursor = {
+  from: number;
+  to: number;
+};
 
 export function useTiEditRichProseApi(
   props: TiEditRichProseProps,
@@ -43,29 +37,42 @@ export function useTiEditRichProseApi(
   // 已经选择的树节点
   let _checked_node_ids = ref<string[]>([]);
   //-----------------------------------------------------
+  // 光标状态
+  let _cursor = ref<EditorCursor>({ from: 0, to: 0 });
+  //-----------------------------------------------------
   // 内置子模型
   //-----------------------------------------------------
   let _doc_tree = useEditorDocTree(() => _view, _doc_tree_data);
   //-----------------------------------------------------
+  // 计算属性
+  //-----------------------------------------------------
+  const CursorInfo = computed(() => {
+    let { from, to } = _cursor.value;
+    if (from === to) {
+      return `${from}`;
+    }
+    return [from, to].join("-");
+  });
+  //-----------------------------------------------------
   // 动态操作编辑器
   //-----------------------------------------------------
-  function select(_from: number, _to: number) {
-    // 防空
-    if (!_view) return;
+  // function select(_from: number, _to: number) {
+  //   // 防空
+  //   if (!_view) return;
 
-    // 1. 获取状态接口
-    const state = _view.state;
+  //   // 1. 获取状态接口
+  //   const state = _view.state;
 
-    // 2. 创建 TextSelection（文本选区）
-    //const selection = TextSelection.create(state.doc, from, to);
-    const selection = TextSelection.create(state.doc, 2, 3);
+  //   // 2. 创建 TextSelection（文本选区）
+  //   //const selection = TextSelection.create(state.doc, from, to);
+  //   const selection = TextSelection.create(state.doc, 2, 3);
 
-    // 3. 创建事务并设置选区
-    const tr: Transaction = state.tr.setSelection(selection);
+  //   // 3. 创建事务并设置选区
+  //   const tr: Transaction = state.tr.setSelection(selection);
 
-    // 4. 提交事务，更新编辑器状态
-    _view.dispatch(tr);
-  }
+  //   // 4. 提交事务，更新编辑器状态
+  //   _view.dispatch(tr);
+  // }
   //-----------------------------------------------------
   // 初始化操作
   //-----------------------------------------------------
@@ -88,12 +95,16 @@ export function useTiEditRichProseApi(
     // 通过一个回调函数，结合 _doc_tree 子模型
     // TODO 思考一下，是不是把 _doc_tree 传递过去改动更小呢？
     _view = init_prose_editor(props, $con, (tr) => {
+      // 更新一下光标位置
+      _cursor.value.from = tr.selection.from;
+      _cursor.value.to = tr.selection.to;
+
       // 检查选择范围是否变化
       _doc_tree.updateTreeRoot(tr.selection, _checked_node_ids);
 
       // 获取锚点所在的节点
-      let node = _doc_tree.findTreeNodeAt(tr.selection.anchor);
-      console.log(node);
+      // let node = _doc_tree.findTreeNodeAt(tr.selection.anchor);
+      // console.log(node);
     });
   }
   //-----------------------------------------------------
@@ -106,8 +117,11 @@ export function useTiEditRichProseApi(
     // 内置子模型
     Tree: _doc_tree,
 
+    // 计算属性
+    CursorInfo,
+
     // 动态操作编辑器
-    select,
+    // select,
 
     // 初始化操作
     initEditor,

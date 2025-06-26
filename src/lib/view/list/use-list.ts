@@ -54,6 +54,7 @@ export function useList(
       },
     }
   );
+  //-----------------------------------------------------
   const getRowType = useDataLogicType(props.getRowType);
   //-----------------------------------------------------
   // 标准列表
@@ -133,6 +134,7 @@ export function useList(
   const _id_index = new Map<TableRowID, number>();
   //-----------------------------------------------------
   function __build_option_items(): ListItem[] {
+    //console.log("__build_option_items");
     _id_index.clear();
     let items = [] as ListItem[];
     if (!props.data) {
@@ -153,6 +155,7 @@ export function useList(
       // 选项信息
       let stdItem = toStdItem(li, index);
       let { value, icon, text, tip } = stdItem;
+      // console.log("-", index, value, text);
 
       // 翻译多国语音
       if (props.autoI18n) {
@@ -212,6 +215,10 @@ export function useList(
       return;
     }
     return _.nth(Items.value, index);
+  }
+  //-----------------------------------------------------
+  function getItemIndex(id: TableRowID): number {
+    return _id_index.get(id) ?? -1;
   }
   //-----------------------------------------------------
   function itemsHasIcon(items: IndentlyItem[]) {
@@ -307,6 +314,7 @@ export function useList(
     Items,
     getItemByIndex,
     getItemById,
+    getItemIndex,
 
     getRoadblock,
     itemsHasIcon,

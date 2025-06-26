@@ -9,7 +9,7 @@
   //-----------------------------------------------------
   const TreeStyle = computed(() => {
     return {
-      lineHeight: "0.5em",
+      lineHeight: "2em",
     };
   });
   //-----------------------------------------------------
@@ -20,12 +20,14 @@
 </script>
 <template>
   <TiTree
+    class="fit-parent"
     :style="TreeStyle"
     :data="api?.TreeData.value"
     :checkedIds="api?.TreeCheckedIds.value"
     :canSelect="false"
     :multi="true"
+    :autoScrollIntoView="true"
     :isNodeOpen="3"
     :isLeafNode="isLeafNode"
-    size="t"/>
+    size="t" />
 </template>

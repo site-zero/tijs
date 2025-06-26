@@ -3,6 +3,7 @@ import { Selection } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
 import { computed, Ref } from "vue";
 import { IconInput } from "../../../../../_type";
+import { getNodeIcon } from "./doc-tree-node-icons";
 
 export type DocTreeNode = {
   id: string;
@@ -43,7 +44,6 @@ export function useEditorDocTree(
     }
     return re;
   }
-  //-----------------------------------------------------
   /**
    * 根据文档光标位置，搜索文档节点列表 `_doc_tree_data.value`
    * 根据节点的 from 和 to 属性判断光标是否落到这个节点上
@@ -73,6 +73,17 @@ export function useEditorDocTree(
 
     return undefined;
   }
+
+  /**
+   * 根据一个选区，获取能涵盖这个选区最近的节点
+   *
+   *
+   * @param from 选区开始位置
+   * @param to  选区结束位置
+   */
+  // function findTreeNodeByRange(from:number,to:number):DocTreeNode|undefined {
+
+  // }
   //-----------------------------------------------------
   /**
    * 更新文档树的根节点。
@@ -86,9 +97,12 @@ export function useEditorDocTree(
     selection: Selection,
     _checked_node_ids: Ref<string[]>
   ) {
-    let { from: start, to: end } = selection;
+    let cursor_is_collapsed = selection.from === selection.to;
+    const _in_selection = (pos: number) => {
+      return pos >= selection.from && pos < selection.to;
+    };
     //console.log("useEditorDocTree", { start, end });
-    let doc = getView()?.state.doc;
+    const doc = getView()?.state.doc;
 
     // 防空
     if (!doc) return;
@@ -107,18 +121,21 @@ export function useEditorDocTree(
     let nodes: DocTreeNode[] = [root];
     let idStack = [root.id];
     let checkedIds: string[] = [];
-    let cursorCollapsed = start === end;
 
     // 递归遍历文档节点
     doc.descendants((node, pos) => {
-      let rp = doc.resolve(pos);
-      let depth = rp.depth; // 顶层节点(<P>)的 depth==0
-      let from = pos;
-      let to = pos + node.nodeSize;
-      let nodeId = `N${n++}`;
-      let nodeInRange = false;
+      const rp = doc.resolve(pos);
+      const depth = rp.depth; // 顶层节点(<P>)的 depth==0
+      const from = pos;
+      const to = pos + node.nodeSize;
+      const _in_node = (p: number) => {
+        return p >= from && p < to;
+      };
+
+      const nodeId = `N${n++}`;
+
       // 创建节点对象
-      let nIt: DocTreeNode = {
+      const nIt: DocTreeNode = {
         id: nodeId,
         parentId: idStack[depth],
         type: node.type.name,
@@ -126,44 +143,47 @@ export function useEditorDocTree(
         from,
         to,
         tip: `[${from}-${to}]`,
+        icon: getNodeIcon(node.type),
       };
+
+      let nodeInRange = false;
+      // 坍缩的光标，判断是否在节点中
+      if (cursor_is_collapsed) {
+        let pos = selection.from;
+        if (node.isText) {
+          pos -= 1;
+        }
+        nodeInRange = _.inRange(pos, from, to);
+      }
+      // 选区，那么判断节点两端是否在选区中
+      else {
+        nodeInRange =
+          _in_selection(from) ||
+          _in_selection(to - 1) ||
+          _in_node(selection.from) ||
+          _in_node(selection.to - 1);
+      }
+
       // 更新节点文本
       let texts = [] as string[];
       // 文字节点
       // 只要包含选区就选中
-      if (node.isText) {
-        // 对于坍缩光标，判断是否在节点中
-        // 考虑到文字会追加在当前节点的现实，判断的时候
-        // 看光标前一个位置会来得比较符合用户直觉
-        if (cursorCollapsed) {
-          nodeInRange = _.inRange(start - 1, from, to);
-        }
-        // 否则选区与节点有重合即可
-        else {
-          nodeInRange = from < end && to > start;
-        }
+      if (node.isText && node.text) {
         // 获取文字标注信息
         let marks = node.marks.map((mark) => mark.type.name);
         if (marks.length > 0) {
           texts.push(`[${marks.join(",")}]`);
         }
-        texts.push(node.text ?? "");
-        nIt.icon = "fas-font";
+        if (node.text.length < 100) {
+          texts.push(node.text ?? "");
+        } else {
+          texts.push(node.text.substring(0, 100) ?? "");
+        }
       }
       // 其他节点
       // 选区必须包含全部，才会被选中
       else {
-        // 对于坍缩光标，判断是否在节点中
-        if (cursorCollapsed) {
-          nodeInRange = _.inRange(start, from, to);
-        }
-        // 否则节点必须完整包含选区
-        else {
-          nodeInRange = from <= start && to >= end;
-        }
-
         texts.push(`<${node.type.name}>`);
-        nIt.icon = "fas-paragraph";
         if (!node.isAtom && !node.isLeaf) {
           idStack[depth + 1] = nIt.id;
         }
