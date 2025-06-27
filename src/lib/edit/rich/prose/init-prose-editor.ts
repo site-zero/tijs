@@ -46,10 +46,10 @@ export function init_prose_editor(
     marks,
   });
 
-  let i = 0;
-  mySchema.spec.nodes.forEach((key, val) => {
-    console.log(i++, key, val);
-  });
+  // let i = 0;
+  // mySchema.spec.nodes.forEach((key, val) => {
+  //   console.log(i++, key, val);
+  // });
 
   //console.log(exampleSetup({ schema: mySchema, menuBar: false }));
   // ---------------------- 手工配置插件 ---------------------- //

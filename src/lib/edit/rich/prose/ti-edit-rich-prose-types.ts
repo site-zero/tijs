@@ -1,5 +1,6 @@
-import { CommonProps } from "@site0/tijs";
+import { ActionBarItem, CommonProps } from "@site0/tijs";
 import { InjectionKey } from "vue";
+import { EditorToolbarItemName } from "./toolbar/toolbar-item-builder";
 import { TiEditRichProseApi } from "./use-ti-edit-rich-prose-api";
 
 export const TI_RICH_EDITOR_API_KEY: InjectionKey<TiEditRichProseApi> =
@@ -9,9 +10,16 @@ export type TiEditRichProseEmitter = {
   (event: "change", payload: any): void;
 };
 
-export type TiEditRichProseProps = CommonProps & {
-  // 这里放置控件支持的属性
+export type TiEditRichProseProps = CommonProps & EditorToolbarProps & {};
+
+export type EditorToolbarProps = {
+  toolbar?: EditorToolbarItem[] | undefined | null;
 };
+
+export type EditorToolbarItem =
+  | ActionBarItem
+  | EditorToolbarItemName
+  | EditorToolbarItemName[];
 
 export type RichEditorGUIState = {
   /**
