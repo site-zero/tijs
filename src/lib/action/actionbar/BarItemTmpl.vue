@@ -35,6 +35,10 @@
   const isOpened = computed(() => "opened" == OpenStatus.value);
   const isReady = computed(() => "ready" == OpenStatus.value);
   //-------------------------------------------------------
+  const isIconOnly = computed(() => {
+    return props.icon && !props.text;
+  });
+  //-------------------------------------------------------
   const TopClass = computed(() => {
     return CssUtils.mergeClassName(props.className, {
       "is-disabled": props.disabled,
@@ -47,6 +51,8 @@
       "is-highlight": isOpened.value || isReady.value,
       "is-disabled": props.disabled,
       "is-enabled": !props.disabled,
+      "has-icon-part": !hideIconPart.value,
+      "is-icon-only": isIconOnly.value,
     });
   });
   //-------------------------------------------------------

@@ -10,6 +10,7 @@ const en_us = {
   "example-mode-v": "Vertical Mode",
   "example-bool": "Bool Items",
   "example-button-group": "Button Group",
+  "example-toolbar": "Tool Bar",
 };
 const zh_cn = {
   "com-name": "动作条",
@@ -17,6 +18,7 @@ const zh_cn = {
   "example-mode-v": "垂直模式",
   "example-bool": "布尔选项",
   "example-button-group": "按钮组",
+  "example-toolbar": "工具条",
 };
 
 const COM_TYPE = COM_TYPES.ActionBar;
@@ -54,6 +56,7 @@ const TiActionBarInfo: TiComInfo = {
     example.modeV,
     example.boolItems,
     example.buttonGroup,
+    example.toolbar,
   ],
 };
 

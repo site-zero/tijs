@@ -1,8 +1,9 @@
-import _ from 'lodash';
-import { App, DefineComponent, InjectionKey, Ref } from 'vue';
-import { ActionBarProps, BlockOverflowMode, TipsApi } from '../lib';
+import _ from "lodash";
+import { App, DefineComponent, InjectionKey, Ref } from "vue";
+import { ActionBarProps, BlockOverflowMode, TipsApi } from "../lib";
+import { FieldComProps } from "./lib-type-fields";
 
-export type DocumentIconType = 'emoji' | 'image/png' | 'image/x-icon';
+export type DocumentIconType = "emoji" | "image/png" | "image/x-icon";
 /*---------------------------------------------------`
 
                      补足原生
@@ -146,7 +147,7 @@ export type NameAnyValue = NameValue<string, any>;
  */
 export type IconInput = string | IconObj;
 
-export type IconType = 'font' | 'image' | 'emoji';
+export type IconType = "font" | "image" | "emoji";
 
 export type IconObj = {
   type: IconType;
@@ -184,10 +185,10 @@ export function isIconObj(input: any): input is IconObj {
   if (!input) {
     return false;
   }
-  if ('font' == input.type && input.className) {
+  if ("font" == input.type && input.className) {
     return true;
   }
-  if ('image' == input.type && input.src) {
+  if ("image" == input.type && input.src) {
     return true;
   }
   return false;
@@ -213,7 +214,7 @@ export type TimeInfo = {
 
 export type TimeInput = number | string | Date | TimeInfo;
 
-export type TimeUpdateUnit = 'ms' | 's' | 'min' | 'hr';
+export type TimeUpdateUnit = "ms" | "s" | "min" | "hr";
 
 export type Limitation = {
   limit: number;
@@ -239,10 +240,10 @@ export type Point2D = {
 };
 
 export type QuadrantName =
-  | 'top-left'
-  | 'top-right'
-  | 'bottom-left'
-  | 'bottom-right';
+  | "top-left"
+  | "top-right"
+  | "bottom-left"
+  | "bottom-right";
 
 export interface RectInfo {
   width?: number;
@@ -315,11 +316,11 @@ export type KeyDisplay =
   | { (s: string): string };
 
 /** 贴着 水平边 或 垂直边 */
-export type DockMode = 'H' | 'V';
+export type DockMode = "H" | "V";
 
 export interface DockAxis {
-  x: 'left' | 'right' | 'center' | 'auto';
-  y: 'top' | 'bottom' | 'center' | 'auto';
+  x: "left" | "right" | "center" | "auto";
+  y: "top" | "bottom" | "center" | "auto";
 }
 
 export interface DockOptions {
@@ -332,7 +333,7 @@ export interface DockOptions {
 }
 
 export type Link = {
-  target?: '_blank';
+  target?: "_blank";
   icon?: IconInput;
   text: string;
   href?: string;
@@ -358,26 +359,26 @@ export type StrCaseMode = keyof StrCaseFunc;
 
 ---------------------------------------------------*/
 export type LogicType =
-  | 'info'
-  | 'success'
-  | 'warn'
-  | 'danger'
-  | 'track'
-  | 'disable'
-  | 'text'
-  | 'number'
-  | 'primary'
-  | 'secondary'
-  | 'tip';
+  | "info"
+  | "success"
+  | "warn"
+  | "danger"
+  | "track"
+  | "disable"
+  | "text"
+  | "number"
+  | "primary"
+  | "secondary"
+  | "tip";
 /**
  * 如果通过 type 来指定控件的颜色，有时候，我们希望
  * 整体背景是主颜色，这时候可以设置 colorMode 为 'box'
  *
  * 默认的，我们使用 'text
  */
-export type BoxColorMode = 'box' | 'text';
+export type BoxColorMode = "box" | "text";
 
-export type ObjDataStatus = 'loading' | 'saving' | 'ready' | 'empty';
+export type ObjDataStatus = "loading" | "saving" | "ready" | "empty";
 /*---------------------------------------------------
 
                      容器
@@ -436,7 +437,7 @@ export type ExplainI18n = {
   keyDisplayBy?: KeyDisplay;
 };
 
-export type TextContentType = 'html' | 'text';
+export type TextContentType = "html" | "text";
 
 export type ValueChange<T> = {
   value: T;
@@ -540,7 +541,7 @@ export interface InvokeOptions {
   dft?: Function;
 }
 
-export type InvokePartial = 'left' | 'right' | 'left?' | 'right?';
+export type InvokePartial = "left" | "right" | "left?" | "right?";
 
 export type Invoke = {
   /**
@@ -563,13 +564,13 @@ export function isInvoke(input: any): input is Invoke {
     return false;
   }
   keys.sort();
-  if ('args' != keys[0]) {
+  if ("args" != keys[0]) {
     return false;
   }
-  if ('name' != keys[1]) {
+  if ("name" != keys[1]) {
     return false;
   }
-  if (keys.length > 1 && 'partial' != keys[2]) {
+  if (keys.length > 1 && "partial" != keys[2]) {
     return false;
   }
   return true;
@@ -688,8 +689,8 @@ export type FontSizeCallback = {
 };
 
 export type ElementScrollIntoViewOptions = {
-  to?: 'top' | 'bottom' | 'center' | 'auto';
-  axis?: 'x' | 'y' | 'xy';
+  to?: "top" | "bottom" | "center" | "auto";
+  axis?: "x" | "y" | "xy";
   smooth?: boolean;
 };
 
@@ -702,31 +703,31 @@ export enum TiComRace {
   /**
    *  输入: 生产比较简单单一的数据类型
    */
-  INPUT = 'INPUT',
+  INPUT = "INPUT",
   /**
    *  编辑: 生产比较复杂的数据
    */
-  EDIT = 'EDIT',
+  EDIT = "EDIT",
   /**
    * 搁架:组合更多子控件，用作界面布局
    */
-  SHELF = 'SHELF',
+  SHELF = "SHELF",
   /**
    *  动作: 按钮、导航条、等执行用户命令
    */
-  ACTION = 'ACTION',
+  ACTION = "ACTION",
   /**
    *  小片: 小面积信息展示控件
    */
-  TILE = 'TILE',
+  TILE = "TILE",
   /**
    *  播放器：展示多媒体内容
    */
-  PLAY = 'PLAY',
+  PLAY = "PLAY",
   /**
    *  视图: 通常来处理比较复杂的数据，在页面上占用的面积也比较大
    */
-  VIEW = 'VIEW',
+  VIEW = "VIEW",
 }
 
 export interface ComPropExample {
@@ -756,15 +757,15 @@ export type ComInfoFilter = (info: TiComInfo) => boolean;
 
 export type TiRawCom = DefineComponent<any, any, any>;
 
-export type DeltaUpdateMode = 'merge' | 'assign';
+export type DeltaUpdateMode = "merge" | "assign";
 export type TiComExampleModelTarget =
   | string
   | ((val: any, oldComConf: Vars) => Vars)
   | {
       key: string;
       val: any;
-      mode?: 'merge' | 'assign';
-      scope?:string;
+      mode?: "merge" | "assign";
+      scope?: string;
     };
 
 export interface TiComInfo {
@@ -845,26 +846,15 @@ export type EventInfo<T> = {
   dynamic?: boolean;
 };
 
-export function isEventInfo<T>(
-  input: any,
-  isT?: IsType<T>
-): input is EventInfo<T> {
+export function isEventInfo<T>(input: any): input is EventInfo<T> {
   if (_.isNil(input)) {
     return false;
   }
   let keys = _.keys(input);
-  if (keys.length < 1 || keys.length > 2) {
-    return false;
-  }
-  keys.sort();
-  if ('name' != keys[0]) {
-    return false;
-  }
-  if (keys.length > 1 && 'payload' != keys[1]) {
-    return false;
-  }
-  if (isT && keys.length > 1 && !isT(input.payload)) {
-    return false;
+  for (let k of keys) {
+    if (!/^(name|payload|dynamic)$/.test(k)) {
+      return false;
+    }
   }
   return true;
 }
@@ -885,8 +875,8 @@ export function isEventInfo<T>(
 // };
 
 export enum AppEvents {
-  APP_RESIZE = 'app-resize',
-  APP_SCROLL = 'app-scroll',
+  APP_RESIZE = "app-resize",
+  APP_SCROLL = "app-scroll",
 }
 
 // export type APP_EVENT = keyof typeof AppEvents;
@@ -903,9 +893,9 @@ export enum AppEvents {
 export type TiAppBus = TiBus<any>;
 // export type TiAppEventTrigger<K extends string> = TiEventTrigger<K, any>;
 
-export const BUS_KEY: InjectionKey<TiAppBus> = Symbol('EVENT_BUS');
+export const BUS_KEY: InjectionKey<TiAppBus> = Symbol("EVENT_BUS");
 
-export const TI_TIP_API_KEY: InjectionKey<TipsApi> = Symbol('TIP_API');
+export const TI_TIP_API_KEY: InjectionKey<TipsApi> = Symbol("TIP_API");
 
 /**
  *  如果仅仅是名称适配
@@ -973,7 +963,36 @@ export type VisibilityProps = {
               动作条
 
 --------------------------------------------*/
-export type ActionBarAction = (() => void) | EventInfo<any> | Invoke | string;
+export type ActionEventInfo = EventInfo<any> & {
+  /**
+   * 事件不要 emit 而是发向应用全局总线
+   */
+  bus?: boolean;
+};
+
+export function isActionEventInfo(input: any): input is ActionEventInfo {
+  if (_.isNil(input)) {
+    return false;
+  }
+  let keys = _.keys(input);
+  for (let k of keys) {
+    if (!/^(bus|name|payload|dynamic)$/.test(k)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+export type ActionBarCallback = (
+  value: any,
+  vars: Vars,
+  bus?: TiAppBus
+) => void;
+export type ActionBarAction =
+  | ActionBarCallback
+  | ActionEventInfo
+  | Invoke
+  | string;
 export type ActionBarItemInfo = {
   icon?: IconInput;
   text?: string;
@@ -985,11 +1004,19 @@ export type ActionBarItemAltDisplay = ActionBarItemInfo & {
   test?: any;
 };
 export type ActionBarItem = VisibilityProps &
-  ActionBarItemInfo & {
+  ActionBarItemInfo &
+  Omit<
+    FieldComProps,
+    "activatedComType" | "activatedComConf" | "autoValue" | "dynamic"
+  > & {
+    //.....................................
     uniqKey?: string;
     shortcut?: string;
     //.....................................
+    type?: "auto" | "action" | "group" | "sep" | "combin" | "customized";
+    //.....................................
     altDisplay?: ActionBarItemAltDisplay | ActionBarItemAltDisplay[];
+    //.....................................
     items?: ActionBarItem[];
     action?: ActionBarAction;
   };
@@ -1023,7 +1050,7 @@ export type BlockInfoProps = BlockAspectClass & {
   // 采用 .cover-parent 以便最大限度适配区域
   // 对于 auto 的轨道，会造成内容塌陷
   // auto 是默认
-  blockFit?: 'fit' | 'cover' | 'auto';
+  blockFit?: "fit" | "cover" | "auto";
 
   /**
    * 块名称
@@ -1148,13 +1175,13 @@ export type AppModalInitProps = AppModalProps & {
   releaseDom: () => void;
 };
 
-export type TranSpeed = 'slow' | 'normal' | 'fast';
+export type TranSpeed = "slow" | "normal" | "fast";
 export type TranName =
-  | 'ti-slide-up'
-  | 'ti-slide-down'
-  | 'ti-slide-left'
-  | 'ti-slide-right'
-  | 'ti-zoom';
+  | "ti-slide-up"
+  | "ti-slide-down"
+  | "ti-slide-left"
+  | "ti-slide-right"
+  | "ti-zoom";
 
 export type PopItemMeasure = {
   width?: string;
@@ -1184,24 +1211,24 @@ export type PopItemProps = PopItemMeasure & {
  * 弹出层的为位置类型，可以适用于 LayoutPaenel，模式对话框，全局弹出框
  */
 export type PopPosition =
-  | 'left'
-  | 'right'
-  | 'top'
-  | 'bottom'
-  | 'center'
-  | 'free'
-  | 'left-top'
-  | 'right-top'
-  | 'bottom-left'
-  | 'bottom-right';
+  | "left"
+  | "right"
+  | "top"
+  | "bottom"
+  | "center"
+  | "free"
+  | "left-top"
+  | "right-top"
+  | "bottom-left"
+  | "bottom-right";
 
 /*---------------------------------------------------
 
        不知道如何分类，但是控件里还有用的类型
 
 ---------------------------------------------------*/
-export type AspectSize = 't' | 's' | 'm' | 'b' | 'h';
-export type HDirecton = 'left' | 'right';
+export type AspectSize = "t" | "s" | "m" | "b" | "h";
+export type HDirecton = "left" | "right";
 
 export type DateTimeQuickParserSet = {
   /**
@@ -1255,7 +1282,7 @@ export type DateTimeQuickParseOptions = {
  *  8  表示 GMT+8 时区
  * null | undefined 表示采用用户浏览器本地时区设置
  */
-export type DateParseOptionsZone = 'Z' | number | null | undefined;
+export type DateParseOptionsZone = "Z" | number | null | undefined;
 export type DateInput = string | number | Date;
 export type DateFormatOptions = {
   fmt?: string;

@@ -4,12 +4,15 @@
   user-select: none;
   @include aspect_pad("&.bar-pad");
   @include aspect_fontsize("&.item-size");
-  $BR: var(--ti-measure-r-s);
-  --ti-fontsz-t: 8px; // tiny
-  --ti-fontsz-s: 10px; // small
-  --ti-fontsz-m: 12px; // middle
-  --ti-fontsz-b: 14px; // big
-  --ti-fontsz-h: 16px; // hug
+  --item-color: var(--ti-color-border-shallow);
+  --item-line-height: 2.4em;
+  --item-icon-width: 2em;
+  --item-icon-height: 2em;
+  // --ti-fontsz-t: 8px; // tiny
+  // --ti-fontsz-s: 10px; // small
+  // --ti-fontsz-m: 12px; // middle
+  // --ti-fontsz-b: 14px; // big
+  // --ti-fontsz-h: 16px; // hug
   // 菜单项
   .bar-item {
     display: grid;
@@ -22,10 +25,10 @@
     }
     &[aspect="sub"] {
       &:first-child {
-        border-radius: $BR $BR 0 0;
+        border-radius: var(--item-radius) var(--item-radius) 0 0;
       }
       &:last-child {
-        border-radius: 0 0 $BR $BR;
+        border-radius: 0 0 var(--item-radius) var(--item-radius);
       }
     }
   } // .bar-item

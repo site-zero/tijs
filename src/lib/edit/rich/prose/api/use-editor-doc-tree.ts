@@ -74,16 +74,6 @@ export function useEditorDocTree(
     return undefined;
   }
 
-  /**
-   * 根据一个选区，获取能涵盖这个选区最近的节点
-   *
-   *
-   * @param from 选区开始位置
-   * @param to  选区结束位置
-   */
-  // function findTreeNodeByRange(from:number,to:number):DocTreeNode|undefined {
-
-  // }
   //-----------------------------------------------------
   /**
    * 更新文档树的根节点。
@@ -108,9 +98,8 @@ export function useEditorDocTree(
     if (!doc) return;
 
     // 准备根节点, 以及解析栈
-    let n = 0;
     let root: DocTreeNode = {
-      id: `N${n++}`,
+      id: `Root`,
       parentId: null,
       type: "document",
       leaf: false,
@@ -132,7 +121,7 @@ export function useEditorDocTree(
         return p >= from && p < to;
       };
 
-      const nodeId = `N${n++}`;
+      const nodeId = `N${pos}`;
 
       // 创建节点对象
       const nIt: DocTreeNode = {

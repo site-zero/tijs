@@ -1,0 +1,32 @@
+@use "@site0/tijs/sass/_all.scss" as *;
+
+.bar-item.as-combin {
+  @include flex-align-nowrap;
+  position: relative;
+  $SPACE: 2px;
+  padding: $SPACE;
+  border-radius: var(--item-radius);
+  --item-icon-width: 1.8em;
+  --item-icon-height: 1.8em;
+  //-----------------------------------------------------
+  &.is-disabled {
+    opacity: 0.6;
+    &::after {
+      position: absolute;
+      inset: 0;
+      filter: grayscale(100%);
+    }
+  }
+  //-----------------------------------------------------
+  > .bar-sep {
+    height: 100%;
+    width: 0px;
+    border-left: 1px solid var(--ti-color-border-shallow);
+    margin: 0 $SPACE;
+  }
+  //-----------------------------------------------------
+  > .bar-item[aspect="sub"] {
+    border-radius: var(--item-radius);
+  }
+  //-----------------------------------------------------
+}

@@ -38,6 +38,10 @@
   import { getLayoutGridItems, isLayoutAdjustable } from './use-grid-items';
   import { getTopStyle } from './use-grid-util';
   //-------------------------------------------------
+  defineOptions({
+    inheritAttrs: false,
+  });
+  //-------------------------------------------------
   import { TiLayoutTabs } from '../tabs/ti-layout-tabs-index';
   //-------------------------------------------------
   const props = withDefaults(defineProps<LayoutGridProps>(), {

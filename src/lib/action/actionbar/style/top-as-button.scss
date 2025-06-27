@@ -3,9 +3,12 @@
 .ti-actionbar.top-as-button {
   //--------------------------------------
   .bar-item[aspect="top"] {
+    //------------------------------------
+    &.as-combin,
     > .bar-item-info {
       border: 1px solid var(--item-color);
     }
+    //------------------------------------
   }
   //--------------------------------------
   // .bar-item[aspect='top'] + .bar-item[aspect='top'] {

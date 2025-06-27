@@ -1,19 +1,19 @@
-import _ from 'lodash';
+import _ from "lodash";
 import {
   ABarItemOpenStatus,
   ABarParsedItem,
   ABarState,
   ABarUsedItem,
-} from './ti-action-bar-types';
+} from "./ti-action-bar-types";
 
-export function useActionBar(
+export function useActionBarItems(
   items: ABarParsedItem[],
   state: ABarState
 ): ABarUsedItem[] {
   let re = [] as ABarUsedItem[];
   for (let it of items) {
     let newItem = _.cloneDeep(
-      _.omit(it, 'isDisabled', 'isHidden', 'items', 'altDisplay')
+      _.omit(it, "isDisabled", "isHidden", "items", "altDisplay")
     ) as ABarUsedItem;
 
     // ............... 可见性
@@ -32,11 +32,12 @@ export function useActionBar(
 
     // ............... 建立子项目
     if (it.items) {
-      newItem.items = useActionBar(it.items, state);
+      newItem.items = useActionBarItems(it.items, state);
     }
 
     // ............... 记入列表
     re.push(newItem);
+    state.itemsMap.set(newItem.uniqKey, newItem);
   }
   return re;
 }
@@ -53,10 +54,26 @@ export function hasOpenedGroup(
 }
 
 export function openBarItem(state: ABarState, it: ABarUsedItem) {
+  // 确保自己是在一个 group 里，因为如果在 combin 里不需要记录打开
+  let isInGroup = "group" == it.type;
+  if (!isInGroup) {
+    for (let uk of it.axis) {
+      let pIt = state.itemsMap.get(uk);
+      if (pIt && pIt.type == "group") {
+        isInGroup = true;
+        break;
+      }
+    }
+  }
+  if (!isInGroup) {
+    return;
+  }
+
+  // 标记打开状态
   let keys = [...it.axis, it.uniqKey];
   clearBarOpenStateExcept(state, keys);
-  setBarOpenState(state, it.axis, 'ready');
-  state.opened.set(it.uniqKey, 'opened');
+  setBarOpenState(state, it.axis, "ready");
+  state.opened.set(it.uniqKey, "opened");
 }
 
 function setBarOpenState(

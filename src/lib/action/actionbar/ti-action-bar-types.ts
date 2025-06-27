@@ -1,14 +1,15 @@
 import { InjectionKey } from "vue";
 import { VisibilityFeature } from "../../";
 import {
+  ActionBarCallback,
   ActionBarItem,
   ActionBarItemInfo,
   AspectSize,
   CommonProps,
   CssAlignment,
+  FieldComProps,
   IconInput,
   TextContentType,
-  TiAppBus,
   TiMatch,
   Vars,
 } from "../../../_type";
@@ -36,10 +37,20 @@ export type ABarState = {
    * 上下文变量
    */
   vars: Vars;
+
+  /**
+   * 索引一下所有编译好的菜单项
+   */
+  itemsMap: Map<string, ABarUsedItem>;
 };
 
 export type ABarItemOpenStatus = "opened" | "ready";
-export type ActionBarType = "action" | "group" | "sep";
+export type ActionBarType =
+  | "action"
+  | "group"
+  | "sep"
+  | "combin"
+  | "customized";
 export type ActionBarLayoutMode = "H" | "V";
 export type BarTopItemAspectMode = "normal" | "button";
 
@@ -112,16 +123,20 @@ export type ActionBarProps = CommonProps & {
 
 type ActionBarAspect = "top" | "sub";
 
-export type AbstractBarItem = ActionBarItemInfo & {
-  uniqKey: string;
-  index: number; // 0 base
-  depth: number; // 0 base, 0 is top
-  axis: string[];
-  type: ActionBarType;
-  aspect: ActionBarAspect;
-  layoutMode: ActionBarLayoutMode;
-  action?: (vars: Vars, bus?: TiAppBus) => void;
-};
+export type AbstractBarItem = Omit<ActionBarItemInfo, "action" | "type"> &
+  Omit<
+    FieldComProps,
+    "activatedComType" | "activatedComConf" | "autoValue" | "dynamic"
+  > & {
+    uniqKey: string;
+    index: number; // 0 base
+    depth: number; // 0 base, 0 is top
+    axis: string[];
+    type: ActionBarType;
+    aspect: ActionBarAspect;
+    layoutMode: ActionBarLayoutMode;
+    action?: ActionBarCallback;
+  };
 
 export type ABarParsedItem = AbstractBarItem &
   VisibilityFeature & {

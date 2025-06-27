@@ -1,12 +1,14 @@
 <script lang="ts" setup>
-  import _ from 'lodash';
-  import { computed, inject, ref, watch } from 'vue';
-  import { BUS_KEY, DockMode, Point2D } from '../../../_type';
-  import { Dom } from '../../../core';
-  import BarItemTmpl from './BarItemTmpl.vue';
-  import ItemAsAction from './ItemAsAction.vue';
-  import { ABAR_STATE, ABarUsedItem } from './ti-action-bar-types';
-  import { openBarItem } from './use-action-bar';
+  import _ from "lodash";
+  import { computed, inject, ref, watch } from "vue";
+  import { BUS_KEY, DockMode, Point2D } from "../../../_type";
+  import { Dom } from "../../../core";
+  import BarItemTmpl from "./BarItemTmpl.vue";
+  import ItemAsAction from "./ItemAsAction.vue";
+  import ItemAsCombin from "./ItemAsCombin.vue";
+  import ItemAsCustomized from "./ItemAsCustomized.vue";
+  import { ABAR_STATE, ABarUsedItem } from "./ti-action-bar-types";
+  import { openBarItem } from "./use-action-bar";
   //-------------------------------------------------------
   defineOptions({
     inheritAttrs: false,
@@ -23,8 +25,8 @@
     }
   });
   //-------------------------------------------------------
-  const isOpened = computed(() => 'opened' == OpenStatus.value);
-  const isReady = computed(() => 'ready' == OpenStatus.value);
+  const isOpened = computed(() => "opened" == OpenStatus.value);
+  const isReady = computed(() => "ready" == OpenStatus.value);
   // 如果不指定自己的 action，那么就没必要显示 suffixIcon
   // 毕竟这个 suffixIcon 仅仅是为了区分两种操作
   const showTopSuffixIcon = computed(() => {
@@ -33,15 +35,15 @@
   //-------------------------------------------------------
   const ConClass = computed(() => {
     return {
-      'is-opened': isOpened.value,
-      'is-ready': isReady.value,
+      "is-opened": isOpened.value,
+      "is-ready": isReady.value,
     };
   });
   //-------------------------------------------------------
   function OnClickHead() {
     // 指定了动作
     if (props.action) {
-      props.action(state?.vars || {}, bus);
+      props.action(props.uniqKey, state?.vars || {}, bus);
     }
     // 否则就相当于 ClickSuffix
     else {
@@ -50,7 +52,7 @@
   }
   //-------------------------------------------------------
   function OnClickSuffix() {
-    let st = OpenStatus.value ?? 'closed';
+    let st = OpenStatus.value ?? "closed";
     //console.log('OnClickHead', st);
     if (state && /^(closed)$/.test(st)) {
       openBarItem(state, props);
@@ -68,9 +70,9 @@
       }
       //console.log('Show!!!', $con.value);
       let mode: DockMode =
-        props.depth > 0 || 'V' == props.layoutMode ? 'V' : 'H';
+        props.depth > 0 || "V" == props.layoutMode ? "V" : "H";
       let space: Point2D =
-        'H' == mode ? { x: 0, y: MENU_SPACE } : { x: MENU_SPACE, y: 0 };
+        "H" == mode ? { x: 0, y: MENU_SPACE } : { x: MENU_SPACE, y: 0 };
       let $menu = $con.value;
       let $info = $menu.previousElementSibling as HTMLElement;
       if (!$info) {
@@ -79,10 +81,10 @@
       Dom.dockTo($menu, $info, {
         mode,
         space,
-        position: 'fixed',
+        position: "fixed",
       });
       _.delay(() => {
-        state?.opened.set(props.uniqKey, 'ready');
+        state?.opened.set(props.uniqKey, "ready");
       }, 0);
     }
   );
@@ -90,9 +92,7 @@
 </script>
 <template>
   <!-- 显示自己-->
-  <BarItemTmpl
-    v-bind="props"
-    @click="OnClickHead">
+  <BarItemTmpl v-bind="props" @click="OnClickHead">
     <template v-slot:suffix>
       <!-- 显示向右展开的指示按钮-->
       <div
@@ -115,18 +115,16 @@
       class="bar-item-con"
       :class="ConClass"
       ref="$con">
-      <template
-        v-for="it in props.items"
-        :key="it.uniqKey">
+      <template v-for="it in props.items" :key="it.uniqKey">
         <template v-if="!it.hidden">
           <!--......|< Action >|......-->
-          <ItemAsAction
-            v-if="'action' == it.type"
-            v-bind="it" />
+          <ItemAsAction v-if="'action' == it.type" v-bind="it" />
           <!--......|< Group >|......-->
-          <ItemAsFolderGroup
-            v-else-if="'group' == it.type"
-            v-bind="it" />
+          <ItemAsGroup v-else-if="'group' == it.type" v-bind="it" />
+          <!--......|< Combin >|......-->
+          <ItemAsCombin v-else-if="'combin' == it.type" v-bind="it" />
+          <!--......|< Customized >|......-->
+          <ItemAsCustomized v-else-if="'customized' == it.type" v-bind="it" />
           <!--......|< Sep >|......-->
           <div
             v-else-if="'sep' == it.type"

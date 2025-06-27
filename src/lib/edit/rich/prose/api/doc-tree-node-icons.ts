@@ -7,6 +7,14 @@ const _NODE_ICONS: Record<string, IconInput> = {
   text: "fas-align-justify",
   hard_break: "zmdi-long-arrow-return",
   heading: "fas-heading",
+  doc: "fas-file",
+  blockquote: "fas-quote-left",
+  horizontal_rule: "fas-ruler-horizontal",
+  code_block: "fas-code",
+  image: "fas-image",
+  ordered_list: "list-ol",
+  bullet_list: "list-ul",
+  list_item: "fas-minus",
 };
 
 export function getNodeIcon(nodeType: NodeType) {

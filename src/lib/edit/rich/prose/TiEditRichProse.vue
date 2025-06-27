@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+  import "prosemirror-menu/style/menu.css"; // 菜单样式
   import { onMounted, provide, useTemplateRef } from "vue";
   import EditorDocTree from "./EditorDocTree.vue";
   import {

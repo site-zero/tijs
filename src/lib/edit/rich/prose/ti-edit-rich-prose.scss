@@ -2,7 +2,7 @@
 
 .ti-edit-rich-prose {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: 0.5fr 1fr 0.5fr;
   grid-template-rows: auto 1fr;
   grid-template-areas:
     "menu menu menu"
@@ -24,12 +24,26 @@
     background-color: yellow;
     position: relative;
     .ProseMirror {
+      outline: none;
+      //white-space: pre-wrap;
+      overflow: auto;
+      padding: 1em;
+    }
+    > .ProseMirror {
+      position: absolute;
+      inset: 0;
+    }
+    > .ProseMirror-menubar-wrapper {
+      @include flex-align-v-nowrap;
       position: absolute;
       outline: none;
       inset: 0;
-      white-space: pre-wrap;
-      padding: 1em;
-      overflow: auto;
+      > .ProseMirror-menubar {
+        flex: 0 0 auto;
+      }
+      > .ProseMirror {
+        flex: 1 1 auto;
+      }
     }
   }
   //-----------------------------------------------------

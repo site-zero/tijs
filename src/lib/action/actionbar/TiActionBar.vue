@@ -13,7 +13,9 @@
   import { CssUtils } from "../../../core";
   import { TiTextSnippet } from "../../../lib";
   import ItemAsAction from "./ItemAsAction.vue";
-  import ItemAsFolderGroup from "./ItemAsFolderGroup.vue";
+  import ItemAsCombin from "./ItemAsCombin.vue";
+  import ItemAsCustomized from "./ItemAsCustomized.vue";
+  import ItemAsGroup from "./ItemAsGroup.vue";
   import { buildActionBarItems } from "./build-action-bar-items";
   import {
     ABAR_STATE,
@@ -21,7 +23,7 @@
     ActionBarEmitter,
     ActionBarProps,
   } from "./ti-action-bar-types";
-  import { hasOpenedGroup, useActionBar } from "./use-action-bar";
+  import { hasOpenedGroup, useActionBarItems } from "./use-action-bar";
   //-------------------------------------------------------
   let emit = defineEmits<ActionBarEmitter>();
   //-------------------------------------------------------
@@ -39,6 +41,7 @@
   const state = reactive({
     opened: new Map(),
     vars: {},
+    itemsMap: new Map(),
   } as ABarState);
   provide(ABAR_STATE, state);
   const $root = ref<HTMLElement>();
@@ -47,9 +50,9 @@
     items: () => [],
     layoutMode: "H",
     topItemAspectMode: "normal",
-    topItemMinWidth: "8em",
+    topItemMinWidth: "6em",
     barPad: "s",
-    itemSize: "m",
+    itemSize: "s",
     itemRadius: "s",
     itemAlign: "left",
   });
@@ -73,7 +76,7 @@
   });
   //-------------------------------------------------------
   const UsedBarItems = computed(() => {
-    return useActionBar(ParsedBarItems.value, state);
+    return useActionBarItems(ParsedBarItems.value, state);
   });
   //-------------------------------------------------------
   const HasOpenedGroup = computed(() => hasOpenedGroup(state.opened));
@@ -98,6 +101,7 @@
         "--min-wrapper-width": props.minWrapperWidth,
         "--max-wrapper-width": props.maxWrapperWidth,
         "--top-item-min-width": props.topItemMinWidth ?? null,
+        "--item-radius": `var(--ti-measure-r-${props.itemRadius})`,
       },
     ]);
   });
@@ -141,7 +145,11 @@
           <!--......|< Action >|......-->
           <ItemAsAction v-if="'action' == it.type" v-bind="it" />
           <!--......|< Group >|......-->
-          <ItemAsFolderGroup v-else-if="'group' == it.type" v-bind="it" />
+          <ItemAsGroup v-else-if="'group' == it.type" v-bind="it" />
+          <!--......|< Combin >|......-->
+          <ItemAsCombin v-else-if="'combin' == it.type" v-bind="it" />
+          <!--......|< Customized >|......-->
+          <ItemAsCustomized v-else-if="'customized' == it.type" v-bind="it" />
           <!--......|< Sep >|......-->
           <div
             v-else-if="'sep' == it.type"
@@ -182,6 +190,7 @@
   @use "./style/bar-sep.scss";
   @use "./style/bar-item-info.scss";
   @use "./style/bar-item-con.scss";
+  @use "./style/bar-item-combin.scss";
   @use "./style/bar-effect.scss";
   @use "./style/top-as-button.scss";
 </style>

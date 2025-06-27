@@ -3,21 +3,27 @@
 .bar-item-info {
   @include flex-align-nowrap($ai: stretch);
   gap: 0;
-  line-height: 2.4em;
+  line-height: var(--item-line-height);
   overflow: hidden;
-  //-----------------------------------------------------
-  --item-color: var(--ti-color-border-shallow);
   //-----------------------------------------------------
   .item-icon {
     @include flex-center;
     font-size: 1.2em;
-    width: 2em;
+    width: var(--item-icon-width);
+    min-height: var(--item-icon-height);
     flex: 0 0 auto;
   }
   //-----------------------------------------------------
   .item-text {
     white-space: nowrap;
     flex: 1 1 auto;
+    padding: 0 1em;
+  }
+  //-----------------------------------------------------
+  &.has-icon-part {
+    .item-text {
+      padding-left: 0;
+    }
   }
   //-----------------------------------------------------
   .item-suffix {
@@ -53,7 +59,14 @@
   }
   //-----------------------------------------------------
   &[aspect="top"] {
-    @include aspect_radius("&.item-r");
+    border-radius: var(--item-radius);
+    &.is-icon-only {
+      > .item-icon {
+        > .ti-icon {
+          font-size: 1.2em;
+        }
+      }
+    }
   }
   //-----------------------------------------------------
   &[aspect="sub"],
@@ -74,6 +87,10 @@
     }
   }
   //-----------------------------------------------------
+  &.highlight {
+    background-color: var(--ti-color-selected);
+  }
+  //-----------------------------------------------------
   @mixin __bar_item_color_by_name($name) {
     &.is-enabled.is-#{$name} {
       --item-color: var(--ti-color-#{$name}-r);
@@ -82,6 +99,18 @@
       background-color: var(--ti-color-#{$name});
       &:hover {
         background-color: var(--ti-color-#{$name}-b);
+      }
+      &.highlight {
+        --item-color: var(--ti-color-#{$name});
+        --item-color-r: var(--ti-color-#{$name}-r);
+        color: var(--ti-color-#{$name});
+        background-color: var(--ti-color-#{$name}-r);
+        &:hover {
+          --item-color: var(--ti-color-#{$name}-r);
+          --item-color-r: var(--ti-color-#{$name});
+          color: var(--ti-color-#{$name}-r);
+          background-color: var(--ti-color-#{$name});
+        }
       }
     }
 
@@ -95,6 +124,18 @@
         --item-color-r: var(--ti-color-#{$name}-r);
         color: var(--ti-color-#{$name});
         background-color: var(--ti-color-#{$name}-r);
+      }
+      &.highlight {
+        --item-color: var(--ti-color-#{$name});
+        --item-color-r: var(--ti-color-#{$name}-r);
+        color: var(--ti-color-#{$name});
+        background-color: var(--ti-color-#{$name}-r);
+        &:hover {
+          --item-color: var(--ti-color-#{$name}-r);
+          --item-color-r: var(--ti-color-#{$name});
+          color: var(--ti-color-#{$name}-r);
+          background-color: var(--ti-color-#{$name});
+        }
       }
     }
   }

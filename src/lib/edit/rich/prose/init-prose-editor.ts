@@ -5,9 +5,10 @@ import { history, redo, undo } from "prosemirror-history"; // 撤销历史
 import { inputRules } from "prosemirror-inputrules"; // 输入规则
 import { keymap } from "prosemirror-keymap"; // 键盘映射
 import { Schema } from "prosemirror-model";
-import { schema as basicSchema } from "prosemirror-schema-basic";
+import { schema } from "prosemirror-schema-basic";
 import { addListNodes } from "prosemirror-schema-list";
 import { EditorState, Transaction } from "prosemirror-state";
+import { tableNodes } from "prosemirror-tables";
 import { EditorView } from "prosemirror-view";
 import { br_command } from "./command/br-command";
 import { TiEditRichProseProps } from "./ti-edit-rich-prose-types";
@@ -17,9 +18,37 @@ export function init_prose_editor(
   $con: HTMLElement,
   whenDispatchTransaction: (tr: Transaction) => void
 ) {
+  let marks = schema.spec.marks;
+
+  // 建立支持的节点
+  let nodes = addListNodes(schema.spec.nodes, "paragraph block*", "block");
+
+  // 支持表格
+  nodes = nodes.append(
+    tableNodes({
+      tableGroup: "block",
+      cellContent: "paragraph block*",
+      cellAttributes: {
+        background: {
+          default: null,
+          getFromDOM: (dom) => dom.style.backgroundColor,
+          setDOMAttr: (value, attrs) => {
+            if (value)
+              attrs.style = (attrs.style || "") + `background-color: ${value};`;
+          },
+        },
+      },
+    })
+  );
+
   const mySchema = new Schema({
-    nodes: addListNodes(basicSchema.spec.nodes, "paragraph block*", "block"),
-    marks: basicSchema.spec.marks,
+    nodes,
+    marks,
+  });
+
+  let i = 0;
+  mySchema.spec.nodes.forEach((key, val) => {
+    console.log(i++, key, val);
   });
 
   //console.log(exampleSetup({ schema: mySchema, menuBar: false }));
@@ -83,6 +112,9 @@ export function init_prose_editor(
         dropCursorPlugin,
         gapCursorPlugin,
         historyPlugin,
+        // menuBar({
+        //   content: buildMenuItems(schema).fullMenu,
+        // }),
       ],
       //plugins: exampleSetup({ schema: mySchema, menuBar: false }),
     }),

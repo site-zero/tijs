@@ -14,8 +14,8 @@
   min-width: var(--min-wrapper-width);
   max-width: var(--max-wrapper-width);
   box-shadow: -1px -1px var(--ti-color-light), 1px 1px var(--ti-color-dark),
-    6px 6px 15px var(--ti-color-mask-thin);
-  border-radius: var(--ti-measure-r-s);
+    2px 2px 15px var(--ti-color-mask-thin);
+  border-radius: var(--item-radius);
   z-index: $z-menu + 1;
   &.is-opened {
     height: unset;
@@ -24,8 +24,4 @@
     height: unset;
     opacity: 1;
   }
-}
-
-.bar-item {
-  @include aspect_radius("&.item-r", "> .bar-item-con");
 }

@@ -4,6 +4,7 @@ import exSimple from "./ex-simple";
 import exVisiblity from "./ex-visiblity";
 import exBool from "./ex-bool";
 import exButtonGroup from "./ex-button-group";
+import exToolbar from "./ex-toolbar";
 
 // export const simple = exSimple as ComPropExample;
 // export const visiblity = exVisiblity as ComPropExample;
@@ -15,4 +16,5 @@ export default {
   modeV: exModeV,
   boolItems: exBool,
   buttonGroup: exButtonGroup,
+  toolbar: exToolbar,
 };

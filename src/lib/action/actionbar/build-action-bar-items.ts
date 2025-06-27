@@ -1,38 +1,55 @@
-import _ from 'lodash';
-import { ActionBarProps, useVisibility } from '../../';
+import _ from "lodash";
+import { ActionBarProps, useVisibility } from "../../";
 import {
   ActionBarAction,
+  ActionBarCallback,
   ActionBarItem,
   ActionBarItemAltDisplay,
   TiAppBus,
   Vars,
-  isEventInfo,
+  isActionEventInfo,
   isInvoke,
-} from '../../../_type';
-import { CssUtils, Match, Util } from '../../../core';
+} from "../../../_type";
+import { CssUtils, Match, Util } from "../../../core";
 import {
   ABarAltDisplay,
   ABarParsedItem,
   ActionBarEmitter,
   ActionBarLayoutMode,
   ActionBarType,
-} from './ti-action-bar-types';
+} from "./ti-action-bar-types";
 
 function autoBarItemType(item: ActionBarItem): ActionBarType {
+  let type = item.type;
+
+  // 用户指定类型
+  if (type && "auto" != type) {
+    return type;
+  }
+  // 自动判断类型: 自定义
+  if (item.comType) {
+    return "customized";
+  }
+
+  // 自动判断类型: 带分组
   if (item.items) {
-    return 'group';
+    return "group";
   }
-  if (_.isEmpty(item)) {
-    return 'sep';
+
+  // 自动判断类型: 分隔线
+  if (_.isEmpty(item) || "sep" == item.type) {
+    return "sep";
   }
-  return 'action';
+
+  // 自动判断类型: 默认为普通动作菜单项
+  return "action";
 }
 
 // action?: Callback | EventInfo<any> | Invoke | string;
 function makeItemAction(
   emit: ActionBarEmitter,
   action?: ActionBarAction
-): ((vars: Vars) => void) | undefined {
+): ActionBarCallback | undefined {
   // Guard
   if (!action) {
     return;
@@ -44,19 +61,38 @@ function makeItemAction(
   }
 
   // EventInfo<any>
-  if (isEventInfo<any>(action, (_it): _it is any => true)) {
+  if (isActionEventInfo(action)) {
     let ei = action;
     let eventName = ei.name;
-    return (vars: Vars) => {
-      console.log('------------------------------');
+
+    let getPayload = function (value: any, vars: Vars) {
       let payload = ei.payload;
       if (ei.dynamic) {
-        payload = Util.explainObj(vars, ei.payload, {
+        payload = Util.explainObj({ value, vars }, ei.payload, {
           evalFunc: false,
         });
       }
-      emit('fire', { name: eventName, payload });
+      return payload;
     };
+    
+    // 总线事件
+    if (action.bus) {
+      return (value: any, vars: Vars, bus?: TiAppBus) => {
+        if (!bus) {
+          console.warn(`need bug to notify [${action}]`);
+          return;
+        }
+        let payload = getPayload(value, vars);
+        bus.emit(eventName, payload);
+      };
+    }
+    // 当做普通事件
+    else {
+      return (value: any, vars: Vars) => {
+        let payload = getPayload(value, vars);
+        emit("fire", { name: eventName, payload });
+      };
+    }
   }
 
   // Invoke
@@ -65,30 +101,17 @@ function makeItemAction(
       let fn = Util.genInvokingBy(action, {
         context: vars,
         dft: () => {
-          throw new Error('fail to parse: ' + action);
+          throw new Error("fail to parse: " + action);
         },
       });
       return fn();
     };
   }
 
-  // String 作为 BUS
-  let m = /^\s*bus:>(.+)$/.exec(action);
-  if (m) {
-    let busNotifyName = _.trim(m[1]);
-    return (vars: Vars, bus?: TiAppBus) => {
-      if (!bus) {
-        console.warn(`need bug to notify [${action}]`);
-        return;
-      }
-      bus.emit(busNotifyName, vars);
-    };
-  }
-
   // String 作为事件名称
   let eventName = action;
   return (vars: Vars) => {
-    emit('fire', { name: eventName, payload: vars });
+    emit("fire", { name: eventName, payload: vars });
   };
 }
 
@@ -109,7 +132,7 @@ export function buildActionBarItems(
 
     // 融合下标
     let selfIndexes = [...indexes, index];
-    let uniqKey = `BAR_${selfIndexes.join('_')}`;
+    let uniqKey = `BAR_${selfIndexes.join("_")}`;
     let depth = indexes.length;
 
     // 准备显示项目
@@ -122,11 +145,16 @@ export function buildActionBarItems(
       altDisplay = [];
       for (let alt of alts) {
         let a: ABarAltDisplay = {
-          info: _.omit(alt, 'test'),
+          info: _.omit(alt, "test"),
         };
         if (!_.isNil(alt.test)) {
           a.test = Match.parse(alt.test);
         }
+        a.info.className = CssUtils.mergeClassName(
+          {},
+          a.info.className,
+          `item-r-${props.itemRadius ?? "s"}`
+        );
         altDisplay.push(a);
       }
     }
@@ -138,7 +166,7 @@ export function buildActionBarItems(
       index,
       depth,
       type,
-      aspect: 0 == depth ? 'top' : 'sub',
+      aspect: 0 == depth ? "top" : "sub",
       layoutMode,
       axis: [],
       //.....................................
@@ -147,12 +175,21 @@ export function buildActionBarItems(
       className: CssUtils.mergeClassName(
         {},
         it.className,
-        `item-r-${props.itemRadius ?? 's'}`
+        `item-r-${props.itemRadius ?? "s"}`
       ),
       style: it.style,
       tip: it.tip,
       //.....................................
       altDisplay,
+      //.....................................
+      explainOptions: it.explainOptions,
+      vars: it.vars,
+      comType: it.comType,
+      comConf: it.comConf,
+      readonlyComType: it.readonlyComType,
+      readonlyComConf: it.readonlyComConf,
+      changeEventName: it.changeEventName,
+      //.....................................
       action: makeItemAction(emit, it.action),
       //.....................................
       ...useVisibility(it, uniqKey),

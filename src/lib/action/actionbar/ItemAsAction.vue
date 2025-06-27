@@ -17,7 +17,7 @@
   function OnFireAction() {
     //console.log("OnFireAction", props)
     if (_.isFunction(props.action)) {
-      props.action(state?.vars || {}, bus);
+      props.action(props.uniqKey, state?.vars || {}, bus);
     }
     state?.opened.clear();
   }
