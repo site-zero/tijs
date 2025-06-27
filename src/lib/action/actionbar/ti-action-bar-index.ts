@@ -2,19 +2,21 @@ import { App } from "vue";
 import { TiComInfo, TiComRace, Vars } from "../../../_type";
 import { COM_TYPES } from "../../lib-com-types";
 import TiActionBar from "./TiActionBar.vue";
-import * as example from "./example";
+import example from "./example";
 
 const en_us = {
   "com-name": "Action Bar",
   "example-visibility": "Visibility",
   "example-mode-v": "Vertical Mode",
   "example-bool": "Bool Items",
+  "example-button-group": "Button Group",
 };
 const zh_cn = {
   "com-name": "动作条",
   "example-visibility": "可见性",
   "example-mode-v": "垂直模式",
   "example-bool": "布尔选项",
+  "example-button-group": "按钮组",
 };
 
 const COM_TYPE = COM_TYPES.ActionBar;
@@ -51,6 +53,7 @@ const TiActionBarInfo: TiComInfo = {
     example.visiblity,
     example.modeV,
     example.boolItems,
+    example.buttonGroup,
   ],
 };
 

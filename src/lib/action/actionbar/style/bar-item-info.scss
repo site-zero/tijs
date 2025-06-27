@@ -1,13 +1,9 @@
-@use '@site0/tijs/sass/_all.scss' as *;
+@use "@site0/tijs/sass/_all.scss" as *;
 
 .bar-item-info {
-  display: grid;
-  grid-auto-columns: auto;
-  grid-auto-flow: column;
+  @include flex-align-nowrap($ai: stretch);
   gap: 0;
-  line-height: var(--ti-measure-menu-lineheight);
-  //padding: 0.26em 0.6em;
-  padding: 0 0.5em;
+  line-height: 2.4em;
   overflow: hidden;
   //-----------------------------------------------------
   --item-color: var(--ti-color-border-shallow);
@@ -15,33 +11,33 @@
   .item-icon {
     @include flex-center;
     font-size: 1.2em;
-    width: min-content;
-    margin: 0 0.2em;
+    width: 2em;
+    flex: 0 0 auto;
   }
   //-----------------------------------------------------
   .item-text {
     white-space: nowrap;
-    padding: 0.2em;
-    @include flex-align-nowrap($ai: center);
+    flex: 1 1 auto;
   }
   //-----------------------------------------------------
   .item-suffix {
-    @include font-fixed;
-    opacity: 0.7;
-    &.as-icon {
+    @include flex-align-nowrap($ai: stretch);
+    flex: 0 0 auto;
+    > .suffix-icon {
       @include flex-center;
       border-left: 1px solid var(--item-color);
       padding: 0 0.36em;
       font-size: 1.3em;
+      &:hover {
+        opacity: 1;
+        background-color: var(--ti-color-highlight);
+        // background-color: var(--item-color);
+        // color: var(--item-color-r);
+      }
     }
-    &.as-tip {
+    > .suffix-tip {
+      @include font-fixed;
       font-size: 0.8em;
-    }
-    &:hover {
-      opacity: 1;
-      background-color: var(--ti-color-highlight);
-      // background-color: var(--item-color);
-      // color: var(--item-color-r);
     }
   }
   //-----------------------------------------------------
@@ -56,13 +52,12 @@
     }
   }
   //-----------------------------------------------------
-  &[aspect='top'] {
-    @include aspect_radius('&.item-r');
-    min-width: var(--top-item-min-width);
+  &[aspect="top"] {
+    @include aspect_radius("&.item-r");
   }
   //-----------------------------------------------------
-  &[aspect='sub'],
-  &[bar-layout-mode='V'] {
+  &[aspect="sub"],
+  &[bar-layout-mode="V"] {
     grid-template-columns: auto 1fr;
   }
   //-----------------------------------------------------

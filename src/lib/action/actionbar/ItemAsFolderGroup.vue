@@ -97,14 +97,14 @@
       <!-- 显示向右展开的指示按钮-->
       <div
         v-if="props.depth > 0 || 'V' == props.layoutMode"
-        class="item-suffix as-icon"
+        class="suffix-icon"
         @click.stop="OnClickSuffix">
         <i class="zmdi zmdi-chevron-right"></i>
       </div>
       <!-- 显示下拉指示按钮-->
       <div
         v-else-if="showTopSuffixIcon"
-        class="item-suffix as-icon"
+        class="suffix-icon"
         @click.stop="OnClickSuffix">
         <i class="zmdi zmdi-chevron-down"></i>
       </div>

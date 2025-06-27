@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-  import { computed, inject, ref } from 'vue';
-  import { CssUtils, I18n } from '../../../core';
-  import { TiIcon } from '../../../lib';
-  import { ABAR_STATE, ABarUsedItem } from './ti-action-bar-types';
-  import { openBarItem } from './use-action-bar';
+  import { computed, inject, ref } from "vue";
+  import { CssUtils, I18n } from "../../../core";
+  import { TiIcon } from "../../../lib";
+  import { ABAR_STATE, ABarUsedItem } from "./ti-action-bar-types";
+  import { openBarItem } from "./use-action-bar";
   //-------------------------------------------------------
   defineOptions({
     inheritAttrs: false,
@@ -12,7 +12,7 @@
   const state = inject(ABAR_STATE);
   //-------------------------------------------------------
   const emit = defineEmits<{
-    (eventName: 'click', item: ABarUsedItem): void;
+    (eventName: "click", item: ABarUsedItem): void;
   }>();
   //-------------------------------------------------------
   const $item = ref<HTMLElement>();
@@ -32,21 +32,21 @@
     }
   });
   //-------------------------------------------------------
-  const isOpened = computed(() => 'opened' == OpenStatus.value);
-  const isReady = computed(() => 'ready' == OpenStatus.value);
+  const isOpened = computed(() => "opened" == OpenStatus.value);
+  const isReady = computed(() => "ready" == OpenStatus.value);
   //-------------------------------------------------------
   const TopClass = computed(() => {
     return CssUtils.mergeClassName(props.className, {
-      'is-disabled': props.disabled,
-      'is-enabled': !props.disabled,
+      "is-disabled": props.disabled,
+      "is-enabled": !props.disabled,
     });
   });
   //-------------------------------------------------------
   const InfoClass = computed(() => {
     return CssUtils.mergeClassName(props.className, {
-      'is-highlight': isOpened.value || isReady.value,
-      'is-disabled': props.disabled,
-      'is-enabled': !props.disabled,
+      "is-highlight": isOpened.value || isReady.value,
+      "is-disabled": props.disabled,
+      "is-enabled": !props.disabled,
     });
   });
   //-------------------------------------------------------
@@ -63,7 +63,7 @@
     if (props.hidden || props.disabled) {
       return;
     }
-    emit('click', props);
+    emit("click", props);
   }
   //-------------------------------------------------------
 </script>
@@ -85,19 +85,15 @@
       :aspect="props.aspect"
       @click.left.stop="onClikeItem"
       @mouseenter="OnEnter">
-      <div
-        class="item-icon"
-        v-if="!hideIconPart">
-        <TiIcon
-          v-if="props.icon"
-          :value="props.icon" />
+      <div class="item-icon" v-if="!hideIconPart">
+        <TiIcon v-if="props.icon" :value="props.icon" />
       </div>
-      <div
-        class="item-text"
-        v-if="props.text">
+      <div class="item-text" v-if="props.text">
         {{ I18n.text(props.text) }}
       </div>
-      <slot name="suffix"></slot>
+      <div class="item-suffix">
+        <slot name="suffix"></slot>
+      </div>
     </div>
     <slot></slot>
   </div>

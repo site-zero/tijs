@@ -8,24 +8,20 @@
     reactive,
     ref,
     watch,
-  } from 'vue';
-  import { AppEvents, BUS_KEY, BusMsg, Vars } from '../../../_type';
-  import { CssUtils } from '../../../core';
-  import { TiTextSnippet } from '../../../lib';
-  import ItemAsAction from './ItemAsAction.vue';
-  import ItemAsFolderGroup from './ItemAsFolderGroup.vue';
-  import { buildActionBarItems } from './build-action-bar-items';
+  } from "vue";
+  import { AppEvents, BUS_KEY, BusMsg, Vars } from "../../../_type";
+  import { CssUtils } from "../../../core";
+  import { TiTextSnippet } from "../../../lib";
+  import ItemAsAction from "./ItemAsAction.vue";
+  import ItemAsFolderGroup from "./ItemAsFolderGroup.vue";
+  import { buildActionBarItems } from "./build-action-bar-items";
   import {
     ABAR_STATE,
     ABarState,
     ActionBarEmitter,
     ActionBarProps,
-  } from './ti-action-bar-types';
-  import { hasOpenedGroup, useActionBar } from './use-action-bar';
-  //-------------------------------------------------------
-  defineOptions({
-    inheritAttrs: true,
-  });
+  } from "./ti-action-bar-types";
+  import { hasOpenedGroup, useActionBar } from "./use-action-bar";
   //-------------------------------------------------------
   let emit = defineEmits<ActionBarEmitter>();
   //-------------------------------------------------------
@@ -49,12 +45,13 @@
   //-------------------------------------------------------
   const props = withDefaults(defineProps<ActionBarProps>(), {
     items: () => [],
-    layoutMode: 'H',
-    topItemAspectMode: 'normal',
-    barPad: 's',
-    itemSize: 'm',
-    itemRadius: 's',
-    itemAlign: 'left',
+    layoutMode: "H",
+    topItemAspectMode: "normal",
+    topItemMinWidth: "8em",
+    barPad: "s",
+    itemSize: "m",
+    itemRadius: "s",
+    itemAlign: "left",
   });
   //-------------------------------------------------------
   watch(
@@ -70,7 +67,7 @@
       props,
       [],
       props.items ?? [],
-      props.layoutMode ?? 'H',
+      props.layoutMode ?? "H",
       emit
     );
   });
@@ -85,12 +82,12 @@
     CssUtils.mergeClassName(
       props.className,
       {
-        'show-click-mask': HasOpenedGroup.value,
+        "show-click-mask": HasOpenedGroup.value,
       },
-      `layout-mode-${props.layoutMode ?? 'H'}`,
-      `top-as-${props.topItemAspectMode ?? 'normal'}`,
-      `item-size-${props.itemSize ?? 'm'}`,
-      `bar-pad-${props.barPad ?? 'none'}`
+      `layout-mode-${props.layoutMode ?? "H"}`,
+      `top-as-${props.topItemAspectMode ?? "normal"}`,
+      `item-size-${props.itemSize ?? "m"}`,
+      `bar-pad-${props.barPad ?? "none"}`
     )
   );
   //-------------------------------------------------------
@@ -98,7 +95,9 @@
     return CssUtils.mergeStyles([
       props.style,
       {
-        '--top-item-min-width': props.topItemMinWidth ?? null,
+        "--min-wrapper-width": props.minWrapperWidth,
+        "--max-wrapper-width": props.maxWrapperWidth,
+        "--top-item-min-width": props.topItemMinWidth ?? null,
       },
     ]);
   });
@@ -118,11 +117,7 @@
   });
 </script>
 <template>
-  <div
-    class="ti-actionbar"
-    :class="TopClass"
-    :style="TopStyle"
-    ref="$root">
+  <div class="ti-actionbar" :class="TopClass" :style="TopStyle" ref="$root">
     <!--===: Bar Head :===-->
     <slot name="head">
       <TiTextSnippet
@@ -138,26 +133,15 @@
         :comConf="props.head.comConf" />
     </slot>
     <!--===: Bar Mask :===-->
-    <div
-      class="bar-mask"
-      v-if="HasOpenedGroup"
-      @click.left="OnClickMask"></div>
+    <div class="bar-mask" v-if="HasOpenedGroup" @click.left="OnClickMask"></div>
     <!--===: Show Bar Items :===-->
-    <div
-      class="bar-item-wrapper"
-      :item-align="props.itemAlign">
-      <template
-        v-for="it in UsedBarItems"
-        :key="it.uniqKey">
+    <div class="bar-item-wrapper" :item-align="props.itemAlign">
+      <template v-for="it in UsedBarItems" :key="it.uniqKey">
         <template v-if="!it.hidden">
           <!--......|< Action >|......-->
-          <ItemAsAction
-            v-if="'action' == it.type"
-            v-bind="it" />
+          <ItemAsAction v-if="'action' == it.type" v-bind="it" />
           <!--......|< Group >|......-->
-          <ItemAsFolderGroup
-            v-else-if="'group' == it.type"
-            v-bind="it" />
+          <ItemAsFolderGroup v-else-if="'group' == it.type" v-bind="it" />
           <!--......|< Sep >|......-->
           <div
             v-else-if="'sep' == it.type"
@@ -194,10 +178,10 @@
   </div>
 </template>
 <style lang="scss">
-  @use './style/bar.scss';
-  @use './style/bar-sep.scss';
-  @use './style/bar-item-info.scss';
-  @use './style/bar-item-con.scss';
-  @use './style/bar-effect.scss';
-  @use './style/top-as-button.scss';
+  @use "./style/bar.scss";
+  @use "./style/bar-sep.scss";
+  @use "./style/bar-item-info.scss";
+  @use "./style/bar-item-con.scss";
+  @use "./style/bar-effect.scss";
+  @use "./style/top-as-button.scss";
 </style>

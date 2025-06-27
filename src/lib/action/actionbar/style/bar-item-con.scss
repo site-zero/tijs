@@ -1,4 +1,4 @@
-@use '@site0/tijs/sass/_all.scss' as *;
+@use "@site0/tijs/sass/_all.scss" as *;
 
 .bar-item-con {
   position: fixed;
@@ -11,10 +11,9 @@
   //transition: opacity 0.3s;
   background-color: var(--ti-color-menu);
   color: var(--ti-color-menu-f);
-  min-width: 10em;
-  box-shadow:
-    -1px -1px var(--ti-color-light),
-    1px 1px var(--ti-color-dark),
+  min-width: var(--min-wrapper-width);
+  max-width: var(--max-wrapper-width);
+  box-shadow: -1px -1px var(--ti-color-light), 1px 1px var(--ti-color-dark),
     6px 6px 15px var(--ti-color-mask-thin);
   border-radius: var(--ti-measure-r-s);
   z-index: $z-menu + 1;

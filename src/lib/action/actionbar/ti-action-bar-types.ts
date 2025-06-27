@@ -1,5 +1,5 @@
-import { InjectionKey } from 'vue';
-import { VisibilityFeature } from '../../';
+import { InjectionKey } from "vue";
+import { VisibilityFeature } from "../../";
 import {
   ActionBarItem,
   ActionBarItemInfo,
@@ -11,7 +11,7 @@ import {
   TiAppBus,
   TiMatch,
   Vars,
-} from '../../../_type';
+} from "../../../_type";
 
 export type ActionBarEvent = {
   name: string;
@@ -19,7 +19,7 @@ export type ActionBarEvent = {
 };
 
 export type ActionBarEmitter = {
-  (eventName: 'fire', barEvent: ActionBarEvent): void;
+  (eventName: "fire", barEvent: ActionBarEvent): void;
 };
 
 export type ABarState = {
@@ -38,10 +38,10 @@ export type ABarState = {
   vars: Vars;
 };
 
-export type ABarItemOpenStatus = 'opened' | 'ready';
-export type ActionBarType = 'action' | 'group' | 'sep';
-export type ActionBarLayoutMode = 'H' | 'V';
-export type BarTopItemAspectMode = 'normal' | 'button';
+export type ABarItemOpenStatus = "opened" | "ready";
+export type ActionBarType = "action" | "group" | "sep";
+export type ActionBarLayoutMode = "H" | "V";
+export type BarTopItemAspectMode = "normal" | "button";
 
 export type ABarAltDisplay = {
   info: ActionBarItemInfo;
@@ -51,8 +51,8 @@ export type ABarAltDisplay = {
 export type ActionBarText = CommonProps & {
   textType?: TextContentType;
   text?: string;
-  style?: Vars;
   icon?: IconInput;
+  style?: Vars;
   comType?: string;
   comConf?: Vars;
 };
@@ -63,12 +63,28 @@ export type ActionBarProps = CommonProps & {
   items?: ActionBarItem[];
   vars?: Vars;
   style?: Vars;
+  /**
+   * 指明两种布局方式，`H|V` 垂直布局 `V` 比较适合
+   * 放在上下文菜单等竖向排布的容器中
+   */
   layoutMode?: ActionBarLayoutMode;
+  /**
+   * 指明顶层菜单的显示模式: 普通还是按钮
+   */
   topItemAspectMode?: BarTopItemAspectMode;
   /**
    * 顶级按钮最小宽度
    */
-  topItemMinWidth?: string;
+  topItemMinWidth?: string | undefined | null;
+
+  /**
+   * 指明弹出子菜单或者垂直模式下的菜单条最小宽度
+   */
+  minWrapperWidth?: string | undefined | null;
+  /**
+   * 指明弹出子菜单或者垂直模式下的菜单条最大宽度
+   */
+  maxWrapperWidth?: string | undefined | null;
 
   head?: ActionBarText;
   tail?: ActionBarText;
@@ -76,7 +92,7 @@ export type ActionBarProps = CommonProps & {
   /**
    * 选项间距
    */
-  barPad?: AspectSize | 'none';
+  barPad?: AspectSize | "none";
 
   /**
    * 选项字体大小
@@ -91,10 +107,10 @@ export type ActionBarProps = CommonProps & {
   /**
    * 选项圆角
    */
-  itemRadius?: AspectSize | 'none';
+  itemRadius?: AspectSize | "none";
 };
 
-type ActionBarAspect = 'top' | 'sub';
+type ActionBarAspect = "top" | "sub";
 
 export type AbstractBarItem = ActionBarItemInfo & {
   uniqKey: string;
@@ -119,4 +135,4 @@ export type ABarUsedItem = AbstractBarItem & {
   items?: ABarUsedItem[];
 };
 
-export const ABAR_STATE: InjectionKey<ABarState> = Symbol('ABAR_STATE');
+export const ABAR_STATE: InjectionKey<ABarState> = Symbol("ABAR_STATE");

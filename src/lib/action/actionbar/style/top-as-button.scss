@@ -1,46 +1,28 @@
-@use '@site0/tijs/sass/_all.scss' as *;
+@use "@site0/tijs/sass/_all.scss" as *;
 
 .ti-actionbar.top-as-button {
   //--------------------------------------
-  .bar-item[aspect='top'] {
+  .bar-item[aspect="top"] {
     > .bar-item-info {
-      @include flex-align-nowrap($ai: stretch);
-      padding: 0 0.2em;
       border: 1px solid var(--item-color);
-      text-align: center;
-      //------------------------------------
-      .item-icon {
-        @include flex-center;
-        width: auto;
-      }
-      //------------------------------------
-      .item-text {
-        //padding: 0.2em 0.5em;
-        flex: 1 1 auto;
+    }
+  }
+  //--------------------------------------
+  // .bar-item[aspect='top'] + .bar-item[aspect='top'] {
+  //   margin-left: 0.1em;
+  // }
+  //--------------------------------------
+  &.layout-mode-H {
+    .bar-item[aspect="top"] {
+      > .bar-item-info {
         justify-content: center;
-      }
-      //------------------------------------
-      .item-suffix {
-        margin: 0;
-        padding: 0 0.36em;
-      }
-      //------------------------------------
-      &[bar-layout-mode='V'] {
-        justify-content: flex-start;
+        min-width: var(--top-item-min-width);
         .item-text {
-          flex: 1 1 auto;
+          text-align: center;
+          flex: 0 0 auto;
         }
       }
-      //------------------------------------
-      // &:hover {
-      //   //box-shadow: 3px 3px 6px var(--ti-color-mask-thin);
-      // }
-      //------------------------------------
-    } // > .bar-item-head {
-  } // > .bar-item[item-depth="0"] {
-  //--------------------------------------
-  .bar-item[aspect='top'] + .bar-item[aspect='top'] {
-    margin-left: 0.1em;
+    }
   }
   //--------------------------------------
 }

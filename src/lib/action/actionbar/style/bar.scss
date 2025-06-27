@@ -1,9 +1,9 @@
-@use '@site0/tijs/sass/_all.scss' as *;
+@use "@site0/tijs/sass/_all.scss" as *;
 
 .ti-actionbar {
   user-select: none;
-  @include aspect_pad('&.bar-pad');
-  @include aspect_fontsize('&.item-size');
+  @include aspect_pad("&.bar-pad");
+  @include aspect_fontsize("&.item-size");
   $BR: var(--ti-measure-r-s);
   --ti-fontsz-t: 8px; // tiny
   --ti-fontsz-s: 10px; // small
@@ -20,7 +20,7 @@
       opacity: 0.4;
       filter: grayscale(100%);
     }
-    &[aspect='sub'] {
+    &[aspect="sub"] {
       &:first-child {
         border-radius: $BR $BR 0 0;
       }
@@ -43,24 +43,33 @@
     > .bar-item-wrapper {
       @include flex-align-nowrap($ai: stretch);
       flex: 1 1 auto;
-      &[item-align='left'] {
+      &[item-align="left"] {
         justify-content: flex-start;
       }
-      &[item-align='center'] {
+      &[item-align="center"] {
         justify-content: center;
       }
-      &[item-align='right'] {
+      &[item-align="right"] {
         justify-content: flex-end;
       }
     }
   }
   &.layout-mode-V {
+    min-width: var(--min-wrapper-width);
+    max-width: var(--max-wrapper-width);
     > .bar-item-wrapper {
       @include flex-align-v-nowrap($ai: stretch);
     }
-    &.top-as-button {
-      .bar-item[aspect='top'] {
-        margin: 0.2em 0;
+    &.top-as-button > .bar-item-wrapper {
+      gap: 0.2em;
+      > .bar-sep {
+        height: 0;
+        width: 100%;
+        margin: 0;
+        border-bottom: 1px solid var(--ti-color-border-thin);
+      }
+      > .bar-item[aspect="top"] > .bar-item-info .item-text {
+        justify-content: flex-start;
       }
     }
   }
