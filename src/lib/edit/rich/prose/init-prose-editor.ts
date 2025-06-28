@@ -10,8 +10,9 @@ import { addListNodes } from "prosemirror-schema-list";
 import { EditorState, Transaction } from "prosemirror-state";
 import { tableNodes } from "prosemirror-tables";
 import { EditorView } from "prosemirror-view";
-import { br_command } from "./command/br-command";
-import { TiEditRichProseProps } from "./ti-edit-rich-prose-types";
+import { br_command } from "./command/br.cmd";
+import { EditorSchema, TiEditRichProseProps } from "./ti-edit-rich-prose-types";
+import { useEditorCommands } from "./api/use-editor-commands";
 
 export function init_prose_editor(
   _props: TiEditRichProseProps,
@@ -41,15 +42,23 @@ export function init_prose_editor(
     })
   );
 
-  const mySchema = new Schema({
+  const mySchema: EditorSchema = new Schema({
     nodes,
     marks,
   });
 
-  // let i = 0;
-  // mySchema.spec.nodes.forEach((key, val) => {
-  //   console.log(i++, key, val);
-  // });
+  let i = 0;
+  mySchema.spec.nodes.forEach((key, val) => {
+    console.log("node", i++, key, val);
+  });
+
+  console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+  i = 0;
+  mySchema.spec.marks.forEach((key, val) => {
+    console.log("mark", i++, key, val);
+  });
+
+  const myCommands = useEditorCommands(mySchema);
 
   //console.log(exampleSetup({ schema: mySchema, menuBar: false }));
   // ---------------------- 手工配置插件 ---------------------- //
@@ -73,18 +82,20 @@ export function init_prose_editor(
     "Mod-z": undo,
     "Mod-y": redo,
     // 自定义绑定
-    "Mod-i": toggleMark(mySchema.marks.emphasis), // Ctrl/Cmd + I 启用斜体
-    "Mod-b": toggleMark(mySchema.marks.strong), // Ctrl/Cmd + B 启用加粗
+    "Mod-i": myCommands.get("I"),
+    "Mod-b": myCommands.get("B"),
     // Shift+Enter 生成段内回车
-    "Shift-Enter": br_command,
+    "Shift-Enter": myCommands.get("br"),
     // 快速设置标题
-    "Ctrl-Shift-1": setBlockType(mySchema.nodes.heading, { level: 1 }), // 标题1
-    "Ctrl-Shift-2": setBlockType(mySchema.nodes.heading, { level: 2 }), // 标题2
-    "Ctrl-Shift-3": setBlockType(mySchema.nodes.heading, { level: 3 }), // 标题3
-    "Ctrl-Shift-4": setBlockType(mySchema.nodes.heading, { level: 4 }), // 标题4
-    "Ctrl-Shift-5": setBlockType(mySchema.nodes.heading, { level: 5 }), // 标题5
-    "Ctrl-Shift-6": setBlockType(mySchema.nodes.heading, { level: 6 }), // 标题6
+    "Ctrl-Shift-1": myCommands.get("h1"),
+    "Ctrl-Shift-2": myCommands.get("h2"),
+    "Ctrl-Shift-3": myCommands.get("h3"),
+    "Ctrl-Shift-4": myCommands.get("h4"),
+    "Ctrl-Shift-5": myCommands.get("h5"),
+    "Ctrl-Shift-6": myCommands.get("h6"),
+    "Ctrl-Shift-0": myCommands.get("p"),
   };
+
   const keymapPlugin = keymap(customKeymaps);
 
   // 3. Drop Cursor 插件
@@ -96,9 +107,8 @@ export function init_prose_editor(
   // 5. 撤销历史插件
   const historyPlugin = history();
 
-  //
   // 初始化编辑器
-  return new EditorView($con, {
+  const view = new EditorView($con, {
     state: EditorState.create({
       schema: mySchema,
       // plugins: [
@@ -136,4 +146,11 @@ export function init_prose_editor(
       whenDispatchTransaction(tr);
     },
   });
+
+  // 返回输出
+  return {
+    view,
+    commands: myCommands,
+    schema: mySchema,
+  };
 }

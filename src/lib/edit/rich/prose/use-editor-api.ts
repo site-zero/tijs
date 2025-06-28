@@ -1,12 +1,17 @@
 import { EditorView } from "prosemirror-view";
 import { computed, reactive, ref } from "vue";
+import { EditorCommands } from "./api/use-editor-commands";
 import { DocTreeNode, useEditorDocTree } from "./api/use-editor-doc-tree";
 import { init_prose_editor } from "./init-prose-editor";
 import {
+  EditorSchema,
   RichEditorGUIState,
   TiEditRichProseEmitter,
   TiEditRichProseProps,
 } from "./ti-edit-rich-prose-types";
+import { Dom } from "../../../..//core/web";
+import { Transaction } from "prosemirror-state";
+import { update } from "lodash";
 
 export type TiEditRichProseApi = ReturnType<typeof useTiEditRichProseApi>;
 
@@ -24,6 +29,8 @@ export function useTiEditRichProseApi(
   // 数据模型
   //-----------------------------------------------------
   let _view: EditorView | undefined = undefined;
+  let _commands: EditorCommands | undefined = undefined;
+  let _schema: EditorSchema | undefined = undefined;
   // 文档结构树的数据
   let _doc_tree_data = ref<DocTreeNode[]>([]);
   // 界面模块显示开关
@@ -56,6 +63,20 @@ export function useTiEditRichProseApi(
   //-----------------------------------------------------
   // 动态操作编辑器
   //-----------------------------------------------------
+  function runCommand(commandName: string) {
+    if (_view && _commands) {
+      _commands.run(commandName, _view, (tr) => {
+        updateSelection(tr);
+      });
+    }
+    const $main = getContainerElement();
+    if ($main) {
+      const $con = Dom.find(":scope > .ProseMirror", $main);
+      if ($con) {
+        $con.focus();
+      }
+    }
+  }
   // function select(_from: number, _to: number) {
   //   // 防空
   //   if (!_view) return;
@@ -73,6 +94,15 @@ export function useTiEditRichProseApi(
   //   // 4. 提交事务，更新编辑器状态
   //   _view.dispatch(tr);
   // }
+  //-----------------------------------------------------
+  function updateSelection(tr: Transaction) {
+    // 更新一下光标位置
+    _cursor.value.from = tr.selection.from;
+    _cursor.value.to = tr.selection.to;
+
+    // 检查选择范围是否变化
+    _doc_tree.updateTreeRoot(tr.selection, _checked_node_ids);
+  }
   //-----------------------------------------------------
   // 初始化操作
   //-----------------------------------------------------
@@ -94,18 +124,14 @@ export function useTiEditRichProseApi(
 
     // 通过一个回调函数，结合 _doc_tree 子模型
     // TODO 思考一下，是不是把 _doc_tree 传递过去改动更小呢？
-    _view = init_prose_editor(props, $con, (tr) => {
-      // 更新一下光标位置
-      _cursor.value.from = tr.selection.from;
-      _cursor.value.to = tr.selection.to;
-
-      // 检查选择范围是否变化
-      _doc_tree.updateTreeRoot(tr.selection, _checked_node_ids);
-
-      // 获取锚点所在的节点
-      // let node = _doc_tree.findTreeNodeAt(tr.selection.anchor);
-      // console.log(node);
+    let reInit = init_prose_editor(props, $con, (tr) => {
+      updateSelection(tr);
     });
+
+    // 记录返回到上层闭包
+    _view = reInit.view;
+    _commands = reInit.commands;
+    _schema = reInit.schema;
   }
   //-----------------------------------------------------
   // 返回接口
@@ -121,7 +147,7 @@ export function useTiEditRichProseApi(
     CursorInfo,
 
     // 动态操作编辑器
-    // select,
+    runCommand,
 
     // 初始化操作
     initEditor,

@@ -7,7 +7,7 @@
     TiEditRichProseEmitter,
     TiEditRichProseProps,
   } from "./ti-edit-rich-prose-types";
-  import { useTiEditRichProseApi } from "./use-ti-edit-rich-prose-api";
+  import { useTiEditRichProseApi } from "./use-editor-api";
   import EditorToolbar from "./EditorToolbar.vue";
   //-----------------------------------------------------
   const $main = useTemplateRef<HTMLElement>("main");

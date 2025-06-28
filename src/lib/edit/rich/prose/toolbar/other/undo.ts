@@ -3,5 +3,8 @@ import { ActionBarItem } from "../../../../../../";
 export default {
   icon: "zmdi-undo",
   tip: "i18n:undo",
-  action: "undo",
+  action: {
+    name: "run:command",
+    payload: "undo",
+  },
 } as ActionBarItem;

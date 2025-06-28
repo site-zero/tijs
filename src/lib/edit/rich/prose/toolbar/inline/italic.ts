@@ -8,9 +8,7 @@ export default {
     className: "highlight",
   },
   action: {
-    name: "toggleMark",
-    payload: {
-      mark: "italic",
-    },
+    name: "run:command",
+    payload: "I",
   },
 } as ActionBarItem;

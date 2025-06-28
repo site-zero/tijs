@@ -29,7 +29,11 @@
   //-----------------------------------------------------
   function onFire(barEvent: ActionBarEvent) {
     let { name, payload } = barEvent;
-    console.log({ name, payload });
+    if ("run:command" == name) {
+      api?.runCommand(payload);
+    } else {
+      console.log("unhandle toolbar event:", { name, payload });
+    }
   }
   //-----------------------------------------------------
 </script>
