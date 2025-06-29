@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { Selection } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
-import { computed, Ref } from "vue";
+import { computed, ref, Ref } from "vue";
 import { IconInput } from "../../../../../_type";
 import { getNodeIcon } from "./doc-tree-node-icons";
 
@@ -17,14 +17,13 @@ export type DocTreeNode = {
   tip?: string;
 };
 
-export function useEditorDocTree(
-  getView: () => EditorView | undefined,
-  _doc_tree_data: Ref<DocTreeNode[]>
-) {
+export function useEditorDocTree(getView: () => EditorView | undefined) {
+  //-----------------------------------------------------
+  const _doc_tree_nodes = ref<DocTreeNode[]>([]);
   //-----------------------------------------------------
   const DocTreeNodeMap = computed(() => {
     const map = new Map<String, DocTreeNode>();
-    for (let nd of _doc_tree_data.value) {
+    for (let nd of _doc_tree_nodes.value) {
       map.set(nd.id, nd);
     }
     return map;
@@ -53,7 +52,7 @@ export function useEditorDocTree(
    */
   function findTreeNodeAt(pos: number): DocTreeNode | undefined {
     // 所有的中间节点
-    let nodes = _doc_tree_data.value.filter((nd) => !nd.leaf);
+    let nodes = _doc_tree_nodes.value.filter((nd) => !nd.leaf);
 
     let left = 0;
     let right = nodes.length - 1;
@@ -189,7 +188,7 @@ export function useEditorDocTree(
     });
 
     // 返回数据
-    _doc_tree_data.value = nodes;
+    _doc_tree_nodes.value = nodes;
     _checked_node_ids.value = checkedIds;
   }
   //-----------------------------------------------------
@@ -223,6 +222,7 @@ export function useEditorDocTree(
   // 返回接口
   //-----------------------------------------------------
   return {
+    DocTreeNodes: computed(() => _doc_tree_nodes.value),
     DocTreeNodeMap,
     getTreeNode,
     getTreeNodes,

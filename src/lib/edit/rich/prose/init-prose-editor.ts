@@ -12,6 +12,7 @@ import { tableNodes } from "prosemirror-tables";
 import { EditorView } from "prosemirror-view";
 import { useEditorCommands } from "./api/use-editor-commands";
 import { EditorSchema, TiEditRichProseProps } from "./ti-edit-rich-prose-types";
+import _ from "lodash";
 
 export function init_prose_editor(
   _props: TiEditRichProseProps,
@@ -63,6 +64,10 @@ export function init_prose_editor(
     console.log("mark", i++, key, val);
   });
 
+  console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+  console.log("keymap", _.keys(baseKeymap));
+  
+
   const myCommands = useEditorCommands(mySchema);
 
   //console.log(exampleSetup({ schema: mySchema, menuBar: false }));
@@ -84,13 +89,14 @@ export function init_prose_editor(
     // 基础绑定（如复制、粘贴等）
     ...baseKeymap,
     // 撤销
-    "Mod-z": undo,
-    "Mod-y": redo,
+    "Mod-z": myCommands.get("undo"),
+    "Mod-y": myCommands.get("redo"),
     // 自定义绑定
     "Mod-i": myCommands.get("I"),
     "Mod-b": myCommands.get("B"),
+    "Mod-u": myCommands.get("U"),
     // Shift+Enter 生成段内回车
-    "Shift-Enter": myCommands.get("br"),
+    "Mod-Enter": myCommands.get("br"),
     // 快速设置标题
     "Ctrl-Shift-1": myCommands.get("h1"),
     "Ctrl-Shift-2": myCommands.get("h2"),
@@ -98,7 +104,7 @@ export function init_prose_editor(
     "Ctrl-Shift-4": myCommands.get("h4"),
     "Ctrl-Shift-5": myCommands.get("h5"),
     "Ctrl-Shift-6": myCommands.get("h6"),
-    "Ctrl-Shift-0": myCommands.get("p"),
+    "Ctrl-Shift-`": myCommands.get("p"),
   };
 
   const keymapPlugin = keymap(customKeymaps);
@@ -143,7 +149,7 @@ export function init_prose_editor(
       // 因为 _view.value 本质上是一个 Proxy 对象，
       // 它并不是 EditorView 对象本身，而去掉 _view 响应性的包裹的确没有问题了
       // 看来这种异常复杂的对象还是不能随意的用响应式来包裹
-      let view = this as unknown as EditorView;
+      //let view = this as unknown as EditorView;
       const newState = view.state.apply(tr);
       view.updateState(newState);
 

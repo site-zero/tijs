@@ -1,14 +1,15 @@
 <script lang="ts" setup>
   import "prosemirror-menu/style/menu.css"; // 菜单样式
-  import { computed, onMounted, provide, useTemplateRef } from "vue";
+  import { onMounted, provide, useTemplateRef } from "vue";
   import EditorDocTree from "./EditorDocTree.vue";
+  import EditorFooter from "./EditorFooter.vue";
+  import EditorToolbar from "./EditorToolbar.vue";
   import {
     TI_RICH_EDITOR_API_KEY,
     TiEditRichProseEmitter,
     TiEditRichProseProps,
   } from "./ti-edit-rich-prose-types";
   import { useTiEditRichProseApi } from "./use-editor-api";
-  import EditorToolbar from "./EditorToolbar.vue";
   //-----------------------------------------------------
   const $main = useTemplateRef<HTMLElement>("main");
   const emit = defineEmits<TiEditRichProseEmitter>();
@@ -35,11 +36,7 @@
     </nav>
     <article ref="main" class="fit-parent"></article>
     <aside>Props</aside>
-    <footer>
-      <div class="as-cursor">
-        <span>{{ _api.CursorInfo.value }}</span>
-      </div>
-    </footer>
+    <EditorFooter />
   </div>
 </template>
 <style lang="scss">
