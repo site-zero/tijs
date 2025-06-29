@@ -67,6 +67,14 @@ function makeItemAction(
 
     let getPayload = function (value: any, vars: Vars) {
       let payload = ei.payload;
+      // 未指定 payload 那么就尝试通过值啥的搞一个
+      if (_.isNil(payload)) {
+        if (_.isNil(value)) {
+          return _.cloneDeep(vars || {});
+        }
+        return value;
+      }
+      // 动态负载，解析一下
       if (ei.dynamic) {
         payload = Util.explainObj({ value, vars }, ei.payload, {
           evalFunc: false,
@@ -74,7 +82,7 @@ function makeItemAction(
       }
       return payload;
     };
-    
+
     // 总线事件
     if (action.bus) {
       return (value: any, vars: Vars, bus?: TiAppBus) => {

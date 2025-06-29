@@ -1,6 +1,6 @@
-import { ActionBarItem } from "../../../../../../";
+import { ActionBarItem, DroplistProps } from "../../../../../";
 
-export default {
+export const table = {
   icon: "fas-table-cells",
   tip: "i18n:table",
   action: "insert:table",

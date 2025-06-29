@@ -12,15 +12,21 @@
   const props = withDefaults(defineProps<EditorToolbarProps>(), {
     toolbar: () => [
       "heading",
-      ["B", "I", "U"],
+      ["B", "I", "U", "code"],
       "link",
       "blockquote",
+      "code_block",
       "|",
       "table",
       "image",
+      "hr",
       "|",
       "undo",
       "redo",
+      {
+        text: "Test",
+        action: "test",
+      },
     ],
   });
 

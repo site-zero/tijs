@@ -1,6 +1,6 @@
-import { ActionBarItem } from "../../../../../../";
+import { ActionBarItem } from "../../../../../";
 
-export default {
+export const image = {
   icon: "zmdi-image",
   tip: "i18n:image",
   action: "insert:image",

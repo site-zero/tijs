@@ -1,4 +1,4 @@
-import { TiComInfo, TiComRace } from "@site0/tijs";
+import { TiComInfo, TiComRace, TiEditRichProseProps } from "@site0/tijs";
 import { App, defineAsyncComponent } from "vue";
 import { COM_TYPES } from "../../../lib-com-types";
 //import TiEditRichProse from "./TiEditRichProse.vue";
@@ -36,7 +36,13 @@ const TiEditRichProseInfo: TiComInfo = {
     app.component(COM_TYPE, TiEditRichProse);
   },
   defaultProps: "simple",
-  exampleProps: [],
+  exampleProps: [
+    {
+      name: "simple",
+      text: "i18n:simple",
+      comConf: {} as TiEditRichProseProps,
+    },
+  ],
 };
 
 export * from "./ti-edit-rich-prose-types";

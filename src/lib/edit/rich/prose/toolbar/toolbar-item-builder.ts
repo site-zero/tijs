@@ -1,35 +1,26 @@
 import _ from "lodash";
-import BLOCKQUOTE from "./block/blockquote";
-import HEADING from "./block/heading";
-import TABLE from "./block/table";
-import IMAGE from "./embed/image";
-import BOLD from "./inline/bold";
-import ITALIC from "./inline/italic";
-import LINK from "./inline/link";
-import UNDERLINED from "./inline/underlined";
-import REDO from "./other/redo";
-import UNDO from "./other/undo";
+import * as BLOCK from "./_block";
+import * as EMBED from "./_embed";
+import * as INLINE from "./_inline";
+import * as OTHERS from "./_others";
+import * as TABLE from "./_table";
 
 export const _EDITOR_TOOLBAR_ITEMS = {
   // 分隔符,
   "|": {},
+
   // 内联
-  "B": BOLD,
-  "I": ITALIC,
-  "U": UNDERLINED,
-  "link": LINK,
+  ...INLINE,
 
   // 块操作
-  "blockquote": BLOCKQUOTE,
-  "table": TABLE,
-  "heading": HEADING,
+  ...BLOCK,
+  ...TABLE,
 
   // 嵌入式对象
-  "image": IMAGE,
+  ...EMBED,
 
   // 其他操作
-  "undo": UNDO,
-  "redo": REDO,
+  ...OTHERS,
 };
 
 type EDITOR_TOOLBAR_ITEMS = typeof _EDITOR_TOOLBAR_ITEMS;

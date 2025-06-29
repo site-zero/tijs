@@ -1,4 +1,4 @@
-import { baseKeymap, setBlockType, toggleMark } from "prosemirror-commands"; // 基础键盘绑定
+import { baseKeymap } from "prosemirror-commands"; // 基础键盘绑定
 import { dropCursor } from "prosemirror-dropcursor"; // Drop Cursor
 import { gapCursor } from "prosemirror-gapcursor"; // Gap Cursor
 import { history, redo, undo } from "prosemirror-history"; // 撤销历史
@@ -10,9 +10,8 @@ import { addListNodes } from "prosemirror-schema-list";
 import { EditorState, Transaction } from "prosemirror-state";
 import { tableNodes } from "prosemirror-tables";
 import { EditorView } from "prosemirror-view";
-import { br_command } from "./command/br.cmd";
-import { EditorSchema, TiEditRichProseProps } from "./ti-edit-rich-prose-types";
 import { useEditorCommands } from "./api/use-editor-commands";
+import { EditorSchema, TiEditRichProseProps } from "./ti-edit-rich-prose-types";
 
 export function init_prose_editor(
   _props: TiEditRichProseProps,
@@ -20,6 +19,12 @@ export function init_prose_editor(
   whenDispatchTransaction: (tr: Transaction) => void
 ) {
   let marks = schema.spec.marks;
+  marks = marks.append({
+    underline: {
+      parseDOM: [{ tag: "u" }],
+      toDOM: () => ["u", 0],
+    },
+  });
 
   // 建立支持的节点
   let nodes = addListNodes(schema.spec.nodes, "paragraph block*", "block");
