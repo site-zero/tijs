@@ -1,25 +1,42 @@
 import _ from "lodash";
+import { Node } from "prosemirror-model";
 import { Selection } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
 import { computed, ref, Ref } from "vue";
-import { IconInput } from "../../../../../_type";
+import { IconInput, Vars } from "../../../../../_type";
 import { getNodeIcon } from "./doc-tree-node-icons";
 
 export type DocTreeNode = {
   id: string;
   parentId: string | null;
-  type: string;
+  name: string;
   leaf: boolean;
   from: number;
   to: number;
+  depth: number;
+  /**
+   * 节点内容长度
+   */
+  size: number;
+  /**
+   * 块节点大纲级别
+   * - 0: 正文
+   * - 1-6: 大纲级别 H1 ~ H6
+   */
+  level: number;
+  attrs: Vars;
+  marks: string[];
   icon?: IconInput;
   text?: string;
   tip?: string;
 };
 
+export type EditorDocTreeApi = ReturnType<typeof useEditorDocTree>;
+
 export function useEditorDocTree(getView: () => EditorView | undefined) {
   //-----------------------------------------------------
   const _doc_tree_nodes = ref<DocTreeNode[]>([]);
+  const _doc_raw_nodes = new Map<string, Node>();
   //-----------------------------------------------------
   const DocTreeNodeMap = computed(() => {
     const map = new Map<String, DocTreeNode>();
@@ -29,8 +46,10 @@ export function useEditorDocTree(getView: () => EditorView | undefined) {
     return map;
   });
   //-----------------------------------------------------
-  function getTreeNode(nodeId: string) {
-    return DocTreeNodeMap.value.get(nodeId);
+  function getTreeNode(nodeId: string | undefined | null) {
+    if (nodeId) {
+      return DocTreeNodeMap.value.get(nodeId);
+    }
   }
   //-----------------------------------------------------
   function getTreeNodes(nodeIds: string[]) {
@@ -43,36 +62,94 @@ export function useEditorDocTree(getView: () => EditorView | undefined) {
     }
     return re;
   }
-  /**
-   * 根据文档光标位置，搜索文档节点列表 `_doc_tree_data.value`
-   * 根据节点的 from 和 to 属性判断光标是否落到这个节点上
-   * 查找的方式采用二分法查找
-   *
-   * @param pos 文档光标的绝对位置
-   */
-  function findTreeNodeAt(pos: number): DocTreeNode | undefined {
-    // 所有的中间节点
-    let nodes = _doc_tree_nodes.value.filter((nd) => !nd.leaf);
 
+  /**
+   * 根据指定的 pos，从 _doc_tree_nodes 里用二分法查找节点。
+   * 查找的方式，利用 DocTreeNode.from 属性，寻找到最靠近 pos 的那个节点
+   * 即 `(from - pos) >= 0` 且为值最小的节点
+   * @param pos 节点参考位置
+   */
+  function findNodeByPos(pos: number) {
+    // 防空
+    let view = getView();
+    if (!view) return null;
+
+    // 准备节点列表
+    let nodes = _doc_tree_nodes.value ?? [];
     let left = 0;
     let right = nodes.length - 1;
+    let result: DocTreeNode = nodes[0];
+
+    // console.log(
+    //   "begin result:>",
+    //   `{${result.from}~${result.to},depth=${result.depth}}`,
+    //   result.name
+    // );
 
     while (left <= right) {
       const mid = Math.floor((left + right) / 2);
       const node = nodes[mid];
-
-      if (pos >= node.from && pos <= node.to) {
-        return _.cloneDeep(node);
-      } else if (pos < node.from) {
-        right = mid - 1;
-      } else {
+      // console.log(
+      //   [
+      //     `[L=${left},R:${right}]=>pos:${pos}=>nodes[${mid}]`,
+      //     `{${node.from}~${node.to},depth=${node.depth}}`,
+      //     node.name,
+      //   ].join(" ")
+      // );
+      // 节点包括这个位置
+      if (node.from <= pos && node.to > pos) {
+        // 节点范围小于初始化返回，证明这个节点比初始节点更具体
+        // 因此缩小这个节点范围
+        if (
+          node.from >= result.from &&
+          node.to <= result.to &&
+          node.depth > result.depth
+        ) {
+          result = node;
+          // console.log(
+          //   " >> set result=> ",
+          //   `{${node.from}~${node.to},depth=${node.depth}}`,
+          //   node.name
+          // );
+        }
+        // 否则，就没有必要改变之前选中的节点，因为它更具体
+        // 接下来查找 给定节点后面的部分
         left = mid + 1;
       }
+      // 位置在给定节点之前
+      else if (pos < node.from) {
+        right = mid - 1;
+      }
+      // 位置在给定节点之后
+      else if (pos >= node.to) {
+        left = mid + 1;
+      }
+      // 不可能
+      else {
+        throw "Impossiable!!!";
+      }
     }
-
-    return undefined;
+    return result;
   }
 
+  /**
+   * 获取指定节点的所有祖先节点数组（不包括自己）
+   *
+   * @param node 要查找祖先节点的文档树节点
+   * @returns 祖先节点数组，按从根节点到直接父节点的顺序排列
+   */
+  function getNodeAncestors(node?: DocTreeNode | null | undefined) {
+    let re: DocTreeNode[] = [];
+    if (!node) {
+      return [_doc_tree_nodes.value[0]];
+    }
+    let nd: DocTreeNode | undefined | null = getTreeNode(node.parentId);
+    while (nd) {
+      re.push(nd);
+      nd = getTreeNode(nd.parentId);
+    }
+    return re.reverse();
+  }
   //-----------------------------------------------------
   /**
    * 更新文档树的根节点。
@@ -82,10 +159,7 @@ export function useEditorDocTree(getView: () => EditorView | undefined) {
    * @param selection - ProseMirror 的选区对象，包含选区的起始和结束位置。
    * @param _checked_node_ids - 一个响应式引用，存储已选中的节点 ID 列表。
    */
-  function updateTreeRoot(
-    selection: Selection,
-    _checked_node_ids: Ref<string[]>
-  ) {
+  function updateTree(selection: Selection, _checked_node_ids: Ref<string[]>) {
     let cursor_is_collapsed = selection.from === selection.to;
     const _in_selection = (pos: number) => {
       return pos >= selection.from && pos < selection.to;
@@ -100,12 +174,19 @@ export function useEditorDocTree(getView: () => EditorView | undefined) {
     let root: DocTreeNode = {
       id: `Root`,
       parentId: null,
-      type: "document",
+      name: "document",
       leaf: false,
       from: 0,
-      to: -1,
-      text: "<Document>",
+      depth: -1,
+      to: doc.content.size,
+      size: doc.content.size,
+      level: 0,
+      attrs: {},
+      marks: [],
+      text: "Document",
     };
+    _doc_raw_nodes.set(root.id, doc);
+
     let nodes: DocTreeNode[] = [root];
     let idStack = [root.id];
     let checkedIds: string[] = [];
@@ -126,30 +207,31 @@ export function useEditorDocTree(getView: () => EditorView | undefined) {
       const nIt: DocTreeNode = {
         id: nodeId,
         parentId: idStack[depth],
-        type: node.type.name,
+        name: node.type.name,
         leaf: node.isAtom || node.isText,
         from,
         to,
+        depth,
+        size: node.nodeSize,
+        level: node.attrs.level ?? 0,
+        attrs: _.cloneDeep(node.attrs),
+        marks: node.marks.map((mark) => mark.type.name),
         tip: `[${from}-${to}]`,
         icon: getNodeIcon(node.type),
       };
+      _doc_raw_nodes.set(nodeId, node);
 
       let nodeInRange = false;
       // 坍缩的光标，判断是否在节点中
       if (cursor_is_collapsed) {
         let pos = selection.from;
-        if (node.isText) {
-          pos -= 1;
-        }
-        nodeInRange = _.inRange(pos, from, to);
+        nodeInRange = _in_node(pos);
       }
       // 选区，那么判断节点两端是否在选区中
       else {
-        nodeInRange =
-          _in_selection(from) ||
-          _in_selection(to - 1) ||
-          _in_node(selection.from) ||
-          _in_node(selection.to - 1);
+        nodeInRange = _in_selection(from) || _in_selection(to - 1);
+        // _in_node(selection.from) ||
+        // _in_node(selection.to - 1);
       }
 
       // 更新节点文本
@@ -158,9 +240,8 @@ export function useEditorDocTree(getView: () => EditorView | undefined) {
       // 只要包含选区就选中
       if (node.isText && node.text) {
         // 获取文字标注信息
-        let marks = node.marks.map((mark) => mark.type.name);
-        if (marks.length > 0) {
-          texts.push(`[${marks.join(",")}]`);
+        if (nIt.marks.length > 0) {
+          texts.push(`[${nIt.marks.join(",")}]`);
         }
         if (node.text.length < 100) {
           texts.push(node.text ?? "");
@@ -224,10 +305,14 @@ export function useEditorDocTree(getView: () => EditorView | undefined) {
   return {
     DocTreeNodes: computed(() => _doc_tree_nodes.value),
     DocTreeNodeMap,
+
     getTreeNode,
     getTreeNodes,
-    findTreeNodeAt,
-    updateTreeRoot,
+    findNodeByPos,
+    getNodeAncestors,
+
+    updateTree,
+
     dumpTree,
   };
 }

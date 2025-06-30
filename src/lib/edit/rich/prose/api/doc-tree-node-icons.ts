@@ -15,6 +15,10 @@ const _NODE_ICONS: Record<string, IconInput> = {
   ordered_list: "list-ol",
   bullet_list: "list-ul",
   list_item: "fas-minus",
+  table: "fas-table-cells",
+  table_row: "fas-table-list",
+  table_header: "fas-table-columns",
+  table_cell: "fas-border-none",
 };
 
 export function getNodeIcon(nodeType: NodeType) {

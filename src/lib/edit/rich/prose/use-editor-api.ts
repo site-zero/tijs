@@ -43,7 +43,7 @@ export function useTiEditRichProseApi(
   // 文档结构树的数据
   const _doc_tree = useEditorDocTree(() => _view);
   // 文档当前选区
-  const _doc_selection = useEditorDocSelection(() => _view);
+  const _doc_selection = useEditorDocSelection(_doc_tree);
   //-----------------------------------------------------
   // 计算属性
   //-----------------------------------------------------
@@ -65,11 +65,11 @@ export function useTiEditRichProseApi(
   }
   //-----------------------------------------------------
   function onTransactionChange(tr: Transaction) {
+    // 检查选择范围是否变化
+    _doc_tree.updateTree(tr.selection, _checked_node_ids);
+
     // 更新一下光标位置
     _doc_selection.update(tr);
-
-    // 检查选择范围是否变化
-    _doc_tree.updateTreeRoot(tr.selection, _checked_node_ids);
   }
   //-----------------------------------------------------
   // 初始化操作

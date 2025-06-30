@@ -1,18 +1,18 @@
+import _ from "lodash";
 import { baseKeymap } from "prosemirror-commands"; // 基础键盘绑定
 import { dropCursor } from "prosemirror-dropcursor"; // Drop Cursor
 import { gapCursor } from "prosemirror-gapcursor"; // Gap Cursor
-import { history, redo, undo } from "prosemirror-history"; // 撤销历史
+import { history } from "prosemirror-history"; // 撤销历史
 import { inputRules } from "prosemirror-inputrules"; // 输入规则
 import { keymap } from "prosemirror-keymap"; // 键盘映射
 import { Schema } from "prosemirror-model";
 import { schema } from "prosemirror-schema-basic";
 import { addListNodes } from "prosemirror-schema-list";
 import { EditorState, Transaction } from "prosemirror-state";
-import { tableNodes } from "prosemirror-tables";
+import { tableEditing, tableNodes, columnResizing } from "prosemirror-tables";
 import { EditorView } from "prosemirror-view";
 import { useEditorCommands } from "./api/use-editor-commands";
 import { EditorSchema, TiEditRichProseProps } from "./ti-edit-rich-prose-types";
-import _ from "lodash";
 
 export function init_prose_editor(
   _props: TiEditRichProseProps,
@@ -66,7 +66,6 @@ export function init_prose_editor(
 
   console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
   console.log("keymap", _.keys(baseKeymap));
-  
 
   const myCommands = useEditorCommands(mySchema);
 
@@ -133,6 +132,8 @@ export function init_prose_editor(
         dropCursorPlugin,
         gapCursorPlugin,
         historyPlugin,
+        columnResizing(), // 添加列宽调整插件
+        tableEditing(), // 表格编辑插件放在后面
         // menuBar({
         //   content: buildMenuItems(schema).fullMenu,
         // }),

@@ -1,8 +1,6 @@
 <script lang="ts" setup>
-  import _ from "lodash";
   import { computed, inject } from "vue";
-  import { TableSelectEmitInfo, TiTree } from "../../../";
-  import { Util } from "../../../../core";
+  import { TiTree, TreeNode } from "../../../";
   import { TI_RICH_EDITOR_API_KEY } from "./ti-edit-rich-prose-types";
   //-----------------------------------------------------
   const api = inject(TI_RICH_EDITOR_API_KEY);
@@ -13,9 +11,9 @@
     };
   });
   //-----------------------------------------------------
-  const isLeafNode = {
-    leaf: true,
-  };
+  function isLeafNode(treeNode: TreeNode) {
+    return treeNode.data.leaf ?? false;
+  }
   //-----------------------------------------------------
 </script>
 <template>
@@ -27,7 +25,7 @@
     :canSelect="false"
     :multi="true"
     :autoScrollIntoView="true"
-    :isNodeOpen="3"
+    :isNodeOpen="5"
     :isLeafNode="isLeafNode"
     size="t" />
 </template>

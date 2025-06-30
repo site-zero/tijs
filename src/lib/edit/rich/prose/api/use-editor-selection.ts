@@ -1,77 +1,108 @@
 import { Transaction } from "prosemirror-state";
-import { EditorView } from "prosemirror-view";
 import { computed, ref } from "vue";
-
-export type EditorCursor = {
-  from: number;
-  to: number;
-  collapse: boolean;
-};
+import { DocTreeNode, EditorDocTreeApi } from "./use-editor-doc-tree";
 
 /**
  * 记录选区信息，根据 Transaction.selection 统计出来
  */
 export type EditorDocSelection = {
   // 光标状态
-  cursor: EditorCursor;
+  from: number;
+  to: number;
+  collapsed: boolean;
 
   // 锚点所在块节点名称
-  anchorNodeName?: string | null | undefined;
-  headNodeName?: string | null | undefined;
+  anchor: DocTreeNode | null;
+  head: DocTreeNode | null;
+
+  // 节点路径轴
+  path: DocTreeNode[];
+
+  // 选取所在的顶级节点
+  top: DocTreeNode | null;
 
   // 选区包含的 marks
   marks: string[];
-
-  // 锚点所在大纲级别
-  // - 0: 正文
-  // - 1-6: 大纲级别 H1 ~ H6
-  anchorHeadingLevel: 0;
-  headHeadingLevel: 0;
 };
 
-export function useEditorDocSelection(_getView: () => EditorView | undefined) {
+export function useEditorDocSelection(_doc_tree: EditorDocTreeApi) {
   const _editor_selection = ref<EditorDocSelection>({
-    cursor: { from: 0, to: 0, collapse: false },
+    from: 0,
+    to: 0,
+    collapsed: false,
     marks: [],
-    anchorHeadingLevel: 0,
-    headHeadingLevel: 0,
+    anchor: null,
+    head: null,
+    path: [],
+    top: null,
   });
   //-----------------------------------------------------
   function update(tr: Transaction) {
-    let tsel = tr.selection;
-    let { from, to } = tsel;
+    let sel = tr.selection;
+    let { from, to } = sel;
 
     let _sel = _editor_selection.value;
 
     // 更新光标选区
-    _sel.cursor = {
-      from,
-      to,
-      collapse: from == to,
-    };
-
-    let $an = tsel.$anchor.node();
-    let $hd = tsel.$head.node();
+    _sel.from = sel.from;
+    _sel.to = sel.to;
+    _sel.collapsed = from == to;
 
     // 更新锚点所在节点
-    _sel.anchorNodeName = $an.type.name;
-    _sel.headNodeName = $hd.type.name;
+    _sel.anchor = _doc_tree.findNodeByPos(sel.anchor);
+    if (_sel.collapsed) {
+      _sel.head = _sel.anchor;
+    } else {
+      _sel.head = _doc_tree.findNodeByPos(sel.head);
+    }
+
+    // 更新所有父节点
+    let path: DocTreeNode[];
+    if (_sel.collapsed) {
+      path = _doc_tree.getNodeAncestors(_sel.anchor);
+    }
+    // 寻找共同祖先
+    else {
+      let ph_anchor = _doc_tree.getNodeAncestors(_sel.anchor);
+      let ph_head = _doc_tree.getNodeAncestors(_sel.head);
+      console.log(
+        "anch",
+        ph_anchor.length,
+        ph_anchor.map((nd) => [nd.name, nd.id].join(":")).join(" > ")
+      );
+      console.log(
+        "head",
+        ph_head.length,
+        ph_head.map((nd) => [nd.name, nd.id].join(":")).join(" > ")
+      );
+      path = [];
+      let N = Math.min(ph_anchor.length, ph_head.length);
+      for (let i = 0; i < N; i++) {
+        let aa = ph_anchor[i];
+        let ah = ph_head[i];
+        if (aa.id != ah.id) {
+          break;
+        }
+        path.push(aa);
+      }
+      console.log(
+        "path",
+        path.length,
+        path.map((nd) => [nd.name, nd.id].join(":")).join(" > ")
+      );
+    }
+    _sel.path = path;
 
     // 更新选区的标记
     _sel.marks =
-      tsel.$from.marksAcross(tsel.$to)?.map((mark) => {
+      sel.$from.marksAcross(sel.$to)?.map((mark) => {
         return mark.type.name;
       }) ?? [];
-
-    // 更新锚点所在大纲级别
-    _sel.anchorHeadingLevel = $an.attrs.level ?? 0;
-    _sel.headHeadingLevel = $hd.attrs.level ?? 0;
   }
   //-----------------------------------------------------
   // 返回特性
   //-----------------------------------------------------
   return {
-    cursor: computed(() => _editor_selection.value.cursor),
     data: computed(() => _editor_selection.value),
     update,
   };

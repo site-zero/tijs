@@ -36,10 +36,13 @@
     </nav>
     <article ref="main" class="fit-parent"></article>
     <aside>Props</aside>
-    <EditorFooter />
+    <footer>
+      <EditorFooter />
+    </footer>
   </div>
 </template>
 <style lang="scss">
   @use "./ti-edit-rich-prose.scss";
   @import "prosemirror-view/style/prosemirror.css";
+  @import "prosemirror-tables/style/tables.css";
 </style>
