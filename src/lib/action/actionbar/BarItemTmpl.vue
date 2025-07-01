@@ -69,6 +69,7 @@
     if (props.hidden || props.disabled) {
       return;
     }
+    //console.log('onClikeItem', props.uniqKey);
     emit("click", props);
   }
   //-------------------------------------------------------

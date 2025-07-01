@@ -1,9 +1,9 @@
-import { ComputedRef, Ref } from 'vue';
-import { ActionBarProps, TableStrictColumn } from '../../';
-import { ActionBarItem, Vars } from '../../../_type';
-import { doCustomizeColumn } from './use-customized-columns';
-import { TableFeature } from './use-table';
-import { TableKeepFeature } from './use-table-keep';
+import { ComputedRef, Ref } from "vue";
+import { ActionBarProps, TableStrictColumn } from "../../";
+import { ActionBarItem, Vars } from "../../../_type";
+import { doCustomizeColumn } from "./use-customized-columns";
+import { TableFeature } from "./use-table";
+import { TableKeepFeature } from "./use-table-keep";
 
 export function useTableHeadMenu(
   _table: TableFeature,
@@ -14,23 +14,23 @@ export function useTableHeadMenu(
 ): ActionBarProps {
   let items = [
     {
-      icon: 'zmdi-check-all',
-      text: 'i18n:ti-table-select-all',
+      icon: "zmdi-check-all",
+      text: "i18n:ti-table-select-all",
       action: () => {
         _table.checkAll();
       },
     },
     {
-      icon: 'zmdi-minus',
-      text: 'i18n:ti-table-select-none',
+      icon: "zmdi-minus",
+      text: "i18n:ti-table-select-none",
       action: () => {
         _table.selectNone();
       },
     },
     {},
     {
-      icon: 'zmdi-settings',
-      text: 'i18n:ti-table-customized',
+      icon: "zmdi-settings",
+      text: "i18n:ti-table-customized",
       action: async () => {
         await doCustomizeColumn(
           AllTableColumns,
@@ -50,27 +50,27 @@ export function useTableHeadMenu(
   //     none: 'zmdi-square-o',
   //   }[rowCheckedStatus];
   return {
-    className: 'cover-parent',
-    barPad: 'none',
+    className: "cover-parent",
+    barPad: "none",
     vars: {
       checked: rowCheckedStatus,
     },
     items: [
       {
-        icon: 'zmdi-square-o',
-        className: 'bg-transparent fit-parent',
+        icon: "zmdi-square-o",
+        className: "bg-transparent fit-parent",
         style: {
-          gridTemplateColumns: '1fr auto',
-          justifyContent: 'flex-start',
-          alignItem: 'center',
-          borderRadius: '2px',
+          gridTemplateColumns: "1fr auto",
+          justifyContent: "flex-start",
+          alignItem: "center",
+          borderRadius: "2px",
         },
         altDisplay: [
-          { icon: 'zmdi-check-square', test: { checked: 'all' } },
-          { icon: 'zmdi-minus-square', test: { checked: 'part' } },
+          { icon: "zmdi-check-square", test: { checked: "all" } },
+          { icon: "zmdi-minus-square", test: { checked: "part" } },
         ],
-        action: (payload: Vars) => {
-          if ('all' == payload.checked) {
+        action: (_uniqKey, vars: Vars) => {
+          if ("all" == vars.checked) {
             _table.selectNone();
           } else {
             _table.checkAll();

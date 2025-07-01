@@ -15,7 +15,7 @@
   let props = withDefaults(defineProps<ABarUsedItem>(), {});
   //-------------------------------------------------------
   function OnFireAction() {
-    //console.log("OnFireAction", props)
+    console.log("OnFireAction", props)
     if (_.isFunction(props.action)) {
       props.action(props.uniqKey, state?.vars || {}, bus);
     }

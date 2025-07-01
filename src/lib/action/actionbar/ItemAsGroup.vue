@@ -41,6 +41,7 @@
   });
   //-------------------------------------------------------
   function OnClickHead() {
+    //console.log('OnClickHead', props.uniqKey);
     // 指定了动作
     if (props.action) {
       props.action(props.uniqKey, state?.vars || {}, bus);
@@ -53,7 +54,7 @@
   //-------------------------------------------------------
   function OnClickSuffix() {
     let st = OpenStatus.value ?? "closed";
-    //console.log('OnClickHead', st);
+    //console.log('OnClickSuffix', st);
     if (state && /^(closed)$/.test(st)) {
       openBarItem(state, props);
     }
