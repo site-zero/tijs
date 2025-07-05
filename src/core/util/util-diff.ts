@@ -1,5 +1,6 @@
-import _ from 'lodash';
-import { Vars } from '../../_type';
+import _ from "lodash";
+import { mapToObj } from "../";
+import { Vars } from "../../_type";
 
 export type RecordDiffOptions = {
   /**
@@ -82,4 +83,67 @@ export function setMapEmptyToNull(map: Map<string, any>) {
       map.set(k, null);
     }
   }
+}
+
+export function isDeepEqual(o0: any, o1: any) {
+  // undefined
+  if (_.isUndefined(o0)) {
+    return _.isUndefined(o1);
+  }
+  // null
+  if (_.isNull(o0)) {
+    return _.isNull(o1);
+  }
+  // 空字符串
+  if ("" === o0) {
+    return "" === o1;
+  }
+  // 0 值
+  if (0 === o0) {
+    return 0 === o1;
+  }
+  // 数组
+  if (_.isArray(o0)) {
+    if (!_.isArray(o1) || o0.length != o1.length) {
+      return false;
+    }
+    for (let i = 0; i < o0.length; i++) {
+      let v0 = o0[i];
+      let v1 = o1[i];
+      if (!isDeepEqual(v0, v1)) {
+        return false;
+      }
+    }
+    return true;
+  }
+  // 对象
+  if (_.isPlainObject(o0)) {
+    if (!_.isPlainObject(o1)) {
+      return false;
+    }
+    let diff = getRecordDiffDeeply(o0, o1);
+    return Object.keys(diff).length == 0;
+  }
+  // Map
+  if (_.isMap(o0)) {
+    if (!_.isMap(o1)) {
+      return false;
+    }
+    let obj0 = mapToObj(o0);
+    let obj1 = mapToObj(o1);
+    let diff = getRecordDiffDeeply(obj0, obj1);
+    return Object.keys(diff).length == 0;
+  }
+  // 集合
+  if (_.isSet(o0)) {
+    if (!_.isSet(o1) || o0.size != o1.size) {
+      return false;
+    }
+    let list0 = [...o0];
+    let list1 = [...o1];
+    return isDeepEqual(list0, list1);
+  }
+
+  // 采用 JS 比较宽泛的比较一下
+  return o0 == o1;
 }

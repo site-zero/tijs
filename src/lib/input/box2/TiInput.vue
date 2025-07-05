@@ -1,26 +1,26 @@
 <script setup lang="ts">
   import _ from "lodash";
-  import {
-    computed,
-    onMounted,
-    reactive,
-    ref,
-    useTemplateRef,
-    watch,
-  } from "vue";
-  import { TiList } from "../../";
-  import { Rect, Vars } from "../../../_type";
-  import { ListSelectEmitInfo } from "../../../lib";
-  import { useDict, useValuePipe } from "../../_features";
-  import { InputBoxEmitter, InputBoxProps } from "./ti-input-box-types";
-  import { useBoxAspect } from "./use-box-aspect";
-  import { useBoxIcon } from "./use-box-icon";
-  import { useBoxTips } from "./use-box-tips";
-  import { InputBoxState, useInputBox2 } from "./use-input-box2";
-  import { useInputComposition } from "./use-input-composition";
-  import { useTipList } from "./use-tip-list";
-  import { useValueHintCooking } from "./use-value-hint-cooking";
-  import { useValueOptions, ValueOptions } from "./use-value-options";
+import {
+  computed,
+  onMounted,
+  reactive,
+  ref,
+  useTemplateRef,
+  watch,
+} from "vue";
+import { TiList } from "../../";
+import { Rect, Vars } from "../../../_type";
+import { ListSelectEmitInfo } from "../../../lib";
+import { useDict, useValuePipe } from "../../_features";
+import { InputBoxEmitter, InputBoxProps } from "./ti-input-box-types";
+import { useBoxAspect } from "./use-box-aspect";
+import { useBoxIcon } from "./use-box-icon";
+import { useBoxTips } from "./use-box-tips";
+import { InputBoxState, useInputBox2 } from "./use-input-box2";
+import { useInputComposition } from "./use-input-composition";
+import { useTipList } from "./use-tip-list";
+import { useValueHintCooking } from "./use-value-hint-cooking";
+import { useValueOptions, ValueOptions } from "./use-value-options";
   //-----------------------------------------------------
   const emit = defineEmits<InputBoxEmitter>();
   const $el = useTemplateRef<HTMLElement>("el");
@@ -282,13 +282,16 @@
   // 而 _options_data 会立刻被变成 undefined
   // 因此也导致 hasTips 变成 false
   watch(
-    () => props.value,
-    () => {
-      // if (props.options) {
-      //   _box.value.debouncePropsValueChange();
-      // } else {
-      _box.value.onPropsValueChange();
+    () => [props.value, props.options],
+    (_newVal, _oldVal) => {
+      //if (newVal && null === newVal[0] && _box_state.box_text) {
+      //if (newVal && "HKHKG" === newVal[0]) {
+        // console.log("onPropsValueChange", {
+        //   value: newVal[0],
+        //   boxtxt: _box_state.box_text,
+        // });
       //}
+      _box.value.onPropsValueChange();
     },
     { immediate: true }
   );

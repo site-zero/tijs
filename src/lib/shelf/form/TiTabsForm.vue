@@ -92,12 +92,12 @@
   }
   //-------------------------------------------------
   function onFormChange(data: Vars) {
-    console.log('onFormChange', data);
+    // console.log('onFormChange', data);
     emit('change', data);
   }
   //-------------------------------------------------
   function onFieldChange(changes: FieldChange[]) {
-    console.log('onFieldChange', changes);
+    //console.log('onFieldChange', changes);
     emit('change-fields', changes);
   }
   //-------------------------------------------------
