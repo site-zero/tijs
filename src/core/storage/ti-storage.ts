@@ -1,7 +1,7 @@
-import JSON5 from 'json5';
-import _ from 'lodash';
-import { Str } from '../';
-import { Vars } from '../../_type';
+import JSON5 from "json5";
+import _ from "lodash";
+import { Str } from "../";
+import { Vars } from "../../_type";
 
 export class TiStorage {
   private storage: Storage;
@@ -17,11 +17,16 @@ export class TiStorage {
     return formater(str);
   }
   getString(key: string, dft?: string) {
-    return this.get(key, dft ?? '', (v) => v);
+    return this.get(key, dft ?? "", (v) => v);
   }
   getObject(key: string, dft?: Vars): Vars {
     return this.get(key, dft ?? {}, (s: string) => {
       return JSON5.parse(s);
+    });
+  }
+  getStrArray(key: string, dft: string[] = []) {
+    return this.get(key, dft, (str) => {
+      return JSON5.parse(str);
     });
   }
   getInt(key: string, dft = -1) {
