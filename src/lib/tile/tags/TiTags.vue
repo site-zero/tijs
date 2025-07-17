@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import _ from 'lodash';
+  import _ from "lodash";
   import {
     computed,
     onMounted,
@@ -7,24 +7,24 @@
     ref,
     useTemplateRef,
     watch,
-  } from 'vue';
-  import { TiActionBar, TiLabel, usePlaceholder } from '../../';
-  import { CssUtils, I18n } from '../../../core';
-  import { TagItem, TagsEmitter, TagsProps } from './ti-tags-types';
-  import { useTags } from './use-tags';
-  import { useTagsSortable } from './use-tags-sortable';
+  } from "vue";
+  import { TiActionBar, TiLabel, usePlaceholder } from "../../";
+  import { CssUtils, I18n } from "../../../core";
+  import { TagItem, TagsEmitter, TagsProps } from "./ti-tags-types";
+  import { useTags } from "./use-tags";
+  import { useTagsSortable } from "./use-tags-sortable";
   //-----------------------------------------------------
-  const $el = useTemplateRef<HTMLElement>('el');
+  const $el = useTemplateRef<HTMLElement>("el");
   //-----------------------------------------------------
   const emit = defineEmits<TagsEmitter>();
   //-----------------------------------------------------
   const props = withDefaults(defineProps<TagsProps>(), {
-    placeholder: 'i18n:nil-content',
+    placeholder: "i18n:nil-content",
     autoI18n: true,
     valueIsMatcher: undefined,
-    boxFontSize: 't',
-    boxPadding: 's',
-    boxRadius: 's',
+    boxFontSize: "t",
+    boxPadding: "s",
+    boxRadius: "s",
   });
   //-----------------------------------------------------
   const tagItems = ref<TagItem[]>([]);
@@ -50,32 +50,32 @@
   //-----------------------------------------------------
   const TopClass = computed(() =>
     CssUtils.mergeClassName({
-      'is-readonly': !props.editable,
-      'is-editable': props.editable,
-      'show-border': props.showBoreder ? true : false,
+      "is-readonly": !props.editable,
+      "is-editable": props.editable,
+      "show-border": props.showBoreder ? true : false,
     })
   );
   //-----------------------------------------------------
   const TopStyle = computed(() => {
     let re = CssUtils.toStyle(props.style);
     if (props.showBoreder) {
-      re['--box-border'] = props.showBoreder;
+      re["--box-border"] = props.showBoreder;
     }
     if (props.boxFontSize) {
-      re['--box-fontsz'] = `var(--ti-fontsz-${props.boxFontSize})`;
+      re["--box-fontsz"] = `var(--ti-fontsz-${props.boxFontSize})`;
     }
     if (props.boxPadding) {
-      re['--box-padding'] = `var(--ti-box-pad-${props.boxPadding})`;
+      re["--box-padding"] = `var(--ti-box-pad-${props.boxPadding})`;
     }
     if (props.boxRadius) {
-      re['--box-radius'] = `var(--ti-measure-r-${props.boxRadius})`;
+      re["--box-radius"] = `var(--ti-measure-r-${props.boxRadius})`;
     }
     return re;
   });
   //-----------------------------------------------------
   function onClickItem(it: TagItem) {
     if (props.tagClickable) {
-      emit('click-tag', it);
+      emit("click-tag", it);
     }
   }
   //-----------------------------------------------------
@@ -84,14 +84,14 @@
     if (props.editable) {
       // 对于 TagItem[] 型的 value
       if (_.isArray(props.value)) {
-        emit('remove', it);
+        emit("remove", it);
       }
       // 对于 Vars 型的 value
       else if (props.value && it.name) {
         let val = _.cloneDeep(props.value);
         let v2 = _.omit(val, it.name);
         if (!_.isEqual(v2, props.value)) {
-          emit('change', v2);
+          emit("change", v2);
         }
       }
     }
@@ -138,9 +138,7 @@
     :style="TopStyle"
     :nowrap="props.nowrap || undefined"
     ref="el">
-    <div
-      class="as-title"
-      v-if="props.title">
+    <div class="as-title" v-if="props.title">
       {{ I18n.text(props.title) }}
     </div>
     <template v-if="hasTagItems">
@@ -163,17 +161,16 @@
         @click-prefix-icon="onClickItem(it)"
         @click="onClickItem(it)" />
     </template>
-    <span
-      v-else
-      class="as-empty"
-      >{{ _placeholder }}</span
-    >
+    <span v-else class="as-empty">{{ _placeholder }}</span>
     <!--======<Tab Actions>======-->
     <template v-if="props.actions">
-      <TiActionBar v-bind="props.actions" />
+      <TiActionBar
+        v-bind="props.actions"
+        topItemAspectMode="button"
+        :topItemMinWidth="null" />
     </template>
   </div>
 </template>
 <style lang="scss" scoped>
-  @use './ti-tags.scss';
+  @use "./ti-tags.scss";
 </style>
