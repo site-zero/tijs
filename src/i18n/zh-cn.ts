@@ -458,6 +458,7 @@ export default {
   'run-welcome': '正在运行脚本，请稍后 ...',
   'save': '保存',
   'save-change': '保存修改',
+  'save-close': '保存并关闭',
   'save-done': '保存成功',
   'save-now': '立即保存',
   'saving': '正在保存...',

@@ -461,6 +461,7 @@ export default {
   'run-welcome': 'Run script, please wait for a while ...',
   'save': 'Save',
   'save-change': 'Save change',
+  'save-close': 'Save and Close',
   'save-done': 'Save success',
   'save-now': 'Save now',
   'saving': 'Saving ...',
