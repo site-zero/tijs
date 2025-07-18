@@ -1,6 +1,6 @@
-import _ from 'lodash';
-import { ref } from 'vue';
-import { CssUtils, Match, Rects, Str, Util } from '../';
+import _ from "lodash";
+import { ref } from "vue";
+import { CssUtils, Match, Rects, Str, Util } from "../";
 import {
   DockOptions,
   DocumentIconType,
@@ -22,7 +22,7 @@ import {
   StrCaseMode,
   Vars,
   WindowTheme,
-} from '../../_type';
+} from "../../_type";
 
 /*-------------------------------------------
 
@@ -34,7 +34,7 @@ export function createElement(
   $doc = document
 ): HTMLElement {
   let {
-    tagName = 'div',
+    tagName = "div",
     attrs,
     props,
     data,
@@ -94,7 +94,7 @@ export function prependTo($el: Element, $p: Element) {
 }
 //----------------------------------------------------
 export function wrap($el: Element, $newEl: Element) {
-  $el.insertAdjacentElement('afterend', $newEl);
+  $el.insertAdjacentElement("afterend", $newEl);
   $newEl.appendChild($el);
 }
 //----------------------------------------------------
@@ -115,7 +115,7 @@ export function unwrap($el: Element) {
 }
 //----------------------------------------------------
 export function replace($el: Element, $newEl: Element, keepInnerHTML = false) {
-  $el.insertAdjacentElement('afterend', $newEl);
+  $el.insertAdjacentElement("afterend", $newEl);
   if (keepInnerHTML) {
     $newEl.innerHTML = $el.innerHTML;
   }
@@ -135,7 +135,7 @@ export type AttrFilter =
 export function attrFilter(filter: AttrFilter): AttrPredicate {
   // Selector
   if (_.isString(filter)) {
-    if (filter.startsWith('^') && filter.endsWith('$')) {
+    if (filter.startsWith("^") && filter.endsWith("$")) {
       let reg = new RegExp(filter);
       return (key: string) => reg.test(key);
     }
@@ -173,7 +173,7 @@ export function attrFilter(filter: AttrFilter): AttrPredicate {
     };
   }
 
-  throw new Error('Unsupport attrFilter: ' + filter);
+  throw new Error("Unsupport attrFilter: " + filter);
 }
 //----------------------------------------------------
 export function attr($el: Element, name: string, dft?: any): any {
@@ -212,9 +212,9 @@ export function attrs($el: Element, flt: AttrFilter = true) {
       continue;
     }
     // Auto convert "true/false"
-    if ('true' == val) {
+    if ("true" == val) {
       val = true;
-    } else if ('false' == val) {
+    } else if ("false" == val) {
       val = false;
     }
     // Set the value
@@ -244,7 +244,7 @@ export function getClassList(
   } else {
     str = className.className;
   }
-  let list = _.without(str.split(/\s+/), '');
+  let list = _.without(str.split(/\s+/), "");
   let re = [];
   for (let li of list) {
     if (filter(li)) {
@@ -294,17 +294,17 @@ export function getComputedStyle($el: Element, name: string | string[]) {
 //----------------------------------------------------
 export function getOwnStyle($el: Element, filter = true) {
   if (_.isElement($el)) {
-    return CssUtils.parseCssRule($el.getAttribute('style'), filter);
+    return CssUtils.parseCssRule($el.getAttribute("style"), filter);
   }
 }
 //----------------------------------------------------
-export function parseCssRule(rule = '', filter = true) {
-  console.warn('!Deprecate call: parseCssRule -> Css.parseCssRule');
+export function parseCssRule(rule = "", filter = true) {
+  console.warn("!Deprecate call: parseCssRule -> Css.parseCssRule");
   return CssUtils.parseCssRule(rule, filter);
 }
 //----------------------------------------------------
 export function renderCssRule(css = {}) {
-  console.warn('!Deprecate call: renderCssRule -> Css.renderCssRule');
+  console.warn("!Deprecate call: renderCssRule -> Css.renderCssRule");
   return CssUtils.renderCssRule(css);
 }
 //----------------------------------------------------
@@ -337,7 +337,7 @@ export function getData($el: Element, flt: AttrFilter = true) {
   let re = {} as Vars;
   for (let i = 0; i < $el.attributes.length; i++) {
     let { name, value } = $el.attributes[i];
-    if (name.startsWith('data-')) {
+    if (name.startsWith("data-")) {
       name = _.camelCase(name.substring(5));
       let key = filter(name, value);
       if (key) {
@@ -445,7 +445,7 @@ export function remove(
 }
 //----------------------------------------------------
 // self by :scope
-export function findAll(selector = '*', qc?: DomQueryContext): Element[] {
+export function findAll(selector = "*", qc?: DomQueryContext): Element[] {
   let $doc: Document | Element;
   if (!qc) {
     $doc = document;
@@ -497,7 +497,7 @@ export function elementFilter<T extends Element>(
   }
   // Selector
   if (_.isString(test)) {
-    if (test.startsWith('^') && test.endsWith('$')) {
+    if (test.startsWith("^") && test.endsWith("$")) {
       let reg = new RegExp(test);
       return (el) => reg.test(el.tagName);
     }
@@ -534,7 +534,7 @@ export function elementFilter<T extends Element>(
     return test;
   }
 
-  throw 'Unsupport elementFilter: ' + test;
+  throw "Unsupport elementFilter: " + test;
 }
 //----------------------------------------------------
 export function seekUntil<T extends Element>(
@@ -798,7 +798,7 @@ export function ownerWindow($el: Element | Document | Window) {
 }
 //----------------------------------------------------
 export function isTouchDevice() {
-  let UA = window.navigator.userAgent || '';
+  let UA = window.navigator.userAgent || "";
   if (/^.+(\((ipad|iphone);|linux;\s*android).+$/i.test(UA)) {
     return true;
   }
@@ -829,10 +829,10 @@ export function autoRootFontSize(
   if (_.isFunction(callback)) {
     let mode =
       win_rect.width > tabletMaxWidth
-        ? 'desktop'
+        ? "desktop"
         : win_rect.width > phoneMaxWidth
-        ? 'tablet'
-        : 'phone';
+        ? "tablet"
+        : "phone";
 
     callback({
       $win,
@@ -874,7 +874,7 @@ export function watchAutoRootFontSize(
   }
   let options: FontSizeOptions = _.assign({}, opt, { $win, callback });
   // Watch the window resizing
-  $win.addEventListener('resize', () => {
+  $win.addEventListener("resize", () => {
     autoRootFontSize(options);
   });
   // auto resize firstly
@@ -910,7 +910,7 @@ export function setStyleValue(
   oldVal: any
 ) {
   if (!_.isUndefined(oldVal) && oldVal == val) return;
-  if (!val || 'none' == val) {
+  if (!val || "none" == val) {
     $el.style.removeProperty(name);
   } else if (_.isNumber(val) || /^\d+(\.\d+)?$/.test(val)) {
     $el.style.setProperty(name, `${val}px`);
@@ -923,25 +923,25 @@ export function setStyle($el: HTMLElement, css = {}) {
   // Guard
   if (!$el) return;
   if (_.isEmpty(css)) {
-    _.set($el, 'style', '');
+    _.set($el, "style", "");
     return;
   }
   let cssStyle = CssUtils.renderCssRule(css);
-  _.set($el, 'style', cssStyle);
+  _.set($el, "style", cssStyle);
 }
 //----------------------------------------------------
 export function updateStyle($el: HTMLElement, css = {}) {
   // Guard
   if (!$el) return;
   if (_.isEmpty(css)) {
-    _.set($el, 'style', '');
+    _.set($el, "style", "");
     return;
   }
   _.forOwn(css, (val, key) => {
     if (_.isNull(val) || _.isUndefined(val)) return;
     let pnm = _.kebabCase(key);
     // Empty string to remove one propperty
-    if ('' === val) {
+    if ("" === val) {
       $el.style.removeProperty(pnm);
     }
     // Set the property
@@ -949,7 +949,7 @@ export function updateStyle($el: HTMLElement, css = {}) {
       // integer as the px
       let v2 =
         !/^(opacity|z-index)$/.test(pnm) && val !== 0 && _.isNumber(val)
-          ? val + 'px'
+          ? val + "px"
           : val;
       $el.style.setProperty(pnm, v2);
     }
@@ -971,12 +971,12 @@ export function setAttrs(
     let k3 = _.kebabCase(k2);
 
     // Style
-    if ('style' == k3) {
+    if ("style" == k3) {
       if (_.isNil(val)) {
-        $el.removeAttribute('style');
+        $el.removeAttribute("style");
       } else {
         let cssStyle = CssUtils.renderCssRule(val);
-        _.set($el, 'style', cssStyle);
+        _.set($el, "style", cssStyle);
       }
     }
     // Other attribute
@@ -1001,7 +1001,7 @@ export function setAttrs(
 //----------------------------------------------------
 export function setClass($el: Element, ...classNames: any[]) {
   let klass = _.flattenDeep(classNames);
-  let className = klass.join(' ');
+  let className = klass.join(" ");
   $el.className = className;
 }
 //----------------------------------------------------
@@ -1027,7 +1027,7 @@ export function is($el: Element, selector: DomSelector) {
   if ($el.matches) {
     return $el.matches(selector);
   }
-  throw 'Slot Element matched';
+  throw "Slot Element matched";
   // console.warn("slow is!")
   // let doc = $el.ownerDocument
   // let win = doc.defaultView
@@ -1097,12 +1097,12 @@ export function hasOneClass($el: Element, ...classNames: any[]) {
 export function applyRect(
   $el: HTMLElement,
   rect: Rect,
-  keys = 'tlwh',
+  keys = "tlwh",
   viewport?: Size2D
 ) {
   let $win = $el.ownerDocument.defaultView;
   if (!$win) {
-    throw new Error('impossible!');
+    throw new Error("impossible!");
   }
   _.defaults(viewport, {
     width: $win.innerWidth,
@@ -1112,25 +1112,25 @@ export function applyRect(
   updateStyle($el, css);
 }
 //----------------------------------------------------
-export type DockPosX = 'left' | 'center' | 'right';
-export type DockPosY = 'top' | 'center' | 'bottom';
+export type DockPosX = "left" | "center" | "right";
+export type DockPosY = "top" | "center" | "bottom";
 export interface DomDockOptions extends DockOptions {
   posListX?: DockPosX[]; // ["left"| "center"| "right"]
   posListY?: DockPosY[]; // ["top"| "center"| "bottom"]
-  coord?: 'win' | 'target';
-  position?: 'fixed' | 'absolute';
+  coord?: "win" | "target";
+  position?: "fixed" | "absolute";
 }
 
 export function dockTo(
   $src: HTMLElement,
   $ta: HTMLElement,
   {
-    mode = 'H',
+    mode = "H",
     axis = {},
     posListX, // ["left", "center", "right"]
     posListY, // ["top", "center", "bottom"]
     space,
-    coord = 'win', // win | target
+    coord = "win", // win | target
     viewportBorder = 4,
     position,
   } = {} as DomDockOptions
@@ -1148,7 +1148,7 @@ export function dockTo(
   //console.log(mode, axis, space, position)
 
   if (!$src.ownerDocument.defaultView) {
-    throw new Error('why element window is null');
+    throw new Error("why element window is null");
   }
 
   // Get the rect
@@ -1172,22 +1172,22 @@ export function dockTo(
   }
 
   // Auto axis
-  _.defaults(axis, { x: 'auto', y: 'auto' });
-  if ('auto' == axis.x) {
+  _.defaults(axis, { x: "auto", y: "auto" });
+  if ("auto" == axis.x) {
     let list =
       posListX ||
       ({
-        H: ['left', 'right'],
-        V: ['right', 'left'],
+        H: ["left", "right"],
+        V: ["right", "left"],
       }[mode] as DockPosX[]);
     axis.x = getAxis(rect.ta.x, rect.win.width / list.length, list);
   }
-  if ('auto' == axis.y) {
+  if ("auto" == axis.y) {
     let list =
       posListY ||
       ({
-        H: ['bottom', 'top'],
-        V: ['top', 'center', 'bottom'],
+        H: ["bottom", "top"],
+        V: ["top", "center", "bottom"],
       }[mode] as DockPosY[]);
     axis.y = getAxis(rect.ta.y, rect.win.height / list.length, list);
   }
@@ -1195,13 +1195,13 @@ export function dockTo(
   // Count the max viewport to wrapCut
   // Cut the droplist panel by target positon
   let viewport: Rect = rect.win.clone();
-  if ('H' == mode && 'win' == coord) {
-    if (axis.y == 'bottom') {
+  if ("H" == mode && "win" == coord) {
+    if (axis.y == "bottom") {
       viewport.top = rect.ta.bottom;
-    } else if (axis.y == 'top') {
+    } else if (axis.y == "top") {
       viewport.bottom = rect.ta.top;
     }
-    viewport.updateBy('tlbr');
+    viewport.updateBy("tlbr");
   }
 
   // Dock & Apply
@@ -1216,7 +1216,7 @@ export function dockTo(
   //console.log({ dockMode })
 
   // Translate coord
-  if ('target' == coord) {
+  if ("target" == coord) {
     rect.src.translate({
       x: rect.ta.left * -1,
       y: rect.ta.top * -1,
@@ -1226,7 +1226,7 @@ export function dockTo(
   else {
     let realStyle = window.getComputedStyle($src);
     //console.log(realStyle.position, window.pageYOffset)
-    if ('absolute' == realStyle.position && window.pageYOffset > 0) {
+    if ("absolute" == realStyle.position && window.pageYOffset > 0) {
       rect.src.top += window.scrollY;
       rect.src.update();
     }
@@ -1250,7 +1250,7 @@ export function getRemBase($doc = document) {
   if (_.isElement($doc) && $doc.ownerDocument) {
     $doc = $doc.ownerDocument;
   }
-  let fontSize = $doc.documentElement.style.fontSize || '100px';
+  let fontSize = $doc.documentElement.style.fontSize || "100px";
   return CssUtils.toAbsPixel(fontSize);
 }
 //----------------------------------------------------
@@ -1328,19 +1328,19 @@ export async function loadImageRawData(
   $doc = document
 ) {
   const __make_data = function (img: HTMLImageElement) {
-    let canvas = createElement({ tagName: 'canvas' }) as HTMLCanvasElement;
+    let canvas = createElement({ tagName: "canvas" }) as HTMLCanvasElement;
     canvas.width = img.width;
     canvas.height = img.height;
-    let ctx = canvas.getContext('2d');
+    let ctx = canvas.getContext("2d");
     if (!ctx) {
-      throw new Error('Fail to create Canvas2D from load Image!!!');
+      throw new Error("Fail to create Canvas2D from load Image!!!");
     }
     ctx.drawImage(img, 0, 0, img.width, img.height);
     try {
       if (asBase64) {
         if (!dataUrlPrefix) {
           let suffixName = Util.getSuffixName(url, true);
-          dataUrlPrefix = `image/${{ jpg: 'jpeg' }[suffixName] || suffixName}`;
+          dataUrlPrefix = `image/${{ jpg: "jpeg" }[suffixName] || suffixName}`;
         }
         return {
           width: img.width,
@@ -1357,11 +1357,11 @@ export async function loadImageRawData(
   let $img = find(`img[src="${url}"]`, $doc);
   if (!$img) {
     let $new_img = createElement({
-      tagName: 'img',
+      tagName: "img",
       $p: $doc.body,
     }) as HTMLImageElement;
     return new Promise((resolve) => {
-      $new_img.addEventListener('load', function (evt) {
+      $new_img.addEventListener("load", function (evt) {
         let imgData = __make_data(evt.target as HTMLImageElement);
         resolve(imgData);
       });
@@ -1380,25 +1380,25 @@ export function scrollBarSize() {
   if (!SCROLL_BAR_SIZE) {
     let body = document.body;
     let $out = createElement({
-      tagName: 'div',
+      tagName: "div",
       style: {
-        position: 'fixed',
-        top: '-1000px',
+        position: "fixed",
+        top: "-1000px",
         left: 0,
-        width: '200px',
-        height: '200px',
-        overflowY: 'scroll',
-        overflowX: 'scroll',
+        width: "200px",
+        height: "200px",
+        overflowY: "scroll",
+        overflowX: "scroll",
       },
       $p: body,
     });
     let $in = createElement({
-      tagName: 'div',
+      tagName: "div",
       style: {
-        width: '100%',
-        height: '100%',
-        overflowY: 'scroll',
-        overflowX: 'scroll',
+        width: "100%",
+        height: "100%",
+        overflowY: "scroll",
+        overflowX: "scroll",
       },
       $refer: $out,
     });
@@ -1425,8 +1425,8 @@ export function scrollIntoView(
     return;
   }
   let {
-    to = 'auto', // top | bottom | center | auto
-    axis = 'xy', // x | y | xy
+    to = "auto", // top | bottom | center | auto
+    axis = "xy", // x | y | xy
     smooth = true,
   } = options;
   let r_view = Rects.createBy($view);
@@ -1439,15 +1439,15 @@ export function scrollIntoView(
     y: () => r_view.containsY(r_row),
   }[axis];
 
-  let toMode: 'top' | 'bottom' | 'center';
-  if ('auto' == to) {
+  let toMode: "top" | "bottom" | "center";
+  if ("auto" == to) {
     // at bottom
     if (r_row.bottom > r_view.bottom) {
-      toMode = 'bottom';
+      toMode = "bottom";
     }
     // at top
     else {
-      toMode = 'top';
+      toMode = "top";
     }
   } else {
     toMode = to;
@@ -1473,14 +1473,22 @@ export function scrollIntoView(
     //$view.scrollTop = $view.scrollTop + off
     $view.scrollTo({
       top: $view.scrollTop + off,
-      behavior: smooth ? 'smooth' : 'instant',
+      behavior: smooth ? "smooth" : "instant",
     });
   }
 }
 //----------------------------------------------------
+export function moveCursorTo(input: HTMLInputElement, pos?: number) {
+  pos = pos ?? input.value.length;
+  _.delay(() => {
+    input.focus();
+    input.setSelectionRange(pos, pos);
+  }, 10);
+}
+//----------------------------------------------------
 export function setDocumentTitle(title: string) {
-  if (typeof document === 'undefined') {
-    console.warn('setFavicon was called in a non-browser environment');
+  if (typeof document === "undefined") {
+    console.warn("setFavicon was called in a non-browser environment");
     return;
   }
   // 更新文档标题
@@ -1495,10 +1503,10 @@ export function setDocumentTitle(title: string) {
 
 export function setDocumentIcon(
   icon: string,
-  type: DocumentIconType = 'image/x-icon'
+  type: DocumentIconType = "image/x-icon"
 ) {
-  if (typeof document === 'undefined') {
-    console.warn('setFavicon was called in a non-browser environment');
+  if (typeof document === "undefined") {
+    console.warn("setFavicon was called in a non-browser environment");
     return;
   }
 
@@ -1508,24 +1516,24 @@ export function setDocumentIcon(
 
   // 如果没有找到，创建一个新的链接元素
   if (!link) {
-    link = document.createElement('link');
+    link = document.createElement("link");
     link.type = type;
-    link.rel = 'shortcut icon';
-    document.getElementsByTagName('head')[0].appendChild(link);
+    link.rel = "shortcut icon";
+    document.getElementsByTagName("head")[0].appendChild(link);
   }
 
   // 处理 Emoji
-  if ('emoji' == type) {
-    const canvas = document.createElement('canvas');
+  if ("emoji" == type) {
+    const canvas = document.createElement("canvas");
     canvas.height = 32;
     canvas.width = 32;
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     if (ctx) {
-      ctx.font = '28px serif';
+      ctx.font = "28px serif";
       ctx.fillText(icon, 0, 24);
-      link.type = 'image/x-icon';
-      link.rel = 'shortcut icon';
-      link.href = canvas.toDataURL('image/x-icon');
+      link.type = "image/x-icon";
+      link.rel = "shortcut icon";
+      link.href = canvas.toDataURL("image/x-icon");
       document.head.appendChild(link);
     }
   }
@@ -1539,16 +1547,16 @@ export function setDocumentIcon(
 //----------------------------------------------------
 export function getWindowTheme(): WindowTheme {
   if (window.matchMedia) {
-    if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      return 'dark';
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      return "dark";
     }
   }
-  return 'light';
+  return "light";
 }
 //----------------------------------------------------
 export function getDocumentTheme(doc = document): WindowTheme {
-  let rootClass = doc.documentElement.getAttribute('class');
-  if ('light' == rootClass || 'dark' == rootClass) {
+  let rootClass = doc.documentElement.getAttribute("class");
+  if ("light" == rootClass || "dark" == rootClass) {
     return rootClass;
   }
   // 自动跟随系统的设置
@@ -1556,15 +1564,15 @@ export function getDocumentTheme(doc = document): WindowTheme {
 }
 
 //----------------------------------------------------
-export const RootThemeClass = ref<WindowTheme>('light');
+export const RootThemeClass = ref<WindowTheme>("light");
 let _root_theme_observer: MutationObserver;
 function _get_root_theme_observer() {
   if (!_root_theme_observer) {
     _root_theme_observer = new MutationObserver((mutationsList) => {
       for (var mutation of mutationsList) {
         if (
-          mutation.type === 'attributes' &&
-          mutation.attributeName === 'class'
+          mutation.type === "attributes" &&
+          mutation.attributeName === "class"
         ) {
           let html = mutation.target as HTMLElement;
           // console.log('<html> 标签的 class 属性发生变化:', html.className);
@@ -1577,7 +1585,7 @@ function _get_root_theme_observer() {
 }
 export function watchDocumentTheme(doc?: Document) {
   // 保护一下，在 node 环境没有这个类
-  if ('undefined' == typeof MutationObserver) {
+  if ("undefined" == typeof MutationObserver) {
     return;
   }
   // 获取观察者类
@@ -1587,10 +1595,10 @@ export function watchDocumentTheme(doc?: Document) {
   }
   ob.observe(doc.documentElement, {
     attributes: true,
-    attributeFilter: ['class'],
+    attributeFilter: ["class"],
   });
 }
 watchDocumentTheme();
 //----------------------------------------------------
 
-export * from './web-dom-html';
+export * from "./web-dom-html";
