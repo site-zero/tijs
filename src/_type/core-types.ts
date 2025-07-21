@@ -18,6 +18,14 @@ export type PickPartial<T, K extends keyof T> = T & Partial<Pick<T, K>>;
 
 /*---------------------------------------------------`
 
+                     类型工具
+
+---------------------------------------------------*/
+export type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+export type IntersectionKeys<T, U> = keyof T & keyof U;
+export type IntersectionType<T, U> = Pick<T, keyof T & keyof U>;
+/*---------------------------------------------------`
+
                      Bus
 
 ---------------------------------------------------*/
@@ -83,7 +91,6 @@ export interface TiBus<T> {
                       结构/联合类型
 
 ---------------------------------------------------*/
-export type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 export type TextValue<T> = {
   text: string;
   value: T;
