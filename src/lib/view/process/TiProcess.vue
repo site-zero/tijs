@@ -98,7 +98,7 @@
   watch(
     () => props.listCurrentRowIndex,
     (index) => {
-      console.log('listCurrentRowIndex', index, $list.value);
+      //console.log('listCurrentRowIndex', index, $list.value);
       if ($list.value && _.isNumber(index)) {
         $list.value.scrollIntoViewByIndex(index);
       }
