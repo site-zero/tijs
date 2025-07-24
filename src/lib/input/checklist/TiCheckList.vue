@@ -50,7 +50,7 @@
     :data="_list.optionsData.value"
     :max-checked="props.maxChecked"
     :min-checked="props.minChecked"
-    :can-select="false"
+    :can-select="true"
     :showChecker="true"
     :checked-ids="checkedIds"
     @select="onSelect" />

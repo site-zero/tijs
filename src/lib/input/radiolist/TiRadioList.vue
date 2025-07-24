@@ -46,7 +46,7 @@
     :data="_list.optionsData.value"
     :marker-icons="['zmdi-circle-o', 'zmdi-dot-circle']"
     :max-checked="1"
-    :can-select="false"
+    :can-select="true"
     :showChecker="true"
     :checked-ids="checkedIds"
     @select="onSelect" />

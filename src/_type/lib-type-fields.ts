@@ -1,6 +1,6 @@
-import JSON5 from 'json5';
-import _ from 'lodash';
-import { DateTime, ENV_KEYS, getEnv, Str, Util } from '../core';
+import JSON5 from "json5";
+import _ from "lodash";
+import { DateTime, ENV_KEYS, getEnv, Str, Util } from "../core";
 import {
   CommonProps,
   ComRef,
@@ -12,7 +12,7 @@ import {
   InvokePartial,
   NameValue,
   Vars,
-} from './core-types';
+} from "./core-types";
 
 export type Field = {
   /**
@@ -53,7 +53,7 @@ export type Field = {
 
 export type CellProps = CommonProps &
   Field &
-  Omit<FieldComProps, 'readonlyComType' | 'readonlyComConf'> & {
+  Omit<FieldComProps, "readonlyComType" | "readonlyComConf"> & {
     title?: string;
     tip?: string;
     disabled?: boolean;
@@ -154,10 +154,10 @@ export function isFieldType(type: string): type is FieldValueType {
  * - FIELD_UNDEFINED : 字段未定义
  */
 export type ValidateType =
-  | 'OK'
-  | 'VALUE_INVALID'
-  | 'VALUE_NIL'
-  | 'FIELD_UNDEFINED';
+  | "OK"
+  | "VALUE_INVALID"
+  | "VALUE_NIL"
+  | "FIELD_UNDEFINED";
 
 export type ValidateResult = {
   type: ValidateType;
@@ -214,7 +214,7 @@ export function getFieldUniqKey(name: FieldName): string {
   if (_.isString(name)) {
     return name;
   }
-  return name.join('-');
+  return name.join("-");
 }
 
 export function makeFieldUniqKey(
@@ -228,7 +228,7 @@ export function makeFieldUniqKey(
   if (fieldName) {
     return getFieldUniqKey(fieldName);
   }
-  return `_F${indexes.join('_')}`;
+  return `_F${indexes.join("_")}`;
 }
 
 export function mergeFieldChanges(changes: FieldChange[], data?: Vars): Vars {
@@ -289,24 +289,24 @@ export function getFieldConvertor(type: FieldValueType): FieldConvertor {
 
 export function getFieldTypeByValue(input?: any): FieldValueType {
   if (_.isUndefined(input) || _.isString(input)) {
-    return 'String';
+    return "String";
   }
   if (_.isNumber(input)) {
     if (Number.isInteger(input)) {
-      return 'Integer';
+      return "Integer";
     }
-    return 'Number';
+    return "Number";
   }
   if (_.isBoolean(input)) {
-    return 'Boolean';
+    return "Boolean";
   }
   if (_.isArray(input)) {
-    return 'Array';
+    return "Array";
   }
   if (_.isNull(input) || _.isPlainObject(input)) {
-    return 'Object';
+    return "Object";
   }
-  return 'String';
+  return "String";
 }
 
 export function parseFieldConverter(
@@ -323,7 +323,7 @@ export function parseFieldConverter(
     let conv = Util.genInvoking(converter, {
       context,
       args,
-      partial: partial || 'right',
+      partial: partial || "right",
     });
     return conv as (val: any, data: Vars, name: FieldName) => any;
   }
@@ -420,7 +420,13 @@ export type ToIntegerOptions = {
 };
 
 export function anyToInteger(input: any, options: ToIntegerOptions = {}) {
-  let { mode = 'round', dft = -1, range = [], border = [true, true] } = options;
+  let { mode = "round", dft = -1, range = [], border = [true, true] } = options;
+  if ("" === input) {
+    return dft;
+  }
+  if (_.isBoolean(input)) {
+    return input ? 1 : 0;
+  }
   let n = INT_CONVERTERS[mode](input);
   // Apply the default
   if (isNaN(n)) {
@@ -517,9 +523,9 @@ function toDateTime(input: any) {
 
 function toDatetimeText(input: any) {
   if (_.isNil(input)) {
-    return '';
+    return "";
   }
-  let fmt = getEnv(ENV_KEYS.DFT_DATETIME_FORMAT, 'yyyy-MM-dd HH:mm:ss');
+  let fmt = getEnv(ENV_KEYS.DFT_DATETIME_FORMAT, "yyyy-MM-dd HH:mm:ss");
   let d = DateTime.parse(input);
   if (_.isDate(d)) {
     return DateTime.format(d, { fmt });

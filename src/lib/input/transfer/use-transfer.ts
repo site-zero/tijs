@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { ComputedRef, Ref } from "vue";
+import { computed, ComputedRef, Ref } from "vue";
 import {
   ActionBarItem,
   IconInput,
@@ -111,18 +111,21 @@ export function useTransfer(
     }
   }
 
-  const valueSet = new Set<TableRowID>();
-  if (props.value) {
-    for (let v of props.value) {
-      valueSet.add(v);
+  const valueSet = computed(() => {
+    let re = new Set<TableRowID>();
+    if (props.value) {
+      for (let v of props.value) {
+        re.add(v);
+      }
     }
-  }
+    return re;
+  });
 
   function getCandidateList(): StdOptionItem[] {
     let list = [] as StdOptionItem[];
     let fv = state.filterValue?.toUpperCase();
     for (let li of state.options) {
-      if (!valueSet.has(li.value)) {
+      if (!valueSet.value.has(li.value)) {
         // 过滤备选项目
         if (fv) {
           let text = li.text?.toUpperCase();

@@ -103,7 +103,7 @@
           <TiList
             v-bind="_tip_list.TipListConfig.value"
             :multi="true"
-            :can-select="false"
+            :can-select="true"
             :showChecker="true"
             :checked-ids="_api.TagValues.value"
             :data="_api.OptionsData?.value"

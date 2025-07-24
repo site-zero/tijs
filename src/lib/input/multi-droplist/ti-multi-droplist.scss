@@ -3,7 +3,7 @@
 .ti-multi-droplist {
   --box-color-border: var(--ti-color-border-thin);
   --box-color-border-focus: var(--ti-color-primary);
-  --box-padding: var(--ti-gap-s);
+  --box-padding: 0;
   //-----------------------------------------------------
   > .part-main {
     display: block;
