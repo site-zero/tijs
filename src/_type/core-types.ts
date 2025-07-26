@@ -4,6 +4,7 @@ import { ActionBarProps, BlockOverflowMode, TipsApi } from "../lib";
 import { FieldComProps } from "./lib-type-fields";
 
 export type DocumentIconType = "emoji" | "image/png" | "image/x-icon";
+export type EventModifier = 'alt' | 'ctrl' | 'shift' | 'meta';
 /*---------------------------------------------------`
 
                      补足原生

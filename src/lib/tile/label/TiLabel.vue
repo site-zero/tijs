@@ -1,11 +1,12 @@
 <script setup lang="ts">
-  import { computed, reactive, useTemplateRef, watch } from 'vue';
-  import { useDict, usePlaceholder, useValuePipe } from '../../';
-  import { I18n } from '../../../core';
-  import { LabelEmitter, LabelProps, LabelState } from './ti-label-types';
-  import { useLabel } from './use-label';
-  import { useLabelAspect } from './use-label-aspect';
-  import { useLabelIcon } from './use-label-icon';
+  import { computed, reactive, useTemplateRef, watch } from "vue";
+  import { useDict, usePlaceholder, useValuePipe } from "../../";
+  import { Be, I18n } from "../../../core";
+  import { LabelEmitter, LabelProps, LabelState } from "./ti-label-types";
+  import { useLabel } from "./use-label";
+  import { useLabelAspect } from "./use-label-aspect";
+  import { useLabelIcon } from "./use-label-icon";
+  import { useClickCopy } from "./use-click-copy";
   //-----------------------------------------------------
   defineOptions({ inheritAttrs: true });
   //-----------------------------------------------------
@@ -14,12 +15,13 @@
   let props = withDefaults(defineProps<LabelProps>(), {
     autoI18n: true,
     nowrap: true,
-    boxRadius: 's',
-    boxFontSize: 's',
-    boxPadding: 's',
+    boxRadius: "s",
+    boxFontSize: "s",
+    boxPadding: "s",
+    clickForCopy: () => ["ctrl", "ctrl+shift"],
   });
   //-----------------------------------------------------
-  const $el = useTemplateRef('el');
+  const $el = useTemplateRef("el");
   const _state = reactive<LabelState>({});
   //-----------------------------------------------------
   const _pipe = computed(() => useValuePipe(props));
@@ -36,7 +38,7 @@
   const _prefix = computed(() =>
     useLabelIcon({
       _api: _api,
-      type: 'prefix',
+      type: "prefix",
       href: _api.Href.value,
       icon: props.prefixIcon,
       hoverIcon: props.prefixHoverIcon,
@@ -48,7 +50,7 @@
   const _suffix = computed(() =>
     useLabelIcon({
       _api: _api,
-      type: 'suffix',
+      type: "suffix",
       icon: props.suffixIcon,
       hoverIcon: props.suffixHoverIcon,
       iconFor: props.suffixIconFor,
@@ -72,13 +74,21 @@
     if (props.value == LabelText.value) {
       return null;
     }
-    return [props.value, LabelText.value].join(': ');
+    return [props.value, LabelText.value].join(": ");
+  });
+  //-----------------------------------------------------
+  const clickCopy = useClickCopy(props, {
+    getElement: () => $el.value,
+    getText: () => _state.text,
+    getValue: () => props.value,
   });
   //-----------------------------------------------------
   function onClickLabel(event: MouseEvent) {
     if (props.captureClick) {
       event.stopPropagation();
     }
+    // 指定复制操作
+    clickCopy(event);
   }
   //-----------------------------------------------------
   // 看看是否满足选项列表的打开条件
@@ -107,9 +117,7 @@
       v-html="_prefix.IconPartHtml.value"
       @click.left.stop="_prefix.onClick"></div>
     <!--====================================-->
-    <div
-      class="value-part"
-      :style="_aspect.ValuePartStyle.value">
+    <div class="value-part" :style="_aspect.ValuePartStyle.value">
       <a
         v-if="_api.Href.value"
         :href="_api.Href.value"
@@ -118,10 +126,7 @@
         data-tip-modifier="CTRL"
         >{{ LabelText }}</a
       >
-      <span
-        v-else
-        :data-tip="LabelTipText"
-        data-tip-modifier="CTRL">
+      <span v-else :data-tip="LabelTipText" data-tip-modifier="CTRL">
         {{ LabelText }}
       </span>
     </div>
@@ -136,5 +141,5 @@
   </div>
 </template>
 <style lang="scss">
-  @use './ti-label.scss';
+  @use "./ti-label.scss";
 </style>

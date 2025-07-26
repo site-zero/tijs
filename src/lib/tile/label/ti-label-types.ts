@@ -3,22 +3,24 @@ import {
   DisplayTextProps,
   PlaceholderProps,
   ValuePipeProps,
-} from '../../';
+} from "../../";
 import {
   AspectSize,
   BoxColorMode,
   CommonProps,
   CssAlignment,
+  EventModifier,
   IconInput,
   LogicType,
   Vars,
-} from '../../../_type';
-import { useLabel } from './use-label';
+} from "../../../_type";
+import { ClickCopyProps } from "./use-click-copy";
+import { useLabel } from "./use-label";
 
 export type LabelEmitter = {
-  (eventName: 'change', payload: any): void;
-  (eventName: 'click-prefix-icon', api: LabelApi): void;
-  (eventName: 'click-suffix-icon', api: LabelApi): void;
+  (eventName: "change", payload: any): void;
+  (eventName: "click-prefix-icon", api: LabelApi): void;
+  (eventName: "click-suffix-icon", api: LabelApi): void;
 };
 
 export type LabelApi = ReturnType<typeof useLabel>;
@@ -30,16 +32,16 @@ export type LabelState = {
 };
 
 export type LabelIconFor =
-  | 'clear'
-  | 'copy'
-  | 'copy-raw'
-  | 'click'
+  | "clear"
+  | "copy"
+  | "copy-raw"
+  | "click"
   | ((label: LabelApi) => void);
 
 export type LabelAspectProps = {
   boxFontSize?: AspectSize;
   boxPadding?: AspectSize;
-  boxRadius?: AspectSize | 'none';
+  boxRadius?: AspectSize | "none";
   showBorder?: boolean;
   align?: CssAlignment;
   type?: LogicType;
@@ -59,7 +61,8 @@ export type LabelProps = CommonProps &
   PlaceholderProps &
   ValuePipeProps &
   DictProps &
-  DisplayTextProps & {
+  DisplayTextProps &
+  ClickCopyProps & {
     value?: any;
 
     tip?: string;
