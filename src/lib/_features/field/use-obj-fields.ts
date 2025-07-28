@@ -4,8 +4,8 @@ import {
   I18n,
   LabelProps,
   Str,
-} from '@site0/tijs';
-import _ from 'lodash';
+} from "@site0/tijs";
+import _ from "lodash";
 
 //const log = getLogger('wn.obj-fields');
 
@@ -24,7 +24,7 @@ export type QuickFieldInfo = {
 };
 
 //-----------------------------------------------
-export type TiObjFieldsFeature = ReturnType<typeof defineObjFields>;
+export type TiObjFieldsApi = ReturnType<typeof defineObjFields>;
 //-----------------------------------------------
 /**
  * 定义表单管理特性
@@ -48,7 +48,7 @@ function defineObjFields(featureName: string) {
   ): GridFieldsInput {
     let finfo = parseNameForObjField(uniqKey);
     let _fld: GridFieldsInput | undefined;
-    if ('-SEP-' == finfo._key) {
+    if ("-SEP-" == finfo._key) {
       _fld = _FIELDS.get(uniqKey) ?? {
         colStart: 1,
         colSpan: 100,
@@ -61,7 +61,7 @@ function defineObjFields(featureName: string) {
       throw `Fail to found field ['${uniqKey}']`;
     }
     let re = _.cloneDeep(_fld);
-    _.assign(re, _.omit(field, 'comConf'));
+    _.assign(re, _.omit(field, "comConf"));
     re.comConf = re.comConf ?? {};
     _.assign(re.comConf, field?.comConf);
     if (finfo.readonly) {
@@ -79,7 +79,7 @@ function defineObjFields(featureName: string) {
     }
 
     re.name = finfo.name ?? re.name ?? finfo._key;
-    if ('-SEP-' == re.name) {
+    if ("-SEP-" == re.name) {
       re.name = undefined;
     }
     re.title = finfo.title ?? re.title;
@@ -92,8 +92,8 @@ function defineObjFields(featureName: string) {
     if (re.title && re.title.length > 10) {
       // 如果确定要折行，那么，自动的将后面加一个空格
       // 这样折行以后，就会右对齐
-      if (_.isString(re.title) && !re.title.startsWith('i18n:')) {
-        re.title = _.trim(re.title) + ' ';
+      if (_.isString(re.title) && !re.title.startsWith("i18n:")) {
+        re.title = _.trim(re.title) + " ";
       }
     }
 
@@ -163,13 +163,20 @@ function defineObjFields(featureName: string) {
     };
   }
   //---------------------------------------------
+  function addFieldIfNoExists(uniqKey: string, field: GridFieldsInput) {
+    if (_FIELDS.has(uniqKey)) {
+      return;
+    }
+    addField(uniqKey, field);
+  }
+  //---------------------------------------------
   /**
    * 添加一个字段定义
    *
    * @param uniqKey
    * @param field
    */
-  function setField(uniqKey: string, field: GridFieldsInput) {
+  function addField(uniqKey: string, field: GridFieldsInput) {
     if (_FIELDS.has(uniqKey)) {
       console.warn(`field '${uniqKey}' already exists!!`);
     }
@@ -180,13 +187,13 @@ function defineObjFields(featureName: string) {
   }
   //---------------------------------------------
   function setDateTimeLabelField(uniqKey: string, title: string) {
-    setField(uniqKey, {
+    addField(uniqKey, {
       name: uniqKey,
       title,
-      comType: 'TiLabel',
+      comType: "TiLabel",
       comConf: {
-        placeholder: 'i18n:unknown',
-        valuePiping: '$DT',
+        placeholder: "i18n:unknown",
+        valuePiping: "$DT",
       } as LabelProps,
     });
   }
@@ -199,14 +206,15 @@ function defineObjFields(featureName: string) {
     getFieldBy,
     getFieldList,
     getFieldGroup,
-    setField,
+    setField: addField,
+    setFieldIfNoExists: addFieldIfNoExists,
     setDateTimeLabelField,
   };
 }
 //-----------------------------------------------
-const _OBJ_FIELDS_INSTANCES = new Map<string, TiObjFieldsFeature>();
+const _OBJ_FIELDS_INSTANCES = new Map<string, TiObjFieldsApi>();
 //-----------------------------------------------
-export function useObjFields(name = '_DEFAULT_FIELD_SET'): TiObjFieldsFeature {
+export function useObjFields(name = "_DEFAULT_FIELD_SET"): TiObjFieldsApi {
   let re = _OBJ_FIELDS_INSTANCES.get(name);
   if (!re) {
     re = defineObjFields(name);
@@ -257,18 +265,18 @@ export function parseNameForObjField(key: string) {
   let readonly = false;
   let disabled = undefined;
   if (m) {
-    required = m[1].indexOf('*') >= 0;
-    readonly = m[1].indexOf('!') >= 0;
-    if (m[1].indexOf('~') >= 0) {
+    required = m[1].indexOf("*") >= 0;
+    readonly = m[1].indexOf("!") >= 0;
+    if (m[1].indexOf("~") >= 0) {
       disabled = true;
     }
     key = m[2].trim();
   }
 
-  let parts = key.split(':');
+  let parts = key.split(":");
   let name = parts[0];
-  cols = _.nth(parts, 1) ?? '';
-  rows = _.nth(parts, 2) ?? '';
+  cols = _.nth(parts, 1) ?? "";
+  rows = _.nth(parts, 2) ?? "";
   re = { _key: name, required, readonly, disabled };
 
   // name/title
@@ -295,7 +303,7 @@ export function parseNameForObjField(key: string) {
   }
 
   // 对于包括 , 的名称，需要变成数组
-  if (_.isString(re.name) && re.name.indexOf(',') >= 0) {
+  if (_.isString(re.name) && re.name.indexOf(",") >= 0) {
     re.name = Str.splitIgnoreBlank(re.name);
   }
 
@@ -328,7 +336,7 @@ export function parseNameForObjField(key: string) {
 
   // 某种分隔符表示 FieldLabel
   if (/^[=#.-]{3,}/.test(re._key)) {
-    re._key = '-SEP-';
+    re._key = "-SEP-";
   }
 
   return re;

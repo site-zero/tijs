@@ -1,6 +1,6 @@
 import _ from "lodash";
-import { mapToObj } from "../";
-import { Vars } from "../../_type";
+import { mapToObj, Util } from "../";
+import { DiffItem, MakeDiffOptions, TableRowID, Vars } from "../../_type";
 
 export type RecordDiffOptions = {
   /**
@@ -146,4 +146,161 @@ export function isDeepEqual(o0: any, o1: any) {
 
   // 采用 JS 比较宽泛的比较一下
   return o0 == o1;
+}
+
+/**
+ * 用于 `makeDifferents` 函数的配置对象类型
+ * 包含本地列表、远程列表、远程映射、ID 获取函数和选项
+ */
+export type MakeDiffSetup = {
+  localList?: Vars[];
+  remoteList?: Vars[];
+  remoteMap?: Map<TableRowID, Vars>;
+  getId: (it: Vars, index: number) => TableRowID;
+  options: MakeDiffOptions;
+  patchMetaUpdate?: null | ((diff: Vars, id: TableRowID, remote: Vars) => void);
+};
+
+export function makeDifferents(setup: MakeDiffSetup): DiffItem[] {
+  let re: DiffItem[] = [];
+
+  let { localList, remoteList, remoteMap, getId, options, patchMetaUpdate } =
+    setup;
+
+  // 如果没有做过任何修改 ...
+  if (!localList) {
+    return re;
+  }
+
+  // 对远程列表编制索引
+  if (!remoteMap) {
+    remoteMap = buildMapFromList(getId, remoteList);
+  }
+
+  // 循环本地列表，顺便编制一个本地列表的ID 索引
+  let localMap = new Map<TableRowID, Vars>();
+  if (localList) {
+    for (let i = 0; i < localList.length; i++) {
+      let local = localList[i];
+      let id = getId(local, i);
+      localMap.set(id, local);
+      let remote = remoteMap.get(id);
+      let diffItem = {
+        index: i,
+        id,
+        existsInRemote: remote ? true : false,
+        existsInLocal: true,
+        local: Util.jsonClone(local),
+        remote: Util.jsonClone(remote),
+      } as DiffItem;
+      // 已经存在，必然是要更新记录
+      if (remote) {
+        let diff = Util.getRecordDiff(remote, local, {
+          checkRemoveFromOrgin: true,
+        });
+        if (_.isEmpty(diff)) {
+          continue;
+        }
+
+        // 补上固定 Meta
+        if (options.defaultMeta) {
+          // 动态计算
+          if (_.isFunction(options.defaultMeta)) {
+            _.defaults(diff, options.defaultMeta(local, remote));
+          }
+          // 静态值
+          else {
+            _.defaults(diff, options.defaultMeta);
+          }
+        }
+        if (options.updateMeta) {
+          // 动态计算
+          if (_.isFunction(options.updateMeta)) {
+            _.assign(diff, options.updateMeta(local, remote));
+          }
+          // 静态值
+          else {
+            _.assign(diff, options.updateMeta);
+          }
+        }
+
+        // 补上 ID
+        if (patchMetaUpdate) {
+          patchMetaUpdate(diff, id, remote);
+        }
+
+        diffItem.delta = diff;
+      }
+      // 必然是新记录，需要插入
+      else {
+        let newMeta = Util.jsonClone(local);
+        if (options.defaultMeta) {
+          // 动态计算
+          if (_.isFunction(options.defaultMeta)) {
+            _.defaults(newMeta, options.defaultMeta(local, remote));
+          }
+          // 静态值
+          else {
+            _.defaults(newMeta, options.defaultMeta);
+          }
+        }
+        if (options.insertMeta) {
+          // 动态计算
+          if (_.isFunction(options.insertMeta)) {
+            _.assign(newMeta, options.insertMeta(local, remote));
+          }
+          // 静态值
+          else {
+            _.assign(newMeta, options.insertMeta);
+          }
+        }
+        diffItem.delta = newMeta;
+      }
+      // 记入返回列表
+      re.push(diffItem);
+    } // for (let i = 0; i < _local_list.value.length; i++) {
+  }
+
+  // 循环一下，看看哪些需要从远程删除
+  if (remoteList) {
+    for (let i = 0; i < remoteList.length; i++) {
+      let remote = remoteList[i];
+      let id = getId(remote, i);
+      let local = localMap.get(id);
+      if (!local) {
+        re.push({
+          index: -1,
+          id,
+          existsInRemote: true,
+          existsInLocal: false,
+          local: {},
+          delta: {},
+          remote: Util.jsonClone(remote),
+        });
+      }
+    }
+  }
+
+  return re;
+}
+
+/**
+ * 根据给定的列表和 ID 获取函数构建一个 Map
+ * @param list - 包含数据的数组
+ * @param getId - 用于从数组元素中获取 ID 的函数，接收元素和索引作为参数
+ * @returns 一个以 ID 为键，数组元素为值的 Map
+ */
+export function buildMapFromList(
+  getId: (it: Vars, index: number) => TableRowID,
+  list?: Vars[]
+): Map<TableRowID, Vars> {
+  let re = new Map<TableRowID, Vars>();
+  if (list) {
+    for (let i = 0; i < list.length; i++) {
+      let remote = list[i];
+      let id = getId(remote, i);
+      re.set(id, remote);
+    }
+  }
+  return re;
 }

@@ -2,7 +2,7 @@ import _ from 'lodash';
 import { buildFieldValidatorGroup, useVisibility } from '../..';
 import { makeFieldUniqKey, Vars } from '../../../_type';
 import { Match, Str } from '../../../core';
-import { TiObjFieldsFeature } from '../field/use-obj-fields';
+import { TiObjFieldsApi } from '../field/use-obj-fields';
 import {
   DataValidatableField,
   ValidatableField,
@@ -10,7 +10,7 @@ import {
 } from './data-validate-types';
 
 export function _build_validatable_field(
-  fieldSet: TiObjFieldsFeature,
+  fieldSet: TiObjFieldsApi,
   fld_ref: ValidatableFieldRefer
 ): DataValidatableField {
   // 归一化输入字段
@@ -56,7 +56,7 @@ export function _build_validatable_field(
 }
 
 function _get_field(
-  fieldSet: TiObjFieldsFeature,
+  fieldSet: TiObjFieldsApi,
   fld: ValidatableFieldRefer
 ): ValidatableField {
   // 简单键

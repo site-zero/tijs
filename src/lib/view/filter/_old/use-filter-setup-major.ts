@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { openAppModal, TiObjFieldsFeature, TransferProps } from '../../../';
+import { openAppModal, TiObjFieldsApi, TransferProps } from '../../../';
 import { StrOptionItem } from '../../../../_type';
 import { FilterProps } from './ti-filter-types';
 import { FilterEmitter } from './use-filter';
@@ -7,7 +7,7 @@ import { joinFieldsTitle, makeFieldsMap } from './use-filter-fields';
 
 export async function useSetupMajorFields(
   props: FilterProps,
-  fieldSet: TiObjFieldsFeature,
+  fieldSet: TiObjFieldsApi,
   emit: FilterEmitter
 ) {
   // 准备字段选项

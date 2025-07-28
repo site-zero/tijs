@@ -15,30 +15,12 @@ type QuickColumnInfo = {
 };
 
 //-----------------------------------------------
-export type ObjColumnsFeature = {
-  getName: () => string;
-  getColumn: (
-    uniqKey: string,
-    editable?: boolean,
-    column?: Partial<TableInputColumn>
-  ) => TableInputColumn;
-  getColumnBy: (
-    col: ColumnRefer,
-    editable?: boolean,
-    column?: Partial<TableInputColumn>
-  ) => TableInputColumn;
-  getColumnList: (
-    keys: ColumnRefer[],
-    editable?: boolean,
-    column?: Partial<TableInputColumn>
-  ) => TableInputColumn[];
-  addColumn: (uniqKey: string, column: Partial<TableInputColumn>) => void;
-};
+export type ObjColumnsApi = ReturnType<typeof defineObjColumns>;
 //-----------------------------------------------
 /**
  * 定义表格列管理特性
  */
-function defineObjColumns(featureName: string): ObjColumnsFeature {
+function defineObjColumns(featureName: string) {
   const _COLUMNS = new Map<string, TableInputColumn>();
   //---------------------------------------------
   function getColumn(
@@ -167,6 +149,16 @@ function defineObjColumns(featureName: string): ObjColumnsFeature {
     return re;
   }
   //---------------------------------------------
+  function addColumnIfNoExists(
+    uniqKey: string,
+    column: Partial<TableInputColumn>
+  ) {
+    if (_COLUMNS.has(uniqKey)) {
+      return;
+    }
+    addColumn(uniqKey, column);
+  }
+  //---------------------------------------------
   function addColumn(uniqKey: string, column: Partial<TableInputColumn>) {
     if (_COLUMNS.has(uniqKey)) {
       console.warn(`column '${uniqKey}' already exists!!`);
@@ -206,12 +198,13 @@ function defineObjColumns(featureName: string): ObjColumnsFeature {
     getColumnBy,
     getColumnList,
     addColumn,
+    addColumnIfNoExists,
   };
 }
 //-----------------------------------------------
-const _OBJ_COLUMN_INSTANCES = new Map<string, ObjColumnsFeature>();
+const _OBJ_COLUMN_INSTANCES = new Map<string, ObjColumnsApi>();
 //-----------------------------------------------
-export function useObjColumns(name = "_DEFAULT_COLUMN_SET"): ObjColumnsFeature {
+export function useObjColumns(name = "_DEFAULT_COLUMN_SET"): ObjColumnsApi {
   let re = _OBJ_COLUMN_INSTANCES.get(name);
   if (!re) {
     re = defineObjColumns(name);

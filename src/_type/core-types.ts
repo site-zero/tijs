@@ -4,7 +4,7 @@ import { ActionBarProps, BlockOverflowMode, TipsApi } from "../lib";
 import { FieldComProps } from "./lib-type-fields";
 
 export type DocumentIconType = "emoji" | "image/png" | "image/x-icon";
-export type EventModifier = 'alt' | 'ctrl' | 'shift' | 'meta';
+export type EventModifier = "alt" | "ctrl" | "shift" | "meta";
 /*---------------------------------------------------`
 
                      补足原生
@@ -1229,6 +1229,34 @@ export type PopPosition =
   | "right-top"
   | "bottom-left"
   | "bottom-right";
+
+/*---------------------------------------------------
+
+       算法相关
+
+---------------------------------------------------*/
+export type MetaPatcher =
+  | Vars
+  | ((local: Vars, remote?: Vars) => Vars | undefined);
+export type UpdateMetaPatcher =
+  | Vars
+  | ((local: Vars, remote: Vars) => Vars | undefined);
+
+export type MakeDiffOptions = {
+  defaultMeta?: MetaPatcher;
+  insertMeta?: MetaPatcher;
+  updateMeta?: UpdateMetaPatcher;
+};
+
+export type DiffItem = {
+  index: number;
+  id: TableRowID;
+  existsInRemote: boolean;
+  existsInLocal: boolean;
+  local: Vars;
+  delta: Vars;
+  remote: Vars;
+};
 
 /*---------------------------------------------------
 
