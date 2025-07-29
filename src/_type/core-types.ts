@@ -1274,11 +1274,16 @@ export type ConflictItem = {
    * 冲突记录 ID
    */
   id: TableRowID;
+
+  existsInMine: boolean;
+  existsInThey: boolean;
+  myData:Vars;
+  taData:Vars;
   /**
    * 冲突记录具体发生冲突的字段
    * 键为字段名，值分别记录了两个冲突的值
    */
-  data: Record<string, ConflictItemValue>;
+  detail: Record<string, ConflictItemValue>;
 };
 
 /*---------------------------------------------------
