@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from "lodash";
 import {
   ENV_KEYS,
   getEnv,
@@ -7,7 +7,7 @@ import {
   tiGetDefaultComPropValue,
   TiTime,
   Util,
-} from '../';
+} from "../";
 import {
   DateFormatOptions,
   DateInput,
@@ -18,7 +18,7 @@ import {
   DateTimeQuickParserSet,
   TimeInput,
   TimeUpdateUnit,
-} from '../../_type';
+} from "../../_type";
 
 ///////////////////////////////////////////
 // const P_DATE = new RegExp(
@@ -30,11 +30,11 @@ import {
 //     "(Z(\\d*))?$"
 // );
 const P_DATE = new RegExp(
-  '^((\\d{2,4})([^0-9])(\\d{1,2})?([^0-9])?(\\d{1,2})?)?([^0-9])?' +
-    '(([ T])?' +
-    '(\\d{1,2})(:)(\\d{1,2})((:)(\\d{1,2}))?' +
-    '(([.])(\\d{1,3}))?)?' +
-    '(Z|([+-]\\d{1,2}(:\\d{2})?)?)?$'
+  "^((\\d{2,4})([^0-9])(\\d{1,2})?([^0-9])?(\\d{1,2})?)?([^0-9])?" +
+    "(([ T])?" +
+    "(\\d{1,2})(:)(\\d{1,2})((:)(\\d{1,2}))?" +
+    "(([.])(\\d{1,3}))?)?" +
+    "(Z|([+-]\\d{1,2}(:\\d{2})?)?)?$"
 );
 
 export function parse(
@@ -71,10 +71,10 @@ export function parse(
   }
   //console.log("parseDate:", d)
   // Default return today
-  if ('now' === d) {
+  if ("now" === d) {
     return new Date();
   }
-  if ('today' === d) {
+  if ("today" === d) {
     let d = new Date();
     setTime(d);
     return d;
@@ -102,16 +102,24 @@ export function parse(
 
     // 符合标准，可以直接创建日期对象
     //      | year   | month | day     T    HH      mm       ss    .    ms    Z
-    let std_m =
-      /^\d{4}[/-]\d{2}[/-]\d{2}([ T]\d{1,2}:\d{1,2}:\d{1,2})?(\.\d{1,3})?(Z|[+-]\d{1,2}(:\d{2})?)?$/.exec(
+    // 首先截取时区
+    let m = /(.+)([zZ]|[+-]\d{1,2}(:\d{2})?)$/.exec(str);
+    let timezone = "Z";
+    if (m) {
+      timezone = m[2].trim();
+      str = m[1].trim();
+    }
+
+    // 解析日期时间部分
+    if (
+      /^(\d{4}[/-]\d{2}[/-]\d{2})([ T]\d{2}:\d{2}(:\d{2}(\.\d{3})?)?)?$/.test(
         str
-      );
-    if (std_m) {
-      // 没有时区，补一个 Z
-      if (!std_m[3]) {
-        str += 'Z';
+      )
+    ) {
+      let d = new Date(str + timezone);
+      if (!isNaN(d.getTime())) {
+        return d;
       }
-      return new Date(str);
     }
 
     // 开始解析
@@ -121,16 +129,9 @@ export function parse(
       yy: `${today.getFullYear()}`,
       MM: `01`,
       dd: `01`,
-      time: new TiTime('00:00:00'),
-      tz: '',
+      time: new TiTime("00:00:00"),
+      tz: timezone,
     };
-
-    // 结尾是 timezone 拿出来
-    let m = /(Z|([+-]\d{1,2}(:\d{2})?))$/.exec(str);
-    if (m) {
-      info.tz = m[1];
-      info.input = str.substring(0, m.index).trim();
-    }
 
     // 截取时间部分
     m = /[^\d](\d{1,2}:(\d{1,2})(:(\d{1,2}))?)$/.exec(info.input);
@@ -172,12 +173,12 @@ export function parse(
 
     // 合并输出
     let list = [
-      _.padStart(info.yy, 4, '0'),
-      '-',
-      _.padStart(info.MM, 2, '0'),
-      '-',
-      _.padStart(info.dd, 2, '0'),
-      ' ',
+      _.padStart(info.yy, 4, "0"),
+      "-",
+      _.padStart(info.MM, 2, "0"),
+      "-",
+      _.padStart(info.dd, 2, "0"),
+      " ",
       info.time.toString(),
     ];
 
@@ -191,17 +192,17 @@ export function parse(
     }
     // 采用配置的时区
     else {
-      let zone: DateParseOptionsZone = Util.fallback(options.timezone, 'Z');
+      let zone: DateParseOptionsZone = Util.fallback(options.timezone, "Z");
       list.push(toTimezoneSuffix(zone));
     }
 
-    let dateStr = list.join('');
+    let dateStr = list.join("");
     let date = new Date(dateStr);
 
     return date;
   }
   // Invalid date
-  console.trace('Invalid Date:', d);
+  console.trace("Invalid Date:", d);
   return;
 }
 
@@ -228,7 +229,7 @@ const _quick_parsers: DateTimeQuickParserSet = {
     let year: number, month: number, day: number;
 
     // 移除所有非数字字符
-    const _str = s.trim().replace(/\D/g, '');
+    const _str = s.trim().replace(/\D/g, "");
 
     // 格式: YYMM
     if (_str.length === 4) {
@@ -256,10 +257,10 @@ const _quick_parsers: DateTimeQuickParserSet = {
     }
     // 返回日期字符串
     return [
-      _.padStart(`${year}`, 4, '0'),
-      _.padStart(`${month + 1}`, 2, '0'),
-      _.padStart(`${day}`, 2, '0'),
-    ].join('-');
+      _.padStart(`${year}`, 4, "0"),
+      _.padStart(`${month + 1}`, 2, "0"),
+      _.padStart(`${day}`, 2, "0"),
+    ].join("-");
   },
   /**
    * 假设今年是 2024 年
@@ -274,7 +275,7 @@ const _quick_parsers: DateTimeQuickParserSet = {
     let day: number, month: number, year: number;
 
     // 移除所有非数字字符
-    const _str = s.trim().replace(/\D/g, '');
+    const _str = s.trim().replace(/\D/g, "");
 
     // 格式: DDMM
     if (_str.length === 4) {
@@ -302,10 +303,10 @@ const _quick_parsers: DateTimeQuickParserSet = {
 
     // 返回日期字符串
     return [
-      _.padStart(`${year}`, 4, '0'),
-      _.padStart(`${month + 1}`, 2, '0'),
-      _.padStart(`${day}`, 2, '0'),
-    ].join('-');
+      _.padStart(`${year}`, 4, "0"),
+      _.padStart(`${month + 1}`, 2, "0"),
+      _.padStart(`${day}`, 2, "0"),
+    ].join("-");
   },
   /**
    * 假设今年是 2024 年
@@ -320,7 +321,7 @@ const _quick_parsers: DateTimeQuickParserSet = {
     let day: number, month: number, year: number;
 
     // 移除所有非数字字符
-    const _str = s.trim().replace(/\D/g, '');
+    const _str = s.trim().replace(/\D/g, "");
 
     // 格式: MMDD
     if (_str.length === 4) {
@@ -348,10 +349,10 @@ const _quick_parsers: DateTimeQuickParserSet = {
 
     // 返回日期字符串
     return [
-      _.padStart(`${year}`, 4, '0'),
-      _.padStart(`${month + 1}`, 2, '0'),
-      _.padStart(`${day}`, 2, '0'),
-    ].join('-');
+      _.padStart(`${year}`, 4, "0"),
+      _.padStart(`${month + 1}`, 2, "0"),
+      _.padStart(`${day}`, 2, "0"),
+    ].join("-");
   },
 };
 
@@ -364,8 +365,8 @@ const _quick_parsers: DateTimeQuickParserSet = {
  * @returns 附加时区后缀后的日期字符串。
  */
 function toTimezoneSuffix(timezone?: DateParseOptionsZone) {
-  if ('Z' === timezone) {
-    return 'Z';
+  if ("Z" === timezone) {
+    return "Z";
   }
   // 直接时区偏移量
   else if (_.isNumber(timezone)) {
@@ -374,7 +375,7 @@ function toTimezoneSuffix(timezone?: DateParseOptionsZone) {
     }
     return `${timezone}`;
   }
-  return '';
+  return "";
 }
 
 /**
@@ -391,14 +392,14 @@ export function quickParse(
 ): Date | undefined {
   let s = _.trim(_input);
   if (!s) return;
-  let { mode = 'dmy' } = options;
+  let { mode = "dmy" } = options;
   let quick_parser = _quick_parsers[mode];
 
   // 获取日期部分和时间部分
   let m = /^([^\s]+)(\s+([^\s]+))?$/.exec(_input);
   if (m) {
     let s_date = m[1];
-    let s_time = m[3] ?? '';
+    let s_time = m[3] ?? "";
 
     // 如果日期部分包括特殊字符，就一定不是快速模式
     if (!/^[0-9]+$/.test(s_date)) {
@@ -417,9 +418,9 @@ export function quickParse(
     let date_str = dInStr;
     if (s_time) {
       let time = parseTime(s_time);
-      date_str += ' ' + time.toString();
+      date_str += " " + time.toString();
     } else {
-      date_str += ' 00:00:00.000';
+      date_str += " 00:00:00.000";
     }
     date_str += toTimezoneSuffix(options.timezone);
 
@@ -499,7 +500,7 @@ export function genFormatContext(_d: any, timezone?: DateParseOptionsZone) {
   // Format by pattern
   let M = m_i + 1;
   let Mmm = MONTH_ABBR[m_i];
-  let MMM = Mmm ? Mmm.toUpperCase() : '---';
+  let MMM = Mmm ? Mmm.toUpperCase() : "---";
   let MMMM = I18n ? I18n.get(`month-${Mmm}`) : MONTH_NAME[m_i];
 
   let day = date.getDay();
@@ -516,14 +517,14 @@ export function genFormatContext(_d: any, timezone?: DateParseOptionsZone) {
     s,
     S,
     yyy: yyyy,
-    yy: ('' + yyyy).substring(2, 4),
-    MM: _.padStart(`${M}`, 2, '0'),
-    dd: _.padStart(`${d}`, 2, '0'),
-    HH: _.padStart(`${H}`, 2, '0'),
-    mm: _.padStart(`${m}`, 2, '0'),
-    ss: _.padStart(`${s}`, 2, '0'),
-    SS: _.padStart(`${S}`, 3, '0'),
-    SSS: _.padStart(`${S}`, 3, '0'),
+    yy: ("" + yyyy).substring(2, 4),
+    MM: _.padStart(`${M}`, 2, "0"),
+    dd: _.padStart(`${d}`, 2, "0"),
+    HH: _.padStart(`${H}`, 2, "0"),
+    mm: _.padStart(`${m}`, 2, "0"),
+    ss: _.padStart(`${s}`, 2, "0"),
+    SS: _.padStart(`${S}`, 3, "0"),
+    SSS: _.padStart(`${S}`, 3, "0"),
     E,
     EE: E,
     EEE: E,
@@ -556,7 +557,7 @@ export function formats(
  * 如果未设置时区且 dftAsLocal 为 false，则返回 undefined。
  */
 export function getDefaultTimezoneOffset(dftAsLocal = true) {
-  let tz = (getEnv(ENV_KEYS.TIMEZONE) as string) ?? '';
+  let tz = (getEnv(ENV_KEYS.TIMEZONE) as string) ?? "";
   let m = /^(GMT|UTC)([+-]\d{1,2})$/.exec(tz);
   if (m) {
     return parseInt(m[2]);
@@ -575,9 +576,9 @@ export function getDefaultTimezoneProp(
   if (!_.isNil(timezone)) {
     return timezone;
   }
-  let dft = tiGetDefaultComPropValue(COM_TYPE, 'timezone', 'auto');
-  if ('Z' == dft) {
-    return 'Z';
+  let dft = tiGetDefaultComPropValue(COM_TYPE, "timezone", "auto");
+  if ("Z" == dft) {
+    return "Z";
   }
   if (/^[+-][0-9]{1,2}$/.test(dft)) {
     return parseInt(dft);
@@ -600,10 +601,10 @@ export function format(
 ): string {
   // 防空
   if (_.isNil(_date)) {
-    return '';
+    return "";
   }
 
-  let { fmt = 'yyyy-MM-dd HH:mm:ss', trimZero = false, timezone } = options;
+  let { fmt = "yyyy-MM-dd HH:mm:ss", trimZero = false, timezone } = options;
 
   // 未指定 timezone 那么尝试从全局环境变量里获取
   // 这个通常由开发者在连接远程服务器获得正确的时区后
@@ -624,17 +625,17 @@ export function format(
       }
       // 那么默认当作 UTC 时间戳
       else {
-        date = new Date(_date + 'Z');
+        date = new Date(_date + "Z");
       }
     }
     // 不知道是什么
     else {
-      return '???';
+      return "???";
     }
 
     // 最后防守一道
     if (!_.isDate(date) || isNaN(date.getTime())) {
-      return '!!!';
+      return "!!!";
     }
   } else {
     date = _date;
@@ -659,9 +660,9 @@ export function format(
   if (last < fmt.length) {
     list.push(fmt.substring(last));
   }
-  let re = list.join('');
+  let re = list.join("");
   // if end by 00:00:00 then auto trim it
-  if (trimZero && re.endsWith(' 00:00:00')) {
+  if (trimZero && re.endsWith(" 00:00:00")) {
     return re.substring(0, re.length - 9);
   }
   return re;
@@ -680,16 +681,16 @@ export function timeText(
   { justNow = 10, i18n } = {} as {
     justNow: number;
     i18n?: {
-      'any-time': string;
-      'in-year': string;
-      'past-in-min': string;
-      'past-in-hour': string;
-      'past-in-day': string;
-      'past-in-week': string;
-      'future-in-min': string;
-      'future-in-hour': string;
-      'future-in-day': string;
-      'future-in-week': string;
+      "any-time": string;
+      "in-year": string;
+      "past-in-min": string;
+      "past-in-hour": string;
+      "past-in-day": string;
+      "past-in-week": string;
+      "future-in-min": string;
+      "future-in-hour": string;
+      "future-in-day": string;
+      "future-in-week": string;
     };
   }
 ) {
@@ -700,16 +701,16 @@ export function timeText(
   //.....................................
   // 准备 i18n 默认值
   i18n = _.assign(i18n ?? {}, {
-    'any-time': I18n.get('dt-any-time', 'yyyy-MM-dd'),
-    'in-year': I18n.get('dt-in-year', 'MM-dd'),
-    'past-in-min': I18n.get('dt-past-in-min', 'Just now'),
-    'past-in-hour': I18n.get('dt-past-in-hour', 'In ${min}mins'),
-    'past-in-day': I18n.get('dt-past-in-day', 'In ${hour}hours'),
-    'past-in-week': I18n.get('dt-past-in-week', 'In ${day}days'),
-    'future-in-min': I18n.get('dt-future-in-min', 'Soon'),
-    'future-in-hour': I18n.get('dt-future-in-hour', 'After ${min}mins'),
-    'future-in-day': I18n.get('dt-future-in-day', 'After ${hour}hours'),
-    'future-in-week': I18n.get('dt-future-in-week', 'After ${day}days'),
+    "any-time": I18n.get("dt-any-time", "yyyy-MM-dd"),
+    "in-year": I18n.get("dt-in-year", "MM-dd"),
+    "past-in-min": I18n.get("dt-past-in-min", "Just now"),
+    "past-in-hour": I18n.get("dt-past-in-hour", "In ${min}mins"),
+    "past-in-day": I18n.get("dt-past-in-day", "In ${hour}hours"),
+    "past-in-week": I18n.get("dt-past-in-week", "In ${day}days"),
+    "future-in-min": I18n.get("dt-future-in-min", "Soon"),
+    "future-in-hour": I18n.get("dt-future-in-hour", "After ${min}mins"),
+    "future-in-day": I18n.get("dt-future-in-day", "After ${hour}hours"),
+    "future-in-week": I18n.get("dt-future-in-week", "After ${day}days"),
   });
   //.....................................
   let ams = d.getTime();
@@ -722,18 +723,18 @@ export function timeText(
   // Just now
   let du_min = Math.round(du_ms / 60000);
   if (du_min < justNow) {
-    return at_past ? i18n['past-in-min'] : i18n['future-in-min'];
+    return at_past ? i18n["past-in-min"] : i18n["future-in-min"];
   }
   // in-hour
   if (du_min < 60) {
-    let tmpl = at_past ? i18n['past-in-hour'] : i18n['future-in-hour'];
+    let tmpl = at_past ? i18n["past-in-hour"] : i18n["future-in-hour"];
     return Str.renderTmpl(tmpl, { min: du_min });
   }
   //.....................................
   // in-day
   let du_hr = Math.round(du_ms / 3600000);
   if (du_hr < 24) {
-    let tmpl = at_past ? i18n['past-in-day'] : i18n['future-in-day'];
+    let tmpl = at_past ? i18n["past-in-day"] : i18n["future-in-day"];
     return Str.renderTmpl(tmpl, {
       min: du_min,
       hour: du_hr,
@@ -743,7 +744,7 @@ export function timeText(
   // in-week
   let du_day = Math.round(du_hr / 24);
   if (du_day < 7) {
-    let tmpl = at_past ? i18n['past-in-week'] : i18n['future-in-week'];
+    let tmpl = at_past ? i18n["past-in-week"] : i18n["future-in-week"];
     return Str.renderTmpl(tmpl, {
       min: du_min,
       hour: du_hr,
@@ -755,11 +756,11 @@ export function timeText(
   let year = d.getFullYear();
   let toYear = new Date().getFullYear();
   if (year == toYear) {
-    return format(d, { fmt: i18n['in-year'], trimZero: true });
+    return format(d, { fmt: i18n["in-year"], trimZero: true });
   }
   //.....................................
   // any-time
-  return format(d, { fmt: i18n['any-time'], trimZero: true });
+  return format(d, { fmt: i18n["any-time"], trimZero: true });
   //.....................................
 }
 
@@ -898,20 +899,20 @@ export function createDate(d: Date, offset = 0) {
 
 export function parseTime(
   input: TimeInput,
-  unit: TimeUpdateUnit = 'ms'
+  unit: TimeUpdateUnit = "ms"
 ): TiTime {
   return new TiTime(input, unit);
 }
 
-const I_DAYS = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+const I_DAYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"];
 const I_WEEK = [
-  'sunday',
-  'monday',
-  'tuesday',
-  'wednesday',
-  'thursday',
-  'friday',
-  'saturday',
+  "sunday",
+  "monday",
+  "tuesday",
+  "wednesday",
+  "thursday",
+  "friday",
+  "saturday",
 ];
 const WEEK_DAYS = {
   sun: 0,
@@ -932,33 +933,33 @@ const WEEK_DAYS = {
   [k: string]: number;
 };
 const MONTH_ABBR = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
+  "Jan",
+  "Feb",
+  "Mar",
+  "Apr",
+  "May",
+  "Jun",
+  "Jul",
+  "Aug",
+  "Sep",
+  "Oct",
+  "Nov",
+  "Dec",
 ];
 
 const MONTH_NAME = [
-  'January',
-  'February',
-  'March',
-  'April',
-  'May',
-  'June',
-  'July',
-  'August',
-  'September',
-  'October',
-  'November',
-  'December',
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 ///////////////////////////////////////////

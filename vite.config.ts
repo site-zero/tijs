@@ -1,6 +1,6 @@
 import vue from "@vitejs/plugin-vue";
 import path from "path";
-import { defineConfig } from "vite";
+import { defineConfig } from "vitest/config";
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -21,6 +21,9 @@ export default defineConfig({
   optimizeDeps: {
     include: ["@vue/compiler-dom", "@vue/server-renderer"],
     exclude: ["vitest"],
+  },
+  test: {
+    setupFiles: ["./src/test/setup.ts"],
   },
   build: {
     // 单位是 KB

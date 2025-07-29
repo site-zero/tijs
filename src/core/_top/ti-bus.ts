@@ -18,6 +18,19 @@ class BusListener<T> {
     this._match = match ?? Match.parse(true);
   }
 
+  toString(): string {
+    let sb: string[] = [`@[${this._name}]`];
+    if (_.isFunction(this._handler)) {
+      sb.push("<handler>");
+    } else {
+      sb.push("<-NoHdl->");
+    }
+    if (this._match) {
+      sb.push(":=>", this._match.explainText(Match.createExplainI18n()));
+    }
+    return sb.join(" ");
+  }
+
   isMyHandler(handler: BusListenerHanlder<T>) {
     return this._handler === handler;
   }
@@ -81,6 +94,28 @@ export class TiBusImpl<T> implements TiBus<T> {
 
     let ALL_BUS = getEnv("ALL_BUS") as Map<string, TiBus<any>>;
     ALL_BUS.set(this._uniqKey, this);
+  }
+
+  toString(): string {
+    let re: string[] = [`Bus<${this._uniqKey}>`];
+    re.push("------------------");
+    re.push(`Listen:any(${this._lis_any.length})`);
+    this._lis_any.forEach((lis, index) => {
+      re.push(`  - ${index}. ${lis.toString()}`);
+    });
+    re.push("------------------");
+    re.push(`Listen:name(${this._lis_name.size})`);
+    let index = 0;
+    for (let [key, lis] of this._lis_name.entries()) {
+      re.push(`  - ${index}. ${key} ${lis.toString()}`);
+    }
+    re.push("------------------");
+    re.push(`Listen:match(${this._lis_match.length})`);
+    this._lis_match.forEach((lis, index) => {
+      re.push(`  - ${index}. ${lis.toString()}`);
+    });
+
+    return re.join("\n");
   }
 
   /**
@@ -208,6 +243,7 @@ export class TiBusImpl<T> implements TiBus<T> {
     else {
       this.offName(name, handler);
     }
+    //console.log(this.toString());
   }
 
   offAny(handler: BusListenerHanlder<T>) {
@@ -217,9 +253,13 @@ export class TiBusImpl<T> implements TiBus<T> {
   }
 
   offMatch(handler: BusListenerHanlder<T>, name?: string) {
-    // console.log("offMatch");
-    this._lis_any = _.filter(this._lis_match, (li) => {
-      return li._name != name && !li.isMyHandler(handler);
+    //console.log("offMatch: name=", name);
+    this._lis_match = _.filter(this._lis_match, (li, index) => {
+      let is_match_name = _.isNil(name) || li._name == name;
+      if(is_match_name && li.isMyHandler(handler)){
+        return false;
+      }
+      return true;
     });
     // if (!name) {
     //   _.remove(this._lis_match, (li) => li.isMyHandler(handler));

@@ -1258,6 +1258,29 @@ export type DiffItem = {
   remote: Vars;
 };
 
+export type ConflictItemValue = {
+  // 我值：通常指的是本地值
+  myValue: any;
+  // 他值: 通常指的是远端值
+  taValue: any;
+};
+
+export type ConflictItem = {
+  /**
+   * 冲突记录所在列表下标
+   */
+  index: number;
+  /**
+   * 冲突记录 ID
+   */
+  id: TableRowID;
+  /**
+   * 冲突记录具体发生冲突的字段
+   * 键为字段名，值分别记录了两个冲突的值
+   */
+  data: Record<string, ConflictItemValue>;
+};
+
 /*---------------------------------------------------
 
        不知道如何分类，但是控件里还有用的类型

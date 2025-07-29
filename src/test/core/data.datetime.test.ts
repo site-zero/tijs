@@ -1,6 +1,8 @@
 import _ from 'lodash';
 import { assert, expect, test } from 'vitest';
-import { DateTime } from '../../core';
+import { DateTime, installTiCoreI18n } from '../../core';
+
+installTiCoreI18n("en-us");
 
 test('quickParse with ymd mode', () => {
   const cases = [
@@ -176,7 +178,7 @@ test('genFormatContext', function () {
 
   expect(reObj.MMM).eq('JUL');
   expect(reObj.Mmm).eq('Jul');
-  expect(reObj.MMMM).eq('month-Jul');
+  expect(reObj.MMMM).eq('July');
 });
 
 test('format', function () {
@@ -203,30 +205,30 @@ test('timeText', function () {
   expect(DateTime.timeText(d)).eq('Just now');
 
   d.setTime(Date.now() - 30 * 60 * 1000);
-  expect(DateTime.timeText(d)).eq('In 30mins');
+  expect(DateTime.timeText(d)).eq('In 30 Mins');
 
   d.setTime(Date.now() - 23 * 3600 * 1000);
-  expect(DateTime.timeText(d)).eq('In 23hours');
+  expect(DateTime.timeText(d)).eq('In 23 Hours');
 
   d.setTime(Date.now() - 3 * 24 * 3600 * 1000);
-  expect(DateTime.timeText(d)).eq('In 3days');
+  expect(DateTime.timeText(d)).eq('In 3 Days');
 
   d.setTime(Date.now() + 8 * 60 * 1000);
   //console.log("现在", new Date(), "测试", d)
   expect(DateTime.timeText(d)).eq('Soon');
 
   d.setTime(Date.now() + 30 * 60 * 1000);
-  expect(DateTime.timeText(d)).eq('After 30mins');
+  expect(DateTime.timeText(d)).eq('After 30 Mins');
 
   d.setTime(Date.now() + 10 * 3600 * 1000);
-  expect(DateTime.timeText(d)).eq('After 10hours');
+  expect(DateTime.timeText(d)).eq('After 10 Hours');
 
   d.setTime(Date.now() + 5 * 24 * 3600 * 1000);
-  expect(DateTime.timeText(d)).eq('After 5days');
+  expect(DateTime.timeText(d)).eq('After 5 Days');
 
   let threeYearsBefore = DateTime.parse('2020-10-06 10:00:00');
   d.setTime(threeYearsBefore!.getTime());
-  expect(DateTime.timeText(d)).eq('2020-10-06');
+  expect(DateTime.timeText(d)).eq('6 OCT 2020');
 });
 
 test('getWeekDayAbbr', function () {
@@ -342,7 +344,8 @@ test('todayInMs', function () {
 });
 
 test('countMonthDay', function () {
-  let d = DateTime.parse('2023-02-28+8');
+  let d = DateTime.parse('2023-02-28+08');
+  console.log("d=", d)
   expect(DateTime.countMonthDay(d!)).eq(28);
 
   d = DateTime.parse('2000-02-28');
