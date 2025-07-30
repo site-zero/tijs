@@ -1,11 +1,15 @@
-import _ from 'lodash';
-import { AnyGetter, AnyTester } from '../../_type';
-import { splitIgnoreBlank, splitQuote } from '../text/ti-str';
+import _ from "lodash";
+import { AnyGetter, AnyTester, Vars } from "../../_type";
+import { splitIgnoreBlank, splitQuote } from "../text/ti-str";
 
 export type GetOptions = {
   test?: AnyTester;
   enableKeyPath?: boolean;
   dft?: any;
+};
+
+export const DefaultIdGetter = (it: Vars) => {
+  return it.id ?? it.value;
 };
 
 /**
@@ -22,7 +26,7 @@ export type GetOptions = {
  */
 export function genObjPathGetter(input: string): AnyGetter {
   let keyPath = splitQuote(input, {
-    seps: '.',
+    seps: ".",
     keepQuote: false,
     ignoreBlank: true,
   });
@@ -76,16 +80,16 @@ export function genObjGetter(
 ): AnyGetter {
   let { test = (v) => !_.isNil(v), enableKeyPath = true, dft } = options;
 
-  let keyFallback = splitIgnoreBlank(input, '|');
+  let keyFallback = splitIgnoreBlank(input, "|");
   let keyGetters = [] as AnyGetter[];
   for (let key of keyFallback) {
     let getter: AnyGetter;
     if (enableKeyPath) {
       getter = genObjPathGetter(key);
-      _.set(getter, '_gen_by', `genObjPathGetter(${key}) input='${input}'`);
+      _.set(getter, "_gen_by", `genObjPathGetter(${key}) input='${input}'`);
     } else {
       getter = (obj) => obj[key];
-      _.set(getter, '_gen_by', `obj[${key}] input='${input}'`);
+      _.set(getter, "_gen_by", `obj[${key}] input='${input}'`);
     }
     keyGetters.push(getter);
   }

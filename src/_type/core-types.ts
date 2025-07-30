@@ -1249,14 +1249,19 @@ export type MakeDiffOptions = {
 };
 
 export type DiffItem = {
-  index: number;
+  //index: number;
   id: TableRowID;
-  existsInRemote: boolean;
-  existsInLocal: boolean;
-  local: Vars;
+
+  existsInMine: boolean;
+  existsInTarget: boolean;
+  
+  myData: Vars|undefined;
+  taData: Vars|undefined;
+
   delta: Vars;
-  remote: Vars;
 };
+
+export type DiffItemType = "INSERT" | "DELETE" | "CHANGE";
 
 export type ConflictItemValue = {
   // 我值：通常指的是本地值
@@ -1267,23 +1272,20 @@ export type ConflictItemValue = {
 
 export type ConflictItem = {
   /**
-   * 冲突记录所在列表下标
-   */
-  index: number;
-  /**
    * 冲突记录 ID
    */
   id: TableRowID;
 
-  existsInMine: boolean;
-  existsInThey: boolean;
-  myData:Vars;
-  taData:Vars;
+  myDiffType: DiffItemType;
+  taDiffType: DiffItemType;
+
+  myDelta: Vars;
+  taDelta: Vars;
   /**
    * 冲突记录具体发生冲突的字段
    * 键为字段名，值分别记录了两个冲突的值
    */
-  detail: Record<string, ConflictItemValue>;
+  fields: Record<string, ConflictItemValue>;
 };
 
 /*---------------------------------------------------

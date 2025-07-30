@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { ExplainI18n, TiMatch, Vars } from '../../_type';
+import { ExplainI18n, isTiMatch, TiMatch, Vars } from '../../_type';
 import { gen_by_func } from './by-func';
 import { gen_by_array } from './by_array';
 import { gen_by_bool } from './by_bool';
@@ -67,6 +67,9 @@ export function notMatch(m: TiMatch): TiMatch {
 }
 
 export function parse(src: any, dft: boolean = false): TiMatch {
+  if(isTiMatch(src)){
+    return src;
+  }
   if (_.isNil(src)) {
     return gen_by_bool(dft);
   }
@@ -77,6 +80,9 @@ export function parse(src: any, dft: boolean = false): TiMatch {
 }
 
 export function parse_strictly(src: any): TiMatch {
+  if(isTiMatch(src)){
+    return src;
+  }
   if (_.isFunction(src)) {
     return gen_by_func(src);
   }

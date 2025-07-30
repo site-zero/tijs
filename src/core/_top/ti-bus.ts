@@ -254,9 +254,9 @@ export class TiBusImpl<T> implements TiBus<T> {
 
   offMatch(handler: BusListenerHanlder<T>, name?: string) {
     //console.log("offMatch: name=", name);
-    this._lis_match = _.filter(this._lis_match, (li, index) => {
+    this._lis_match = _.filter(this._lis_match, (li) => {
       let is_match_name = _.isNil(name) || li._name == name;
-      if(is_match_name && li.isMyHandler(handler)){
+      if (is_match_name && li.isMyHandler(handler)) {
         return false;
       }
       return true;

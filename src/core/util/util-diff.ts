@@ -1,6 +1,15 @@
 import _ from "lodash";
-import { mapToObj, Util } from "../";
-import { DiffItem, MakeDiffOptions, TableRowID, Vars } from "../../_type";
+import { DefaultIdGetter, mapToObj, Match, Util } from "../";
+import {
+  DiffItem,
+  DiffItemType,
+  MakeDiffOptions,
+  TableRowID,
+  TiMatch,
+  Vars,
+} from "../../_type";
+
+const debug = false;
 
 export type RecordDiffOptions = {
   /**
@@ -8,6 +17,15 @@ export type RecordDiffOptions = {
    * 默认为 true
    */
   checkRemoveFromOrgin?: boolean;
+  /**
+   * 指定需要忽略的键
+   */
+  ignoreKeys?:
+    | TiMatch
+    | string
+    | string[]
+    | RegExp
+    | ((key: string) => boolean);
 };
 
 export function getRecordDiff(
@@ -15,10 +33,14 @@ export function getRecordDiff(
   data: Vars,
   options: RecordDiffOptions = {}
 ): Vars {
-  let { checkRemoveFromOrgin = true } = options;
+  let { checkRemoveFromOrgin = true, ignoreKeys } = options;
+  let ignore = Match.parse(ignoreKeys, false);
   let diff: Vars = {};
   // 看看哪些被修改了
   _.forEach(data, (v0, k) => {
+    if (ignore && ignore.test(k)) {
+      return;
+    }
     let vOld = _.get(org, k);
     if (!_.isEqual(vOld, v0)) {
       _.set(diff, k, v0);
@@ -27,6 +49,9 @@ export function getRecordDiff(
   // 看看哪些被删掉了
   if (checkRemoveFromOrgin) {
     _.forEach(org, (_v, k) => {
+      if (ignore && ignore.test(k)) {
+        return;
+      }
       if (_.isUndefined(data[k])) {
         diff[k] = null;
       }
@@ -148,135 +173,206 @@ export function isDeepEqual(o0: any, o1: any) {
   return o0 == o1;
 }
 
+export function getDiffItemType(item: DiffItem): DiffItemType {
+  if (item.existsInMine && item.existsInTarget) {
+    return "CHANGE";
+  }
+  if (item.existsInMine && !item.existsInTarget) {
+    return "INSERT";
+  }
+  if (!item.existsInMine && item.existsInTarget) {
+    return "DELETE";
+  }
+  throw "It is impossible!!";
+}
+
+export type BuildDifferentItemOptions = MakeDiffOptions & {
+  getId?: (it: Vars) => TableRowID;
+  ignoreKeys?:
+    | TiMatch
+    | string
+    | string[]
+    | RegExp
+    | ((key: string) => boolean);
+
+  patchMetaUpdate?: null | ((diff: Vars, id: TableRowID, remote: Vars) => void);
+};
+
+export function buildDifferentItem(
+  myData: Vars | undefined,
+  taData: Vars | undefined,
+  options: BuildDifferentItemOptions = {}
+): DiffItem | undefined {
+  if (debug) console.log("buildDifferentItem", { myData, taData });
+  // 防空
+  if (!myData && !taData) {
+    return;
+  }
+
+  // 解析参数
+  let {
+    getId = DefaultIdGetter,
+    ignoreKeys,
+    defaultMeta,
+    updateMeta,
+    insertMeta,
+    patchMetaUpdate,
+  } = options;
+
+  // 准备返回值
+  let id = getId(myData ?? taData ?? {});
+  let reDiffItem = {
+    id,
+    existsInMine: myData ? true : false,
+    existsInTarget: taData ? true : false,
+    myData: Util.jsonClone(myData),
+    taData: Util.jsonClone(taData),
+  } as DiffItem;
+  if (debug) console.log("reDiffItem:", reDiffItem);
+
+  // 自己不存在，那么必然 remote 存在, 相当于自己执行了删除
+  if (!myData) {
+    reDiffItem.delta = {};
+  }
+  // 两边都存在，则开始比较不同
+  else if (taData) {
+    let diff = Util.getRecordDiff(taData, myData, {
+      checkRemoveFromOrgin: true,
+      ignoreKeys,
+    });
+    if (_.isEmpty(diff)) {
+      return;
+    }
+
+    // 补上固定 Meta
+    if (defaultMeta) {
+      // 动态计算
+      if (_.isFunction(defaultMeta)) {
+        _.defaults(diff, defaultMeta(myData, taData));
+      }
+      // 静态值
+      else {
+        _.defaults(diff, defaultMeta);
+      }
+    }
+    if (updateMeta) {
+      // 动态计算
+      if (_.isFunction(updateMeta)) {
+        _.assign(diff, updateMeta(myData, taData));
+      }
+      // 静态值
+      else {
+        _.assign(diff, updateMeta);
+      }
+    }
+
+    // 补上 ID
+    if (patchMetaUpdate) {
+      patchMetaUpdate(diff, id, taData);
+    }
+
+    reDiffItem.delta = diff;
+  }
+  // 必然是新记录，需要插入
+  else {
+    let newMeta = Util.jsonClone(myData);
+    if (defaultMeta) {
+      // 动态计算
+      if (_.isFunction(defaultMeta)) {
+        _.defaults(newMeta, defaultMeta(myData, taData));
+      }
+      // 静态值
+      else {
+        _.defaults(newMeta, defaultMeta);
+      }
+    }
+    if (insertMeta) {
+      // 动态计算
+      if (_.isFunction(insertMeta)) {
+        _.assign(newMeta, insertMeta(myData, taData));
+      }
+      // 静态值
+      else {
+        _.assign(newMeta, insertMeta);
+      }
+    }
+    reDiffItem.delta = newMeta;
+  }
+
+  // 搞定返回
+  return reDiffItem;
+}
+
 /**
  * 用于 `makeDifferents` 函数的配置对象类型
  * 包含本地列表、远程列表、远程映射、ID 获取函数和选项
  */
-export type MakeDiffSetup = {
-  localList?: Vars[];
-  remoteList?: Vars[];
+export type BuildDifferentListOptions = BuildDifferentItemOptions & {
   remoteMap?: Map<TableRowID, Vars>;
-  getId: (it: Vars, index: number) => TableRowID;
-  options: MakeDiffOptions;
-  patchMetaUpdate?: null | ((diff: Vars, id: TableRowID, remote: Vars) => void);
 };
 
-export function makeDifferents(setup: MakeDiffSetup): DiffItem[] {
+/**
+ * 构建本地列表和远程列表之间的差异项列表
+ *
+ * @param myList - 本地数据列表，可选参数
+ * @param taList - 远程数据列表，可选参数
+ * @param options - 构建差异项的配置选项，包含 ID 获取函数、远程映射等
+ * @returns 返回一个包含差异项的数组
+ */
+export function buildDifferentListItems(
+  myList: Vars[] | undefined,
+  taList: Vars[] | undefined,
+  options: BuildDifferentListOptions = {}
+): DiffItem[] {
   let re: DiffItem[] = [];
 
-  let { localList, remoteList, remoteMap, getId, options, patchMetaUpdate } =
-    setup;
+  let { getId = DefaultIdGetter, remoteMap, ignoreKeys } = options;
 
   // 如果没有做过任何修改 ...
-  if (!localList) {
+  if (!myList) {
     return re;
   }
 
   // 对远程列表编制索引
   if (!remoteMap) {
-    remoteMap = buildMapFromList(getId, remoteList);
+    remoteMap = buildMapFromList(getId, taList);
   }
+  if (debug) console.log("remoteMap:", remoteMap);
+
+  // 重新设置选项
+  let diffItemOptions: BuildDifferentItemOptions = {
+    ...options,
+    ignoreKeys: Match.parse(ignoreKeys),
+  };
 
   // 循环本地列表，顺便编制一个本地列表的ID 索引
   let localMap = new Map<TableRowID, Vars>();
-  if (localList) {
-    for (let i = 0; i < localList.length; i++) {
-      let local = localList[i];
-      let id = getId(local, i);
-      localMap.set(id, local);
-      let remote = remoteMap.get(id);
-      let diffItem = {
-        index: i,
-        id,
-        existsInRemote: remote ? true : false,
-        existsInLocal: true,
-        local: Util.jsonClone(local),
-        remote: Util.jsonClone(remote),
-      } as DiffItem;
-      // 已经存在，必然是要更新记录
-      if (remote) {
-        let diff = Util.getRecordDiff(remote, local, {
-          checkRemoveFromOrgin: true,
-        });
-        if (_.isEmpty(diff)) {
-          continue;
-        }
-
-        // 补上固定 Meta
-        if (options.defaultMeta) {
-          // 动态计算
-          if (_.isFunction(options.defaultMeta)) {
-            _.defaults(diff, options.defaultMeta(local, remote));
-          }
-          // 静态值
-          else {
-            _.defaults(diff, options.defaultMeta);
-          }
-        }
-        if (options.updateMeta) {
-          // 动态计算
-          if (_.isFunction(options.updateMeta)) {
-            _.assign(diff, options.updateMeta(local, remote));
-          }
-          // 静态值
-          else {
-            _.assign(diff, options.updateMeta);
-          }
-        }
-
-        // 补上 ID
-        if (patchMetaUpdate) {
-          patchMetaUpdate(diff, id, remote);
-        }
-
-        diffItem.delta = diff;
-      }
-      // 必然是新记录，需要插入
-      else {
-        let newMeta = Util.jsonClone(local);
-        if (options.defaultMeta) {
-          // 动态计算
-          if (_.isFunction(options.defaultMeta)) {
-            _.defaults(newMeta, options.defaultMeta(local, remote));
-          }
-          // 静态值
-          else {
-            _.defaults(newMeta, options.defaultMeta);
-          }
-        }
-        if (options.insertMeta) {
-          // 动态计算
-          if (_.isFunction(options.insertMeta)) {
-            _.assign(newMeta, options.insertMeta(local, remote));
-          }
-          // 静态值
-          else {
-            _.assign(newMeta, options.insertMeta);
-          }
-        }
-        diffItem.delta = newMeta;
-      }
-      // 记入返回列表
+  for (let i = 0; i < myList.length; i++) {
+    let myData = myList[i];
+    let id = getId(myData);
+    localMap.set(id, myData);
+    let taData = remoteMap.get(id);
+    let diffItem = buildDifferentItem(myData, taData, diffItemOptions);
+    if (diffItem) {
       re.push(diffItem);
-    } // for (let i = 0; i < _local_list.value.length; i++) {
+    }
   }
+  if (debug) console.log("localMap:", localMap);
 
   // 循环一下，看看哪些需要从远程删除
-  if (remoteList) {
-    for (let i = 0; i < remoteList.length; i++) {
-      let remote = remoteList[i];
-      let id = getId(remote, i);
+  if (taList) {
+    for (let i = 0; i < taList.length; i++) {
+      let remote = taList[i];
+      let id = getId(remote);
       let local = localMap.get(id);
-      if (!local) {
-        re.push({
-          index: -1,
-          id,
-          existsInRemote: true,
-          existsInLocal: false,
-          local: {},
-          delta: {},
-          remote: Util.jsonClone(remote),
-        });
+      if (local) {
+        continue;
+      }
+      if (debug) console.log("rm from taList: i=", i, id, remote);
+      let diffItem = buildDifferentItem(local, remote, diffItemOptions);
+      if (debug) console.log("diffItem", diffItem);
+      if (diffItem) {
+        re.push(diffItem);
       }
     }
   }
