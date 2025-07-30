@@ -137,7 +137,6 @@ test("conflict-list-02", function () {
   let taDiff = buildDifferentListItems(server, remote);
 
   let conflicts = buildConflictList(myDiff, taDiff);
-  console.log(conflicts[1]);
   expect(conflicts.length).eq(2);
   expect(conflicts[0]).toEqual({
     id: "A",

@@ -345,7 +345,6 @@ test('todayInMs', function () {
 
 test('countMonthDay', function () {
   let d = DateTime.parse('2023-02-28+08');
-  console.log("d=", d)
   expect(DateTime.countMonthDay(d!)).eq(28);
 
   d = DateTime.parse('2000-02-28');

@@ -71,7 +71,6 @@ test("diff-list-01", function () {
   ];
 
   let diffs = buildDifferentListItems(myList, taList);
-  console.log(JSON.stringify(diffs, null, 4));
   expect(diffs.length).eq(1);
   expect(diffs[0]).toEqual({
     id: "A",
