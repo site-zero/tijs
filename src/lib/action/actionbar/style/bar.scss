@@ -36,16 +36,25 @@
     @include flex-align-nowrap($ai: stretch);
     > .bar-head {
       @include flex-align-nowrap($ai: center);
+      flex:1 1 auto;
       font-weight: bold;
       padding: 0 0.6em;
       > .ti-icon {
+        flex: 0 0 auto;
         font-size: 1.5em;
         margin-right: 0.3em;
+      }
+      > .as-snippet-text {
+        flex: 1 1 auto;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 10px;
       }
     }
     > .bar-item-wrapper {
       @include flex-align-nowrap($ai: stretch);
-      flex: 1 1 auto;
+      flex: 0 0 auto;
       &[item-align="left"] {
         justify-content: flex-start;
       }
