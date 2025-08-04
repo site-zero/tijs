@@ -1,14 +1,14 @@
-import _ from 'lodash';
-import { computed, ref } from 'vue';
-import { ListSelectEmitInfo, TagItem } from '../../';
-import { TableRowID, Vars } from '../../../_type';
-import { Util } from '../../../core';
-import { useDict, useReadonly } from '../../_features';
-import { useValueOptions } from '../box2/use-value-options';
+import _ from "lodash";
+import { computed, ref } from "vue";
+import { ListSelectEmitInfo, TagItem } from "../../";
+import { TableRowID, Vars } from "../../../_type";
+import { Util } from "../../../core";
+import { useDict, useReadonly } from "../../_features";
+import { useValueOptions } from "../box2/use-value-options";
 import {
   MultiDroplistEmitter,
   MultiDroplistProps,
-} from './ti-multi-droplist-types';
+} from "./ti-multi-droplist-types";
 
 export type MultiDroplistApi = ReturnType<typeof useMultiDroplist>;
 
@@ -81,7 +81,7 @@ export function useMultiDroplist(
     if (_.isEqual(vals, props.value)) {
       return;
     }
-    emit('change', vals ?? null);
+    emit("change", vals ?? null);
   }
   //-----------------------------------------------------
   // 异步方法
@@ -105,8 +105,27 @@ export function useMultiDroplist(
     await _options.reloadOptioinsData();
   }
   //-----------------------------------------------------
+  let delay_load: (TableRowID[] | undefined)[] | null = null;
+  //-----------------------------------------------------
   async function _load_items(vals?: TableRowID[]) {
+    // console.log(
+    //   "_load_items",
+    //   vals?.length || 0,
+    //   vals,
+    //   `_delay_laod: [${delay_load?.length}]`
+    // );
     let items: TagItem[] = [];
+
+    // 准备取消控制器
+    if (!delay_load) {
+      delay_load = [];
+    }
+    // 如果正在读取，那么记录到最后
+    else {
+      delay_load.push(vals);
+      return;
+    }
+
     // 逐个值来处理
     if (vals) {
       for (let val of vals) {
@@ -128,13 +147,24 @@ export function useMultiDroplist(
         }
       }
     }
-    // 设置
-    _items.value = items.length > 0 ? items : undefined;
+
+    // 继续取最后一个直接读取
+    if (delay_load && delay_load.length > 0) {
+      let lastValues = delay_load.pop();
+      delay_load = null;
+      await _load_items(lastValues);
+    }
+    // 清空栈并设置值
+    else {
+      delay_load = null;
+      //console.log("_item.value=", items.length, vals);
+      _items.value = items.length > 0 ? items : undefined;
+    }
   }
   //-----------------------------------------------------
   async function onPropsValueChange() {
-    // console.log('onPropsValueChange', props.value);
-    _load_items(TagValues.value);
+    //console.log("onPropsValueChange", props.value);
+    await _load_items(TagValues.value);
   }
   //-----------------------------------------------------
   // 输出特性
