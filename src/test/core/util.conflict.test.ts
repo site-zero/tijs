@@ -15,9 +15,12 @@ test("conflict-item-00", function () {
   let myDiff = buildDifferentItem(local, remote);
   let taDiff = buildDifferentItem(server, remote);
 
-  let conflict = buildConflict(myDiff, taDiff);
+  let conflict = buildConflict(myDiff, taDiff, {
+    getText: (it) => `[${it.id.toLowerCase()}]`,
+  });
   expect(conflict).toEqual({
     id: "A",
+    text: "[a]",
     myDiffType: "CHANGE",
     taDiffType: "CHANGE",
     myDelta: { a: 35 },
@@ -39,9 +42,14 @@ test("conflict-item-01", function () {
   let myDiff = buildDifferentItem(local, remote);
   let taDiff = buildDifferentItem(server, remote);
 
-  let conflict = buildConflict(myDiff, taDiff);
+  let conflict = buildConflict(myDiff, taDiff, {
+    getText: (it) => [it.id, it.a, it.b].join(":"),
+    getHref: (it) => `/view/${it.id}`,
+  });
   expect(conflict).toEqual({
     id: "A",
+    text: "A:34:hello",
+    href: "/view/A",
     myDiffType: "CHANGE",
     taDiffType: "CHANGE",
     myDelta: { a: 35, c: null },
@@ -75,7 +83,7 @@ test("conflict-list-00", function () {
   let myDiff = buildDifferentListItems(local, remote);
   let taDiff = buildDifferentListItems(server, remote);
 
-  let conflicts = buildConflictList(myDiff, taDiff);
+  let conflicts = buildConflictList(myDiff, taDiff, {});
 
   expect(conflicts.length).eq(0);
 });
@@ -100,11 +108,12 @@ test("conflict-list-01", function () {
   let myDiff = buildDifferentListItems(local, remote);
   let taDiff = buildDifferentListItems(server, remote);
 
-  let conflicts = buildConflictList(myDiff, taDiff);
+  let conflicts = buildConflictList(myDiff, taDiff, {});
 
   expect(conflicts.length).eq(1);
   expect(conflicts[0]).toEqual({
     id: "C",
+    text: "C",
     myDiffType: "CHANGE",
     taDiffType: "CHANGE",
     myDelta: { age: 30, info: { x: false, y: "1.5" } },
@@ -136,10 +145,11 @@ test("conflict-list-02", function () {
   let myDiff = buildDifferentListItems(local, remote);
   let taDiff = buildDifferentListItems(server, remote);
 
-  let conflicts = buildConflictList(myDiff, taDiff);
+  let conflicts = buildConflictList(myDiff, taDiff, {});
   expect(conflicts.length).eq(2);
   expect(conflicts[0]).toEqual({
     id: "A",
+    text: "A",
     myDiffType: "CHANGE",
     taDiffType: "DELETE",
     myDelta: { age: 19 },
@@ -148,6 +158,7 @@ test("conflict-list-02", function () {
   } as ConflictItem);
   expect(conflicts[1]).toEqual({
     id: "C",
+    text: "C",
     myDiffType: "DELETE",
     taDiffType: "CHANGE",
     myDelta: {},

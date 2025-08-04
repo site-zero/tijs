@@ -1,6 +1,83 @@
 import _ from "lodash";
+import { Ref } from "vue";
 import { DefaultIdGetter, getDiffItemType, Match } from "..";
 import { ConflictItem, DiffItem, TableRowID, TiMatch, Vars } from "../../_type";
+
+export function has_conflict(cf?: ConflictItem): boolean {
+  if (!cf || _.isEmpty(cf)) {
+    return false;
+  }
+  if (cf.myDiffType != cf.taDiffType) {
+    return true;
+  }
+  if (_.isEmpty(cf.fields)) {
+    return false;
+  }
+  return true;
+}
+
+export function has_conflict_in(cfs?: ConflictItem[]): boolean {
+  if (!cfs || _.isEmpty(cfs)) {
+    return false;
+  }
+  for (let cf of cfs) {
+    if (has_conflict(cf)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+export function get_conflict_delta(data: Vars, conflict: ConflictItem): Vars {
+  let conflictKeys = _.keys(conflict.fields);
+  return _.omit(data, conflictKeys);
+}
+
+export function apply_conflict(
+  local: Ref<Vars | undefined>,
+  server?: Vars,
+  localDiff?: DiffItem
+) {
+  // if (local.value && server && conflict) {
+  //   // 没有冲突，就把本地修改直接融合到服务器上
+  //   if (!conflict.fields || _.isEmpty(conflict.fields)) {
+  //     local.value = _.assign({}, _.cloneDeep(server), localDiff);
+  //   }
+  //   // 更新本地修改没有冲突的部分
+  //   else {
+  //     let delta = get_conflict_delta(server, conflict);
+  //     _.assign(local.value, delta);
+  //   }
+  // }
+  if (local.value) {
+    local.value = _.assign(_.cloneDeep(server), localDiff?.delta);
+  }
+}
+
+export function apply_conflict_list(
+  local: Ref<Vars[] | undefined>,
+  server?: Vars[],
+  localDiff?: DiffItem[]
+) {
+  if (!server || _.isEmpty(server)) {
+    return;
+  }
+  // 编制冲突索引
+  let deltaMap = new Map<string, Vars>();
+  _.forEach(localDiff, (diffItem) => {
+    if (diffItem.id && !_.isEmpty(diffItem.delta))
+      deltaMap.set(diffItem.id as string, diffItem.delta!);
+  });
+
+  // 已 Server 为基础循环处理冲突项目
+  let list = _.cloneDeep(server);
+  for (let li of list) {
+    let delta = deltaMap.get(li.id);
+    _.assign(li, delta);
+  }
+  // 更新本地列表
+  local.value = list;
+}
 
 /**
  * 创建冲突对象，用于比较两个变量对象中的键值对，找出值不同的冲突项。
@@ -11,8 +88,9 @@ import { ConflictItem, DiffItem, TableRowID, TiMatch, Vars } from "../../_type";
  * 值为包含两个对象对应值的冲突项；如果任一输入对象为空或没有不同值，则返回 undefined。
  */
 export function buildConflict(
-  myDiff?: DiffItem,
-  taDiff?: DiffItem
+  myDiff: DiffItem | undefined,
+  taDiff: DiffItem | undefined,
+  options: BuildConflictItemOptions
 ): ConflictItem | undefined {
   // 防空
   if (!myDiff || !taDiff) {
@@ -26,9 +104,25 @@ export function buildConflict(
   let myDiffType = getDiffItemType(myDiff);
   let taDiffType = getDiffItemType(taDiff);
 
+  // 获取描述信息
+  let item = taDiff.taData || taDiff.myData || myDiff.myData;
+  let { getText, getHref } = options;
+  let text = myDiff.id as string;
+  if (getText && item) {
+    text = getText(item);
+  }
+
+  // 获取超链接
+  let href: string | undefined = undefined;
+  if (getHref && item) {
+    href = getHref(item);
+  }
+
   // 准备返回值
   let re: ConflictItem = {
     id: myDiff.id,
+    text,
+    href,
     myDiffType,
     myDelta: myDiff.delta,
     taDiffType,
@@ -83,7 +177,12 @@ export function buildConflict(
   return re;
 }
 
-export type MakeConflictSetup = {
+export type BuildConflictItemOptions = {
+  getText?: (item: Vars) => string;
+  getHref?: (item: Vars) => string | undefined;
+};
+
+export type BuildConflictListOptions = BuildConflictItemOptions & {
   ignoreKeys?:
     | TiMatch
     | string
@@ -96,7 +195,7 @@ export type MakeConflictSetup = {
 export function buildConflictList(
   myList: DiffItem[],
   taList: DiffItem[],
-  options: MakeConflictSetup = {}
+  options: BuildConflictListOptions
 ): ConflictItem[] {
   // 准备参数
   options.ignoreKeys = Match.parse(options.ignoreKeys, false);
@@ -119,7 +218,7 @@ export function buildConflictList(
     if (!taData) {
       continue;
     }
-    let conflict = buildConflict(myData, taData);
+    let conflict = buildConflict(myData, taData, options);
     if (conflict) {
       re.push(conflict);
     }

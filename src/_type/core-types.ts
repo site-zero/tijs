@@ -1100,7 +1100,7 @@ export type AppModelBindingData =
 export type AppModelBindingEvent =
   | null
   | string
-  | Record<string, string[] | Record<string, string>>;
+  | Record<string, string[] | Record<string, string> | AppModelActionHandler>;
 
 /**
  * 如何将模式框的 result 绑定到主控件上
@@ -1254,9 +1254,9 @@ export type DiffItem = {
 
   existsInMine: boolean;
   existsInTarget: boolean;
-  
-  myData: Vars|undefined;
-  taData: Vars|undefined;
+
+  myData: Vars | undefined;
+  taData: Vars | undefined;
 
   delta: Vars;
 };
@@ -1275,6 +1275,8 @@ export type ConflictItem = {
    * 冲突记录 ID
    */
   id: TableRowID;
+  text: string;
+  href?: string;
 
   myDiffType: DiffItemType;
   taDiffType: DiffItemType;

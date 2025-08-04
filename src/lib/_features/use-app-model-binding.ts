@@ -1,11 +1,12 @@
-import _ from 'lodash';
+import _ from "lodash";
 import {
+  AppModelActionHandler,
   AppModelBindingData,
   AppModelBindingEvent,
   Callback1,
   isArray,
   Vars,
-} from '../../_type';
+} from "../../_type";
 
 const debug = false;
 
@@ -19,11 +20,11 @@ export function makeAppModelDataProps(
   bindingData: AppModelBindingData,
   getResult: () => any
 ): Record<string, any> {
-  if (debug) console.log('bindingData=', bindingData);
+  if (debug) console.log("bindingData=", bindingData);
   let props = {} as Record<string, any>;
   // 1. `null` 不传递
   if (!bindingData) {
-    if (debug) console.log('null => {}');
+    if (debug) console.log("null => {}");
     return props;
   }
   let result = getResult();
@@ -34,20 +35,20 @@ export function makeAppModelDataProps(
   }
   // 3. `["a","b"] 将 result.a 传递给 a 属性，result.b 传递给 b 属性
   else if (_.isArray(bindingData)) {
-    if (debug) console.log('array => ...');
+    if (debug) console.log("array => ...");
     for (let key of bindingData) {
       props[key] = _.get(result, key);
     }
   }
   // 4. `{a:"x",b:"y"}` 将 result.a 传递给 x 属性，result.b 传递给 y 属性
   else {
-    if (debug) console.log('mapping => ...');
+    if (debug) console.log("mapping => ...");
     for (let fromKey of _.keys(bindingData)) {
       let toKey = bindingData[fromKey];
       props[toKey] = _.get(result, fromKey);
     }
   }
-  if (debug) console.log('props=', props);
+  if (debug) console.log("props=", props);
   return props;
 }
 
@@ -68,11 +69,11 @@ export type MakeAppModelEventListenerOption = {
  */
 export function makeAppModelEventListeners(
   options: MakeAppModelEventListenerOption
-): Record<string, Callback1<any>> {
+): Record<string, AppModelActionHandler> {
   let { COM_TYPE, setResult, assignResult, bindingEvent } = options;
   //console.log(COM_TYPE, bindingEvent, result);
-  if (debug) console.log('listenResult:', COM_TYPE, bindingEvent, setResult);
-  let listeners = {} as Record<string, Callback1<any>>;
+  if (debug) console.log("listenResult:", COM_TYPE, bindingEvent, setResult);
+  let listeners = {} as Record<string, AppModelActionHandler>;
   // 1. `null` 不传递
   if (!bindingEvent) {
     return listeners;
@@ -80,8 +81,8 @@ export function makeAppModelEventListeners(
   // 2. `"change"` 【默认】将 change 事件的 payload 设置为 result
   if (_.isString(bindingEvent)) {
     if (debug) console.log(`'${bindingEvent}' => result`);
-    listeners[bindingEvent] = (payload: any) => {
-      if (debug) console.log(`🎃<${COM_TYPE}>`, bindingEvent, '=', payload);
+    listeners[bindingEvent] = async (_api, payload: any) => {
+      if (debug) console.log(`🎃<${COM_TYPE}>`, bindingEvent, "=", payload);
       setResult(payload);
     };
   }
@@ -89,37 +90,41 @@ export function makeAppModelEventListeners(
   else {
     for (let eventName of _.keys(bindingEvent)) {
       let handler = bindingEvent[eventName];
-      // 3. `{change:["a","b"]}`
+      // 3. `{change: (api, payload) => { ... }}`
+      if (_.isFunction(handler)) {
+        listeners[eventName] = handler;
+      }
+      // 4. `{change:["a","b"]}`
       //     将 change 事件的 payload.a =>result.a,payload.b => result.b
-      if (isArray<string>(handler)) {
+      else if (isArray<string>(handler)) {
         if (debug) console.log(`{change:["a","b"]}`);
         let asKeys = handler as string[];
-        listeners[eventName] = (payload: any) => {
+        listeners[eventName] = async (_api, payload: any) => {
           if (debug)
             console.log(
               `🎃<${COM_TYPE}>`,
               eventName,
               `handler=${JSON.stringify(asKeys)}`,
-              '=',
+              "=",
               payload
             );
           let meta = _.pick(payload, ...asKeys);
           assignResult(meta);
         };
       }
-      // 4. `{change:{a:"x",b:"y"}}`
+      // 5. `{change:{a:"x",b:"y"}}`
       //     将 change 事件的 payload.a =>result.x,payload.b => result.y
       else {
         if (debug) console.log(`{change:{a:"x",b:"y"}}`);
         let asMapping = handler as Record<string, string>;
-        listeners[eventName] = (payload: any) => {
+        listeners[eventName] = async (_api, payload: any) => {
           let meta: Vars = {};
           if (debug)
             console.log(
               `🎃<${COM_TYPE}>`,
               eventName,
               `handler=${JSON.stringify(asMapping)}`,
-              '=',
+              "=",
               payload
             );
           for (let fromKey of _.keys(asMapping)) {
@@ -132,7 +137,7 @@ export function makeAppModelEventListeners(
       }
     }
   }
-  if (debug) console.log('listeners=', listeners);
+  if (debug) console.log("listeners=", listeners);
   return listeners;
 }
 

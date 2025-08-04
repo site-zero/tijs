@@ -150,7 +150,7 @@
     //console.log('onBlockEvent', eventName, data);
     let handler = Listeners.value[eventName];
     if (handler) {
-      handler(data);
+      handler(ModalApi.value, data);
     }
   }
 
