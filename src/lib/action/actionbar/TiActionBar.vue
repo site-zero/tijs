@@ -7,6 +7,7 @@
     provide,
     reactive,
     ref,
+    useSlots,
     watch,
   } from "vue";
   import { AppEvents, BUS_KEY, BusMsg, Vars } from "../../../_type";
@@ -57,6 +58,14 @@
     itemAlign: "left",
   });
   //-------------------------------------------------------
+  const slots = useSlots();
+  const isShowHead = computed(() => {
+    return slots.head || props.head ? true : false;
+  });
+  const isShowTail = computed(() => {
+    return slots.tail || props.tail ? true : false;
+  });
+  //-------------------------------------------------------
   watch(
     () => props.vars,
     (newVal: Vars) => {
@@ -86,6 +95,8 @@
       props.className,
       {
         "show-click-mask": HasOpenedGroup.value,
+        "is-show-head": isShowHead.value,
+        "is-show-tail": isShowTail.value,
       },
       `layout-mode-${props.layoutMode ?? "H"}`,
       `top-as-${props.topItemAspectMode ?? "normal"}`,

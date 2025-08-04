@@ -36,7 +36,7 @@
     @include flex-align-nowrap($ai: stretch);
     > .bar-head {
       @include flex-align-nowrap($ai: center);
-      flex:1 1 auto;
+      flex: 1 1 auto;
       font-weight: bold;
       padding: 0 0.6em;
       > .ti-icon {
@@ -54,7 +54,7 @@
     }
     > .bar-item-wrapper {
       @include flex-align-nowrap($ai: stretch);
-      flex: 0 0 auto;
+      flex: 1 1 auto;
       &[item-align="left"] {
         justify-content: flex-start;
       }
@@ -64,6 +64,10 @@
       &[item-align="right"] {
         justify-content: flex-end;
       }
+    }
+    &.is-show-head > .bar-item-wrapper,
+    &.is-show-tail > .bar-item-wrapper {
+      flex: 0 0 auto;
     }
   }
   &.layout-mode-V {
