@@ -1,8 +1,8 @@
-import _ from 'lodash';
-import { computed } from 'vue';
-import { StrCaseMode, ValueProcesser, Vars } from '../../_type';
-import { Str } from '../../core';
-import { getDefaultValPipes } from './val-pipes/dft-val-pipes';
+import _ from "lodash";
+import { computed } from "vue";
+import { StrCaseMode, ValueProcesser, Vars } from "../../_type";
+import { DateTime, Str } from "../../core";
+import { getDefaultValPipes } from "./val-pipes/dft-val-pipes";
 
 export type ValuePipeFeature = ReturnType<typeof useValuePipe>;
 
@@ -59,10 +59,10 @@ export function useValuePipe(props: ValuePipeProps) {
     _.forEach(dft, (v, k) => {
       re.set(k, v);
     });
-    
+
     // case
     if (props.valueCase) {
-      re.set('$CASE', Str.getCaseFunc(props.valueCase));
+      re.set("$CASE", Str.getCaseFunc(props.valueCase));
     }
 
     // customized
@@ -90,9 +90,9 @@ export function useValuePipe(props: ValuePipeProps) {
    * 然后根据每个处理器名称从 `_pp_map.value` 中获取对应的处理器并添加到结果数组中。
    */
   function __build_processors() {
-    let piping = props.valuePiping ?? ['$TRIM', '$CASE'];
+    let piping = props.valuePiping ?? ["$TRIM", "$CASE"];
     if (_.isString(piping)) {
-      piping = Str.splitIgnoreBlank(piping, '|');
+      piping = Str.splitIgnoreBlank(piping, "|");
     }
     let re: ValueProcesser[] = [];
     for (let pipItem of piping) {
@@ -111,6 +111,10 @@ export function useValuePipe(props: ValuePipeProps) {
 
   // 返回处理函数
   return (val: any) => {
+    // if (val === "2025-09-09 00:00:00.000") {
+    //   let vs = DateTime.format(val, { timezone: "Z" });
+    //   console.log("useValuePipe", vs);
+    // }
     let context = props.pipeContext ?? {};
     let re = val;
     for (let processer of __processers.value) {

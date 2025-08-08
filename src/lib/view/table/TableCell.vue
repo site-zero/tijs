@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-  import { computed } from 'vue';
-  import { getFieldValue } from '../../../_type';
-  import { useFieldCom } from '../../_features/field';
-  import { TableCellEmitter, TableCellProps } from './ti-table-types';
+  import { computed } from "vue";
+  import { getFieldValue } from "../../../_type";
+  import { useFieldCom } from "../../_features/field";
+  import { TableCellEmitter, TableCellProps } from "./ti-table-types";
   //-------------------------------------------------------
   defineOptions({
     inheritAttrs: false,
@@ -11,7 +11,7 @@
   const emit = defineEmits<TableCellEmitter>();
   //-------------------------------------------------------
   const props = withDefaults(defineProps<TableCellProps>(), {
-    autoValue: 'value',
+    autoValue: "value",
     checkEquals: true,
     rowIndex: 0,
     colIndex: 0,
@@ -20,6 +20,9 @@
   //-------------------------------------------------------
   const CellValue = computed(() => {
     let val = getFieldValue(props.name, props.data);
+    // if ("load_etd" == props.name && val && val.startsWith('2025-09-09')) {
+    //   console.log("CellValue, name=", props.name, ", val=", val);
+    // }
     if (props.transformer) {
       return props.transformer(val, props.data, props.name);
     }
@@ -61,8 +64,8 @@
     );
     // 暗戳戳的标记一下控件的 disabled 状态，因为有些控件可以针对这个状态做特殊显示
     if (re.comConf && FieldDisabled.value) {
-      if ('TiLabel' === re.comType.name) {
-        re.comConf.type = 'disable';
+      if ("TiLabel" === re.comType.name) {
+        re.comConf.type = "disable";
       } else {
         re.comConf.disable = true;
       }
@@ -72,7 +75,7 @@
   //-------------------------------------------------------
   const CellListeners = computed(() => {
     let listen = {} as Record<string, Function>;
-    let changeEventName = props.changeEventName || 'change';
+    let changeEventName = props.changeEventName || "change";
     if (changeEventName && !FieldDisabled.value) {
       listen[changeEventName] = (val: any) => {
         // 防守
@@ -80,7 +83,7 @@
           return;
         }
         // 通知改动
-        emit('cell-change', {
+        emit("cell-change", {
           uniqKey: props.uniqKey,
           name: props.name,
           value: val,
@@ -103,7 +106,7 @@
   </div>
 </template>
 <style lang="scss">
-  @use '@site0/tijs/sass/_all.scss' as *;
+  @use "@site0/tijs/sass/_all.scss" as *;
   .table-cell-wrapper {
     @include flex-align-nowrap($jc: stretch, $ai: stretch);
     > * {

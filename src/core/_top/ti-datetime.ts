@@ -609,7 +609,7 @@ export function format(
   // 未指定 timezone 那么尝试从全局环境变量里获取
   // 这个通常由开发者在连接远程服务器获得正确的时区后
   // 通过类似 setEnv(ENV_KEYS.TIMEZONE,'GMT+8'); 来设置
-  if (_.isUndefined(timezone)) {
+  if (_.isNil(timezone)) {
     timezone = getDefaultTimezoneOffset(false);
   }
   let date: Date;
