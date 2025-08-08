@@ -17,6 +17,7 @@ export type InputGroupProps = CommonProps &
     | 'defaultComConf'
     | 'maxFieldNameWidth'
     | 'fieldLayoutMode'
+    | 'changeMode'
   > & {
     value?: Vars;
     ignoreNil?: boolean;
