@@ -1,4 +1,4 @@
-import { App } from 'vue';
+import { App } from "vue";
 import {
   AspectSize,
   LogicType,
@@ -7,7 +7,7 @@ import {
   TextContentType,
   TranSpeed,
   Vars,
-} from '../../_type';
+} from "../../_type";
 
 /**
  * 四种原始定位方式
@@ -43,9 +43,9 @@ import {
  *           +----------------------+
  * ```
  */
-export type TipDockPosition = 'H-left' | 'H-right' | 'V-top' | 'V-bottom';
+export type TipDockPosition = "H-left" | "H-right" | "V-top" | "V-bottom";
 
-export type TipDockMode = 'H' | 'V' | TipDockPosition;
+export type TipDockMode = "H" | "V" | TipDockPosition;
 
 type TipAspect = PopItemMeasure & {
   dockMode?: TipDockMode;
@@ -58,13 +58,13 @@ type TipAspect = PopItemMeasure & {
   padding?: AspectSize;
 
   // 默认 s
-  radius?: AspectSize | 'none';
+  radius?: AspectSize | "none";
 
   // 默认 primary
   type?: LogicType;
 };
 
-export type ModifierKey = 'ALT' | 'CTRL' | 'SHIFT' | 'META';
+export type ModifierKey = "ALT" | "CTRL" | "SHIFT" | "META";
 
 export type TipBoxProps = TipAspect & {
   /**
@@ -122,6 +122,13 @@ export type TipBoxProps = TipAspect & {
    * 如果声明了 comType，在这个字段里声明控件的配置信息
    */
   comConf?: Vars;
+
+  /**
+   * 如果 tip 渲染的时候动态控件，当内容渲染完毕， tipbox 的尺寸可能会变化
+   * 这时候应该重新 docking，因此动态控件需要发出一个事件。
+   * 通常这个事件的名称应该是 `ready` 但是可以通过这个属性特别指明
+   */
+  readyEvent?: string;
 };
 
 export type TipInstance = {

@@ -1032,7 +1032,6 @@ export type ActionBarItem = VisibilityProps &
      * 默认会指定为 1000ms
      */
     debounce?: number;
-
   };
 /*-------------------------------------------
 
@@ -1360,6 +1359,13 @@ export type DateParseOptionsZone = "Z" | number | null | undefined;
 export type DateInput = string | number | Date;
 export type DateFormatOptions = {
   fmt?: string;
+  /**
+   * 如果未指定 fmt，将会从环境变量里获取默认格式化字符串
+   * - `as:"date"` 将用 `DFT_DATE_FORMAT`
+   * - `as:"datetime"` 将用 `DFT_DATETIME_FORMAT`
+   * 默认为 as:"datetime"
+   */
+  as?: "date" | "datetime";
   trimZero?: boolean;
   timezone?: DateParseOptionsZone;
 };

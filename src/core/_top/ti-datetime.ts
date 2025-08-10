@@ -604,7 +604,13 @@ export function format(
     return "";
   }
 
-  let { fmt = "yyyy-MM-dd HH:mm:ss", trimZero = false, timezone } = options;
+  let { fmt, as = "datetime", trimZero = false, timezone } = options;
+
+  if (_.isNil(fmt)) {
+    let fmt_key =
+      as == "date" ? ENV_KEYS.DFT_DATE_FORMAT : ENV_KEYS.DFT_DATETIME_FORMAT;
+    fmt = getEnv(fmt_key, "yyyy-MM-dd HH:mm:ss") as string;
+  }
 
   // 未指定 timezone 那么尝试从全局环境变量里获取
   // 这个通常由开发者在连接远程服务器获得正确的时区后
