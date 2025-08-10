@@ -123,6 +123,24 @@ function makeItemAction(
   };
 }
 
+function makeItemActionWithDebounce(
+  emit: ActionBarEmitter,
+  action?: ActionBarAction,
+  debounce = 1000
+): ActionBarCallback | undefined {
+  let fn = makeItemAction(emit, action);
+  if (!fn) {
+    return;
+  }
+  if (debounce > 0) {
+    return _.debounce(fn, debounce, {
+      leading: true,
+      trailing: false,
+    });
+  }
+  return fn;
+}
+
 export function buildActionBarItems(
   props: ActionBarProps,
   indexes: number[],
@@ -198,7 +216,8 @@ export function buildActionBarItems(
       readonlyComConf: it.readonlyComConf,
       changeEventName: it.changeEventName,
       //.....................................
-      action: makeItemAction(emit, it.action),
+      action: makeItemActionWithDebounce(emit, it.action, it.debounce),
+
       //.....................................
       ...useVisibility(it, uniqKey),
       //.....................................

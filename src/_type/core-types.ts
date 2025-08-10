@@ -1027,6 +1027,12 @@ export type ActionBarItem = VisibilityProps &
     //.....................................
     items?: ActionBarItem[];
     action?: ActionBarAction;
+    /**
+     * 指定 action 的反弹跳时间(毫秒)，0 表示不要反弹跳。
+     * 默认会指定为 1000ms
+     */
+    debounce?: number;
+
   };
 /*-------------------------------------------
 

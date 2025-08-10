@@ -31,6 +31,7 @@ export function useTransfer(
         icon: "fas-arrow-up-long",
         text: "i18n:ti-transfer-move-up",
         enabled: { hasSelChecked: true },
+        debounce: 0,
         action: () => {
           let val = Util.moveCheckedById(
             props.value ?? [],
@@ -46,6 +47,7 @@ export function useTransfer(
         icon: "fas-arrow-down-long",
         text: "i18n:ti-transfer-move-down",
         enabled: { hasSelChecked: true },
+        debounce: 0,
         action: () => {
           let val = Util.moveCheckedById(
             props.value ?? [],
@@ -61,6 +63,7 @@ export function useTransfer(
         icon: "fas-trash-can",
         text: "i18n:clear",
         enabled: { hasValues: true },
+        debounce: 0,
         action: () => {
           emit("change", []);
         },
