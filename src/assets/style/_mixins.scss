@@ -1,7 +1,6 @@
 //-------------------------- font
-$f_fixed: Monaco, Consolas, Courier New;
-$f_nice: 'Microsoft YaHei', 'PingHei', 'Helvetica Neue', 'Helvetica', 'Arial',
-  'Verdana', 'sans-serif';
+$f_fixed: vary(--ti-font-fixed);
+$f_nice: vary(--ti-font-nice);
 //-------------------------- zIndex
 $z-above: 1;
 $z-cover: 10;

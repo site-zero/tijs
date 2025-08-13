@@ -2,7 +2,7 @@
   import { FormProps, GridFieldsEmitter, TiGridFields } from '../..';
   //-------------------------------------------------
   defineOptions({
-    inheritAttrs: false,
+    inheritAttrs: true,
   });
   const emit = defineEmits<GridFieldsEmitter>();
   const props = withDefaults(defineProps<FormProps>(), {

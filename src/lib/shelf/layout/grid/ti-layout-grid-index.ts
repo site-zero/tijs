@@ -5,15 +5,16 @@ import { simple } from "./example";
 import i18n from "./i18n";
 
 const COM_TYPE = COM_TYPES.LayoutGrid;
-const TiLayoutGrid: any = defineAsyncComponent({
-  loader: () => import("./TiLayoutGrid.vue"),
-  loadingComponent: {
-    template: `<div>Loading ${COM_TYPE}.vue...</div>`,
-  },
-  errorComponent: {
-    template: `<div>Fail to async load ${COM_TYPE}.vue</div>`,
-  },
-});
+import TiLayoutGrid from "./TiLayoutGrid.vue";
+// const TiLayoutGrid: any = defineAsyncComponent({
+//   loader: () => import("./TiLayoutGrid.vue"),
+//   loadingComponent: {
+//     template: `<div>Loading ${COM_TYPE}.vue...</div>`,
+//   },
+//   errorComponent: {
+//     template: `<div>Fail to async load ${COM_TYPE}.vue</div>`,
+//   },
+// });
 
 const TiLayoutGridInfo: TiComInfo = {
   icon: "zmdi-view-quilt",

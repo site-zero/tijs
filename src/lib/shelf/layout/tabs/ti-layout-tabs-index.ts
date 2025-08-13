@@ -4,15 +4,16 @@ import { COM_TYPES } from "../../../lib-com-types";
 import { atBottom, atTop } from "./example";
 
 const COM_TYPE = COM_TYPES.LayoutTabs;
-const TiLayoutTabs = defineAsyncComponent({
-  loader: () => import("./TiLayoutTabs.vue"),
-  loadingComponent: {
-    template: `<div>Loading ${COM_TYPE}.vue...</div>`,
-  },
-  errorComponent: {
-    template: `<div>Fail to async load ${COM_TYPE}.vue</div>`,
-  },
-});
+import TiLayoutTabs from "./TiLayoutTabs.vue";
+// const TiLayoutTabs = defineAsyncComponent({
+//   loader: () => import("./TiLayoutTabs.vue"),
+//   loadingComponent: {
+//     template: `<div>Loading ${COM_TYPE}.vue...</div>`,
+//   },
+//   errorComponent: {
+//     template: `<div>Fail to async load ${COM_TYPE}.vue</div>`,
+//   },
+// });
 
 const en_us = {
   "com-name": "Tabs Layout",
