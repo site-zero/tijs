@@ -1,6 +1,6 @@
 //-------------------------- font
-$f_fixed: vary(--ti-font-fixed);
-$f_nice: vary(--ti-font-nice);
+$f_fixed: var(--ti-font-fixed);
+$f_nice: var(--ti-font-nice);
 //-------------------------- zIndex
 $z-above: 1;
 $z-cover: 10;

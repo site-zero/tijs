@@ -78,7 +78,7 @@ export function useDropping(options: DropFileOptions) {
 
   function onDragOver(e: MouseEvent) {
     if (_drop_target) {
-      console.log("onDragOver", e.pageX, e.pageY);
+      //console.log("onDragOver", e.pageX, e.pageY);
       // 还在上面
       if (_drop_target.contains(e.target as HTMLElement)) {
         if (over) {
