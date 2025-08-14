@@ -17,10 +17,11 @@ const en_us = {
   "com-name": "Rich Prose Editor",
 };
 const zh_cn = {
-  "com-name": "富文本编辑器",
+  "com-name": "富文本编辑",
 };
 
 const TiEditRichProseInfo: TiComInfo = {
+  tags: ['ing'],
   icon: "fas-pen-to-square",
   race: TiComRace.EDIT,
   name: COM_TYPE,

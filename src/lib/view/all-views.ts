@@ -9,10 +9,13 @@ import { TiListInfo } from "./list/ti-list-index";
 import { TiLoadingInfo } from "./loading/ti-loading-index";
 import { TiProcessInfo } from "./process/ti-process-index";
 import { TiRoadblockInfo } from "./roadblock/ti-roadblock-index";
+import { TiSearchBarInfo } from "./search-bar/ti-search-bar-index";
+import { TiSorterInfo } from "./sorter/ti-sorter-index";
 import { TiTableInfo } from "./table/ti-table-index";
 import { TiTreeTableInfo } from "./tree-table/ti-tree-table-index";
 import { TiTreeInfo } from "./tree/ti-tree-index";
 import { TiWallInfo } from "./wall/ti-wall-index";
+
 
 export default {
   TiComboFilter: TiComboFilterInfo,
@@ -25,6 +28,8 @@ export default {
   TiLoading: TiLoadingInfo,
   TiProcess: TiProcessInfo,
   TiRoadblock: TiRoadblockInfo,
+  TiSearchBar: TiSearchBarInfo,
+  TiSorter: TiSorterInfo,
   TiTable: TiTableInfo,
   TiTree: TiTreeInfo,
   TiTreeTable: TiTreeTableInfo,
@@ -41,6 +46,8 @@ export * from "./list/ti-list-index";
 export * from "./loading/ti-loading-index";
 export * from "./process/ti-process-index";
 export * from "./roadblock/ti-roadblock-index";
+export * from "./search-bar/ti-search-bar-index";
+export * from "./sorter/ti-sorter-index";
 export * from "./table/ti-table-index";
 export * from "./tree-table/ti-tree-table-index";
 export * from "./tree/ti-tree-index";

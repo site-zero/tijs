@@ -8,6 +8,7 @@ export const COM_TYPES = {
   Tabs: "TiTabs",
   //------------------- EDIT
   CodeEditor: "TiCodeEditor",
+  DiffForm: "TiDiffForm",
   PairEditor: "TiPairEditor",
   RichTinyMCEditor: "TiRichTinyMCEditor",
   EditRichProse: "TiEditRichProse",
@@ -49,7 +50,6 @@ export const COM_TYPES = {
   InputPicker: "TiInputPicker",
   InputText: "TiInputText",
   Score: "TiScore",
-  Sorter: "TiSorter",
   Switcher: "TiSwitcher",
   Toggle: "TiToggle",
   Transfer: "TiTransfer",
@@ -72,7 +72,11 @@ export const COM_TYPES = {
   Table: "TiTable",
   Wall: "TiWall",
   Process: "TiProcess",
+  SearchBar: "TiSearchBar",
+  Sorter: "TiSorter",
+  // TODO: vvvvvvvvvvvvvvvvvv 下面这三个要删掉
   Filter: "TiFilter",
   ComboFilter: "TiComboFilter",
   FilterBar: "TiFilterBar",
+  // TODO: ^^^^^^^^^^^^^^^^^^^ 上面这三个要删掉
 };

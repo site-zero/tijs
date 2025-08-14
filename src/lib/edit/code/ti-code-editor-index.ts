@@ -13,7 +13,7 @@ const en_us = {
   'example-markdown': 'MARKDOWN',
 };
 const zh_cn = {
-  'com-name': '代码编辑器',
+  'com-name': '代码编辑',
   'example-js': 'JS',
   'example-css': 'CSS',
   'example-json': 'JSON',

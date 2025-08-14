@@ -18,7 +18,6 @@ import { TiInputNumInfo } from "./num/ti-input-num-index";
 import { TiInputPickerInfo } from "./picker/ti-input-picker-index";
 import { TiRadioListInfo } from "./radiolist/ti-radio-list-index";
 import { TiScoreInfo } from "./score/ti-score-index";
-import { TiSorterInfo } from "./sorter/ti-sorter-index";
 import { TiSwitcherInfo } from "./switcher/ti-switcher-index";
 import { TiInputTextInfo } from "./text/ti-input-text-index";
 import { TiInputTimeInfo } from "./time/ti-input-time-index";
@@ -48,7 +47,6 @@ export default {
   TiMultiDroplist: TiMultiDroplistInfo,
   TiRadioList: TiRadioListInfo,
   TiScore: TiScoreInfo,
-  TiSorter: TiSorterInfo,
   TiSwitcher: TiSwitcherInfo,
   TiToggle: TiToggleInfo,
   TiTransfer: TiTransferInfo,
@@ -73,9 +71,9 @@ export * from "./num/ti-input-num-index";
 export * from "./picker/ti-input-picker-index";
 export * from "./radiolist/ti-radio-list-index";
 export * from "./score/ti-score-index";
-export * from "./sorter/ti-sorter-index";
 export * from "./switcher/ti-switcher-index";
 export * from "./text/ti-input-text-index";
 export * from "./time/ti-input-time-index";
 export * from "./toggle/ti-toggle-index";
 export * from "./transfer/ti-transfer-index";
+

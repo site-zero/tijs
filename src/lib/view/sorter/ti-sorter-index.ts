@@ -19,7 +19,7 @@ const COM_TYPE = COM_TYPES.Sorter;
 
 const TiSorterInfo: TiComInfo = {
   icon: 'zmdi-sort-asc',
-  race: TiComRace.INPUT,
+  race: TiComRace.VIEW,
   name: COM_TYPE,
   text: 'i18n:ti-sorter-com-name',
   i18n: {
@@ -38,3 +38,4 @@ const TiSorterInfo: TiComInfo = {
 
 export * from './ti-sorter-types';
 export { TiSorter, TiSorterInfo };
+

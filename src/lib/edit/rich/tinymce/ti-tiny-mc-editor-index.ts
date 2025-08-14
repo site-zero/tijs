@@ -1,17 +1,17 @@
 import { TiComInfo, TiComRace } from "@site0/tijs";
-import { App, defineAsyncComponent } from "vue";
+import { App } from "vue";
 import { COM_TYPES } from "../../../lib-com-types";
-// import TiRichTinyMCEditor from "./TiRichTinyMCEditor.vue";
+import TiRichTinyMCEditor from "./TiRichTinyMCEditor.vue";
 const COM_TYPE = COM_TYPES.RichTinyMCEditor;
-const TiRichTinyMCEditor = defineAsyncComponent({
-  loader: () => import("./TiRichTinyMCEditor.vue"),
-  loadingComponent: {
-    template: `<div>Loading ${COM_TYPE}.vue...</div>`,
-  },
-  errorComponent: {
-    template: `<div>Fail to async load ${COM_TYPE}.vue</div>`,
-  },
-});
+// const TiRichTinyMCEditor = defineAsyncComponent({
+//   loader: () => import("./TiRichTinyMCEditor.vue"),
+//   loadingComponent: {
+//     template: `<div>Loading ${COM_TYPE}.vue...</div>`,
+//   },
+//   errorComponent: {
+//     template: `<div>Fail to async load ${COM_TYPE}.vue</div>`,
+//   },
+// });
 
 const en_us = {
   "com-name": "TinyMCE",
