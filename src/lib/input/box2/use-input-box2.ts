@@ -518,8 +518,18 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     }
   }
   //------------------------------------------------
+  function onClickIcon(event: any) {
+    if ("click:prefix-icon" == event) {
+      emit("click:prefix-icon");
+    } else if ("click:suffix-icon" == event) {
+      emit("click:suffix-icon");
+    } else {
+      emit("click", event);
+    }
+  }
+  //------------------------------------------------
   function emitIfChanged() {
-    if(isReadonly.value){
+    if (isReadonly.value) {
       return;
     }
     let val = _box_state.box_value;
@@ -593,6 +603,8 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
         await _options?.reloadOptioinsData();
       }
     },
+    onClickIcon,
+
     emitIfChanged,
     Placeholder: computed(() => usePlaceholder(props)),
   };

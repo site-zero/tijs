@@ -1,30 +1,37 @@
 <script setup lang="ts">
   import _ from "lodash";
-import {
-  computed,
-  onMounted,
-  reactive,
-  ref,
-  useTemplateRef,
-  watch,
-} from "vue";
-import { TiList } from "../../";
-import { Rect, Vars } from "../../../_type";
-import { ListSelectEmitInfo } from "../../../lib";
-import { useDict, useValuePipe } from "../../_features";
-import { InputBoxEmitter, InputBoxProps } from "./ti-input-box-types";
-import { useBoxAspect } from "./use-box-aspect";
-import { useBoxIcon } from "./use-box-icon";
-import { useBoxTips } from "./use-box-tips";
-import { InputBoxState, useInputBox2 } from "./use-input-box2";
-import { useInputComposition } from "./use-input-composition";
-import { useTipList } from "./use-tip-list";
-import { useValueHintCooking } from "./use-value-hint-cooking";
-import { useValueOptions, ValueOptions } from "./use-value-options";
+  import {
+    computed,
+    onMounted,
+    onUnmounted,
+    reactive,
+    ref,
+    useTemplateRef,
+    watch,
+  } from "vue";
+  import { TiList } from "../../";
+  import { Rect, Vars } from "../../../_type";
+  import { ListSelectEmitInfo } from "../../../lib";
+  import { useDict, useValuePipe, useViewport } from "../../_features";
+  import { InputBoxEmitter, InputBoxProps } from "./ti-input-box-types";
+  import { useBoxAspect } from "./use-box-aspect";
+  import { useBoxIcon } from "./use-box-icon";
+  import { useBoxTips } from "./use-box-tips";
+  import { InputBoxState, useInputBox2 } from "./use-input-box2";
+  import { useInputComposition } from "./use-input-composition";
+  import { useTipList } from "./use-tip-list";
+  import { useValueHintCooking } from "./use-value-hint-cooking";
+  import { useValueOptions, ValueOptions } from "./use-value-options";
   //-----------------------------------------------------
   const emit = defineEmits<InputBoxEmitter>();
   const $el = useTemplateRef<HTMLElement>("el");
   const $input = useTemplateRef<HTMLInputElement>("input");
+  //-------------------------------------------------
+  const _viewport = useViewport({
+    el: $el,
+    onMounted,
+    onUnmounted,
+  });
   //-----------------------------------------------------
   const _box_state = reactive({
     usr_text: null,
@@ -51,7 +58,7 @@ import { useValueOptions, ValueOptions } from "./use-value-options";
     canInput: true,
     trimed: true,
     autoSelect: true,
-    boxFontSize: "m",
+    //boxFontSize: "m",
     boxPadding: "m",
     boxRadius: "s",
   });
@@ -108,7 +115,7 @@ import { useValueOptions, ValueOptions } from "./use-value-options";
   );
   //-----------------------------------------------------
   const _aspect = computed(() =>
-    useBoxAspect(props, _box.value, _tip_box.value)
+    useBoxAspect(props, _box.value, _tip_box.value, _viewport)
   );
   //-----------------------------------------------------
   const _comp = useInputComposition({
@@ -132,6 +139,7 @@ import { useValueOptions, ValueOptions } from "./use-value-options";
       hoverIcon: props.prefixHoverIcon,
       iconFor: props.prefixIconFor,
       autoIcon: _box_state.box_icon ?? undefined,
+      clickEmit: "click:prefix-icon",
       getInputElement: () => $input.value,
     })
   );
@@ -142,6 +150,7 @@ import { useValueOptions, ValueOptions } from "./use-value-options";
       icon: props.suffixIcon,
       hoverIcon: props.suffixHoverIcon,
       iconFor: props.suffixIconFor,
+      clickEmit: "click:suffix-icon",
       getInputElement: () => $input.value,
     })
   );
@@ -286,10 +295,10 @@ import { useValueOptions, ValueOptions } from "./use-value-options";
     (_newVal, _oldVal) => {
       //if (newVal && null === newVal[0] && _box_state.box_text) {
       //if (newVal && "HKHKG" === newVal[0]) {
-        // console.log("onPropsValueChange", {
-        //   value: newVal[0],
-        //   boxtxt: _box_state.box_text,
-        // });
+      // console.log("onPropsValueChange", {
+      //   value: newVal[0],
+      //   boxtxt: _box_state.box_text,
+      // });
       //}
       _box.value.onPropsValueChange();
     },

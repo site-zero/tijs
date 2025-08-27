@@ -5,23 +5,26 @@ import {
   IconInput,
   LogicType,
   Vars,
-} from '../../../_type';
+} from "../../../_type";
 import {
   DictProps,
   DisplayTextProps,
   PlaceholderProps,
   ReadonlyProps,
   ValuePipeProps,
-} from '../../_features';
-import { ListProps } from '../../view/all-views';
-import { useInputBox2 } from './use-input-box2';
-import { ValueHintCookingProps } from './use-value-hint-cooking';
-import { ValueOptionsProps } from './use-value-options';
+} from "../../_features";
+import { ListProps } from "../../view/all-views";
+import { useInputBox2 } from "./use-input-box2";
+import { ValueHintCookingProps } from "./use-value-hint-cooking";
+import { ValueOptionsProps } from "./use-value-options";
 //--------------------------------------------------
 export type InputBoxEmitter = {
-  (event: 'change', value: any): void;
-  (event: 'blur'): void;
-  (event: 'focus'): void;
+  (event: "change", value: any): void;
+  (event: "blur"): void;
+  (event: "focus"): void;
+  (event: "click:prefix-icon"): void;
+  (event: "click:suffix-icon"): void;
+  (event: "click", payload: any): void;
 };
 //--------------------------------------------------
 export type InputBoxAspect = {
@@ -37,7 +40,7 @@ export type InputBoxAspect = {
   align?: CssAlignment;
   boxFontSize?: AspectSize;
   boxPadding?: AspectSize;
-  boxRadius?: AspectSize | 'none';
+  boxRadius?: AspectSize | "none";
   type?: LogicType;
   width?: string;
 };
@@ -92,7 +95,7 @@ export type InputBoxProps = CommonProps &
     /**
      * 提示列表的配置
      */
-    tipList?: Omit<ListProps, 'data'>;
+    tipList?: Omit<ListProps, "data">;
 
     /**
      * 展出提示框宽度，如果不声明，则采用与 box 相同的宽度
@@ -172,7 +175,7 @@ export type InputBoxProps = CommonProps &
  * - `std-item` : 整体标准对象
  * - `raw-item` : 整体原始对象
  */
-export type BoxEmitType = 'value' | 'std-item' | 'raw-item';
+export type BoxEmitType = "value" | "std-item" | "raw-item";
 //--------------------------------------------------
 /**
  * 除非一些必要的时机，还有哪些时候需要检查改动
@@ -180,12 +183,13 @@ export type BoxEmitType = 'value' | 'std-item' | 'raw-item';
  * - blur : 默认的 blur 是，如果没有展开选项，才会检查更新，明确声明 blur 则表示肯定要检查更新
  * - close : 选项框关闭时候检查更新
  */
-export type BoxEmitTime = 'blur' | 'close';
+export type BoxEmitTime = "blur" | "close";
 //--------------------------------------------------
 export type BoxIconFor =
-  | 'copy'
-  | 'load-options'
-  | 'clear'
+  | "copy"
+  | "load-options"
+  | "clear"
+  | "click"
   | ((box: InputBoxApi) => void);
 //--------------------------------------------------
 /**
@@ -194,7 +198,7 @@ export type BoxIconFor =
  * - focus : 聚焦就显示
  * - auto  : 只有需要才显示
  */
-export type TipShowTime = 'focus' | 'auto';
+export type TipShowTime = "focus" | "auto";
 /**
  * 对于提示列表的快速格式模式，
  *
@@ -207,6 +211,6 @@ export type TipShowTime = 'focus' | 'auto';
  *
  * 在没有声明  tipList.textFormat 的前提下，它可以为其快速设置格式化方式
  */
-export type TipOptionFormat = 'T' | 'VT' | 'TV' | 'VTP' | 'TP' | 'PT';
+export type TipOptionFormat = "T" | "VT" | "TV" | "VTP" | "TP" | "PT";
 //--------------------------------------------------
 export type InputBoxApi = ReturnType<typeof useInputBox2>;

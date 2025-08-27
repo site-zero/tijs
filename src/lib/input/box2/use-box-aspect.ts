@@ -1,13 +1,14 @@
-import _ from 'lodash';
-import { computed } from 'vue';
-import { CssUtils } from '../../../';
-import { InputBoxApi, InputBoxProps } from './ti-input-box-types';
-import { BoxTipsFeature } from './use-box-tips';
+import _ from "lodash";
+import { computed } from "vue";
+import { CssUtils, ViewportFeature } from "../../../";
+import { InputBoxApi, InputBoxProps } from "./ti-input-box-types";
+import { BoxTipsFeature } from "./use-box-tips";
 
 export function useBoxAspect(
   props: InputBoxProps,
   _box: InputBoxApi,
-  _tips: BoxTipsFeature
+  _tips: BoxTipsFeature,
+  _viewport: ViewportFeature
 ) {
   //--------------------------------------------------
   const TopClass = computed(() => CssUtils.mergeClassName(props.className));
@@ -22,9 +23,9 @@ export function useBoxAspect(
   //--------------------------------------------------
   const PartMainClass = computed(() => {
     return {
-      'is-focused': _box.isFocused.value,
-      'show-tips': _tips.TipBoxStyleReady.value,
-      'is-readonly': _box.isReadonly.value,
+      "is-focused": _box.isFocused.value,
+      "show-tips": _tips.TipBoxStyleReady.value,
+      "is-readonly": _box.isReadonly.value,
     };
   });
   //--------------------------------------------------
@@ -34,35 +35,39 @@ export function useBoxAspect(
       _tips.MainBoxStyle.value
     );
     if (props.boxFontSize) {
-      re['--box-fontsz'] = `var(--ti-fontsz-${props.boxFontSize})`;
+      re["--box-fontsz"] = `var(--ti-fontsz-${props.boxFontSize})`;
+    } else {
+      re["--box-fontsz"] = `inherit`;
     }
     if (props.boxPadding) {
-      re['--box-padding'] = `var(--ti-box-pad-${props.boxPadding})`;
+      re["--box-padding"] = `var(--ti-box-pad-${props.boxPadding})`;
     }
     if (props.boxRadius) {
-      re['--box-radius'] = `var(--ti-measure-r-${props.boxRadius})`;
+      re["--box-radius"] = `var(--ti-measure-r-${props.boxRadius})`;
     }
     if (props.align) {
-      re['--box-align'] = props.align;
+      re["--box-align"] = props.align;
     }
     if (props.type) {
       _.assign(re, {
-        '--box-color-border': `var(--ti-color-${props.type}-b)`,
-        '--box-color-text': `var(--ti-color-${props.type})`,
+        "--box-color-border": `var(--ti-color-${props.type}-b)`,
+        "--box-color-text": `var(--ti-color-${props.type})`,
         //'--box-color-bg': `var(--ti-color-${props.type}-r)`,
-        '--box-color-focus-border': `var(--ti-color-${props.type})`,
-        '--box-color-focus-text': `var(--ti-color-${props.type})`,
-        '--box-color-focus-bg': `var(--ti-color-${props.type}-r)`,
+        "--box-color-focus-border": `var(--ti-color-${props.type})`,
+        "--box-color-focus-text": `var(--ti-color-${props.type})`,
+        "--box-color-focus-bg": `var(--ti-color-${props.type}-r)`,
       });
     }
+    re["--box-w"] = `${_viewport.size.width}px`;
+    re["--box-h"] = `${_viewport.size.height}px`;
     return re;
   });
   //--------------------------------------------------
   const MainBodyStyle = computed(() => {
     let re = _.assign({}, props.mainBodyStyle);
     if (props.hideBorder) {
-      re.border = '0px';
-      re.borderRadius = '0px';
+      re.border = "0px";
+      re.borderRadius = "0px";
     }
     return CssUtils.toStyle(re);
   });

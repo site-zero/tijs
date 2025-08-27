@@ -1,4 +1,4 @@
-@use '@site0/tijs/sass/_all.scss' as *;
+@use "@site0/tijs/sass/_all.scss" as *;
 
 .ti-input {
   --box-color-border: var(--ti-color-border-dark);
@@ -17,7 +17,7 @@
   //-----------------------------------------------------
   > .part-main {
     @include flex-align-nowrap($ai: stretch);
-    flex:1 1 auto;
+    flex: 1 1 auto;
     //---------------------------------------------------
     > .box-part {
       flex: 1 1 auto;
@@ -86,7 +86,7 @@
     //---------------------------------------------------
     > .icon-part {
       flex: 0 0 auto;
-      width: calc(var(--box-fontsz) * 1.8);
+      width: min(var(--box-h), 1.8em);
       position: relative;
       i {
         @include flex-center;

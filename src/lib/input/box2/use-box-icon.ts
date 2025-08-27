@@ -10,11 +10,12 @@ export type BoxIconOptions = {
   hoverIcon?: IconInput | null;
   iconFor?: BoxIconFor;
   autoIcon?: IconInput;
+  clickEmit: "click:prefix-icon" | "click:suffix-icon";
   getInputElement: () => HTMLInputElement | null;
 };
 
 export function useBoxIcon(options: BoxIconOptions) {
-  const { _box, icon, hoverIcon, iconFor, autoIcon } = options;
+  const { _box, icon, hoverIcon, iconFor, autoIcon, clickEmit } = options;
   //--------------------------------------------------
   const _icon = computed(() => {
     if (autoIcon) return autoIcon;
@@ -26,6 +27,7 @@ export function useBoxIcon(options: BoxIconOptions) {
         "clear": "zmdi-minus",
         "copy": "zmdi-copy",
         "load-options": "zmdi-caret-down",
+        "click": "zmdi-more",
       }[iconFor];
     }
   });
@@ -39,6 +41,7 @@ export function useBoxIcon(options: BoxIconOptions) {
         "clear": "zmdi-close",
         "copy": "zmdi-copy",
         "load-options": "zmdi-caret-down",
+        "click": "zmdi-more",
       }[iconFor];
     }
   });
@@ -70,6 +73,10 @@ export function useBoxIcon(options: BoxIconOptions) {
     // 自定义动作
     if (_.isFunction(iconFor)) {
       iconFor(_box);
+    }
+    // 释放点击
+    else if ("click" == iconFor) {
+      _box.onClickIcon(clickEmit);
     }
     // 清除值
     else if ("clear" === iconFor) {

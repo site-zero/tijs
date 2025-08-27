@@ -1,6 +1,6 @@
-import _ from 'lodash';
-import { Util } from '../';
-import { TableRowID, TextStrValue } from '../../_type';
+import _ from "lodash";
+import { Util } from "../";
+import { TableRowID, TextStrValue } from "../../_type";
 
 /***
  * 将一组值推到一个对象的某个指定键下,
@@ -77,7 +77,7 @@ export function grouping(
   //...............................................
   let {
     titles = [],
-    otherTitle = { value: 'Others', text: 'Others' },
+    otherTitle = { value: "Others", text: "Others" },
     asList = false,
   } = options || {};
   //...............................................
@@ -132,12 +132,96 @@ export function grouping(
 }
 
 /**
+ * 在列表中查找指定 ID 的项的索引
  *
- * @param list
- * @param ids
- * @param dir
- * @param getId
- * @returns
+ * @param list 输入的列表
+ * @param itemId 需要查找的项的 ID
+ * @param getId 可选参数，用于从列表项中获取 ID 的函数，默认尝试获取 'id' 或 'value' 属性
+ * @returns 找到则返回对应索引，未找到则返回 -1
+ */
+export function getItemIndex<T>(
+  list: T[],
+  itemId?: TableRowID,
+  getId?: (it: T, index: number) => undefined | null | TableRowID
+): number {
+  if (_.isNil(itemId)) {
+    return -1;
+  }
+  const _get_item_id = getId ?? ((it: any) => it.id ?? it.value);
+  for (let i = 0; i < list.length; i++) {
+    let id = _get_item_id(list[i], i);
+    if (id === itemId) {
+      return i;
+    }
+  }
+  return -1;
+}
+
+/**
+ * 根据最后一个选中的 ID，在列表中查找下一个未选中的项的 ID
+ * 若向后未找到，则向前查找
+ *
+ * @param list 输入的列表
+ * @param checkedIds 已选中的项的 ID 或 ID 列表
+ * @param getId 可选参数，用于从列表项中获取 ID 的函数，默认尝试获取 'id' 或 'value' 属性
+ * @returns 找到则返回对应 ID，未找到则返回 undefined
+ */
+export function getNextId<T>(
+  list: T[],
+  checkedIds?: TableRowID | TableRowID[] | undefined | null,
+  getId?: (it: T, index: number) => undefined | null | TableRowID
+): TableRowID | undefined {
+  // 归一化参数
+  let _ids = _.isNil(checkedIds)
+    ? []
+    : _.isArray(checkedIds)
+    ? checkedIds
+    : [checkedIds];
+
+  // 防空
+  if (_.isEmpty(_ids) || _.isEmpty(list)) {
+    return;
+  }
+
+  // 编制索引
+  let idMap = Util.arrayToMap(_ids);
+  let lastId = _.last(_ids);
+
+  // 获取 ID 的方法
+  const _get_item_id =
+    getId ?? ((it: any, index: number) => it.id ?? it.value ?? `row-${index}`);
+
+  // 开始查找
+  let index = getItemIndex(list, lastId!, _get_item_id);
+  if (index < 0) {
+    return;
+  }
+
+  // 向后找，遇到第一个非选中的对象ID
+  for (let i = index + 1; i < list.length; i++) {
+    let id = _get_item_id(list[i], i);
+    if (!idMap.has(id)) {
+      return id;
+    }
+  }
+
+  // 向前找，遇到第一个非选中的对象ID
+  for (let i = index - 1; i >= 0; i--) {
+    let id = _get_item_id(list[i], i);
+    if (!idMap.has(id)) {
+      return id;
+    }
+  }
+}
+
+/**
+ * 根据 ID 移动已选中的项
+ *
+ * @param list 输入的列表
+ * @param ids 需要移动的项的 ID 列表
+ * @param dir 移动方向，可选值为 'prev'、'next'、'head'、'tail'
+ * @param getId 可选参数，用于从列表项中获取 ID 的函数，默认尝试获取 'id' 或 'value' 属性
+ * @returns 移动后的新列表
  */
 export function moveCheckedById<T>(
   list: T[],
@@ -150,7 +234,7 @@ export function moveCheckedById<T>(
       if (_.isString(it) || _.isNumber(it)) {
         return it as TableRowID;
       }
-      return (_.get(it, 'id') ?? _.get(it, 'value')) as TableRowID;
+      return (_.get(it, "id") ?? _.get(it, "value")) as TableRowID;
     };
   }
   const idSet = Util.arrayToSet(ids);
@@ -164,14 +248,15 @@ export function moveCheckedById<T>(
   return moveChecked(list, isChecked, dir);
 }
 
-export type MoveDirection = 'prev' | 'next' | 'head' | 'tail';
+export type MoveDirection = "prev" | "next" | "head" | "tail";
 
 /**
+ * 根据检查函数移动已选中的项
  *
- * @param list
- * @param isChecked
- * @param dir
- * @returns
+ * @param list 输入的列表
+ * @param isChecked 用于检查列表项是否需要移动的函数
+ * @param dir 移动方向，可选值为 'prev'、'next'、'head'、'tail'
+ * @returns 移动后的新列表
  */
 export function moveChecked<T>(
   list: T[],
