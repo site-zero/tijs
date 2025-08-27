@@ -58,7 +58,7 @@
         <TiIcon class="s16" :value="Block.BlockIcon" />
       </div>
       <!--------Title----------->
-      <div class="as-title" v-if="Block.BlockTitle">
+      <div class="as-title" v-if="Block.BlockTitle" :style="Block.TitleStyle">
         {{ Block.BlockTitle }}
       </div>
       <!--------ActionBar--------->

@@ -43,6 +43,7 @@ export function useBlock(props: BlockProps, _options: BlockOptions) {
   let BlockIcon = props.icon;
   let BlockTitle = props.title ? I18n.text(props.title) : undefined;
   let showHeadBar = BlockIcon || BlockTitle ? true : false;
+  let TitleStyle = CssUtils.toStyle(props.titleStyle);
 
   //
   // 计算布局
@@ -91,6 +92,7 @@ export function useBlock(props: BlockProps, _options: BlockOptions) {
     HeadClass,
     HeadStyle,
     HeadActions,
+    TitleStyle,
     BodyClass,
     BodyStyle,
     MainClass,

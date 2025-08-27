@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from "lodash";
 import {
   BlockProps,
   LayoutGridProps,
@@ -7,8 +7,8 @@ import {
   LayoutSchema,
   LayoutState,
   TabsLayoutProps,
-} from '../../';
-import { CssUtils } from '../../../core';
+} from "../../";
+import { CssUtils } from "../../../core";
 
 /**
  * 根据布局项块的特征，为其指定一个确定的类型
@@ -19,15 +19,15 @@ export function autoSetLayoutItemType(it: LayoutItem) {
   if (!it.type) {
     // Grid
     if (it.layout) {
-      it.type = 'grid';
+      it.type = "grid";
     }
     // Tabs
     else if (it.blocks) {
-      it.type = 'tabs';
+      it.type = "tabs";
     }
     // 默认就是 Block， 放个路障
     else {
-      it.type = 'block';
+      it.type = "block";
     }
   }
 }
@@ -47,6 +47,7 @@ export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
     return {
       icon: it.icon,
       title: it.title,
+      titleStyle: it.titleStyle,
       name: it.name,
       actions: it.actions,
       actionVars: it.actionVars,
@@ -61,7 +62,7 @@ export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
     };
   };
   // 布局块
-  if ('block' == it.type) {
+  if ("block" == it.type) {
     it.propsForBlock = _.cloneDeep(it);
     // 特殊的属性
     _.assign(it.propsForBlock, {
@@ -85,30 +86,30 @@ export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
     // 设置默认
     if (!it.propsForBlock.comType) {
       _.assign(it.propsForBlock, {
-        comType: 'TiRoadblock',
+        comType: "TiRoadblock",
         comConf: {
-          icon: 'fas-person-digging',
-          text: it.name || 'Layout Block',
+          icon: "fas-person-digging",
+          text: it.name || "Layout Block",
         },
       });
     }
   }
   // 格子布局
-  else if ('grid' == it.type) {
+  else if ("grid" == it.type) {
     // 获取格子布局的属性
     let _layout_grid_props = _.pick(
       it,
-      'name',
-      'blocks',
-      'conStyle',
-      'layout',
-      'keepSizes',
-      'KeepShown',
-      'layoutHint',
-      'layoutGridTracks',
-      'customizedGridTracks',
-      'gridStyle',
-      'resetLocalGridTracks'
+      "name",
+      "blocks",
+      "conStyle",
+      "layout",
+      "keepSizes",
+      "KeepShown",
+      "layoutHint",
+      "layoutGridTracks",
+      "customizedGridTracks",
+      "gridStyle",
+      "resetLocalGridTracks"
     );
 
     // 格子布局还需要套上一个TiBlock
@@ -116,7 +117,7 @@ export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
       it.propsForBlock = __pick_props_for_block(it);
       // 特殊的属性
       _.assign(it.propsForBlock, {
-        comType: 'TiLayoutGrid',
+        comType: "TiLayoutGrid",
         comConf: {
           className: it.gridClass,
           layout: it.layout,
@@ -142,28 +143,28 @@ export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
     }
   }
   // 标签布局
-  else if ('tabs' == it.type) {
+  else if ("tabs" == it.type) {
     let _layout_tabs_props = _.pick(
       it,
-      'name',
-      'blocks',
-      'tabsAt',
-      'tabsAlign',
-      'wrapTabs',
-      'tabMaxWidth',
-      'tabItemSpace',
-      'defaultTab',
-      'keepTab'
+      "name",
+      "blocks",
+      "tabsAt",
+      "tabsAlign",
+      "wrapTabs",
+      "tabMaxWidth",
+      "tabItemSpace",
+      "defaultTab",
+      "keepTab"
     );
     // 格子布局还需要套上一个TiBlock
     if (it.title) {
       it.propsForBlock = __pick_props_for_block(it);
       // 特殊的属性
       _.assign(it.propsForBlock, {
-        objectFit: 'cover',
-        comType: 'TiLayoutTabs',
+        objectFit: "cover",
+        comType: "TiLayoutTabs",
         comConf: {
-          className: CssUtils.mergeClassName(it.tabsClass, 'cover-parent'),
+          className: CssUtils.mergeClassName(it.tabsClass, "cover-parent"),
           schema: schema,
           subLayout: true,
           itemStyle: it.itemStyle,
@@ -218,12 +219,12 @@ export function getLayoutItem(state: LayoutState, props: LayoutProps) {
 
     // 布局项的 ClassName
     it.conClass = CssUtils.mergeClassName(it.conClass, `as-${it.type}`, {
-      'cover-parent': 'cover' == it.blockFit,
-      'fit-parent': 'fit' == it.blockFit,
+      "cover-parent": "cover" == it.blockFit,
+      "fit-parent": "fit" == it.blockFit,
     });
     it.blockClass = CssUtils.mergeClassName(it.blockClass, {
-      'cover-parent': 'cover' == it.blockFit,
-      'fit-parent': 'fit' == it.blockFit,
+      "cover-parent": "cover" == it.blockFit,
+      "fit-parent": "fit" == it.blockFit,
     });
 
     // 布局项的样式

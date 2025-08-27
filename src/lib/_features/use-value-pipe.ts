@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { computed } from "vue";
 import { StrCaseMode, ValueProcesser, Vars } from "../../_type";
-import { DateTime, Str } from "../../core";
+import { Str } from "../../core";
 import { getDefaultValPipes } from "./val-pipes/dft-val-pipes";
 
 export type ValuePipeFeature = ReturnType<typeof useValuePipe>;
