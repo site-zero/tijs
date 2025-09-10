@@ -29,10 +29,10 @@ export function useRadioList(props: RadioListProps) {
       autoI18n: props.autoI18n,
 
       // Std List
-      getIcon: props.getIcon,
-      getText: props.getText,
-      getTip: props.getTip,
-      getId: props.getValue,
+      // getIcon: props.getIcon,
+      // getText: props.getText,
+      // getTip: props.getTip,
+      // getId: props.getValue,
     };
   });
 
