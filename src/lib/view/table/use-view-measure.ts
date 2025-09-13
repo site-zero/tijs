@@ -1,10 +1,9 @@
-import _ from 'lodash';
-import { nextTick } from 'vue';
-import { Callback1, FuncA0, Size2D } from '../../../_type';
-import { Rects } from '../../../core';
-import { getLogger } from '../../../core/log/ti-log';
+import _ from "lodash";
+import { nextTick } from "vue";
+import { Callback1, FuncA0, Size2D } from "../../../_type";
+import { Rects } from "../../../core";
 
-const log = getLogger('ti.use-view-measure');
+const debug = false;
 
 export type ViewMeasureProps = {
   getMainElement: FuncA0<HTMLElement | undefined>;
@@ -22,7 +21,7 @@ export type ViewMeasureProps = {
 export function useViewMeasure(props: ViewMeasureProps) {
   let { getMainElement, setViewport, setScrollTop, debounce = 500 } = props;
   let updateViewport = function ($main: HTMLElement) {
-    log.debug('updateViewport =>', $main);
+    if (debug) console.log("updateViewport =>", $main);
     nextTick(() => {
       //console.log("FormItem:updateViewport");
       let rect = Rects.createBy($main!);
@@ -36,7 +35,7 @@ export function useViewMeasure(props: ViewMeasureProps) {
       $main = getMainElement();
     }
     if ($main && setScrollTop) {
-      log.debug('updateScrollTop =>', $main);
+      if (debug) console.log("updateScrollTop =>", $main);
       setScrollTop($main!.scrollTop);
     }
   };
@@ -61,9 +60,7 @@ export function useViewMeasure(props: ViewMeasureProps) {
   // Create a ResizeObserver instance
   const resizeObserver = new ResizeObserver((entries) => {
     for (const entry of entries) {
-      if (log.isTraceEnabled()) {
-        log.trace('objserve resize', entry.target);
-      }
+      if (debug) console.log("objserve resize", entry.target);
       updateMeasure(entry.target as HTMLElement);
     }
   });
@@ -76,13 +73,13 @@ export function useViewMeasure(props: ViewMeasureProps) {
 
   function watchMain() {
     if (main_watched) {
-      log.warn('$main elemnent has been watched already!');
+      if (debug) console.warn("$main elemnent has been watched already!");
       return;
     }
     let $main = getMainElement();
     if ($main) {
       updateMeasure($main);
-      $main.addEventListener('scroll', onTopScroll);
+      $main.addEventListener("scroll", onTopScroll);
       resizeObserver.observe($main);
       main_watched = true;
     }
@@ -91,7 +88,7 @@ export function useViewMeasure(props: ViewMeasureProps) {
   function unWatchMain() {
     let $main = getMainElement();
     if ($main) {
-      $main.removeEventListener('scroll', onTopScroll);
+      $main.removeEventListener("scroll", onTopScroll);
       resizeObserver.disconnect();
     }
     main_watched = false;

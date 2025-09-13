@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { computed, ref, watch } from 'vue';
+  import { computed, ref, watch } from "vue";
   import {
     BlockEvent,
     TiBlock,
@@ -7,34 +7,33 @@
     TiTabs,
     getLayoutItem,
     useKeep,
-  } from '../../../';
-  import { CssUtils } from '../../../../core';
-  import { getLogger } from '../../../../core/log/ti-log';
-  import { COM_TYPES } from '../../../lib-com-types';
-  import { TabDisplayItem } from '../layout-types';
-  import { TabsLayoutProps, TabChangeEvent } from './ti-layout-tabs-types';
+  } from "../../../";
+  import { CssUtils } from "../../../../core";
+  import { COM_TYPES } from "../../../lib-com-types";
+  import { TabDisplayItem } from "../layout-types";
+  import { TabsLayoutProps, TabChangeEvent } from "./ti-layout-tabs-types";
   import {
     autoSetCurrentTablKey,
     buildLayoutTabsConfig,
     buildOneTab,
-  } from './use-layout-tabs';
+  } from "./use-layout-tabs";
   //-------------------------------------------------
-  import { TiLayoutGrid } from '../grid/ti-layout-grid-index';
+  import { TiLayoutGrid } from "../grid/ti-layout-grid-index";
   //-------------------------------------------------
   const COM_TYPE = COM_TYPES.LayoutTabs;
-  const log = getLogger(COM_TYPE);
+  const debug = false;
   //-------------------------------------------------
   const emit = defineEmits<{
-    (eventName: 'tab-change', payload: TabChangeEvent): void;
-    (event: 'block', payload: BlockEvent): void;
-    (event: '_sub_block', payload: BlockEvent): void;
+    (eventName: "tab-change", payload: TabChangeEvent): void;
+    (event: "block", payload: BlockEvent): void;
+    (event: "_sub_block", payload: BlockEvent): void;
   }>();
   //-------------------------------------------------
   const props = withDefaults(defineProps<TabsLayoutProps>(), {
     wrapTabs: false,
-    tabItemSpace: 'm',
-    tabsAt: 'top',
-    tabsAlign: 'center',
+    tabItemSpace: "m",
+    tabsAt: "top",
+    tabsAlign: "center",
     defaultTab: 0,
   });
   //-------------------------------------------------
@@ -59,9 +58,9 @@
   function OnBlockEventHappen(event: BlockEvent) {
     //console.log('OnBlockEventHappen', event);
     if (props.subLayout) {
-      emit('_sub_block', event);
+      emit("_sub_block", event);
     } else {
-      emit('block', event);
+      emit("block", event);
     }
   }
   //-------------------------------------------------
@@ -84,9 +83,10 @@
         props.defaultTab
       );
       if (!MainTab.value) {
-        log.warn(
-          `Fail to evel MainTab: [${_current_tab_key.value}] defaultTab=${props.defaultTab}`
-        );
+        if (debug)
+          console.log(
+            `Fail to evel MainTab: [${_current_tab_key.value}] defaultTab=${props.defaultTab}`
+          );
       }
     },
     {
@@ -105,7 +105,7 @@
         // if ('Bunya-GUI-layout-EdiViewer-Tabs' == props.keepTab) {
         //   console.log('emit MainTabChange', MainTab.value);
         // }
-        emit('tab-change', {
+        emit("tab-change", {
           to: {
             className: MainTab.value.blockClass,
             current: true,
@@ -136,9 +136,7 @@
         @change="OnTabChange" />
     </header>
     <!--======== Main Block =======-->
-    <main
-      :style="props.mainStyle"
-      :class="MainClass">
+    <main :style="props.mainStyle" :class="MainClass">
       <div class="tabs-main-block-con">
         <!----------------------------->
         <template v-if="MainTab">
@@ -174,15 +172,11 @@
           </slot>
         </template>
         <!----------------------------->
-        <TiRoadblock
-          v-else
-          mode="fit"
-          icon="fas-pen-ruler"
-          text="No GUI" />
+        <TiRoadblock v-else mode="fit" icon="fas-pen-ruler" text="No GUI" />
       </div>
     </main>
   </div>
 </template>
 <style lang="scss" scoped>
-  @use './ti-layout-tabs.scss';
+  @use "./ti-layout-tabs.scss";
 </style>

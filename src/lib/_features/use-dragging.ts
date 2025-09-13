@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from "lodash";
 import {
   Callback,
   Callback1,
@@ -6,13 +6,12 @@ import {
   FuncA0,
   Point2D,
   Rect,
-} from '../../_type';
-import { Dom, Rects } from '../../core';
-import { getLogger } from '../../core/log/ti-log';
-import { Dragging } from './drag/dragging';
-export { Dragging } from './drag/dragging';
+} from "../../_type";
+import { Dom, Rects } from "../../core";
+import { Dragging } from "./drag/dragging";
+export { Dragging } from "./drag/dragging";
 
-const log = getLogger('ti.lib.draggalbe');
+const debug = false;
 /*-----------------------------------------------------
 
                       Types
@@ -82,7 +81,7 @@ type WATCH_EVENT = {
   POINTER_UP: string;
   POINTER_MOVE: string;
   // 如果有这个设置，需要在激活后阻止
-  POINTER_CLICK?: 'click';
+  POINTER_CLICK?: "click";
   getPointerEvent: Convertor<Event, MouseEvent | Touch>;
   getPoint2D: Convertor<MouseEvent | Touch, Point2D>;
 };
@@ -116,10 +115,10 @@ function getWatchEvent(): WATCH_EVENT {
   //   };
   // }
   return {
-    POINTER_DOWN: 'pointerdown',
-    POINTER_MOVE: 'pointermove',
-    POINTER_UP: 'pointerup',
-    POINTER_CLICK: Dom.isTouchDevice() ? undefined : 'click',
+    POINTER_DOWN: "pointerdown",
+    POINTER_MOVE: "pointermove",
+    POINTER_UP: "pointerup",
+    POINTER_CLICK: Dom.isTouchDevice() ? undefined : "click",
     getPointerEvent,
     getPoint2D,
   };
@@ -149,7 +148,7 @@ function deposeDragging(ing: Dragging, onEnd?: Callback1<Dragging>) {
 function whenMoving(
   ing: Dragging,
   p2d: Point2D,
-  options: Pick<DraggingOptions, 'onMoving' | 'onEnd'>
+  options: Pick<DraggingOptions, "onMoving" | "onEnd">
 ) {
   // console.log('whenMoving 1', ing._dead);
   if (ing.update(p2d)) {
@@ -279,7 +278,7 @@ export function useDragging(options: DraggingOptions) {
   // 准备销毁程序
   //
   function release_draggable() {
-    log.debug('release_draggable');
+    if (debug) console.log("release_draggable");
     $watchTarget.removeEventListener(POINTER_DOWN, OnPointerDown);
   }
 

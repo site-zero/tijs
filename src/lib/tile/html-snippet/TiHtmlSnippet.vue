@@ -1,13 +1,11 @@
 <script setup lang="ts">
   import { computed, onMounted, ref, watch } from 'vue';
   import { CssUtils } from '../../../core';
-  import { getLogger } from '../../../core/log/ti-log';
   import { COM_TYPES } from '../../lib-com-types';
   import { HtmlSnippetEmitter, HtmlSnippetProps } from './html-snippet-types';
   import { useHtmlSnippetEventDelegate } from './use-html-snippet-events';
   //-----------------------------------------------------
   const COM_TYPE = COM_TYPES.HtmlSnippet;
-  const log = getLogger(COM_TYPE);
   const $top = ref<HTMLElement>();
   //-----------------------------------------------------
   const emit = defineEmits<HtmlSnippetEmitter>();
@@ -40,13 +38,6 @@
     },
     { immediate: true }
   );
-  //-----------------------------------------------------
-  onMounted(() => {
-    if (!$top.value) {
-      log.warn('$top is Nil');
-      return;
-    }
-  });
   //-----------------------------------------------------
 </script>
 <template>

@@ -7,12 +7,11 @@ import {
   TableRowID,
 } from "../../../_type";
 import { Util } from "../../../core";
-import { getLogger } from "../../../core/log/ti-log";
 import { ListProps, RoadblockProps } from "../../../lib";
 import { OptionsFeature, StdListItemFeature } from "../../../lib/_features";
 import { TransferProps, TransferState } from "./ti-transfer-types";
 
-const log = getLogger("ti-use-transfer");
+const debug = false;
 
 export type TransferEmitter = {
   (event: "change", payload: TableRowID[]): void;
@@ -95,7 +94,7 @@ export function useTransfer(
     let { dict } = _options.value;
     let { toStdItems } = _std_list.value;
     if (!dict) {
-      log.warn("NOT dict, unable to relodOptons!");
+      if (debug) console.log("NOT dict, unable to relodOptons!");
       state.options = [];
     } else {
       let list = await dict.getData(force);

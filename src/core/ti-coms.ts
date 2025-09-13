@@ -1,5 +1,5 @@
-import _ from 'lodash';
-import { App } from 'vue';
+import _ from "lodash";
+import { App } from "vue";
 import {
   ComInfoFilter,
   I18nLang,
@@ -7,22 +7,20 @@ import {
   MessageMap,
   TiCom,
   TiComSet,
-} from '../_type';
-import en_us from '../i18n/en-us';
-import zh_cn from '../i18n/zh-cn';
-import _com_set_action from '../lib/action/all-actions';
-import _com_set_edit from '../lib/edit/all-edit';
-import _com_set_input from '../lib/input/all-input';
-import _com_set_shelf from '../lib/shelf/all-shelf';
-import _com_set_tile from '../lib/tile/all-tiles';
-import _com_set_view from '../lib/view/all-views';
-import { getEnv, setEnv } from './ti';
-import { I18n, Str } from './ti-exports';
+} from "../_type";
+import en_us from "../i18n/en-us";
+import zh_cn from "../i18n/zh-cn";
+import _com_set_action from "../lib/action/all-actions";
+import _com_set_edit from "../lib/edit/all-edit";
+import _com_set_input from "../lib/input/all-input";
+import _com_set_shelf from "../lib/shelf/all-shelf";
+import _com_set_tile from "../lib/tile/all-tiles";
+import _com_set_view from "../lib/view/all-views";
+import { TiComImpl } from "./_top/ti-com";
+import { getEnv, setEnv } from "./ti";
+import { I18n, Str } from "./ti-exports";
 
-import { getLogger } from '../core/log/ti-log';
-import { TiComImpl } from './_top/ti-com';
-
-const log = getLogger('ti.lib');
+const debug = true;
 
 /**
  * 定义一个组件的集合
@@ -58,7 +56,7 @@ export const updateInstalledComponentsLangs: {
   (lang: I18nLang): void;
   (lang: string): void;
 } = function (lang: string | I18nLang): void {
-  log.debug('updateInstalledComponentsLangs', lang);
+  if (debug) console.log("updateInstalledComponentsLangs", lang);
   let langKey: I18nLang;
   if (_.isString(lang)) {
     langKey = I18n.toLangKey(lang);
@@ -70,7 +68,7 @@ export const updateInstalledComponentsLangs: {
     let messages = com.i18n[langKey];
 
     // 看看是否字符串是以 com 名称作为前缀
-    let prefix = _.kebabCase(com.name) + '-';
+    let prefix = _.kebabCase(com.name) + "-";
     let _msgs = {} as MessageMap;
     _.forEach(messages, (v, k) => {
       if (!k.startsWith(prefix)) {
@@ -87,7 +85,7 @@ export const updateInstalledComponentsLangs: {
 export function installTiCoreI18n(lang: string, updateComponents = false) {
   let cn = zh_cn as MessageMap;
   let en = en_us as MessageMap;
-  log.debug('installTiCoreI18n', lang);
+  if (debug) console.log("installTiCoreI18n", lang);
   const app_i18ns = {
     zh_cn: cn,
     en_us: en,
@@ -108,7 +106,7 @@ export function tiPutComponents(coms: TiComSet) {
 
 export function tiGetComponent(
   key: string,
-  dft: string = 'TiUnknown'
+  dft: string = "TiUnknown"
 ): TiCom | undefined {
   let comType = Str.toComType(key);
   let com = ALL_TI_COMS.get(comType);
@@ -137,7 +135,7 @@ export function tiFindComponents(filter?: ComInfoFilter): TiCom[] {
 }
 
 function _dft_com_prop_key(comType: string, propName: string) {
-  return ['ComDefaultProps', comType, propName].join('-');
+  return ["ComDefaultProps", comType, propName].join("-");
 }
 
 /**

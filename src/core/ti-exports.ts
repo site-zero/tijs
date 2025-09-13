@@ -16,7 +16,6 @@ export * as Dicts from "./dict/ti-dict";
 export * from "./fuse";
 export * as G2D from "./g2d/ti-g2d";
 export * from "./gui-util-context";
-export * from "./log/ti-log";
 export * as Match from "./match/ti-match";
 export * as Net from "./net/ti-net";
 export * as Num from "./num/ti-num";
