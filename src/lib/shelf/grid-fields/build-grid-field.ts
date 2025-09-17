@@ -24,6 +24,17 @@ export function buildOneGridField(
 ): GridFieldsStrictItem {
   let field: GridFieldsInput = fieldSet.getFieldBy(fr);
 
+  if ("db_table" == field.name) {
+    console.log(field);
+  }
+
+  _.defaults(field, {
+    readonly: dft.readonly,
+    disabled: dft.disabled,
+    enabled: dft.enabled,
+    required: dft.required,
+  });
+
   let uniqKey = makeFieldUniqKey(indexes, field.name, field.uniqKey);
   // 可见性
   let visiblity = useVisibility(field, uniqKey);
@@ -181,12 +192,13 @@ export function buildOneGridField(
     grp.defaultComConf = field.defaultComConf ?? dft.defaultComConf;
 
     // 递归构建嵌套子项目
-    grp.fields = buildGridFields(
-      fieldSet,
-      indexes,
-      field.fields,
-      grp as GridFieldsInput
-    );
+    grp.fields = buildGridFields(fieldSet, indexes, field.fields, {
+      ...grp,
+      readonly: field.readonly,
+      disabled: field.disabled,
+      enabled: field.enabled,
+      required: field.required,
+    } as GridFieldsInput);
   }
   // ---------------: 标签 :---------------
   else {
