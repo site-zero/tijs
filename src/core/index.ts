@@ -1,4 +1,4 @@
-import * as ti_global from './ti';
+//import * as ti_global from './ti';
 import * as ti_coms from './ti-coms';
 import * as ti_core from './ti-exports';
 
@@ -15,11 +15,11 @@ if (!G.Ti) {
 }
 _.assign(G.Ti, {
   lodash: _,
-  ...ti_global,
+  //...ti_global,
   ...ti_coms,
   ...ti_core,
 });
 
-export * from './ti';
+//export * from './ti';
 export * from './ti-coms';
 export * from './ti-exports';

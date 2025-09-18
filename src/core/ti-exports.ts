@@ -6,6 +6,7 @@ export * as Bank from "./_top/ti-bank";
 export * from "./_top/ti-bus";
 export * from "./_top/ti-com";
 export * as DateTime from "./_top/ti-datetime";
+export * from "./_top/ti-env";
 export * as Icons from "./_top/ti-icons";
 export * from "./_top/ti-random";
 export * as Rects from "./_top/ti-rect";

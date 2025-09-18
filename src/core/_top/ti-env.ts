@@ -1,6 +1,6 @@
 import { assign, cloneDeep, get, set } from 'lodash';
-import * as PKG from '../../package.json';
-import { TiBus, Vars } from '../_type';
+import * as PKG from '../../../package.json';
+import { TiBus, Vars } from '../../_type';
 
 export const version = PKG.version;
 

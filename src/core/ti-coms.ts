@@ -16,9 +16,9 @@ import _com_set_input from "../lib/input/all-input";
 import _com_set_shelf from "../lib/shelf/all-shelf";
 import _com_set_tile from "../lib/tile/all-tiles";
 import _com_set_view from "../lib/view/all-views";
+
 import { TiComImpl } from "./_top/ti-com";
-import { getEnv, setEnv } from "./ti";
-import { I18n, Str } from "./ti-exports";
+import { I18n, Str, getEnv, setEnv } from "./ti-exports";
 
 const debug = true;
 

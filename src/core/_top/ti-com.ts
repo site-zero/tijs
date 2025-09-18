@@ -1,5 +1,5 @@
-import _ from 'lodash';
-import { App } from 'vue';
+import _ from "lodash";
+import { App } from "vue";
 import {
   ComPropExample,
   I18nSet,
@@ -9,8 +9,8 @@ import {
   TiComRace,
   TiRawCom,
   Vars,
-} from '../../_type';
-import { I18n } from '../ti-exports';
+} from "../../_type";
+import * as I18n from "../text/ti-i18n";
 
 export class TiComImpl implements TiCom {
   icon: string;
@@ -32,7 +32,7 @@ export class TiComImpl implements TiCom {
   >;
 
   constructor(info: TiComInfo) {
-    this.icon = info.icon || 'fas-question';
+    this.icon = info.icon || "fas-question";
     this.race = info.race;
     this.name = info.name;
     this.text = info.text ?? info.name;
@@ -47,9 +47,9 @@ export class TiComImpl implements TiCom {
     this.com = info.com;
     this.asInner = info.asInner ?? false;
     this.install = info.install;
-    this.defaultProps = info.defaultProps ?? '_auto_';
+    this.defaultProps = info.defaultProps ?? "_auto_";
     this.exampleProps = _.cloneDeep(info.exampleProps ?? []);
-    this.exampleModel = _.cloneDeep(info.exampleModel) ?? { change: 'value' };
+    this.exampleModel = _.cloneDeep(info.exampleModel) ?? { change: "value" };
 
     this.events = [];
     if (this.com.emits) {
