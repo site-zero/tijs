@@ -4,7 +4,7 @@ import {
   ImageProps,
   ProgressBarProps,
   TextSnippetProps,
-} from '../../';
+} from "../../";
 import {
   ActionBarItem,
   ActionBarItemInfo,
@@ -13,12 +13,12 @@ import {
   CssAlignment,
   LogicType,
   Vars,
-} from '../../../_type';
+} from "../../../_type";
 
 export type AbstracUploadEmitter = ActionBarEmitter & {
-  (event: 'upload', payload: File): void;
-  (event: 'clear'): void;
-  (event: 'stop-upload'): void;
+  (event: "upload", payload: File): void;
+  (event: "clear"): void;
+  (event: "stop-upload"): void;
 };
 
 export type AbstractUploaderProps = CommonProps & {
@@ -37,7 +37,9 @@ export type AbstractUploaderProps = CommonProps & {
   uploadButton?: ActionBarItemInfo | boolean;
   clearButton?: ActionBarItemInfo | boolean;
   actions?: ActionBarItem[];
-  actionBar?: Omit<ActionBarProps, 'items'>;
+  actionBar?: Omit<ActionBarProps, "items">;
+  accept?: string;
+  multi?: boolean;
   //-----------------------------------------------------
   // Aspect
   //-----------------------------------------------------

@@ -1,7 +1,9 @@
-import { Dom } from '..';
+import { Dom } from "..";
 
 export type DoUploadFilesOptions = {
   multi?: boolean;
+  // accept="image/*, text/*, .jpg, .jpeg, .pdf"
+  accept?: string;
 };
 
 export async function doUploadFiles(
@@ -11,14 +13,15 @@ export async function doUploadFiles(
     try {
       // 创建一个临时元素
       let $input = Dom.createElement({
-        tagName: 'input',
+        tagName: "input",
         attrs: {
-          type: 'file',
+          type: "file",
           multiple: options.multi ?? false,
+          accept: options.accept,
         },
       }) as HTMLInputElement;
       // 监听事件
-      $input.addEventListener('change', (evt: any) => {
+      $input.addEventListener("change", (evt: any) => {
         // console.log('change', evt);
         let files: FileList = evt.target.files;
         if (!files || files.length == 0) {

@@ -1,9 +1,9 @@
-import _ from 'lodash';
-import { Ref } from 'vue';
-import { ActionBarEvent, ActionBarProps, useDropping } from '../../';
-import { ActionBarItem, ActionBarItemInfo } from '../../../_type/core-types';
-import { Be } from '../../../core';
-import { AbstractUploaderProps, AbstracUploadEmitter } from './upload-types';
+import _ from "lodash";
+import { Ref } from "vue";
+import { ActionBarEvent, ActionBarProps, useDropping } from "../../";
+import { ActionBarItem, ActionBarItemInfo } from "../../../_type/core-types";
+import { Be } from "../../../core";
+import { AbstractUploaderProps, AbstracUploadEmitter } from "./upload-types";
 
 export type GetActionBarOptions = {
   /**
@@ -26,28 +26,28 @@ export function getActionBarProps(
   if (_in_progress) {
     actions.push({
       //icon: 'fas-circle-stop',
-      icon: 'zmdi-stop',
-      [options.iconButton ? 'tip' : 'text']: 'i18n:ti-upload-bar-stop',
-      className: `is-${props.type ?? 'dangar'}-r`,
-      action: 'stop-upload',
+      icon: "zmdi-stop",
+      [options.iconButton ? "tip" : "text"]: "i18n:ti-upload-bar-stop",
+      className: `is-${props.type ?? "dangar"}-r`,
+      action: "stop-upload",
     });
   }
   // 显示操作按钮
   else {
     // 内置上传按钮
     _join_action(actions, props.uploadButton, {
-      icon: 'fas-upload',
-      [options.iconButton ? 'tip' : 'text']: 'i18n:ti-upload-bar-upload',
-      className: `is-${props.type ?? 'primary'}-r`,
-      action: 'choose-file',
+      icon: "fas-upload",
+      [options.iconButton ? "tip" : "text"]: "i18n:ti-upload-bar-upload",
+      className: `is-${props.type ?? "primary"}-r`,
+      action: "choose-file",
     });
 
     // 内置清除按钮
     _join_action(actions, props.clearButton, {
-      icon: 'far-trash-can',
-      [options.iconButton ? 'tip' : 'text']: 'i18n:ti-upload-bar-clean',
-      className: `is-${props.type ?? 'primary'}-r`,
-      action: 'clear',
+      icon: "far-trash-can",
+      [options.iconButton ? "tip" : "text"]: "i18n:ti-upload-bar-clean",
+      className: `is-${props.type ?? "primary"}-r`,
+      action: "clear",
     });
 
     // 定制化的操作按钮
@@ -55,7 +55,7 @@ export function getActionBarProps(
       _.forEach(props.actions, (at) => {
         at = _.cloneDeep(at);
         if (_.isUndefined(at.className)) {
-          at.className = `is-${props.type ?? 'primary'}-r`;
+          at.className = `is-${props.type ?? "primary"}-r`;
         }
         actions.push(at);
       });
@@ -65,7 +65,7 @@ export function getActionBarProps(
   // 生成操作栏配置属性
   if (actions.length > 0) {
     return {
-      className: 'top-as-button',
+      className: "top-as-button",
       items: actions,
       ...(props.actionBar ?? {}),
     } as ActionBarProps;
@@ -90,28 +90,32 @@ function _join_action(
 }
 
 export function onUploadActionFire(
+  props: AbstractUploaderProps,
   event: ActionBarEvent,
   emit: AbstracUploadEmitter
 ) {
-  console.log('onUploadActionFire', event);
+  //console.log('onUploadActionFire', event);
   let fn = {
-    'choose-file': async () => {
-      let files = await Be.doUploadFiles({ multi: true });
+    "choose-file": async () => {
+      let files = await Be.doUploadFiles({
+        multi: props.multi,
+        accept: props.accept,
+      });
       if (files.length > 0) {
-        emit('upload', files[0]);
+        emit("upload", files[0]);
       }
     },
-    'clear': () => {
-      emit('clear');
+    "clear": () => {
+      emit("clear");
     },
-    'stop-upload': () => {
-      emit('stop-upload');
+    "stop-upload": () => {
+      emit("stop-upload");
     },
   }[event.name];
   if (fn) {
     fn();
   } else {
-    emit('fire', event.payload);
+    emit("fire", event.payload);
   }
 }
 
@@ -137,7 +141,7 @@ export function useUploadDropping(
       //console.log(files);
       let f = _.first(files);
       if (f) {
-        emit('upload', f);
+        emit("upload", f);
       }
     },
   });

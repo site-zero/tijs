@@ -71,7 +71,7 @@
   });
   //-----------------------------------------------------
   function onActionFire(event: ActionBarEvent) {
-    onUploadActionFire(event, emit);
+    onUploadActionFire(props, event, emit);
   }
   //-----------------------------------------------------
   const _drag_enter = ref(false);
