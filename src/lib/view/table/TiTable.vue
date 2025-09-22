@@ -37,7 +37,7 @@
   import { loadColumns, useKeepTable } from "./use-table-keep";
   import { useViewMeasure } from "./use-view-measure";
   //-------------------------------------------------------
-  const debug = false;
+  const debug = true;
   //-------------------------------------------------------
   const $main: Ref<HTMLElement> = ref() as Ref<HTMLElement>;
   //-------------------------------------------------------
@@ -164,9 +164,7 @@
   const TableData = computed(() => _table.value.TableData.value);
   const hasData = computed(() => TableData.value.length > 0);
   //-------------------------------------------------------
-  const ShowRowMarker = computed(
-    () => props.showChecker || props.showRowIndex
-  );
+  const ShowRowMarker = computed(() => props.showChecker || props.showRowIndex);
   //-------------------------------------------------------
   const HeadMenu = computed(() =>
     useTableHeadMenu(
@@ -354,7 +352,8 @@
         _keep.value
       );
       _mea.updateMeasure();
-    }
+    },
+    { immediate: true }
   );
   //-------------------------------------------------------
   onMounted(() => {
