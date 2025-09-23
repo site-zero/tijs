@@ -1,9 +1,9 @@
-import { BUNYA_COM } from "@bunya/lib";
 import { TiComInfo, TiComRace } from "@site0/tijs";
 import { App } from "vue";
+import { COM_TYPES } from "../../../lib-com-types";
 import DiffFormFldName from "./DiffFormFldName.vue";
 
-const COM_TYPE = BUNYA_COM.DiffFormFldName;
+const COM_TYPE = COM_TYPES.DiffFormFldName;
 
 const DiffFormFldNameInfo: TiComInfo = {
   icon: "fas-address-book", // 从 fontawsome 寻找一个合适的图标

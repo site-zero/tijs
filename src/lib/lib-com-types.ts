@@ -9,6 +9,7 @@ export const COM_TYPES = {
   //------------------- EDIT
   CodeEditor: "TiCodeEditor",
   DiffForm: "TiDiffForm",
+  DiffFormFldName: "DiffFormFldName",
   PairEditor: "TiPairEditor",
   RichTinyMCEditor: "TiRichTinyMCEditor",
   EditRichProse: "TiEditRichProse",

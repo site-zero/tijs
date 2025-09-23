@@ -2,7 +2,7 @@ import { DiffFormFldNameProps, DiffFormFldNameEmitter } from "./diff-form-fld-na
 
 export type DiffFormFldNameApi = ReturnType<typeof useDiffFormFldNameApi>;
 
-export function useDiffFormFldNameApi(props: DiffFormFldNameProps, emit: DiffFormFldNameEmitter) {
+export function useDiffFormFldNameApi(_props: DiffFormFldNameProps, _emit: DiffFormFldNameEmitter) {
   //-----------------------------------------------------
   // 返回接口
   //-----------------------------------------------------

@@ -7,7 +7,7 @@ export type DiffFormResult = {};
 export type TiDiffFormApi = ReturnType<typeof useTiDiffFormApi>;
 
 export function useTiDiffFormApi(
-  props: TiDiffFormProps,
+  _props: TiDiffFormProps,
   _emit: TiDiffFormEmitter
 ) {
   //-----------------------------------------------------
