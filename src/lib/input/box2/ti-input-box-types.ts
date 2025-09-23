@@ -65,7 +65,7 @@ export type InputBoxProps = CommonProps &
 
     emitTime?: BoxEmitTime[];
 
-    onChange?: (val: any) => void;
+    onValueChange?: (val: any) => void;
 
     /**
      * 传递输入框 api 给父控件。

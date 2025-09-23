@@ -537,7 +537,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     if (!_.isEqual(val, props.value)) {
       // 空值
       if (_.isNil(val) || "" === val) {
-        if (props.onChange) props.onChange(val);
+        if (props.onValueChange) props.onValueChange(val);
         emit("change", null);
       }
       // 原始对象
@@ -545,7 +545,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
         let hint = cookHint(val);
         _dict.getStdItem(hint).then((it) => {
           let item = it?.toOptionItem();
-          if (props.onChange) props.onChange(item);
+          if (props.onValueChange) props.onValueChange(item);
           emit("change", item ?? null);
         });
       }
@@ -557,12 +557,12 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
           icon: _box_state.box_icon ?? undefined,
           tip: _box_state.box_tip ?? undefined,
         };
-        if (props.onChange) props.onChange(item);
+        if (props.onValueChange) props.onValueChange(item);
         emit("change", item);
       }
       // 采用值
       else {
-        if (props.onChange) props.onChange(val);
+        if (props.onValueChange) props.onValueChange(val);
         emit("change", val);
       }
     }
