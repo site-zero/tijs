@@ -9,11 +9,11 @@ import {
 import { I18n, Util } from '../../../core';
 import {
   FieldDynamicContext,
-  GridFieldLayoutMode,
+  FormFieldLayoutMode,
   GridFieldsProps,
-  GridFieldsStrictAbstractItem,
-  GridFieldsStrictField,
-  GridFieldsStrictGroup,
+  AbstractFormItem,
+  FormFieldItem,
+  FormItemGroup,
 } from './ti-grid-fields-types';
 
 type FieldItemStyleOptions = {
@@ -22,7 +22,7 @@ type FieldItemStyleOptions = {
 };
 
 export function getFieldTopStyle(
-  props: GridFieldsStrictField,
+  props: FormFieldItem,
   options: FieldItemStyleOptions
 ) {
   let css_1 = getGridItemStyle(props);
@@ -35,7 +35,7 @@ export function getFieldTopStyle(
 }
 
 function getFieldLayoutStyle(
-  layoutMode: GridFieldLayoutMode,
+  layoutMode: FormFieldLayoutMode,
   nameWidth: number | string,
   options: FieldItemStyleOptions
 ) {
@@ -192,7 +192,7 @@ function getFieldLayoutStyle(
   return css;
 }
 
-export function getGridItemStyle(item: GridFieldsStrictAbstractItem) {
+export function getGridItemStyle(item: AbstractFormItem) {
   let css = _.cloneDeep(item.style || {});
   if (item.rowStart) {
     css.gridRowStart = item.rowStart;
@@ -211,7 +211,7 @@ export function getGridItemStyle(item: GridFieldsStrictAbstractItem) {
 }
 
 export function getFieldTitleStyle(
-  field: GridFieldsStrictField,
+  field: FormFieldItem,
   status?: FieldStatusInfo
 ) {
   let re = _.assign({}, field.titleStyle);
@@ -244,7 +244,7 @@ type FieldTipIconInfo = {
 };
 
 function getFieldTipIcon(
-  field: GridFieldsStrictField,
+  field: FormFieldItem,
   hasTip: boolean
 ): FieldTipIconInfo | undefined {
   if (hasTip) {
@@ -260,7 +260,7 @@ function getFieldTipIcon(
   }
 }
 
-export function getFieldTitleAlign(field: GridFieldsStrictField): string {
+export function getFieldTitleAlign(field: FormFieldItem): string {
   if (!field.titleAlign) {
     return /^h-/.test(field.fieldLayoutMode) ? 'right' : 'left';
   }
@@ -283,7 +283,7 @@ export type FieldTitleIcon = {
  * 包括提示信息图标，以及 required 图标
  */
 export function getFieldIcon(
-  field: GridFieldsStrictField,
+  field: FormFieldItem,
   hasTitle: boolean,
   hasTip: boolean,
   status?: FieldStatusInfo
@@ -367,7 +367,7 @@ export type FieldTextInfo = {
 
 export function getFieldTextInfo(
   field: Pick<
-    GridFieldsStrictField,
+    FormFieldItem,
     | 'title'
     | 'titleType'
     | 'fieldTitleBy'
@@ -417,7 +417,7 @@ export function getFieldTextInfo(
 }
 
 export function getBodyPartStyle(
-  props: GridFieldsStrictGroup | GridFieldsProps
+  props: FormItemGroup | GridFieldsProps
 ): Vars {
   let css = _.cloneDeep(props.bodyPartStyle) || {};
   if (props.bodyPartDense) {

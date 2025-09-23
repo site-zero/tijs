@@ -39,9 +39,9 @@ export const FIELD_STATUS_KEY: InjectionKey<
 //-----------------------------------------------
 export type TextArm = SelectValueArm<string, any>;
 //-----------------------------------------------
-export type GridFieldsFeature = {
-  strictItems: GridFieldsStrictItem[];
-  fieldItems: GridFieldsStrictField[];
+export type GridFieldsApi = {
+  strictItems: OneFormItem[];
+  fieldItems: FormFieldItem[];
   // 动态类选择器
   className?: Vars;
   style?: Vars;
@@ -81,7 +81,7 @@ export type GridFieldsProps = Omit<
   | 'maxTrackCount'
   | 'validation'
 > &
-  Omit<FieldChangeProps<GridFieldsStrictField>, 'fields'> & {
+  Omit<FieldChangeProps<FormFieldItem>, 'fields'> & {
     // 动态 explain 时的变量
     vars?: Vars;
     // 输入的数据
@@ -103,7 +103,7 @@ export type GridFieldsProps = Omit<
      * @param fieldItems
      * @returns
      */
-    whenGrid?: (grid: GridFieldsFeature) => void;
+    whenGrid?: (grid: GridFieldsApi) => void;
 
     /**
      * 得到每个字段的状态
@@ -174,7 +174,7 @@ export type GridFieldsInput = CommonProps &
 
     // 普通字段的布局模式
     // 仅仅当 `race=field` 时有效
-    fieldLayoutMode?: GridFieldLayoutMode;
+    fieldLayoutMode?: FormFieldLayoutMode;
     fieldValueStyle?: Vars;
     //------------------------------------
     // 约束
@@ -288,7 +288,7 @@ export type GroupAspect = 'legend' | 'bottom-line' | 'bar';
  * v-value-icon-suffix : 上下布局，提示作为图标，作为值后缀
  * ```
  */
-export type GridFieldLayoutMode =
+export type FormFieldLayoutMode =
   | 'h-wrap'
   | 'h-bottom'
   | 'v-wrap'
@@ -308,7 +308,7 @@ export type FieldDynamicContext = {
 /**
  * 编译后的严格属性字段
  */
-export type GridFieldsStrictAbstractItem = FieldComProps &
+export type AbstractFormItem = FieldComProps &
   ReadonlyProps &
   VisibilityFeature & {
     data: Vars;
@@ -340,17 +340,17 @@ export type GridFieldsStrictAbstractItem = FieldComProps &
     colSpan?: number; // 指定格子的列跨度，比 style.gridColumnEnd 优先
   };
 //-----------------------------------------------
-export type GridFieldsStrictGroup = GridFieldsStrictAbstractItem &
+export type FormItemGroup = AbstractFormItem &
   GridLayoutProps & {
     race: 'group';
-    fields: GridFieldsStrictItem[];
+    fields: OneFormItem[];
     groupAspect?: GroupAspect;
 
     fieldTitleAlign?: CssTextAlign;
 
     // 用来传递给下属字段
     maxFieldNameWidth?: number | string;
-    fieldLayoutMode?: GridFieldLayoutMode;
+    fieldLayoutMode?: FormFieldLayoutMode;
 
     bodyPartStyle?: Vars;
     bodyPartDense?: boolean;
@@ -367,13 +367,13 @@ export type GridFieldsStrictGroup = GridFieldsStrictAbstractItem &
     defaultComConf?: Vars;
   };
 //-----------------------------------------------
-export type GridFieldsStrictField = GridFieldsStrictAbstractItem &
+export type FormFieldItem = AbstractFormItem &
   AbstractField & {
     race: 'field';
 
     checkEquals: boolean;
     maxFieldNameWidth?: number | string;
-    fieldLayoutMode: GridFieldLayoutMode;
+    fieldLayoutMode: FormFieldLayoutMode;
 
     fieldTitleBy?: FieldComProps;
     titleTextStyle?: Vars;
@@ -383,14 +383,14 @@ export type GridFieldsStrictField = GridFieldsStrictAbstractItem &
     tipIcon: IconInput;
   };
 //-----------------------------------------------
-export type GridFieldsStrictLabel = GridFieldsStrictAbstractItem & {
+export type FormLabelItem = AbstractFormItem & {
   race: 'label';
   titleTextStyle?: Vars;
   tipIcon?: IconInput;
   tipTextStyle?: Vars;
 };
 //-----------------------------------------------
-export type GridFieldsStrictItem =
-  | GridFieldsStrictGroup
-  | GridFieldsStrictField
-  | GridFieldsStrictLabel;
+export type OneFormItem =
+  | FormItemGroup
+  | FormFieldItem
+  | FormLabelItem;

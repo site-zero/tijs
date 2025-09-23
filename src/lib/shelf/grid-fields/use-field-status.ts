@@ -1,10 +1,10 @@
 import _ from 'lodash';
 import { computed } from 'vue';
 import { FieldStatus, FieldStatusIcons, FieldStatusInfo } from '../../../_type';
-import { GridFieldsStrictField } from './ti-grid-fields-types';
+import { FormFieldItem } from './ti-grid-fields-types';
 
 export function useFieldStatus(
-  fields: GridFieldsStrictField[],
+  fields: FormFieldItem[],
   fieldStatusIcons?: FieldStatusIcons
 ) {
   // 得到默认的状态图标

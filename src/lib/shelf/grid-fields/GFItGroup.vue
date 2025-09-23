@@ -10,9 +10,9 @@
   import GFItField from './GFItField.vue';
   import GFItLabel from './GFItLabel.vue';
   import {
-    GridFieldsStrictField,
-    GridFieldsStrictGroup,
-    GridFieldsStrictLabel,
+    FormFieldItem,
+    FormItemGroup,
+    FormLabelItem,
     GridItemEmitter,
   } from './ti-grid-fields-types';
   import {
@@ -27,7 +27,7 @@
   //-------------------------------------------------
   const emit = defineEmits<GridItemEmitter>();
   const props = defineProps<
-    GridFieldsStrictGroup & {
+    FormItemGroup & {
       activedUniqKey?: string;
     }
   >();
@@ -136,7 +136,7 @@
           <!------[:Field:]---------->
           <GFItField
             v-if="'field' == fld.race"
-            v-bind="(fld as GridFieldsStrictField)"
+            v-bind="(fld as FormFieldItem)"
             :max-track-count="GridLayoutStyle.trackCount"
             :is-actived="fld.uniqKey == props.activedUniqKey"
             @name-change="emit('name-change', $event)"
@@ -146,7 +146,7 @@
           <!------[:Group:]---------->
           <GFItGroup
             v-else-if="'group' == fld.race"
-            v-bind="(fld as GridFieldsStrictGroup)"
+            v-bind="(fld as FormItemGroup)"
             :max-track-count="GridLayoutStyle.trackCount"
             :actived-uniq-key="props.activedUniqKey"
             @name-change="emit('name-change', $event)"
@@ -154,7 +154,7 @@
           <!------[:Label:]---------->
           <GFItLabel
             v-else-if="'label' == fld.race"
-            v-bind="(fld as GridFieldsStrictLabel)"
+            v-bind="(fld as FormLabelItem)"
             :max-track-count="GridLayoutStyle.trackCount" />
           <!------[!Invalid!]---------->
           <blockquote

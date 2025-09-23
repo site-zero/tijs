@@ -16,6 +16,7 @@ const zh_cn = {
 };
 
 const TiFilterBarInfo: TiComInfo = {
+  tags: ["ing"],
   icon: "zmdi-graphic-eq",
   race: TiComRace.VIEW,
   name: COM_TYPE,

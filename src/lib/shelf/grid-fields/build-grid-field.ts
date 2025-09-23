@@ -10,10 +10,10 @@ import {
   FieldRefer,
   GridFieldsInput,
   GridFieldsProps,
-  GridFieldsStrictAbstractItem,
-  GridFieldsStrictField,
-  GridFieldsStrictGroup,
-  GridFieldsStrictItem,
+  AbstractFormItem,
+  FormFieldItem,
+  FormItemGroup,
+  OneFormItem,
 } from "./ti-grid-fields-types";
 
 export function buildOneGridField(
@@ -21,7 +21,7 @@ export function buildOneGridField(
   indexes: number[],
   fr: FieldRefer,
   dft: GridFieldsProps
-): GridFieldsStrictItem {
+): OneFormItem {
   let field: GridFieldsInput = fieldSet.getFieldBy(fr);
 
   if ("db_table" == field.name) {
@@ -44,7 +44,7 @@ export function buildOneGridField(
   // }
 
   // 准备返回值
-  let re: GridFieldsStrictAbstractItem = {
+  let re: AbstractFormItem = {
     // 唯一键
     uniqKey,
     // 下标
@@ -98,7 +98,7 @@ export function buildOneGridField(
   // ---------------: 普通字段 :---------------
   if (field.name) {
     re.race = "field";
-    let fld = re as GridFieldsStrictField;
+    let fld = re as FormFieldItem;
 
     fld.name = field.name;
     fld.type = field.type ?? dft.defaultFieldType ?? "String";
@@ -166,7 +166,7 @@ export function buildOneGridField(
   // ---------------: 分组 :---------------
   else if (field.fields) {
     re.race = "group";
-    let grp = re as GridFieldsStrictGroup;
+    let grp = re as FormItemGroup;
     grp.maxFieldNameWidth = field.maxFieldNameWidth ?? dft.maxFieldNameWidth;
     grp.layout = field.layout;
     grp.fieldTitleAlign = field.fieldTitleAlign ?? dft.fieldTitleAlign;
@@ -205,7 +205,7 @@ export function buildOneGridField(
     re.race = "label";
   }
 
-  return re as GridFieldsStrictItem;
+  return re as OneFormItem;
 }
 
 export function buildGridFields(
@@ -213,8 +213,8 @@ export function buildGridFields(
   indexes: number[],
   fields: FieldRefer[],
   dft: GridFieldsInput
-): GridFieldsStrictItem[] {
-  let items: GridFieldsStrictItem[] = [];
+): OneFormItem[] {
+  let items: OneFormItem[] = [];
   for (let i = 0; i < fields.length; i++) {
     let is = _.concat(indexes, i);
     let field = fields[i];
