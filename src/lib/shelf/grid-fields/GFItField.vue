@@ -2,11 +2,11 @@
   import JSON5 from "json5";
   import { computed, inject } from "vue";
   import { TiTextSnippet, useFieldCom, useReadonly } from "../../";
-  import { LogicType, ValueChange, getFieldValue } from "../../../_type";
+  import { LogicType, ValueChange, Vars, getFieldValue } from "../../../_type";
   import { CssUtils } from "../../../core";
   import {
     FIELD_STATUS_KEY,
-    GridFieldsStrictField,
+    FormFieldItem,
     GridItemEmitter,
   } from "./ti-grid-fields-types";
   import {
@@ -23,7 +23,7 @@
   //-------------------------------------------------
   const emit = defineEmits<GridItemEmitter>();
   const props = defineProps<
-    GridFieldsStrictField & {
+    FormFieldItem & {
       isActived?: boolean;
     }
   >();
@@ -128,14 +128,16 @@
     return val;
   });
   //-------------------------------------------------
-  const FieldTitleVars = computed(() => {
+  const FieldTitleVars = computed((): Vars => {
     let required = false;
     if (props.isRequired) {
       required = props.isRequired(props.data);
     }
     return {
+      ...(props.vars ?? {}),
       uniqKey: props.uniqKey,
-      title: props.title,
+      //title: props.title,
+      title: FieldText.value.title,
       name: props.name,
       tip: props.tip,
       value: FieldValue.value,

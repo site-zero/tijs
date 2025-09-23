@@ -3,14 +3,14 @@
   import { computed } from 'vue';
   import { TiTextSnippet } from '../../';
   import { CssUtils } from '../../../core';
-  import { GridFieldsStrictLabel } from './ti-grid-fields-types';
+  import { FormLabelItem } from './ti-grid-fields-types';
   import { getFieldTextInfo, getGridItemStyle } from './use-field-style';
   //-------------------------------------------------
   defineOptions({
     inheritAttrs: false,
   });
   //-------------------------------------------------
-  const props = defineProps<GridFieldsStrictLabel>();
+  const props = defineProps<FormLabelItem>();
   //-------------------------------------------------
   const TopClass = computed(() => {
     let _is_empty =

@@ -3,8 +3,8 @@ import {
   buildGridFields,
   FieldRefer,
   getFieldValue,
-  GridFieldsStrictField,
-  GridFieldsStrictItem,
+  FormFieldItem,
+  OneFormItem,
   useObjFields,
   Vars,
 } from '../../../';
@@ -16,11 +16,11 @@ import {
   useFieldChange,
 } from './use-field-change';
 
-export type FormFieldChangeApi = FieldChangeApi<GridFieldsStrictField> & {
+export type FormFieldChangeApi = FieldChangeApi<FormFieldItem> & {
   /**
    * @returns 当前接口监控的字段列表
    */
-  getWatchedFields: () => GridFieldsStrictField[];
+  getWatchedFields: () => FormFieldItem[];
 
   /**
    * 将错误信息构建为 HTML 字符串。
@@ -55,7 +55,7 @@ export type FormFieldChangeApi = FieldChangeApi<GridFieldsStrictField> & {
 };
 
 export function useFormFieldChange(
-  props: FieldChangeProps<GridFieldsStrictField>,
+  props: FieldChangeProps<FormFieldItem>,
   fields: FieldRefer[],
   fieldSetName?: string
 ): FormFieldChangeApi {
@@ -66,11 +66,11 @@ export function useFormFieldChange(
     [],
     fields,
     {}
-  ) as GridFieldsStrictItem[];
+  ) as OneFormItem[];
   //--------------------------------------------------------------
   // 递归收集所有真正的字段
-  const read_fields: GridFieldsStrictField[] = [];
-  function __join_real_fields(items: GridFieldsStrictItem[]) {
+  const read_fields: FormFieldItem[] = [];
+  function __join_real_fields(items: OneFormItem[]) {
     for (const item of items) {
       if (item.race === 'field') {
         read_fields.push(item);

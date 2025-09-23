@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-  import _ from 'lodash';
-  import { computed, onMounted, onUnmounted, provide, ref, watch } from 'vue';
+  import _ from "lodash";
+  import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
   import {
     RoadblockProps,
     TiRoadblock,
@@ -8,12 +8,12 @@
     useFieldChange,
     useGridLayout,
     useViewport,
-  } from '../../';
-  import { FieldChange } from '../../../_type';
-  import { CssUtils } from '../../../core';
-  import GFItField from './GFItField.vue';
-  import GFItGroup from './GFItGroup.vue';
-  import GFItLabel from './GFItLabel.vue';
+  } from "../../";
+  import { FieldChange } from "../../../_type";
+  import { CssUtils } from "../../../core";
+  import GFItField from "./GFItField.vue";
+  import GFItGroup from "./GFItGroup.vue";
+  import GFItLabel from "./GFItLabel.vue";
   // import {
   //   buildGridFieldsLayoutStyle,
   //   parseGridLayout,
@@ -23,13 +23,13 @@
     GridFieldsDomReadyInfo,
     GridFieldsEmitter,
     GridFieldsProps,
-    GridFieldsStrictField,
-    GridFieldsStrictGroup,
-    GridFieldsStrictLabel,
-  } from './ti-grid-fields-types';
-  import { useFieldStatus } from './use-field-status';
-  import { getBodyPartStyle, getFieldTextInfo } from './use-field-style';
-  import { useGridFields } from './use-grid-fields';
+    FormFieldItem,
+    FormItemGroup,
+    FormLabelItem,
+  } from "./ti-grid-fields-types";
+  import { useFieldStatus } from "./use-field-status";
+  import { getBodyPartStyle, getFieldTextInfo } from "./use-field-style";
+  import { useGridFields } from "./use-grid-fields";
   //-------------------------------------------------
   defineOptions({
     inheritAttrs: true,
@@ -38,12 +38,12 @@
   const emit = defineEmits<GridFieldsEmitter>();
   const props = withDefaults(defineProps<GridFieldsProps>(), {
     fields: () => [],
-    bodyPartGap: 'm',
-    bodyPartFontSize: 's',
+    bodyPartGap: "m",
+    bodyPartFontSize: "s",
     //fieldLayoutMode: 'h-wrap',
-    fieldLayoutMode: 'h-title-icon-suffix',
-    maxFieldNameWidth: '6em',
-    changeMode: 'diff',
+    fieldLayoutMode: "h-title-icon-suffix",
+    maxFieldNameWidth: "6em",
+    changeMode: "diff",
     allowUndefinedFields: true,
     data: () => ({}),
   });
@@ -65,12 +65,12 @@
   const FormEmptyRoadblock = computed(() => {
     return _.assign(
       {
-        text: 'i18n:empty-data',
-        icon: 'fas-clipboard-list',
-        mode: 'cover',
-        size: 'normal',
-        layout: 'A',
-        opacity: 'shadowy',
+        text: "i18n:empty-data",
+        icon: "fas-clipboard-list",
+        mode: "cover",
+        size: "normal",
+        layout: "A",
+        opacity: "shadowy",
       } as RoadblockProps,
       props.emptyRoadblock
     ) as RoadblockProps;
@@ -107,22 +107,28 @@
   provide(FIELD_STATUS_KEY, _field_status);
   //-------------------------------------------------
   const Change = computed(() =>
-    useFieldChange<GridFieldsStrictField>(props, Grid.value.fieldItems)
+    useFieldChange<FormFieldItem>(props, Grid.value.fieldItems)
   );
   //-------------------------------------------------
   const GridText = computed(() =>
     getFieldTextInfo(
       {
         title: props.title,
-        titleType: props.titleType ?? 'text',
+        titleType: props.titleType ?? "text",
         fieldTitleBy: props.fieldTitleBy,
         tip: props.tip,
-        tipType: props.tipType ?? 'text',
+        tipType: props.tipType ?? "text",
         data: props.data,
       },
       props.vars
     )
   );
+  //-------------------------------------------------
+  defineExpose({
+    getUsedFields: function () {
+      return Grid.value.fieldItems;
+    },
+  });
   //-------------------------------------------------
   // function updateViewportWidth() {
   //   let w = $main.value?.getBoundingClientRect().width ?? 0;
@@ -192,17 +198,13 @@
         el: $el.value!,
         main: $main.value,
       };
-      emit('dom-ready', info);
+      emit("dom-ready", info);
     }
   });
   //-------------------------------------------------
 </script>
 <template>
-  <div
-    class="ti-grid-fields"
-    :class="TopClass"
-    :style="props.style"
-    ref="$el">
+  <div class="ti-grid-fields" :class="TopClass" :style="props.style" ref="$el">
     <!--===============: 表单头 :===================-->
     <slot name="head">
       <TiTextSnippet
@@ -224,9 +226,7 @@
     <!-- 
       显示空数据提示
      -->
-    <div
-      v-if="isEmptyData && props.emptyRoadblock"
-      class="part-empty-tip">
+    <div v-if="isEmptyData && props.emptyRoadblock" class="part-empty-tip">
       <TiRoadblock v-bind="FormEmptyRoadblock" />
     </div>
     <!-- 
@@ -236,16 +236,13 @@
       <!--=============: 上部多用途插槽 :==============-->
       <slot name="head_ext"></slot>
       <!--===============: 表单体 :===================-->
-      <div
-        ref="$main"
-        class="part-body"
-        :style="BodyStyle">
+      <div ref="$main" class="part-body" :style="BodyStyle">
         <template v-for="fld in Grid.strictItems">
           <template v-if="!fld.isHidden(props.data)">
             <!------[:Field:]---------->
             <GFItField
               v-if="'field' == fld.race"
-              v-bind="(fld as GridFieldsStrictField)"
+              v-bind="(fld as FormFieldItem)"
               :max-track-count="GridLayoutStyle.trackCount"
               :is-actived="fld.uniqKey == _actived_uniqKey"
               @name-change="emit('name-change', $event)"
@@ -255,7 +252,7 @@
             <!------[:Group:]---------->
             <GFItGroup
               v-else-if="'group' == fld.race"
-              v-bind="(fld as GridFieldsStrictGroup)"
+              v-bind="(fld as FormItemGroup)"
               :max-track-count="GridLayoutStyle.trackCount"
               :actived-uniq-key="_actived_uniqKey"
               @name-change="emit('name-change', $event)"
@@ -264,7 +261,7 @@
             <!------[:Label:]---------->
             <GFItLabel
               v-else-if="'label' == fld.race"
-              v-bind="(fld as GridFieldsStrictLabel)"
+              v-bind="(fld as FormLabelItem)"
               :max-track-count="GridLayoutStyle.trackCount" />
             <!------[!Invalid!]---------->
             <blockquote
@@ -300,5 +297,5 @@
   </div>
 </template>
 <style lang="scss">
-  @use './style/ti-grid-fields.scss';
+  @use "./style/ti-grid-fields.scss";
 </style>

@@ -2,18 +2,18 @@ import { CssUtils } from '../../../core';
 import { useObjFields } from '../../_features';
 import { buildGridFields } from './build-grid-field';
 import {
-  GridFieldsFeature,
+  GridFieldsApi,
   GridFieldsProps,
-  GridFieldsStrictField,
-  GridFieldsStrictGroup,
-  GridFieldsStrictItem,
-  GridFieldsStrictLabel,
+  FormFieldItem,
+  FormItemGroup,
+  OneFormItem,
+  FormLabelItem,
 } from './ti-grid-fields-types';
 
-export function useGridFields(props: GridFieldsProps): GridFieldsFeature {
+export function useGridFields(props: GridFieldsProps): GridFieldsApi {
   let _ofs = useObjFields(props.fieldSetName);
   let strictItems = buildGridFields(_ofs, [], props.fields || [], props);
-  let fieldItems: GridFieldsStrictField[] = [];
+  let fieldItems: FormFieldItem[] = [];
   __join_strict_field_items(strictItems, fieldItems);
 
   return {
@@ -34,9 +34,9 @@ export function useGridFields(props: GridFieldsProps): GridFieldsFeature {
 }
 
 function __join_strict_field_items(
-  items: GridFieldsStrictItem[],
-  list: GridFieldsStrictField[] = []
-): GridFieldsStrictField[] {
+  items: OneFormItem[],
+  list: FormFieldItem[] = []
+): FormFieldItem[] {
   for (let it of items) {
     // 标准字段
     if (isGridFieldsStrictField(it)) {
@@ -51,19 +51,19 @@ function __join_strict_field_items(
 }
 
 export function isGridFieldStrictsGroup(
-  item: GridFieldsStrictItem
-): item is GridFieldsStrictGroup {
+  item: OneFormItem
+): item is FormItemGroup {
   return item && 'group' == item.race;
 }
 
 export function isGridFieldsStrictField(
-  item: GridFieldsStrictItem
-): item is GridFieldsStrictField {
+  item: OneFormItem
+): item is FormFieldItem {
   return item && 'field' == item.race;
 }
 
 export function isGridFieldStrictsLabel(
-  item: GridFieldsStrictItem
-): item is GridFieldsStrictLabel {
+  item: OneFormItem
+): item is FormLabelItem {
   return item && 'label' == item.race;
 }
