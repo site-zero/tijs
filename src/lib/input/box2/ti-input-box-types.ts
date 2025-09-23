@@ -65,6 +65,8 @@ export type InputBoxProps = CommonProps &
 
     emitTime?: BoxEmitTime[];
 
+    onChange?: (val: any) => void;
+
     /**
      * 传递输入框 api 给父控件。
      * 每次 api 因为自动计算而导致的变化，都会触发这个回调
