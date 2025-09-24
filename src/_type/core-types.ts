@@ -1244,6 +1244,8 @@ export type PopPosition =
 export type MetaPatcher =
   | Vars
   | ((local: Vars, remote?: Vars) => Vars | undefined);
+
+// 与 MetaPatcher 不同的时候，它的 remote 一定是存在的
 export type UpdateMetaPatcher =
   | Vars
   | ((local: Vars, remote: Vars) => Vars | undefined);
