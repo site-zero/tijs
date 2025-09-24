@@ -8,6 +8,10 @@ const DFT_FUSE_KEY = "_dft_fuse_key";
  */
 const _FUSES = new Map<string, FuseApi>();
 
+export function __getAllFuseData() {
+  return _FUSES;
+}
+
 export function useFuse() {
   async function fire(key = DFT_FUSE_KEY) {
     let api = getOrCreate(key);

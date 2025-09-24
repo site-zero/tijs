@@ -37,7 +37,7 @@
   import { loadColumns, useKeepTable } from "./use-table-keep";
   import { useViewMeasure } from "./use-view-measure";
   //-------------------------------------------------------
-  const debug = true;
+  const debug = false;
   //-------------------------------------------------------
   const $main: Ref<HTMLElement> = ref() as Ref<HTMLElement>;
   //-------------------------------------------------------

@@ -309,6 +309,11 @@ export function buildDifferentItem(
  */
 export type BuildDifferentListOptions = BuildDifferentItemOptions & {
   remoteMap?: Map<TableRowID, Vars>;
+  /**
+   * 找到一个差异就退出，通常适用于仅仅判断是否不同的场景
+   * 各个模型的 isChanged 就是用这个计算的
+   */
+  findOneQuiet?: boolean;
 };
 
 /**
@@ -355,6 +360,9 @@ export function buildDifferentListItems(
     let diffItem = buildDifferentItem(myData, taData, diffItemOptions);
     if (diffItem) {
       re.push(diffItem);
+      if (options.findOneQuiet) {
+        return re;
+      }
     }
   }
   if (debug) console.log("localMap:", localMap);
@@ -373,6 +381,9 @@ export function buildDifferentListItems(
       if (debug) console.log("diffItem", diffItem);
       if (diffItem) {
         re.push(diffItem);
+        if (options.findOneQuiet) {
+          return re;
+        }
       }
     }
   }

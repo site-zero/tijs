@@ -37,6 +37,10 @@ export function createFuseApi() {
     _detonators.delete(key);
   }
 
+  function keys() {
+    return [..._detonators.keys()];
+  }
+
   function clear(keys?: string[]) {
     if (_.isEmpty(keys)) {
       _detonators.clear();
@@ -48,6 +52,7 @@ export function createFuseApi() {
   }
 
   return {
+    keys,
     fire,
     add,
     remove,
