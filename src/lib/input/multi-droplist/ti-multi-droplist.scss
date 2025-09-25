@@ -1,4 +1,4 @@
-@use '../../../assets/style/_all.scss' as *;
+@use "../../../assets/style/_all.scss" as *;
 
 .ti-multi-droplist {
   --box-color-border: var(--ti-color-border-thin);
@@ -7,10 +7,20 @@
   //-----------------------------------------------------
   > .part-main {
     display: block;
-
     padding: var(--box-padding);
     border: 1px solid var(--box-color-border);
     border-radius: var(--ti-measure-r-s);
+    .ti-tags {
+      .ti-label {
+        height: 2em;
+      }
+      .ti-actionbar {
+        --item-line-height: 1em;
+        --item-icon-width: 1.6em;
+        --item-icon-height: 1em;
+        min-width: 1.6em;
+      }
+    }
   }
   //-----------------------------------------------------
   &.is-editable {

@@ -52,4 +52,10 @@ export type MultiDroplistProps = CommonProps &
 
     style?: Vars;
     tagsStyle?: Vars;
+    width?: string;
+
+    /**
+     * 强制不换行
+     */
+    nowrap?: boolean;
   };
