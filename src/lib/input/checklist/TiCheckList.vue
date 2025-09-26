@@ -1,16 +1,16 @@
 <script lang="ts" setup>
-  import _ from 'lodash';
-  import { computed, watch } from 'vue';
-  import { ListSelectEmitInfo, TiList } from '../../';
-  import { Util } from '../../../core';
-  import { CheckListEmitter, CheckListProps } from './ti-check-list-types';
-  import { useChecklist } from './use-checklist';
+  import _ from "lodash";
+  import { computed, watch } from "vue";
+  import { ListSelectEmitInfo, TiList } from "../../";
+  import { Util } from "../../../core";
+  import { CheckListEmitter, CheckListProps } from "./ti-check-list-types";
+  import { useChecklist } from "./use-checklist";
   //-----------------------------------------------------
   const emit = defineEmits<CheckListEmitter>();
   //-----------------------------------------------------
   const props = withDefaults(defineProps<CheckListProps>(), {
     textAsHtml: true,
-    borderStyle: 'solid',
+    borderStyle: "solid",
     highlightChecked: false,
     canHover: true,
   });
@@ -20,10 +20,10 @@
   const checkedIds = computed(() => Util.arrayToMap(props.value));
   //-----------------------------------------------------
   function onSelect(payload: ListSelectEmitInfo) {
-    let ids = Util.mapTruthyKeys(payload.checkedIds);
+    let ids = payload.checkedIds;
     //console.log('onSelect', ids);
     if (!_.isEqual(ids, props.value)) {
-      emit('change', ids);
+      emit("change", ids);
     }
   }
   //-----------------------------------------------------

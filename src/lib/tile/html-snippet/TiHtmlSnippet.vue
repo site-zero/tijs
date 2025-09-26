@@ -1,9 +1,10 @@
 <script setup lang="ts">
-  import { computed, onMounted, ref, watch } from 'vue';
-  import { CssUtils } from '../../../core';
-  import { COM_TYPES } from '../../lib-com-types';
-  import { HtmlSnippetEmitter, HtmlSnippetProps } from './html-snippet-types';
-  import { useHtmlSnippetEventDelegate } from './use-html-snippet-events';
+  import { computed, onMounted, ref, watch } from "vue";
+  import { CssUtils } from "../../../core";
+  import { COM_TYPES } from "../../lib-com-types";
+  import { HtmlSnippetEmitter, HtmlSnippetProps } from "./html-snippet-types";
+  import { useHtmlSnippetEventDelegate } from "./use-html-snippet-events";
+  import _ from "lodash";
   //-----------------------------------------------------
   const COM_TYPE = COM_TYPES.HtmlSnippet;
   const $top = ref<HTMLElement>();
@@ -18,12 +19,16 @@
   const snippetInnerHtml = computed(() => {
     let html = [];
     if (props.styleSheet) {
-      html.push(`<style>
-      ${CssUtils.renderCssStyleSheet(props.styleSheet)}
-      </style>`);
+      html.push(`<style>`);
+      if (_.isString(props.styleSheet)) {
+        html.push(props.styleSheet);
+      } else {
+        html.push(CssUtils.renderCssStyleSheet(props.styleSheet));
+      }
+      html.push(`</style>`);
     }
-    html.push(props.content ?? '<strong>HTML <em>snippet</em></strong>');
-    return html.join('\n');
+    html.push(props.content ?? "<strong>HTML <em>snippet</em></strong>");
+    return html.join("\n");
   });
   //-----------------------------------------------------
   const TopClass = computed(() => CssUtils.mergeClassName(props.className));
@@ -50,5 +55,5 @@
     v-on="eventBinding"></div>
 </template>
 <style lang="scss">
-  @use './msg-box.scss';
+  @use "./msg-box.scss";
 </style>

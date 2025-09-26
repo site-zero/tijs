@@ -20,7 +20,8 @@ export type SelectableState<ID> = {
 };
 export type SelectEmitInfo<ID> = {
   currentId?: ID | null;
-  checkedIds: Map<ID, boolean>;
+  //checkedIds: Map<ID, boolean>;
+  checkedIds: ID[];
   current?: Vars;
   checked: Vars[];
   index: number;
@@ -229,14 +230,14 @@ export function useSelectable<ID extends TableRowID>(
   ): SelectEmitInfo<ID> {
     let currentId = selection.currentId ?? null;
     let ckIds = Util.mapTruthyKeys(selection.checkedIds);
-    let checkedIds = Util.arrayToMap(ckIds);
+    //let checkedIds = Util.arrayToMap(ckIds);
     let current = _.isNil(currentId)
       ? undefined
       : getCurrentData(list, selection);
     let checked = getCheckedData(list, selection);
     return {
       currentId,
-      checkedIds,
+      checkedIds:ckIds,
       current,
       checked,
       index: selection.lastSelectIndex,

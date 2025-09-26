@@ -147,7 +147,7 @@
 
   function onBlockEvent(event: BlockEvent) {
     let { eventName, data } = event;
-    //console.log('onBlockEvent', eventName, data);
+    console.log('onBlockEvent', eventName, data);
     let handler = Listeners.value[eventName];
     if (handler) {
       handler(ModalApi.value, data);

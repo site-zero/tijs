@@ -65,7 +65,7 @@
   }));
   //-----------------------------------------------------
   function onCanSelect(payload: ListSelectEmitInfo) {
-    _stat.can_checked_ids = Util.mapTruthyKeys(payload.checkedIds);
+    _stat.can_checked_ids = Util.anyToTruthyKeys(payload.checkedIds);
   }
   //-----------------------------------------------------
   function onCanOpen(it: ListItem) {
@@ -76,7 +76,7 @@
   }
   //-----------------------------------------------------
   function onSelSelect(payload: ListSelectEmitInfo) {
-    _stat.sel_checked_ids = Util.mapTruthyKeys(payload.checkedIds);
+    _stat.sel_checked_ids = Util.anyToTruthyKeys(payload.checkedIds);
   }
   //-----------------------------------------------------
   function onSelOpen(it: ListItem) {

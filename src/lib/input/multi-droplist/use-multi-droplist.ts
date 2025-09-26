@@ -87,7 +87,7 @@ export function useMultiDroplist(
   // 异步方法
   //-----------------------------------------------------
   async function onOptionSelect(payload: ListSelectEmitInfo) {
-    let ids = Util.mapTruthyKeys(payload.checkedIds);
+    let ids = Util.anyToTruthyKeys(payload.checkedIds);
     // console.log('onOptionSelect', payload.checkedIds);
     _it_values.value = ids;
     await _load_items(ids);

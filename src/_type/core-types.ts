@@ -1098,10 +1098,12 @@ export type AppModelBindingData =
  *
  * 1. `null` 不传递
  * 2. `"change"` 【默认】将 change 事件的 payload 设置为 result
- * 3. `{change:["a","b"]}`
+ * 3. "select.checkedId" 将 select 事件的 payload 中的 checkedIds 设置为 result
+ * 4. `{change:["a","b"]}`
  *     将 change 事件的 payload.a =>result.a,payload.b => result.b
- * 4. `{change:{a:"x",b:"y"}}`
+ * 5. `{change:{a:"x",b:"y"}}`
  *     将 change 事件的 payload.a =>result.x,payload.b => result.y
+ * 6. `{change: (api, payload) => { ... }}` 自定义设置 result 的方法
  */
 export type AppModelBindingEvent =
   | null

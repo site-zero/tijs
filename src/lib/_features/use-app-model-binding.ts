@@ -3,12 +3,11 @@ import {
   AppModelActionHandler,
   AppModelBindingData,
   AppModelBindingEvent,
-  Callback1,
   isArray,
   Vars,
 } from "../../_type";
 
-const debug = false;
+const debug = true;
 
 /**
  * 通常这个函数会被用到计算属性里。 它会生产一个控件的属性表
@@ -79,18 +78,34 @@ export function makeAppModelEventListeners(
     return listeners;
   }
   // 2. `"change"` 【默认】将 change 事件的 payload 设置为 result
+  // 3. "select.checkedId" 将 select 事件的 payload 中的 checkedIds 设置为 result
   if (_.isString(bindingEvent)) {
     if (debug) console.log(`'${bindingEvent}' => result`);
-    listeners[bindingEvent] = async (_api, payload: any) => {
-      if (debug) console.log(`🎃<${COM_TYPE}>`, bindingEvent, "=", payload);
-      setResult(payload);
-    };
+    // 带有路径
+    let pos = bindingEvent.indexOf(".");
+    if (pos > 0) {
+      let eventName = bindingEvent.substring(0, pos);
+      let path = bindingEvent.substring(pos + 1);
+      listeners[eventName] = async (_api, payload: any) => {
+        if (debug)
+          console.log(`🎃<${COM_TYPE}>`, eventName, `(${path}) = `, payload);
+        let eventData = _.get(payload, path);
+        setResult(eventData);
+      };
+    }
+    // 简单的鹅黄色定
+    else {
+      listeners[bindingEvent] = async (_api, payload: any) => {
+        if (debug) console.log(`🎃<${COM_TYPE}>`, bindingEvent, "=", payload);
+        setResult(payload);
+      };
+    }
   }
   // 动态多重监听
   else {
     for (let eventName of _.keys(bindingEvent)) {
       let handler = bindingEvent[eventName];
-      // 3. `{change: (api, payload) => { ... }}`
+      // 6. `{change: (api, payload) => { ... }}` 自定义设置 result 的方法
       if (_.isFunction(handler)) {
         listeners[eventName] = handler;
       }
@@ -155,7 +170,13 @@ export function getAppModelListenEvents(
     return [];
   }
   // 2. `"change"` 【默认】将 change 事件的 payload 设置为 result
+  // 3. "select.checkedId" 将 select 事件的 payload 中的 checkedIds 设置为 result
   if (_.isString(bindingEvent)) {
+    let pos = bindingEvent.indexOf(".");
+    if (pos > 0) {
+      let eventName = bindingEvent.substring(0, pos);
+      return [eventName];
+    }
     return [bindingEvent];
   }
   // 动态多重监听

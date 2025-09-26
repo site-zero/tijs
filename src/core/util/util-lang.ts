@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { anyToStr } from "../text/ti-str";
 import { genObjGetter } from "./util-getter";
 
 /**
@@ -288,6 +289,21 @@ export function arrayToMap<T>(ids?: T[]): Map<T, boolean> {
   return map;
 }
 
+export function arrayToMapAs<T>(
+  ids: any[],
+  toKey?: (k: any) => T
+): Map<T, boolean> {
+  let _to_key = toKey ?? ((k) => k);
+  let map = new Map<T, boolean>();
+  if (ids) {
+    for (let id of ids) {
+      let k = _to_key(id);
+      map.set(k, true);
+    }
+  }
+  return map;
+}
+
 /**
  * 一个帮助函数而已，方便通过  `ID[]` 生成 `Map<ID,boolean>`
  *
@@ -318,6 +334,26 @@ export function recordTruthyKeys<T extends string>(map?: Record<T, any>): T[] {
     }
   });
   return keys;
+}
+
+/**
+ * 将任意输入转换为真值键名数组。
+ *
+ * 如果输入是 `Map` 类型，会返回 `Map` 中值为真值的键组成的数组。
+ * 如果输入是数组，会将数组中的每个元素转换为字符串后返回。
+ * 对于其他类型的输入，返回空数组。
+ *
+ * @param input - 任意输入对象
+ * @returns 返回真值键名组成的字符串数组
+ */
+export function anyToTruthyKeys(input: any): string[] {
+  if (input instanceof Map) {
+    return mapTruthyKeys(input);
+  }
+  if (_.isArray(input)) {
+    return _.map(input, (it) => anyToStr(it));
+  }
+  return [];
 }
 
 /**

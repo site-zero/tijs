@@ -21,5 +21,5 @@ export type HtmlSnippetProps = CommonProps & {
   content?: string;
   listenners?: HtmlSnippetListenner[];
   // 设置内部样式
-  styleSheet?: CssSheet[];
+  styleSheet?: CssSheet[] | string;
 };
