@@ -132,8 +132,9 @@
   });
 
   // 监控控件的事件以便更新 result
-  const Listeners = computed(() =>
-    makeAppModelEventListeners({
+  const Listeners = computed(() => {
+    // Model 模块需要监听的事件
+    let modListeners = makeAppModelEventListeners({
       COM_TYPE: "TiAppModal",
       bindingEvent: model?.event,
       setResult: (result: any) => {
@@ -142,12 +143,20 @@
       assignResult: (meta: any) => {
         _.assign(_result.value, meta);
       },
-    })
-  );
+    });
+
+    // 处理自定义控件监听事件
+    if (props.handleBlocks) {
+      _.assign(modListeners, props.handleBlocks);
+    }
+
+    // 返回监听列表
+    return modListeners;
+  });
 
   function onBlockEvent(event: BlockEvent) {
     let { eventName, data } = event;
-    console.log('onBlockEvent', eventName, data);
+    console.log("onBlockEvent", eventName, data);
     let handler = Listeners.value[eventName];
     if (handler) {
       handler(ModalApi.value, data);
@@ -159,6 +168,11 @@
     let eventNames = getAppModelListenEvents(model.event);
     for (let event of eventNames) {
       re[event] = event;
+    }
+    if (props.handleBlocks) {
+      _.forEach(props.handleBlocks, (__, k) => {
+        re[k] = k;
+      });
     }
     return re;
   });

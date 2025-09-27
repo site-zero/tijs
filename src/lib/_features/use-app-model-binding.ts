@@ -7,7 +7,7 @@ import {
   Vars,
 } from "../../_type";
 
-const debug = true;
+const debug = false;
 
 /**
  * 通常这个函数会被用到计算属性里。 它会生产一个控件的属性表

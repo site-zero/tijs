@@ -1170,7 +1170,7 @@ export type AppModalProps = CommonProps &
      * 是否深度监控 comConf 的属性变化
      */
     watchDeep?: boolean;
-
+    handleBlocks?: Record<string, AppModelActionHandler>;
     /**
      * 本回调在对话框资源准备完毕后调用，用来获取更多的延迟动态效果
      * 例如：动态设置焦点，动态设置滚动条位置，动态更新数据等
