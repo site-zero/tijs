@@ -1,6 +1,13 @@
 import _ from "lodash";
-import { InputBoxProps, LabelProps } from "../../";
-import { ColumnRefer, TableInputColumn } from "../../../_type";
+import {
+  CheckProps,
+  InputBoxProps,
+  InputDatetimeProps,
+  InputNumProps,
+  LabelProps,
+  ToggleProps,
+} from "../../";
+import { ColumnRefer, FieldName, TableInputColumn } from "../../../_type";
 import { I18n } from "../../../core";
 //-----------------------------------------------
 type QuickColumnInfo = {
@@ -275,4 +282,342 @@ function parseNameColumn(key: string): QuickColumnInfo {
   }
 
   return re;
+}
+
+export function colID(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: LabelProps
+): TableInputColumn {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    comType: "TiLabel",
+    comConf: {
+      placeholder: "i18n:nil",
+      boxRadius: "none",
+    } as LabelProps,
+  };
+}
+
+export function colLable(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: LabelProps
+): TableInputColumn {
+  let [title, tip] = _.concat(titleAndTip);
+  return { name, title, tip, comType: "TiLabel", comConf };
+}
+
+export function colInput(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputBoxProps
+): TableInputColumn {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    activatedComType: "TiInput",
+    activatedComConf: _.assign(
+      {
+        trim: true,
+        hideBorder: true,
+        autoSelect: true,
+        boxFontSize: "s",
+        boxPadding: "s",
+        boxRadius: "none",
+      } as InputBoxProps,
+      comConf
+    ),
+  };
+}
+
+export function colInputUpper(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputBoxProps
+): TableInputColumn {
+  return colInput(
+    name,
+    titleAndTip,
+    _.assign({ valueCase: "upperAll" } as InputBoxProps, comConf)
+  );
+}
+
+export function colInputText(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputBoxProps
+): TableInputColumn {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    activatedComType: "TiInput",
+    activatedComConf: _.assign(
+      {
+        trimed: true,
+        hideBorder: true,
+        autoSelect: true,
+        autoFocus: true,
+        boxFontSize: "s",
+        boxPadding: "s",
+        boxRadius: "none",
+      } as InputBoxProps,
+      comConf
+    ),
+  };
+}
+
+export function colInputI(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputNumProps
+): TableInputColumn {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    readonlyComType: "TiLabel",
+    readonlyComConf: {
+      align: "right",
+      type: "disable",
+      boxRadius: "none",
+    } as LabelProps,
+    activatedComType: "TiInputNum",
+    activatedComConf: _.assign(
+      {
+        precision: 1,
+        hideBorder: true,
+        boxRadius: "none",
+      } as InputNumProps,
+      comConf
+    ),
+  };
+}
+
+export function colInputF2(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputNumProps
+): TableInputColumn {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    readonlyComType: "TiLabel",
+    readonlyComConf: {
+      align: "right",
+      valuePiping: "$F2",
+      showBorder: false,
+      type: "disable",
+      boxRadius: "none",
+    } as LabelProps,
+    activatedComType: "TiInputNum",
+    activatedComConf: _.assign(
+      {
+        precision: 100,
+        decimalPlaces: 2,
+        boxRadius: "none",
+      } as InputNumProps,
+      comConf
+    ),
+  };
+}
+
+export function colInputF3(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputNumProps
+): TableInputColumn {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    readonlyComType: "TiLabel",
+    readonlyComConf: {
+      align: "right",
+      valuePiping: "$F3",
+      showBorder: false,
+      type: "disable",
+      boxRadius: "none",
+    } as LabelProps,
+    activatedComType: "TiInputNum",
+    activatedComConf: _.assign(
+      {
+        precision: 1000,
+        decimalPlaces: 3,
+        boxRadius: "none",
+      } as InputNumProps,
+      comConf
+    ),
+  };
+}
+
+export function colInputF6(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputNumProps
+): TableInputColumn {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    readonlyComType: "TiLabel",
+    readonlyComConf: {
+      align: "right",
+      valuePiping: "$F6",
+      showBorder: false,
+      type: "disable",
+      boxRadius: "none",
+    } as LabelProps,
+    activatedComType: "TiInputNum",
+    activatedComConf: _.assign(
+      {
+        precision: 1000000,
+        decimalPlaces: 6,
+        boxRadius: "none",
+      } as InputNumProps,
+      comConf
+    ),
+  };
+}
+
+export function colToggle(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: ToggleProps
+): TableInputColumn {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    type: "Integer",
+    readonlyComType: "TiLabel",
+    readonlyComConf: {
+      valuePiping: "BOOL",
+      boxRadius: "none",
+      pipeProcessers: {
+        BOOL: (v: any) => {
+          if (v && v > 0) {
+            return "i18n:yes";
+          }
+          return "i18n:no";
+        },
+      },
+    } as LabelProps,
+    activatedComType: "TiToggle",
+    activatedComConf: _.assign(
+      {
+        texts: ["i18n:no", "i18n:yes"],
+      } as ToggleProps,
+      comConf
+    ),
+  };
+}
+
+export function colCheck(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: CheckProps
+): TableInputColumn {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    type: "Integer",
+    readonlyComType: "TiLabel",
+    readonlyComConf: {
+      valuePiping: "BOOL",
+      pipeProcessers: {
+        BOOL: (v: any) => {
+          if (v && v > 0) {
+            return "i18n:yes";
+          }
+          return "i18n:no";
+        },
+      },
+    } as LabelProps,
+    activatedComType: "TiCheck",
+    activatedComConf: _.assign(
+      {
+        texts: ["i18n:no", "i18n:yes"],
+        values: [0, 1],
+      } as CheckProps,
+      comConf
+    ),
+  };
+}
+
+export function colInputDate(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputDatetimeProps
+): TableInputColumn {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    type: "String",
+    readonlyComType: "TiLabel",
+    readonlyComConf: {
+      className: "is-nowrap",
+      valuePiping: "$DATE",
+      boxRadius: "none",
+    } as LabelProps,
+    activatedComType: "TiInputDate",
+    activatedComConf: _.assign(
+      {
+        hideBorder: true,
+        autoSelect: true,
+        boxFocused: true,
+        boxRadius: "none",
+        trimed: true,
+      } as InputDatetimeProps,
+      comConf
+    ),
+  };
+}
+
+export function colInputDateTime(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputDatetimeProps
+): TableInputColumn {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    type: "String",
+    readonlyComType: "TiLabel",
+    readonlyComConf: {
+      className: "is-nowrap",
+      valuePiping: "DATETIME",
+      boxRadius: "none",
+    } as LabelProps,
+    activatedComType: "TiInputDatetime",
+    activatedComConf: _.assign(
+      {
+        hideBorder: true,
+        autoSelect: true,
+        boxFocused: true,
+        boxRadius: "none",
+        trimed: true,
+      } as InputDatetimeProps,
+      comConf
+    ),
+  };
 }
