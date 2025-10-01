@@ -295,10 +295,13 @@ export function colID(
     title,
     tip,
     comType: "TiLabel",
-    comConf: {
-      placeholder: "i18n:nil",
-      boxRadius: "none",
-    } as LabelProps,
+    comConf: _.assign(
+      {
+        placeholder: "i18n:nil",
+        boxRadius: "none",
+      } as LabelProps,
+      comConf
+    ),
   };
 }
 
