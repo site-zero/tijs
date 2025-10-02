@@ -328,11 +328,11 @@ export function colInput(
     activatedComConf: _.assign(
       {
         trim: true,
-        hideBorder: true,
         autoSelect: true,
         boxFontSize: "s",
         boxPadding: "s",
         boxRadius: "none",
+        hideBorder: true,
       } as InputBoxProps,
       comConf
     ),
@@ -365,12 +365,12 @@ export function colInputText(
     activatedComConf: _.assign(
       {
         trimed: true,
-        hideBorder: true,
         autoSelect: true,
         autoFocus: true,
         boxFontSize: "s",
         boxPadding: "s",
         boxRadius: "none",
+        hideBorder: true,
       } as InputBoxProps,
       comConf
     ),
@@ -419,7 +419,7 @@ export function colInputF2(
     readonlyComConf: {
       align: "right",
       valuePiping: "$F2",
-      showBorder: false,
+      hideBorder: true,
       type: "disable",
       boxRadius: "none",
     } as LabelProps,
@@ -429,6 +429,7 @@ export function colInputF2(
         precision: 100,
         decimalPlaces: 2,
         boxRadius: "none",
+        hideBorder: true,
       } as InputNumProps,
       comConf
     ),
@@ -449,7 +450,7 @@ export function colInputF3(
     readonlyComConf: {
       align: "right",
       valuePiping: "$F3",
-      showBorder: false,
+      hideBorder: true,
       type: "disable",
       boxRadius: "none",
     } as LabelProps,
@@ -459,6 +460,7 @@ export function colInputF3(
         precision: 1000,
         decimalPlaces: 3,
         boxRadius: "none",
+        hideBorder: true,
       } as InputNumProps,
       comConf
     ),
@@ -479,7 +481,7 @@ export function colInputF6(
     readonlyComConf: {
       align: "right",
       valuePiping: "$F6",
-      showBorder: false,
+      hideBorder: true,
       type: "disable",
       boxRadius: "none",
     } as LabelProps,
@@ -489,6 +491,7 @@ export function colInputF6(
         precision: 1000000,
         decimalPlaces: 6,
         boxRadius: "none",
+        hideBorder: true,
       } as InputNumProps,
       comConf
     ),
@@ -576,17 +579,17 @@ export function colInputDate(
     type: "String",
     readonlyComType: "TiLabel",
     readonlyComConf: {
-      className: "is-nowrap",
       valuePiping: "$DATE",
       boxRadius: "none",
+      nowrap: true,
     } as LabelProps,
     activatedComType: "TiInputDate",
     activatedComConf: _.assign(
       {
-        hideBorder: true,
         autoSelect: true,
         boxFocused: true,
         boxRadius: "none",
+        hideBorder: true,
         trimed: true,
       } as InputDatetimeProps,
       comConf
@@ -605,19 +608,19 @@ export function colInputDateTime(
     title,
     tip,
     type: "String",
-    readonlyComType: "TiLabel",
-    readonlyComConf: {
-      className: "is-nowrap",
-      valuePiping: "DATETIME",
+    comType: "TiLabel",
+    comConf: {
+      valuePiping: "$DT",
       boxRadius: "none",
+      nowrap: true,
     } as LabelProps,
     activatedComType: "TiInputDatetime",
     activatedComConf: _.assign(
       {
-        hideBorder: true,
         autoSelect: true,
         boxFocused: true,
         boxRadius: "none",
+        hideBorder: true,
         trimed: true,
       } as InputDatetimeProps,
       comConf

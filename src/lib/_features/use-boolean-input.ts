@@ -1,6 +1,6 @@
-import _ from 'lodash';
-import { computed } from 'vue';
-import { ReadonlyProps, useReadonly } from './use-readonly';
+import _ from "lodash";
+import { computed } from "vue";
+import { ReadonlyProps, useReadonly } from "./use-readonly";
 
 export type BooleanProps = {
   value?: any;
@@ -10,7 +10,7 @@ export type BooleanProps = {
 };
 
 export type BooleanEmitter = {
-  (eventName: 'change', payload: any): void;
+  (eventName: "change", payload: any): void;
 };
 
 export type BooleanOptions = {
@@ -27,7 +27,7 @@ export function useBooleanInput(
   //   return _.nth(props.values, 1) ?? true;
   // }
 
-  const BoolValues = computed(() => {
+  function getBoolValues() {
     if (props.values) {
       return props.values;
     }
@@ -39,15 +39,16 @@ export function useBooleanInput(
     }
     // 默认
     return [false, true];
-  });
+  }
 
   function isTrue(val: any) {
-    //console.log('isTrue', val);
+    // console.log("isTrue", val);
     if (_.isFunction(props.isTrue)) {
       return props.isTrue(val);
     }
-    if (BoolValues.value.length > 1) {
-      return _.isEqual(BoolValues.value[1], val);
+    const BoolValues = getBoolValues();
+    if (BoolValues.length > 1) {
+      return _.isEqual(BoolValues[1], val);
     }
     return val ? true : false;
   }
@@ -56,12 +57,14 @@ export function useBooleanInput(
     if (Readonly.isReadonly(props.value)) {
       return;
     }
+    const BoolValues = getBoolValues();
     let I = isTrue(props.value) ? 0 : 1;
-    let val = BoolValues.value[I];
-    emit('change', val);
+    let val = BoolValues[I];
+    emit("change", val);
   }
 
   return {
+    rawValue: computed(() => props.value),
     yes: isTrue(props.value),
     //getTrueValue,
     isTrue,

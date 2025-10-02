@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import { computed } from 'vue';
-  import { TiIcon } from '../../';
-  import { TextSnippetProps } from './text-snippet-types';
-  import { useTextSnippet } from './use-text-snippet';
+  import { computed } from "vue";
+  import { TiIcon } from "../../";
+  import { TextSnippetProps } from "./text-snippet-types";
+  import { useTextSnippet } from "./use-text-snippet";
   //-----------------------------------------------------
   const props = defineProps<TextSnippetProps>();
   //-----------------------------------------------------
@@ -24,7 +24,12 @@
     :is="_text.tag"
     :class="_text.TopClass"
     :style="_text.TopStyle"
-    v-bind="_text.TopAttrs">
+    v-bind="_text.TopAttrs"
+    :data-tip="props.ctrlTip"
+    data-tip-modifier="CTRL"
+    data-tip-max-width="640px"
+    data-tip-content-type="html"
+    data-tip-dock-mode="H">
     <template v-if="!_text.customized">
       <TiIcon
         v-if="props.prefixIcon"
@@ -37,21 +42,11 @@
           v-if="'html' == props.textType"
           class="as-snippet-text"
           :style="props.textStyle"
-          v-html="_text.text"
-          :data-tip="props.ctrlTip"
-          data-tip-modifier="CTRL"
-          data-tip-max-width="640px"
-          data-tip-content-type="html"
-          data-tip-dock-mode="H"></div>
+          v-html="_text.text"></div>
         <div
           v-else
           class="as-snippet-text"
-          :style="props.textStyle"
-          :data-tip="props.ctrlTip"
-          data-tip-modifier="CTRL"
-          data-tip-max-width="640px"
-          data-tip-content-type="html"
-          data-tip-dock-mode="H">
+          :style="props.textStyle">
           {{ _text.text }}
         </div>
       </template>

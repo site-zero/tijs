@@ -1,9 +1,16 @@
 import {
+  CheckProps,
+  FieldName,
   FieldRefer,
+  FormField,
   GridFieldsInput,
   I18n,
+  InputBoxProps,
+  InputDatetimeProps,
+  InputNumProps,
   LabelProps,
   Str,
+  ToggleProps,
 } from "@site0/tijs";
 import _ from "lodash";
 
@@ -340,4 +347,264 @@ export function parseNameForObjField(key: string) {
   }
 
   return re;
+}
+
+export function fldID(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: LabelProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    comType: "TiLabel",
+    comConf: _.assign(
+      {
+        placeholder: "i18n:nil",
+        prefixIconFor: "copy",
+      } as LabelProps,
+      comConf
+    ),
+  };
+}
+
+export function fldLable(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: LabelProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return { name, title, tip, comType: "TiLabel", comConf };
+}
+
+export function fldInput(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputBoxProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    comType: "TiInput",
+    comConf: _.assign(
+      {
+        trim: true,
+        autoSelect: true,
+      } as InputBoxProps,
+      comConf
+    ),
+  };
+}
+
+export function fldInputUpper(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputBoxProps
+): FormField {
+  return fldInput(
+    name,
+    titleAndTip,
+    _.assign({ valueCase: "upperAll" } as InputBoxProps, comConf)
+  );
+}
+
+export function fldInputText(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputBoxProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    activatedComType: "TiInput",
+    activatedComConf: _.assign(
+      {
+        trimed: true,
+        autoSelect: true,
+      } as InputBoxProps,
+      comConf
+    ),
+  };
+}
+
+export function fldInputI(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputNumProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    comType: "TiInputNum",
+    comConf: _.assign(
+      {
+        precision: 1,
+      } as InputNumProps,
+      comConf
+    ),
+  };
+}
+
+export function fldInputF2(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputNumProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    comType: "TiInputNum",
+    comConf: _.assign(
+      {
+        precision: 100,
+        decimalPlaces: 2,
+      } as InputNumProps,
+      comConf
+    ),
+  };
+}
+
+export function fldInputF3(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputNumProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    comType: "TiInputNum",
+    comConf: _.assign(
+      {
+        precision: 1000,
+        decimalPlaces: 3,
+      } as InputNumProps,
+      comConf
+    ),
+  };
+}
+
+export function fldInputF6(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputNumProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    comType: "TiInputNum",
+    comConf: _.assign(
+      {
+        precision: 1000000,
+        decimalPlaces: 6,
+      } as InputNumProps,
+      comConf
+    ),
+  };
+}
+
+export function fldToggle(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: ToggleProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    type: "Integer",
+    comType: "TiToggle",
+    comConf: _.assign(
+      {
+        texts: ["i18n:no", "i18n:yes"],
+      } as ToggleProps,
+      comConf
+    ),
+  };
+}
+
+export function fldCheck(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: CheckProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    type: "Integer",
+    comType: "TiCheck",
+    comConf: _.assign(
+      {
+        texts: ["i18n:no", "i18n:yes"],
+        values: [0, 1],
+      } as CheckProps,
+      comConf
+    ),
+  };
+}
+
+export function fldInputDate(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputDatetimeProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    type: "String",
+    comType: "TiInputDate",
+    comConf: _.assign(
+      {
+        autoSelect: true,
+        boxFocused: true,
+        boxRadius: "none",
+        hideBorder: true,
+        trimed: true,
+      } as InputDatetimeProps,
+      comConf
+    ),
+  };
+}
+
+export function fldInputDateTime(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputDatetimeProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    type: "String",
+    comType: "TiInputDatetime",
+    comConf: _.assign(
+      {
+        autoSelect: true,
+        boxFocused: true,
+        boxRadius: "none",
+        hideBorder: true,
+        trimed: true,
+      } as InputDatetimeProps,
+      comConf
+    ),
+  };
 }

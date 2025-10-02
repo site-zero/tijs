@@ -1,13 +1,13 @@
-import _ from 'lodash';
-import { TiRawCom, Vars } from '../../../_type';
-import { CssUtils, I18n, Tmpl } from '../../../core/';
-import { useFieldCom } from '../../_features';
-import { TextSnippetProps } from './text-snippet-types';
+import _ from "lodash";
+import { TiRawCom, Vars } from "../../../_type";
+import { CssUtils, I18n, Tmpl } from "../../../core/";
+import { useFieldCom } from "../../_features";
+import { TextSnippetProps } from "./text-snippet-types";
 
 export type TextSnippetApi = ReturnType<typeof useTextSnippet>;
 
 export function useTextSnippet(props: TextSnippetProps) {
-  let tag: string | TiRawCom = props.tagName ?? 'div';
+  let tag: string | TiRawCom = props.tagName ?? "div";
   let TopClass = CssUtils.mergeClassName(props.className);
   let TopStyle = CssUtils.toStyle(props.style);
   //-----------------------------------------------------
@@ -17,7 +17,7 @@ export function useTextSnippet(props: TextSnippetProps) {
     if (_.isNil(v)) return;
     k = _.kebabCase(k);
     if (!/^\^/.test(k)) {
-      k = '^' + k;
+      k = "^" + k;
     }
     TopAttrs[k] = v;
   });
@@ -26,7 +26,7 @@ export function useTextSnippet(props: TextSnippetProps) {
     if (_.isNil(v)) return;
     k = _.kebabCase(k);
     if (!/^\./.test(k)) {
-      k = '.' + k;
+      k = "." + k;
     }
     TopAttrs[k] = v;
   });
@@ -41,7 +41,9 @@ export function useTextSnippet(props: TextSnippetProps) {
   if (props.comType) {
     customized = true;
     let com = useFieldCom(props);
+    //console.log("load_confirm", props.vars?.data?.load_confirm);
     let CustomizedCom = com.autoGetCom({}, props.vars ?? { text }, text);
+    //console.log("CustomizedCom", CustomizedCom.comConf.value);
     tag = CustomizedCom.rawCom;
     _.assign(TopAttrs, CustomizedCom.comConf);
   }

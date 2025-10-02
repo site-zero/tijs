@@ -54,12 +54,12 @@ export type GridFieldsApi = {
 };
 //-----------------------------------------------
 export type GridFieldsEmitter = FieldChangeEmitter & {
-  (eventName: 'name-change', payload: ValueChange<string>): void;
+  (eventName: 'name-change', payload: FieldChange): void;
   (eventName: 'dom-ready', payload: GridFieldsDomReadyInfo): void;
 };
 //-----------------------------------------------
 export type GridItemEmitter = {
-  (eventName: 'name-change', payload: ValueChange<string>): void;
+  (eventName: 'name-change', payload: FieldChange): void;
   (eventName: 'value-change', payload: FieldChange): void;
   (eventName: 'field-actived', payload: string): void;
   (eventName: 'field-inactived', payload: string): void;

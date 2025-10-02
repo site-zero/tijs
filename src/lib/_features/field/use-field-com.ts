@@ -1,6 +1,6 @@
-import _ from 'lodash';
-import { FieldComProps, TiCom, TiRawCom, Vars } from '../../../_type';
-import { Util, tiCheckComponent } from '../../../core';
+import _ from "lodash";
+import { FieldComProps, TiCom, TiRawCom, Vars } from "../../../_type";
+import { Util, tiCheckComponent } from "../../../core";
 export type FieldMode = {
   readonly?: boolean;
   actived?: boolean;
@@ -42,7 +42,7 @@ export function useFieldCom(
   props: FieldComProps,
   options: FieldComOptions = {}
 ): FieldComFeature {
-  let { defaultComType = 'TiLabel', defaultComConf = {} } = options;
+  let { defaultComType = "TiLabel", defaultComConf = {} } = options;
   //
   //             Normal Com
   //
@@ -55,8 +55,8 @@ export function useFieldCom(
       comConf = Util.explainObj(context, comConf, props.explainOptions);
     }
     // 自动为控件添加值属性
-    let valueKey = props.autoValue ?? 'value';
-    if (!_.isNull(props.autoValue) && _.isUndefined(comConf[valueKey])) {
+    let valueKey = Util.fallback(props.autoValue, "value");
+    if (valueKey && _.isUndefined(comConf[valueKey])) {
       comConf[valueKey] = val;
     }
     return comConf;
@@ -76,8 +76,8 @@ export function useFieldCom(
     // TODO 自动分析 comConf ，构建一个自己对应的  comConf
 
     // 自动为控件添加值属性
-    if (!_.isNull(props.autoValue) && _.isUndefined(comConf.value)) {
-      let valueKey = props.autoValue ?? 'value';
+    let valueKey = Util.fallback(props.autoValue, "value");
+    if (valueKey && _.isUndefined(comConf[valueKey])) {
       comConf[valueKey] = val;
     }
 
@@ -89,7 +89,7 @@ export function useFieldCom(
   }
 
   function getActivatedComType() {
-    return tiCheckComponent(props.activatedComType || 'TiInput');
+    return tiCheckComponent(props.activatedComType || "TiInput");
   }
   function getActivatedComConf(context: Vars, val?: any): Vars {
     let comConf = _.cloneDeep(
@@ -101,7 +101,7 @@ export function useFieldCom(
 
     // 自动为控件添加值属性
     if (!_.isNull(props.autoValue) && _.isUndefined(comConf.value)) {
-      let valueKey = props.autoValue ?? 'value';
+      let valueKey = props.autoValue ?? "value";
       comConf[valueKey] = val;
     }
     return comConf;

@@ -2,7 +2,7 @@
   import JSON5 from "json5";
   import { computed, inject } from "vue";
   import { TiTextSnippet, useFieldCom, useReadonly } from "../../";
-  import { LogicType, ValueChange, Vars, getFieldValue } from "../../../_type";
+  import { LogicType, Vars, getFieldValue } from "../../../_type";
   import { CssUtils } from "../../../core";
   import {
     FIELD_STATUS_KEY,
@@ -171,12 +171,14 @@
     };
   });
   //-------------------------------------------------
-  function onTitleChange(payload: ValueChange<string>) {
-    console.log("onTitleChange", payload);
-    emit("name-change", {
-      value: payload.value,
-      oldVal: props.uniqKey,
-    });
+  function onTitleChange(newValue: any) {
+    const payload = {
+      uniqKey: props.uniqKey,
+      name: props.name,
+      value: newValue,
+    }
+    //console.log("onTitleChange", payload);
+    emit("name-change", payload);
   }
   //-------------------------------------------------
 </script>
