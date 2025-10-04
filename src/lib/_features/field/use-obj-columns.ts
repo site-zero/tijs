@@ -569,7 +569,8 @@ export function colCheck(
 export function colInputDate(
   name: FieldName,
   titleAndTip: string | string[],
-  comConf?: InputDatetimeProps
+  activedComConf?: InputDatetimeProps,
+  readonlyComConf?: LabelProps
 ): TableInputColumn {
   let [title, tip] = _.concat(titleAndTip);
   return {
@@ -578,11 +579,14 @@ export function colInputDate(
     tip,
     type: "String",
     readonlyComType: "TiLabel",
-    readonlyComConf: {
-      valuePiping: "$DATE",
-      boxRadius: "none",
-      nowrap: true,
-    } as LabelProps,
+    readonlyComConf: _.assign(
+      {
+        valuePiping: "$DATE",
+        boxRadius: "none",
+        nowrap: true,
+      } as LabelProps,
+      readonlyComConf
+    ),
     activatedComType: "TiInputDate",
     activatedComConf: _.assign(
       {
@@ -592,7 +596,7 @@ export function colInputDate(
         hideBorder: true,
         trimed: true,
       } as InputDatetimeProps,
-      comConf
+      activedComConf
     ),
   };
 }
@@ -600,7 +604,8 @@ export function colInputDate(
 export function colInputDateTime(
   name: FieldName,
   titleAndTip: string | string[],
-  comConf?: InputDatetimeProps
+  activedComConf?: InputDatetimeProps,
+  readonlyComConf?: LabelProps
 ): TableInputColumn {
   let [title, tip] = _.concat(titleAndTip);
   return {
@@ -609,11 +614,14 @@ export function colInputDateTime(
     tip,
     type: "String",
     comType: "TiLabel",
-    comConf: {
-      valuePiping: "$DT",
-      boxRadius: "none",
-      nowrap: true,
-    } as LabelProps,
+    comConf: _.assign(
+      {
+        valuePiping: "$DT",
+        boxRadius: "none",
+        nowrap: true,
+      } as LabelProps,
+      readonlyComConf
+    ),
     activatedComType: "TiInputDatetime",
     activatedComConf: _.assign(
       {
@@ -623,7 +631,7 @@ export function colInputDateTime(
         hideBorder: true,
         trimed: true,
       } as InputDatetimeProps,
-      comConf
+      activedComConf
     ),
   };
 }

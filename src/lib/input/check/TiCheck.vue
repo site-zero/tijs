@@ -11,6 +11,9 @@
       ["zmdi-square-o", "zmdi-check-square"] as [IconInput, IconInput],
     text: "i18n:yes",
     //values: () => [false, true] as [any, any],
+    tipMaxWidth: "640px",
+    tipContentType: "text",
+    tipDockMode: "V",
   });
   const emit = defineEmits<BooleanEmitter>();
   const Bool = computed(() => useBooleanInput(props, { emit }));
@@ -30,7 +33,13 @@
 </script>
 <template>
   <div class="ti-check" :class="TopClass" @click.stop="Bool.emitToggle">
-    <div class="check-con">
+    <div
+      class="check-con"
+      :data-tip="props.tip"
+      :data-tip-max-width="props.tipMaxWidth"
+      :data-tip-content-type="props.tipContentType"
+      :data-tip-dock-mode="props.tipDockMode"
+      :data-tip-type="props.tipType">
       <div class="part-icon"><TiIcon :value="CheckIcon" /></div>
       <div class="part-text" v-if="props.text">
         {{ I18n.text(props.text) }}

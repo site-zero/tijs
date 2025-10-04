@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { ValueProcesser, Vars } from "../../../_type";
+import { DateParseOptionsZone, ValueProcesser, Vars } from "../../../_type";
 import { Alg, Bank, DateTime, ENV_KEYS, getEnv, Str } from "../../../core";
 
 export function getDefaultValPipes(): Record<string, ValueProcesser> {
@@ -41,7 +41,9 @@ export function getDefaultValPipes(): Record<string, ValueProcesser> {
             ENV_KEYS.DFT_DATETIME_FORMAT,
             "yyyy-MM-dd HH:mm:ss"
           ) as string);
-        return DateTime.format(v, { fmt: format }) ?? "";
+
+        let timezone: DateParseOptionsZone = pipeContext.timezone;
+        return DateTime.format(v, { fmt: format, timezone }) ?? "";
       }
       return "";
     },
@@ -51,7 +53,9 @@ export function getDefaultValPipes(): Record<string, ValueProcesser> {
         let format =
           pipeContext.dateFormat ??
           (getEnv(ENV_KEYS.DFT_DATE_FORMAT) as string);
-        return DateTime.format(v, { fmt: format }) ?? "";
+
+        let timezone: DateParseOptionsZone = pipeContext.timezone;
+        return DateTime.format(v, { fmt: format, timezone }) ?? "";
       }
       return "";
     },

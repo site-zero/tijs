@@ -1,5 +1,10 @@
-import { BooleanProps, ReadonlyProps } from '../../';
-import { CommonProps, IconInput } from '../../../_type';
+import { BooleanProps, ReadonlyProps, TipDockMode } from "../../";
+import {
+  CommonProps,
+  IconInput,
+  LogicType,
+  TextContentType,
+} from "../../../_type";
 
 export type CheckProps = CommonProps &
   BooleanProps &
@@ -7,4 +12,11 @@ export type CheckProps = CommonProps &
     text?: string;
     // [falseIcon, trueIcon]
     icons?: [IconInput, IconInput];
+
+    // Tip
+    tip?: string;
+    tipMaxWidth?: string;
+    tipContentType?: TextContentType;
+    tipDockMode?: TipDockMode;
+    tipType?: LogicType;
   };
