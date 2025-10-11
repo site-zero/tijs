@@ -1,12 +1,10 @@
 <script setup lang="ts">
-  import { computed, onMounted, ref, watch } from "vue";
+  import _ from "lodash";
+  import { computed, ref, watch } from "vue";
   import { CssUtils } from "../../../core";
-  import { COM_TYPES } from "../../lib-com-types";
   import { HtmlSnippetEmitter, HtmlSnippetProps } from "./html-snippet-types";
   import { useHtmlSnippetEventDelegate } from "./use-html-snippet-events";
-  import _ from "lodash";
   //-----------------------------------------------------
-  const COM_TYPE = COM_TYPES.HtmlSnippet;
   const $top = ref<HTMLElement>();
   //-----------------------------------------------------
   const emit = defineEmits<HtmlSnippetEmitter>();
@@ -27,7 +25,13 @@
       }
       html.push(`</style>`);
     }
-    html.push(props.content ?? "<strong>HTML <em>snippet</em></strong>");
+    if (_.isFunction(props.content)) {
+      html.push(props.content());
+    } else if (props.content) {
+      html.push(props.content);
+    } else {
+      html.push("<strong>HTML <em>snippet</em></strong>");
+    }
     return html.join("\n");
   });
   //-----------------------------------------------------

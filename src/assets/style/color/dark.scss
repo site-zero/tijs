@@ -1,6 +1,6 @@
 @mixin use_color_theme_dark {
   /*区域*/
-  --ti-color-body: #252525;
+  --ti-color-body: #292929;
   --ti-color-body-f: #ddd;
   --ti-color-card: #000;
   --ti-color-card-f: #eee;
@@ -17,7 +17,7 @@
   --ti-color-mask-thin: rgba(255, 255, 255, 0.2);
   --ti-color-mask-weak: rgba(255, 255, 255, 0.1);
   /* 边框/线 */
-  --ti-color-border-shallow: #333;
+  --ti-color-border-shallow: #3b3b3b;
   --ti-color-border-thin: #444;
   --ti-color-border-weak: #666;
   --ti-color-border-dark: #888;
@@ -52,9 +52,9 @@
   --ti-color-track: #888;
   --ti-color-track-b: #a7a7a7;
   --ti-color-track-r: #313131;
-  --ti-color-disable: #797979;
-  --ti-color-disable-b: #868686;
-  --ti-color-disable-r: #555;
+  --ti-color-disable: #9e9d9d;
+  --ti-color-disable-b: #979797;
+  --ti-color-disable-r: #5a5a5a;
   --ti-color-text: #a25791;
   --ti-color-text-b: #bd7aad;
   --ti-color-text-r: #410031;
