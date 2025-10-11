@@ -50,13 +50,6 @@ function defineObjColumns(featureName: string) {
       _.omit(column, "comConf", "activatedComConf", "readonlyComConf")
     );
 
-    // 默认字段
-    re.comConf = _.assign(
-      { boxRadius: "none", hideBorder: true },
-      re.comConf,
-      column?.comConf
-    );
-
     // 活动字段
     if (re.activatedComConf) {
       re.activatedComConf = _.assign(
@@ -77,6 +70,24 @@ function defineObjColumns(featureName: string) {
         { boxRadius: "none", hideBorder: true },
         re.readonlyComConf,
         column?.readonlyComConf
+      );
+    }
+
+    if (re.name == "as_main") {
+      console.log(re, column);
+    }
+
+    // 默认字段
+    if (!re.comType && !re.comConf && re.readonlyComConf) {
+      re.comType = re.readonlyComType || undefined;
+      re.comConf = _.cloneDeep(re.readonlyComConf);
+    }
+    // 如果定义了只读字段，但是没有定义默认字段，默认采用只读字段作为默认字段
+    else {
+      re.comConf = _.assign(
+        { boxRadius: "none", hideBorder: true },
+        re.comConf,
+        column?.comConf
       );
     }
 
@@ -172,6 +183,11 @@ function defineObjColumns(featureName: string) {
     }
     if (!column.name) {
       column.name = uniqKey;
+    }
+    // 如果定义了只读字段，但是没有定义默认字段，默认采用只读字段作为默认字段
+    if (!column.comType && !column.comConf && column.readonlyComConf) {
+      column.comType = column.readonlyComType || undefined;
+      column.comConf = _.cloneDeep(column.readonlyComConf);
     }
     // 表格内，如果是标签，那么默认是没有圆角的
     if (column.comType == "TiLabel" || !column.comType) {
