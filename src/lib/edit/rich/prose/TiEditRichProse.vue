@@ -1,6 +1,7 @@
 <script lang="ts" setup>
   import "prosemirror-menu/style/menu.css"; // 菜单样式
-  import { onMounted, provide, useTemplateRef } from "vue";
+  import { onMounted, onUnmounted, provide, useTemplateRef } from "vue";
+  import { useViewport } from "../../../_features";
   import EditorDocTree from "./EditorDocTree.vue";
   import EditorFooter from "./EditorFooter.vue";
   import EditorToolbar from "./EditorToolbar.vue";
@@ -17,6 +18,13 @@
   const props = withDefaults(defineProps<TiEditRichProseProps>(), {});
   //-----------------------------------------------------
   const _api = useTiEditRichProseApi(props, () => $main.value, emit);
+  //-------------------------------------------------
+  const $el = useTemplateRef<HTMLElement>("el");
+  const _viewport = useViewport({
+    el: $el,
+    onMounted,
+    onUnmounted,
+  });
   //-----------------------------------------------------
   provide(TI_RICH_EDITOR_API_KEY, _api);
   //-----------------------------------------------------
@@ -27,7 +35,7 @@
   //-----------------------------------------------------
 </script>
 <template>
-  <div class="ti-edit-rich-prose fit-parent">
+  <div class="ti-edit-rich-prose fit-parent" ref="el">
     <header>
       <EditorToolbar :toolbar="props.toolbar" />
     </header>
