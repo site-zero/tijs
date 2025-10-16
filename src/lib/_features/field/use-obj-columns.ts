@@ -582,6 +582,35 @@ export function colCheck(
   };
 }
 
+export function colBool(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: LabelProps
+): TableInputColumn {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    type: "Integer",
+    comType: "TiLabel",
+    comConf: _.assign(
+      {
+        valuePiping: "BOOL",
+        pipeProcessers: {
+          BOOL: (v: any) => {
+            if (v && v > 0) {
+              return "i18n:yes";
+            }
+            return "i18n:no";
+          },
+        },
+      } as LabelProps,
+      comConf
+    ),
+  };
+}
+
 export function colInputDate(
   name: FieldName,
   titleAndTip: string | string[],

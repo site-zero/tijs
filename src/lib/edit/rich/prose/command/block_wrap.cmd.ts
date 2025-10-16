@@ -63,11 +63,34 @@ export function useBlockWrappingCommands(schema: EditorSchema) {
     return true;
   };
 
+  const indentBlock: Command = (state, dispatch) => {
+    // 实现缩进功能
+    if (dispatch) {
+      const { selection } = state;
+      // 在光标位置插入制表符
+      dispatch(state.tr.insertText("\t", selection.from, selection.to));
+    }
+    return true;  
+  };
+
+  const shiftIndentBlock: Command = (state, dispatch) => {
+    // 实现取消缩进功能
+    if (dispatch) {
+      const { selection } = state;
+      // 删除光标位置的制表符
+      dispatch(state.tr.delete(selection.from, selection.to));
+    }
+    return true;  
+  };
+
+
   //------------------------------------------------------
   // 返回命令集
   //------------------------------------------------------
   return {
     blockquote: wrapBlockquote,
     code_block: insertCodeBlock,
+    indent: indentBlock,
+    shift_indent: shiftIndentBlock,
   };
 }

@@ -559,6 +559,35 @@ export function fldCheck(
   };
 }
 
+export function fldBool(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: LabelProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    type: "Integer",
+    comType: "TiLabel",
+    comConf: _.assign(
+      {
+        valuePiping: "BOOL",
+        pipeProcessers: {
+          BOOL: (v: any) => {
+            if (v && v > 0) {
+              return "i18n:yes";
+            }
+            return "i18n:no";
+          },
+        },
+      } as LabelProps,
+      comConf
+    ),
+  };
+}
+
 export function fldInputDate(
   name: FieldName,
   titleAndTip: string | string[],

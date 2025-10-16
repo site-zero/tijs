@@ -37,6 +37,24 @@ export const code_block = {
   },
 } as ActionBarItem;
 
+export const ol = {
+  icon: "fas-list-ol",
+  tip: "i18n:order-list",
+  action: {
+    name: "run:command",
+    payload: "ol",
+  },
+} as ActionBarItem;
+
+export const ul = {
+  icon: "fas-list-ul",
+  tip: "i18n:unorder-list",
+  action: {
+    name: "run:command",
+    payload: "ul",
+  },
+} as ActionBarItem;
+
 export const hr = {
   icon: "fas-minus",
   tip: "i18n:horizontal_rule",

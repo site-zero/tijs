@@ -5,8 +5,9 @@ import { gapCursor } from "prosemirror-gapcursor"; // Gap Cursor
 import { history } from "prosemirror-history"; // 撤销历史
 import { inputRules } from "prosemirror-inputrules"; // 输入规则
 import { keymap } from "prosemirror-keymap"; // 键盘映射
-import { Schema } from "prosemirror-model";
-import { schema } from "prosemirror-schema-basic";
+import { MarkSpec, NodeSpec, Schema } from "prosemirror-model";
+//import { schema } from "prosemirror-schema-basic";
+import OrderedMap from "orderedmap";
 import { addListNodes } from "prosemirror-schema-list";
 import { EditorState, Transaction } from "prosemirror-state";
 import { tableEditing, tableNodes, columnResizing } from "prosemirror-tables";
@@ -19,16 +20,52 @@ export function init_prose_editor(
   $con: HTMLElement,
   whenDispatchTransaction: (tr: Transaction) => void
 ) {
-  let marks = schema.spec.marks;
-  marks = marks.append({
-    underline: {
-      parseDOM: [{ tag: "u" }],
-      toDOM: () => ["u", 0],
+  // 1. 定义节点类型 - 使用 OrderedMap.from 或 OrderedMap.empty().add()
+  let nodes: OrderedMap<NodeSpec> = OrderedMap.from({
+    // 文档根节点
+    doc: {
+      content: "block+",
+    },
+    // 段落节点
+    paragraph: {
+      content: "inline*",
+      group: "block",
+      parseDOM: [{ tag: "p" }],
+      toDOM: () => ["p", 0],
+    },
+    // 文本节点（必备）
+    text: {
+      inline: true,
+      group: "inline",
+    },
+    // 换行节点
+    hard_break: {
+      inline: true,
+      group: "inline",
+      selectable: false,
+      parseDOM: [{ tag: "br" }],
+      toDOM: () => ["br"],
+    },
+    // 标题节点
+    heading: {
+      attrs: { level: { default: 1 } },
+      content: "inline*",
+      group: "block",
+      defining: true,
+      parseDOM: [
+        { tag: "h1", attrs: { level: 1 } },
+        { tag: "h2", attrs: { level: 2 } },
+        { tag: "h3", attrs: { level: 3 } },
+        { tag: "h4", attrs: { level: 4 } },
+        { tag: "h5", attrs: { level: 5 } },
+        { tag: "h6", attrs: { level: 6 } },
+      ],
+      toDOM: (node: any) => [`h${node.attrs.level}`, 0],
     },
   });
 
   // 建立支持的节点
-  let nodes = addListNodes(schema.spec.nodes, "paragraph block*", "block");
+  nodes = addListNodes(nodes, "paragraph block*", "block");
 
   // 支持表格
   nodes = nodes.append(
@@ -48,24 +85,53 @@ export function init_prose_editor(
     })
   );
 
+  // 2. 定义标记类型
+  const marks: OrderedMap<MarkSpec> = OrderedMap.from({
+    // 加粗标记
+    strong: {
+      parseDOM: [
+        { tag: "strong" },
+        { tag: "b" },
+        { style: "font-weight=bold" },
+      ],
+      toDOM: () => ["strong", 0],
+    },
+    // 斜体标记
+    em: {
+      parseDOM: [{ tag: "em" }, { tag: "i" }, { style: "font-style=italic" }],
+      toDOM: () => ["em", 0],
+    },
+    // 行内代码标记
+    code: {
+      parseDOM: [{ tag: "code" }],
+      toDOM: () => ["code", 0],
+    },
+    // 下划线
+    underline: {
+      parseDOM: [{ tag: "u" }],
+      toDOM: () => ["u", 0],
+    },
+  });
+
+  // 建立 Schema
   const mySchema: EditorSchema = new Schema({
     nodes,
     marks,
   });
 
-  let i = 0;
-  mySchema.spec.nodes.forEach((key, val) => {
-    console.log("node", i++, key, val);
-  });
+  // let i = 0;
+  // mySchema.spec.nodes.forEach((key, val) => {
+  //   console.log("node", i++, key, val);
+  // });
 
-  console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-  i = 0;
-  mySchema.spec.marks.forEach((key, val) => {
-    console.log("mark", i++, key, val);
-  });
+  // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+  // i = 0;
+  // mySchema.spec.marks.forEach((key, val) => {
+  //   console.log("mark", i++, key, val);
+  // });
 
-  console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-  console.log("keymap", _.keys(baseKeymap));
+  // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+  // console.log("keymap", _.keys(baseKeymap));
 
   const myCommands = useEditorCommands(mySchema);
 
@@ -96,6 +162,9 @@ export function init_prose_editor(
     "Mod-u": myCommands.get("U"),
     // Shift+Enter 生成段内回车
     "Mod-Enter": myCommands.get("br"),
+    // 缩进
+    "Tab": myCommands.get("indent"),
+    "Shift-Tab": myCommands.get("shift_indent"),
     // 快速设置标题
     "Ctrl-Shift-1": myCommands.get("h1"),
     "Ctrl-Shift-2": myCommands.get("h2"),
