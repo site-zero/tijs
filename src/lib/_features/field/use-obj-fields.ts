@@ -357,7 +357,7 @@ export function fldID(
   let [title, tip] = _.concat(titleAndTip);
   return {
     name,
-    title,
+    title: title || undefined,
     tip,
     comType: "TiLabel",
     comConf: _.assign(
@@ -376,7 +376,13 @@ export function fldLable(
   comConf?: LabelProps
 ): FormField {
   let [title, tip] = _.concat(titleAndTip);
-  return { name, title, tip, comType: "TiLabel", comConf };
+  return {
+    name,
+    title: title || undefined,
+    tip,
+    comType: "TiLabel",
+    comConf,
+  };
 }
 
 export function fldInput(
@@ -387,7 +393,7 @@ export function fldInput(
   let [title, tip] = _.concat(titleAndTip);
   return {
     name,
-    title,
+    title: title || undefined,
     tip,
     comType: "TiInput",
     comConf: _.assign(
@@ -420,7 +426,7 @@ export function fldInputText(
   let [title, tip] = _.concat(titleAndTip);
   return {
     name,
-    title,
+    title: title || undefined,
     tip,
     activatedComType: "TiInput",
     activatedComConf: _.assign(
@@ -441,7 +447,7 @@ export function fldInputI(
   let [title, tip] = _.concat(titleAndTip);
   return {
     name,
-    title,
+    title: title || undefined,
     tip,
     comType: "TiInputNum",
     comConf: _.assign(
@@ -461,7 +467,7 @@ export function fldInputF2(
   let [title, tip] = _.concat(titleAndTip);
   return {
     name,
-    title,
+    title: title || undefined,
     tip,
     comType: "TiInputNum",
     comConf: _.assign(
@@ -482,7 +488,7 @@ export function fldInputF3(
   let [title, tip] = _.concat(titleAndTip);
   return {
     name,
-    title,
+    title: title || undefined,
     tip,
     comType: "TiInputNum",
     comConf: _.assign(
@@ -503,7 +509,7 @@ export function fldInputF6(
   let [title, tip] = _.concat(titleAndTip);
   return {
     name,
-    title,
+    title: title || undefined,
     tip,
     comType: "TiInputNum",
     comConf: _.assign(
@@ -524,7 +530,7 @@ export function fldToggle(
   let [title, tip] = _.concat(titleAndTip);
   return {
     name,
-    title,
+    title: title || undefined,
     tip,
     type: "Integer",
     comType: "TiToggle",
@@ -545,7 +551,7 @@ export function fldCheck(
   let [title, tip] = _.concat(titleAndTip);
   return {
     name,
-    title,
+    title: title || undefined,
     tip,
     type: "Integer",
     comType: "TiCheck",
@@ -567,7 +573,7 @@ export function fldBool(
   let [title, tip] = _.concat(titleAndTip);
   return {
     name,
-    title,
+    title: title || undefined,
     tip,
     type: "Integer",
     comType: "TiLabel",
@@ -604,8 +610,6 @@ export function fldInputDate(
       {
         autoSelect: true,
         boxFocused: true,
-        boxRadius: "none",
-        hideBorder: true,
         trimed: true,
       } as InputDatetimeProps,
       comConf
@@ -629,8 +633,6 @@ export function fldInputDateTime(
       {
         autoSelect: true,
         boxFocused: true,
-        boxRadius: "none",
-        hideBorder: true,
         trimed: true,
       } as InputDatetimeProps,
       comConf
