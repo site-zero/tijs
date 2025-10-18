@@ -1,18 +1,19 @@
-import _ from "lodash";
 import { baseKeymap } from "prosemirror-commands"; // 基础键盘绑定
 import { dropCursor } from "prosemirror-dropcursor"; // Drop Cursor
 import { gapCursor } from "prosemirror-gapcursor"; // Gap Cursor
 import { history } from "prosemirror-history"; // 撤销历史
 import { inputRules } from "prosemirror-inputrules"; // 输入规则
 import { keymap } from "prosemirror-keymap"; // 键盘映射
-import { MarkSpec, NodeSpec, Schema } from "prosemirror-model";
+import { MarkSpec, Schema } from "prosemirror-model";
 //import { schema } from "prosemirror-schema-basic";
 import OrderedMap from "orderedmap";
 import { addListNodes } from "prosemirror-schema-list";
 import { EditorState, Transaction } from "prosemirror-state";
-import { tableEditing, tableNodes, columnResizing } from "prosemirror-tables";
+import { columnResizing, tableEditing, tableNodes } from "prosemirror-tables";
 import { EditorView } from "prosemirror-view";
 import { useEditorCommands } from "./api/use-editor-commands";
+import { getBaseMarkSpec } from "./support";
+import { getBaseNodeSpec } from "./support/base-node-spec";
 import { EditorSchema, TiEditRichProseProps } from "./ti-edit-rich-prose-types";
 
 export function init_prose_editor(
@@ -21,48 +22,7 @@ export function init_prose_editor(
   whenDispatchTransaction: (tr: Transaction) => void
 ) {
   // 1. 定义节点类型 - 使用 OrderedMap.from 或 OrderedMap.empty().add()
-  let nodes: OrderedMap<NodeSpec> = OrderedMap.from({
-    // 文档根节点
-    doc: {
-      content: "block+",
-    },
-    // 段落节点
-    paragraph: {
-      content: "inline*",
-      group: "block",
-      parseDOM: [{ tag: "p" }],
-      toDOM: () => ["p", 0],
-    },
-    // 文本节点（必备）
-    text: {
-      inline: true,
-      group: "inline",
-    },
-    // 换行节点
-    hard_break: {
-      inline: true,
-      group: "inline",
-      selectable: false,
-      parseDOM: [{ tag: "br" }],
-      toDOM: () => ["br"],
-    },
-    // 标题节点
-    heading: {
-      attrs: { level: { default: 1 } },
-      content: "inline*",
-      group: "block",
-      defining: true,
-      parseDOM: [
-        { tag: "h1", attrs: { level: 1 } },
-        { tag: "h2", attrs: { level: 2 } },
-        { tag: "h3", attrs: { level: 3 } },
-        { tag: "h4", attrs: { level: 4 } },
-        { tag: "h5", attrs: { level: 5 } },
-        { tag: "h6", attrs: { level: 6 } },
-      ],
-      toDOM: (node: any) => [`h${node.attrs.level}`, 0],
-    },
-  });
+  let nodes = getBaseNodeSpec();
 
   // 建立支持的节点
   nodes = addListNodes(nodes, "paragraph block*", "block");
@@ -86,32 +46,7 @@ export function init_prose_editor(
   );
 
   // 2. 定义标记类型
-  const marks: OrderedMap<MarkSpec> = OrderedMap.from({
-    // 加粗标记
-    strong: {
-      parseDOM: [
-        { tag: "strong" },
-        { tag: "b" },
-        { style: "font-weight=bold" },
-      ],
-      toDOM: () => ["strong", 0],
-    },
-    // 斜体标记
-    em: {
-      parseDOM: [{ tag: "em" }, { tag: "i" }, { style: "font-style=italic" }],
-      toDOM: () => ["em", 0],
-    },
-    // 行内代码标记
-    code: {
-      parseDOM: [{ tag: "code" }],
-      toDOM: () => ["code", 0],
-    },
-    // 下划线
-    underline: {
-      parseDOM: [{ tag: "u" }],
-      toDOM: () => ["u", 0],
-    },
-  });
+  const marks: OrderedMap<MarkSpec> = getBaseMarkSpec();
 
   // 建立 Schema
   const mySchema: EditorSchema = new Schema({
