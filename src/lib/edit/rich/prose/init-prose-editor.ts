@@ -22,28 +22,7 @@ export function init_prose_editor(
   whenDispatchTransaction: (tr: Transaction) => void
 ) {
   // 1. 定义节点类型 - 使用 OrderedMap.from 或 OrderedMap.empty().add()
-  let nodes = getBaseNodeSpec();
-
-  // 建立支持的节点
-  nodes = addListNodes(nodes, "paragraph block*", "block");
-
-  // 支持表格
-  nodes = nodes.append(
-    tableNodes({
-      tableGroup: "block",
-      cellContent: "paragraph block*",
-      cellAttributes: {
-        background: {
-          default: null,
-          getFromDOM: (dom) => dom.style.backgroundColor,
-          setDOMAttr: (value, attrs) => {
-            if (value)
-              attrs.style = (attrs.style || "") + `background-color: ${value};`;
-          },
-        },
-      },
-    })
-  );
+  let nodes = getBaseNodeSpec({ table: true, list: true });
 
   // 2. 定义标记类型
   const marks: OrderedMap<MarkSpec> = getBaseMarkSpec();

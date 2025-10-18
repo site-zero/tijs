@@ -1,8 +1,17 @@
 import OrderedMap from "orderedmap";
+import { addListNodes } from "prosemirror-schema-list";
 import { NodeSpec } from "prosemirror-model";
+import { columnResizing, tableEditing, tableNodes } from "prosemirror-tables";
 
-export function getBaseNodeSpec(): OrderedMap<NodeSpec> {
-  return OrderedMap.from({
+export type BaseNodeSpecOptions = {
+  table?: boolean;
+  list?: boolean;
+};
+
+export function getBaseNodeSpec(
+  options: BaseNodeSpecOptions = {}
+): OrderedMap<NodeSpec> {
+  let nodes: OrderedMap<NodeSpec> = OrderedMap.from({
     // 文档根节点
     doc: {
       content: "block+",
@@ -44,4 +53,33 @@ export function getBaseNodeSpec(): OrderedMap<NodeSpec> {
       toDOM: (node: any) => [`h${node.attrs.level}`, 0],
     },
   });
+
+  // 支持列表
+  if (options.list) {
+    nodes = addListNodes(nodes, "paragraph block*", "block");
+  }
+
+  // 支持表格
+  if (options.table) {
+    nodes = nodes.append(
+      tableNodes({
+        tableGroup: "block",
+        cellContent: "paragraph block*",
+        cellAttributes: {
+          background: {
+            default: null,
+            getFromDOM: (dom) => dom.style.backgroundColor,
+            setDOMAttr: (value, attrs) => {
+              if (value)
+                attrs.style =
+                  (attrs.style || "") + `background-color: ${value};`;
+            },
+          },
+        },
+      })
+    );
+  }
+
+  // 搞定
+  return nodes;
 }
