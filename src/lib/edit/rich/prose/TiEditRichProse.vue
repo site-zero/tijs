@@ -6,6 +6,7 @@
     onUnmounted,
     provide,
     useTemplateRef,
+    watch,
   } from "vue";
   import { useViewport } from "../../../_features";
   import EditorDocTree from "./EditorDocTree.vue";
@@ -17,6 +18,8 @@
     TiEditRichProseProps,
   } from "./ti-edit-rich-prose-types";
   import { useTiEditRichProseApi } from "./use-editor-api";
+  import _ from "lodash";
+
   //-----------------------------------------------------
   const $main = useTemplateRef<HTMLElement>("main");
   const emit = defineEmits<TiEditRichProseEmitter>();
@@ -36,9 +39,20 @@
   //-----------------------------------------------------
   provide(TI_RICH_EDITOR_API_KEY, _api);
   //-----------------------------------------------------
+  watch(
+    () => props.value,
+    (newValue, oldValue) => {
+      if (newValue && newValue !== oldValue && _.isUndefined(oldValue)) {
+        //console.log("updateContent:watch", props.value);
+        _api.updateContent(newValue);
+      }
+    }
+  );
+  //-----------------------------------------------------
   onMounted(() => {
     _api.initEditor();
     if (props.value) {
+      //console.log("updateContent:onMounted", props.value);
       _api.updateContent(props.value);
     }
   });

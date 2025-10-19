@@ -14,6 +14,7 @@ import { useEditorCommands } from "./api/use-editor-commands";
 import { getBaseMarkSpec } from "./support";
 import { getBaseNodeSpec } from "./support/base-node-spec";
 import { EditorSchema, TiEditRichProseProps } from "./ti-edit-rich-prose-types";
+import _ from "lodash";
 
 export function init_prose_editor(
   _props: TiEditRichProseProps,

@@ -2,8 +2,8 @@ import _ from "lodash";
 import { DOMParser, DOMSerializer, Node } from "prosemirror-model";
 import {
   EditorContentConvertor,
-  EditorSchema,
   EditorContentProps,
+  EditorSchema,
 } from "../ti-edit-rich-prose-types";
 
 export function useHTMLContentConvertor(

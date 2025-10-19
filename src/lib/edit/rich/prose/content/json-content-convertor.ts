@@ -1,19 +1,27 @@
 import JSON5 from "json5";
+import _ from "lodash";
 import { Node } from "prosemirror-model";
 import {
   EditorContentConvertor,
   EditorContentProps,
   EditorSchema,
-  EditorToolbarProps,
 } from "../ti-edit-rich-prose-types";
-import _ from "lodash";
 
 export function useJsonContentConvertor(
   props: EditorContentProps,
   schema: EditorSchema
 ): EditorContentConvertor {
   function parse(input: string): Node {
-    const data = JSON5.parse(input);
+    const str = _.trim(input);
+    // 默认搞个空文档
+    let data = {
+      type: "doc",
+      content: [{ type: "paragraph" }],
+    };
+    // 有内容及时解析一下
+    if (str) {
+      data = JSON5.parse(input);
+    }
     return Node.fromJSON(schema, data);
   }
 

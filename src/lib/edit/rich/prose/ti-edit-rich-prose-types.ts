@@ -1,6 +1,6 @@
 import { ActionBarItem, CommonProps } from "@site0/tijs";
 import OrderedMap from "orderedmap";
-import { MarkSpec, Node, NodeSpec, Schema } from "prosemirror-model";
+import { MarkSpec, Node, NodeSpec, Schema, Slice } from "prosemirror-model";
 import { InjectionKey } from "vue";
 import { EditorToolbarItemName } from "./toolbar/toolbar-item-builder";
 import { TiEditRichProseApi } from "./use-editor-api";

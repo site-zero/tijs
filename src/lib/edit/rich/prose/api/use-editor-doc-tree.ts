@@ -1,6 +1,5 @@
 import _ from "lodash";
 import { Node } from "prosemirror-model";
-import { Selection } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
 import { computed, ref, Ref } from "vue";
 import { IconInput, Vars } from "../../../../../_type";
@@ -165,15 +164,15 @@ export function useEditorDocTree(getView: () => EditorView | undefined) {
    * @param _checked_node_ids - 一个响应式引用，存储已选中的节点 ID 列表。
    */
   function updateTree(
-    selection?: Selection,
+    selection: DocTreeSelection,
     _checked_node_ids?: Ref<string[]>
   ) {
-    let { from, to } = selection ?? { from: 1, to: 1 };
-    let cursor_is_collapsed = from === to;
+    let { from: selectionFrom, to: selectionTo } = selection;
+    let cursor_is_collapsed = selectionFrom === selectionTo;
     const _in_selection = (pos: number) => {
-      return pos >= from && pos < to;
+      return pos >= selectionFrom && pos < selectionTo;
     };
-    //console.log("useEditorDocTree", { start, end });
+    // console.log("useEditorDocTree", { selectionFrom, selectionTo });
     const doc = getView()?.state.doc;
 
     // 防空
@@ -204,13 +203,14 @@ export function useEditorDocTree(getView: () => EditorView | undefined) {
     doc.descendants((node, pos) => {
       const rp = doc.resolve(pos);
       const depth = rp.depth; // 顶层节点(<P>)的 depth==0
-      const from = pos;
-      const to = pos + node.nodeSize;
+      const nodeFrom = pos;
+      const nodeTo = pos + node.nodeSize;
       const _in_node = (p: number) => {
-        return p >= from && p < to;
+        return p >= nodeFrom && p < nodeTo;
       };
 
       const nodeId = `N${pos}`;
+      //console.log(nodeId, [nodeFrom, nodeTo], node.textContent);
 
       // 创建节点对象
       const nIt: DocTreeNode = {
@@ -218,29 +218,29 @@ export function useEditorDocTree(getView: () => EditorView | undefined) {
         parentId: idStack[depth],
         name: node.type.name,
         leaf: node.isAtom || node.isText,
-        from,
-        to,
+        from: nodeFrom,
+        to: nodeTo,
         depth,
         size: node.nodeSize,
         level: node.attrs.level ?? 0,
         attrs: _.cloneDeep(node.attrs),
         marks: node.marks.map((mark) => mark.type.name),
-        tip: `[${from}-${to}]`,
+        tip: `[${nodeFrom}-${nodeTo}]`,
         icon: getNodeIcon(node.type),
       };
       _doc_raw_nodes.set(nodeId, node);
 
       let nodeInRange = false;
-      // 坍缩的光标，判断是否在节点中
+      // 【坍缩光标】，判断是否在节点中
       if (cursor_is_collapsed) {
-        let pos = from;
-        nodeInRange = _in_node(pos);
+        nodeInRange = _in_node(selectionFrom);
       }
-      // 选区，那么判断节点两端是否在选区中
+      // 【选区】，那么判断节点两端有一个在选区里，或者整个节点完全包括了选区
       else {
-        nodeInRange = _in_selection(from) || _in_selection(to - 1);
-        // _in_node(selection.from) ||
-        // _in_node(selection.to - 1);
+        nodeInRange =
+          _in_selection(nodeFrom) ||
+          _in_selection(nodeTo - 1) ||
+          (_in_node(selectionFrom) && _in_node(selectionTo - 1));
       }
 
       // 更新节点文本

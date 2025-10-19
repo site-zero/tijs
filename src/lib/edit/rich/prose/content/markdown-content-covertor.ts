@@ -8,26 +8,15 @@ import {
 import _ from "lodash";
 
 export function useMarkdownContentConvertor(
-  props: EditorContentProps,
-  schema: EditorSchema
+  _props: EditorContentProps,
+  _schema: EditorSchema
 ): EditorContentConvertor {
-  function parse(input: string): Node {
-    const data = JSON5.parse(input);
-    return Node.fromJSON(schema, data);
+  function parse(_input: string): Node {
+    throw "Markdown 格式不支持解析";
   }
 
-  function render(doc: Node): string {
-    const data = doc.toJSON();
-    // 指定了缩进级别
-    if (_.isNumber(props.jsonFormator)) {
-      return JSON.stringify(data, null, props.jsonFormator);
-    }
-    // 自定义
-    if (_.isFunction(props.jsonFormator)) {
-      return props.jsonFormator(data);
-    }
-    // 默认直接转换为 JSON 字符串
-    return JSON.stringify(data);
+  function render(_doc: Node): string {
+    throw "Markdown 格式不支持渲染";
   }
 
   return {

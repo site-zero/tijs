@@ -23,28 +23,38 @@
     grid-area: main;
     background-color: yellow;
     position: relative;
-    .ProseMirror {
-      outline: none;
-      //white-space: pre-wrap;
-      overflow: auto;
-      padding: 1em;
-    }
     > .ProseMirror {
       position: absolute;
       inset: 0;
-    }
-    > .ProseMirror-menubar-wrapper {
-      @include flex-align-v-nowrap;
-      position: absolute;
       outline: none;
-      inset: 0;
-      > .ProseMirror-menubar {
-        flex: 0 0 auto;
+      overflow: auto;
+      padding: 1em;
+      //-------------------------------------------------
+      table {
+        td,
+        th {
+          border: 1px dashed rgba(80, 80, 80, 0.2);
+          padding: 0.3em;
+          p {
+            margin: 0;
+          }
+        }
       }
-      > .ProseMirror {
-        flex: 1 1 auto;
-      }
-    }
+      //-------------------------------------------------
+      //-------------------------------------------------
+    } //> .ProseMirror
+    // > .ProseMirror-menubar-wrapper {
+    //   @include flex-align-v-nowrap;
+    //   position: absolute;
+    //   outline: none;
+    //   inset: 0;
+    //   > .ProseMirror-menubar {
+    //     flex: 0 0 auto;
+    //   }
+    //   > .ProseMirror {
+    //     flex: 1 1 auto;
+    //   }
+    // }
   }
   //-----------------------------------------------------
   > aside {

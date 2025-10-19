@@ -65,16 +65,16 @@ export function useEditorDocSelection(_doc_tree: EditorDocTreeApi) {
     else {
       let ph_anchor = _doc_tree.getNodeAncestors(_sel.anchor);
       let ph_head = _doc_tree.getNodeAncestors(_sel.head);
-      console.log(
-        "anch",
-        ph_anchor.length,
-        ph_anchor.map((nd) => [nd.name, nd.id].join(":")).join(" > ")
-      );
-      console.log(
-        "head",
-        ph_head.length,
-        ph_head.map((nd) => [nd.name, nd.id].join(":")).join(" > ")
-      );
+      // console.log(
+      //   "anch",
+      //   ph_anchor.length,
+      //   ph_anchor.map((nd) => [nd.name, nd.id].join(":")).join(" > ")
+      // );
+      // console.log(
+      //   "head",
+      //   ph_head.length,
+      //   ph_head.map((nd) => [nd.name, nd.id].join(":")).join(" > ")
+      // );
       path = [];
       let N = Math.min(ph_anchor.length, ph_head.length);
       for (let i = 0; i < N; i++) {
@@ -85,11 +85,11 @@ export function useEditorDocSelection(_doc_tree: EditorDocTreeApi) {
         }
         path.push(aa);
       }
-      console.log(
-        "path",
-        path.length,
-        path.map((nd) => [nd.name, nd.id].join(":")).join(" > ")
-      );
+      // console.log(
+      //   "path",
+      //   path.length,
+      //   path.map((nd) => [nd.name, nd.id].join(":")).join(" > ")
+      // );
     }
     _sel.path = path;
 

@@ -1,4 +1,4 @@
-import { EditorState, Transaction } from "prosemirror-state";
+import { TextSelection, Transaction } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
 import { computed, reactive, ref } from "vue";
 import { Dom } from "../../../..//core/web";
@@ -70,9 +70,9 @@ export function useTiEditRichProseApi(
   }
   //-----------------------------------------------------
   function onTransactionChange(tr: Transaction) {
-    let from = tr.selection.from;
-    let to = tr.selection.to
-    console.log("onTransactionChange", { from, to });
+    // let from = tr.selection.from;
+    // let to = tr.selection.to;
+    //console.log("onTransactionChange", { from, to });
     // 检查选择范围是否变化
     _doc_tree.updateTree(tr.selection, _checked_node_ids);
 
@@ -82,19 +82,40 @@ export function useTiEditRichProseApi(
     // 如果内容发生了改动，则获取最新内容
     if (tr.docChanged && _convertor) {
       const str = _convertor.render(tr.doc);
-      console.log("docChanged", str);
+      //console.log("docChanged", str);
       emit("change", str);
     }
   }
   //-----------------------------------------------------
   function updateContent(str: string) {
     if (_view && _convertor) {
-      let doc = _convertor.parse(str);
-      const newState = EditorState.create({ schema: _schema, doc });
-      _view.updateState(newState);
+      let newDoc = _convertor.parse(str);
+
+      // 替换整个文档
+      let vws = _view.state;
+      let docsz = vws.doc.content.size;
+      const tr = vws.tr.replaceWith(0, docsz, newDoc.content);
+      _view.dispatch(tr);
 
       // 更新文档结构树
-      //_doc_tree.updateTree({ from: 0, to: -1 }, _checked_node_ids);
+      _doc_tree.updateTree({ from: 0, to: 0 }, _checked_node_ids);
+
+      // 编辑器初始化完成后自动获得焦点
+      // 将光标定位到第一个字符位置
+      // ProseMirror中位置从1开始
+      setCursor(1);
+    }
+  }
+  //-----------------------------------------------------
+  // TODO 以后，靠里 pos 支持 [from,to] 这种形式
+  function setCursor(pos: number) {
+    if (_view) {
+      if (!_view.hasFocus()) {
+        _view.focus();
+      }
+      const sel = TextSelection.create(_view.state.doc, pos);
+      const tr = _view.state.tr.setSelection(sel);
+      _view.dispatch(tr);
     }
   }
   //-----------------------------------------------------
