@@ -146,6 +146,5 @@ export function init_prose_editor(
     view,
     commands: myCommands,
     schema: mySchema,
-    render: DOMSerializer.fromSchema(mySchema),
   };
 }

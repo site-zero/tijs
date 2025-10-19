@@ -1,25 +1,26 @@
-import { Transaction } from "prosemirror-state";
+import { EditorState, Transaction } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
 import { computed, reactive, ref } from "vue";
 import { Dom } from "../../../..//core/web";
 import { EditorCommands } from "./api/use-editor-commands";
 import { useEditorDocTree } from "./api/use-editor-doc-tree";
 import { useEditorDocSelection } from "./api/use-editor-selection";
+import { getContentConvertorMaker } from "./content";
 import { init_prose_editor } from "./init-prose-editor";
 import {
+  EditorContentConvertor,
   EditorSchema,
   RichEditorGUIState,
   TiEditRichProseEmitter,
   TiEditRichProseProps,
 } from "./ti-edit-rich-prose-types";
-import { DOMSerializer } from "prosemirror-model";
 
 export type TiEditRichProseApi = ReturnType<typeof useTiEditRichProseApi>;
 
 export function useTiEditRichProseApi(
   props: TiEditRichProseProps,
   getContainerElement: () => HTMLElement | null,
-  _emit: TiEditRichProseEmitter
+  emit: TiEditRichProseEmitter
 ) {
   //-----------------------------------------------------
   // 数据模型
@@ -27,7 +28,9 @@ export function useTiEditRichProseApi(
   let _view: EditorView | undefined = undefined;
   let _commands: EditorCommands | undefined = undefined;
   let _schema: EditorSchema | undefined = undefined;
-  let _serilalizer: DOMSerializer | undefined = undefined;
+  //-----------------------------------------------------
+  let makeConvertor = getContentConvertorMaker(props.contentType || "json");
+  let _convertor: EditorContentConvertor | undefined = undefined;
   //-----------------------------------------------------
   // 界面模块显示开关
   const _gui_state = reactive<RichEditorGUIState>({
@@ -67,6 +70,9 @@ export function useTiEditRichProseApi(
   }
   //-----------------------------------------------------
   function onTransactionChange(tr: Transaction) {
+    let from = tr.selection.from;
+    let to = tr.selection.to
+    console.log("onTransactionChange", { from, to });
     // 检查选择范围是否变化
     _doc_tree.updateTree(tr.selection, _checked_node_ids);
 
@@ -74,13 +80,21 @@ export function useTiEditRichProseApi(
     _doc_selection.update(tr);
 
     // 如果内容发生了改动，则获取最新内容
-    if (tr.docChanged) {
-      //console.log(tr.doc.toJSON());
-      let frag = _serilalizer?.serializeFragment(tr.doc.content);
-      // 把 DocumentFragment 转字符串
-      const wrap = document.createElement("div");
-      wrap.appendChild(frag!);
-      console.log(wrap.innerHTML)
+    if (tr.docChanged && _convertor) {
+      const str = _convertor.render(tr.doc);
+      console.log("docChanged", str);
+      emit("change", str);
+    }
+  }
+  //-----------------------------------------------------
+  function updateContent(str: string) {
+    if (_view && _convertor) {
+      let doc = _convertor.parse(str);
+      const newState = EditorState.create({ schema: _schema, doc });
+      _view.updateState(newState);
+
+      // 更新文档结构树
+      //_doc_tree.updateTree({ from: 0, to: -1 }, _checked_node_ids);
     }
   }
   //-----------------------------------------------------
@@ -110,7 +124,7 @@ export function useTiEditRichProseApi(
     _view = reInit.view;
     _commands = reInit.commands;
     _schema = reInit.schema;
-    _serilalizer = DOMSerializer.fromSchema(_schema);
+    _convertor = makeConvertor(props, _schema);
   }
   //-----------------------------------------------------
   // 返回接口
@@ -127,6 +141,7 @@ export function useTiEditRichProseApi(
 
     // 动态操作编辑器
     runCommand,
+    updateContent,
 
     // 初始化操作
     initEditor,

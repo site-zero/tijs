@@ -6,6 +6,11 @@ import { computed, ref, Ref } from "vue";
 import { IconInput, Vars } from "../../../../../_type";
 import { getNodeIcon } from "./doc-tree-node-icons";
 
+export type DocTreeSelection = {
+  from: number;
+  to: number;
+};
+
 export type DocTreeNode = {
   id: string;
   parentId: string | null;
@@ -159,10 +164,14 @@ export function useEditorDocTree(getView: () => EditorView | undefined) {
    * @param selection - ProseMirror 的选区对象，包含选区的起始和结束位置。
    * @param _checked_node_ids - 一个响应式引用，存储已选中的节点 ID 列表。
    */
-  function updateTree(selection: Selection, _checked_node_ids: Ref<string[]>) {
-    let cursor_is_collapsed = selection.from === selection.to;
+  function updateTree(
+    selection?: Selection,
+    _checked_node_ids?: Ref<string[]>
+  ) {
+    let { from, to } = selection ?? { from: 1, to: 1 };
+    let cursor_is_collapsed = from === to;
     const _in_selection = (pos: number) => {
-      return pos >= selection.from && pos < selection.to;
+      return pos >= from && pos < to;
     };
     //console.log("useEditorDocTree", { start, end });
     const doc = getView()?.state.doc;
@@ -224,7 +233,7 @@ export function useEditorDocTree(getView: () => EditorView | undefined) {
       let nodeInRange = false;
       // 坍缩的光标，判断是否在节点中
       if (cursor_is_collapsed) {
-        let pos = selection.from;
+        let pos = from;
         nodeInRange = _in_node(pos);
       }
       // 选区，那么判断节点两端是否在选区中
@@ -270,7 +279,9 @@ export function useEditorDocTree(getView: () => EditorView | undefined) {
 
     // 返回数据
     _doc_tree_nodes.value = nodes;
-    _checked_node_ids.value = checkedIds;
+    if (_checked_node_ids) {
+      _checked_node_ids.value = checkedIds;
+    }
   }
   //-----------------------------------------------------
   function dumpTree(): string {

@@ -1,6 +1,12 @@
 <script lang="ts" setup>
   import "prosemirror-menu/style/menu.css"; // 菜单样式
-  import { onMounted, onUnmounted, provide, useTemplateRef } from "vue";
+  import {
+    onBeforeMount,
+    onMounted,
+    onUnmounted,
+    provide,
+    useTemplateRef,
+  } from "vue";
   import { useViewport } from "../../../_features";
   import EditorDocTree from "./EditorDocTree.vue";
   import EditorFooter from "./EditorFooter.vue";
@@ -15,7 +21,9 @@
   const $main = useTemplateRef<HTMLElement>("main");
   const emit = defineEmits<TiEditRichProseEmitter>();
   //-----------------------------------------------------
-  const props = withDefaults(defineProps<TiEditRichProseProps>(), {});
+  const props = withDefaults(defineProps<TiEditRichProseProps>(), {
+    contentType: "json",
+  });
   //-----------------------------------------------------
   const _api = useTiEditRichProseApi(props, () => $main.value, emit);
   //-------------------------------------------------
@@ -29,8 +37,10 @@
   provide(TI_RICH_EDITOR_API_KEY, _api);
   //-----------------------------------------------------
   onMounted(() => {
-    console.log("TiEditRichProse mounted");
     _api.initEditor();
+    if (props.value) {
+      _api.updateContent(props.value);
+    }
   });
   //-----------------------------------------------------
 </script>
