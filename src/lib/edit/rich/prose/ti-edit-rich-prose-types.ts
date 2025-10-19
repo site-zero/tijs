@@ -9,7 +9,7 @@ export const TI_RICH_EDITOR_API_KEY: InjectionKey<TiEditRichProseApi> =
   Symbol("TI_RICH_EDITOR_API");
 
 export type TiEditRichProseEmitter = {
-  (event: "change", payload: any): void;
+  (event: "change", payload: string): void;
 };
 
 export type TiEditRichProseProps = CommonProps & EditorToolbarProps & {};

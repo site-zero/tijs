@@ -4,12 +4,11 @@ import { gapCursor } from "prosemirror-gapcursor"; // Gap Cursor
 import { history } from "prosemirror-history"; // 撤销历史
 import { inputRules } from "prosemirror-inputrules"; // 输入规则
 import { keymap } from "prosemirror-keymap"; // 键盘映射
-import { MarkSpec, Schema } from "prosemirror-model";
+import { DOMSerializer, MarkSpec, Schema } from "prosemirror-model";
 //import { schema } from "prosemirror-schema-basic";
 import OrderedMap from "orderedmap";
-import { addListNodes } from "prosemirror-schema-list";
 import { EditorState, Transaction } from "prosemirror-state";
-import { columnResizing, tableEditing, tableNodes } from "prosemirror-tables";
+import { columnResizing, tableEditing } from "prosemirror-tables";
 import { EditorView } from "prosemirror-view";
 import { useEditorCommands } from "./api/use-editor-commands";
 import { getBaseMarkSpec } from "./support";
@@ -147,5 +146,6 @@ export function init_prose_editor(
     view,
     commands: myCommands,
     schema: mySchema,
+    render: DOMSerializer.fromSchema(mySchema),
   };
 }

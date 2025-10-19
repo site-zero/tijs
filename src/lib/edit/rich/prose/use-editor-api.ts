@@ -12,6 +12,7 @@ import {
   TiEditRichProseEmitter,
   TiEditRichProseProps,
 } from "./ti-edit-rich-prose-types";
+import { DOMSerializer } from "prosemirror-model";
 
 export type TiEditRichProseApi = ReturnType<typeof useTiEditRichProseApi>;
 
@@ -26,6 +27,7 @@ export function useTiEditRichProseApi(
   let _view: EditorView | undefined = undefined;
   let _commands: EditorCommands | undefined = undefined;
   let _schema: EditorSchema | undefined = undefined;
+  let _serilalizer: DOMSerializer | undefined = undefined;
   //-----------------------------------------------------
   // 界面模块显示开关
   const _gui_state = reactive<RichEditorGUIState>({
@@ -70,6 +72,16 @@ export function useTiEditRichProseApi(
 
     // 更新一下光标位置
     _doc_selection.update(tr);
+
+    // 如果内容发生了改动，则获取最新内容
+    if (tr.docChanged) {
+      //console.log(tr.doc.toJSON());
+      let frag = _serilalizer?.serializeFragment(tr.doc.content);
+      // 把 DocumentFragment 转字符串
+      const wrap = document.createElement("div");
+      wrap.appendChild(frag!);
+      console.log(wrap.innerHTML)
+    }
   }
   //-----------------------------------------------------
   // 初始化操作
@@ -98,6 +110,7 @@ export function useTiEditRichProseApi(
     _view = reInit.view;
     _commands = reInit.commands;
     _schema = reInit.schema;
+    _serilalizer = DOMSerializer.fromSchema(_schema);
   }
   //-----------------------------------------------------
   // 返回接口
