@@ -330,16 +330,119 @@ export function colLable(
   return { name, title, tip, comType: "TiLabel", comConf };
 }
 
-export function colInput(
+export function colLabelI(
   name: FieldName,
   titleAndTip: string | string[],
-  comConf?: InputBoxProps
+  comConf?: LabelProps
 ): TableInputColumn {
   let [title, tip] = _.concat(titleAndTip);
   return {
     name,
     title,
     tip,
+    comType: "TiLabel",
+    comConf: _.assign(
+      {
+        align: "right",
+        type: "disable",
+        boxRadius: "none",
+      } as LabelProps,
+      comConf
+    ),
+  };
+}
+
+export function colLabelF2(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: LabelProps
+): TableInputColumn {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    comType: "TiLabel",
+    comConf: _.assign(
+      {
+        align: "right",
+        valuePiping: "$F2",
+        hideBorder: true,
+        type: "disable",
+        boxRadius: "none",
+      } as LabelProps,
+      comConf
+    ),
+  };
+}
+
+export function colLabelF3(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: LabelProps
+): TableInputColumn {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    comType: "TiLabel",
+    comConf: _.assign(
+      {
+        align: "right",
+        valuePiping: "$F3",
+        hideBorder: true,
+        type: "disable",
+        boxRadius: "none",
+      } as LabelProps,
+      comConf
+    ),
+  };
+}
+
+export function colLabelF6(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: LabelProps
+): TableInputColumn {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    comType: "TiLabel",
+    comConf: _.assign(
+      {
+        align: "right",
+        valuePiping: "$F6",
+        hideBorder: true,
+        type: "disable",
+        boxRadius: "none",
+      } as LabelProps,
+      comConf
+    ),
+  };
+}
+
+export function colInput(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputBoxProps,
+  readonlyComConf?: LabelProps
+): TableInputColumn {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    readonlyComType: "TiLabel",
+    readonlyComConf: _.assign(
+      {
+        type: "disable",
+        boxRadius: "none",
+      } as LabelProps,
+      readonlyComConf
+    ),
     activatedComType: "TiInput",
     activatedComConf: _.assign(
       {
@@ -358,12 +461,14 @@ export function colInput(
 export function colInputUpper(
   name: FieldName,
   titleAndTip: string | string[],
-  comConf?: InputBoxProps
+  comConf?: InputBoxProps,
+  readonlyComConf?: LabelProps
 ): TableInputColumn {
   return colInput(
     name,
     titleAndTip,
-    _.assign({ valueCase: "upperAll" } as InputBoxProps, comConf)
+    _.assign({ valueCase: "upperAll" } as InputBoxProps, comConf),
+    readonlyComConf
   );
 }
 

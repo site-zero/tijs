@@ -22,6 +22,7 @@ export type EditorContentType = "html" | "json" | "markdown";
 
 export type EditorToolbarProps = {
   toolbar?: EditorToolbarItem[] | undefined | null;
+  plugins?: RichEditorPlugin[];
 };
 
 export type EditorContentProps = {
@@ -99,3 +100,10 @@ export type RichEditorGUIState = {
    */
   toolbar: boolean;
 };
+
+export type RichEditorPluginInput = {};
+
+export type RichEditorPlugin = (
+  input: RichEditorPluginInput,
+  props: TiEditRichProseProps
+) => void;

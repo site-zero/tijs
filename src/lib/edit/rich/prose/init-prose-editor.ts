@@ -15,6 +15,7 @@ import { getBaseMarkSpec } from "./support";
 import { getBaseNodeSpec } from "./support/base-node-spec";
 import { EditorSchema, TiEditRichProseProps } from "./ti-edit-rich-prose-types";
 import _ from "lodash";
+import { helloPlugin } from "./plugin";
 
 export function init_prose_editor(
   _props: TiEditRichProseProps,
@@ -117,9 +118,7 @@ export function init_prose_editor(
         historyPlugin,
         columnResizing(), // 添加列宽调整插件
         tableEditing(), // 表格编辑插件放在后面
-        // menuBar({
-        //   content: buildMenuItems(schema).fullMenu,
-        // }),
+        helloPlugin(),
       ],
       //plugins: exampleSetup({ schema: mySchema, menuBar: false }),
     }),

@@ -87,7 +87,8 @@ export function useTiEditRichProseApi(
     }
   }
   //-----------------------------------------------------
-  function updateContent(str: string) {
+  function updateContent(str: string, resetCursor = 0) {
+    console.log("updateContent", {  resetCursor });
     if (_view && _convertor) {
       let newDoc = _convertor.parse(str);
 
@@ -103,7 +104,9 @@ export function useTiEditRichProseApi(
       // 编辑器初始化完成后自动获得焦点
       // 将光标定位到第一个字符位置
       // ProseMirror中位置从1开始
-      setCursor(1);
+      if (resetCursor > 0) {
+        setCursor(resetCursor);
+      }
     }
   }
   //-----------------------------------------------------
@@ -131,6 +134,10 @@ export function useTiEditRichProseApi(
   function initEditor() {
     let $con = getContainerElement();
     if (!$con) {
+      return;
+    }
+    if (_view) {
+      console.log("initEditor:view already initialized");
       return;
     }
 
