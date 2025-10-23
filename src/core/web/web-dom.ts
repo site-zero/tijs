@@ -1488,7 +1488,7 @@ export function moveCursorTo(input: HTMLInputElement, pos?: number) {
 //----------------------------------------------------
 export function setDocumentTitle(title: string) {
   if (typeof document === "undefined") {
-    console.warn("setFavicon was called in a non-browser environment");
+    console.warn("setDocumentTitle was called in a non-browser environment");
     return;
   }
   // 更新文档标题

@@ -24,7 +24,7 @@ export const prosemirrorPlaceholders = () =>
           return true; // 已处理，停止冒泡
         }
       },
-      handlePaste(view, e, slice) {
+      handlePaste(_view, e, slice) {
         const text = slice.content.textBetween(
           0,
           slice.content.size,
