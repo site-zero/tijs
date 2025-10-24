@@ -90,7 +90,7 @@
       :bar-layout-mode="props.layoutMode"
       :style="props.style"
       :aspect="props.aspect"
-      @click.left.stop="onClikeItem"
+      @click.left.stop.prevent="onClikeItem"
       @mouseenter="OnEnter">
       <div class="item-icon" v-if="!hideIconPart">
         <TiIcon v-if="props.icon" :value="props.icon" />

@@ -1,10 +1,10 @@
 import { TextSelection, Transaction } from "prosemirror-state";
 import { EditorView } from "prosemirror-view";
 import { computed, reactive, ref } from "vue";
-import { Dom } from "../../../..//core/web";
-import { EditorCommands } from "./api/use-editor-commands";
+import { EditorCommandsApi } from "./api/use-editor-commands";
 import { useEditorDocTree } from "./api/use-editor-doc-tree";
 import { useEditorDocSelection } from "./api/use-editor-selection";
+import { useEditorToolbar } from "./api/use-editor-toolbar";
 import { getContentConvertorMaker } from "./content";
 import { init_prose_editor } from "./init-prose-editor";
 import {
@@ -26,8 +26,10 @@ export function useTiEditRichProseApi(
   // 数据模型
   //-----------------------------------------------------
   let _view: EditorView | undefined = undefined;
-  let _commands: EditorCommands | undefined = undefined;
+  let _commands: EditorCommandsApi | undefined = undefined;
   let _schema: EditorSchema | undefined = undefined;
+  //-----------------------------------------------------
+  let _toolbar = useEditorToolbar();
   //-----------------------------------------------------
   let makeConvertor = getContentConvertorMaker(props.contentType || "json");
   let _convertor: EditorContentConvertor | undefined = undefined;
@@ -59,14 +61,15 @@ export function useTiEditRichProseApi(
   function runCommand(commandName: string) {
     if (_view && _commands) {
       _commands.run(commandName, _view, onTransactionChange);
+      _view.focus();
     }
-    const $main = getContainerElement();
-    if ($main) {
-      const $con = Dom.find(":scope > .ProseMirror", $main);
-      if ($con) {
-        $con.focus();
-      }
-    }
+    // const $main = getContainerElement();
+    // if ($main) {
+    //   const $con = Dom.find(":scope > .ProseMirror", $main);
+    //   if ($con) {
+    //     $con.focus();
+    //   }
+    // }
   }
   //-----------------------------------------------------
   function onTransactionChange(tr: Transaction) {
@@ -88,7 +91,7 @@ export function useTiEditRichProseApi(
   }
   //-----------------------------------------------------
   function updateContent(str: string, resetCursor = 0) {
-    console.log("updateContent", {  resetCursor });
+    console.log("updateContent", { resetCursor });
     if (_view && _convertor) {
       let newDoc = _convertor.parse(str);
 
@@ -112,6 +115,7 @@ export function useTiEditRichProseApi(
   //-----------------------------------------------------
   // TODO 以后，靠里 pos 支持 [from,to] 这种形式
   function setCursor(pos: number) {
+    console.log("setCursor", pos);
     if (_view) {
       if (!_view.hasFocus()) {
         _view.focus();
@@ -146,7 +150,7 @@ export function useTiEditRichProseApi(
 
     // 通过一个回调函数，结合 _doc_tree 子模型
     // TODO 思考一下，是不是把 _doc_tree 传递过去改动更小呢？
-    let reInit = init_prose_editor(props, $con, onTransactionChange);
+    let reInit = init_prose_editor(props, $con, _toolbar, onTransactionChange);
 
     // 记录返回到上层闭包
     _view = reInit.view;
@@ -170,6 +174,7 @@ export function useTiEditRichProseApi(
     // 动态操作编辑器
     runCommand,
     updateContent,
+    toolbar: _toolbar,
 
     // 初始化操作
     initEditor,

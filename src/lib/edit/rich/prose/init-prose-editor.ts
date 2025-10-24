@@ -4,22 +4,23 @@ import { gapCursor } from "prosemirror-gapcursor"; // Gap Cursor
 import { history } from "prosemirror-history"; // 撤销历史
 import { inputRules } from "prosemirror-inputrules"; // 输入规则
 import { keymap } from "prosemirror-keymap"; // 键盘映射
-import { DOMSerializer, MarkSpec, Schema } from "prosemirror-model";
+import { MarkSpec, Schema } from "prosemirror-model";
 //import { schema } from "prosemirror-schema-basic";
 import OrderedMap from "orderedmap";
-import { EditorState, Transaction } from "prosemirror-state";
+import { Command, EditorState, Transaction } from "prosemirror-state";
 import { columnResizing, tableEditing } from "prosemirror-tables";
 import { EditorView } from "prosemirror-view";
 import { useEditorCommands } from "./api/use-editor-commands";
+import { EditorToolbarApi, useEditorToolbar } from "./api/use-editor-toolbar";
+import { helloProsePlugin } from "./plugin";
 import { getBaseMarkSpec } from "./support";
 import { getBaseNodeSpec } from "./support/base-node-spec";
 import { EditorSchema, TiEditRichProseProps } from "./ti-edit-rich-prose-types";
-import _ from "lodash";
-import { helloProsePlugin } from "./plugin";
 
 export function init_prose_editor(
   _props: TiEditRichProseProps,
   $con: HTMLElement,
+  toolbarApi: EditorToolbarApi,
   whenDispatchTransaction: (tr: Transaction) => void
 ) {
   // 1. 定义节点类型 - 使用 OrderedMap.from 或 OrderedMap.empty().add()
@@ -65,7 +66,7 @@ export function init_prose_editor(
   });
 
   // 2. 键盘映射（Keymaps）：基础绑定 + 自定义绑定
-  const customKeymaps = {
+  const customKeymaps: Record<string, Command> = {
     // 基础绑定（如复制、粘贴等）
     ...baseKeymap,
     // 撤销
@@ -118,7 +119,7 @@ export function init_prose_editor(
         historyPlugin,
         columnResizing(), // 添加列宽调整插件
         tableEditing(), // 表格编辑插件放在后面
-        helloProsePlugin(),
+        //helloProsePlugin(),
       ],
       //plugins: exampleSetup({ schema: mySchema, menuBar: false }),
     }),

@@ -5,7 +5,6 @@
     EditorToolbarProps,
     TI_RICH_EDITOR_API_KEY,
   } from "./ti-edit-rich-prose-types";
-  import { buildEditorToolbarItem } from "./toolbar/use-editor-toolbar";
   //-----------------------------------------------------
   const api = inject(TI_RICH_EDITOR_API_KEY);
   //-----------------------------------------------------
@@ -32,10 +31,13 @@
   });
 
   //-----------------------------------------------------
-  const ToolbarItems = computed(() => buildEditorToolbarItem(props.toolbar));
+  const ToolbarItems = computed(() =>
+    api?.toolbar.buildEditorToolbarItem(props.toolbar)
+  );
   //-----------------------------------------------------
   function onFire(barEvent: ActionBarEvent) {
     let { name, payload } = barEvent;
+    console.log("onFire", {name,payload})
     if ("run:command" == name) {
       api?.runCommand(payload);
     } else {

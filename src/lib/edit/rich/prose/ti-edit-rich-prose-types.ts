@@ -2,7 +2,6 @@ import { ActionBarItem, CommonProps } from "@site0/tijs";
 import OrderedMap from "orderedmap";
 import { MarkSpec, Node, NodeSpec, Schema, Slice } from "prosemirror-model";
 import { InjectionKey } from "vue";
-import { EditorToolbarItemName } from "./toolbar/toolbar-item-builder";
 import { TiEditRichProseApi } from "./use-editor-api";
 
 export const TI_RICH_EDITOR_API_KEY: InjectionKey<TiEditRichProseApi> =
@@ -68,8 +67,9 @@ export type EditorContentConvertorMaker = (
 
 export type EditorToolbarItem =
   | ActionBarItem
-  | EditorToolbarItemName
-  | EditorToolbarItemName[];
+  | ActionBarItem[]
+  | string
+  | string[];
 
 export type EditorSchema = Schema<
   keyof OrderedMap<NodeSpec>,

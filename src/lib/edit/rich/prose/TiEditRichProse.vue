@@ -53,7 +53,7 @@
   onMounted(() => {
     _api.initEditor();
     if (props.value) {
-      // console.log("updateContent:onMounted", props.value);
+      console.log("updateContent:onMounted", props.value);
       _api.updateContent(props.value, 1);
     }
   });
