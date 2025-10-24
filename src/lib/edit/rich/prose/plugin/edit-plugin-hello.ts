@@ -3,7 +3,7 @@ import { Decoration, DecorationSet } from "prosemirror-view";
 
 const helloKey = new PluginKey("hello");
 
-export const helloPlugin = () =>
+export const helloProsePlugin = () =>
   new Plugin({
     key: helloKey,
     state: {
