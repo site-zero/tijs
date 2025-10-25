@@ -1,12 +1,11 @@
 import _ from "lodash";
-import { Util } from "../../../../../core";
+import { RichEditorImagePlugin, RichEditorTestPlugin } from "../plugin/";
 import {
   RichEditorPlugin,
   RichEditorPluginReadyContext,
   RichEditorPluginSetupContext,
   TiEditRichProseProps,
 } from "../ti-edit-rich-prose-types";
-import { RichEditorTestPlugin } from "../plugin/test";
 
 // 内置插件
 const _BUILT_IN_PLUGINS = ((...plugins: RichEditorPlugin[]) => {
@@ -15,7 +14,7 @@ const _BUILT_IN_PLUGINS = ((...plugins: RichEditorPlugin[]) => {
     list.push([plug.name, plug]);
   }
   return new Map<string, RichEditorPlugin>(list);
-})(RichEditorTestPlugin);
+})(RichEditorTestPlugin, RichEditorImagePlugin);
 
 // 插件管理接口
 export type EditorPluginsApi = ReturnType<typeof useEditorPlugins>;

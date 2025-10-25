@@ -92,7 +92,7 @@ export function useTiEditRichProseApi(
   }
   //-----------------------------------------------------
   function updateContent(str: string, resetCursor = 0) {
-    console.log("updateContent", { resetCursor });
+    //console.log("updateContent", { resetCursor });
     if (_view && _convertor) {
       let newDoc = _convertor.parse(str);
 
@@ -116,7 +116,7 @@ export function useTiEditRichProseApi(
   //-----------------------------------------------------
   // TODO 以后，靠里 pos 支持 [from,to] 这种形式
   function setCursor(pos: number) {
-    console.log("setCursor", pos);
+    //console.log("setCursor", pos);
     if (_view) {
       if (!_view.hasFocus()) {
         _view.focus();

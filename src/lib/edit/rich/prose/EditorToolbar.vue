@@ -9,22 +9,7 @@
   const api = inject(TI_RICH_EDITOR_API_KEY);
   //-----------------------------------------------------
   const props = withDefaults(defineProps<EditorToolbarProps>(), {
-    toolbar: () => [
-      "heading",
-      ["B", "I", "U", "code"],
-      "link",
-      "blockquote",
-      "code_block",
-      "|",
-      ["ol", "ul"],
-      "|",
-      "table",
-      "image",
-      "hr",
-      "|",
-      ["undo", "redo"],
-      "test",
-    ],
+    toolbar: () => [["B", "I", "U"], "|", ["undo", "redo"]],
   });
   //-----------------------------------------------------
   const ToolbarItems = computed(() => {

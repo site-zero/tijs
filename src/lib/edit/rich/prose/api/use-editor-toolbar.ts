@@ -3,7 +3,6 @@ import { ActionBarItem } from "../../../../../_type";
 import { Util } from "../../../../../core";
 import { EditorToolbarItem } from "../ti-edit-rich-prose-types";
 import * as BLOCK from "../toolbar/_block";
-import * as EMBED from "../toolbar/_embed";
 import * as INLINE from "../toolbar/_inline";
 import * as OTHERS from "../toolbar/_others";
 import * as TABLE from "../toolbar/_table";
@@ -24,9 +23,6 @@ export function useEditorToolbar() {
     // 块操作
     ...BLOCK,
     ...TABLE,
-
-    // 嵌入式对象
-    ...EMBED,
 
     // 其他操作
     ...OTHERS,
