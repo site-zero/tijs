@@ -2,126 +2,118 @@ import { baseKeymap } from "prosemirror-commands"; // 基础键盘绑定
 import { dropCursor } from "prosemirror-dropcursor"; // Drop Cursor
 import { gapCursor } from "prosemirror-gapcursor"; // Gap Cursor
 import { history } from "prosemirror-history"; // 撤销历史
-import { inputRules } from "prosemirror-inputrules"; // 输入规则
 import { keymap } from "prosemirror-keymap"; // 键盘映射
-import { MarkSpec, Schema } from "prosemirror-model";
+import { Schema } from "prosemirror-model";
 //import { schema } from "prosemirror-schema-basic";
-import OrderedMap from "orderedmap";
-import { Command, EditorState, Transaction } from "prosemirror-state";
+import { EditorState, Plugin, Transaction } from "prosemirror-state";
 import { columnResizing, tableEditing } from "prosemirror-tables";
 import { EditorView } from "prosemirror-view";
 import { useEditorCommands } from "./api/use-editor-commands";
-import { EditorToolbarApi, useEditorToolbar } from "./api/use-editor-toolbar";
-import { helloProsePlugin } from "./plugin";
+import { useEditorPlugins } from "./api/use-editor-plugins";
+import { EditorToolbarApi } from "./api/use-editor-toolbar";
 import { getBaseMarkSpec } from "./support";
 import { getBaseNodeSpec } from "./support/base-node-spec";
-import { EditorSchema, TiEditRichProseProps } from "./ti-edit-rich-prose-types";
+import {
+  RichEditorPluginReadyContext,
+  RichEditorPluginSetupContext,
+  TiEditRichProseProps,
+} from "./ti-edit-rich-prose-types";
+import { InputRule, inputRules } from "prosemirror-inputrules";
 
 export function init_prose_editor(
   _props: TiEditRichProseProps,
   $con: HTMLElement,
-  toolbarApi: EditorToolbarApi,
+  toolbar: EditorToolbarApi,
   whenDispatchTransaction: (tr: Transaction) => void
 ) {
-  // 1. 定义节点类型 - 使用 OrderedMap.from 或 OrderedMap.empty().add()
-  let nodes = getBaseNodeSpec({ table: true, list: true });
+  const _plugins = useEditorPlugins(_props);
+  //-----------------------------------------------------
+  // 初始化构建设置
+  //-----------------------------------------------------
+  const setup_context = {
+    toolbar,
+  } as RichEditorPluginSetupContext;
+  setup_context.nodes = getBaseNodeSpec({ table: true, list: true });
+  setup_context.marks = getBaseMarkSpec();
+  _plugins.setupEditor(setup_context);
 
-  // 2. 定义标记类型
-  const marks: OrderedMap<MarkSpec> = getBaseMarkSpec();
-
+  //-----------------------------------------------------
+  // 准备构建编辑器
+  //-----------------------------------------------------
   // 建立 Schema
-  const mySchema: EditorSchema = new Schema({
-    nodes,
-    marks,
+  const schema = new Schema({
+    nodes: setup_context.nodes,
+    marks: setup_context.marks,
   });
+  // 可扩展的命令接口
+  const commands = useEditorCommands(schema);
 
-  // let i = 0;
-  // mySchema.spec.nodes.forEach((key, val) => {
-  //   console.log("node", i++, key, val);
-  // });
-
-  // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-  // i = 0;
-  // mySchema.spec.marks.forEach((key, val) => {
-  //   console.log("mark", i++, key, val);
-  // });
-
-  // console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-  // console.log("keymap", _.keys(baseKeymap));
-
-  const myCommands = useEditorCommands(mySchema);
-
-  //console.log(exampleSetup({ schema: mySchema, menuBar: false }));
-  // ---------------------- 手工配置插件 ---------------------- //
-
-  // 1. 输入规则（Input Rules）：智能引号、Markdown块引用等
-  const inputRulesPlugin = inputRules({
-    rules: [
-      // 示例：智能引号（可根据需求添加更多规则）
-      // new InputRule(/^(")([^""]*)(")$/, (state, match, start, end) => { ... }),
-      // 示例：Markdown块引用（输入">"触发）
-      // new InputRule(/^>(\s+)?$/, (state, match, start, end) => { ... })
-      // 注：实际项目中可使用预设规则或扩展社区规则
-    ],
-  });
+  // 最后准备构建上下文
+  const ready_context = {
+    schema,
+    commands,
+    inputRules: [] as InputRule[],
+  } as RichEditorPluginReadyContext;
 
   // 2. 键盘映射（Keymaps）：基础绑定 + 自定义绑定
-  const customKeymaps: Record<string, Command> = {
+  ready_context.keymaps = {
     // 基础绑定（如复制、粘贴等）
     ...baseKeymap,
     // 撤销
-    "Mod-z": myCommands.get("undo"),
-    "Mod-y": myCommands.get("redo"),
+    "Mod-z": commands.get("undo"),
+    "Mod-y": commands.get("redo"),
     // 自定义绑定
-    "Mod-i": myCommands.get("I"),
-    "Mod-b": myCommands.get("B"),
-    "Mod-u": myCommands.get("U"),
+    "Mod-i": commands.get("I"),
+    "Mod-b": commands.get("B"),
+    "Mod-u": commands.get("U"),
     // Shift+Enter 生成段内回车
-    "Mod-Enter": myCommands.get("br"),
+    "Mod-Enter": commands.get("br"),
     // 缩进
-    "Tab": myCommands.get("indent"),
-    "Shift-Tab": myCommands.get("shift_indent"),
+    "Tab": commands.get("indent"),
+    "Shift-Tab": commands.get("shift_indent"),
     // 快速设置标题
-    "Ctrl-Shift-1": myCommands.get("h1"),
-    "Ctrl-Shift-2": myCommands.get("h2"),
-    "Ctrl-Shift-3": myCommands.get("h3"),
-    "Ctrl-Shift-4": myCommands.get("h4"),
-    "Ctrl-Shift-5": myCommands.get("h5"),
-    "Ctrl-Shift-6": myCommands.get("h6"),
-    "Ctrl-Shift-`": myCommands.get("p"),
+    "Ctrl-Shift-1": commands.get("h1"),
+    "Ctrl-Shift-2": commands.get("h2"),
+    "Ctrl-Shift-3": commands.get("h3"),
+    "Ctrl-Shift-4": commands.get("h4"),
+    "Ctrl-Shift-5": commands.get("h5"),
+    "Ctrl-Shift-6": commands.get("h6"),
+    "Ctrl-Shift-`": commands.get("p"),
   };
 
-  const keymapPlugin = keymap(customKeymaps);
-
-  // 3. Drop Cursor 插件
+  // 编辑器的插件列表
+  const keymapPlugin = keymap(ready_context.keymaps);
   const dropCursorPlugin = dropCursor();
-
-  // 4. Gap Cursor 插件
   const gapCursorPlugin = gapCursor();
-
-  // 5. 撤销历史插件
   const historyPlugin = history();
+  ready_context.plugins = [
+    keymapPlugin,
+    dropCursorPlugin,
+    gapCursorPlugin,
+    historyPlugin,
+    columnResizing(), // 添加列宽调整插件
+    tableEditing(), // 表格编辑插件放在后面
+    //helloProsePlugin(),
+  ] as Plugin<any>[];
 
+  // 最后处理一下配置
+  _plugins.readyEditor(ready_context);
+
+  //-----------------------------------------------------
+  // 都准备好了，开始构建编辑器
+  //-----------------------------------------------------
+  // 输入规则
+  const editorInputRules = inputRules({ rules: ready_context.inputRules });
   // 初始化编辑器
   const view = new EditorView($con, {
     state: EditorState.create({
-      schema: mySchema,
+      schema: ready_context.schema,
       // plugins: [
       //   history(),
       //   keymap({ "Mod-z": undo, "Mod-y": redo }),
       //   keymap(baseKeymap),
       // ],
-      plugins: [
-        inputRulesPlugin,
-        keymapPlugin,
-        dropCursorPlugin,
-        gapCursorPlugin,
-        historyPlugin,
-        columnResizing(), // 添加列宽调整插件
-        tableEditing(), // 表格编辑插件放在后面
-        //helloProsePlugin(),
-      ],
-      //plugins: exampleSetup({ schema: mySchema, menuBar: false }),
+      plugins: [...ready_context.plugins, editorInputRules],
     }),
     // 在这里监听编辑器所有的变化
     dispatchTransaction(tr) {
@@ -145,7 +137,7 @@ export function init_prose_editor(
   // 返回输出
   return {
     view,
-    commands: myCommands,
-    schema: mySchema,
+    schema: ready_context.schema,
+    commands: ready_context.commands,
   };
 }

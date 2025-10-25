@@ -1,7 +1,11 @@
-import { ActionBarItem, CommonProps } from "@site0/tijs";
+import { ActionBarItem, CommonProps, Vars } from "@site0/tijs";
 import OrderedMap from "orderedmap";
-import { MarkSpec, Node, NodeSpec, Schema, Slice } from "prosemirror-model";
+import { InputRule } from "prosemirror-inputrules";
+import { MarkSpec, Node, NodeSpec, Schema } from "prosemirror-model";
+import { Command, Plugin } from "prosemirror-state";
 import { InjectionKey } from "vue";
+import { EditorCommandsApi } from "./api/use-editor-commands";
+import { EditorToolbarApi } from "./api/use-editor-toolbar";
 import { TiEditRichProseApi } from "./use-editor-api";
 
 export const TI_RICH_EDITOR_API_KEY: InjectionKey<TiEditRichProseApi> =
@@ -14,17 +18,18 @@ export type TiEditRichProseEmitter = {
 export type TiEditRichProseProps = CommonProps &
   EditorToolbarProps &
   EditorContentProps & {
-    value?: string;
+    plugins?: RichEditorPlugin[] | string[];
+    pluginVars?: Record<string, Vars>;
   };
 
 export type EditorContentType = "html" | "json" | "markdown";
 
 export type EditorToolbarProps = {
   toolbar?: EditorToolbarItem[] | undefined | null;
-  plugins?: RichEditorPlugin[];
 };
 
 export type EditorContentProps = {
+  value?: string;
   /**
    * 编辑器对应的内容类型
    * - `json`: 对应的内容为 JSON 字符串(编辑器文档对象模型原始结构)
@@ -101,9 +106,26 @@ export type RichEditorGUIState = {
   toolbar: boolean;
 };
 
-export type RichEditorPluginInput = {};
+export type RichEditorPluginSetupContext = {
+  toolbar: EditorToolbarApi;
+  nodes: OrderedMap<NodeSpec>;
+  marks: OrderedMap<MarkSpec>;
+};
 
-export type RichEditorPlugin = (
-  input: RichEditorPluginInput,
-  props: TiEditRichProseProps
-) => void;
+export type RichEditorPluginReadyContext = {
+  commands: EditorCommandsApi;
+  schema: EditorSchema;
+  keymaps: Record<string, Command>;
+  inputRules: InputRule[];
+  plugins: Plugin<any>[];
+};
+
+export type RichEditorPlugin = {
+  /**
+   * 插件名称
+   */
+  name: string;
+  setup: (context: RichEditorPluginSetupContext, pluginVars: Vars) => void;
+  inputRules?: (pluginVars: Vars) => InputRule[];
+  ready: (context: RichEditorPluginReadyContext, pluginVars: Vars) => void;
+};
