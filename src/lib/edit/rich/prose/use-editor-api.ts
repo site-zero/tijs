@@ -47,6 +47,7 @@ export function useTiEditRichProseApi(
   //-----------------------------------------------------
   // 内置子模型
   //-----------------------------------------------------
+  const _ready = ref(false);
   // 文档结构树的数据
   const _doc_tree = useEditorDocTree(() => _view);
   // 文档当前选区
@@ -136,6 +137,7 @@ export function useTiEditRichProseApi(
   }
   //-----------------------------------------------------
   function initEditor() {
+    _ready.value = false;
     let $con = getContainerElement();
     if (!$con) {
       return;
@@ -157,11 +159,13 @@ export function useTiEditRichProseApi(
     _commands = reInit.commands;
     _schema = reInit.schema;
     _convertor = makeConvertor(props, _schema);
+    _ready.value = true;
   }
   //-----------------------------------------------------
   // 返回接口
   //-----------------------------------------------------
   return {
+    isReady: computed(() => _ready.value),
     TreeData: computed(() => _doc_tree.DocTreeNodes.value),
     TreeCheckedIds: computed(() => _checked_node_ids.value),
 

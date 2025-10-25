@@ -6,10 +6,21 @@ import {
   RichEditorPluginSetupContext,
   TiEditRichProseProps,
 } from "../ti-edit-rich-prose-types";
-import { InputRule } from "prosemirror-inputrules";
+import { RichEditorTestPlugin } from "../plugin/test";
 
-const _BUILT_IN_PLUGINS = Util.objToMap({} as Record<string, RichEditorPlugin>);
+// 内置插件
+const _BUILT_IN_PLUGINS = ((...plugins: RichEditorPlugin[]) => {
+  let list: [string, RichEditorPlugin][] = [];
+  for (let plug of plugins) {
+    list.push([plug.name, plug]);
+  }
+  return new Map<string, RichEditorPlugin>(list);
+})(RichEditorTestPlugin);
+
+// 插件管理接口
 export type EditorPluginsApi = ReturnType<typeof useEditorPlugins>;
+
+// 插件管理器
 export function useEditorPlugins(props: TiEditRichProseProps) {
   let _plugins = [] as RichEditorPlugin[];
 

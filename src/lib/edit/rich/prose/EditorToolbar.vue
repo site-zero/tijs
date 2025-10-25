@@ -23,21 +23,19 @@
       "hr",
       "|",
       ["undo", "redo"],
-      {
-        text: "Test",
-        action: "test",
-      },
+      "test",
     ],
   });
-
   //-----------------------------------------------------
-  const ToolbarItems = computed(() =>
-    api?.toolbar.buildEditorToolbarItem(props.toolbar)
-  );
+  const ToolbarItems = computed(() => {
+    if (api && api.isReady.value) {
+      return api.toolbar.buildEditorToolbarItem(props.toolbar);
+    }
+  });
   //-----------------------------------------------------
   function onFire(barEvent: ActionBarEvent) {
     let { name, payload } = barEvent;
-    console.log("onFire", {name,payload})
+    console.log("onFire", { name, payload });
     if ("run:command" == name) {
       api?.runCommand(payload);
     } else {
