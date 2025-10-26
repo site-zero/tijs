@@ -39,16 +39,17 @@
   //-----------------------------------------------------
   provide(TI_RICH_EDITOR_API_KEY, _api);
   // //-----------------------------------------------------
-  // watch(
-  //   () => props.value,
-  //   (newValue, oldValue) => {
-  //     console.log("updateContent:watch", {newValue, oldValue});
-  //     _api.initEditor();
-  //     if (newValue && !_.isEqual(newValue, oldValue)) {
-  //       _api.updateContent(newValue, 1);
-  //     }
-  //   }
-  // );
+  watch(
+    () => props.value,
+    (newValue, oldValue) => {
+      console.log("updateContent:watch", {newValue, oldValue});
+      // _api.initEditor();
+      if (newValue && !_.isEqual(newValue, oldValue)) {
+        console.log("It will change")
+        //_api.updateContent(newValue, 1);
+      }
+    }
+  );
   //-----------------------------------------------------
   onMounted(() => {
     _api.initEditor();

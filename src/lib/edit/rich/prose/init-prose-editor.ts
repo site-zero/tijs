@@ -108,11 +108,6 @@ export function init_prose_editor(
   const view = new EditorView($con, {
     state: EditorState.create({
       schema: ready_context.schema,
-      // plugins: [
-      //   history(),
-      //   keymap({ "Mod-z": undo, "Mod-y": redo }),
-      //   keymap(baseKeymap),
-      // ],
       plugins: [...ready_context.plugins, editorInputRules],
     }),
     // 在这里监听编辑器所有的变化
