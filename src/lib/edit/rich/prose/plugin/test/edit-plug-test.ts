@@ -1,4 +1,5 @@
 import { RichEditorPlugin } from "../../ti-edit-rich-prose-types";
+import { helloProsePlugin } from "./hello-plugin";
 
 export const RichEditorTestPlugin: RichEditorPlugin = {
   name: "test",
@@ -14,12 +15,14 @@ export const RichEditorTestPlugin: RichEditorPlugin = {
       },
     });
   },
-  ready({ commands }) {
+  ready({ commands, plugins }) {
     console.log("RichEditorTestPlugin: ready");
     // 注册命令
     commands.set("dotest", () => {
       console.log("dotest");
       return true;
     });
+    // 编辑器插件
+    plugins.push(helloProsePlugin());
   },
 };
