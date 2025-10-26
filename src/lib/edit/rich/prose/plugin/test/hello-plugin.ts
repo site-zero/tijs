@@ -20,24 +20,24 @@ export const helloProsePlugin = () =>
         // 3. 如果仅仅是光标（没拖选），就高亮单词
         const { selection } = tr;
         //console.log("hello::apply", _.pick(selection, "from", "to", "empty"));
-        if (selection.empty) {
-          const pos = tr.selection.from;
-          const dom = () => {
-            const btn = document.createElement("span");
-            btn.textContent = "⚑";
-            btn.style.cssText = [
-              `color:red;cursor:pointer`,
-              `margin-left:4px`,
-              `position:relative`,
-              `top:-2em`,
-            ].join(";");
-            btn.title = "点我试试";
-            btn.addEventListener("click", () => alert("widget 被点了"));
-            return btn;
-          };
-          const deco = Decoration.widget(pos, dom, { side: 1 });
-          newSet = newSet.add(tr.doc, [deco]);
-        }
+        // if (selection.empty) {
+        //   const pos = tr.selection.from;
+        //   const dom = () => {
+        //     const btn = document.createElement("span");
+        //     btn.textContent = "⚑";
+        //     btn.style.cssText = [
+        //       `color:red;cursor:pointer`,
+        //       `margin-left:4px`,
+        //       `position:relative`,
+        //       `top:-2em`,
+        //     ].join(";");
+        //     btn.title = "点我试试";
+        //     btn.addEventListener("click", () => alert("widget 被点了"));
+        //     return btn;
+        //   };
+        //   const deco = Decoration.widget(pos, dom, { side: 1 });
+        //   newSet = newSet.add(tr.doc, [deco]);
+        // }
 
         return newSet;
       },
