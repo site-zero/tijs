@@ -14,6 +14,7 @@ export const COM_TYPES = {
   RichTinyMCEditor: "TiRichTinyMCEditor",
   EditRichProse: "TiEditRichProse",
   //------------------- TILE
+  Crumb: "TiCrumb",
   HtmlSnippet: "TiHtmlSnippet",
   TextSnippet: "TiTextSnippet",
   HtmlPage: "TiHtmlPage",
