@@ -1,4 +1,4 @@
-import { IconInput } from './core-types';
+import { IconInput, TextContentType, Vars } from "./core-types";
 
 /*---------------------------------------------------
 
@@ -85,4 +85,18 @@ export type Pager = {
   // Suammary
   // skip?: number; //"skip",
   // limit?: number; //"limit"
+};
+
+/*---------------------------------------------------
+
+                  混合文字片段
+
+---------------------------------------------------*/
+export type TextFragment = {
+  textType?: TextContentType;
+  text?: string;
+  icon?: IconInput;
+  style?: Vars;
+  comType?: string;
+  comConf?: Vars;
 };
