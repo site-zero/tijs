@@ -1,0 +1,15 @@
+@use "@site0/tijs/sass/_all.scss" as *;
+
+.ti-crumb {
+  @include flex-align-nowrap($ai: stretch);
+  //-----------------------------------------------------
+  > .crumb-body {
+    @include flex-align-nowrap($ai: stretch);
+    gap: 0.5em;
+    .crumb-item {
+      @include flex-align-nowrap($ai: center);
+      gap: 0.3em;
+    }
+  }
+  //-----------------------------------------------------
+}

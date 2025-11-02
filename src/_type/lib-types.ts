@@ -1,4 +1,4 @@
-import { IconInput, TextContentType, Vars } from "./core-types";
+import { CommonProps, IconInput, TextContentType, Vars } from "./core-types";
 
 /*---------------------------------------------------
 
@@ -92,7 +92,7 @@ export type Pager = {
                   混合文字片段
 
 ---------------------------------------------------*/
-export type TextFragment = {
+export type TextFragment = CommonProps & {
   textType?: TextContentType;
   text?: string;
   icon?: IconInput;
