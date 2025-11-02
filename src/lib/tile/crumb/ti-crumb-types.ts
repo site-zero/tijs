@@ -1,8 +1,10 @@
 import {
+  AspectSize,
   CommonProps,
   IconInput,
-  SelectableProps,
+  LogicType,
   StdListItemProps,
+  StdOptionItem,
   TableRowID,
   TextFragment,
   Vars,
@@ -10,6 +12,15 @@ import {
 
 export type CrumbEmitter = {
   (event: "change", payload: any): void;
+};
+
+export type CrumbItemSepType = "icon" | "text";
+
+export type CrumbItem = StdOptionItem & {
+  index: number;
+  current?: boolean;
+  sepType?: CrumbItemSepType;
+  separator?: IconInput;
 };
 
 export type CrumbProps = CommonProps &
@@ -43,6 +54,17 @@ export type CrumbProps = CommonProps &
      */
     emitValueType?: "id" | "std-item" | "raw-item";
 
+    //-----------------------------------------------------
+    // Aspect
+    //-----------------------------------------------------
+    currentItemClass?: string;
+    currentItemStyle?: Vars;
+
+    sepType?: CrumbItemSepType;
+    separator?: IconInput;
+
+    itemFontSize?: AspectSize;
+    type?: LogicType;
     /**
      * 如果没有数据项，显示什么占位信息
      */

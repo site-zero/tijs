@@ -2,13 +2,23 @@
 
 .ti-crumb {
   @include flex-align-nowrap($ai: stretch);
+  font-size: var(--ti-fontsz-s);
   //-----------------------------------------------------
   > .crumb-body {
     @include flex-align-nowrap($ai: stretch);
-    gap: 0.5em;
     .crumb-item {
       @include flex-align-nowrap($ai: center);
       gap: 0.3em;
+      padding: 0.3em 0.5em;
+      &.is-current {
+        background-color: var(--ti-color-primary-r);
+        color: var(--ti-color-primary);
+        border: 1px solid var(--ti-color-primary);
+        border-radius: 0.2em;
+      }
+    }
+    .crumb-sep {
+      @include flex-center;
     }
   }
   //-----------------------------------------------------

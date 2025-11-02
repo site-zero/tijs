@@ -1,16 +1,28 @@
 <script lang="ts" setup>
-  import { TiIcon, TiTextSnippet } from "@site0/tijs";
+  import { CssUtils, TiIcon, TiTextSnippet } from "@site0/tijs";
   import { CrumbEmitter, CrumbProps } from "./ti-crumb-types";
   import { useTiCrumbApi } from "./use-ti-crumb-api";
+  import { computed } from "vue";
   //-----------------------------------------------------
   const emit = defineEmits<CrumbEmitter>();
-  const props = withDefaults(defineProps<CrumbProps>(), {});
+  const props = withDefaults(defineProps<CrumbProps>(), {
+    separator: "zmdi-chevron-right", // "zmdi-caret-right"
+    itemFontSize: "b",
+  });
+  //-----------------------------------------------------
+  const TopStyle = computed(() => {
+    let css = CssUtils.mergeStyles([props.style]);
+    if (props.itemFontSize) {
+      css["fontSize"] = `var(--ti-fontsz-${props.itemFontSize})`;
+    }
+    return css;
+  });
   //-----------------------------------------------------
   const _api = useTiCrumbApi(props, emit);
   //-----------------------------------------------------
 </script>
 <template>
-  <div class="ti-crumb">
+  <div class="ti-crumb" :style="TopStyle">
     <slot name="head">
       <TiTextSnippet
         v-if="props.head"
@@ -25,14 +37,16 @@
         :comConf="props.head.comConf" />
     </slot>
     <div class="crumb-body">
-      <div
-        v-for="it in _api.StdItems.value"
-        class="crumb-item"
-        :class="it.className"
-        :data-tip="it.tip">
-        <TiIcon v-if="it.icon" :value="it.icon" />
-        <span>{{ it.text }}</span>
-      </div>
+      <template v-for="it in _api.StdItems.value">
+        <div class="crumb-item" :class="it.className" :data-tip="it.tip">
+          <TiIcon v-if="it.icon" :value="it.icon" />
+          <span v-if="it.text">{{ it.text }}</span>
+        </div>
+        <div class="crumb-sep" v-if="it.separator">
+          <TiIcon v-if="it.sepType == 'icon'" :value="it.separator" />
+          <span v-else>{{ it.separator }}</span>
+        </div>
+      </template>
     </div>
     <slot name="tail">
       <TiTextSnippet

@@ -1,9 +1,9 @@
 import _ from "lodash";
-import { StdOptionItem, StrOptionItem, TableRowID, Vars } from "../../../_type";
-import { useStdListItem } from "../../_features";
-import { CrumbEmitter, CrumbProps } from "./ti-crumb-types";
 import { computed } from "vue";
+import { StdOptionItem, StrOptionItem, TableRowID, Vars } from "../../../_type";
 import { CssUtils } from "../../../core";
+import { useStdListItem } from "../../_features";
+import { CrumbEmitter, CrumbItem, CrumbProps } from "./ti-crumb-types";
 
 export type TiCrumbApi = ReturnType<typeof useTiCrumbApi>;
 
@@ -36,20 +36,31 @@ export function useTiCrumbApi(props: CrumbProps, emit: CrumbEmitter) {
   //-----------------------------------------------------
   const RawItems = computed(() => props.data || []);
   //-----------------------------------------------------
-  const StdItems = computed(() => {
-    let stdItems: StdOptionItem[] = [];
-    for (let i = 0; i < RawItems.value.length; i++) {
+  const CrumbItems = computed(() => {
+    let list: CrumbItem[] = [];
+    let lastI = RawItems.value.length - 1;
+    for (let i = 0; i <= lastI; i++) {
       let it = RawItems.value[i];
-      let stdItem = { ...toStdItem(it, i) };
-      let current = props.currentItemId == stdItem.value;
-      if (current) {
-        stdItem.className = CssUtils.mergeClassName(it.className, {
-          "is-current": current,
-        });
+      let item: CrumbItem = { ...toStdItem(it, i), index: i };
+      item.current = props.currentItemId == item.value;
+      // 当前项目，设置样式
+      if (item.current) {
+        item.className = CssUtils.mergeClassName(
+          it.className,
+          { "is-current": item.current },
+          props.currentItemClass
+        );
+        item.style = CssUtils.mergeStyles([item.style, props.currentItemStyle]);
       }
-      stdItems.push(stdItem);
+      // 如果不是最后一项，那么就要有分隔符
+      if (i < lastI && props.separator) {
+        item.separator = props.separator || "zmdi-chevron-right";
+        item.sepType = props.sepType || "icon";
+      }
+      // 计入列表
+      list.push(item);
     }
-    return stdItems;
+    return list;
   });
   //-----------------------------------------------------
   // 响应函数
@@ -74,7 +85,7 @@ export function useTiCrumbApi(props: CrumbProps, emit: CrumbEmitter) {
     // 传递 标准项
     else if ("std-item" == props.emitValueType) {
       let stdItem = _.cloneDeep(
-        _.find(StdItems.value, (it: StrOptionItem) => {
+        _.find(CrumbItems.value, (it: StrOptionItem) => {
           return id == it.value;
         })
       );
@@ -90,7 +101,7 @@ export function useTiCrumbApi(props: CrumbProps, emit: CrumbEmitter) {
   //-----------------------------------------------------
   return {
     RawItems,
-    StdItems,
+    StdItems: CrumbItems,
     onClickItem,
   };
 }
