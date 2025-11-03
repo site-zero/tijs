@@ -6,6 +6,7 @@ const emit = defineEmits<FilterBarEmitter>();
 const props = withDefaults(defineProps<FilterBarProps>(), {});
 const _api = useTiFilterBarApi(props, emit);
 //-----------------------------------------------------
+//-----------------------------------------------------
 </script>
 <template>
   <div class="ti-filter-bar">
