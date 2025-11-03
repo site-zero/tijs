@@ -6,8 +6,8 @@ import DiffFormFldName from "./DiffFormFldName.vue";
 const COM_TYPE = COM_TYPES.DiffFormFldName;
 
 const DiffFormFldNameInfo: TiComInfo = {
-  icon: "fas-address-book", // 从 fontawsome 寻找一个合适的图标
-  race: TiComRace.VIEW,
+  icon: "zmdi-label-alt-outline",
+  race: TiComRace.EDIT,
   name: COM_TYPE,
   text: COM_TYPE,
   i18n: {

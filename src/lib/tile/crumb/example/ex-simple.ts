@@ -4,11 +4,15 @@ export default {
   name: "simple",
   text: "i18n:simple",
   comConf: {
+    itemFontSize: "m",
+    itemPadding: "m",
+    itemRadius: "m",
+    type: "success",
     data: [
-      { value: "a", text: "Animal", icon: "fas-paw" },
-      { value: "dog", text: "Dog", icon: "fas-dog" },
-      { value: "W_C", text: "Wang Cai", icon: "fas-shield-dog" },
+      { value: "plant", text: "Plant" },
+      { value: "tree", text: "Tree" },
+      { value: "pine", text: "Pine Tree" },
     ],
-    currentItemId: "W_C",
+    value: null,
   } as CrumbProps,
 };

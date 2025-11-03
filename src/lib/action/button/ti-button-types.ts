@@ -12,8 +12,8 @@ export type ButtonProps = CommonProps & {
   text?: string;
   autoI18n?: boolean;
 
-  // 行为
-  action?: null | 'click' | ((payload?: any) => void);
+  // 行为,默认 "click"
+  action?: null | string | ((payload?: any) => void);
   payload?: any;
 
   // 外观

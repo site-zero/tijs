@@ -42,14 +42,17 @@ export function useTiCrumbApi(props: CrumbProps, emit: CrumbEmitter) {
     for (let i = 0; i <= lastI; i++) {
       let it = RawItems.value[i];
       let item: CrumbItem = { ...toStdItem(it, i), index: i };
-      item.current = props.currentItemId == item.value;
+      item.current = props.value == item.value;
       // 当前项目，设置样式
+      item.className = CssUtils.mergeClassName(it.className, {
+        "is-current": item.current,
+        "no-current": !item.current,
+      });
       if (item.current) {
-        item.className = CssUtils.mergeClassName(
-          it.className,
-          { "is-current": item.current },
-          props.currentItemClass
-        );
+        _.assign(item.className, {
+          "is-current": item.current,
+          "no-current": !item.current,
+        });
         item.style = CssUtils.mergeStyles([item.style, props.currentItemStyle]);
       }
       // 如果不是最后一项，那么就要有分隔符

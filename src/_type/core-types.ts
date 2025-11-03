@@ -796,10 +796,9 @@ export interface TiComInfo {
    *
    * @default `{change:"value"}`
    */
-  exampleModel?: Record<
-    string,
-    TiComExampleModelTarget | TiComExampleModelTarget[]
-  >;
+  exampleModel?:
+    | Record<string, TiComExampleModelTarget | TiComExampleModelTarget[]>
+    | ((eventName: string, payload: any) => void);
 }
 
 export type TiComSet = Record<string, TiComInfo>;
@@ -926,7 +925,7 @@ export type EmitAdaptorHandler = (payload: EmitAdaptorEvent) => void;
 //   return _.isFunction(input);
 // }
 
-export type EmitAdaptor = string | EmitAdaptorHandler;
+export type EmitAdaptor = boolean | string | EmitAdaptorHandler;
 
 export type EmitAdaptorProps = {
   events?: Record<string, EmitAdaptor>;

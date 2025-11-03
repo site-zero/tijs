@@ -26,10 +26,9 @@ export class TiComImpl implements TiCom {
   install: (app: App) => void;
   defaultProps: string;
   exampleProps: ComPropExample[];
-  exampleModel: Record<
-    string,
-    TiComExampleModelTarget | TiComExampleModelTarget[]
-  >;
+  exampleModel:
+    | Record<string, TiComExampleModelTarget | TiComExampleModelTarget[]>
+    | ((eventName: string, payload: any) => void);
 
   constructor(info: TiComInfo) {
     this.icon = info.icon || "fas-question";

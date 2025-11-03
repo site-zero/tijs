@@ -7,6 +7,7 @@ import {
   StdOptionItem,
   TableRowID,
   TextFragment,
+  TextSnippetProps,
   Vars,
 } from "@site0/tijs";
 
@@ -33,7 +34,7 @@ export type CrumbProps = CommonProps &
     /**
      * 当前选中的项的 ID
      */
-    currentItemId?: TableRowID;
+    value?: TableRowID | null | undefined;
 
     /**
      * 获取项的 ID
@@ -64,6 +65,8 @@ export type CrumbProps = CommonProps &
     separator?: IconInput;
 
     itemFontSize?: AspectSize;
+    itemRadius?: AspectSize;
+    itemPadding?: AspectSize;
     type?: LogicType;
     /**
      * 如果没有数据项，显示什么占位信息
@@ -75,6 +78,6 @@ export type CrumbProps = CommonProps &
     //-----------------------------------------------------
     // 头部和尾部的可配置扩展槽
     //-----------------------------------------------------
-    head?: TextFragment;
-    tail?: TextFragment;
+    head?: TextSnippetProps;
+    tail?: TextSnippetProps;
   };

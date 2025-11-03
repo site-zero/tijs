@@ -1,6 +1,6 @@
 import { TiComInfo, TiComRace } from "@site0/tijs";
 import { App } from "vue";
-import { COM_TYPES } from "../../../lib-com-types";
+import { COM_TYPES } from "../../lib-com-types";
 import TiFilterBar from "./TiFilterBar.vue";
 import { FilterBarProps } from "./ti-filter-bar-types";
 
@@ -18,7 +18,7 @@ const zh_cn = {
 const TiFilterBarInfo: TiComInfo = {
   tags: ["ing"],
   icon: "zmdi-graphic-eq",
-  race: TiComRace.VIEW,
+  race: TiComRace.EDIT,
   name: COM_TYPE,
   text: "i18n:ti-filter-bar-com-name",
   i18n: {

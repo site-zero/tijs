@@ -2,22 +2,42 @@
 
 .ti-crumb {
   @include flex-align-nowrap($ai: stretch);
-  font-size: var(--ti-fontsz-s);
+  --item-fontsz: var(--ti-fontsz-s);
+  --item-boxpad: var(--ti-box-pad-s);
+  --item-radius: var(--ti-measure-r-s);
+  --item-color: var(--ti-color-primary);
+  --item-color-b: var(--ti-color-primary-b);
+  --item-color-r: var(--ti-color-primary-r);
+  --item-color-hl-bg: var(--ti-color-highlight);
+  font-size: var(--item-fontsz);
+  line-height: 1.3em;
   //-----------------------------------------------------
   > .crumb-body {
     @include flex-align-nowrap($ai: stretch);
-    .crumb-item {
+    user-select: none;
+    a.crumb-item {
       @include flex-align-nowrap($ai: center);
+      border: 1px solid transparent;
       gap: 0.3em;
-      padding: 0.3em 0.5em;
-      &.is-current {
-        background-color: var(--ti-color-primary-r);
-        color: var(--ti-color-primary);
-        border: 1px solid var(--ti-color-primary);
-        border-radius: 0.2em;
+      //padding: 0.2em 0.6em 0.2em 0.2em;
+      padding: var(--item-boxpad);
+      border-radius: var(--item-radius);
+      white-space: nowrap;
+      color: inherit;
+      text-decoration: none;
+      &.no-current:hover {
+        background-color: var(--item-color-hl-bg);
+        text-decoration: none;
       }
+      //---------------------------------------------------
+      &.is-current {
+        background-color: var(--item-color-r);
+        color: var(--item-color);
+        border-color: 1px solid var(--item-color-b);
+      }
+      //---------------------------------------------------
     }
-    .crumb-sep {
+    span.crumb-sep {
       @include flex-center;
     }
   }

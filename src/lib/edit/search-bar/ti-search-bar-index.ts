@@ -15,8 +15,8 @@ const COM_TYPE = COM_TYPES.SearchBar;
 
 const TiSearchBarInfo: TiComInfo = {
   tags: ['ing'],
-  icon: "fas-magnifying-glass", // 从 fontawsome 寻找一个合适的图标
-  race: TiComRace.VIEW,
+  icon: "fas-magnifying-glass",
+  race: TiComRace.EDIT,
   name: COM_TYPE,
   text: 'i18n:ti-search-bar-com-name',
   i18n: {
