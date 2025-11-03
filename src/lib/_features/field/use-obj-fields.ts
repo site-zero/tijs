@@ -1,5 +1,6 @@
 import {
   CheckProps,
+  DroplistProps,
   FieldName,
   FieldRefer,
   FormField,
@@ -382,6 +383,27 @@ export function fldLable(
     tip,
     comType: "TiLabel",
     comConf,
+  };
+}
+
+export function fldDroplist(
+  name: FieldName,
+  titleAndTip: string | string[],
+  options: string,
+  comConf?: DroplistProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title: title || undefined,
+    tip,
+    comType: "TiDroplist",
+    comConf: _.assign(
+      {
+        options,
+      } as DroplistProps,
+      comConf
+    ),
   };
 }
 

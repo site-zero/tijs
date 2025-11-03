@@ -1,6 +1,7 @@
 import _ from "lodash";
 import {
   CheckProps,
+  DroplistProps,
   InputBoxProps,
   InputDatetimeProps,
   InputNumProps,
@@ -419,6 +420,41 @@ export function colLabelF6(
         type: "disable",
         boxRadius: "none",
       } as LabelProps,
+      comConf
+    ),
+  };
+}
+
+export function colDroplist(
+  name: FieldName,
+  titleAndTip: string | string[],
+  options: string,
+  comConf?: DroplistProps,
+  readonlyComConf?: LabelProps
+): TableInputColumn {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    readonlyComType: "TiLabel",
+    readonlyComConf: _.assign(
+      {
+        type: "disable",
+        boxRadius: "none",
+        options,
+      } as LabelProps,
+      readonlyComConf
+    ),
+    activatedComType: "TiInput",
+    activatedComConf: _.assign(
+      {
+        options,
+        boxFontSize: "s",
+        boxPadding: "s",
+        boxRadius: "none",
+        hideBorder: true,
+      } as DroplistProps,
       comConf
     ),
   };
