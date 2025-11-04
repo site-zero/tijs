@@ -137,6 +137,7 @@
     :class="TopClass"
     :style="TopStyle"
     :nowrap="props.nowrap || undefined"
+    @click.stop="emit('click')"
     ref="el">
     <div class="as-title" v-if="props.title">
       {{ I18n.text(props.title) }}
@@ -165,9 +166,10 @@
     <!--======<Tab Actions>======-->
     <template v-if="props.actions">
       <TiActionBar
-        v-bind="props.actions"
         topItemAspectMode="button"
-        :topItemMinWidth="null" />
+        :topItemMinWidth="null"
+        :vars="props.vars"
+        v-bind="props.actions" />
     </template>
   </div>
 </template>

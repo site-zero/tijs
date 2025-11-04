@@ -31,12 +31,20 @@ const TiFilterBarInfo: TiComInfo = {
   install: (app: App) => {
     app.component("TiFilterBar", TiFilterBar);
   },
+  liveStyle: {
+    maxWidth: "800px",
+  },
   defaultProps: "simple",
   exampleProps: [
     {
       name: "simple",
       text: "i18n:simple",
-      comConf: {} as FilterBarProps,
+      comConf: {
+        value: {
+          name: "^A",
+          age: "[2,100)",
+        },
+      } as FilterBarProps,
     },
   ],
 };

@@ -5,17 +5,17 @@ import {
   IconInput,
   LogicType,
   Vars,
-} from '../../../_type';
+} from "../../../_type";
 import {
   ActionBarProps,
   LabelAspectProps,
   PlaceholderProps,
   ValueTranslatorProps,
-} from '../../../lib';
+} from "../../../lib";
 
 /**
  * 标题翻译器，这个转换器使用的场景是当 value 是 `Vars` 的时候，
- * 就需要循环对象的每个字段，通过键，如果可以获取一个转换器
+ * 就需要循环对象的每个字段，通过键获取一个转换器
  *
  * @param text - 输入的文本
  * @return `[string, string[]]` 元组 [本字段的标题, 吃掉的的值的字段]
@@ -27,14 +27,15 @@ export type TagNameInfo = {
 };
 
 export type TagsEmitter = {
+  (event: "click"): void;
   // 对于 TagItem[] 型的 value
-  (event: 'click-tag', payload: TagItem): void;
+  (event: "click-tag", payload: TagItem): void;
   // 对于 TagItem[] 型的 value
-  (event: 'remove', payload: TagItem): void;
+  (event: "remove", payload: TagItem): void;
   // 对于 Vars 型的 value
-  (event: 'change', payload: Vars): void;
+  (event: "change", payload: Vars): void;
   // 支持排序
-  (event: 'sorted', payload: TagItem[]): void;
+  (event: "sorted", payload: TagItem[]): void;
 };
 
 export type TagItem = {
@@ -62,7 +63,16 @@ export type TagsProps = CommonProps &
     defaultTagStyle?: Vars;
     defaultTagAspect?: LabelAspectProps;
 
+    /**
+     * 动作条，默认为search与reset 两个按钮。
+     * 如果 `{items:[]}` 则表示不显示动作条。
+     */
     actions?: ActionBarProps;
+    /**
+     * 上下文变量，除非 actions 定义了自己的 vars
+     * 否则，默认的，也会采用本属性作为动作条的上下文变量集
+     */
+    vars?: Vars;
 
     /**
      * 前缀标题
@@ -104,5 +114,5 @@ export type TagsProps = CommonProps &
 
     boxFontSize?: AspectSize;
     boxPadding?: AspectSize;
-    boxRadius?: AspectSize | 'none';
+    boxRadius?: AspectSize | "none";
   };

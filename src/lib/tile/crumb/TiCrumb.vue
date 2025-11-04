@@ -40,8 +40,7 @@
       <TiTextSnippet
         v-if="props.head"
         className="crumb-head"
-        v-bind="props.head"
-        @click-button="console.log('click-button')" />
+        v-bind="props.head" />
     </slot>
     <div class="crumb-body">
       <template v-for="it in _api.StdItems.value">
