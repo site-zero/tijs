@@ -76,6 +76,8 @@
   function onClickItem(it: TagItem) {
     if (props.tagClickable) {
       emit("click-tag", it);
+    }else {
+      emit("click");
     }
   }
   //-----------------------------------------------------

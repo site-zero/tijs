@@ -1,4 +1,4 @@
-import { ActionBarItem } from "index";
+import { ActionBarItem } from "../../../../";
 
 export function dft_flt_bar_action_items(): ActionBarItem[] {
   return [

@@ -24,7 +24,8 @@
       :actions="api.ActionBarConfig.value"
       v-bind="props.tags"
       :placeholder="props.placeholder"
-      :value="props.value" />
+      :value="props.value"
+      @click="api.openFilterEditor()" />
     <!-- <div class="part-menu">
       <TiActionBar v-bind="api.ActionBarConfig.value" />
     </div> -->

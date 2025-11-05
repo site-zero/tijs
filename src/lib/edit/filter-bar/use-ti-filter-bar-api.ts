@@ -1,6 +1,6 @@
 import { computed } from "vue";
 import { FilterBarProps, FilterBarEmitter } from "./ti-filter-bar-types";
-import { ActionBarProps } from "src/lib/action/all-actions";
+import { ActionBarProps } from "../../action/all-actions";
 import _ from "lodash";
 import { dft_flt_bar_action_items } from "./support/dft-flt-bar-actions";
 
@@ -31,9 +31,20 @@ export function useTiFilterBarApi(
     return re;
   });
   //-----------------------------------------------------
+  // 处理数据
+  //-----------------------------------------------------
+  
+  //-----------------------------------------------------
+  // 打开编辑器
+  //-----------------------------------------------------
+  function openFilterEditor(){
+    console.log("openFilterEditor");
+  }
+  //-----------------------------------------------------
   // 返回接口
   //-----------------------------------------------------
   return {
     ActionBarConfig,
+    openFilterEditor,
   };
 }
