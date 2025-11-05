@@ -1,8 +1,9 @@
-import { TiComInfo, TiComRace } from "@site0/tijs";
+import { FormProps, TiComInfo, TiComRace } from "@site0/tijs";
 import { App } from "vue";
 import { COM_TYPES } from "../../lib-com-types";
 import TiFilterBar from "./TiFilterBar.vue";
 import { FilterBarProps } from "./ti-filter-bar-types";
+import example from "./example";
 
 const COM_TYPE = COM_TYPES.FilterBar;
 
@@ -16,7 +17,6 @@ const zh_cn = {
 };
 
 const TiFilterBarInfo: TiComInfo = {
-  tags: ["ing"],
   icon: "zmdi-graphic-eq",
   race: TiComRace.EDIT,
   name: COM_TYPE,
@@ -35,18 +35,7 @@ const TiFilterBarInfo: TiComInfo = {
     maxWidth: "800px",
   },
   defaultProps: "simple",
-  exampleProps: [
-    {
-      name: "simple",
-      text: "i18n:simple",
-      comConf: {
-        value: {
-          name: "^A",
-          age: "[2,100)",
-        },
-      } as FilterBarProps,
-    },
-  ],
+  exampleProps: [example.simple],
 };
 
 export * from "./ti-filter-bar-types";

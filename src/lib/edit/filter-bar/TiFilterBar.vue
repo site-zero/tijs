@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-  import { TiActionBar, TiTags, TiTextSnippet } from "../../";
-  import { FilterBarProps, FilterBarEmitter } from "./ti-filter-bar-types";
+  import { TiTags, TiTextSnippet } from "../../";
+  import { FilterBarEmitter, FilterBarProps } from "./ti-filter-bar-types";
   import { useTiFilterBarApi } from "./use-ti-filter-bar-api";
   //-----------------------------------------------------
   const emit = defineEmits<FilterBarEmitter>();
@@ -25,7 +25,9 @@
       v-bind="props.tags"
       :placeholder="props.placeholder"
       :value="props.value"
-      @click="api.openFilterEditor()" />
+      @change="api.onTagsChange"
+      @click="api.openFilterEditor()"
+      @fire="api.onActionFire" />
     <!-- <div class="part-menu">
       <TiActionBar v-bind="api.ActionBarConfig.value" />
     </div> -->

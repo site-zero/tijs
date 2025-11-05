@@ -76,13 +76,13 @@
   function onClickItem(it: TagItem) {
     if (props.tagClickable) {
       emit("click-tag", it);
-    }else {
+    } else {
       emit("click");
     }
   }
   //-----------------------------------------------------
   function onRemoveItem(it: TagItem) {
-    // console.log('onRemoveItem', it);
+    console.log("onRemoveItem", it, { editable: props.editable });
     if (props.editable) {
       // 对于 TagItem[] 型的 value
       if (_.isArray(props.value)) {
@@ -171,7 +171,8 @@
         topItemAspectMode="button"
         :topItemMinWidth="null"
         :vars="props.vars"
-        v-bind="props.actions" />
+        v-bind="props.actions"
+        @fire="emit('fire', $event)" />
     </template>
   </div>
 </template>

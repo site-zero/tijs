@@ -7,6 +7,7 @@ import {
   Vars,
 } from "../../../_type";
 import {
+  ActionBarEmitter,
   ActionBarProps,
   LabelAspectProps,
   PlaceholderProps,
@@ -26,7 +27,7 @@ export type TagNameInfo = {
   name: string | string[];
 };
 
-export type TagsEmitter = {
+export type TagsEmitter = ActionBarEmitter & {
   (event: "click"): void;
   // 对于 TagItem[] 型的 value
   (event: "click-tag", payload: TagItem): void;

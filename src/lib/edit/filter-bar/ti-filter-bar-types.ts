@@ -1,4 +1,5 @@
 import {
+  ActionBarEmitter,
   ActionBarProps,
   AppModalProps,
   CommonProps,
@@ -8,9 +9,10 @@ import {
   Vars,
 } from "@site0/tijs";
 
-export type FilterBarEmitter = {
+export type FilterBarEmitter = ActionBarEmitter & {
   (event: "change", newValue: Vars): void;
-  (event: string, payload: any): void;
+  (event: "search", newValue: Vars): void;
+  (event: "reset"): void;
 };
 
 export type FilterBarProps = CommonProps &
