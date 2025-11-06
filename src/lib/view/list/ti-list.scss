@@ -83,7 +83,11 @@
           @include flex-align-nowrap;
           padding: 0 0.5em;
           flex: 1 1 auto;
-          //gap: 1em;
+          gap: 0.5em;
+          code {
+            @include font-fixed;
+            color: var(--ti-color-primary);
+          }
           em {
             font-style: normal;
             flex: 1 1 auto;
