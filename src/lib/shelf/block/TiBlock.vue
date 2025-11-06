@@ -64,12 +64,8 @@
       <!--------ActionBar--------->
       <TiActionBar
         v-if="!_.isEmpty(Block.HeadActions)"
-        v-bind="props.actionBar"
-        :items="Block.HeadActions"
+        v-bind="Block.HeadActions"
         :topItemMinWidth="null"
-        :vars="props.actionVars"
-        :className="props.actionClass"
-        :style="props.actionStyle"
         @fire="emit('fire', $event)" />
     </header>
     <!--Block:Main-->

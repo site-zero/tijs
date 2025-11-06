@@ -1,6 +1,7 @@
-import { BlockProps, useFieldCom } from '../../';
-import { CssGridLayout } from '../../../_type';
-import { CssUtils, I18n } from '../../../core';
+import _ from "lodash";
+import { BlockProps, useFieldCom } from "../../";
+import { CssGridLayout } from "../../../_type";
+import { CssUtils, I18n } from "../../../core";
 
 /*-------------------------------------------------------
 
@@ -49,18 +50,18 @@ export function useBlock(props: BlockProps, _options: BlockOptions) {
   // 计算布局
   //
   let gridStyle = {
-    gridTemplateRows: '1fr',
+    gridTemplateRows: "1fr",
   } as CssGridLayout;
   if (showHeadBar) {
-    gridStyle.gridTemplateRows = 'auto 1fr';
+    gridStyle.gridTemplateRows = "auto 1fr";
   } else {
-    gridStyle.gridTemplateRows = '1fr';
+    gridStyle.gridTemplateRows = "1fr";
   }
 
   const TopClass = CssUtils.mergeClassName(
     props.className,
     props.blockClass,
-    `overflow-${props.overflowMode ?? 'auto'}`
+    `overflow-${props.overflowMode ?? "auto"}`
   );
   const TopStyle = CssUtils.mergeStyles([
     gridStyle,
@@ -78,7 +79,19 @@ export function useBlock(props: BlockProps, _options: BlockOptions) {
   //
   // 标题动作条
   //
-  const HeadActions = props.actions || [];
+  const HeadActions = props.actionBar ?? {};
+  if (props.actions && !_.isEmpty(props.actions)) {
+    HeadActions.items = props.actions;
+  }
+  if (props.actionVars) {
+    HeadActions.vars = HeadActions.vars || props.actionBar;
+  }
+  if (props.actionClass) {
+    HeadActions.className = props.actionClass;
+  }
+  if (props.actionStyle) {
+    HeadActions.style = props.actionStyle;
+  }
 
   //
   // 获取控件`

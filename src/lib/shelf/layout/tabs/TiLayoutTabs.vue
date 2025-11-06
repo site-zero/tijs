@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { computed, ref, watch } from "vue";
+  import { computed, onMounted, ref, watch } from "vue";
   import {
     BlockEvent,
     TiBlock,
@@ -9,9 +9,8 @@
     useKeep,
   } from "../../../";
   import { CssUtils } from "../../../../core";
-  import { COM_TYPES } from "../../../lib-com-types";
   import { TabDisplayItem } from "../layout-types";
-  import { TabsLayoutProps, TabChangeEvent } from "./ti-layout-tabs-types";
+  import { TabChangeEvent, TabsLayoutProps } from "./ti-layout-tabs-types";
   import {
     autoSetCurrentTablKey,
     buildLayoutTabsConfig,
@@ -20,7 +19,6 @@
   //-------------------------------------------------
   import { TiLayoutGrid } from "../grid/ti-layout-grid-index";
   //-------------------------------------------------
-  const COM_TYPE = COM_TYPES.LayoutTabs;
   const debug = false;
   //-------------------------------------------------
   const emit = defineEmits<{
@@ -75,19 +73,19 @@
   watch(
     () => [Keep.value, TabBlocks.value, props.defaultTab],
     () => {
-      //console.log('autoSetCurrentTablKey');
+      //console.log("autoSetCurrentTablKey");
       autoSetCurrentTablKey(
         _current_tab_key,
         TabBlocks,
         Keep,
         props.defaultTab
       );
-      if (!MainTab.value) {
-        if (debug)
-          console.log(
-            `Fail to evel MainTab: [${_current_tab_key.value}] defaultTab=${props.defaultTab}`
-          );
-      }
+      // if (!MainTab.value) {
+      //   if (debug)
+      //     console.log(
+      //       `Fail to evel MainTab: [${_current_tab_key.value}] defaultTab=${props.defaultTab}`
+      //     );
+      // }
     },
     {
       immediate: true,
@@ -120,6 +118,10 @@
     },
     { immediate: true }
   );
+  //-------------------------------------------------
+  onMounted(() => {
+    autoSetCurrentTablKey(_current_tab_key, TabBlocks, Keep, props.defaultTab);
+  });
   //-------------------------------------------------
 </script>
 <template>
