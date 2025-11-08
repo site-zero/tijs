@@ -131,6 +131,17 @@ export type TableSelectEmitInfo = SelectEmitInfo<TableRowID> & {
   column?: TableStrictColumn;
 };
 
+export type TableRowEditablePredicate = (data: Vars, index: number) => boolean;
+
+/**
+ * 判断 TableRow 是否可编辑
+ *
+ * - 函数：根据行数据和索引判断是否可编辑
+ * - 对象：编译为 TiMatch
+ * - 数组：编译为 TiMatch
+ */
+export type TableRowEditable = TableRowEditablePredicate | Vars | Vars[];
+
 export type TableBehaviorsProps = {
   columns: ColumnRefer[];
   /**
@@ -158,6 +169,7 @@ export type TableBehaviorsProps = {
    * 如果设置为 false， 则会将 activedCom 全都取消
    */
   editable?: boolean;
+  rowEditable?: TableRowEditable;
 
   /**
    * 表格列默认宽度，0 表示 `1fr` 均分
@@ -279,7 +291,7 @@ export type TableProps = CommonProps &
   };
 
 export type TableRowProps = CommonProps &
-  Omit<TableBehaviorsProps, "columns"> & {
+  Omit<TableBehaviorsProps, "columns" | "rowEditable"> & {
     /**
      * 显示行首
      */

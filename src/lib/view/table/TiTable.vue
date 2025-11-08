@@ -100,8 +100,13 @@
   } as TableSelection);
   //-------------------------------------------------------
   const _keep = computed(() => useKeepTable(props));
-  let _table = computed(() =>
+  //-------------------------------------------------------
+  const _table = computed(() =>
     useTable(props, selection, _table_column_map, emit)
+  );
+  //-------------------------------------------------------
+  const _row_editable = computed(() =>
+    _table.value.buildRowEditablePredicate()
   );
   //-------------------------------------------------------
   /**
@@ -435,7 +440,7 @@
           :activated="row.id == selection.currentId"
           :checked="_table.selectable.isIDChecked(selection, row.id)"
           :indent="row.indent"
-          :editable="props.editable"
+          :editable="_row_editable(row.rawData, row.index)"
           :activedColUniqKey="getRowActivedColUniqKey(selection, row)"
           :updateRowHeight="updateRowHeight"
           @row-select="_table.OnRowSelect($event)"

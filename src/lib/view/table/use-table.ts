@@ -8,12 +8,13 @@ import {
   TableRowID,
   Vars,
 } from "../../../_type";
-import { EventUtils, useFuse } from "../../../core";
+import { EventUtils, Match, useFuse } from "../../../core";
 import {
   TableEmitter,
   TableEventPayload,
   TableProps,
   TableRowData,
+  TableRowEditablePredicate,
   TableSelectEmitInfo,
   TableSelection,
   TableStrictColumn,
@@ -166,6 +167,21 @@ export function useTable(
     return checked;
   }
   //-----------------------------------------------------
+  // 判断行是否可编辑
+  //-----------------------------------------------------
+  function buildRowEditablePredicate(): TableRowEditablePredicate {
+    if (_.isNil(props.rowEditable)) {
+      return () => props.editable ?? true;
+    }
+    if (_.isFunction(props.rowEditable)) {
+      return props.rowEditable;
+    }
+    const match = Match.parse(props.rowEditable);
+    return (data: Vars, _index: number): boolean => {
+      return match.test(data);
+    };
+  }
+  //-----------------------------------------------------
   // 操作函数
   //-----------------------------------------------------
   function trySelect(newSelection: TableSelection) {
@@ -278,6 +294,8 @@ export function useTable(
 
     getCurrentRow,
     getCheckedRows,
+
+    buildRowEditablePredicate,
 
     checkAll() {
       //console.log('selectAll', selection.ids);
