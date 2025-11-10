@@ -24,6 +24,10 @@ export function useTiCrumbApi(props: CrumbProps, emit: CrumbEmitter) {
       _get_id = (it: Vars) => getter(it);
     }
   }
+  // 默认采用 id|value 作为 id
+  else {
+    _get_id = (it: Vars) => it.id || it.value;
+  }
   //-----------------------------------------------------
   const { toStdItem } = useStdListItem({
     ...props,

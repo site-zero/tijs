@@ -2,6 +2,7 @@
 
 .ti-crumb {
   @include flex-align-nowrap($ai: stretch);
+  gap: 0.5em;
   --item-fontsz: var(--ti-fontsz-s);
   --item-boxpad: var(--ti-box-pad-s);
   --item-radius: var(--ti-measure-r-s);
@@ -11,6 +12,14 @@
   --item-color-hl-bg: var(--ti-color-highlight);
   font-size: var(--item-fontsz);
   line-height: 1.3em;
+  //-----------------------------------------------------
+  > .crumb-part {
+    @include flex-align-nowrap;
+    gap: 0.5em;
+    > .ti-icon {
+      font-size: 1.2em;
+    }
+  }
   //-----------------------------------------------------
   > .crumb-body {
     @include flex-align-nowrap($ai: stretch);

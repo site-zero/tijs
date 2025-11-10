@@ -39,7 +39,7 @@
     <slot name="head">
       <TiTextSnippet
         v-if="props.head"
-        className="crumb-head"
+        className="crumb-part as-head"
         v-bind="props.head" />
     </slot>
     <div class="crumb-body">
@@ -61,7 +61,7 @@
     <slot name="tail">
       <TiTextSnippet
         v-if="props.tail"
-        className="crmb-tail"
+        className="crmb-part as-head"
         v-bind="props.tail" />
     </slot>
   </div>
