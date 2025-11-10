@@ -81,6 +81,7 @@ export type TableCellEventPayload = {
 export type TableRowChanagePayload = {
   colIndex: number;
   rowIndex: number;
+  rowId: TableRowID;
   uniqKey: string;
   name: FieldName;
   changed: Vars | FieldChange[];

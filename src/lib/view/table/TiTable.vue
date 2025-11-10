@@ -283,7 +283,8 @@
     // 尝试通知行改动
     let { colIndex, rowIndex } = changed;
 
-    let oldRowData = _.nth(TableData.value, rowIndex)?.rawData;
+    let oldRow = _.nth(TableData.value, rowIndex);
+    let oldRowData = oldRow?.rawData;
 
     // 更新值，并通知改动
     Change.tidyValueChange(
@@ -293,6 +294,7 @@
         emit("row-change", {
           colIndex,
           rowIndex,
+          rowId: oldRow?.id!,
           uniqKey: field.uniqKey,
           name: field.name,
           changed: rowData,

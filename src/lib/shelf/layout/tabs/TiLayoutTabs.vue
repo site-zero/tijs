@@ -18,14 +18,14 @@
   } from "./use-layout-tabs";
   //-------------------------------------------------
   import { TiLayoutGrid } from "../grid/ti-layout-grid-index";
-  //-------------------------------------------------
-  const debug = false;
+  import _ from "lodash";
   //-------------------------------------------------
   const emit = defineEmits<{
     (eventName: "tab-change", payload: TabChangeEvent): void;
     (event: "block", payload: BlockEvent): void;
     (event: "_sub_block", payload: BlockEvent): void;
   }>();
+
   //-------------------------------------------------
   const props = withDefaults(defineProps<TabsLayoutProps>(), {
     wrapTabs: false,
@@ -34,10 +34,41 @@
     tabsAlign: "center",
     defaultTab: 0,
   });
+  //const debug = "local: GUI-CIVEditor-Layout-Tab" == props.keepTab;
+  const debug = false;
   //-------------------------------------------------
   const Keep = computed(() => useKeep(props.keepTab));
   //-------------------------------------------------
-  const TabBlocks = computed(() => getLayoutItem({ shown: {} }, props));
+  const TabBlocks = computed(() => {
+    if (debug) {
+      console.log("TabBlocks : getLayoutItem");
+    }
+    try {
+      return getLayoutItem({ shown: {} }, props, (item) => {
+        item.propsForBlock = _.omit(
+          item.propsForBlock,
+          "title",
+          "icon",
+          "blockFit",
+          "actions",
+          "actionVars",
+          "actionClass",
+          "actionBar",
+          "actionStyle"
+        );
+
+        _.assign(item.blockClass, {
+          "cover-parent": true,
+          "fit-parent": false,
+        });
+        return item;
+      });
+    } finally {
+      if (debug) {
+        console.log("TabBlocks : computed done");
+      }
+    }
+  });
   //-------------------------------------------------
   const _current_tab_key = ref<string | undefined>();
   //-------------------------------------------------
@@ -50,7 +81,16 @@
   );
   //-------------------------------------------------
   let MainTab = computed(() => {
-    return buildOneTab(TabBlocks.value, _current_tab_key.value);
+    if (debug) {
+      console.log("MainTab : buildOneTab", _current_tab_key.value);
+    }
+    try {
+      return buildOneTab(TabBlocks.value, _current_tab_key.value, debug);
+    } finally {
+      if (debug) {
+        console.log("MainTab : buildOneTab done");
+      }
+    }
   });
   //-------------------------------------------------
   function OnBlockEventHappen(event: BlockEvent) {
@@ -73,7 +113,9 @@
   watch(
     () => [Keep.value, TabBlocks.value, props.defaultTab],
     () => {
-      //console.log("autoSetCurrentTablKey");
+      if (debug) {
+        console.log("autoSetCurrentTablKey");
+      }
       autoSetCurrentTablKey(
         _current_tab_key,
         TabBlocks,

@@ -196,7 +196,11 @@ export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
  * @param props 布局的输入属性
  * @returns 布局项块列表
  */
-export function getLayoutItem(state: LayoutState, props: LayoutProps) {
+export function getLayoutItem(
+  state: LayoutState,
+  props: LayoutProps,
+  iterator?: (item: LayoutItem) => LayoutItem
+) {
   let { blocks = [], schema = {}, itemStyle = {}, itemClass } = props;
   let { shown } = state;
   let list = [] as LayoutItem[];
@@ -233,6 +237,11 @@ export function getLayoutItem(state: LayoutState, props: LayoutProps) {
 
     // 设置布局项的属性
     setLayoutItemConfig(it, schema);
+
+    // 调用迭代器
+    if (iterator) {
+      it = iterator(it);
+    }
 
     // 记入返回列表
     list.push(it);

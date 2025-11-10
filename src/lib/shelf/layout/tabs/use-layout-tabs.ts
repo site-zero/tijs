@@ -1,11 +1,11 @@
-import _ from 'lodash';
-import { KeepFeature, LayoutItem } from '../../../';
+import _ from "lodash";
+import { KeepFeature, LayoutItem } from "../../../";
 
-import { ComputedRef, Ref } from 'vue';
-import { StrOptionItem } from '../../../../_type';
-import { CssUtils } from '../../../../core';
-import { TabsProps } from '../../../action/tabs/ti-tabs-types';
-import { LayoutTabItem, TabsLayoutProps } from './ti-layout-tabs-types';
+import { ComputedRef, Ref } from "vue";
+import { StrOptionItem } from "../../../../_type";
+import { CssUtils } from "../../../../core";
+import { TabsProps } from "../../../action/tabs/ti-tabs-types";
+import { LayoutTabItem, TabsLayoutProps } from "./ti-layout-tabs-types";
 
 export type TabMain = LayoutTabItem & {
   // uniqKey?: string;
@@ -17,39 +17,30 @@ export type TabMain = LayoutTabItem & {
   //tabInfo: LayoutTabItem;
 };
 
-export function buildOneTab(items: LayoutTabItem[], tabKey?: string) {
+export function buildOneTab(
+  items: LayoutTabItem[],
+  tabKey: string | undefined,
+  debug?: boolean
+) {
   if (_.isNil(tabKey)) {
     return;
   }
+  if (debug) console.log("buildOneTab : tabKey=", tabKey);
   for (let item of items) {
+    if (debug) console.log("buildOneTab : item=", item.uniqKey);
     if (item.uniqKey != tabKey) {
       continue;
     }
-    let re = _.cloneDeep(item);
-    if (re.propsForBlock) {
-      re.propsForBlock = _.omit(
-        re.propsForBlock,
-        'title',
-        'icon',
-        'blockFit',
-        'actions',
-        'actionVars',
-        'actionClass',
-        'actionBar',
-        'actionStyle'
-      );
-    }
-    re.blockClass = CssUtils.mergeClassName(item.blockClass, {
-      'cover-parent': true,
-    });
-    return re;
+    if (debug) console.log("buildOneTab : return ", item);
+    return item;
   }
+  if (debug) console.log("buildOneTab : return undefined");
 }
 
 export function buildLayoutTabsConfig(
   props: TabsLayoutProps,
   blocks: LayoutTabItem[]
-): Omit<TabsProps, 'value'> {
+): Omit<TabsProps, "value"> {
   let options = [] as StrOptionItem[];
   for (let block of blocks) {
     options.push({

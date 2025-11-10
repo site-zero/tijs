@@ -1,16 +1,16 @@
 <script lang="ts" setup>
-  import _ from 'lodash';
-  import { Ref, computed, onMounted, ref } from 'vue';
-  import { CssUtils } from '../../../core';
-  import TableCell from './TableCell.vue';
+  import _ from "lodash";
+  import { Ref, computed, onMounted, ref } from "vue";
+  import { CssUtils } from "../../../core";
+  import TableCell from "./TableCell.vue";
   import {
     TableRowEmitter,
     TableRowEventName,
     TableRowProps,
-  } from './ti-table-types';
+  } from "./ti-table-types";
   //-------------------------------------------------------
   defineOptions({
-    name: 'TableRow',
+    name: "TableRow",
     inheritAttrs: false,
   });
 
@@ -54,13 +54,13 @@
     let odd = props.row.index % 2 == 1;
     let col = uniqKey ? props.columnMap.get(uniqKey) : undefined;
     return CssUtils.mergeClassName({
-      'is-actived': isActived,
-      'is-checked': props.checked,
-      'has-actived-com': col?.activatedComType ? true : false,
-      'can-hover': props.canHover,
-      [`is-${props.row.type ?? ''}`]: props.row.type ? true : false,
-      'is-odd': odd,
-      'is-even': !odd,
+      "is-actived": isActived,
+      "is-checked": props.checked,
+      "has-actived-com": col?.activatedComType ? true : false,
+      "can-hover": props.canHover,
+      [`is-${props.row.type ?? ""}`]: props.row.type ? true : false,
+      "is-odd": odd,
+      "is-even": !odd,
     });
   }
   //-------------------------------------------------------
@@ -115,23 +115,15 @@
     @dblclick="onRow('row-open', $event)">
     <!--选择框-->
     <template v-if="props.showChecker">
-      <span
-        class="as-checker"
-        @click.stop="onRow('row-check', $event)">
-        <i
-          v-if="props.checked"
-          class="zmdi zmdi-check-square"></i>
-        <i
-          v-else
-          class="zmdi zmdi-square-o"></i>
+      <span class="as-checker" @click.stop="onRow('row-check', $event)">
+        <i v-if="props.checked" class="zmdi zmdi-check-square"></i>
+        <i v-else class="zmdi zmdi-square-o"></i>
       </span>
     </template>
     <!--行号-->
-    <span
-      v-if="props.showRowIndex"
-      class="as-row-index"
-      >{{ props.row.index + 1 }}</span
-    >
+    <span v-if="props.showRowIndex" class="as-row-index">{{
+      props.row.index + 1
+    }}</span>
     <!--Activated 指示器-->
     <span
       v-if="props.activated"
