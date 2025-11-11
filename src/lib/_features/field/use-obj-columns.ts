@@ -322,7 +322,7 @@ export function colID(
   };
 }
 
-export function colLable(
+export function colLabel(
   name: FieldName,
   titleAndTip: string | string[],
   comConf?: LabelProps

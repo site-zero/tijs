@@ -371,7 +371,7 @@ export function fldID(
   };
 }
 
-export function fldLable(
+export function fldLabel(
   name: FieldName,
   titleAndTip: string | string[],
   comConf?: LabelProps
