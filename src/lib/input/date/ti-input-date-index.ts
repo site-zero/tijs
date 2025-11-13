@@ -16,7 +16,7 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.InputDate;
 
 const TiInputDateInfo: TiComInfo = {
-  icon: 'fas-calendar-days',
+  icon: 'zmdi-calendar-check',
   race: TiComRace.INPUT,
   name: COM_TYPE,
   text: 'i18n:ti-input-date-com-name',

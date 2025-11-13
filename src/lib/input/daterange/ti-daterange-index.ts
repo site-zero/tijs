@@ -15,7 +15,7 @@ const COM_TYPE = COM_TYPES.InputDateRange;
 
 const TiInputDateRangeInfo: TiComInfo = {
   tags: ['scaffold'],
-  icon: 'fas-calendar-week',
+  icon: 'zmdi-calendar-note',
   race: TiComRace.INPUT,
   name: COM_TYPE,
   text: 'i18n:ti-input-date-range-com-name',

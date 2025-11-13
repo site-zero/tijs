@@ -16,7 +16,7 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.InputDatetime;
 
 const TiInputDatetimeInfo: TiComInfo = {
-  icon: 'fas-calendar-day',
+  icon: 'zmdi-alarm-check',
   race: TiComRace.INPUT,
   name: COM_TYPE,
   text: 'i18n:ti-input-datetime-com-name',

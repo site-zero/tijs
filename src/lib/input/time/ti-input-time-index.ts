@@ -15,7 +15,7 @@ const COM_TYPE = COM_TYPES.InputTime;
 
 const TiInputTimeInfo: TiComInfo = {
   tags: ['scaffold'],
-  icon: 'far-clock',
+  icon: 'zmdi-time',
   race: TiComRace.INPUT,
   name: COM_TYPE,
   text: 'i18n:ti-input-time-com-name',
