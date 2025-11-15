@@ -5,13 +5,14 @@ import TiCalendar from "./TiCalendar.vue";
 const COM_TYPE = "TiCalendar";
 
 const en_us = {
-  'com-name': 'TiCalendar',
+  "com-name": "TiCalendar",
 };
 const zh_cn = {
-  'com-name': '日历',
+  "com-name": "日历",
 };
 
 const TiCalendarInfo: TiComInfo = {
+  tags: ["scaffold"],
   icon: "fas-calendar-days",
   race: TiComRace.SHELF,
   name: COM_TYPE,

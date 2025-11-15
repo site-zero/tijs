@@ -12,6 +12,7 @@ const zh_cn = {
 };
 
 const TiWeeksInfo: TiComInfo = {
+  tags: ["scaffold"],
   icon: "fas-calendar-week",
   race: TiComRace.SHELF,
   name: COM_TYPE,

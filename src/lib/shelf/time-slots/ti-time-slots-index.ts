@@ -5,13 +5,14 @@ import TiTimeSlots from "./TiTimeSlots.vue";
 const COM_TYPE = "TiTimeSlots";
 
 const en_us = {
-  'com-name': 'TiTimeSlots',
+  "com-name": "TiTimeSlots",
 };
 const zh_cn = {
-  'com-name': '日时间槽',
+  "com-name": "日时间槽",
 };
 
 const TiTimeSlotsInfo: TiComInfo = {
+  tags: ["scaffold"],
   icon: "zmdi-time-interval",
   race: TiComRace.SHELF,
   name: COM_TYPE,

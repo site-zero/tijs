@@ -13,6 +13,7 @@ import { TiInputGroupInfo } from "./group/ti-input-group-index";
 import { TiInputIconInfo } from "./icon/ti-input-icon-index";
 import { TiInputLatLngInfo } from "./latlng/ti-input-latlng-index";
 import { TiMultiDroplistInfo } from "./multi-droplist/ti-multi-droplist-index";
+import { TiInputMultiLinesInfo } from "./multi-lines/ti-input-multi-lines-index";
 import { TiInputNumUnitInfo } from "./num-unit/ti-input-num-unit-index";
 import { TiInputNumInfo } from "./num/ti-input-num-index";
 import { TiInputPickerInfo } from "./picker/ti-input-picker-index";
@@ -50,6 +51,7 @@ export default {
   TiSwitcher: TiSwitcherInfo,
   TiToggle: TiToggleInfo,
   TiTransfer: TiTransferInfo,
+  TiInputMultiLines: TiInputMultiLinesInfo,
 } as TiComSet;
 
 export * from "./box2/ti-input-box-index";
@@ -66,6 +68,7 @@ export * from "./group/ti-input-group-index";
 export * from "./icon/ti-input-icon-index";
 export * from "./latlng/ti-input-latlng-index";
 export * from "./multi-droplist/ti-multi-droplist-index";
+export * from "./multi-lines/ti-input-multi-lines-index";
 export * from "./num-unit/ti-input-num-unit-index";
 export * from "./num/ti-input-num-index";
 export * from "./picker/ti-input-picker-index";
@@ -76,4 +79,3 @@ export * from "./text/ti-input-text-index";
 export * from "./time/ti-input-time-index";
 export * from "./toggle/ti-toggle-index";
 export * from "./transfer/ti-transfer-index";
-
