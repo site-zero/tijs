@@ -207,12 +207,13 @@ export type TipShowTime = "focus" | "auto";
  * - `T`   : `<em>${text}</em>`
  * - `VT`  : `<code>${value}</code><em>${text}</em>`
  * - `TV`  : `<em>${text}</em><code>${value}</code>`
- * - `TP`  : `<em>${text}</em><span>${tip}</span>`
+ * - `TP`  : `<em>${text}</em><abbr>${tip}</abbr>`
  * - `PT`  : `<code>${tip}</code><em>${text}</em>`
- * - `VTP` : `<code>${value}</code><em>${text}</em><span>${tip}</span>`
+ * - `VTP` : `<code>${value}</code><em>${text}</em><abbr>${tip}</abbr>`
+ * - `VpT` : `<code>${value}(${tip})</code><em>${text}</em>`
  *
  * 在没有声明  tipList.textFormat 的前提下，它可以为其快速设置格式化方式
  */
-export type TipOptionFormat = "T" | "VT" | "TV" | "VTP" | "TP" | "PT";
+export type TipOptionFormat = "T" | "VT" | "TV" | "VTP" | "TP" | "PT" | "VpT";
 //--------------------------------------------------
 export type InputBoxApi = ReturnType<typeof useInputBox2>;

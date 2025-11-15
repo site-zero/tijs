@@ -25,7 +25,7 @@
     getNumber: 'number',
     getUnit: 'unit',
     unitSelectOnly: true,
-    unitWidth: '3em',
+    unitWidth: '4em',
     valueInputAlign: 'right',
   });
   //-----------------------------------------------------

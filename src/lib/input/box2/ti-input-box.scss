@@ -144,6 +144,8 @@
       overflow: auto;
       .ti-list {
         .list-item > .list-part.as-text {
+          @include flex-align-nowrap;
+          gap: 0.5em;
           em {
             font-style: normal;
           }
@@ -160,13 +162,9 @@
               min-width: 4em;
             }
           }
-          code + em,
-          code + abbr {
-            margin-left: 0.5em;
-          }
-          em + code,
-          em + abbr {
-            margin-left: 0.5em;
+          code + code {
+            color: var(--ti-color-secondary);
+            font-size: 0.8em;
           }
         }
       }

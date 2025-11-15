@@ -9,6 +9,7 @@ import {
   InputBoxProps,
   InputDatetimeProps,
   InputNumProps,
+  InputNumUnitProps,
   LabelProps,
   Str,
   ToggleProps,
@@ -541,6 +542,22 @@ export function fldInputF6(
       } as InputNumProps,
       comConf
     ),
+  };
+}
+
+export function fldInputNumUnit(
+  name: [string, string],
+  titleAndTip: string | string[],
+  comConf?: InputNumUnitProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title: title || undefined,
+    tip,
+    type: "Object",
+    comType: "TiInputNumUnit",
+    comConf: _.assign({} as InputNumUnitProps, comConf),
   };
 }
 

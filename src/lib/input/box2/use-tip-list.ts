@@ -1,8 +1,8 @@
-import _ from 'lodash';
-import { ListProps } from '../../view/list/ti-list-types';
-import { computed, Ref } from 'vue';
-import { Vars } from '../../../_type';
-import { InputBoxProps } from './ti-input-box-types';
+import _ from "lodash";
+import { ListProps } from "../../view/list/ti-list-types";
+import { computed, Ref } from "vue";
+import { AnyOptionItem, Vars } from "../../../_type";
+import { InputBoxProps } from "./ti-input-box-types";
 
 export type TipListSetup = {
   _options_data: Ref<Vars[] | undefined>;
@@ -19,7 +19,7 @@ export function useTipList(props: InputBoxProps) {
         canSelect: true,
         canHover: true,
         allowUserSelect: false,
-        borderStyle: 'solid',
+        borderStyle: "solid",
       } as ListProps,
       props.tipList
     );
@@ -44,6 +44,13 @@ export function useTipList(props: InputBoxProps) {
         TP: `<em>\${text}</em><abbr>\${tip}</abbr>`,
         PT: `<code>\${tip}</code><em>\${text}</em>`,
         VTP: `<code>\${value}:</code><em>\${text}</em><abbr>\${tip}</abbr>`,
+        VpT: (it: AnyOptionItem): string => {
+          let { value, text, tip } = it;
+          if (tip) {
+            return `<code>${value}:</code><code>${tip}</code><em>${text}</em>`;
+          }
+          return `<code>${value}:</code><em>${text}</em>`;
+        },
       }[props.tipFormat];
     }
 

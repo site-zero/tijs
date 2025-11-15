@@ -1,9 +1,9 @@
-import _ from 'lodash';
-import { computed, Ref } from 'vue';
-import { AnyOptionItem, isAnyOptionItem, Vars } from '../../../_type';
-import { Match, Num, TiDict, Util } from '../../../core';
-import { ItemLookupProps, useItemLookup } from './use-item-lookup';
-import { ValueHintCooking } from './use-value-hint-cooking';
+import _ from "lodash";
+import { computed, Ref } from "vue";
+import { AnyOptionItem, isAnyOptionItem, Vars } from "../../../_type";
+import { Match, Num, TiDict, Util } from "../../../core";
+import { ItemLookupProps, useItemLookup } from "./use-item-lookup";
+import { ValueHintCooking } from "./use-value-hint-cooking";
 //--------------------------------------------------
 export type ValueOptions = ReturnType<typeof useValueOptions>;
 //--------------------------------------------------
@@ -114,7 +114,7 @@ export function useValueOptions(
   });
   //------------------------------------------------
   let lastAbort: AbortController | null = null;
-  const ABORT_REASON = 'abort-value-options-reload';
+  const ABORT_REASON = "abort-value-options-reload";
   //------------------------------------------------
   function abortOptonsLoading() {
     if (lastAbort) {
@@ -136,7 +136,7 @@ export function useValueOptions(
       if (hint || props.forceCookHint) {
         // 预处理搜索条件
         if (cookHint) {
-          hint = cookHint(hint ?? '');
+          hint = cookHint(hint ?? "");
         }
         re = await dict.queryData(hint, lastAbort?.signal);
       }
@@ -177,17 +177,14 @@ export function useValueOptions(
   }
   //------------------------------------------------
   function getOptionItemIndex(value: any): number {
-    if (
-      _.isNil(value) ||
-      !_options_data.value ||
-      _.isEmpty(_options_data.value)
-    ) {
+    const list = OptionsData.value ?? [];
+    if (_.isNil(value) || !list || _.isEmpty(list)) {
       return -1;
     }
     // 逐个寻找选项对象
-    let N = _options_data.value.length;
+    let N = list.length;
     for (let i = 0; i < N; i++) {
-      let it = _options_data.value[i];
+      let it = list[i];
       let it_val: any;
       if (isAnyOptionItem(it)) {
         it_val = it.value;
@@ -213,22 +210,19 @@ export function useValueOptions(
     index: number,
     offset: number = 0
   ): AnyOptionItem | undefined {
+    const list = OptionsData.value ?? [];
     // 防空
-    if (
-      index < 0 ||
-      !_options_data.value ||
-      index >= _options_data.value.length
-    ) {
+    if (index < 0 || !list || index >= list.length) {
       return undefined;
     }
 
     // 获取对象
-    let N = _options_data.value.length;
+    let N = list.length;
     let I = index;
     if (offset != 0) {
       I = Num.scrollIndex(index + offset, N);
     }
-    let it = _options_data.value[I];
+    let it = list[I];
     return toOptionItem(it);
   }
   //------------------------------------------------
