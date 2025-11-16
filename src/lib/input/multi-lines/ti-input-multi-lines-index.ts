@@ -38,6 +38,8 @@ const TiInputMultiLinesInfo: TiComInfo = {
       text: "i18n:simple",
       comConf: {
         value: "Rose,Tulip,Sunflower",
+        emptyAsNull: false,
+        autoFilterNilItem: true,
       } as TiInputMultiLinesProps,
     },
   ],

@@ -59,6 +59,13 @@ export type InputBoxProps = CommonProps &
      */
     value?: any;
 
+    /**
+     * 如果值为空字符串，那么默认的会给 null
+     * 但是有时候，我们还是想去分出空串与 null
+     * 打开这个选项即可
+     */
+    keepEmptyValue?: boolean;
+
     autoI18n?: boolean;
 
     emitType?: BoxEmitType;

@@ -12,7 +12,7 @@
   const props = withDefaults(defineProps<TiInputMultiLinesProps>(), {});
   const _api = useTiInputMultiLinesApi(props, emit);
   //-----------------------------------------------------
-  const FormatedValue = computed(() => _api.formatValue());
+  const FormatedValue = computed(() => _api.splitValue());
   //-----------------------------------------------------
   const InputConfig = computed(() => {
     return _.assign(
@@ -24,8 +24,13 @@
 </script>
 <template>
   <div class="ti-input-multi-lines">
-    <div class="input-line" v-for="val in FormatedValue">
-      <TiInput v-bind="InputConfig" :value="val" />
+    <div class="input-line" v-for="(val, index) in FormatedValue">
+      <TiInput
+        v-bind="InputConfig"
+        :value="val"
+        :keepEmptyValue="true"
+        prefix-icon-for="clear"
+        @change="_api.onLineChange(FormatedValue, index, $event)" />
     </div>
   </div>
 </template>

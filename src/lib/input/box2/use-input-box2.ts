@@ -537,15 +537,22 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     if (!_.isEqual(val, props.value)) {
       // 空值
       if (_.isNil(val) || "" === val) {
-        if (props.onValueChange) props.onValueChange(val);
-        emit("change", null);
+        if (!props.keepEmptyValue) {
+          val = null;
+        }
+        if (props.onValueChange) {
+          props.onValueChange(val);
+        }
+        emit("change", val);
       }
       // 原始对象
       else if ("raw-item" == emitType && _dict) {
         let hint = cookHint(val);
         _dict.getStdItem(hint).then((it) => {
           let item = it?.toOptionItem();
-          if (props.onValueChange) props.onValueChange(item);
+          if (props.onValueChange) {
+            props.onValueChange(val);
+          }
           emit("change", item ?? null);
         });
       }
@@ -557,12 +564,16 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
           icon: _box_state.box_icon ?? undefined,
           tip: _box_state.box_tip ?? undefined,
         };
-        if (props.onValueChange) props.onValueChange(item);
+        if (props.onValueChange) {
+          props.onValueChange(val);
+        }
         emit("change", item);
       }
       // 采用值
       else {
-        if (props.onValueChange) props.onValueChange(val);
+        if (props.onValueChange) {
+          props.onValueChange(val);
+        }
         emit("change", val);
       }
     }
