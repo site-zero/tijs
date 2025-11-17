@@ -1,4 +1,4 @@
-import { SelectableProps, SelectEmitInfo } from '../../';
+import { SelectableProps, SelectEmitInfo } from "../../";
 import {
   CommonProps,
   ComRef,
@@ -7,7 +7,9 @@ import {
   TableRowID,
   TiRawCom,
   Vars,
-} from '../../../_type';
+} from "../../../_type";
+
+export type WallMode = "list" | "wall";
 
 export type WallProps = CommonProps &
   ComRef &
@@ -31,6 +33,11 @@ export type WallProps = CommonProps &
      * 是否支持多选
      */
     multi?: boolean;
+
+    /**
+     * 显示模式
+     */
+    mode?: WallMode;
 
     /**
      * 墙贴的顶级样式
@@ -72,6 +79,6 @@ export type WallEvent = {
 
 export type WallSelectEmitInfo = SelectEmitInfo<TableRowID>;
 export type WallEmitter = {
-  (event: 'select', payload: WallSelectEmitInfo): void;
-  (event: 'open', payload: WallItem): void;
+  (event: "select", payload: WallSelectEmitInfo): void;
+  (event: "open", payload: WallItem): void;
 };

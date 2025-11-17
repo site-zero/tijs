@@ -3,6 +3,7 @@ import {
   TiInputMultiLinesEmitter,
   TiInputMultiLinesProps,
 } from "./ti-input-multi-lines-types";
+import { computed } from "vue";
 
 export type TiInputMultiLinesApi = ReturnType<typeof useTiInputMultiLinesApi>;
 
@@ -10,6 +11,16 @@ export function useTiInputMultiLinesApi(
   props: TiInputMultiLinesProps,
   emit: TiInputMultiLinesEmitter
 ) {
+  //-----------------------------------------------------
+  // 计算属性
+  //-----------------------------------------------------
+  const LineItems = computed(() => {
+    let vals = splitValue();
+    return vals.map((val, index) => ({
+      value: val,
+      index: index,
+    }));
+  });
   //-----------------------------------------------------
   // 处理数据
   //-----------------------------------------------------
@@ -72,7 +83,8 @@ export function useTiInputMultiLinesApi(
   //-----------------------------------------------------
   // 响应操作
   //-----------------------------------------------------
-  function onLineChange(vals: string[], index: number, val: string | null) {
+  function onLineChange(index: number, val: string | null) {
+    let vals = LineItems.value.map((item) => item.value);
     console.log(index, val);
     let list = [...vals];
     // null 表示移除
@@ -91,8 +103,8 @@ export function useTiInputMultiLinesApi(
   // 返回接口
   //-----------------------------------------------------
   return {
-    // 处理数据
-    splitValue,
+    // 计算属性
+    LineItems,
     // 处理值
     joinValue,
     tryNotify,

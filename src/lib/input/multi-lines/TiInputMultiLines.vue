@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { InputBoxProps, TiInput } from "@site0/tijs";
+  import { InputBoxProps, TiWall } from "@site0/tijs";
   import _ from "lodash";
   import { computed } from "vue";
   import {
@@ -12,26 +12,34 @@
   const props = withDefaults(defineProps<TiInputMultiLinesProps>(), {});
   const _api = useTiInputMultiLinesApi(props, emit);
   //-----------------------------------------------------
-  const FormatedValue = computed(() => _api.splitValue());
-  //-----------------------------------------------------
   const InputConfig = computed(() => {
     return _.assign(
       { readonly: props.readonly, boxFontSize: "s" } as InputBoxProps,
-      props.inputConfig
+      props.inputConfig,
+      {
+        value: "=item.value",
+        keepEmptyValue: true,
+        suffixIconFor: "clear",
+      } as InputBoxProps
     );
   });
   //-----------------------------------------------------
 </script>
 <template>
   <div class="ti-input-multi-lines">
-    <div class="input-line" v-for="(val, index) in FormatedValue">
+    <!-- <div class="input-line" v-for="(item, index) in _api.LineItems.value">
       <TiInput
         v-bind="InputConfig"
-        :value="val"
+        :value="item.value"
         :keepEmptyValue="true"
-        prefix-icon-for="clear"
-        @change="_api.onLineChange(FormatedValue, index, $event)" />
-    </div>
+        suffix-icon-for="clear"
+        @change="_api.onLineChange(index, $event)" />
+    </div> -->
+    <TiWall
+      mode="list"
+      :data="_api.LineItems.value"
+      comType="TiInput"
+      :comConf="InputConfig" />
   </div>
 </template>
 <style lang="scss">

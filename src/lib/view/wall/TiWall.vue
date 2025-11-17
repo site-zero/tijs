@@ -6,22 +6,22 @@
     reactive,
     useTemplateRef,
     watch,
-  } from 'vue';
-  import { SelectableState, useGridLayout, useViewport } from '../../';
-  import { TableRowID } from '../../../';
-  import { CssUtils } from '../../../core';
-  import { WallEmitter, WallProps } from './ti-wall-types';
-  import { useWall } from './use-wall';
+  } from "vue";
+  import { SelectableState, useGridLayout, useViewport } from "../../";
+  import { TableRowID } from "../../../";
+  import { CssUtils } from "../../../core";
+  import { WallEmitter, WallProps } from "./ti-wall-types";
+  import { useWall } from "./use-wall";
   //-------------------------------------------------
   const emit = defineEmits<WallEmitter>();
   //-----------------------------------------------------
   const props = withDefaults(defineProps<WallProps>(), {
-    dftIdPrefix: 'item',
-    layout: () => ({ gap: '1em' }),
-    conStyle: () => ({ padding: '2em' }),
+    dftIdPrefix: "item",
+    layout: () => ({ gap: "1em" }),
+    conStyle: () => ({ padding: "2em" }),
   });
   //-------------------------------------------------
-  const $el = useTemplateRef<HTMLElement>('$el');
+  const $el = useTemplateRef<HTMLElement>("$el");
   const _viewport = useViewport({
     el: $el,
     onMounted,
@@ -43,8 +43,8 @@
   //-----------------------------------------------------
   const TopClass = computed(() => {
     return CssUtils.mergeClassName(props.className, {
-      'can-select': props.canSelect,
-      'can-check': props.showChecker,
+      "can-select": props.canSelect,
+      "can-check": props.showChecker,
     });
   });
   //-----------------------------------------------------
@@ -81,6 +81,7 @@
     class="ti-wall"
     :class="TopClass"
     :style="TopStyle"
+    :data-mode="props.mode || 'wall'"
     @click.left="_wall.resetSelection(selection, props.data)">
     <div
       class="wall-con"
@@ -100,14 +101,12 @@
           :style="wit.conStyle"
           @click.left.stop="_wall.OnItemSelect({ event: $event, item: wit })"
           @dblclick="emit('open', wit)">
-          <component
-            :is="wit.comType"
-            v-bind="wit.comConf" />
+          <component :is="wit.comType" v-bind="wit.comConf" />
         </div>
       </div>
     </div>
   </div>
 </template>
 <style lang="scss" scoped>
-  @use './ti-wall.scss';
+  @use "./ti-wall.scss";
 </style>
