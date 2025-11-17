@@ -1,4 +1,4 @@
-@use '@site0/tijs/sass/_all.scss' as *;
+@use "@site0/tijs/sass/_all.scss" as *;
 
 .ti-grid-fiels-item.part-group {
   > .as-group-title {
@@ -33,6 +33,9 @@
       padding: 0 0.5em;
       background-color: var(--ti-color-card);
       font-weight: bold;
+    }
+    > .as-group-body {
+      margin-top: 0.5em;
     }
   }
   //------------------------------------------
@@ -75,11 +78,11 @@
       font-size: var(--ti-fontsz-#{$sz});
     }
   }
-  @include __aspect_fontsz('t');
-  @include __aspect_fontsz('s');
-  @include __aspect_fontsz('m');
-  @include __aspect_fontsz('b');
-  @include __aspect_fontsz('h');
+  @include __aspect_fontsz("t");
+  @include __aspect_fontsz("s");
+  @include __aspect_fontsz("m");
+  @include __aspect_fontsz("b");
+  @include __aspect_fontsz("h");
 
   //-------------------------------------------------------------
   @mixin __aspect_body_gap($sz) {
@@ -95,10 +98,10 @@
       }
     }
   }
-  @include __aspect_body_gap('t');
-  @include __aspect_body_gap('s');
-  @include __aspect_body_gap('m');
-  @include __aspect_body_gap('b');
-  @include __aspect_body_gap('h');
+  @include __aspect_body_gap("t");
+  @include __aspect_body_gap("s");
+  @include __aspect_body_gap("m");
+  @include __aspect_body_gap("b");
+  @include __aspect_body_gap("h");
   //------------------------------------------
 }
