@@ -5,9 +5,11 @@ import {
   GridLayoutProps,
   LogicType,
   TableRowID,
+  TextFragment,
   TiRawCom,
   Vars,
 } from "../../../_type";
+import { WallApi } from "./use-wall";
 
 export type WallMode = "list" | "wall";
 
@@ -40,10 +42,21 @@ export type WallProps = CommonProps &
     mode?: WallMode;
 
     /**
+     * 扩展插槽
+     */
+    head?: TextFragment;
+    tail?: TextFragment;
+
+    /**
      * 墙贴的顶级样式
      */
     style?: Vars;
     conStyle?: Vars;
+
+    /**
+     * 处理每个定制项目的事件
+     */
+    itemEventHandlers?: WallItemEventHandlers;
 
     /**
      * 每个项目的样式
@@ -56,6 +69,17 @@ export type WallProps = CommonProps &
     getItemConClass?: (item: Vars, index: number) => Vars;
     getItemLogicType?: (item: Vars, index: number) => LogicType | undefined;
   };
+
+export type WallItemEventHandlers = Record<
+  string,
+  (ctx: WallItemEventContext) => Promise<void>
+>;
+
+export type WallItemEventContext = {
+  wall: WallApi;
+  item: WallItem;
+  payload: any;
+};
 
 export type WallItem = {
   index: number;
@@ -72,10 +96,10 @@ export type WallItem = {
   comConf: Vars;
 };
 
-export type WallEvent = {
-  event: Event;
-  item: WallItem;
-};
+// export type WallEvent = {
+//   event: Event;
+//   item: WallItem;
+// };
 
 export type WallSelectEmitInfo = SelectEmitInfo<TableRowID>;
 export type WallEmitter = {

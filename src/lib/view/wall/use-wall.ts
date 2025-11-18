@@ -1,34 +1,32 @@
-import _ from 'lodash';
-import { computed } from 'vue';
+import _ from "lodash";
+import { computed } from "vue";
 import {
   SelectableState,
   TableRowID,
   TiRoadblock,
   useSelectable,
   Vars,
-} from '../../..';
-import { CssUtils, EventUtils, tiGetComponent, Util } from '../../../core';
-import {
-  WallEmitter,
-  WallEvent,
-  WallItem,
-  WallProps,
-  WallSelectEmitInfo,
-} from './ti-wall-types';
+} from "../../..";
+import { CssUtils, EventUtils, tiGetComponent, Util } from "../../../core";
+import { WallEmitter, WallItem, WallProps } from "./ti-wall-types";
 
-export type WallSelectApi = ReturnType<typeof useWall>;
+export type WallApi = ReturnType<typeof useWall>;
 
 export function useWall(
   props: WallProps,
   selection: SelectableState<TableRowID>,
   emit: WallEmitter
 ) {
+  console.log(
+    "useWall:",
+    [...selection.checkedIds.keys()].join(",") || "<empty>"
+  );
   const selectable = useSelectable<TableRowID>(props, {
     getItem: (id: TableRowID) => getWallItemById(id),
   });
   //-----------------------------------------------------
   function getWallItemClass(item: WallItem) {
-    let id = item.id;
+    //let id = item.id;
     let isCurrent = selectable.isDataActived(
       selection,
       item.index,
@@ -40,54 +38,107 @@ export function useWall(
       item.rawData
     );
     return CssUtils.mergeClassName(item.className, {
-      'is-current': isCurrent,
-      'is-checked': isChecked,
+      "is-current": isCurrent,
+      "is-checked": isChecked,
     });
   }
   //-----------------------------------------------------
-  function OnItemSelect(itemEvent: WallEvent) {
+  function OnItemSelect(item: WallItem, event: Event) {
+    console.log("itemSelect");
     // 防守
     if (!props.canSelect) {
       return;
     }
-    let oldCurrentId = _.cloneDeep(selection.currentId);
-    let oldCheckedIds = _.cloneDeep(selection.checkedIds);
-    let se = EventUtils.getKeyboardStatus(itemEvent.event);
-    if (props.multi) {
-      selectable.select(selection, itemEvent.item.id, se);
-    } else {
-      selectable.selectId(selection, itemEvent.item.id);
-    }
-
-    let info = selectable.getSelectionEmitInfo(
+    selectable.doAndEmit(
       selection,
-      props.data || [],
-      oldCheckedIds,
-      oldCurrentId
-    ) as WallSelectEmitInfo;
-    emit('select', info);
+      props.data,
+      () => {
+        let se = EventUtils.getKeyboardStatus(event);
+        if (props.multi) {
+          selectable.select(selection, item.id, se);
+        } else {
+          selectable.selectId(selection, item.id);
+        }
+      },
+      emit
+    );
   }
   //-----------------------------------------------------
-  function OnItemCheck(itemEvent: WallEvent) {
+  function OnItemCheck(item: WallItem, _event: Event) {
     // 防守
     if (!props.showChecker) {
       return;
     }
-    let oldCurrentId = _.cloneDeep(selection.currentId);
-    let oldCheckedIds = _.cloneDeep(selection.checkedIds);
-    if (props.multi) {
-      selectable.toggleId(selection, itemEvent.item.id);
-    } else {
-      selectable.selectId(selection, itemEvent.item.id);
-    }
-
-    let info = selectable.getSelectionEmitInfo(
+    selectable.doAndEmit(
       selection,
-      props.data || [],
-      oldCheckedIds,
-      oldCurrentId
-    ) as WallSelectEmitInfo;
-    emit('select', info);
+      props.data,
+      () => {
+        if (props.multi) {
+          selectable.toggleId(selection, item.id);
+        } else {
+          selectable.selectId(selection, item.id);
+        }
+      },
+      emit
+    );
+  }
+  //-----------------------------------------------------
+  function notifySelection() {
+    selectable.doAndEmit(selection, props.data, () => {}, emit);
+  }
+  //-----------------------------------------------------
+  function selectItemByIndex(index: number, quiet?: boolean) {
+    let item = getWallItemByIndex(index);
+    if (item) {
+      selectItemById(item.id);
+    }
+  }
+  //-----------------------------------------------------
+  function selectItemById(id: TableRowID, quiet?: boolean) {
+    if (!_.isNil(id)) {
+      // 静默模式
+      if (quiet) {
+        selectable.selectId(selection, id);
+      }
+      // 默认的修改了，也要通知
+      else {
+        selectable.doAndEmit(
+          selection,
+          props.data,
+          () => {
+            selectable.selectId(selection, id);
+          },
+          emit
+        );
+      }
+    }
+  }
+  //-----------------------------------------------------
+  function toggleByIndex(index: number, quiet?: boolean) {
+    let item = getWallItemByIndex(index);
+    if (item) {
+      toggleById(item.id);
+    }
+  }
+  //-----------------------------------------------------
+  function toggleById(id: TableRowID, quiet?: boolean) {
+    if (!_.isNil(id)) {
+      // 静默模式
+      if (quiet) {
+        selectable.toggleId(selection, id);
+      }
+      // 默认的修改了，也要通知
+      else {
+        selectable.doAndEmit(
+          selection,
+          props.data,
+          () => {
+            selectable.toggleId(selection, id);
+          },
+          emit
+        );
+      }
+    }
   }
   //-----------------------------------------------------
   let {
@@ -143,7 +194,7 @@ export function useWall(
       // 处理控件
       let comType = Util.explainObj(
         itVars,
-        props.comType ?? 'TiThumb'
+        props.comType ?? "TiThumb"
       ) as string;
       let comConf = Util.explainObj(itVars, props.comConf ?? {}) as Vars;
 
@@ -190,5 +241,11 @@ export function useWall(
     OnItemSelect,
     OnItemCheck,
     updateSelection: selectable.updateSelection,
+    // 给调用者的 api
+    selectItemById,
+    selectItemByIndex,
+    toggleById,
+    toggleByIndex,
+    notifySelection,
   };
 }

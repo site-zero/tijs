@@ -228,7 +228,7 @@ export function moveCheckedById<T>(
   ids: TableRowID[],
   dir: MoveDirection,
   getId?: (it: T) => TableRowID
-) {
+): T[] {
   if (!getId) {
     getId = (it: T) => {
       if (_.isString(it) || _.isNumber(it)) {

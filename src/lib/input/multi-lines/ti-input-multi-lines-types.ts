@@ -1,12 +1,12 @@
-import { CommonProps, InputBoxProps } from "@site0/tijs";
+import { ActionBarProps, CommonProps, InputBoxProps } from "@site0/tijs";
 
 export type InputMultiLinesValue = string | string[];
 
-export type TiInputMultiLinesEmitter = {
+export type InputMultiLinesEmitter = {
   (event: "change", payload: InputMultiLinesValue | null): void;
 };
 
-export type TiInputMultiLinesProps = CommonProps & {
+export type InputMultiLinesProps = CommonProps & {
   /**
    * 输入的数值
    */
@@ -47,4 +47,9 @@ export type TiInputMultiLinesProps = CommonProps & {
    * 每行的输入框具体定制配置
    */
   inputConfig?: Omit<InputBoxProps, "value">;
+
+  /**
+   * 动作条配置
+   */
+  actionBar?: ActionBarProps;
 };

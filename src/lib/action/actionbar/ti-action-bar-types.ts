@@ -58,12 +58,28 @@ export type ABarAltDisplay = {
   test?: TiMatch;
 };
 
+export type ActionBarItemRefer =
+  | ActionBarItem
+  | string
+  | [string, Partial<ActionBarItem>];
+
 export type ActionBarProps = CommonProps & {
   // 指明一个名称，可以方便调试的时候区分各个菜单
   name?: string;
-  items?: ActionBarItem[];
+  items?: ActionBarItemRefer[];
   vars?: Vars;
   style?: Vars;
+
+  /**
+   * 调用者可以注册一个 Item 集，这样用字符串就能直接引用这个条目了
+   */
+  barItemSet?:
+    | Record<string, ActionBarItem>
+    | ((
+        item: ActionBarItemRefer,
+        setup?: Partial<ActionBarItem>
+      ) => ActionBarItem);
+
   /**
    * 指明两种布局方式，`H|V` 垂直布局 `V` 比较适合
    * 放在上下文菜单等竖向排布的容器中

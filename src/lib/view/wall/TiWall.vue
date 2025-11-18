@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+  import _ from "lodash";
   import {
     computed,
     onMounted,
@@ -8,17 +9,16 @@
     watch,
   } from "vue";
   import { SelectableState, useGridLayout, useViewport } from "../../";
-  import { TableRowID } from "../../../";
+  import { TableRowID, TiTextSnippet } from "../../../";
   import { CssUtils } from "../../../core";
-  import { WallEmitter, WallProps } from "./ti-wall-types";
+  import { WallEmitter, WallItem, WallProps } from "./ti-wall-types";
   import { useWall } from "./use-wall";
+
   //-------------------------------------------------
   const emit = defineEmits<WallEmitter>();
   //-----------------------------------------------------
   const props = withDefaults(defineProps<WallProps>(), {
     dftIdPrefix: "item",
-    layout: () => ({ gap: "1em" }),
-    conStyle: () => ({ padding: "2em" }),
   });
   //-------------------------------------------------
   const $el = useTemplateRef<HTMLElement>("$el");
@@ -56,15 +56,41 @@
     return GridLayoutStyle.value.mergetStyle(props.conStyle ?? {});
   });
   //-----------------------------------------------------
+  function makeWallItemEventsHandler(item: WallItem): Record<string, Function> {
+    let handlers = {} as Record<string, Function>;
+    _.forEach(props.itemEventHandlers, (fn, key) => {
+      handlers[key] = function (payload: any) {
+        fn({ wall: _wall.value, item, payload });
+      };
+    });
+    return handlers;
+  }
+  //-----------------------------------------------------
+  watch(
+    () => selection.checkedIds,
+    (newVal, oldVal) => {
+      console.log(
+        "checkedIds changed",
+        [...oldVal.keys()].join(",") || "<empty>",
+        "=>",
+        [...newVal.keys()].join(",") || "<empty>"
+      );
+    }
+  );
+  //-----------------------------------------------------
   watch(
     () => props.data,
-    () => _wall.value.resetSelection(selection, props.data),
+    () => {
+      console.log("reset selection");
+      _wall.value.resetSelection(selection, props.data);
+    },
     { immediate: true }
   );
   //-----------------------------------------------------
   watch(
     () => [props.currentId, props.checkedIds],
     () => {
+      console.log("updateSelection");
       _wall.value.updateSelection(
         selection,
         props.data ?? [],
@@ -83,6 +109,21 @@
     :style="TopStyle"
     :data-mode="props.mode || 'wall'"
     @click.left="_wall.resetSelection(selection, props.data)">
+    <!--===: Wall Head :===-->
+    <slot name="head">
+      <TiTextSnippet
+        v-if="props.head"
+        className="bar-head"
+        :class="props.head.className"
+        :style="props.head.style"
+        :prefixIcon="props.head.icon"
+        :text="props.head.text ?? ''"
+        :auto-i18n="true"
+        :textType="props.head.textType"
+        :comType="props.head.comType"
+        :comConf="props.head.comConf" />
+    </slot>
+    <!--===: Wall Body :===-->
     <div
       class="wall-con"
       :style="WallConStyle"
@@ -99,12 +140,28 @@
           class="wall-item-con"
           :class="wit.conClass"
           :style="wit.conStyle"
-          @click.left.stop="_wall.OnItemSelect({ event: $event, item: wit })"
+          @click.left.stop="_wall.OnItemSelect(wit, $event)"
           @dblclick="emit('open', wit)">
-          <component :is="wit.comType" v-bind="wit.comConf" />
+          <component
+            :is="wit.comType"
+            v-bind="wit.comConf"
+            v-on="makeWallItemEventsHandler(wit)" />
         </div>
       </div>
     </div>
+    <!--===: Wall Tail :===-->
+    <slot name="tail">
+      <TiTextSnippet
+        v-if="props.tail"
+        className="bar-tail"
+        :class="props.tail.className"
+        :style="props.tail.style"
+        :prefixIcon="props.tail.icon"
+        :text="props.tail.text ?? ''"
+        :textType="props.tail.textType"
+        :comType="props.tail.comType"
+        :comConf="props.tail.comConf" />
+    </slot>
   </div>
 </template>
 <style lang="scss" scoped>

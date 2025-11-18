@@ -8,7 +8,7 @@
   //-----------------------------------------------------
   .item-icon {
     @include flex-center;
-    font-size: 1.2em;
+    font-size: var(--item-icon-fontsz);
     width: var(--item-icon-width);
     min-height: var(--item-icon-height);
     flex: 0 0 auto;

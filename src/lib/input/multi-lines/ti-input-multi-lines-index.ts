@@ -1,4 +1,4 @@
-import { TiComInfo, TiComRace, TiInputMultiLinesProps } from "@site0/tijs";
+import { TiComInfo, TiComRace, InputMultiLinesProps } from "@site0/tijs";
 import { App } from "vue";
 import TiInputMultiLines from "./TiInputMultiLines.vue";
 
@@ -12,7 +12,6 @@ const zh_cn = {
 };
 
 const TiInputMultiLinesInfo: TiComInfo = {
-  tags: ["ing"],
   icon: "fas-align-left",
   race: TiComRace.INPUT,
   name: COM_TYPE,
@@ -40,7 +39,7 @@ const TiInputMultiLinesInfo: TiComInfo = {
         value: "Rose,Tulip,Sunflower",
         emptyAsNull: false,
         autoFilterNilItem: true,
-      } as TiInputMultiLinesProps,
+      } as InputMultiLinesProps,
     },
   ],
 };

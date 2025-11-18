@@ -15,6 +15,7 @@ import {
   ABarAltDisplay,
   ABarParsedItem,
   ActionBarEmitter,
+  ActionBarItemRefer,
   ActionBarLayoutMode,
   ActionBarType,
 } from "./ti-action-bar-types";
@@ -141,17 +142,59 @@ function makeItemActionWithDebounce(
   return fn;
 }
 
+function _get_bar_item(
+  props: ActionBarProps,
+  key: string,
+  setup: Partial<ActionBarItem> = {}
+): ActionBarItem {
+  // 木有，那么就直接当做静态项目了
+  if (!props.barItemSet) {
+    if (_.isEmpty(key)) {
+      return setup || {};
+    }
+    return _.assign(setup, { text: key } as ActionBarItem);
+  }
+  // 定制
+  if (_.isFunction(props.barItemSet)) {
+    return props.barItemSet(key, setup);
+  }
+
+  // 一个固定菜单项集合
+  let item = props.barItemSet[key];
+  if (!item) {
+    if (_.isEmpty(key)) {
+      return setup || {};
+    }
+    return _.assign(setup, { text: key } as ActionBarItem);
+  }
+  return _.assign({}, item, setup);
+}
+
 export function buildActionBarItems(
   props: ActionBarProps,
   indexes: number[],
-  items: ActionBarItem[],
+  items: ActionBarItemRefer[],
   layoutMode: ActionBarLayoutMode,
   emit: ActionBarEmitter,
   pItem?: ABarParsedItem
 ): ABarParsedItem[] {
   let re = [] as ABarParsedItem[];
   for (let index = 0; index < items.length; index++) {
-    let it = items[index];
+    let _it_ref = items[index];
+
+    let it: ActionBarItem;
+    // 转换为输入 Item
+    if (_.isString(_it_ref)) {
+      it = _get_bar_item(props, _it_ref);
+    }
+    // 修饰
+    else if (_.isArray(_it_ref)) {
+      it = _get_bar_item(props, _it_ref[0], _it_ref[1]);
+    }
+    // 直接指定的菜单项
+    else {
+      it = _it_ref;
+    }
 
     // 项目类型
     let type = autoBarItemType(it);

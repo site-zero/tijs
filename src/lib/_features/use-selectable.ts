@@ -237,13 +237,34 @@ export function useSelectable<ID extends TableRowID>(
     let checked = getCheckedData(list, selection);
     return {
       currentId,
-      checkedIds:ckIds,
+      checkedIds: ckIds,
       current,
       checked,
       index: selection.lastSelectIndex,
       oldCurrentId,
       oldCheckedIds,
     };
+  }
+
+  function doAndEmit(
+    selection: SelectableState<ID>,
+    list: Vars[] | undefined | null,
+    doSomething: Function,
+    emit: (event: "select", info: SelectEmitInfo<ID>) => void
+  ) {
+    let oldCurrentId = _.cloneDeep(selection.currentId);
+    let oldCheckedIds = _.cloneDeep(selection.checkedIds);
+    //----------
+    // 调用者做了什么，反正就是改动了选区
+    doSomething();
+    //----------
+    let info = getSelectionEmitInfo(
+      selection,
+      list || [],
+      oldCheckedIds,
+      oldCurrentId
+    );
+    emit("select", info);
   }
 
   function updateSelection(
@@ -766,5 +787,7 @@ export function useSelectable<ID extends TableRowID>(
 
     canCheckItem,
     canSelectItem,
+
+    doAndEmit,
   };
 }

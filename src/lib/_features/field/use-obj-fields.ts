@@ -524,6 +524,48 @@ export function fldInputF3(
   };
 }
 
+export function fldInputF4(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputNumProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title: title || undefined,
+    tip,
+    comType: "TiInputNum",
+    comConf: _.assign(
+      {
+        precision: 10000,
+        decimalPlaces: 4,
+      } as InputNumProps,
+      comConf
+    ),
+  };
+}
+
+export function fldInputF5(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputNumProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title: title || undefined,
+    tip,
+    comType: "TiInputNum",
+    comConf: _.assign(
+      {
+        precision: 100000,
+        decimalPlaces: 5,
+      } as InputNumProps,
+      comConf
+    ),
+  };
+}
+
 export function fldInputF6(
   name: FieldName,
   titleAndTip: string | string[],

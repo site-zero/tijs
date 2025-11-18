@@ -624,6 +624,68 @@ export function colInputF3(
   };
 }
 
+export function colInputF4(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputNumProps
+): TableInputColumn {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    readonlyComType: "TiLabel",
+    readonlyComConf: {
+      align: "right",
+      valuePiping: "$F4",
+      hideBorder: true,
+      type: "disable",
+      boxRadius: "none",
+    } as LabelProps,
+    activatedComType: "TiInputNum",
+    activatedComConf: _.assign(
+      {
+        precision: 10000,
+        decimalPlaces: 4,
+        boxRadius: "none",
+        hideBorder: true,
+      } as InputNumProps,
+      comConf
+    ),
+  };
+}
+
+export function colInputF5(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputNumProps
+): TableInputColumn {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    readonlyComType: "TiLabel",
+    readonlyComConf: {
+      align: "right",
+      valuePiping: "$F5",
+      hideBorder: true,
+      type: "disable",
+      boxRadius: "none",
+    } as LabelProps,
+    activatedComType: "TiInputNum",
+    activatedComConf: _.assign(
+      {
+        precision: 100000,
+        decimalPlaces: 5,
+        boxRadius: "none",
+        hideBorder: true,
+      } as InputNumProps,
+      comConf
+    ),
+  };
+}
+
 export function colInputF6(
   name: FieldName,
   titleAndTip: string | string[],
