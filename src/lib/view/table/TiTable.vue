@@ -1,4 +1,11 @@
 <script lang="ts" setup>
+  import {
+    TiActionBar,
+    TiRoadblock,
+    TiTextSnippet,
+    useFieldChange,
+    useLargeScrolling,
+  } from "@site0/tijs";
   import _ from "lodash";
   import {
     Ref,
@@ -9,12 +16,6 @@
     ref,
     watch,
   } from "vue";
-  import {
-    TiActionBar,
-    TiRoadblock,
-    useFieldChange,
-    useLargeScrolling,
-  } from "../../";
   import { Size2D, TableRowID } from "../../../_type";
   import { CssUtils } from "../../../core";
   import TableRow from "./TableRow.vue";
@@ -384,6 +385,19 @@
 </script>
 <template>
   <div class="ti-table" :class="TopClass">
+    <slot name="head">
+      <TiTextSnippet
+        v-if="props.head"
+        className="table-head"
+        :class="props.head.className"
+        :style="props.head.style"
+        :prefixIcon="props.head.icon"
+        :text="props.head.text ?? ''"
+        :auto-i18n="true"
+        :textType="props.head.textType"
+        :comType="props.head.comType"
+        :comConf="props.head.comConf" />
+    </slot>
     <main ref="$main" :style="MainStyle" @click="onClickMain">
       <!-- 表格头 -->
       <template v-if="showHeader">
@@ -457,6 +471,19 @@
         <TiRoadblock v-bind="props.emptyRoadblock" />
       </div>
     </main>
+    <!--===: Wall Tail :===-->
+    <slot name="tail">
+      <TiTextSnippet
+        v-if="props.tail"
+        className="table-tail"
+        :class="props.tail.className"
+        :style="props.tail.style"
+        :prefixIcon="props.tail.icon"
+        :text="props.tail.text ?? ''"
+        :textType="props.tail.textType"
+        :comType="props.tail.comType"
+        :comConf="props.tail.comConf" />
+    </slot>
     <!-- 显示拖拽的列分割条-->
     <div
       class="resizing-bar"

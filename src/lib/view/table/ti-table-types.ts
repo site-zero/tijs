@@ -19,6 +19,7 @@ import {
   LogicType,
   TableColumnAspect,
   TableRowID,
+  TextFragment,
   TiMatch,
   Vars,
 } from "../../../_type";
@@ -284,6 +285,12 @@ export type TableProps = CommonProps &
      * 单位为`px`
      */
     rowMinHeight?: number;
+
+    /**
+     * 首尾扩展插槽
+     */
+    head?: TextFragment;
+    tail?: TextFragment;
 
     /**
      * 空白数据，显示的样式

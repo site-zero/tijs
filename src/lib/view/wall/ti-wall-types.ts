@@ -42,7 +42,7 @@ export type WallProps = CommonProps &
     mode?: WallMode;
 
     /**
-     * 扩展插槽
+     * 首尾扩展插槽
      */
     head?: TextFragment;
     tail?: TextFragment;

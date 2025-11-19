@@ -2,6 +2,7 @@
   import _ from "lodash";
   import { computed } from "vue";
   import {
+    CssUtils,
     InputBoxProps,
     TiActionBar,
     TiWall,
@@ -20,6 +21,9 @@
   const _api = useTiInputMultiLinesApi(props, emit);
   //-----------------------------------------------------
   const ActionBarConfig = computed(() => useMultiLinesAction(props, _api));
+  //-----------------------------------------------------
+  const TopClass = computed(() => CssUtils.mergeClassName(props.className));
+  const TopStyle = computed(() => CssUtils.toStyle(props.style));
   //-----------------------------------------------------
   const InputConfig = computed(() => {
     return _.assign(
@@ -52,7 +56,7 @@
   //-----------------------------------------------------
 </script>
 <template>
-  <div class="ti-input-multi-lines">
+  <div class="ti-input-multi-lines" :class="TopClass" :style="TopStyle">
     <!-- <div class="input-line" v-for="(item, index) in _api.LineItems.value">
       <TiInput
         v-bind="InputConfig"
