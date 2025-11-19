@@ -26,13 +26,19 @@
     });
   });
 
+  const TopStyle = computed(() => CssUtils.toStyle(props.style));
+
   const CheckIcon = computed(() => {
     let II = Bool.value.yes ? 1 : 0;
     return props.icons[II];
   });
 </script>
 <template>
-  <div class="ti-check" :class="TopClass" @click.stop="Bool.emitToggle">
+  <div
+    class="ti-check"
+    :class="TopClass"
+    :style="TopStyle"
+    @click.stop="Bool.emitToggle">
     <div
       class="check-con"
       :data-tip="props.tip"

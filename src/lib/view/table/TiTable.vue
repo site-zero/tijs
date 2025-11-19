@@ -388,7 +388,7 @@
     <slot name="head">
       <TiTextSnippet
         v-if="props.head"
-        className="table-head"
+        className="table-part as-head"
         :class="props.head.className"
         :style="props.head.style"
         :prefixIcon="props.head.icon"
@@ -398,84 +398,88 @@
         :comType="props.head.comType"
         :comConf="props.head.comConf" />
     </slot>
-    <main ref="$main" :style="MainStyle" @click="onClickMain">
-      <!-- 表格头 -->
-      <template v-if="showHeader">
-        <!-- 表头: 标记块 -->
-        <div
-          v-if="ShowRowMarker"
-          class="table-cell as-head as-marker"
-          :col-key="HEAD_MARKER"
-          @click.stop>
-          <TiActionBar v-bind="HeadMenu" />
-        </div>
-        <!-- 表头: 列 -->
-        <template v-for="(col, i) in TableColumns" :key="col.uniqKey">
+    <div class="table-part as-body">
+      <main ref="$main" :style="MainStyle" @click="onClickMain">
+        <!-- 表格头 -->
+        <template v-if="showHeader">
+          <!-- 表头: 标记块 -->
           <div
-            class="table-cell as-head"
-            :class="_table.getTableHeadClass(selection, col)"
-            :col-index="i"
-            :cols-count="TableColumns.length"
-            :col-key="col.uniqKey"
-            :col-prev-key="i == 0 ? HEAD_MARKER : TableColumns[i - 1]?.uniqKey">
-            <div class="head-cell-con">
-              <!-- 调整列宽的控制柄 -->
-              <div class="column-resize-hdl for-prev"></div>
-              <!-- 列标题 -->
-              <span
-                class="head-text"
-                :data-tip="col.tip"
-                :data-tip-delay="500"
-                >{{ col.title || col.name }}</span
-              >
-              <!-- 调整列宽的控制柄: 最后一列 -->
-              <div
-                v-if="i == TableColumns.length - 1"
-                class="column-resize-hdl for-self"></div>
-            </div>
+            v-if="ShowRowMarker"
+            class="table-cell as-head as-marker"
+            :col-key="HEAD_MARKER"
+            @click.stop>
+            <TiActionBar v-bind="HeadMenu" />
           </div>
+          <!-- 表头: 列 -->
+          <template v-for="(col, i) in TableColumns" :key="col.uniqKey">
+            <div
+              class="table-cell as-head"
+              :class="_table.getTableHeadClass(selection, col)"
+              :col-index="i"
+              :cols-count="TableColumns.length"
+              :col-key="col.uniqKey"
+              :col-prev-key="
+                i == 0 ? HEAD_MARKER : TableColumns[i - 1]?.uniqKey
+              ">
+              <div class="head-cell-con">
+                <!-- 调整列宽的控制柄 -->
+                <div class="column-resize-hdl for-prev"></div>
+                <!-- 列标题 -->
+                <span
+                  class="head-text"
+                  :data-tip="col.tip"
+                  :data-tip-delay="500"
+                  >{{ col.title || col.name }}</span
+                >
+                <!-- 调整列宽的控制柄: 最后一列 -->
+                <div
+                  v-if="i == TableColumns.length - 1"
+                  class="column-resize-hdl for-self"></div>
+              </div>
+            </div>
+          </template>
         </template>
-      </template>
-      <!-- 表格体 -->
+        <!-- 表格体 -->
 
-      <template v-for="row in TableData" :key="row.id">
-        <!--================== < 表格行 > ================-->
-        <div
-          v-if="!isInRenderZone(row.index)"
-          class="virtual-row"
-          :style="VirtualRowStyle"></div>
-        <TableRow
-          v-else
-          :columns="TableColumns"
-          :columnMap="_table_column_map"
-          :showRowMarker="ShowRowMarker"
-          :showChecker="showChecker"
-          :showRowIndex="showRowIndex"
-          :row="row"
-          :vars="vars"
-          :activated="row.id == selection.currentId"
-          :checked="_table.selectable.isIDChecked(selection, row.id)"
-          :indent="row.indent"
-          :editable="_row_editable(row.rawData, row.index)"
-          :activedColUniqKey="getRowActivedColUniqKey(selection, row)"
-          :updateRowHeight="updateRowHeight"
-          @row-select="_table.OnRowSelect($event)"
-          @row-check="_table.OnRowCheck($event)"
-          @row-open="_table.OnRowOpen($event)"
-          @cell-select="_table.OnCellSelect($event)"
-          @cell-open="_table.OnCellOpen($event)"
-          @cell-change="onCellChange" />
-      </template>
-      <!-- 显示空数据提示 -->
-      <div v-if="!hasData" class="empty-tip" :style="VirtualRowStyle">
-        <TiRoadblock v-bind="props.emptyRoadblock" />
-      </div>
-    </main>
+        <template v-for="row in TableData" :key="row.id">
+          <!--================== < 表格行 > ================-->
+          <div
+            v-if="!isInRenderZone(row.index)"
+            class="virtual-row"
+            :style="VirtualRowStyle"></div>
+          <TableRow
+            v-else
+            :columns="TableColumns"
+            :columnMap="_table_column_map"
+            :showRowMarker="ShowRowMarker"
+            :showChecker="showChecker"
+            :showRowIndex="showRowIndex"
+            :row="row"
+            :vars="vars"
+            :activated="row.id == selection.currentId"
+            :checked="_table.selectable.isIDChecked(selection, row.id)"
+            :indent="row.indent"
+            :editable="_row_editable(row.rawData, row.index)"
+            :activedColUniqKey="getRowActivedColUniqKey(selection, row)"
+            :updateRowHeight="updateRowHeight"
+            @row-select="_table.OnRowSelect($event)"
+            @row-check="_table.OnRowCheck($event)"
+            @row-open="_table.OnRowOpen($event)"
+            @cell-select="_table.OnCellSelect($event)"
+            @cell-open="_table.OnCellOpen($event)"
+            @cell-change="onCellChange" />
+        </template>
+        <!-- 显示空数据提示 -->
+        <div v-if="!hasData" class="empty-tip" :style="VirtualRowStyle">
+          <TiRoadblock v-bind="props.emptyRoadblock" />
+        </div>
+      </main>
+    </div>
     <!--===: Wall Tail :===-->
     <slot name="tail">
       <TiTextSnippet
         v-if="props.tail"
-        className="table-tail"
+        className="tablepart as-tail"
         :class="props.tail.className"
         :style="props.tail.style"
         :prefixIcon="props.tail.icon"

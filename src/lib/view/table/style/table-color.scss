@@ -33,4 +33,6 @@
 @include __table_colorized(".table-row-marker");
 
 // 表格·单元格
-@include __table_colorized(".ti-table > main > .table-cell");
+@include __table_colorized(
+  ".ti-table > .table-part.as-body > main > .table-cell"
+);
