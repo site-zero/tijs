@@ -1,5 +1,5 @@
-import _ from 'lodash';
-import { Limitation } from '../../_type';
+import _ from "lodash";
+import { Limitation } from "../../_type";
 
 /**
  * Translate
@@ -99,6 +99,20 @@ export function round(n: number, precision = 100) {
   return Math.round(n * precision) / precision;
 }
 
+export function floor(n: number, precision = 100) {
+  if (precision === 0) {
+    return n;
+  }
+  return Math.floor(n * precision) / precision;
+}
+
+export function ceil(n: number, precision = 100) {
+  if (precision === 0) {
+    return n;
+  }
+  return Math.ceil(n * precision) / precision;
+}
+
 /***
  * @param n{Number} input number
  * @param unit{Number} the number padding unit
@@ -140,4 +154,3 @@ export function floorUnit(v: number, unit = 1) {
   }
   return v;
 }
-
