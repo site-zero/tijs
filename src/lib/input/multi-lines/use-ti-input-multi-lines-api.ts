@@ -1,7 +1,12 @@
 import _ from "lodash";
 import { computed, ref } from "vue";
-import { CodeEditorProps, openAppModal, TableRowID } from "../../../";
-import { MoveDirection, Util } from "../../../core";
+import {
+  CodeEditorProps,
+  LogicType,
+  openAppModal,
+  TableRowID,
+} from "../../../";
+import { MoveDirection, Str, Util } from "../../../core";
 import {
   InputMultiLinesEmitter,
   InputMultiLinesProps,
@@ -26,14 +31,28 @@ export function useTiInputMultiLinesApi(
     let vals = splitValue();
     return vals.map((val, index) => {
       let checked = checkedIdMap.has(`${index}`);
-      //console.log(index,val, checked)
+      let type: LogicType | undefined = checked
+        ? props.checkedItemType
+        : undefined;
+      if (Str.isBlank(val)) {
+        if (checked) {
+          type = props.checkedEmptyItemType ?? props.checkedItemType;
+        } else {
+          type = props.emptyItemType;
+        }
+      }
+      console.log(index, val, checked, type);
       return {
         prefixIcon: checked ? "far-circle-check" : "far-circle",
-        type: checked ? "primary" : undefined,
+        type,
         value: val,
         index: index,
       };
     });
+  });
+  //-----------------------------------------------------
+  const isEmpty = computed(() => {
+    return LineItems.value.length === 0;
   });
   //-----------------------------------------------------
   const ActionBarVars = computed(() => ({
@@ -130,7 +149,7 @@ export function useTiInputMultiLinesApi(
   //-----------------------------------------------------
   function addLine() {
     let vals = LineItems.value.map((item) => item.value);
-    let list = [...vals, "New_Item"];
+    let list = [...vals, props.newItem ?? ""];
     let newVal = joinValue(list);
     let index = vals.length;
     //console.log(index, newVal);
@@ -226,6 +245,7 @@ export function useTiInputMultiLinesApi(
     _current_id,
     // 计算属性
     LineItems,
+    isEmpty,
     ActionBarVars,
     CurrentId: computed(() => _current_id.value),
     CheckedIds: computed(() => _checked_ids.value),
@@ -239,6 +259,6 @@ export function useTiInputMultiLinesApi(
     addLine,
     viewCode,
     removeChecked,
-    moveChecked
+    moveChecked,
   };
 }

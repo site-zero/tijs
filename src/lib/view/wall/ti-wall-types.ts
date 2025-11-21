@@ -1,4 +1,4 @@
-import { SelectableProps, SelectEmitInfo } from "../../";
+import { RoadblockProps, SelectableProps, SelectEmitInfo } from "../../";
 import {
   CommonProps,
   ComRef,
@@ -46,6 +46,11 @@ export type WallProps = CommonProps &
      */
     head?: TextFragment;
     tail?: TextFragment;
+
+    /**
+     * 空白数据，显示的样式
+     */
+    emptyRoadblock?: RoadblockProps;
 
     /**
      * 墙贴的顶级样式

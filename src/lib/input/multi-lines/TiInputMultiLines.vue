@@ -17,7 +17,13 @@
   import { useTiInputMultiLinesApi } from "./use-ti-input-multi-lines-api";
   //-----------------------------------------------------
   const emit = defineEmits<InputMultiLinesEmitter>();
-  const props = withDefaults(defineProps<InputMultiLinesProps>(), {});
+  const props = withDefaults(defineProps<InputMultiLinesProps>(), {
+    newItem: " ",
+    checkedItemType: "primary",
+    emptyRoadblock: () => ({
+      size: "small",
+    }),
+  });
   const _api = useTiInputMultiLinesApi(props, emit);
   //-----------------------------------------------------
   const ActionBarConfig = computed(() => useMultiLinesAction(props, _api));
@@ -57,14 +63,6 @@
 </script>
 <template>
   <div class="ti-input-multi-lines" :class="TopClass" :style="TopStyle">
-    <!-- <div class="input-line" v-for="(item, index) in _api.LineItems.value">
-      <TiInput
-        v-bind="InputConfig"
-        :value="item.value"
-        :keepEmptyValue="true"
-        suffix-icon-for="clear"
-        @change="_api.onLineChange(index, $event)" />
-    </div> -->
     <TiWall
       mode="list"
       :multi="true"
@@ -76,9 +74,10 @@
       :comConf="InputConfig"
       :canSelect="true"
       :itemEventHandlers="WallItemEvents"
+      :emptyRoadblock="props.emptyRoadblock"
       @select="onItemSelect">
       <template #head>
-        <TiActionBar v-bind="ActionBarConfig" />
+        <TiActionBar v-if="!props.readonly" v-bind="ActionBarConfig" />
       </template>
     </TiWall>
   </div>

@@ -1,4 +1,10 @@
-import { ActionBarProps, CommonProps, InputBoxProps } from "@site0/tijs";
+import {
+  ActionBarProps,
+  CommonProps,
+  InputBoxProps,
+  LogicType,
+  RoadblockProps,
+} from "@site0/tijs";
 
 export type InputMultiLinesValue = string | string[];
 
@@ -11,6 +17,12 @@ export type InputMultiLinesProps = CommonProps & {
    * 输入的数值
    */
   value?: InputMultiLinesValue;
+
+  /**
+   * 添加新值，采用的什么默认字符串
+   * // 默认为空字符串
+   */
+  newItem?: string;
 
   /**
    * 如果没有值，是否是需要转换为 null
@@ -42,6 +54,24 @@ export type InputMultiLinesProps = CommonProps & {
    * 是否只读
    */
   readonly?: boolean;
+
+  /**
+   * 空白数据，显示的样式
+   */
+  emptyRoadblock?: RoadblockProps;
+
+  /**
+   * 选中项的样式,默认为 primary
+   */
+  checkedItemType?: LogicType;
+  /**
+   * 空项的样式,默认为 undefined
+   */
+  emptyItemType?: LogicType;
+  /**
+   * 选中空项的样式,默认为 跟随 checkedItemType
+   */
+  checkedEmptyItemType?: LogicType;
 
   /**
    * 每行的输入框具体定制配置

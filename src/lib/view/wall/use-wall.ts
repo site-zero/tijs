@@ -17,10 +17,10 @@ export function useWall(
   selection: SelectableState<TableRowID>,
   emit: WallEmitter
 ) {
-  console.log(
-    "useWall:",
-    [...selection.checkedIds.keys()].join(",") || "<empty>"
-  );
+  // console.log(
+  //   "useWall:",
+  //   [...selection.checkedIds.keys()].join(",") || "<empty>"
+  // );
   const selectable = useSelectable<TableRowID>(props, {
     getItem: (id: TableRowID) => getWallItemById(id),
   });
@@ -217,6 +217,8 @@ export function useWall(
     return re;
   });
   //-----------------------------------------------------
+  const isEmpty = computed(() => Items.value.length == 0);
+  //-----------------------------------------------------
   function getWallItemByIndex(index: number): WallItem | undefined {
     return _.nth(Items.value, index);
   }
@@ -233,6 +235,7 @@ export function useWall(
   //-----------------------------------------------------
   return {
     Items,
+    isEmpty,
     getWallItemByIndex,
     getWallItemById,
     getItemId: selectable.getDataId,

@@ -8,7 +8,13 @@
     useTemplateRef,
     watch,
   } from "vue";
-  import { SelectableState, useGridLayout, useViewport } from "../../";
+  import {
+    RoadblockProps,
+    SelectableState,
+    TiRoadblock,
+    useGridLayout,
+    useViewport,
+  } from "../../";
   import { TableRowID, TiTextSnippet } from "../../../";
   import { CssUtils } from "../../../core";
   import { WallEmitter, WallItem, WallProps } from "./ti-wall-types";
@@ -54,6 +60,20 @@
   //-----------------------------------------------------
   const WallConStyle = computed(() => {
     return GridLayoutStyle.value.mergetStyle(props.conStyle ?? {});
+  });
+  //-----------------------------------------------------
+  const WallRoadblock = computed(() => {
+    return _.assign(
+      {
+        mode: "fit",
+        layout: "B",
+        size: "normal",
+        className: "is-track",
+        text: "i18n:nil-content",
+        icon: "zmdi-view-module",
+      } as RoadblockProps,
+      props.emptyRoadblock
+    );
   });
   //-----------------------------------------------------
   function makeWallItemEventsHandler(item: WallItem): Record<string, Function> {
@@ -124,30 +144,29 @@
         :comConf="props.head.comConf" />
     </slot>
     <!--===: Wall Body :===-->
-    <div
-      class="wall-con"
-      :style="WallConStyle"
-      :hello="_viewport.size.width"
-      ref="$el">
-      <div
-        v-for="wit in _wall.Items.value"
-        class="wall-item"
-        :class="_wall.getWallItemClass(wit)"
-        :style="wit.style"
-        :it-index="wit.index"
-        :it-type="wit.type">
+    <div class="wall-con" :style="WallConStyle" ref="$el">
+      <TiRoadblock v-if="_wall.isEmpty.value" v-bind="WallRoadblock" />
+      <template v-else>
         <div
-          class="wall-item-con"
-          :class="wit.conClass"
-          :style="wit.conStyle"
-          @click.left.stop="_wall.OnItemSelect(wit, $event)"
-          @dblclick="emit('open', wit)">
-          <component
-            :is="wit.comType"
-            v-bind="wit.comConf"
-            v-on="makeWallItemEventsHandler(wit)" />
+          v-for="wit in _wall.Items.value"
+          class="wall-item"
+          :class="_wall.getWallItemClass(wit)"
+          :style="wit.style"
+          :it-index="wit.index"
+          :it-type="wit.type">
+          <div
+            class="wall-item-con"
+            :class="wit.conClass"
+            :style="wit.conStyle"
+            @click.left.stop="_wall.OnItemSelect(wit, $event)"
+            @dblclick="emit('open', wit)">
+            <component
+              :is="wit.comType"
+              v-bind="wit.comConf"
+              v-on="makeWallItemEventsHandler(wit)" />
+          </div>
         </div>
-      </div>
+      </template>
     </div>
     <!--===: Wall Tail :===-->
     <slot name="tail">
