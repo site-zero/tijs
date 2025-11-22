@@ -1,4 +1,34 @@
-@use '@site0/tijs/sass/_all.scss' as *;
+@use "@site0/tijs/sass/_all.scss" as *;
 
 .ti-score {
+  --star-fontsz: var(--ti-fontsz-h);
+  --star-gap: var(--ti-gap-t);
+  --star-item-padding: var(--ti-gap-t);
+  --star-color: var(--ti-color-star);
+  --star-border-size: 1px;
+  > ul {
+    list-style: none;
+    margin: 0;
+    @include flex-align-nowrap;
+    gap: var(--star-gap);
+    font-size: var(--star-fontsz);
+    padding: var(--star-gap);
+    li {
+      padding: var(--star-item-padding);
+      color: var(--star-color);
+      cursor: pointer;
+      > i {
+        font-size: inherit;
+        text-shadow: -1px -1px var(--star-border-size) var(--star-border-color),
+          -1px 0px var(--star-border-size) var(--star-border-color),
+          -1px 1px var(--star-border-size) var(--star-border-color),
+          0px -1px var(--star-border-size) var(--star-border-color),
+          0px 0px var(--star-border-size) var(--star-border-color),
+          0px 1px var(--star-border-size) var(--star-border-color),
+          1px -1px var(--star-border-size) var(--star-border-color),
+          1px 0px var(--star-border-size) var(--star-border-color),
+          1px 1px var(--star-border-size) var(--star-border-color);
+      }
+    }
+  }
 }

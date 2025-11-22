@@ -377,7 +377,22 @@ export type LogicType =
   | "number"
   | "primary"
   | "secondary"
-  | "tip";
+  | "tip"
+  | "star";
+
+export type LogicColorSuffix = "b" | "r";
+
+export function toLogicColor(
+  type?: LogicType | null | undefined,
+  suffix?: LogicColorSuffix | null | undefined
+): string | undefined {
+  if (!type) return undefined;
+  if (suffix) {
+    return `var(--ti-color-${type}-${suffix})`;
+  }
+  return `var(--ti-color-${type})`;
+}
+
 /**
  * 如果通过 type 来指定控件的颜色，有时候，我们希望
  * 整体背景是主颜色，这时候可以设置 colorMode 为 'box'
@@ -1305,7 +1320,51 @@ export type ConflictItem = {
 
 ---------------------------------------------------*/
 export type AspectSize = "t" | "s" | "m" | "b" | "h";
+export type AspectSizeInput = AspectSize | string | number;
 export type HDirecton = "left" | "right";
+
+export function isAspectSize(sz?: any): sz is AspectSize {
+  if (!sz) return false;
+  return /^[tsmbh]$/.test(sz);
+}
+
+export function toAspectSizeValue(
+  prefix: string,
+  sz?: AspectSizeInput | null | undefined
+): string | undefined {
+  if (!sz) return undefined;
+  if (isAspectSize(sz)) {
+    return `var(${prefix}${sz})`;
+  }
+  if (_.isNumber(sz)) {
+    return `${sz}px`;
+  }
+  return sz;
+}
+
+export function toAspectBoxPad(
+  sz?: AspectSizeInput | null | undefined
+): string | undefined {
+  return toAspectSizeValue("--ti-box-pad-", sz);
+}
+
+export function toAspectGap(
+  sz?: AspectSizeInput | null | undefined
+): string | undefined {
+  return toAspectSizeValue("--ti-gap-", sz);
+}
+
+export function toAspectFontSize(
+  sz?: AspectSizeInput | null | undefined
+): string | undefined {
+  return toAspectSizeValue("--ti-fontsz-", sz);
+}
+
+export function toAspectRadius(
+  sz?: AspectSizeInput | null | undefined
+): string | undefined {
+  return toAspectSizeValue("--ti-measure-r-", sz);
+}
 
 export type DateTimeQuickParserSet = {
   /**

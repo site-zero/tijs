@@ -1,4 +1,10 @@
-import { CommonProps } from "../../../_type";
+import {
+  AspectSizeInput,
+  CommonProps,
+  LogicColorSuffix,
+  LogicType,
+  Vars,
+} from "../../../_type";
 
 export type ScoreEmitter = {
   (event: "change", value: number): void;
@@ -24,10 +30,45 @@ export type ScoreProps = CommonProps & {
   /**
    * 用几颗星表示满分: 默认为 5
    */
-  starts?: number;
+  stars?: number;
 
   /**
    * 展示值时是否允许半星: 默认为 true
    */
-  allowHalfStart?: boolean;
+  allowHalf?: boolean;
+
+  //-----------------------------------------------------
+  // Aspect
+  //-----------------------------------------------------
+  starFontSize?: AspectSizeInput;
+  starGap?: AspectSizeInput;
+  starItemPadding?: AspectSizeInput;
+  starColorType?: LogicType;
+  starColorSuffix?: LogicColorSuffix | null;
+
+  starStyle?: Vars;
+  starIconStyle?: Vars;
+};
+
+export type ScoreStarType = "full" | "half" | "empty";
+
+export type ScoreStars = {
+  /**
+   * 被 props.stars 放大后的数量
+   */
+  startValue: number;
+  /**
+   * 有几颗满星
+   */
+  full: number;
+
+  /**
+   * 第几颗是半星
+   */
+  half: number;
+
+  /**
+   * 星星的展示列表
+   */
+  list: ScoreStarType[];
 };

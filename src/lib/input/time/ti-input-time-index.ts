@@ -14,6 +14,10 @@ const zh_cn = {
 const COM_TYPE = COM_TYPES.InputTime;
 
 const TiInputTimeInfo: TiComInfo = {
+  /**
+   * 组件标签，用于分类和筛选
+   * scaffold 标签表示该组件处于脚手架状态，可能需要进一步开发完善
+   */
   tags: ['scaffold'],
   icon: 'zmdi-time',
   race: TiComRace.INPUT,
