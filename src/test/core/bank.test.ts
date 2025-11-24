@@ -1,67 +1,59 @@
 import { expect, test } from "vitest";
-import { ToBankTextOptions } from "../../_type";
+import { LAST_EXCHANGE_RATE, ToBankTextOptions } from "../../_type";
 import { Bank } from "../../core";
 
-test("exchange", function () {
-  expect(Bank.exchange(10)).eq(10);
+test("exchange_bridge", function () {
   expect(
     Bank.exchange(10, {
       from: "USD",
-      to: "RMB",
-      exrs: {
-        USD_RMB: 7.2,
-      },
+      to: "AUD",
+      bridge: "CNY",
+      precision: 2,
+      table: Bank.toExchangeRateTable({
+        CNY_USD: { [LAST_EXCHANGE_RATE]: 0.1389 },
+        CNY_AUD: { [LAST_EXCHANGE_RATE]: 0.2128 },
+      }),
     })
-  ).eq(72);
+  ).eq(15.32);
 
-  expect(
-    Bank.exchange(12, {
-      from: "USD",
-      to: "RMB",
-      exrs: {
-        RMB_USD: 0.15,
-      },
-    })
-  ).eq(80);
-
-  expect(
-    Bank.exchange(10, {
-      from: "USD",
-      to: "RMB",
-      bridge: "EUR",
-      exrs: {
-        USD_EUR: 1.2,
-        EUR_RMB: 6,
-      },
-    })
-  ).eq(72);
-
+  // 采用 10USD 那么返回的数值默认为分(cent)
   expect(
     Bank.exchange("10USD", {
-      from: "USD",
-      to: "RMB",
-      bridge: "EUR",
-      exrs: {
-        USD_EUR: 1.2,
-        EUR_RMB: 6,
-      },
+      to: "AUD",
+      bridge: "CNY",
+      table: Bank.toExchangeRateTable({
+        CNY_USD: { [LAST_EXCHANGE_RATE]: 0.1389 },
+        CNY_AUD: { [LAST_EXCHANGE_RATE]: 0.2128 },
+      }),
     })
-  ).eq(7200);
+  ).eq(1532);
+});
+
+test("exchange", function () {
+  expect(
+    Bank.exchange(10, {
+      from: "USD",
+      to: "CNY",
+      table: Bank.toExchangeRateTable({
+        USD_CNY: { [LAST_EXCHANGE_RATE]: 7.2 },
+      }),
+    })
+  ).eq(72);
 
   expect(
     Bank.exchange("nihao", {
       from: "USD",
-      to: "RMB",
-      exrs: {
-        USD_RMB: 7.2,
-      },
+      to: "CNY",
+      table: Bank.toExchangeRateTable({
+        USD_CNY: { [LAST_EXCHANGE_RATE]: 7.2 },
+      }),
     })
   ).eq(undefined);
 });
 
 test("getCurrencyChar", function () {
   expect(Bank.getCurrencyChar()).eq("¥");
-  expect(Bank.getCurrencyChar("RMB")).eq("¥");
+  expect(Bank.getCurrencyChar("CNY")).eq("¥");
   expect(Bank.getCurrencyChar("USD")).eq("$");
   expect(Bank.getCurrencyChar("EUR")).eq("€");
   expect(Bank.getCurrencyChar("JPY")).eq("¥");
@@ -69,15 +61,15 @@ test("getCurrencyChar", function () {
 
 test("getCurrencyToken", function () {
   expect(Bank.getCurrencyToken()).eq("¥");
-  expect(Bank.getCurrencyToken("RMB")).eq("¥");
+  expect(Bank.getCurrencyToken("CNY")).eq("¥");
   expect(Bank.getCurrencyToken("USD")).eq("$");
   expect(Bank.getCurrencyToken("EUR")).eq("€");
   expect(Bank.getCurrencyToken("JPY")).eq("¥");
 });
 
 test("getCurrencyText", function () {
-  expect(Bank.getCurrencyText()).eq("i18n:currency-RMB");
-  expect(Bank.getCurrencyText("RMB")).eq("i18n:currency-RMB");
+  expect(Bank.getCurrencyText()).eq("i18n:currency-CNY");
+  expect(Bank.getCurrencyText("CNY")).eq("i18n:currency-CNY");
   expect(Bank.getCurrencyText("USD")).eq("i18n:currency-USD");
   expect(Bank.getCurrencyText("EUR")).eq("i18n:currency-EUR");
   expect(Bank.getCurrencyText("JPY")).eq("i18n:currency-JPY");
@@ -85,7 +77,7 @@ test("getCurrencyText", function () {
 
 test("getCurrencyIcon", function () {
   expect(Bank.getCurrencyIcon()).eq("fas-yen-sign");
-  expect(Bank.getCurrencyIcon("RMB")).eq("fas-yen-sign");
+  expect(Bank.getCurrencyIcon("CNY")).eq("fas-yen-sign");
   expect(Bank.getCurrencyIcon("USD")).eq("fas-dollar-sign");
   expect(Bank.getCurrencyIcon("EUR")).eq("fas-euro-sign");
   expect(Bank.getCurrencyIcon("JPY")).eq("fas-yen-sign");
@@ -101,19 +93,19 @@ test("parseCurrency", function () {
   expect(Bank.parseCurrency(NaN)).toStrictEqual({
     cent: NaN,
     yuan: NaN,
-    currency: "RMB",
+    currency: "CNY",
   });
 
   expect(Bank.parseCurrency(10)).toStrictEqual({
     cent: 1000,
     yuan: 10,
-    currency: "RMB",
+    currency: "CNY",
   });
 
   expect(Bank.parseCurrency(10, { unit: 10 })).toStrictEqual({
     cent: 100,
     yuan: 1,
-    currency: "RMB",
+    currency: "CNY",
   });
 
   expect(Bank.parseCurrency(10, { unit: 10, currency: "USD" })).toStrictEqual({
@@ -126,13 +118,13 @@ test("parseCurrency", function () {
   expect(Bank.parseCurrency("haha")).toStrictEqual({
     cent: NaN,
     yuan: NaN,
-    currency: "RMB",
+    currency: "CNY",
   });
 
   expect(Bank.parseCurrency("10")).toStrictEqual({
     cent: 1000,
     yuan: 10,
-    currency: "RMB",
+    currency: "CNY",
   });
 
   expect(Bank.parseCurrency("10USD")).toStrictEqual({
@@ -150,7 +142,7 @@ test("parseCurrency", function () {
   expect(Bank.parseCurrency("10EURA", { unit: 10 })).toStrictEqual({
     cent: NaN,
     yuan: NaN,
-    currency: "RMB",
+    currency: "CNY",
   });
 
   // 测试对象
@@ -162,18 +154,18 @@ test("parseCurrency", function () {
     currency: "USD",
   });
 
-  expect(Bank.parseCurrency({ value: 12, currency: "RMB" })).toStrictEqual({
+  expect(Bank.parseCurrency({ value: 12, currency: "CNY" })).toStrictEqual({
     cent: 1200,
     yuan: 12,
-    currency: "RMB",
+    currency: "CNY",
   });
 
   expect(
-    Bank.parseCurrency({ value: 12, currency: "RMB" }, { unit: 10 })
+    Bank.parseCurrency({ value: 12, currency: "CNY" }, { unit: 10 })
   ).toStrictEqual({
     cent: 120,
     yuan: 1.2,
-    currency: "RMB",
+    currency: "CNY",
   });
 });
 
@@ -212,7 +204,7 @@ test("toYuanTokenText", function () {
 });
 
 test("toYuanTokenText2", function () {
-  expect(Bank.toYuanTokenText2(105)).eq("¥1.05RMB");
+  expect(Bank.toYuanTokenText2(105)).eq("¥1.05CNY");
   expect(Bank.toYuanTokenText2(105, "USD")).eq("$1.05USD");
   expect(Bank.toYuanTokenText2(6122, "EUR", 10)).eq("€61.20EUR");
 });
@@ -243,8 +235,8 @@ test("toZeroTokenText", function () {
 test("toZeroTokenText2", function () {
   expect(Bank.toZeroTokenText2(0)).eq("--");
   expect(Bank.toZeroTokenText2(0, { placeholder: "**(--)**" })).eq("**(--)**");
-  expect(Bank.toZeroTokenText2(-5)).eq("-¥0.05RMB");
-  expect(Bank.toZeroTokenText2(105)).eq("¥1.05RMB");
+  expect(Bank.toZeroTokenText2(-5)).eq("-¥0.05CNY");
+  expect(Bank.toZeroTokenText2(105)).eq("¥1.05CNY");
   expect(Bank.toZeroTokenText2(-5, { currency: "USD" })).eq("-$0.05USD");
   expect(Bank.toZeroTokenText2(105, { currency: "EUR" })).eq("€1.05EUR");
   expect(

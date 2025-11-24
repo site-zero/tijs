@@ -220,6 +220,12 @@ export type TimeInfo = {
   milliseconds?: number;
 };
 
+export type DateInfo = {
+  year?: number;
+  month?: number; // 1-12
+  day?: number; // 1base date in month
+};
+
 export type TimeInput = number | string | Date | TimeInfo;
 
 export type TimeUpdateUnit = "ms" | "s" | "min" | "hr";
@@ -367,14 +373,35 @@ export type StrCaseMode = keyof StrCaseFunc;
 
 ---------------------------------------------------*/
 export type ExchangeRate = {
-  /** 汇率的来源货币: CNY, USD, EUR, JPY, GBP, AUD, ... */
-  from: string;
-  /** 汇率的目标货币: CNY, USD, EUR, JPY, GBP, AUD, ... */
-  to: string;
   /** 汇率数值字符串形式(4位小数精度) */
-  rate: string;
+  readonly rate: string;
   /** 汇率数值(4位小数精度) */
-  value: number;
+  readonly value: number;
+};
+
+/**
+ * 一个货币的汇率的集合，键为 `yyyyMMdd` 格式的日期,
+ * 值为该日期的汇率
+ * 键 `LAST` 表示最新汇率
+ */
+export type ExchangeRateSet = Map<string, ExchangeRate>;
+export const LAST_EXCHANGE_RATE = "LAST_EXCHANGE_RATE";
+
+export type CurrencyExchangeRate = ExchangeRate & {
+  /**
+   * 目标货币: CNY, USD, EUR, JPY, GBP, AUD, ...
+   * 通常汇率表，会默认本币，譬如 CNY， 这里的 currency 如果是 USD
+   * 则表示 1CNY 等于多少 USD
+   * 即 rate = 1USD ÷ 1CNY
+   * 又比如，本币为 AUD，当前记录 currency 为 CNY
+   * 则表示 1AUD 等于多少 CNY
+   * 即 rate = 1CNY ÷ 1AUD
+   */
+  readonly currency: string;
+  /** 汇率的有效开始日期: yyyyMMdd */
+  readonly beginDate: string;
+  /** 汇率的有效结束日期: yyyyMMdd */
+  readonly endDate: string | null;
 };
 
 /**
@@ -383,7 +410,7 @@ export type ExchangeRate = {
  * 键: `${from}_${to}`
  * 值: 汇率数值(4位小数精度)
  */
-export type ExchangeRateTable = Map<string, number>;
+export type ExchangeRateTable = Map<string, ExchangeRateSet>;
 
 export type ExchangeOptions = {
   /** 汇率的来源货币: CNY, USD, EUR, JPY, GBP, AUD, ... */
@@ -392,8 +419,20 @@ export type ExchangeOptions = {
   to: string;
   /**
    * 桥接货币（如果不指定，则无法桥接）
+   * 在桥接模式下，会自动反算汇率，即如果
+   * {CNY_USD: 0.1449, CNY_AUD:0.2117}
+   * 计算 1USD 等于多少 AUD
+   * 会尝试 :
+   * USD_CNY ? 木有找到
+   * CNY_USD ? 0.1449   这个汇率是反算的，要除
+   * CNY_AUD ? 0.2117   正常汇率
+   * 因此，计算公式应该是 1USD ÷ 0.1449 x 0.2117 = 1.46 AUD
    */
   bridge?: string;
+  /**
+   * 指定 `yyyyMMdd` 格式的日期，不指定的话，则使用最新汇率
+   */
+  exchangeDate?: string;
   /**
    * 汇率转换的表格
    */

@@ -1,13 +1,5 @@
 import _ from "lodash";
-import {
-  ENV_KEYS,
-  getEnv,
-  I18n,
-  Str,
-  tiGetDefaultComPropValue,
-  TiTime,
-  Util,
-} from "../";
+import { ENV_KEYS, getEnv, I18n, Str, tiGetDefaultComPropValue } from "../";
 import {
   DateFormatOptions,
   DateInput,
@@ -19,6 +11,7 @@ import {
   TimeInput,
   TimeUpdateUnit,
 } from "../../_type";
+import { TiTime } from "./time-info";
 
 ///////////////////////////////////////////
 // const P_DATE = new RegExp(
@@ -94,6 +87,8 @@ export function parse(
   // String
   if (_.isString(d)) {
     let str = _.trim(d);
+    let overrideTimezone =
+      options.overrideTimezone ?? (options.timezone ? true : false);
 
     // MS
     if (/\d{13,}/.test(str)) {
@@ -106,8 +101,13 @@ export function parse(
     let m = /(.+)([zZ]|[+-]\d{1,2}(:\d{2})?)$/.exec(str);
     let timezone = "Z";
     if (m) {
+      // 那么时区可能是 +08 或者 +08:00
       timezone = m[2].trim();
       str = m[1].trim();
+    }
+    // 强制覆盖时区
+    if (overrideTimezone && options.timezone) {
+      timezone = toTimezoneSuffix(options.timezone);
     }
 
     // 解析日期时间部分
@@ -172,7 +172,7 @@ export function parse(
     }
 
     // 合并输出
-    let list = [
+    let dateStr = [
       _.padStart(info.yy, 4, "0"),
       "-",
       _.padStart(info.MM, 2, "0"),
@@ -180,23 +180,8 @@ export function parse(
       _.padStart(info.dd, 2, "0"),
       " ",
       info.time.toString(),
-    ];
-
-    // 强制覆盖
-    if (!_.isNil(options.timezone) && options.overrideTimezone) {
-      list.push(toTimezoneSuffix(options.timezone));
-    }
-    // 输入的值就有时区后缀
-    else if (info.tz) {
-      list.push(info.tz);
-    }
-    // 采用配置的时区
-    else {
-      let zone: DateParseOptionsZone = Util.fallback(options.timezone, "Z");
-      list.push(toTimezoneSuffix(zone));
-    }
-
-    let dateStr = list.join("");
+      info.tz,
+    ].join("");
     let date = new Date(dateStr);
 
     return date;

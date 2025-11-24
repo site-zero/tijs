@@ -1,7 +1,7 @@
 import { Chance } from 'chance';
 import _ from 'lodash';
 import { Vars } from '../../../../_type';
-import * as DateTime from '../../../../core/_top/ti-datetime';
+import * as DateTime from '../../../../core/time/datetime';
 
 // 创建一个 Chance 实例
 const chance = new Chance();

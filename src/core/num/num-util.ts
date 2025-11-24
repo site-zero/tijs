@@ -85,9 +85,12 @@ export function scrollIndex(index: number, len = 0): number {
  * @return The number after tidy
  */
 export function precise(n: number, p = 2) {
-  if (p >= 0) {
+  if (p > 0) {
     var y = Math.pow(10, p);
     return Math.round(n * y) / y;
+  }
+  if (p === 0) {
+    return Math.round(n);
   }
   return n;
 }
@@ -96,6 +99,9 @@ export function round(n: number, precision = 100) {
   if (precision === 0) {
     return n;
   }
+  if (precision === 1) {
+    return Math.round(n);
+  }
   return Math.round(n * precision) / precision;
 }
 
@@ -103,12 +109,18 @@ export function floor(n: number, precision = 100) {
   if (precision === 0) {
     return n;
   }
+  if (precision === 1) {
+    return Math.floor(n);
+  }
   return Math.floor(n * precision) / precision;
 }
 
 export function ceil(n: number, precision = 100) {
   if (precision === 0) {
     return n;
+  }
+  if (precision === 1) {
+    return Math.ceil(n);
   }
   return Math.ceil(n * precision) / precision;
 }

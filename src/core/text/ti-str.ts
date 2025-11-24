@@ -9,7 +9,7 @@ import {
   ToJsValueOptions,
   Vars,
 } from "../../_type";
-import * as DateTime from "../_top/ti-datetime";
+import * as DateTime from "../time/datetime";
 
 /*---------------------------------------------------
 
