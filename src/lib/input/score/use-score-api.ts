@@ -5,7 +5,7 @@ export type ScoreApi = ReturnType<typeof useScoreApi>;
 
 export function useScoreApi(
   props: ScoreProps,
-  getUl: () => HTMLElement | null | undefined
+  _getUl: () => HTMLElement | null | undefined
 ) {
   //-----------------------------------------------------
   // 计算属性
@@ -55,7 +55,7 @@ export function useScoreApi(
   //-----------------------------------------------------
   // 响应操作
   //-----------------------------------------------------
-  function onClickStar(index: number, event: MouseEvent) {
+  function onClickStar(_index: number, _event: MouseEvent) {
     // 获取全星星数
 
     // 如果支持半星模式，需要看看点击区域

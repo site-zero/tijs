@@ -1,6 +1,6 @@
-import _ from 'lodash';
-import { IconInput, LogicType, Vars, isIconObj } from '../../_type';
-import { Dom, I18n, Icons } from '../../core';
+import _ from "lodash";
+import { IconInput, LogicType, Vars, isIconObj } from "../../_type";
+import { Dom, I18n, Icons } from "../../core";
 
 export type MsgBoxHtmlOptions = {
   msg: string;
@@ -30,17 +30,18 @@ export function __get_msg_box_html(options: MsgBoxHtmlOptions) {
   // from type
   else if (_.isUndefined(bodyIcon)) {
     let icon_str = {
-      info: 'zmdi-info',
-      success: 'zmdi-check-circle',
-      warn: 'zmdi-alert-triangle',
-      danger: 'zmdi-alert-polygon',
-      track: 'zmdi-help',
-      disable: 'zmdi-alert-octagon',
-      text: 'zmdi-info-outline',
-      number: 'zmdi-n-1-square',
-      primary: 'zmdi-info-outline',
-      secondary: 'zmdi-info-outline',
-      tip: 'zmdi-info'
+      info: "zmdi-info",
+      success: "zmdi-check-circle",
+      warn: "zmdi-alert-triangle",
+      danger: "zmdi-alert-polygon",
+      track: "zmdi-help",
+      disable: "zmdi-alert-octagon",
+      text: "zmdi-info-outline",
+      number: "zmdi-n-1-square",
+      primary: "zmdi-info-outline",
+      secondary: "zmdi-info-outline",
+      tip: "zmdi-info",
+      star: "fas-star",
     }[type];
     msgIcon = Icons.parseIcon(icon_str);
   }
@@ -51,20 +52,20 @@ export function __get_msg_box_html(options: MsgBoxHtmlOptions) {
     /^(font|image)$/.test(msgIcon.type) &&
     (msgIcon.src || msgIcon.className);
 
-  let msgClass = [hasMsgIcon ? 'with-msg-icon' : 'no-msg-icon'];
-  msgClass.push(`color-as-${type || 'info'}`);
+  let msgClass = [hasMsgIcon ? "with-msg-icon" : "no-msg-icon"];
+  msgClass.push(`color-as-${type || "info"}`);
 
   // --------------- build html ---------
-  let html = [`<div class="ti-msg-box ${msgClass.join(' ')}"'>`] as string[];
+  let html = [`<div class="ti-msg-box ${msgClass.join(" ")}"'>`] as string[];
   // 左侧的显示图标
   if (msgIcon && hasMsgIcon) {
     html.push(`<aside>`);
     // 嵌入图像图标
-    if (msgIcon.type == 'image' && msgIcon.src) {
+    if (msgIcon.type == "image" && msgIcon.src) {
       html.push(`<img src="${msgIcon.src}"/>`);
     }
     // 嵌入字体图标
-    else if (msgIcon.type == 'font' && msgIcon.className) {
+    else if (msgIcon.type == "font" && msgIcon.className) {
       html.push(`<i class="${msgIcon.className}"></i>`);
     }
     // 嵌入默认图标
@@ -86,7 +87,7 @@ export function __get_msg_box_html(options: MsgBoxHtmlOptions) {
   if (mainSuffixHtml) {
     html.push(mainSuffixHtml);
   }
-  html.push('</main></div>');
+  html.push("</main></div>");
 
-  return html.join('\n');
+  return html.join("\n");
 }

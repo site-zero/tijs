@@ -1,58 +1,102 @@
-import _ from 'lodash';
-import { I18n, Str } from '../';
-import { TiCurrency, ToBankTextOptions } from '../../_type';
+import _ from "lodash";
+import { I18n, Num, Str } from "../";
+import {
+  ExchangeOptions,
+  ExchangeRate,
+  ExchangeRateTable,
+  TiCurrency,
+  ToBankTextOptions,
+} from "../../_type";
 
 ///////////////////////////////////////
 const CURRENCIES = {
   AUD: {
-    token: '$',
-    icon: 'fas-dollar-sign',
+    token: "$",
+    icon: "fas-dollar-sign",
     text: `i18n:currency-AUD`,
   },
   CAD: {
-    token: '$',
-    icon: 'fas-dollar-sign',
+    token: "$",
+    icon: "fas-dollar-sign",
     text: `i18n:currency-CAD`,
   },
   EUR: {
-    token: '€',
-    icon: 'fas-euro-sign',
+    token: "€",
+    icon: "fas-euro-sign",
     text: `i18n:currency-EUR`,
   },
   GBP: {
-    token: '£',
-    icon: 'fas-pound-sign',
+    token: "£",
+    icon: "fas-pound-sign",
     text: `i18n:currency-GBP`,
   },
   HKD: {
-    token: '¥',
-    icon: 'fas-yen-sign',
+    token: "¥",
+    icon: "fas-yen-sign",
     text: `i18n:currency-HKD`,
   },
   JPY: {
-    token: '¥',
-    icon: 'fas-yen-sign',
+    token: "¥",
+    icon: "fas-yen-sign",
     text: `i18n:currency-JPY`,
   },
   MOP: {
-    token: '¥',
-    icon: 'fas-yen-sign',
+    token: "¥",
+    icon: "fas-yen-sign",
     text: `i18n:currency-MOP`,
   },
   RMB: {
-    token: '¥',
-    icon: 'fas-yen-sign',
+    token: "¥",
+    icon: "fas-yen-sign",
     text: `i18n:currency-RMB`,
   },
   USD: {
-    token: '$',
-    icon: 'fas-dollar-sign',
+    token: "$",
+    icon: "fas-dollar-sign",
     text: `i18n:currency-USD`,
   },
 } as { [k: string]: { token: string; icon: string; text: string } };
 ///////////////////////////////////////
 
 /**
+ * 根据汇率数组生成汇率表，支持自动添加反向汇率与桥接汇率
+ * @param input 原始汇率数组
+ * @param bridge 桥接货币，默认 CNY
+ * @param autoAddReverse 是否自动补全反向汇率，默认 true
+ * @returns 汇率表对象
+ */
+export function buildExchangeRateTable(
+  input: ExchangeRate[],
+  bridge: string = "CNY",
+  autoAddReverse: boolean = true
+): ExchangeRateTable {
+  const table: ExchangeRateTable = new Map();
+
+  // 遍历输入，填充直接汇率
+  for (const { from, to, value } of input) {
+    const key = `${from}_${to}`;
+    table.set(key, value);
+
+    // 自动补全反向汇率
+    if (autoAddReverse) {
+      const reverseKey = `${to}_${from}`;
+      if (!(reverseKey in table)) {
+        table.set(reverseKey, Num.precise(1 / value, 4));
+      }
+    }
+  }
+
+  // 加入桥接汇率（自身兑换为 1）
+  if (bridge) {
+    table.set(`${bridge}_${bridge}`, 1);
+  }
+
+  return table;
+}
+
+/**
+ * 直接转换: `to = val x exrate[{from}_{to}]`
+ * 桥接转换: `to = val x exrate[{from}_{bridge}] x exrate[{bridge}_{to}]`
  *
  * @param val   金额, (1)若是数字，则直接转换; (2)若是 "xxRMB"结构的字符串，则解析后转换。
  * @param from  当前货币类型
@@ -60,19 +104,18 @@ const CURRENCIES = {
  * @param bridge 中间货币类型
  * @param exrs  转换汇率
  *
- * @returns 按汇率转换后的金额。(1)若是数字，则直接转换; (2)若是 "xxRMB"结构的字符串，则返回转换后的cent。
-
+ *
+ * @returns 按汇率转换后的金额。
+ * - 若是数字，则直接转换;
+ * - 若是 "xxRMB"结构的字符串，则返回转换后的cent。
  */
 
 export function exchange(
   val: number | string,
-  { from = 'RMB', to = 'RMB', bridge = 'RMB', exrs = {} } = {} as {
-    from?: string;
-    to?: string;
-    bridge?: string;
-    exrs?: { [k: string]: number };
-  }
+  options: ExchangeOptions
 ): number | undefined {
+  // 拆分输入参数
+  let { from = "CNY", to, bridge, table, precision } = options;
   // 解析出 cent 和 货币单位
   let { cent, currency } = parseCurrency(val, {
     currency: from,
@@ -91,45 +134,53 @@ export function exchange(
   }
 
   // 直接转换
-  let exr = exrs[`${from}_${to}`];
-  if (exr > 0) {
-    return val * exr;
+  let exr = table.get(`${from}_${to}`);
+  if (_.isNumber(exr)) {
+    let v = val * exr;
+    if (precision) {
+      return Num.precise(v, precision);
+    }
+    return v;
   }
 
-  // 逆向计算(评估)
-  exr = exrs[`${to}_${from}`];
-  if (exr > 0) {
-    return val / exr;
+  // 此时必须有桥接，否则无法计算
+  if (!bridge) {
+    throw new Error("Bridge currency cannot be empty");
   }
 
   // 使用中间货币计算
-  let br0 = exrs[`${from}_${bridge}`] || exrs[`${bridge}_${from}`];
-  let br1 = exrs[`${to}_${bridge}`] || exrs[`${bridge}_${to}`];
+  let br0 = table.get(`${from}_${bridge}`);
+  let br1 = table.get(`${bridge}_${to}`);
+  if (!_.isNumber(br0) || !_.isNumber(br1)) {
+    throw new Error(
+      `Exchange rate fail to build bridge, from:${from}, to:${to}, bridge:${bridge}`
+    );
+  }
   if (br0 && br0 > 0 && br1 && br1 > 0) {
-    let v0 = exchange(val, { from, to: bridge, exrs });
-    if (_.isFinite(v0)) {
-      let v1 = exchange(v0!, { from: bridge, to, exrs });
-      return v1;
+    let v = val * br0 * br1;
+    if (precision) {
+      return Num.precise(v, precision);
     }
+    return v;
   }
 }
 
-export function getCurrencyChar(cur: string = 'RMB'): string {
-  return _.get(CURRENCIES[cur], 'token');
+export function getCurrencyChar(cur: string = "RMB"): string {
+  return _.get(CURRENCIES[cur], "token");
 }
 
 //-----------------------------------
-export function getCurrencyToken(cur: string = 'RMB'): string {
-  return _.get(CURRENCIES[cur], 'token');
+export function getCurrencyToken(cur: string = "RMB"): string {
+  return _.get(CURRENCIES[cur], "token");
 }
 
 //-----------------------------------
-export function getCurrencyText(cur = 'RMB') {
-  return _.get(CURRENCIES[cur], 'text');
+export function getCurrencyText(cur = "RMB") {
+  return _.get(CURRENCIES[cur], "text");
 }
 //   //-----------------------------------
-export function getCurrencyIcon(cur = 'RMB') {
-  return _.get(CURRENCIES[cur], 'icon');
+export function getCurrencyIcon(cur = "RMB") {
+  return _.get(CURRENCIES[cur], "icon");
 }
 //-----------------------------------
 export function getCurrencyList(): any[] {
@@ -160,7 +211,7 @@ export function getCurrencyList(): any[] {
  */
 export function parseCurrency(
   input: String | Number | TiCurrency,
-  { unit = 100, currency = 'RMB' } = {} as {
+  { unit = 100, currency = "RMB" } = {} as {
     unit: number;
     currency?: string;
   }
@@ -191,7 +242,7 @@ export function parseCurrency(
     }
   }
   // 若是对象类型
-  else if (input instanceof Object && _.has(input, 'currency')) {
+  else if (input instanceof Object && _.has(input, "currency")) {
     //   if (input && input.currency) {
     // if (_.isObject(input) && _.has(input, "currency")) {
     input = <TiCurrency>input;
@@ -230,21 +281,21 @@ export function autoYuanTokenText(
   options: AutoYuanTokenTextOptions = {}
 ): string {
   let {
-    currency = 'RMB',
+    currency = "RMB",
     precision = 100,
     decimalPlaces = 2,
     width = 3,
-    sep = ',',
-    to = 'left',
+    sep = ",",
+    to = "left",
     showHeadToken: showPrefixToken = true,
     showTailUnit: showSuffixUnit = false,
   } = options;
 
   cent = Math.round(cent);
-  let neg = cent < 0 ? '-' : '';
+  let neg = cent < 0 ? "-" : "";
   cent = Math.abs(cent);
-  let head = showPrefixToken ? getCurrencyToken(currency) || '' : '';
-  let tail = showSuffixUnit ? currency : '';
+  let head = showPrefixToken ? getCurrencyToken(currency) || "" : "";
+  let tail = showSuffixUnit ? currency : "";
 
   let n = cent / 100;
   if (precision > 0) {
@@ -294,7 +345,7 @@ export function toYuanText(cent = 0.0, precision = 100): string {
 //-----------------------------------
 export function toYuanTokenText(
   cent = 0.0,
-  currency = 'RMB',
+  currency = "RMB",
   precision = 100
 ): string {
   return autoYuanTokenText(cent, { currency, precision });
@@ -302,7 +353,7 @@ export function toYuanTokenText(
 //-----------------------------------
 export function toYuanTokenText2(
   cent = 0.0,
-  currency = 'RMB',
+  currency = "RMB",
   precision = 100
 ): string {
   let s = toYuanTokenText(cent, currency, precision);
@@ -319,7 +370,7 @@ export function toZeroText(
   options: ToZeroTextOptions = {}
 ) {
   if (!cent) {
-    return options.placeholder ?? '--';
+    return options.placeholder ?? "--";
   }
   return autoYuanTokenText(cent, options);
 }
@@ -330,10 +381,10 @@ export function toZeroTokenText(
   options: ToZeroTextOptions = {}
 ): string {
   if (!cent) {
-    return options.placeholder ?? '--';
+    return options.placeholder ?? "--";
   }
   return autoYuanTokenText(cent, {
-    currency: 'RMB',
+    currency: "RMB",
     showHeadToken: true,
     showTailUnit: false,
     ...options,
@@ -343,10 +394,10 @@ export function toZeroTokenText(
 //-----------------------------------
 export function toZeroTokenText2(cent = 0.0, options: ToZeroTextOptions = {}) {
   if (!cent) {
-    return options.placeholder ?? '--';
+    return options.placeholder ?? "--";
   }
   return autoYuanTokenText(cent, {
-    currency: 'RMB',
+    currency: "RMB",
     showHeadToken: true,
     showTailUnit: true,
     ...options,
@@ -362,26 +413,26 @@ export function toChineseText(cent = 0.0, capitalized = false): string {
   // Gen Text
   let re = [Str.intToChineseNumber(yuan, capitalized)];
   if (fen > 0) {
-    let UN = '角分厘毫';
-    let fens = _.padStart(fen + '', 4, '0');
-    re.push('元');
+    let UN = "角分厘毫";
+    let fens = _.padStart(fen + "", 4, "0");
+    re.push("元");
     for (let i = 0; i < fens.length; i++) {
       let f = Number(fens[i]) * 1;
       if (f > 0) {
         let t = Str.intToChineseNumber(f, capitalized);
         re.push(t);
         re.push(UN[i]);
-      } else if (re[re.length - 1] != '零') {
-        re.push('零');
+      } else if (re[re.length - 1] != "零") {
+        re.push("零");
       }
     }
-    if (re[re.length - 1] == '零') {
+    if (re[re.length - 1] == "零") {
       re.pop();
     }
   } else {
-    re.push('元整');
+    re.push("元整");
   }
-  return re.join('');
+  return re.join("");
 }
 
 /**
@@ -410,7 +461,7 @@ export function toBankText(
   }
 
   // 处理参数
-  let { width = 3, sep = ',', to = 'left', decimalPlaces = 2 } = options;
+  let { width = 3, sep = ",", to = "left", decimalPlaces = 2 } = options;
 
   // 如果是字符串，则处理一下一些分隔符号
   let str: string;
@@ -424,16 +475,16 @@ export function toBankText(
   if (!m) {
     throw `Impossiable toBankText '${val}'`;
   }
-  let prefix = m[1] ?? '';
-  let s = m[2].replaceAll(/[^0-9.]/g, '');
+  let prefix = m[1] ?? "";
+  let s = m[2].replaceAll(/[^0-9.]/g, "");
 
   // 分成两段，一个是整数部分+小数部分
-  let part_int: string = '';
-  let part_fra: string = '';
-  let pos = s.indexOf('.');
+  let part_int: string = "";
+  let part_fra: string = "";
+  let pos = s.indexOf(".");
   // 必然是 .xxx
   if (pos == 0) {
-    part_int = '0';
+    part_int = "0";
     part_fra = s.substring(1).trim();
   }
   // 全为整数
@@ -451,7 +502,7 @@ export function toBankText(
   parts[0] += Str.partitions(part_int, { width, sep, to });
   // 对于小数部分，对齐精度
   if (decimalPlaces > 0) {
-    parts.push(_.padEnd(part_fra, decimalPlaces, '0'));
+    parts.push(_.padEnd(part_fra, decimalPlaces, "0"));
   }
   // 如果不需要强制精度，则有值就显示
   else if (part_fra) {
@@ -459,16 +510,16 @@ export function toBankText(
   }
 
   // 返回
-  return parts.join('.');
+  return parts.join(".");
 }
 
 //-----------------------------------
 export function isValidPayType(payType: string): boolean {
   return (
     {
-      'wx.qrcode': true,
-      'zfb.qrcode': true,
-      'paypal': true,
+      "wx.qrcode": true,
+      "zfb.qrcode": true,
+      "paypal": true,
     }[payType] || false
   );
 }
@@ -476,7 +527,7 @@ export function isValidPayType(payType: string): boolean {
 export function getPayTypeText(payType: string, autoI18n = false) {
   let key = null;
   if (_.isString(payType)) {
-    key = `pay-by-${payType.replace('.', '-')}`;
+    key = `pay-by-${payType.replace(".", "-")}`;
   }
   if (key) return autoI18n ? I18n.get(key) : key;
 }
@@ -484,7 +535,7 @@ export function getPayTypeText(payType: string, autoI18n = false) {
 //-----------------------------------
 export function getPayTypeChooseI18nText(
   payType: string,
-  { text = 'pay-step-choose-tip2', nil = 'pay-step-choose-nil' } = {}
+  { text = "pay-step-choose-tip2", nil = "pay-step-choose-nil" } = {}
 ) {
   let ptt = getPayTypeText(payType, true);
   if (ptt) {

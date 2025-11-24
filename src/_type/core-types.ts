@@ -363,6 +363,49 @@ export type StrCaseFunc = {
 export type StrCaseMode = keyof StrCaseFunc;
 /*---------------------------------------------------
 
+                  数字、货币、汇率换算
+
+---------------------------------------------------*/
+export type ExchangeRate = {
+  /** 汇率的来源货币: CNY, USD, EUR, JPY, GBP, AUD, ... */
+  from: string;
+  /** 汇率的目标货币: CNY, USD, EUR, JPY, GBP, AUD, ... */
+  to: string;
+  /** 汇率数值字符串形式(4位小数精度) */
+  rate: string;
+  /** 汇率数值(4位小数精度) */
+  value: number;
+};
+
+/**
+ * 汇率转换集合
+ *
+ * 键: `${from}_${to}`
+ * 值: 汇率数值(4位小数精度)
+ */
+export type ExchangeRateTable = Map<string, number>;
+
+export type ExchangeOptions = {
+  /** 汇率的来源货币: CNY, USD, EUR, JPY, GBP, AUD, ... */
+  from?: string;
+  /** 汇率的目标货币: CNY, USD, EUR, JPY, GBP, AUD, ... */
+  to: string;
+  /**
+   * 桥接货币（如果不指定，则无法桥接）
+   */
+  bridge?: string;
+  /**
+   * 汇率转换的表格
+   */
+  table: ExchangeRateTable;
+
+  /**
+   * 转换后的币值小数精度，不指定的话，则不做四舍五入
+   */
+  precision?: number;
+};
+/*---------------------------------------------------
+
                       逻辑类型
 
 ---------------------------------------------------*/

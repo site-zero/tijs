@@ -90,7 +90,7 @@ export function useWall(
   function selectItemByIndex(index: number, quiet?: boolean) {
     let item = getWallItemByIndex(index);
     if (item) {
-      selectItemById(item.id);
+      selectItemById(item.id, quiet);
     }
   }
   //-----------------------------------------------------
@@ -117,7 +117,7 @@ export function useWall(
   function toggleByIndex(index: number, quiet?: boolean) {
     let item = getWallItemByIndex(index);
     if (item) {
-      toggleById(item.id);
+      toggleById(item.id, quiet);
     }
   }
   //-----------------------------------------------------
