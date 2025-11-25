@@ -2,11 +2,11 @@ import _ from "lodash";
 import { DateTime, I18n, Num, Str } from "../";
 import {
   CurrencyExchangeRate,
+  DateInput,
   ExchangeOptions,
   ExchangeRate,
   ExchangeRateSet,
   ExchangeRateTable,
-  LAST_EXCHANGE_RATE,
   TiCurrency,
   ToBankTextOptions,
 } from "../../_type";
@@ -70,30 +70,11 @@ export function buildExchangeRateTable(
   input: CurrencyExchangeRate[],
   bridge: string = "CNY"
 ) {
-  const re: ExchangeRateTable = new Map();
+  const re: ExchangeRateTable = {
+    loadedDates: new Set(),
+    rates: new Map(),
+  };
   joinExchangeRateTable(re, input, bridge);
-  return re;
-}
-
-export function toExchangeRateTable(
-  input: Record<string, Record<string, ExchangeRate | string | number>>
-) {
-  const re: ExchangeRateTable = new Map();
-  for (let cc in input) {
-    let set = input[cc];
-    let the_set: ExchangeRateSet = new Map();
-    for (let k in set) {
-      let v = set[k];
-      if (_.isNumber(v)) {
-        the_set.set(k, { value: v, rate: `${v}` });
-      } else if (_.isString(v)) {
-        the_set.set(k, { value: (v as any) * 1, rate: v as any });
-      } else {
-        the_set.set(k, v);
-      }
-    }
-    re.set(cc, the_set);
-  }
   return re;
 }
 
@@ -117,40 +98,56 @@ export function joinExchangeRateTable(
 
     const key = `${bridge}_${currency}`;
     // 获取每日汇率表
-    let rate_set = table.get(key);
+    let rate_set = table.rates.get(key);
     let val: ExchangeRate = { rate, value };
 
     // 初始化:每日汇率表
     if (!rate_set) {
-      rate_set = new Map<string, ExchangeRate>();
-      table.set(key, rate_set);
+      rate_set = {
+        history: new Map(),
+      };
+      table.rates.set(key, rate_set);
     }
 
     // 最新汇率
     if (!endDate) {
-      rate_set.set(LAST_EXCHANGE_RATE, val);
-      rate_set.set(beginDate, val);
+      rate_set.last = val;
+      rate_set.lastDate = beginDate;
+      table.hasLoadedLastRates = true;
+      table.lastDate = beginDate;
+      table.loadedDates.add(beginDate);
     }
     // 填充每日汇率
     else if (beginDate >= endDate!) {
-      rate_set.set(beginDate, val);
+      rate_set.history.set(beginDate, val);
+      table.loadedDates.add(beginDate);
     }
     // 添加多个日汇率
     else {
       // 开始日期
-      rate_set.set(beginDate, val);
-      // 中间日期
-      let d = DateTime.parse(beginDate, { timezone: "Z" });
-      while (true) {
+      rate_set.history.set(beginDate, val);
+      table.loadedDates.add(beginDate);
+      // 中间日期 yyyyMMdd
+      let m = /^(\d{4})(\d{2})(\d{2})$/.exec(beginDate);
+      if (!m) {
+        throw new Error(`Invalid exchange rate beginDate format: ${beginDate}`);
+      }
+      let d = new Date(`${m[1]}-${m[2]}-${m[3]} 00:00:00Z`);
+      // 100 天汇率总会变吧
+      let loopCount = 0;
+      while (loopCount < 100) {
         DateTime.moveDate(d, 1);
-        let d_in_s = DateTime.format(d, { timezone: "Z" });
-        if (d_in_s == "20000101" || d_in_s == endDate!) {
+        let d_in_s = DateTime.format(d, { fmt: "yyyyMMdd", timezone: "Z" });
+        if (d_in_s == endDate!) {
           break;
         }
-        rate_set.set(d_in_s, val);
+        rate_set.history.set(d_in_s, val);
+        table.loadedDates.add(d_in_s);
+        loopCount++;
       }
       // 结束日期
-      rate_set.set(endDate, val);
+      rate_set.history.set(endDate, val);
+      table.loadedDates.add(endDate);
     }
   }
 
@@ -181,35 +178,25 @@ export function exchange(val: number, options: ExchangeOptions): number {
   let exr = evalExchangeRate(_.omit(options, "precision"));
 
   // 转换金额
-  let re = val * exr.value;
+  let re = val * exr;
   if (options.precision) {
     return Num.precise(re, options.precision);
   }
   return re;
 }
 //-----------------------------------
-export function evalExchangeRate(options: ExchangeOptions): ExchangeRate {
-  let {
-    from = "CNY",
-    to,
-    bridge,
-    exchangeDate,
-    table,
-    precision = 4,
-  } = options;
+export function evalExchangeRate(options: ExchangeOptions): number {
+  let { from = "CNY", to, bridge, table, precision = 4 } = options;
 
   // 无需汇率转换
   if (from == to) {
-    return { rate: "1", value: 1 };
+    return 1;
   }
 
   // 直接转换
-  let rs = table.get(`${from}_${to}`);
-  if (rs) {
-    let exr = getExchangeRateOfDate(rs, exchangeDate);
-    if (exr) {
-      return exr;
-    }
+  let exr = table[`${from}_${to}`];
+  if (_.isNumber(exr)) {
+    return exr;
   }
 
   // 此时必须有桥接，否则无法计算
@@ -223,44 +210,52 @@ export function evalExchangeRate(options: ExchangeOptions): ExchangeRate {
   }
 
   // 使用中间货币桥接计算
-  const errMsg = `Exchange rate fail to build bridge, from:${from}, to:${to}, bridge:${bridge}, exchangeDate:${
-    exchangeDate ?? LAST_EXCHANGE_RATE
-  }`;
+  const errMsg = `Exchange rate fail to build bridge, from:${from}, to:${to}, bridge:${bridge}`;
 
   // 前桥
   let br0_is_rev = false;
-  let br0 = table.get(`${from}_${bridge}`);
-  if (!br0) {
-    br0 = table.get(`${bridge}_${from}`);
+  let br0 = table[`${from}_${bridge}`];
+  if (!_.isNumber(br0)) {
+    br0 = table[`${bridge}_${from}`];
     br0_is_rev = true;
-    if (!br0) throw Error(errMsg);
+    if (!_.isNumber(br0)) throw Error(errMsg);
   }
-  let br0_exr = getExchangeRateOfDate(br0, exchangeDate);
-  if (!br0_exr) throw Error(errMsg);
 
   // 后桥
   let br1_is_rev = false;
-  let br1 = table.get(`${bridge}_${to}`);
-  if (!br1) {
-    br1 = table.get(`${to}_${bridge}`);
+  let br1 = table[`${bridge}_${to}`];
+  if (!_.isNumber(br1)) {
+    br1 = table[`${to}_${bridge}`];
     br1_is_rev = true;
-    if (!br1) throw Error(errMsg);
+    if (!_.isNumber(br1)) throw Error(errMsg);
   }
-  let br1_exr = getExchangeRateOfDate(br1, exchangeDate);
-  if (!br1_exr) throw Error(errMsg);
 
   // 开始计算桥接汇率
-  let v0 = br0_is_rev ? 1 / br0_exr.value : 1 * br0_exr.value;
-  let v1 = br1_is_rev ? v0 / br1_exr.value : v0 * br1_exr.value;
-  let exr = Num.precise(v1, precision);
-  return { rate: `${exr}`, value: exr };
+  let v0 = br0_is_rev ? 1 / br0 : 1 * br0;
+  let v1 = br1_is_rev ? v0 / br1 : v0 * br1;
+  exr = Num.precise(v1, precision);
+  return exr;
+}
+//-----------------------------------
+export function toExchangeRateDateStr(input: DateInput): string {
+  let d = DateTime.parse(input, { timezone: "Z" });
+  return DateTime.format(d, { timezone: "Z", fmt: "yyyyMMdd" });
 }
 //-----------------------------------
 export function getExchangeRateOfDate(
   rateSet: ExchangeRateSet,
   date?: string | null
 ): ExchangeRate | undefined {
-  return rateSet.get(date || LAST_EXCHANGE_RATE);
+  // 未指定日期，返回最新汇率
+  if (!date) {
+    return rateSet.last;
+  }
+  // 指定日期比最后日期还晚，也用最新汇率
+  if (rateSet.lastDate && rateSet.last && date >= rateSet.lastDate) {
+    return rateSet.last;
+  }
+  // 寻找对应日期的汇率
+  return rateSet.history.get(date);
 }
 
 //-----------------------------------

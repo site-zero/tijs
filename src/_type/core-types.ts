@@ -380,12 +380,25 @@ export type ExchangeRate = {
 };
 
 /**
- * 一个货币的汇率的集合，键为 `yyyyMMdd` 格式的日期,
- * 值为该日期的汇率
- * 键 `LAST` 表示最新汇率
+ * 记录一个币种转换的各个交易日的汇率
  */
-export type ExchangeRateSet = Map<string, ExchangeRate>;
-export const LAST_EXCHANGE_RATE = "LAST_EXCHANGE_RATE";
+export type ExchangeRateSet = {
+  /**
+   * 最新汇率
+   */
+  last?: ExchangeRate;
+
+  /**
+   * 最新汇率的日期: yyyyMMdd
+   */
+  lastDate?: string;
+
+  /**
+   * 一个货币的汇率的集合，键为 `yyyyMMdd` 格式的日期,
+   * 值为该日期的汇率
+   */
+  history: Map<string, ExchangeRate>;
+};
 
 export type CurrencyExchangeRate = ExchangeRate & {
   /**
@@ -410,7 +423,25 @@ export type CurrencyExchangeRate = ExchangeRate & {
  * 键: `${from}_${to}`
  * 值: 汇率数值(4位小数精度)
  */
-export type ExchangeRateTable = Map<string, ExchangeRateSet>;
+export type ExchangeRateTable = {
+  /**
+   * 是否加载过最新汇率
+   */
+  hasLoadedLastRates?: boolean;
+  /**
+   * 最新汇率的日期: yyyyMMdd
+   */
+  lastDate?: string;
+  /**
+   * 为了防止重复读取， 这里记录所加载过汇率的日期
+   */
+  loadedDates: Set<string>;
+  /**
+   * 键: `${from}_${to}`
+   * 值: 汇率数值(4位小数精度)
+   */
+  rates: Map<string, ExchangeRateSet>;
+};
 
 export type ExchangeOptions = {
   /** 汇率的来源货币: CNY, USD, EUR, JPY, GBP, AUD, ... */
@@ -430,14 +461,9 @@ export type ExchangeOptions = {
    */
   bridge?: string;
   /**
-   * 指定 `yyyyMMdd` 格式的日期，不指定的话，则使用最新汇率
-   */
-  exchangeDate?: string;
-  /**
    * 汇率转换的表格
    */
-  table: ExchangeRateTable;
-
+  table: Record<string, number>;
   /**
    * 转换后的币值小数精度，不指定的话，则不做四舍五入
    */

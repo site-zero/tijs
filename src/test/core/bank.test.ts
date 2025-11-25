@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { LAST_EXCHANGE_RATE, ToBankTextOptions } from "../../_type";
+import { ToBankTextOptions } from "../../_type";
 import { Bank } from "../../core";
 
 test("exchange_bridge", function () {
@@ -9,10 +9,10 @@ test("exchange_bridge", function () {
       to: "AUD",
       bridge: "CNY",
       precision: 2,
-      table: Bank.toExchangeRateTable({
-        CNY_USD: { [LAST_EXCHANGE_RATE]: 0.1389 },
-        CNY_AUD: { [LAST_EXCHANGE_RATE]: 0.2128 },
-      }),
+      table: {
+        CNY_USD: 0.1389,
+        CNY_AUD: 0.2128,
+      },
     })
   ).eq(15.32);
 
@@ -21,10 +21,10 @@ test("exchange_bridge", function () {
     Bank.exchangeWithCurrency("10USD", {
       to: "AUD",
       bridge: "CNY",
-      table: Bank.toExchangeRateTable({
-        CNY_USD: { [LAST_EXCHANGE_RATE]: 0.1389 },
-        CNY_AUD: { [LAST_EXCHANGE_RATE]: 0.2128 },
-      }),
+      table: {
+        CNY_USD: 0.1389,
+        CNY_AUD: 0.2128,
+      },
     })
   ).eq("15.32AUD");
 });
@@ -34,9 +34,9 @@ test("exchange", function () {
     Bank.exchange(10, {
       from: "USD",
       to: "CNY",
-      table: Bank.toExchangeRateTable({
-        USD_CNY: { [LAST_EXCHANGE_RATE]: 7.2 },
-      }),
+      table: {
+        USD_CNY: 7.2,
+      },
     })
   ).eq(72);
 
@@ -44,9 +44,9 @@ test("exchange", function () {
     Bank.exchangeWithCurrency("nihao", {
       from: "USD",
       to: "CNY",
-      table: Bank.toExchangeRateTable({
-        USD_CNY: { [LAST_EXCHANGE_RATE]: 7.2 },
-      }),
+      table: {
+        USD_CNY: 7.2,
+      },
     })
   ).eq(undefined);
 });
