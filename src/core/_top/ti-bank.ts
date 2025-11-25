@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { DateTime, I18n, Num, Str, Util } from "../";
+import { DateTime, I18n, Num, Str } from "../";
 import {
   CurrencyExchangeRate,
   ExchangeOptions,
@@ -157,63 +157,64 @@ export function joinExchangeRateTable(
   return table;
 }
 
-/**
- * 直接转换: `to = val x exrate[{from}_{to}]`
- * 桥接转换: `to = val x exrate[{from}_{bridge}] x exrate[{bridge}_{to}]`
- *
- * @param val   金额, (1)若是数字，则直接转换; (2)若是 "xxCNY"结构的字符串，则解析后转换。
- * @param from  当前货币类型
- * @param to    目标货币类型
- * @param bridge 中间货币类型
- * @param exrs  转换汇率
- *
- *
- * @returns 按汇率转换后的金额。
- * - 若是数字，则直接转换;
- * - 若是 "xxCNY"结构的字符串，则返回转换后的cent。
- */
-
-export function exchange(
-  val: number | string,
-  options: ExchangeOptions
-): number | undefined {
+export function exchangeWithCurrency(val: string, options: ExchangeOptions) {
   // 拆分输入参数
-  let { from = "CNY", to, bridge, exchangeDate, table, precision } = options;
-  // 如果输入的是字符串，那么返回的就是输入值通常表示元
-  let val_is_str = _.isNumber(val);
+  let { from = "CNY" } = options;
   // 解析出 cent 和 货币单位
   let { cent, currency } = parseCurrency(val, {
     currency: from,
-    unit: val_is_str ? 1 : 100, // "20CNY" or 2000
+    unit: 1,
   });
 
-  // 输入字符(13CNY)，那么会用 cent 来计算，因此默认采用整数精度
-  if(_.isNil(precision) && !val_is_str){
-    precision = 0;
-  }
-
+  // 整理输入金额
   from = currency || from;
-  val = cent;
 
-  if (!_.isFinite(val)) {
-    return undefined;
+  // 转换
+  let v1 = exchange(cent, { ...options, from, precision: 0 });
+  if (isNaN(v1)) return undefined;
+  let yuan = Num.precise(v1, options.precision);
+  return `${yuan}${options.to}`;
+}
+
+export function exchange(val: number, options: ExchangeOptions): number {
+  // 获取汇率
+  let exr = evalExchangeRate(_.omit(options, "precision"));
+
+  // 转换金额
+  let re = val * exr.value;
+  if (options.precision) {
+    return Num.precise(re, options.precision);
   }
+  return re;
+}
+//-----------------------------------
+export function evalExchangeRate(options: ExchangeOptions): ExchangeRate {
+  let {
+    from = "CNY",
+    to,
+    bridge,
+    exchangeDate,
+    table,
+    precision = 4,
+  } = options;
 
+  // 无需汇率转换
   if (from == to) {
-    return val;
+    return { rate: "1", value: 1 };
   }
 
   // 直接转换
   let rs = table.get(`${from}_${to}`);
   if (rs) {
-    let exr = getExchangeRate(rs, exchangeDate);
+    let exr = getExchangeRateOfDate(rs, exchangeDate);
     if (exr) {
-      let v = val * exr.value;
-      if (_.isNumber(precision) && precision>=0) {
-        return Num.precise(v, precision);
-      }
-      return v;
+      return exr;
     }
+  }
+
+  // 此时必须有桥接，否则无法计算
+  if (!bridge) {
+    throw new Error("Bridge currency cannot be empty");
   }
 
   // 此时必须有桥接，否则无法计算
@@ -234,7 +235,7 @@ export function exchange(
     br0_is_rev = true;
     if (!br0) throw Error(errMsg);
   }
-  let br0_exr = getExchangeRate(br0, exchangeDate);
+  let br0_exr = getExchangeRateOfDate(br0, exchangeDate);
   if (!br0_exr) throw Error(errMsg);
 
   // 后桥
@@ -245,20 +246,17 @@ export function exchange(
     br1_is_rev = true;
     if (!br1) throw Error(errMsg);
   }
-  let br1_exr = getExchangeRate(br1, exchangeDate);
+  let br1_exr = getExchangeRateOfDate(br1, exchangeDate);
   if (!br1_exr) throw Error(errMsg);
 
-  // 开始桥接计算
-  let v0 = br0_is_rev ? val / br0_exr.value : val * br0_exr.value;
+  // 开始计算桥接汇率
+  let v0 = br0_is_rev ? 1 / br0_exr.value : 1 * br0_exr.value;
   let v1 = br1_is_rev ? v0 / br1_exr.value : v0 * br1_exr.value;
-  if (_.isNumber(precision) && precision>=0) {
-    return Num.precise(v1, precision);
-  }
-  return v1;
+  let exr = Num.precise(v1, precision);
+  return { rate: `${exr}`, value: exr };
 }
-
 //-----------------------------------
-export function getExchangeRate(
+export function getExchangeRateOfDate(
   rateSet: ExchangeRateSet,
   date?: string | null
 ): ExchangeRate | undefined {

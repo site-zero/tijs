@@ -18,7 +18,7 @@ test("exchange_bridge", function () {
 
   // 采用 10USD 那么返回的数值默认为分(cent)
   expect(
-    Bank.exchange("10USD", {
+    Bank.exchangeWithCurrency("10USD", {
       to: "AUD",
       bridge: "CNY",
       table: Bank.toExchangeRateTable({
@@ -26,7 +26,7 @@ test("exchange_bridge", function () {
         CNY_AUD: { [LAST_EXCHANGE_RATE]: 0.2128 },
       }),
     })
-  ).eq(1532);
+  ).eq("15.32AUD");
 });
 
 test("exchange", function () {
@@ -41,7 +41,7 @@ test("exchange", function () {
   ).eq(72);
 
   expect(
-    Bank.exchange("nihao", {
+    Bank.exchangeWithCurrency("nihao", {
       from: "USD",
       to: "CNY",
       table: Bank.toExchangeRateTable({
