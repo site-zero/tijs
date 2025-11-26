@@ -1,32 +1,32 @@
 <script lang="ts" setup>
-  import _ from 'lodash';
-  import { computed, onMounted, onUnmounted, ref } from 'vue';
+  import _ from "lodash";
+  import { computed, onMounted, onUnmounted, ref } from "vue";
   import {
     InputBoxProps,
     InputNumProps,
     TiInput,
     TiInputNum,
     useViewport,
-  } from '../../';
-  import { CssUtils } from '../../../core';
+  } from "../../";
+  import { CssUtils } from "../../../core";
   import {
     InputNumUnitEmitter,
     InputNumUnitProps,
-  } from './ti-input-num-unit-types';
-  import { useNumUnit } from './use-num-unit';
+  } from "./ti-input-num-unit-types";
+  import { useNumUnit } from "./use-num-unit";
   //-----------------------------------------------------
   const emit = defineEmits<InputNumUnitEmitter>();
   //-----------------------------------------------------
   const props = withDefaults(defineProps<InputNumUnitProps>(), {
     precision: 0,
     decimalPlaces: 0,
-    partSep: ',',
+    partSep: ",",
     partWidth: 3,
-    getNumber: 'number',
-    getUnit: 'unit',
+    getNumber: "number",
+    getUnit: "unit",
     unitSelectOnly: true,
-    unitWidth: '4em',
-    valueInputAlign: 'right',
+    unitWidth: "4em",
+    valueInputAlign: "right",
   });
   //-----------------------------------------------------
   const NU = computed(() => useNumUnit(props, emit));
@@ -45,7 +45,7 @@
   });
   //-----------------------------------------------------
   const TopClass = computed(() =>
-    CssUtils.mergeClassName(props.className, `gap-${props.gap ?? 't'}`)
+    CssUtils.mergeClassName(props.className, `gap-${props.gap ?? "t"}`)
   );
   //-----------------------------------------------------
   const TopStyle = computed(() => CssUtils.toStyle(props.style));
@@ -57,35 +57,36 @@
   const NumConfig = computed(() => {
     let re: InputNumProps = _.omit(
       props,
-      'value',
-      'style',
-      'className',
-      'getNumber',
-      'setNumber',
-      'getUnit',
-      'setUnit',
-      'numAsStr',
-      'defaultNumber',
-      'defaultUnit',
-      'units',
-      'unitSelectOnly',
-      'unitWidth',
-      'gap'
+      "value",
+      "style",
+      "className",
+      "getNumber",
+      "setNumber",
+      "getUnit",
+      "setUnit",
+      "numAsStr",
+      "defaultNumber",
+      "defaultUnit",
+      "units",
+      "unitSelectOnly",
+      "unitWidth",
+      "gap"
     );
     return re;
   });
   //-----------------------------------------------------
   const UnitConfig = computed(() => {
-    let re: InputBoxProps = _.pick(props, 'hideBorder');
+    let re: InputBoxProps = _.pick(props, "hideBorder");
     _.assign(
       re,
       {
         mustInOptions: true,
         useRawValue: true,
-        valueInputAlign: 'left',
-        tipFormat: 'VT',
-        suffixIconFor: 'load-options',
+        valueInputAlign: "left",
+        tipFormat: "VT",
+        suffixIconFor: "load-options",
         suffixIcon: null,
+        readonly: props.readonly,
       } as InputBoxProps,
       props.units
     );
@@ -108,7 +109,7 @@
     return re;
   });
   //-----------------------------------------------------
-  function onNumberChange(val: number|null) {
+  function onNumberChange(val: number | null) {
     NU.value.emitNumberChange(val);
   }
   //-----------------------------------------------------
@@ -118,29 +119,17 @@
   //-----------------------------------------------------
 </script>
 <template>
-  <div
-    ref="$el"
-    class="ti-input-num-unit"
-    :class="TopClass"
-    :style="TopStyle">
+  <div ref="$el" class="ti-input-num-unit" :class="TopClass" :style="TopStyle">
     <!--数字部分-->
     <div class="part-number">
-      <TiInputNum
-        v-bind="NumConfig"
-        :value="NumVal"
-        @change="onNumberChange" />
+      <TiInputNum v-bind="NumConfig" :value="NumVal" @change="onNumberChange" />
     </div>
     <!--单位部分-->
-    <div
-      class="part-unit"
-      :style="PartUnitStyle">
-      <TiInput
-        v-bind="UnitConfig"
-        :value="UnitVal"
-        @change="onUnitChange" />
+    <div class="part-unit" :style="PartUnitStyle">
+      <TiInput v-bind="UnitConfig" :value="UnitVal" @change="onUnitChange" />
     </div>
   </div>
 </template>
 <style lang="scss">
-  @use './ti-input-num-unit.scss';
+  @use "./ti-input-num-unit.scss";
 </style>

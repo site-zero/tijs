@@ -76,7 +76,7 @@ test('parse_time', () => {
 test('parse_format', () => {
   let d = DateTime.parse('2021-12-23T13:14:27.981+08:00');
   expect(d?.getMilliseconds()).eq(981);
-  expect('2021-12-23 13:14:27').eq(DateTime.format(d, { timezone: 8 }));
+  expect('2021-12-23 13:14:27').eq(DateTime.format(d!, { timezone: 8 }));
 });
 
 test('parse_undefined', function () {
@@ -117,37 +117,29 @@ test('parse_number', function () {
   let reval = DateTime.parse(number);
   // date.toJson 结果会默认转到UTC时区
   expect(reval?.toJSON()).eq('2023-10-03T08:30:30.000Z');
-  expect(DateTime.format(reval)).eq('2023-10-03 16:30:30');
+  expect(DateTime.format(reval!)).eq('2023-10-03 16:30:30');
 });
 
 test('parse_string', function () {
   let d = DateTime.parse('2023-06-01 08:00:01.126+8');
   expect(d?.getMilliseconds()).eq(126);
-  expect(DateTime.format(d, { timezone: 8 })).eq('2023-06-01 08:00:01');
+  expect(DateTime.format(d!, { timezone: 8 })).eq('2023-06-01 08:00:01');
 
-  d = DateTime.parse('21-06-12 18:00:01+8');
-  expect(DateTime.format(d, { timezone: 8 })).eq('2021-06-12 18:00:01');
+  d = DateTime.parse('2021-06-12 18:00:01+8');
+  expect(DateTime.format(d!, { timezone: 8 })).eq('2021-06-12 18:00:01');
 
-  d = DateTime.parse('21-6-12 18:0:1+8');
-  expect(DateTime.format(d, { timezone: 8 })).eq('2021-06-12 18:00:01');
+  d = DateTime.parse('2021\\06\\12 18:00:01+8');
+  expect(DateTime.format(d!, { timezone: 8 })).eq('2021-06-12 18:00:01');
 
-  d = DateTime.parse('21\\06\\12 18:00:01+8');
-  expect(DateTime.format(d, { timezone: 8 })).eq('2021-06-12 18:00:01');
+  d = DateTime.parse('2021/06/12 18:00:01+8');
+  expect(DateTime.format(d!, { timezone: 8 })).eq('2021-06-12 18:00:01');
 
-  d = DateTime.parse('21/06/12 18:00:01+8');
-  expect(DateTime.format(d, { timezone: 8 })).eq('2021-06-12 18:00:01');
+  d = DateTime.parse('2021/06/12T18:00:01+8');
+  expect(DateTime.format(d!, { timezone: 8 })).eq('2021-06-12 18:00:01');
 
-  d = DateTime.parse('21/06/12T18:00:01+8');
-  expect(DateTime.format(d, { timezone: 8 })).eq('2021-06-12 18:00:01');
+  d = DateTime.parse('20210612+8');
+  expect(DateTime.format(d!, { timezone: 8 })).eq('2021-06-12 00:00:00');
 
-  d = DateTime.parse('23年9月21日+8');
-  expect(DateTime.format(d, { timezone: 8 })).eq('2023-09-21 00:00:00');
-
-  d = DateTime.parse('210612+8');
-  expect(DateTime.format(d, { timezone: 8 })).eq('2021-06-12 00:00:00');
-
-  d = DateTime.parse('2021+8');
-  expect(DateTime.format(d, { timezone: 8 })).eq('2021-01-01 00:00:00');
 });
 
 test('genFormatContext', function () {
@@ -182,7 +174,7 @@ test('genFormatContext', function () {
 });
 
 test('format', function () {
-  let d: Date | null = new Date();
+  let d: Date | undefined = new Date();
   d.setTime(1696663703000);
   expect(DateTime.format(d, { timezone: 8 })).eq('2023-10-07 15:28:23');
   expect(DateTime.format(d, { fmt: 'yyyy/MM/dd', timezone: 8 })).eq(
@@ -194,7 +186,7 @@ test('format', function () {
 
   d = DateTime.parse('2023-09-21 00:00:00+8');
   // console.log(DateTime.format(d));
-  expect(DateTime.format(d, { timezone: 8 })).eq('2023-09-21 00:00:00');
+  expect(DateTime.format(d!, { timezone: 8 })).eq('2023-09-21 00:00:00');
 });
 
 test('timeText', function () {
@@ -340,7 +332,7 @@ test('todayInMs', function () {
     DateTime.format(new Date(), { fmt: 'yyyy-MM-dd', timezone: 8 }) +
       ' 00:00:00+8'
   );
-  expect(DateTime.todayInMs()).eq(d.getTime());
+  expect(DateTime.todayInMs()).eq(d!.getTime());
 });
 
 test('countMonthDay', function () {

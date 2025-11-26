@@ -239,7 +239,7 @@ export function evalExchangeRate(options: ExchangeOptions): number {
 //-----------------------------------
 export function toExchangeRateDateStr(input: DateInput): string {
   let d = DateTime.parse(input, { timezone: "Z" });
-  return DateTime.format(d, { timezone: "Z", fmt: "yyyyMMdd" });
+  return DateTime.format(d!, { timezone: "Z", fmt: "yyyyMMdd" });
 }
 //-----------------------------------
 export function getExchangeRateOfDate(

@@ -30,11 +30,13 @@ const P_DATE = new RegExp(
     "(Z|([+-]\\d{1,2}(:\\d{2})?)?)?$"
 );
 
-export function parse(
-  d: undefined | null | [],
-  options?: DateParseOptions
-): undefined;
-export function parse(d: DateInput, options?: DateParseOptions): Date;
+type DataStdInfo = {
+  yy: string;
+  MM: string;
+  dd: string;
+  time: TiTime;
+  zone: DateParseOptionsZone;
+};
 
 /**
  * 把任何输入转换为日期对象。
@@ -59,6 +61,7 @@ export function parse(
   d: any,
   options: DateParseOptions = {}
 ): Date | undefined {
+  // 防空
   if (_.isNil(d) || Str.isBlank(d)) {
     return;
   }
@@ -85,110 +88,108 @@ export function parse(
     return new Date(d);
   }
   // String
-  if (_.isString(d)) {
-    let str = _.trim(d);
-    let overrideTimezone =
-      options.overrideTimezone ?? (options.timezone ? true : false);
-
-    // MS
-    if (/\d{13,}/.test(str)) {
-      return new Date((str as any) * 1);
-    }
-
-    // 符合标准，可以直接创建日期对象
-    //      | year   | month | day     T    HH      mm       ss    .    ms    Z
-    // 首先截取时区
-    let m = /(.+)([zZ]|[+-]\d{1,2}(:\d{2})?)$/.exec(str);
-    let timezone = "Z";
-    if (m) {
-      // 那么时区可能是 +08 或者 +08:00
-      timezone = m[2].trim();
-      str = m[1].trim();
-    }
-    // 强制覆盖时区
-    if (overrideTimezone && options.timezone) {
-      timezone = toTimezoneSuffix(options.timezone);
-    }
-
-    // 解析日期时间部分
-    if (
-      /^(\d{4}[/-]\d{2}[/-]\d{2})([ T]\d{2}:\d{2}(:\d{2}(\.\d{3})?)?)?$/.test(
-        str
-      )
-    ) {
-      let d = new Date(str + timezone);
-      if (!isNaN(d.getTime())) {
-        return d;
-      }
-    }
-
-    // 开始解析
-    let today = new Date();
-    let info = {
-      input: str,
-      yy: `${today.getFullYear()}`,
-      MM: `01`,
-      dd: `01`,
-      time: new TiTime("00:00:00"),
-      tz: timezone,
-    };
-
-    // 截取时间部分
-    m = /[^\d](\d{1,2}:(\d{1,2})(:(\d{1,2}))?)$/.exec(info.input);
-    if (m) {
-      info.time.update(m[1]);
-      info.input = info.input.substring(0, m.index + 1).trim();
-    }
-
-    // 处理日期部分:
-    // 250312 -> 2025-03-12
-    // 20250312 -> 2025-03-12
-    m = /^(\d?\d?\d\d)([01]\d)([0123]\d)$/.exec(info.input);
-    if (m) {
-      info.yy = info.yy.substring(0, 2) + m[1];
-      info.MM = m[2] ?? info.MM;
-      info.dd = m[3] ?? info.dd;
-    }
-    // 处理日期部分:
-    //  20250312 -> 2025-03-12
-    //  2025年03月12日 -> 2025-03-12
-    else {
-      m = /^(\d{2,4})([^\d]*([01]?\d)([^\d]*([0123]\d))?)?[^\d]*$/.exec(
-        info.input
-      );
-      if (m) {
-        let yy = m[1];
-        if (yy.length == 2) {
-          yy = info.yy.substring(0, 2) + yy;
-        }
-        info.yy = yy;
-        info.MM = m[3] ?? info.MM;
-        info.dd = m[5] ?? info.dd;
-      }
-      // can't parse
-      else {
-        return new Date(str);
-      }
-    }
-
-    // 合并输出
-    let dateStr = [
-      _.padStart(info.yy, 4, "0"),
-      "-",
-      _.padStart(info.MM, 2, "0"),
-      "-",
-      _.padStart(info.dd, 2, "0"),
-      " ",
-      info.time.toString(),
-      info.tz,
-    ].join("");
-    let date = new Date(dateStr);
-
-    return date;
+  if (!_.isString(d)) {
+    // Invalid date
+    console.trace("Invalid Date Format:", d);
+    return;
   }
-  // Invalid date
-  console.trace("Invalid Date:", d);
-  return;
+
+  // 必然是字符串
+  let str = _.trim(d);
+
+  // MS
+  if (/\d{13,}/.test(str)) {
+    return new Date((str as any) * 1);
+  }
+
+  let info: DataStdInfo;
+  let overrideTimezone =
+    options.overrideTimezone ?? (options.timezone ? true : false);
+
+  // 快速字符串 yyyyMMdd
+  let mq = /^(\d{4})([01]\d)(\d{2})([zZ]|([+-]\d{1,2})(:\d{2})?)?$/.exec(str);
+  if (mq) {
+    let timezone = _to_timezone_input(
+      mq[4],
+      mq[5],
+      options.timezone,
+      overrideTimezone
+    );
+    info = {
+      yy: mq[1],
+      MM: mq[2],
+      dd: mq[3],
+      time: new TiTime("00:00:00"),
+      zone: timezone,
+    };
+  }
+  // 符合标准，可以直接创建日期对象
+  //      | year   | month | day     T    HH      mm       ss    .    ms    Z
+  else {
+    let m =
+      /^(\d{4})[^\d]([01]\d)[^\d](\d{2})([^\d]{1,2})?([ T](\d{2}:\d{2}(:\d{2}(\.\d{3})?)?))?([zZ]|([+-]\d{1,2})(:\d{2})?)?$/.exec(
+        str
+      );
+    if (m) {
+      // let timezone = options.timezone || "Z";
+      // let _tz = m[8];
+      // if (!overrideTimezone && _tz) {
+      //   if ("z" == _tz || "Z" == _tz) {
+      //     timezone = "Z";
+      //   } else {
+      //     timezone = (m[9] as any) * 1;
+      //   }
+      // }
+      let timezone = _to_timezone_input(
+        m[9],
+        m[10],
+        options.timezone,
+        overrideTimezone
+      );
+      info = {
+        yy: m[1],
+        MM: m[2],
+        dd: m[3],
+        time: new TiTime(m[6] || "00:00:00"),
+        zone: timezone,
+      };
+    } else {
+      console.trace("Invalid Date Format:", d);
+      return;
+    }
+  }
+
+  // 合并输出
+  let dateStr = [
+    _.padStart(info.yy, 4, "0"),
+    "-",
+    _.padStart(info.MM, 2, "0"),
+    "-",
+    _.padStart(info.dd, 2, "0"),
+    " ",
+    info.time.toString(),
+    toTimezoneSuffix(info.zone),
+  ].join("");
+
+  return new Date(dateStr);
+}
+
+function _to_timezone_input(
+  _tz: string | null | undefined,
+  offset: string | null,
+  dft: DateParseOptionsZone | undefined,
+  overrideTimezone: boolean
+) {
+  let timezone = dft || "Z";
+  if (!overrideTimezone && _tz) {
+    if ("z" == _tz || "Z" == _tz) {
+      timezone = "Z";
+    } else {
+      timezone = (offset as any) * 1;
+    }
+  }
+
+  return timezone;
 }
 
 export function isDateTimeQuickParseMode(

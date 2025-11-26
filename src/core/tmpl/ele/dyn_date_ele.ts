@@ -24,7 +24,7 @@ export class DynDateEle extends DynEle {
     }
 
     let d = DateTime.parse(v as DateInput);
-    let s = DateTime.format(d, { fmt: this._fmt, trimZero: true }) as string;
+    let s = DateTime.format(d!, { fmt: this._fmt, trimZero: true }) as string;
     sb.push(s);
   }
 }
