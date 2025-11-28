@@ -1,11 +1,12 @@
 import { computed } from "vue";
-import { Num, ScoreProps, ScoreStarType } from "../../..";
+import { Num, Rects, ScoreEmitter, ScoreProps, ScoreStarType } from "../../..";
 
 export type ScoreApi = ReturnType<typeof useScoreApi>;
 
 export function useScoreApi(
   props: ScoreProps,
-  _getUl: () => HTMLElement | null | undefined
+  getUl: () => HTMLElement | null | undefined,
+  emit: ScoreEmitter
 ) {
   //-----------------------------------------------------
   // 计算属性
@@ -56,14 +57,49 @@ export function useScoreApi(
   // 响应操作
   //-----------------------------------------------------
   function onClickStar(_index: number, _event: MouseEvent) {
-    // 获取全星星数
+    console.log(_index, _event)
+    // 最大星数
+    let { stars = 5, minValue = 0, maxValue = 10 } = props;
 
-    // 如果支持半星模式，需要看看点击区域
+    // 获取全星星数(就是下标)
+    let n = _index
+
+    // 看看点击区域
     // 获取点击元素的中点
+    let $ul = getUl();
+    let $li = $ul?.children[_index];
+    let rect = Rects.createBy($li!);
+    let { pageX } = _event
+    // 左侧，半星
+    if (pageX < rect.x) {
+      n += 0.5;
+    }
+    // 右侧全星
+    else {
+      n += 1;
+    }
 
-    // 在中点左侧：半星
-    // 在中点由侧：全星
+    // 切换为比值
+    let p = Math.min(1, n / stars)
 
+    // 转换为值
+    let v = Math.max(minValue, p * maxValue);
+
+    // 原来就是1星，再点击则归零
+    if (Starts.value.full == 1 && Starts.value.half < 0 && _index == 0) {
+      if (n <= 0.5) {
+        emit('change', 0);
+        return;
+      }
+    }
+
+    // 如果不支持半星模式，需要取整
+    if (!props.allowHalf) {
+      v = Math.round(v);
+    }
+    if (v !== props.value) {
+      emit('change', v)
+    }
   }
   //-----------------------------------------------------
   // 返回 API

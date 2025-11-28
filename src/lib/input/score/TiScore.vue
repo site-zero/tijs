@@ -10,7 +10,7 @@
   import { ScoreEmitter, ScoreProps } from "./ti-score-types";
   import { useScoreApi } from "./use-score-api";
   //-----------------------------------------------------
-  const emits = defineEmits<ScoreEmitter>();
+  const emit = defineEmits<ScoreEmitter>();
   const $ul = useTemplateRef("ul");
   //-----------------------------------------------------
   const props = withDefaults(defineProps<ScoreProps>(), {
@@ -21,7 +21,7 @@
     allowHalfStart: true,
   });
   //-----------------------------------------------------
-  const api = useScoreApi(props, () => $ul.value);
+  const api = useScoreApi(props, () => $ul.value, emit);
   //-----------------------------------------------------
   const TopClass = computed(() => CssUtils.mergeClassName(props.className));
   //-----------------------------------------------------
