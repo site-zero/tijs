@@ -36,6 +36,10 @@
           props.starColorType,
           props.starColorSuffix
         ),
+        "--star-border-color": toLogicColor(
+          props.starBorderColorType,
+          props.starBorderColorSuffix
+        ),
       } as Vars,
     ]);
     return re;

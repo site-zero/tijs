@@ -1,12 +1,15 @@
 @use "@site0/tijs/sass/_all.scss" as *;
 
 .ti-score {
-  --star-fontsz: var(--ti-fontsz-h);
+  --star-fontsz: var(--ti-fontsz-m);
   --star-gap: var(--ti-gap-t);
   --star-item-padding: var(--ti-gap-t);
   --star-color: var(--ti-color-star);
   --star-border-size: 1px;
+  padding: 2px;
   > ul {
+    --bsz: var(--star-border-size);
+    --bcl: var(--star-border-color);
     list-style: none;
     margin: 0;
     @include flex-align-nowrap;
@@ -18,16 +21,13 @@
       color: var(--star-color);
       cursor: pointer;
       > i {
-        font-size: inherit;
-        text-shadow: -1px -1px var(--star-border-size) var(--star-border-color),
-          -1px 0px var(--star-border-size) var(--star-border-color),
-          -1px 1px var(--star-border-size) var(--star-border-color),
-          0px -1px var(--star-border-size) var(--star-border-color),
-          0px 0px var(--star-border-size) var(--star-border-color),
-          0px 1px var(--star-border-size) var(--star-border-color),
-          1px -1px var(--star-border-size) var(--star-border-color),
-          1px 0px var(--star-border-size) var(--star-border-color),
-          1px 1px var(--star-border-size) var(--star-border-color);
+        display: block;
+        font-size: 1.5em;
+        text-shadow: -1px -1px var(--bsz) var(--bcl),
+          -1px 0px var(--bsz) var(--bcl), -1px 1px var(--bsz) var(--bcl),
+          0px -1px var(--bsz) var(--bcl), 0px 0px var(--bsz) var(--bcl),
+          0px 1px var(--bsz) var(--bcl), 1px -1px var(--bsz) var(--bcl),
+          1px 0px var(--bsz) var(--bcl), 1px 1px var(--bsz) var(--bcl);
       }
     }
   }

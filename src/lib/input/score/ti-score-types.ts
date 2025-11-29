@@ -46,6 +46,9 @@ export type ScoreProps = CommonProps & {
   starColorType?: LogicType;
   starColorSuffix?: LogicColorSuffix | null;
 
+  starBorderColorType?: LogicType;
+  starBorderColorSuffix?: LogicColorSuffix | null;
+
   starStyle?: Vars;
   starIconStyle?: Vars;
 };

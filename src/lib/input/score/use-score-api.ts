@@ -60,23 +60,29 @@ export function useScoreApi(
     console.log(_index, _event)
     // 最大星数
     let { stars = 5, minValue = 0, maxValue = 10 } = props;
+    let star_val = Starts.value.scaledValue;
 
     // 获取全星星数(就是下标)
     let n = _index
 
+    if (!props.allowHalf) {
+      n += 1
+    }
     // 看看点击区域
     // 获取点击元素的中点
-    let $ul = getUl();
-    let $li = $ul?.children[_index];
-    let rect = Rects.createBy($li!);
-    let { pageX } = _event
-    // 左侧，半星
-    if (pageX < rect.x) {
-      n += 0.5;
-    }
-    // 右侧全星
     else {
-      n += 1;
+      let $ul = getUl();
+      let $li = $ul?.children[_index];
+      let rect = Rects.createBy($li!);
+      let { pageX } = _event
+      // 左侧，半星
+      if (pageX < rect.x) {
+        n += 0.5;
+      }
+      // 右侧全星
+      else {
+        n += 1;
+      }
     }
 
     // 切换为比值
@@ -85,9 +91,16 @@ export function useScoreApi(
     // 转换为值
     let v = Math.max(minValue, p * maxValue);
 
-    // 原来就是1星，再点击则归零
-    if (Starts.value.full == 1 && Starts.value.half < 0 && _index == 0) {
-      if (n <= 0.5) {
+    // 可半星的，原来是半星，再点半星归零
+    if (props.allowHalf) {
+      if (star_val === 0.5 && n < 0.5) {
+        emit('change', 0);
+        return;
+      }
+    }
+    // 否则，原来就是1星，再点一星则归零
+    else {
+      if (star_val === 1 && _index == 0) {
         emit('change', 0);
         return;
       }
@@ -95,7 +108,7 @@ export function useScoreApi(
 
     // 如果不支持半星模式，需要取整
     if (!props.allowHalf) {
-      v = Math.round(v);
+      v = Math.ceil(v);
     }
     if (v !== props.value) {
       emit('change', v)
