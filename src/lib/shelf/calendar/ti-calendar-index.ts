@@ -1,4 +1,4 @@
-import { TiComInfo, TiComRace } from "@site0/tijs";
+import { CalendarProps, TiComInfo, TiComRace } from "@site0/tijs";
 import { App } from "vue";
 import TiCalendar from "./TiCalendar.vue";
 
@@ -12,7 +12,7 @@ const zh_cn = {
 };
 
 const TiCalendarInfo: TiComInfo = {
-  tags: ["scaffold"],
+  tags: ["ing"],
   icon: "fas-calendar-days",
   race: TiComRace.SHELF,
   name: COM_TYPE,
@@ -27,9 +27,22 @@ const TiCalendarInfo: TiComInfo = {
   install: (app: App) => {
     app.component(COM_TYPE, TiCalendarInfo);
   },
-  defaultProps: "",
-  exampleProps: [],
+  liveStyle: {
+    "margin": "10px auto",
+    "width": "min-content"
+  },
+  defaultProps: 'simple',
+  exampleProps: [
+    {
+      name: 'simple',
+      text: 'i18n:simple',
+      comConf: {
+        width: '300px',
+        height: '300px',
+      } as CalendarProps,
+    }],
 };
 
 export * from "./ti-calendar-types";
 export { TiCalendar, TiCalendarInfo };
+

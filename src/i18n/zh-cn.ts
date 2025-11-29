@@ -152,6 +152,22 @@ export default {
   "dt-u-sec": "秒",
   "dt-u-week": "周",
   "dt-u-year": "年",
+  // 星期
+  "dt-w0": "日",
+  "dt-w1": "一",
+  "dt-w2": "二",
+  "dt-w3": "三",
+  "dt-w4": "四",
+  "dt-w5": "五",
+  "dt-w6": "六",
+  "dt-week0": "星期日",
+  "dt-week1": "星期一",
+  "dt-week2": "星期二",
+  "dt-week3": "星期三",
+  "dt-week4": "星期四",
+  "dt-week5": "星期五",
+  "dt-week6": "星期六",
+  //------------------------------
   "duplicate": "创建副本",
   // 错误信息
   "e-auth-account-noexists": "账户不存在",
