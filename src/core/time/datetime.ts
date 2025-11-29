@@ -24,10 +24,10 @@ import { TiTime } from "./time-info";
 // );
 const P_DATE = new RegExp(
   "^((\\d{2,4})([^0-9])(\\d{1,2})?([^0-9])?(\\d{1,2})?)?([^0-9])?" +
-    "(([ T])?" +
-    "(\\d{1,2})(:)(\\d{1,2})((:)(\\d{1,2}))?" +
-    "(([.])(\\d{1,3}))?)?" +
-    "(Z|([+-]\\d{1,2}(:\\d{2})?)?)?$"
+  "(([ T])?" +
+  "(\\d{1,2})(:)(\\d{1,2})((:)(\\d{1,2}))?" +
+  "(([.])(\\d{1,3}))?)?" +
+  "(Z|([+-]\\d{1,2}(:\\d{2})?)?)?$"
 );
 
 type DataStdInfo = {
@@ -887,6 +887,23 @@ export function createDate(d: Date, offset = 0) {
   let d2 = new Date(d);
   d2.setDate(d2.getDate() + offset);
   return d2;
+}
+
+export function isSameDate(d1?: Date | null | undefined, d2?: Date | null | undefined) {
+  if (!d1 || !d2) {
+    return false;
+  }
+  return d1.getFullYear() === d2.getFullYear() &&
+    d1.getMonth() === d2.getMonth() &&
+    d1.getDate() === d2.getDate();
+}
+
+export function isInMonth(d1?: Date | null | undefined, d2?: Date | null | undefined) {
+  if (!d1 || !d2) {
+    return false;
+  }
+  return d1.getFullYear() === d2.getFullYear() &&
+    d1.getMonth() === d2.getMonth();
 }
 
 export function parseTime(
