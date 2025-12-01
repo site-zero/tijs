@@ -154,6 +154,22 @@ export default {
   "dt-u-week": "Week",
   "dt-u-year": "Year",
   "duplicate": "Duplicate",
+  // Weekday
+  "dt-w0": "Sun",
+  "dt-w1": "Mon",
+  "dt-w2": "Tue",
+  "dt-w3": "Wed",
+  "dt-w4": "Thu",
+  "dt-w5": "Fri",
+  "dt-w6": "Sat",
+  "dt-week0": "Sunday",
+  "dt-week1": "Monday",
+  "dt-week2": "Tuesday",
+  "dt-week3": "Wednesday",
+  "dt-week4": "Thursday",
+  "dt-week5": "Friday",
+  "dt-week6": "Saturday",
+  //------------------------------
   // 错误信息
   "e-auth-account-noexists": "Account not exists",
   "e-auth-home-forbidden": "Auth home forbidden",

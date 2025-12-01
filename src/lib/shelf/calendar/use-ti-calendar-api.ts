@@ -1,7 +1,7 @@
 import { computed } from "vue";
 import { ComRef } from "../../../_type";
-import { DateTime, Util } from "../../../core";
-import { TiCalendarEmitter, TiCalendarProps } from "./ti-calendar-types";
+import { DateTime, I18n, Util } from "../../../core";
+import { CalendarEmitter, CalendarProps } from "./ti-calendar-types";
 
 export type TiCalendarApi = ReturnType<typeof useTiCalendarApi>;
 
@@ -30,7 +30,7 @@ export type CaleMonthDayCell = CaleMonthItem & ComRef & {
   isInMonth: boolean;
 }
 
-export function useTiCalendarApi(props: TiCalendarProps, _emit: TiCalendarEmitter) {
+export function useTiCalendarApi(props: CalendarProps, _emit: CalendarEmitter) {
   //-----------------------------------------------------
   // 数据模型
   //-----------------------------------------------------
@@ -48,6 +48,20 @@ export function useTiCalendarApi(props: TiCalendarProps, _emit: TiCalendarEmitte
       return DateTime.parse(props.today, { timezone: props.timezone })!;
     }
     return new Date();
+  })
+  //-----------------------------------------------------
+  const MonthHeads = computed(() => {
+    let prefix = props.i18nPrefix || 'dt-w'
+    let weekBegin = props.weekBegin || 0;
+    let re: string[] = [];
+    for (let i = weekBegin; i < 7; i++) {
+      re.push(I18n.get(`${prefix}${i}`));
+    }
+    // 周一开始一星期
+    if (props.weekBegin === 1) {
+      re.push(I18n.get(`${prefix}0`));
+    }
+    return re;
   })
   //-----------------------------------------------------
   const MonthCells = computed(() => {
@@ -125,6 +139,7 @@ export function useTiCalendarApi(props: TiCalendarProps, _emit: TiCalendarEmitte
     // 计算属性
     CurrentDate,
     Today,
+    MonthHeads,
     MonthCells
   };
 }

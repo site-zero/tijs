@@ -1,10 +1,10 @@
-import { CommonProps, ComRef, DateParseOptionsZone } from "@site0/tijs";
+import { CommonProps, ComRef, DateParseOptionsZone, TextFragment } from "@site0/tijs";
 
-export type TiCalendarEmitter = {
+export type CalendarEmitter = {
   (event: "change", payload: any): void;
 };
 
-export type TiCalendarProps = CommonProps & ComRef & {
+export type CalendarProps = CommonProps & ComRef & {
   /**
    * 任何可以转换为时间的值
    */
@@ -30,11 +30,21 @@ export type TiCalendarProps = CommonProps & ComRef & {
   today?: any;
 
   /**
+   * 国际化前缀
+   * 
+   * - `dt-w` 显示的是段鸣 (日、一、二、三、四、五、六)
+   * - `dt-week` 显示的是完整名称 (星期日、星期一、...、星期六)
+   * 
+   * 默认为  `dt-w
+   */
+  i18nPrefix?: 'dt-w' | 'dt-week';
+
+  /**
    * 一周开始的日子
    * 0 - 周日 【默认】
    * 1 - 周一
    */
-  weekBegin: 0 | 1
+  weekBegin?: 0 | 1
 
   /**
    * 说明显示多少个月的区块。
@@ -46,5 +56,14 @@ export type TiCalendarProps = CommonProps & ComRef & {
    * 今日区块在区块列表中的位置
    */
   todayIndex?: 0
+
+  /**
+   * 首尾扩展插槽
+   */
+  head?: TextFragment;
+  tail?: TextFragment;
+
+  width?: string;
+  height?: string;
 
 };

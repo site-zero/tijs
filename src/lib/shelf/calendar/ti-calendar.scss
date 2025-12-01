@@ -1,5 +1,41 @@
-@use '@site0/tijs/sass/_all.scss' as *;
+@use "@site0/tijs/sass/_all.scss" as *;
 
 .ti-calendar {
-  // 这里放置控件的样式
+  @include flex-align-v-nowrap;
+  --head-bg: var(--ti-color-border-shallow);
+  --head-color: var(--ti-color-primary);
+  --cell-fontsz: var(--ti-fontsz-m);
+  //-----------------------------------------------------
+  > main {
+    flex: 1 1 auto;
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    grid-template-rows: auto repeat(4, 1fr);
+    grid-auto-rows: 1fr;
+    gap: 3px;
+    padding: 6px;
+    background-color: var(--ti-color-border-shallow);
+    font-size: var(--cell-fontsz);
+    //---------------------------------------------------
+    > section.cale-cell {
+      background-color: var(--ti-color-card);
+      position: relative;
+      font-size: 0.8em;
+      //-------------------------------------------------
+      &.as-head {
+        @include flex-center;
+        background-color: var(--head-bg);
+        color: var(--head-color);
+      }
+      //-------------------------------------------------
+      > .cell-con {
+        position: absolute;
+        inset: 0;
+        @include flex-center;
+      } // > .cell-con {
+      //-------------------------------------------------
+    } // > section {
+    //---------------------------------------------------
+  } // > main {
+  //-----------------------------------------------------
 }
