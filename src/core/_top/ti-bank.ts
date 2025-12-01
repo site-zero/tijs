@@ -204,9 +204,10 @@ export function evalExchangeRate(options: ExchangeOptions): number {
     throw new Error("Bridge currency cannot be empty");
   }
 
-  // 此时必须有桥接，否则无法计算
-  if (!bridge) {
-    throw new Error("Bridge currency cannot be empty");
+  // 直接采用反转汇率
+  exr = table[`${to}_${from}`];
+  if (_.isNumber(exr)) {
+    return 1 / exr;
   }
 
   // 使用中间货币桥接计算
