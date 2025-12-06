@@ -1,5 +1,11 @@
-import { InputBoxAspect, InputBoxProps, PlaceholderProps, ReadonlyProps } from '../../';
-import { CommonProps, HDirecton, Vars } from '../../../_type';
+import {
+  InputBoxAspect,
+  InputBoxProps,
+  PlaceholderProps,
+  ReadonlyProps,
+} from "../../";
+import { CommonProps, HDirecton, Vars } from "../../../_type";
+import { ValueOptionsProps } from "../box2/use-value-options";
 
 export type InputNumProps = CommonProps &
   PlaceholderProps &
@@ -7,7 +13,11 @@ export type InputNumProps = CommonProps &
   InputBoxAspect &
   Pick<
     InputBoxProps,
-    'prefixIcon' | 'prefixHoverIcon' | 'suffixIcon' | 'suffixHoverIcon'
+    | "prefixIcon"
+    | "prefixHoverIcon"
+    | "suffixIcon"
+    | "suffixHoverIcon"
+    | "options"
   > & {
     value?: number | string | boolean | null;
     style?: Vars;

@@ -1453,7 +1453,12 @@ export function toAspectSizeValue(
 export function toAspectBoxPad(
   sz?: AspectSizeInput | null | undefined
 ): string | undefined {
-  return toAspectSizeValue("--ti-box-pad-", sz);
+  if (isAspectSize(sz)) {
+    return toAspectSizeValue("--ti-box-pad-", sz);
+  }
+  if (sz) {
+    return sz as string;
+  }
 }
 
 export function toAspectGap(

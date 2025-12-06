@@ -37,8 +37,8 @@ const TiCalendarInfo: TiComInfo = {
       name: 'simple',
       text: 'i18n:simple',
       comConf: {
-        width: '300px',
-        height: '300px',
+        width: '280px',
+        height: '260px',
       } as CalendarProps,
     }],
 };

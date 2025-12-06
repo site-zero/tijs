@@ -4,7 +4,33 @@
   @include flex-align-v-nowrap;
   --head-bg: var(--ti-color-border-shallow);
   --head-color: var(--ti-color-primary);
+  --head-fontsz: var(--ti-fontsz-s);
+  --main-pad: 6px;
   --cell-fontsz: var(--ti-fontsz-m);
+  --cell-gap: 3px;
+  --cell-today-bg: var(--ti-color-primary-r);
+  --cell-today-color: var(--ti-color-primary);
+  --cell-current-bg: var(--ti-color-secondary);
+  --cell-current-color: var(--ti-color-secondary-r);
+  //-----------------------------------------------------
+  > header {
+    @include flex-align-nowrap($jc: space-between);
+    font-size: var(--head-fontsz);
+    padding: var(--ti-gap-s) 0;
+    > .switcher {
+      @include flex-align-nowrap;
+      gap: var(--ti-gap-t);
+    }
+    > a.today {
+      display: block;
+      padding: 0.1em 1em;
+      transition: 0.3s;
+      &:hover {
+        border-radius: 0.3em;
+        background-color: var(--ti-color-mask-weak);
+      }
+    }
+  }
   //-----------------------------------------------------
   > main {
     flex: 1 1 auto;
@@ -12,8 +38,8 @@
     grid-template-columns: repeat(7, 1fr);
     grid-template-rows: auto repeat(4, 1fr);
     grid-auto-rows: 1fr;
-    gap: 3px;
-    padding: 6px;
+    gap: var(--cell-gap);
+    padding: var(--main-pad);
     background-color: var(--ti-color-border-shallow);
     font-size: var(--cell-fontsz);
     //---------------------------------------------------
@@ -28,11 +54,23 @@
         color: var(--head-color);
       }
       //-------------------------------------------------
-      > .cell-con {
-        position: absolute;
-        inset: 0;
-        @include flex-center;
-      } // > .cell-con {
+      &.as-date {
+        > .cell-con {
+          position: absolute;
+          inset: 0;
+          @include flex-center;
+        }
+        //-----------------------------------------------
+        &.is-out-of-month > .cell-con {
+          opacity: 0.3;
+        }
+        //-----------------------------------------------
+        &.is-today > .cell-con {
+          background-color: var(--cell-today-bg);
+          color: var(--cell-today-color);
+        }
+        //-----------------------------------------------
+      }
       //-------------------------------------------------
     } // > section {
     //---------------------------------------------------

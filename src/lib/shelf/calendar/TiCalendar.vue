@@ -1,7 +1,15 @@
 <script lang="ts" setup>
   import { computed } from "vue";
-  import { CssUtils } from "../../../core";
+  import { TiInput } from "../../";
+  import {
+    toAspectBoxPad,
+    toAspectFontSize,
+    toAspectGap,
+    toLogicColor,
+  } from "../../../";
+  import { CssUtils, I18n } from "../../../core";
   import { CalendarEmitter, CalendarProps } from "./ti-calendar-types";
+  import { useMonthDropConfig, useYearDropConfig } from "./use-drop-config";
   import { useTiCalendarApi } from "./use-ti-calendar-api";
   //-----------------------------------------------------
   const emit = defineEmits<CalendarEmitter>();
@@ -13,16 +21,49 @@
   const TopStyle = computed(() =>
     CssUtils.mergeStyles([
       {
-        width: props.width,
-        height: props.height,
+        "width": props.width,
+        "height": props.height,
+        "--head-bg": toLogicColor(props.headBg),
+        "--head-color": toLogicColor(props.headColor),
+        "--head-fontsz": toAspectFontSize(props.headFontSize),
+        "--main-pad": toAspectBoxPad(props.mainPadding),
+        "--cell-fontsz": toAspectFontSize(props.cellFontSize),
+        "--cell-gap": toAspectGap(props.cellGap),
+        "--cell-today-bg": toLogicColor(props.cellTodayBg),
+        "--cell-today-color": toLogicColor(props.cellTodayColor),
+        "--cell-current-bg": toLogicColor(props.cellCurrentBg),
+        "--cell-current-color": toLogicColor(props.cellCurrentColor),
       },
       props.style,
     ])
   );
   //-----------------------------------------------------
+  const YearDropConfig = computed(() => useYearDropConfig(props));
+  const MonthDropConfig = computed(() => useMonthDropConfig(props));
+  //-----------------------------------------------------
 </script>
 <template>
   <div class="ti-calendar" :class="TopClass" :style="TopStyle">
+    <header>
+      <div class="switcher">
+        <!--年份-->
+        <TiInput
+          v-bind="YearDropConfig"
+          :value="_api.ViewYear.value"
+          @click:prefix-icon="_api.gotoPrevYear()"
+          @click:suffix-icon="_api.gotoNextYear()"
+          @change="_api.gotoYear($event)" />
+        <!--月份-->
+        <TiInput
+          v-bind="MonthDropConfig"
+          :value="_api.ViewMonth.value"
+          @click:prefix-icon="_api.gotoPrevMonth()"
+          @click:suffix-icon="_api.gotoNextMonth()"
+          @change="_api.gotoMonth($event)" />
+      </div>
+      <!--跳转今日-->
+      <a class="today">{{ I18n.get("today") }}</a>
+    </header>
     <main>
       <!--星期头-->
       <section v-for="head in _api.MonthHeads.value" class="cale-cell as-head">

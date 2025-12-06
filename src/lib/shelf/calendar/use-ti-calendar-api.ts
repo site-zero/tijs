@@ -1,39 +1,41 @@
-import { computed } from "vue";
+import { computed, ref } from "vue";
 import { ComRef } from "../../../_type";
 import { DateTime, I18n, Util } from "../../../core";
 import { CalendarEmitter, CalendarProps } from "./ti-calendar-types";
 
 export type TiCalendarApi = ReturnType<typeof useTiCalendarApi>;
 
-export type MonthLastDate = 28 | 29 | 30 | 31
+export type MonthLastDate = 28 | 29 | 30 | 31;
 
 export type CaleMonthItem = {
   year: number;
   month: number;
-  dayInMonth: number,
+  dayInMonth: number;
   dayInWeek: number; // 0-6 : Sun,Mon....Fri,Sat
-  date: Date
-}
+  date: Date;
+};
 
-export type CaleMonthDayCell = CaleMonthItem & ComRef & {
-  /**
-   * 本区块是否为今日(props.today)
-   */
-  isToday: boolean;
-  /**
-   * 本区块是否为当前日期(props.value)
-   */
-  isCurrent: boolean;
-  /**
-   * 本区块是否在当前月份内
-   */
-  isInMonth: boolean;
-}
+export type CaleMonthDayCell = CaleMonthItem &
+  ComRef & {
+    /**
+     * 本区块是否为今日(props.today)
+     */
+    isToday: boolean;
+    /**
+     * 本区块是否为当前日期(props.value)
+     */
+    isCurrent: boolean;
+    /**
+     * 本区块是否在当前月份内
+     */
+    isInMonth: boolean;
+  };
 
 export function useTiCalendarApi(props: CalendarProps, _emit: CalendarEmitter) {
   //-----------------------------------------------------
   // 数据模型
   //-----------------------------------------------------
+  const _view_date = ref<Date>();
   //-----------------------------------------------------
   // 计算属性
   //-----------------------------------------------------
@@ -41,17 +43,30 @@ export function useTiCalendarApi(props: CalendarProps, _emit: CalendarEmitter) {
     if (props.value) {
       return DateTime.parse(props.value, { timezone: props.timezone });
     }
-  })
+  });
   //-----------------------------------------------------
   const Today = computed(() => {
     if (props.today) {
       return DateTime.parse(props.today, { timezone: props.timezone })!;
     }
     return new Date();
-  })
+  });
+  //-----------------------------------------------------
+  const ViewDate = computed(() => {
+    if (_view_date.value) {
+      return _view_date.value;
+    }
+    if (CurrentDate.value) {
+      return CurrentDate.value;
+    }
+    return Today.value;
+  });
+  //-----------------------------------------------------
+  const ViewYear = computed(() => ViewDate.value.getFullYear());
+  const ViewMonth = computed(() => ViewDate.value.getMonth());
   //-----------------------------------------------------
   const MonthHeads = computed(() => {
-    let prefix = props.i18nPrefix || 'dt-w'
+    let prefix = props.i18nPrefix || "dt-w";
     let weekBegin = props.weekBegin || 0;
     let re: string[] = [];
     for (let i = weekBegin; i < 7; i++) {
@@ -62,30 +77,40 @@ export function useTiCalendarApi(props: CalendarProps, _emit: CalendarEmitter) {
       re.push(I18n.get(`${prefix}0`));
     }
     return re;
-  })
+  });
   //-----------------------------------------------------
   const MonthCells = computed(() => {
-    return buildMonthCells(Today.value);
-  })
+    return buildMonthCells(ViewDate.value);
+  });
   //-----------------------------------------------------
   // 计算方法
   //-----------------------------------------------------
-  function buildMonthCells(today: Date) {
-    DateTime.setTime(today, 0, 0, 0, 0);
-    let items = createMonthItems(today);
-    let cells: CaleMonthDayCell[] = []
+  function buildMonthCells(view_date: Date) {
+    DateTime.setTime(view_date, 0, 0, 0, 0);
+    let items = createMonthItems(view_date);
+    let cells: CaleMonthDayCell[] = [];
     for (let item of items) {
-      let cell: CaleMonthDayCell;
-      let comType = props.comType
-      let comConf = Util.explainObj(item, props.comConf || {});
+      let isToday = DateTime.isSameDate(item.date, Today.value);
+      let isCurrent = DateTime.isSameDate(item.date, CurrentDate.value);
+      let isInMonth = DateTime.isInMonth(item.date, view_date);
+      let comType = props.comType;
+      let comConf = Util.explainObj(
+        {
+          ...item,
+          isToday,
+          isCurrent,
+          isInMonth,
+        },
+        props.comConf || {}
+      );
       cells.push({
         ...item,
+        isToday,
+        isCurrent,
+        isInMonth,
         comType,
         comConf,
-        isToday: DateTime.isSameDate(item.date, Today.value),
-        isCurrent: DateTime.isSameDate(item.date, CurrentDate.value),
-        isInMonth: DateTime.isInMonth(item.date, today)
-      })
+      });
     }
     return cells;
   }
@@ -103,7 +128,7 @@ export function useTiCalendarApi(props: CalendarProps, _emit: CalendarEmitter) {
     if (dayOffsetHead < 0) {
       dayOffsetHead = 6;
     }
-    const head = new Date(today)
+    const head = new Date(today);
     DateTime.moveDate(head, -dayOffsetHead);
 
     // 要显示多少周
@@ -123,14 +148,51 @@ export function useTiCalendarApi(props: CalendarProps, _emit: CalendarEmitter) {
           month: day.getMonth() + 1,
           dayInMonth: day.getDate(),
           dayInWeek: day.getDay(),
-          date: day
-        })
+          date: day,
+        });
       }
-
     }
 
     // 搞定返回
     return items;
+  }
+  //-----------------------------------------------------
+  // 操作方法
+  //-----------------------------------------------------
+  function gotoPrevYear() {
+    gotoYear(ViewDate.value.getFullYear() - 1);
+  }
+  //-----------------------------------------------------
+  function gotoNextYear() {
+    gotoYear(ViewDate.value.getFullYear() + 1);
+  }
+  //-----------------------------------------------------
+  function gotoYear(year: number) {
+    let vd = new Date(ViewDate.value);
+    vd.setFullYear(year);
+    _view_date.value = vd;
+  }
+  //-----------------------------------------------------
+  function gotoPrevMonth() {
+    let vd = new Date(ViewDate.value);
+    DateTime.moveMonth(vd, -1);
+    _view_date.value = vd;
+  }
+  //-----------------------------------------------------
+  function gotoNextMonth() {
+    let vd = new Date(ViewDate.value);
+    DateTime.moveMonth(vd, 1);
+    _view_date.value = vd;
+  }
+  //-----------------------------------------------------
+  /**
+   * @param month 月份， `0-11` 表示 1-12 月
+   */
+  function gotoMonth(month: number) {
+    let vd = new Date(ViewDate.value);
+    let m = Math.max(Math.min(month, 11), 0);
+    vd.setMonth(m);
+    _view_date.value = vd;
   }
   //-----------------------------------------------------
   // 返回接口
@@ -140,6 +202,17 @@ export function useTiCalendarApi(props: CalendarProps, _emit: CalendarEmitter) {
     CurrentDate,
     Today,
     MonthHeads,
-    MonthCells
+    MonthCells,
+    ViewDate,
+    ViewYear,
+    ViewMonth,
+
+    // 操作方法
+    gotoPrevYear,
+    gotoNextYear,
+    gotoYear,
+    gotoPrevMonth,
+    gotoNextMonth,
+    gotoMonth,
   };
 }

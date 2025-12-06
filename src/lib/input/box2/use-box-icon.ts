@@ -41,7 +41,8 @@ export function useBoxIcon(options: BoxIconOptions) {
         "clear": "zmdi-close",
         "copy": "zmdi-copy",
         "load-options": "zmdi-caret-down",
-        "click": "zmdi-more",
+        //"click": "zmdi-more",
+        "click": _icon.value,
       }[iconFor];
     }
   });
