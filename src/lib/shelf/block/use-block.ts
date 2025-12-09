@@ -79,16 +79,17 @@ export function useBlock(props: BlockProps, _options: BlockOptions) {
   //
   // 标题动作条
   //
-  const HeadActions = props.actionBar ?? {};
+  const HeadActions = _.cloneDeep(props.actionBar ?? {});
   if (props.actions && !_.isEmpty(props.actions)) {
     if (_.isEmpty(HeadActions.items)) {
-      HeadActions.items = props.actions;
+      HeadActions.items = [...props.actions];
     } else {
       HeadActions.items?.push({}, ...props.actions);
     }
   }
   if (props.actionVars) {
-    HeadActions.vars = HeadActions.vars || props.actionBar;
+    HeadActions.vars = HeadActions.vars || {};
+    _.assign(HeadActions.vars, props.actionVars);
   }
   if (props.actionClass) {
     HeadActions.className = props.actionClass;

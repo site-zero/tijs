@@ -61,6 +61,51 @@ const CURRENCIES = {
 } as { [k: string]: { token: string; icon: string; text: string } };
 ///////////////////////////////////////
 /**
+ * 创建一个以 bridge 货币为基准的汇率表构建器
+ * @param bridge 基准货币代码，如 "CNY"
+ */
+export function useExchangeRateTable(bridge: string) {
+  /**
+   * 准备一个 {CNY:4.6782, USD:0.7421 ...} 这样的 汇率映射
+   * 其中汇率表示 {bridge:AUD} 到 {key(CNY)} 的转换汇率
+   */
+  const _map = new Map<string, number>();
+
+  function add(currency: string, exrate: number): number {
+    let exr = exrate * 1;
+    if (isNaN(exr)) {
+      throw new Error(`Invalid exchange rate[${currency}]: ${exrate}`);
+    }
+    let old = _map.get(currency);
+    // 如果存在就检查
+    if (!_.isNil(old)) {
+      if (old != exr) {
+        throw new Error(
+          `Conflict exchange rate[${currency}]: old=${old}, input=${exr}`
+        );
+      }
+    }
+    // 不存在，就添加
+    else {
+      _map.set(currency, exr);
+    }
+    return exr;
+  }
+
+  function getTable() {
+    let re: Record<string, number> = {};
+    for (let [k, v] of _map.entries()) {
+      re[`${bridge}_${k}`] = v;
+    }
+    return re;
+  }
+
+  return {
+    add,
+    getTable,
+  };
+}
+/**
  * 根据汇率数组生成汇率表，支持自动添加反向汇率与桥接汇率
  * @param input 原始汇率数组
  * @param bridge 桥接货币，即本币，默认 CNY
