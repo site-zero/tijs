@@ -7,6 +7,9 @@ import { CalendarProps } from "./ti-calendar-types";
 export function useYearDropConfig(props: CalendarProps): InputNumProps {
   let options = [] as NumOptionItem[];
   let year = new Date().getFullYear();
+  if (props.yearDropBegin) {
+    year += props.yearDropBegin;
+  }
   for (; year > 2000; year--) {
     options.push({
       text: `${year}`,

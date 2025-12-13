@@ -39,6 +39,8 @@ const TiCalendarInfo: TiComInfo = {
       comConf: {
         width: '280px',
         height: '260px',
+        value:'2025-08-16',
+        cellRadius: 't'
       } as CalendarProps,
     }],
 };

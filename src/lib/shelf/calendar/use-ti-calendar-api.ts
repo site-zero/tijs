@@ -1,7 +1,12 @@
+import _ from "lodash";
 import { computed, ref } from "vue";
-import { ComRef } from "../../../_type";
+import { ComRef, DateParseOptionsZone } from "../../../_type";
 import { DateTime, I18n, Util } from "../../../core";
-import { CalendarEmitter, CalendarProps } from "./ti-calendar-types";
+import {
+  CalendarEmitter,
+  CalendarProps,
+  CalendarValueType,
+} from "./ti-calendar-types";
 
 export type TiCalendarApi = ReturnType<typeof useTiCalendarApi>;
 
@@ -31,7 +36,7 @@ export type CaleMonthDayCell = CaleMonthItem &
     isInMonth: boolean;
   };
 
-export function useTiCalendarApi(props: CalendarProps, _emit: CalendarEmitter) {
+export function useTiCalendarApi(props: CalendarProps, emit: CalendarEmitter) {
   //-----------------------------------------------------
   // 数据模型
   //-----------------------------------------------------
@@ -41,14 +46,34 @@ export function useTiCalendarApi(props: CalendarProps, _emit: CalendarEmitter) {
   //-----------------------------------------------------
   const CurrentDate = computed(() => {
     if (props.value) {
-      return DateTime.parse(props.value, { timezone: props.timezone });
+      return DateTime.parse(props.value, { timezone: ValueTimeZone.value });
     }
+  });
+  //-----------------------------------------------------
+  const AutoValueType = computed((): CalendarValueType => {
+    let v = props.value;
+    if (_.isNil(v)) return "str";
+    if (_.isDate(v)) return "date";
+    if (_.isNumber(v)) return "ms";
+    return "str";
+  });
+  //-----------------------------------------------------
+  const ValueType = computed(() => {
+    if ("auto" == props.valueType || !props.valueType) {
+      return AutoValueType.value;
+    }
+    return props.valueType;
+  });
+  //-----------------------------------------------------
+  const ValueTimeZone = computed((): DateParseOptionsZone => {
+    return props.timezone ?? DateTime.getDefaultTimezoneOffset(true);
   });
   //-----------------------------------------------------
   const Today = computed(() => {
     if (props.today) {
-      return DateTime.parse(props.today, { timezone: props.timezone })!;
+      return DateTime.parse(props.today, { timezone: ValueTimeZone.value })!;
     }
+
     return new Date();
   });
   //-----------------------------------------------------
@@ -116,23 +141,32 @@ export function useTiCalendarApi(props: CalendarProps, _emit: CalendarEmitter) {
   }
   //-----------------------------------------------------
   function createMonthItems(today: Date) {
-    const todayWeekDay = today.getDay(); // 0-6
+    const weekBegin = props.weekBegin || 0;
+
+    // 得到本月第一天以及它是周几
+    const first = new Date(today);
+    first.setDate(1);
+    const firstWeekDay = first.getDay(); // 0-6
+
+    // 得到最后本月一天
     const last = new Date(today);
     DateTime.moveToLastDateOfMonth(last);
     const lastDate = last.getDate();
-    const weekBegin = props.weekBegin || 0;
 
     // 之前要补几天？
-    let dayOffsetHead = todayWeekDay - weekBegin;
-    // today 为周日，  weekBegin 为周一时
+    let dayOffsetHead = firstWeekDay - weekBegin;
+    // first 为周日,  weekBegin 为周一时
     if (dayOffsetHead < 0) {
       dayOffsetHead = 6;
     }
-    const head = new Date(today);
+    const head = new Date(first);
     DateTime.moveDate(head, -dayOffsetHead);
 
     // 要显示多少周
     let weekCount = Math.ceil(dayOffsetHead + lastDate) / 7;
+    if (props.weekCount) {
+      weekCount = Math.max(weekCount, props.weekCount);
+    }
 
     // 准备返回值
     let items: CaleMonthItem[] = [];
@@ -141,14 +175,20 @@ export function useTiCalendarApi(props: CalendarProps, _emit: CalendarEmitter) {
     for (let w = 0; w < weekCount; w++) {
       // 第二层循环天
       for (let d = 0; d < 7; d++) {
-        let day = new Date(head);
-        DateTime.moveDate(day, w * 7 + d);
+        // 移动到今天
+        let theDate = new Date(head);
+        DateTime.moveDate(theDate, w * 7 + d);
+        let ds = DateTime.format(theDate, {
+          timezone: ValueTimeZone.value,
+          fmt: "yyyy-MM-dd",
+        });
+
         items.push({
-          year: day.getFullYear(),
-          month: day.getMonth() + 1,
-          dayInMonth: day.getDate(),
-          dayInWeek: day.getDay(),
-          date: day,
+          year: theDate.getFullYear(),
+          month: theDate.getMonth() + 1,
+          dayInMonth: theDate.getDate(),
+          dayInWeek: theDate.getDay(),
+          date: theDate,
         });
       }
     }
@@ -195,11 +235,35 @@ export function useTiCalendarApi(props: CalendarProps, _emit: CalendarEmitter) {
     _view_date.value = vd;
   }
   //-----------------------------------------------------
+  function gotoToday() {
+    _view_date.value = Today.value;
+  }
+  //-----------------------------------------------------
+  function toDateEmitValue(d: Date) {
+    if ("date" == ValueType.value) {
+      return new Date(d);
+    }
+    if ("ms" == ValueType.value) {
+      return "ms";
+    }
+    let fmt = props.valueFormat ?? "yyyy-MM-dd";
+    return DateTime.format(d, { fmt, timezone: ValueTimeZone.value });
+  }
+  //-----------------------------------------------------
+  function changeDate(d: Date) {
+    let val = toDateEmitValue(d);
+    if (val != props.value) {
+      emit("change", val);
+    }
+  }
+  //-----------------------------------------------------
   // 返回接口
   //-----------------------------------------------------
   return {
     // 计算属性
     CurrentDate,
+    AutoValueType,
+    ValueType,
     Today,
     MonthHeads,
     MonthCells,
@@ -214,5 +278,7 @@ export function useTiCalendarApi(props: CalendarProps, _emit: CalendarEmitter) {
     gotoPrevMonth,
     gotoNextMonth,
     gotoMonth,
+    gotoToday,
+    changeDate,
   };
 }
