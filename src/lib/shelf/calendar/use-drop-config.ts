@@ -39,7 +39,7 @@ export function useMonthDropConfig(props: CalendarProps): InputNumProps {
   for (let month = 0; month < 12; month++) {
     options.push({
       text: I18n.get(`month-${month + 1}`),
-      value: month,
+      value: month + 1,
     });
   }
   return _.assign(

@@ -12,7 +12,7 @@ const zh_cn = {
 };
 
 const TiCalendarInfo: TiComInfo = {
-  tags: ["ing"],
+  //tags: ["ing"],
   icon: "fas-calendar-days",
   race: TiComRace.SHELF,
   name: COM_TYPE,
@@ -28,23 +28,23 @@ const TiCalendarInfo: TiComInfo = {
     app.component(COM_TYPE, TiCalendarInfo);
   },
   liveStyle: {
-    "margin": "10px auto",
-    "width": "min-content"
+    margin: "10px auto",
+    width: "min-content",
   },
-  defaultProps: 'simple',
+  defaultProps: "simple",
   exampleProps: [
     {
-      name: 'simple',
-      text: 'i18n:simple',
+      name: "simple",
+      text: "i18n:simple",
       comConf: {
-        width: '280px',
-        height: '260px',
-        value:'2025-08-16',
-        cellRadius: 't'
+        width: "280px",
+        height: "260px",
+        value: "2025-08-16",
+        cellRadius: "t",
       } as CalendarProps,
-    }],
+    },
+  ],
 };
 
 export * from "./ti-calendar-types";
 export { TiCalendar, TiCalendarInfo };
-

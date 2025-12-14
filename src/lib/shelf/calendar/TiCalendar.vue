@@ -59,6 +59,7 @@
 </script>
 <template>
   <div class="ti-calendar" :class="TopClass" :style="TopStyle">
+    
     <header>
       <div class="switcher">
         <!--年份-->
@@ -96,15 +97,15 @@
           'is-in-month': cell.isInMonth,
           'is-out-of-month': !cell.isInMonth,
         }"
-        :title="cell.date.toISOString()">
+        :title="[cell.year, cell.month, cell.date].join('-')">
         <!--定制组件-->
         <component
           v-if="cell.comType"
           :is="cell.comType"
           v-bind="cell.comConf" />
         <!--原生展示-->
-        <div class="cell-con" v-else @click.left="_api.changeDate(cell.date)">
-          <span>{{ cell.dayInMonth }}</span>
+        <div class="cell-con" v-else @click.left="_api.changeDate(cell)">
+          <span>{{ cell.date }}</span>
         </div>
       </section>
     </main>
