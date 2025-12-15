@@ -11,6 +11,11 @@ export type SelectableItem<ID> = {
 };
 export type CanItemMatch<ID> = (item: SelectableItem<ID>) => boolean;
 // -----------------------------------------------------
+export type IDSelection<ID> = {
+  currentId?: ID;
+  checkedIds?: ID[];
+};
+// -----------------------------------------------------
 export type SelectableState<ID> = {
   currentId?: ID | null;
   checkedIds: Map<ID, boolean>;
