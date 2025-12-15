@@ -2,21 +2,24 @@
 
 .ti-calendar {
   @include flex-align-v-nowrap;
+  --main-pad: 6px;
   --head-bg: var(--ti-color-border-shallow);
   --head-color: var(--ti-color-primary);
   --head-fontsz: var(--ti-fontsz-s);
-  --main-pad: 6px;
+  --cell-bg: var(--ti-color-card);
   --cell-fontsz: var(--ti-fontsz-m);
   --cell-gap: 3px;
   --cell-today-bg: var(--ti-color-primary-r);
   --cell-today-color: var(--ti-color-primary);
   --cell-current-bg: var(--ti-color-secondary);
   --cell-current-color: var(--ti-color-secondary-r);
+  --cell-radius: 0;
   //-----------------------------------------------------
   > header {
     @include flex-align-nowrap($jc: space-between);
     font-size: var(--head-fontsz);
     padding: var(--ti-gap-s) 0;
+    user-select: none;
     > .switcher {
       @include flex-align-nowrap;
       gap: var(--ti-gap-t);
@@ -44,7 +47,6 @@
     font-size: var(--cell-fontsz);
     //---------------------------------------------------
     > section.cale-cell {
-      background-color: var(--ti-color-card);
       position: relative;
       font-size: 0.8em;
       //-------------------------------------------------
@@ -59,6 +61,11 @@
           position: absolute;
           inset: 0;
           @include flex-center;
+          background-color: var(--cell-bg);
+          border-radius: var(--cell-radius);
+          &:hover {
+            cursor: pointer;
+          }
         }
         //-----------------------------------------------
         &.is-out-of-month > .cell-con {
@@ -68,6 +75,11 @@
         &.is-today > .cell-con {
           background-color: var(--cell-today-bg);
           color: var(--cell-today-color);
+        }
+        //-----------------------------------------------
+        &.is-current > .cell-con {
+          background-color: var(--cell-current-bg);
+          color: var(--cell-current-color);
         }
         //-----------------------------------------------
       }

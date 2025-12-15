@@ -7,6 +7,9 @@ import { CalendarProps } from "./ti-calendar-types";
 export function useYearDropConfig(props: CalendarProps): InputNumProps {
   let options = [] as NumOptionItem[];
   let year = new Date().getFullYear();
+  if (props.yearDropBegin) {
+    year += props.yearDropBegin;
+  }
   for (; year > 2000; year--) {
     options.push({
       text: `${year}`,
@@ -36,7 +39,7 @@ export function useMonthDropConfig(props: CalendarProps): InputNumProps {
   for (let month = 0; month < 12; month++) {
     options.push({
       text: I18n.get(`month-${month + 1}`),
-      value: month,
+      value: month + 1,
     });
   }
   return _.assign(

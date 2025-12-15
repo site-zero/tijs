@@ -2,9 +2,11 @@
   import { computed } from "vue";
   import { TiInput } from "../../";
   import {
+    isAspectSize,
     toAspectBoxPad,
     toAspectFontSize,
     toAspectGap,
+    toAspectRadius,
     toLogicColor,
   } from "../../../";
   import { CssUtils, I18n } from "../../../core";
@@ -13,20 +15,25 @@
   import { useTiCalendarApi } from "./use-ti-calendar-api";
   //-----------------------------------------------------
   const emit = defineEmits<CalendarEmitter>();
-  const props = withDefaults(defineProps<CalendarProps>(), {});
+  const props = withDefaults(defineProps<CalendarProps>(), {
+    valueType: "auto",
+    weekBegin: 0,
+    weekCount: 6,
+  });
   const _api = useTiCalendarApi(props, emit);
   //-----------------------------------------------------
   const TopClass = computed(() => CssUtils.mergeClassName(props.className));
   //-----------------------------------------------------
-  const TopStyle = computed(() =>
-    CssUtils.mergeStyles([
+  const TopStyle = computed(() => {
+    let re = CssUtils.mergeStyles([
       {
         "width": props.width,
         "height": props.height,
+        "--main-pad": toAspectBoxPad(props.mainPadding),
         "--head-bg": toLogicColor(props.headBg),
         "--head-color": toLogicColor(props.headColor),
         "--head-fontsz": toAspectFontSize(props.headFontSize),
-        "--main-pad": toAspectBoxPad(props.mainPadding),
+        "--cell-bg": toLogicColor(props.cellBg),
         "--cell-fontsz": toAspectFontSize(props.cellFontSize),
         "--cell-gap": toAspectGap(props.cellGap),
         "--cell-today-bg": toLogicColor(props.cellTodayBg),
@@ -35,8 +42,16 @@
         "--cell-current-color": toLogicColor(props.cellCurrentColor),
       },
       props.style,
-    ])
-  );
+    ]);
+    if (props.cellRadius) {
+      if (isAspectSize(props.cellRadius)) {
+        re["--cell-radius"] = toAspectRadius(props.cellRadius);
+      } else {
+        re["--cell-radius"] = props.cellRadius;
+      }
+    }
+    return re;
+  });
   //-----------------------------------------------------
   const YearDropConfig = computed(() => useYearDropConfig(props));
   const MonthDropConfig = computed(() => useMonthDropConfig(props));
@@ -44,6 +59,7 @@
 </script>
 <template>
   <div class="ti-calendar" :class="TopClass" :style="TopStyle">
+    
     <header>
       <div class="switcher">
         <!--年份-->
@@ -62,7 +78,9 @@
           @change="_api.gotoMonth($event)" />
       </div>
       <!--跳转今日-->
-      <a class="today">{{ I18n.get("today") }}</a>
+      <a class="today" @click.left="_api.gotoToday()">{{
+        I18n.get("today")
+      }}</a>
     </header>
     <main>
       <!--星期头-->
@@ -78,15 +96,16 @@
           'is-today': cell.isToday,
           'is-in-month': cell.isInMonth,
           'is-out-of-month': !cell.isInMonth,
-        }">
+        }"
+        :title="[cell.year, cell.month, cell.date].join('-')">
         <!--定制组件-->
         <component
           v-if="cell.comType"
           :is="cell.comType"
           v-bind="cell.comConf" />
         <!--原生展示-->
-        <div class="cell-con" v-else>
-          <span>{{ cell.dayInMonth }}</span>
+        <div class="cell-con" v-else @click.left="_api.changeDate(cell)">
+          <span>{{ cell.date }}</span>
         </div>
       </section>
     </main>
