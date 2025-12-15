@@ -1,4 +1,4 @@
-@use '@site0/tijs/sass/_all.scss' as *;
+@use "@site0/tijs/sass/_all.scss" as *;
 
 .ti-grid-fiels-item.part-label {
   // &.as-info-box {
@@ -14,7 +14,7 @@
   .as-label-title {
     @include flex-align($ai: center, $ac: center);
     border-bottom: 1px solid var(--ti-color-border-shallow);
-    margin-top: 1.6em;
+    margin-top: var(--label-margin-top);
     > .ti-icon:first-child {
       margin-right: 0.3em;
     }
