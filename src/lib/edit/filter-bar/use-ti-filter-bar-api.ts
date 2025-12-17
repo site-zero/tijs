@@ -1,7 +1,16 @@
+import {
+  ActionBarEvent,
+  ActionBarProps,
+  AppModalProps,
+  FieldChange,
+  FormFieldItem,
+  FormProps,
+  openAppModal,
+  useFieldChange,
+  Vars,
+} from "@site0/tijs";
 import _ from "lodash";
 import { computed } from "vue";
-import { AppModalProps, openAppModal, Vars } from "../../../";
-import { ActionBarEvent, ActionBarProps } from "../../action/all-actions";
 import { dft_flt_bar_action_items } from "./support/dft-flt-bar-actions";
 import { FilterBarEmitter, FilterBarProps } from "./ti-filter-bar-types";
 import { useFormMajor } from "./use-form-major";
@@ -18,6 +27,15 @@ export function useTiFilterBarApi(
   const major = useFormMajor(props.major ?? {});
   const MajorFields = computed(() => major.getFields());
   const hasMajorFields = computed(() => major.hasMajorFields());
+  //-----------------------------------------------------
+  // 字段改动接口
+  //-----------------------------------------------------
+  const _major_change = computed(() => {
+    return useFieldChange<FormFieldItem>(
+      props.detailComConf ?? {},
+      MajorFields.value
+    );
+  });
   //-----------------------------------------------------
   // 操作菜单
   //-----------------------------------------------------
@@ -73,6 +91,20 @@ export function useTiFilterBarApi(
     tryNotifyChange(newVal);
   }
   //-----------------------------------------------------
+  function onMajorFieldChange(change: FieldChange) {
+    _major_change.value.handleValueChange(change, {
+      emit: (eventName: string, payload: any) => {
+        if ("change" == eventName) {
+          // 融合新值
+          let newData = { ...(props.value ?? {}), ...payload };
+          tryNotifyChange(newData);
+        }
+      },
+      data: props.value ?? {},
+      checkEquals: true,
+    });
+  }
+  //-----------------------------------------------------
   // 打开编辑器
   //-----------------------------------------------------
   async function openFilterEditor() {
@@ -90,14 +122,19 @@ export function useTiFilterBarApi(
         result,
         model: { data: "data", event: "change" },
         comType: props.detailComType || "TiForm",
-        comConf: props.detailComConf || {},
+        comConf: _.defaults(props.detailComConf || {}, {
+          changeMode: "all",
+        } as FormProps),
       } as AppModalProps,
       props.panel
     );
     let newVal = await openAppModal(modal);
 
+    // 融合新值
+    let newData = { ...(props.value ?? {}), ...newVal };
+
     // 通知改动
-    tryNotifyChange(newVal);
+    tryNotifyChange(newData);
   }
 
   //-----------------------------------------------------
@@ -112,6 +149,7 @@ export function useTiFilterBarApi(
     // 响应事件
     onActionFire,
     onTagsChange,
+    onMajorFieldChange,
     // 打开编辑器
     openFilterEditor,
   };

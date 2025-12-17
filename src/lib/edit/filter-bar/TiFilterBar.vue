@@ -1,13 +1,26 @@
 <script lang="ts" setup>
-  import { CssUtils, TiTags, TiTextSnippet } from "@site0/tijs";
-  import { computed } from "vue";
+  import {
+    CssUtils,
+    FIELD_STATUS_KEY,
+    FieldStatusInfo,
+    TiTags,
+    TiTextSnippet,
+  } from "@site0/tijs";
+  import { computed, provide } from "vue";
   import GFItField from "../../shelf/grid-fields/GFItField.vue";
   import { FilterBarEmitter, FilterBarProps } from "./ti-filter-bar-types";
   import { useTiFilterBarApi } from "./use-ti-filter-bar-api";
   //-----------------------------------------------------
   const emit = defineEmits<FilterBarEmitter>();
-  const props = withDefaults(defineProps<FilterBarProps>(), {});
+  const props = withDefaults(defineProps<FilterBarProps>(), {
+    majorTitleAsPlaceholder: true,
+  });
   const api = useTiFilterBarApi(props, emit);
+  //-----------------------------------------------------
+  // GFItField 需要一个全局注入，用来获取字段状态，这里搞个假的，用来防错。
+  // 说不定以后也用得到
+  const _field_status = computed(() => new Map<string, FieldStatusInfo>());
+  provide(FIELD_STATUS_KEY, _field_status);
   //-----------------------------------------------------
   const TopStyle = computed(() => {
     return CssUtils.toStyle(props.style);
@@ -26,7 +39,11 @@
     <!-------常驻字段------>
     <div v-if="api.hasMajorFields.value" class="part-major">
       <template v-for="fld in api.MajorFields.value">
-        <GFItField v-bind="fld" />
+        <GFItField
+          v-bind="fld"
+          :data="props.value ?? {}"
+          :titleAsPlaceholder="props.majorTitleAsPlaceholder" 
+          @value-change="api.onMajorFieldChange"/>
       </template>
     </div>
     <!-------主体--------->

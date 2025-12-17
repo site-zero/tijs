@@ -11,7 +11,7 @@ import {
 import { FormMajorProps } from "./use-form-major";
 
 export type FilterBarEmitter = ActionBarEmitter & {
-  (event: "change", newValue: Vars): void;
+  (eventName: "change", payload: Vars): void;
   (event: "search", newValue: Vars): void;
 };
 
@@ -49,6 +49,7 @@ export type FilterBarProps = CommonProps &
      * 声明了这个，将在左侧显示主要的常驻过滤字段
      */
     major?: FormMajorProps;
+    majorTitleAsPlaceholder?: boolean;
     //-----------------------------------------------------
     // 扩展表单
     //-----------------------------------------------------

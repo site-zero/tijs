@@ -4,7 +4,6 @@ import {
   FieldName,
   FieldRefer,
   FormField,
-  GridFieldsInput,
   I18n,
   InputBoxProps,
   InputDatetimeProps,
@@ -12,6 +11,7 @@ import {
   InputNumUnitProps,
   LabelProps,
   Str,
+  TipOptionFormat,
   ToggleProps,
 } from "@site0/tijs";
 import _ from "lodash";
@@ -42,7 +42,7 @@ function defineObjFields(featureName: string) {
   /**
    * 准备一个表单字段的集合
    */
-  const _FIELDS = new Map<string, GridFieldsInput>();
+  const _FIELDS = new Map<string, FormField>();
 
   /**
    * 获取一个字段
@@ -51,12 +51,9 @@ function defineObjFields(featureName: string) {
    * @param field
    * @returns  字段定义
    */
-  function getField(
-    uniqKey: string,
-    field: GridFieldsInput = {}
-  ): GridFieldsInput {
+  function getField(uniqKey: string, field: FormField = {}): FormField {
     let finfo = parseNameForObjField(uniqKey);
-    let _fld: GridFieldsInput | undefined;
+    let _fld: FormField | undefined;
     if ("-SEP-" == finfo._key) {
       _fld = _FIELDS.get(uniqKey) ?? {
         colStart: 1,
@@ -109,10 +106,7 @@ function defineObjFields(featureName: string) {
     return re;
   }
   //---------------------------------------------
-  function getFieldBy(
-    fld: FieldRefer,
-    field?: GridFieldsInput
-  ): GridFieldsInput {
+  function getFieldBy(fld: FieldRefer, field?: FormField): FormField {
     let over = _.cloneDeep(field);
     // 简单键
     if (_.isString(fld)) {
@@ -142,11 +136,8 @@ function defineObjFields(featureName: string) {
    * @param fld
    * @returns 字段定义列表
    */
-  function getFieldList(
-    keys: FieldRefer[],
-    fld?: GridFieldsInput
-  ): GridFieldsInput[] {
-    let re = [] as GridFieldsInput[];
+  function getFieldList(keys: FieldRefer[], fld?: FormField): FormField[] {
+    let re = [] as FormField[];
     for (let key of keys) {
       re.push(getFieldBy(key, fld));
     }
@@ -163,8 +154,8 @@ function defineObjFields(featureName: string) {
   function getFieldGroup(
     title: string,
     keys: FieldRefer[],
-    groupSetup: GridFieldsInput = {}
-  ): GridFieldsInput {
+    groupSetup: FormField = {}
+  ): FormField {
     return {
       ...groupSetup,
       title,
@@ -172,11 +163,17 @@ function defineObjFields(featureName: string) {
     };
   }
   //---------------------------------------------
-  function addFieldIfNoExists(uniqKey: string, field: GridFieldsInput) {
+  function addFieldIfNoExists(uniqKey: string, field: FormField) {
     if (_FIELDS.has(uniqKey)) {
       return;
     }
     addField(uniqKey, field);
+  }
+  //---------------------------------------------
+  function addFieldSetIfNoExists(fieldSet: Record<string, FormField>) {
+    _.forEach(fieldSet, (fld, key) => {
+      addFieldIfNoExists(key, fld);
+    });
   }
   //---------------------------------------------
   /**
@@ -185,7 +182,7 @@ function defineObjFields(featureName: string) {
    * @param uniqKey
    * @param field
    */
-  function addField(uniqKey: string, field: GridFieldsInput) {
+  function addField(uniqKey: string, field: FormField) {
     if (_FIELDS.has(uniqKey)) {
       console.warn(`field '${uniqKey}' already exists!!`);
     }
@@ -216,7 +213,8 @@ function defineObjFields(featureName: string) {
     getFieldList,
     getFieldGroup,
     setField: addField,
-    setFieldIfNoExists: addFieldIfNoExists,
+    addFieldIfNoExists,
+    addFieldSetIfNoExists,
     setDateTimeLabelField,
   };
 }
@@ -408,6 +406,33 @@ export function fldDroplist(
   };
 }
 
+export function fldDroplistVT(
+  name: FieldName,
+  titleAndTip: string | string[],
+  options: string,
+  placeholder?: string,
+  tipListMinWidth: string = "200px",
+  tipFormat: TipOptionFormat = "VT",
+  comConf?: DroplistProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title: title || undefined,
+    tip,
+    comType: "TiDroplist",
+    comConf: _.assign(
+      {
+        placeholder,
+        options,
+        tipFormat,
+        tipListMinWidth,
+      } as DroplistProps,
+      comConf
+    ),
+  };
+}
+
 export function fldInput(
   name: FieldName,
   titleAndTip: string | string[],
@@ -427,6 +452,25 @@ export function fldInput(
       comConf
     ),
   };
+}
+
+export function fldInputX(
+  name: FieldName,
+  titleAndTip: string | string[],
+  placeholder?: string,
+  comConf?: InputBoxProps
+): FormField {
+  return fldInput(
+    name,
+    titleAndTip,
+    _.assign(
+      {
+        prefixIconFor: "clear",
+        placeholder,
+      } as InputBoxProps,
+      comConf
+    )
+  );
 }
 
 export function fldInputUpper(

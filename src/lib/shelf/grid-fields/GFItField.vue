@@ -1,5 +1,6 @@
 <script lang="ts" setup>
   import JSON5 from "json5";
+  import _ from "lodash";
   import { computed, inject } from "vue";
   import { TiTextSnippet, useFieldCom, useReadonly } from "../../";
   import { LogicType, Vars, getFieldValue } from "../../../_type";
@@ -25,12 +26,14 @@
   const props = defineProps<
     FormFieldItem & {
       isActived?: boolean;
+      titleAsPlaceholder?: boolean;
     }
   >();
   //-------------------------------------------------
-  const hasTitle = computed(() =>
-    props.title || props.fieldTitleBy ? true : false
-  );
+  const hasTitle = computed(() => {
+    if (props.titleAsPlaceholder) return false;
+    return props.title || props.fieldTitleBy ? true : false;
+  });
   //-------------------------------------------------
   const hasTip = computed(() => (props.tip || props.tipBy ? true : false));
   //-------------------------------------------------
@@ -149,11 +152,17 @@
   //-------------------------------------------------
   const FieldCom = computed(() => {
     let com = useFieldCom(props);
-    return com.autoGetCom(
+    let re = com.autoGetCom(
       { readonly: FieldReadonly.value, actived: props.isActived },
       FieldDynamicContext.value,
       FieldValue.value
     );
+    if (props.titleAsPlaceholder) {
+      _.defaults(re.comConf, {
+        placeholder: FieldText.value.title,
+      });
+    }
+    return re;
   });
   //-------------------------------------------------
   const ListenValueChange = computed(() => {
@@ -176,7 +185,7 @@
       uniqKey: props.uniqKey,
       name: props.name,
       value: newValue,
-    }
+    };
     //console.log("onTitleChange", payload);
     emit("name-change", payload);
   }
