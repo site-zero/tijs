@@ -1,10 +1,10 @@
-import { computed } from "vue";
-import { FilterBarProps, FilterBarEmitter } from "./ti-filter-bar-types";
-import { ActionBarEvent, ActionBarProps } from "../../action/all-actions";
 import _ from "lodash";
-import { dft_flt_bar_action_items } from "./support/dft-flt-bar-actions";
+import { computed } from "vue";
 import { AppModalProps, openAppModal, Vars } from "../../../";
-import { position } from "html2canvas/dist/types/css/property-descriptors/position";
+import { ActionBarEvent, ActionBarProps } from "../../action/all-actions";
+import { dft_flt_bar_action_items } from "./support/dft-flt-bar-actions";
+import { FilterBarEmitter, FilterBarProps } from "./ti-filter-bar-types";
+import { useFormMajor } from "./use-form-major";
 
 export type FilterBarApi = ReturnType<typeof useTiFilterBarApi>;
 
@@ -13,11 +13,20 @@ export function useTiFilterBarApi(
   emit: FilterBarEmitter
 ) {
   //-----------------------------------------------------
+  // 常驻字段
+  //-----------------------------------------------------
+  const major = useFormMajor(props.major ?? {});
+  const MajorFields = computed(() => major.getFields());
+  const hasMajorFields = computed(() => major.hasMajorFields());
+  //-----------------------------------------------------
   // 操作菜单
   //-----------------------------------------------------
   const { actions } = props;
   const ActionBarConfig = computed((): ActionBarProps | undefined => {
     let re = _.cloneDeep(actions) ?? {};
+    _.defaults(re, {
+      itemAlign: "right",
+    } as Partial<ActionBarProps>);
     // 用户确定不要显示动作条
     if (re && _.isArray(re.items) && _.isEmpty(re.items)) {
       return;
@@ -52,7 +61,8 @@ export function useTiFilterBarApi(
     if (eventName === "do:search") {
       emit("search", _.cloneDeep(props.value ?? {}));
     } else if (eventName === "do:reset") {
-      emit("reset");
+      let val = props.resetValue ?? {};
+      tryNotifyChange(val);
     } else if (eventName === "do:edit") {
       openFilterEditor();
     }
@@ -79,13 +89,13 @@ export function useTiFilterBarApi(
         clickMaskToClose: true,
         result,
         model: { data: "data", event: "change" },
-        comType: props.comType || "TiForm",
-        comConf: props.comConf || {},
+        comType: props.detailComType || "TiForm",
+        comConf: props.detailComConf || {},
       } as AppModalProps,
       props.panel
     );
     let newVal = await openAppModal(modal);
-    
+
     // 通知改动
     tryNotifyChange(newVal);
   }
@@ -94,6 +104,10 @@ export function useTiFilterBarApi(
   // 返回接口
   //-----------------------------------------------------
   return {
+    // 常驻字段
+    MajorFields,
+    hasMajorFields,
+    // 操作菜单
     ActionBarConfig,
     // 响应事件
     onActionFire,

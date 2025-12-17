@@ -1,15 +1,50 @@
-import { FormProps } from "../../../";
+import { DroplistProps, FormProps } from "../../../";
 import { FilterBarProps } from "../ti-filter-bar-types";
 
 export default {
   name: "simple",
   text: "i18n:simple",
   comConf: {
-    value: {
-      name: "^A",
-      age: "[2,100)",
+    style: {
+      width: "480px",
     },
-    comConf: {
+    value: {
+      // name: "^A",
+      // age: "[2,100)",
+    },
+    major: {
+      fields: [
+        {
+          name: "color",
+          comType: "TiDroplist",
+          comConf: {
+            boxFontSize: "s",
+            width: "5em",
+            placeholder:'Color',
+            options: [
+              { value: "red", text: "Red" },
+              { value: "green", text: "Green" },
+              { value: "blue", text: "Blue" },
+            ],
+          } as DroplistProps,
+        },
+        {
+          name: "race",
+          comType: "TiDroplist",
+          comConf: {
+            boxFontSize: "s",
+            width: "5em",
+            placeholder:'Race',
+            options: [
+              { value: "dog", text: "Dog" },
+              { value: "cat", text: "Cat" },
+              { value: "bird", text: "Bird" },
+            ],
+          } as DroplistProps,
+        },
+      ],
+    },
+    detailComConf: {
       layoutHint: 1,
       changeMode: "all",
       fields: [

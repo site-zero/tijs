@@ -1,9 +1,9 @@
-@use '@site0/tijs/sass/_all.scss' as *;
+@use "@site0/tijs/sass/_all.scss" as *;
 
 .ti-tags {
   @include flex-align($ai: stretch, $ac: stretch);
   font-size: var(--box-fontsz);
-  padding:var(--box-padding);
+  padding: var(--box-padding);
   //-----------------------------------------------
   &[nowrap] {
     flex-wrap: nowrap;
@@ -41,7 +41,7 @@
     flex: 1 1 auto;
   }
   //-----------------------------------------------
-  > .ti-actionbar {
+  &.has-tags > .ti-actionbar {
     flex: 1 1 auto;
     margin: 0;
     padding: 0;
@@ -49,10 +49,20 @@
   //-----------------------------------------------
   > .as-empty {
     @include flex-center;
-    color: var(--ti-color-disable);
-    font-size: 0.8em;
-    opacity: 0.63;
-    padding: 0 0.5em;
+    flex: 1 1 auto;
+    > span {
+      flex: 1 1 auto;
+      border: 1px dashed var(--ti-color-border-dark);
+      border-radius: var(--ti-measure-r-t);
+      display: block;
+      white-space: nowrap;
+      color: var(--ti-color-disable);
+      font-size: 0.9em;
+      opacity: 0.63;
+      padding: 0.4em;
+      min-width: 12em;
+      text-align: center;
+    }
   }
   //-----------------------------------------------
   &.show-border {

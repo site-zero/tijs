@@ -52,6 +52,8 @@
     CssUtils.mergeClassName({
       "is-readonly": !props.editable,
       "is-editable": props.editable,
+      "is-empty": !hasTagItems.value,
+      "has-tags": hasTagItems.value,
       "show-border": props.showBoreder ? true : false,
     })
   );
@@ -164,7 +166,9 @@
         @click-prefix-icon="onClickItem(it)"
         @click="onClickItem(it)" />
     </template>
-    <span v-else class="as-empty">{{ _placeholder }}</span>
+    <div v-else class="as-empty">
+      <span>{{ _placeholder }}</span>
+    </div>
     <!--======<Tab Actions>======-->
     <template v-if="props.actions">
       <TiActionBar

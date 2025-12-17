@@ -1,12 +1,16 @@
 @use "@site0/tijs/sass/_all.scss" as *;
 
 .ti-filter-bar {
-  @include flex-align;
+  @include flex-align-nowrap;
+  //-----------------------------------------------------
+  > .part-major {
+    @include flex-align-nowrap;
+    gap: 2px;
+    padding: var(--ti-gap-s);
+  }
   //-----------------------------------------------------
   > .part-body {
     flex: 1 1 auto;
   }
-  //-----------------------------------------------------
-  
   //-----------------------------------------------------
 }

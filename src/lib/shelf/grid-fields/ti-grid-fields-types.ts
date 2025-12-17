@@ -1,4 +1,4 @@
-import { ComputedRef, InjectionKey } from 'vue';
+import { ComputedRef, InjectionKey } from "vue";
 import {
   AbstractField,
   AspectSize,
@@ -16,17 +16,16 @@ import {
   InvokePartial,
   SelectValueArm,
   TextContentType,
-  ValueChange,
   Vars,
   VisibilityProps,
-} from '../../../_type';
-import { RoadblockProps } from '../../../lib';
+} from "../../../_type";
+import { RoadblockProps } from "../../../lib";
 import {
   FieldChangeEmitter,
   FieldChangeProps,
   ReadonlyProps,
   VisibilityFeature,
-} from '../../../lib/_features';
+} from "../../../lib/_features";
 //-----------------------------------------------
 export type GridFieldsDomReadyInfo = {
   el: HTMLElement;
@@ -35,7 +34,7 @@ export type GridFieldsDomReadyInfo = {
 //-----------------------------------------------
 export const FIELD_STATUS_KEY: InjectionKey<
   ComputedRef<Map<string, FieldStatusInfo>>
-> = Symbol('FIELD_STATUS_KEY');
+> = Symbol("FIELD_STATUS_KEY");
 //-----------------------------------------------
 export type TextArm = SelectValueArm<string, any>;
 //-----------------------------------------------
@@ -54,34 +53,34 @@ export type GridFieldsApi = {
 };
 //-----------------------------------------------
 export type GridFieldsEmitter = FieldChangeEmitter & {
-  (eventName: 'name-change', payload: FieldChange): void;
-  (eventName: 'dom-ready', payload: GridFieldsDomReadyInfo): void;
+  (eventName: "name-change", payload: FieldChange): void;
+  (eventName: "dom-ready", payload: GridFieldsDomReadyInfo): void;
 };
 //-----------------------------------------------
 export type GridItemEmitter = {
-  (eventName: 'name-change', payload: FieldChange): void;
-  (eventName: 'value-change', payload: FieldChange): void;
-  (eventName: 'field-actived', payload: string): void;
-  (eventName: 'field-inactived', payload: string): void;
+  (eventName: "name-change", payload: FieldChange): void;
+  (eventName: "value-change", payload: FieldChange): void;
+  (eventName: "field-actived", payload: string): void;
+  (eventName: "field-inactived", payload: string): void;
 };
 //-----------------------------------------------
 export type GridFieldsProps = Omit<
   GridFieldsInput,
-  | 'rowStart'
-  | 'rowSpan'
-  | 'colSpan'
-  | 'colStart'
-  | 'transformer'
-  | 'transArgs'
-  | 'transPartial'
-  | 'serializer'
-  | 'serialArgs'
-  | 'serialPartial'
-  | 'changeEventName'
-  | 'maxTrackCount'
-  | 'validation'
+  | "rowStart"
+  | "rowSpan"
+  | "colSpan"
+  | "colStart"
+  | "transformer"
+  | "transArgs"
+  | "transPartial"
+  | "serializer"
+  | "serialArgs"
+  | "serialPartial"
+  | "changeEventName"
+  | "maxTrackCount"
+  | "validation"
 > &
-  Omit<FieldChangeProps<FormFieldItem>, 'fields'> & {
+  Omit<FieldChangeProps<FormFieldItem>, "fields"> & {
     // 动态 explain 时的变量
     vars?: Vars;
     // 输入的数据
@@ -126,7 +125,7 @@ export type GridFieldsProps = Omit<
 
 因此一个 `TiGridFields` 可以看作一个 `group`
 */
-export type GridFieldsItemRace = 'field' | 'group' | 'label';
+export type GridFieldsItemRace = "field" | "group" | "label";
 //-----------------------------------------------
 export type FieldInfo = [
   string,
@@ -140,7 +139,7 @@ export type FieldRefer = GridFieldsInput | FieldInfo | string;
 //-----------------------------------------------
 export type GridFieldsInput = CommonProps &
   Partial<
-    Omit<AbstractField, 'required' | 'validate' | 'transformer' | 'serializer'>
+    Omit<AbstractField, "required" | "validate" | "transformer" | "serializer">
   > &
   FieldComProps &
   VisibilityProps &
@@ -262,7 +261,7 @@ export type GridFieldsInput = CommonProps &
   
   
   */
-export type GroupAspect = 'legend' | 'bottom-line' | 'bar';
+export type GroupAspect = "legend" | "bottom-line" | "bar";
 //-----------------------------------------------
 /**
  * 一个普通字段的 DOM 有下面的结构:
@@ -289,17 +288,17 @@ export type GroupAspect = 'legend' | 'bottom-line' | 'bar';
  * ```
  */
 export type FormFieldLayoutMode =
-  | 'h-wrap'
-  | 'h-bottom'
-  | 'v-wrap'
-  | 'h-title-icon-prefix'
-  | 'h-title-icon-suffix'
-  | 'h-value-icon-prefix'
-  | 'h-value-icon-suffix'
-  | 'v-title-icon-prefix'
-  | 'v-title-icon-suffix'
-  | 'v-value-icon-prefix'
-  | 'v-value-icon-suffix';
+  | "h-wrap"
+  | "h-bottom"
+  | "v-wrap"
+  | "h-title-icon-prefix"
+  | "h-title-icon-suffix"
+  | "h-value-icon-prefix"
+  | "h-value-icon-suffix"
+  | "v-title-icon-prefix"
+  | "v-title-icon-suffix"
+  | "v-value-icon-prefix"
+  | "v-value-icon-suffix";
 //-----------------------------------------------
 export type FieldDynamicContext = {
   data: Vars;
@@ -342,7 +341,7 @@ export type AbstractFormItem = FieldComProps &
 //-----------------------------------------------
 export type FormItemGroup = AbstractFormItem &
   GridLayoutProps & {
-    race: 'group';
+    race: "group";
     fields: OneFormItem[];
     groupAspect?: GroupAspect;
 
@@ -369,7 +368,7 @@ export type FormItemGroup = AbstractFormItem &
 //-----------------------------------------------
 export type FormFieldItem = AbstractFormItem &
   AbstractField & {
-    race: 'field';
+    race: "field";
 
     checkEquals: boolean;
     maxFieldNameWidth?: number | string;
@@ -384,13 +383,22 @@ export type FormFieldItem = AbstractFormItem &
   };
 //-----------------------------------------------
 export type FormLabelItem = AbstractFormItem & {
-  race: 'label';
+  race: "label";
   titleTextStyle?: Vars;
   tipIcon?: IconInput;
   tipTextStyle?: Vars;
 };
 //-----------------------------------------------
-export type OneFormItem =
-  | FormItemGroup
-  | FormFieldItem
-  | FormLabelItem;
+export type OneFormItem = FormItemGroup | FormFieldItem | FormLabelItem;
+//-----------------------------------------------
+export function isFormItemGroup(item: OneFormItem): item is FormItemGroup {
+  return item.race === "group";
+}
+//-----------------------------------------------
+export function isFormFieldItem(item: OneFormItem): item is FormFieldItem {
+  return item.race === "field";
+}
+//-----------------------------------------------
+export function isFormLabelItem(item: OneFormItem): item is FormLabelItem {
+  return item.race === "label";
+}
