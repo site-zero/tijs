@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import _ from 'lodash';
+  import _ from "lodash";
   import {
     Ref,
     computed,
@@ -8,7 +8,7 @@
     reactive,
     ref,
     watch,
-  } from 'vue';
+  } from "vue";
   import {
     ActionBarEmitter,
     ActionBarEvent,
@@ -18,31 +18,31 @@
     useGridLayoutStyle,
     useGridLayoutTrack,
     useViewport,
-  } from '../../../';
-  import { Rect, Vars } from '../../../../_type';
-  import { CssUtils } from '../../../../core';
+  } from "../../../";
+  import { Rect, Vars } from "../../../../_type";
+  import { CssUtils } from "../../../../core";
   import {
     loadAllState,
     resetSizeState,
     useKeepLayoutGrid,
-  } from '../grid/use-grid-keep';
-  import { useGridResizing } from '../grid/use-grid-resizing';
-  import { getLayoutPanelItems } from '../layout-panel';
-  import { LayoutBar, LayoutPanelItem } from '../layout-types';
+  } from "../grid/use-grid-keep";
+  import { useGridResizing } from "../grid/use-grid-resizing";
+  import { getLayoutPanelItems } from "../layout-panel";
+  import { LayoutBar, LayoutPanelItem } from "../layout-types";
   import {
     GridItemTabChangeEvent,
     LayoutGridItem,
     LayoutGridProps,
     LayoutGridState,
-  } from './ti-layout-grid-types';
-  import { getLayoutGridItems, isLayoutAdjustable } from './use-grid-items';
-  import { getTopStyle } from './use-grid-util';
+  } from "./ti-layout-grid-types";
+  import { getLayoutGridItems, isLayoutAdjustable } from "./use-grid-items";
+  import { getTopStyle } from "./use-grid-util";
   //-------------------------------------------------
   defineOptions({
     inheritAttrs: false,
   });
   //-------------------------------------------------
-  import { TiLayoutTabs } from '../tabs/ti-layout-tabs-index';
+  import { TiLayoutTabs } from "../tabs/ti-layout-tabs-index";
   //-------------------------------------------------
   const props = withDefaults(defineProps<LayoutGridProps>(), {
     shown: () => ({}),
@@ -57,11 +57,11 @@
   }) as LayoutGridState;
   //-------------------------------------------------
   type LayoutGridEmitter = ActionBarEmitter & {
-    (event: 'show' | 'hide', name: string): void;
-    (event: 'resize', payload: Rect): void;
-    (event: 'block', payload: BlockEvent): void;
-    (event: '_sub_block', payload: BlockEvent): void;
-    (event: 'tab-change', payload: GridItemTabChangeEvent): void;
+    (event: "show" | "hide", name: string): void;
+    (event: "resize", payload: Rect): void;
+    (event: "block", payload: BlockEvent): void;
+    (event: "_sub_block", payload: BlockEvent): void;
+    (event: "tab-change", payload: GridItemTabChangeEvent): void;
   };
   let emit = defineEmits<LayoutGridEmitter>();
   //-------------------------------------------------
@@ -75,20 +75,9 @@
   let GridLayout = computed(() =>
     useGridLayoutTrack({
       layout: props.layout,
-      layoutHint: props.layoutHint,
+      layoutHint: props.layoutHint ?? 1,
       layoutGridTracks: props.layoutGridTracks,
       customizedGridTracks: props.customizedGridTracks,
-      // customizedGridTracks: (
-      //   trackIndex: number,
-      //   trackCount: number,
-      //   defaultGetTrackSize: GridLayoutTrackSizeGetter
-      // ): string => {
-      //   if (!_.isEmpty(state.columns)) {
-      //     let col = _.nth(state.columns, trackIndex) ?? '1fr';
-      //     return col;
-      //   }
-      //   return defaultGetTrackSize(trackIndex, trackCount);
-      // },
     })
   );
   let GridLayoutStyle = computed(() =>
@@ -96,9 +85,16 @@
   );
   //-------------------------------------------------
   let TopClass = computed(() => CssUtils.mergeClassName(props.className));
-  let TopStyle = computed(() =>
-    getTopStyle(state, props, GridLayoutStyle.value)
-  );
+  let TopStyle = computed(() => {
+    let re = getTopStyle(state, props, GridLayoutStyle.value);
+    // if (
+    //   !props.blocks ||
+    //   (2 == props.blocks?.length && props.blocks[1].name == "cp_ques")
+    // ) {
+    //   console.log("hahahaha!!!!", props.layoutHint, re);
+    // }
+    return re;
+  });
   //-------------------------------------------------
   let GridItems = computed(() =>
     getLayoutGridItems(state, {
@@ -118,8 +114,8 @@
   //-------------------------------------------------
   function onClickPanelMask(pan: LayoutPanelItem): void {
     if (pan.clickMaskToClose) {
-      console.log('OnClickPanelMask', pan.clickMaskToClose, pan);
-      emit('hide', pan.uniqKey);
+      console.log("OnClickPanelMask", pan.clickMaskToClose, pan);
+      emit("hide", pan.uniqKey);
     }
   }
   //-------------------------------------------------
@@ -129,10 +125,10 @@
   //-------------------------------------------------
   function onBlockActionFire(event: ActionBarEvent) {
     // 直接关闭
-    if ('__close_panel' == event.name) {
+    if ("__close_panel" == event.name) {
       let pan: LayoutPanelItem = event.payload;
       if (pan?.uniqKey) {
-        emit('hide', pan.uniqKey);
+        emit("hide", pan.uniqKey);
       }
     }
     // 否则通知出去
@@ -145,16 +141,16 @@
     //console.log('OnBlockEventHappen', event);
     if (props.subLayout) {
       //console.log('> subblock');
-      emit('_sub_block', event);
+      emit("_sub_block", event);
     } else {
       //console.log('> block');
-      emit('block', event);
+      emit("block", event);
     }
   }
   //-------------------------------------------------
   function onGridItemTabChange(event: TabChangeEvent, item: LayoutGridItem) {
     // console.log(event, item);
-    emit('tab-change', {
+    emit("tab-change", {
       ...event,
       items: [item],
       path: [item.uniqKey],
@@ -165,8 +161,8 @@
     event: GridItemTabChangeEvent,
     item: LayoutGridItem
   ) {
-    emit('tab-change', {
-      ..._.omit(event, 'items', 'path'),
+    emit("tab-change", {
+      ..._.omit(event, "items", "path"),
       items: _.concat(event.items, item),
       path: _.concat(event.path, item.uniqKey),
     });
@@ -204,7 +200,7 @@
     () => props.shown,
     (newShown: Vars, oldShown: Vars) => {
       if (!_.isEqual(newShown, oldShown)) {
-        console.log('props.show changed!!!!!', newShown);
+        console.log("props.show changed!!!!!", newShown);
         state.shown = _.cloneDeep(newShown);
       }
     }
@@ -238,11 +234,7 @@
   //-------------------------------------------------
 </script>
 <template>
-  <div
-    class="ti-layout-grid"
-    :class="TopClass"
-    :style="TopStyle"
-    ref="$main">
+  <div class="ti-layout-grid" :class="TopClass" :style="TopStyle" ref="$main">
     <!--
       Grid Blocks
     -->
@@ -254,10 +246,7 @@
       :it-ukey="it.uniqKey"
       :style="it.style">
       <!-------- Block Container -------->
-      <div
-        class="grid-item-con"
-        :class="it.conClass"
-        :style="it.conStyle">
+      <div class="grid-item-con" :class="it.conClass" :style="it.conStyle">
         <slot :item="it">
           <!-- 布局块-->
           <!-- 格子布局:带标题-->
@@ -304,9 +293,7 @@
       Pop Panel
     -->
     <template v-for="pan in GridPanels">
-      <Transition
-        :name="pan.tranName"
-        appear>
+      <Transition :name="pan.tranName" appear>
         <div
           v-if="pan.visible"
           class="layout-panel trans-mask"
@@ -319,9 +306,7 @@
             class="layout-panel-con trans-box"
             :style="pan.conStyle"
             @click.stop>
-            <slot
-              name="panel"
-              :panel="pan">
+            <slot name="panel" :panel="pan">
               <!-- 布局块-->
               <TiBlock
                 v-if="'block' == pan.type"
@@ -358,7 +343,7 @@
   </div>
 </template>
 <style lang="scss" scoped>
-  @use './style/ti-layout-grid';
-  @use './style/grid-adjust-bar';
-  @use '../layout-panel';
+  @use "./style/ti-layout-grid";
+  @use "./style/grid-adjust-bar";
+  @use "../layout-panel";
 </style>

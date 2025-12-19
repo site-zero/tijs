@@ -1,12 +1,12 @@
-import _ from 'lodash';
+import _ from "lodash";
 import {
   GridLayoutHint,
   GridLayoutHintItem,
   GridLayoutProps,
   GridLayoutTrackGetter,
   Vars,
-} from '../../_type';
-import { Str, Util } from '../../core';
+} from "../../_type";
+import { Str, Util } from "../../core";
 
 const DFT_GRID_LAYOUT_HINT: GridLayoutHint = [
   [5, 1500],
@@ -97,7 +97,7 @@ function buildGridFieldsLayoutStyle(
   let { layout, layoutGridTracks, customizedGridTracks } = props;
 
   // Default Track Getter
-  let gridTracks = ['1fr'];
+  let gridTracks = ["1fr"];
   if (_.isString(layoutGridTracks) || _.isArray(layoutGridTracks)) {
     gridTracks = _.concat(layoutGridTracks);
   }
@@ -123,7 +123,7 @@ function buildGridFieldsLayoutStyle(
   function defaultGetTrackSize(i: number, track_count: number) {
     let tracks = _map_tracks.get(track_count) ?? _dft_tracks;
     if (_.isEmpty(tracks)) {
-      return '1fr';
+      return "1fr";
     }
     let realI = _.clamp(i, 0, tracks.length - 1);
     return tracks[realI]!;
@@ -154,7 +154,7 @@ function buildGridFieldsLayoutStyle(
         let col = getTrackSize(i, trackCount);
         cols.push(col);
       }
-      css.gridTemplateColumns = cols.join(' ');
+      css.gridTemplateColumns = cols.join(" ");
     }
     return css;
   };
@@ -178,6 +178,7 @@ export function useGridLayoutStyle(
 ) {
   const trackCount = grid.getTrackCount(_viewport_width);
   const layoutCss = grid.getLayoutCss(trackCount);
+  //console.log("useGridLayoutStyle", trackCount, layoutCss);
   return {
     trackCount,
     layoutCss,

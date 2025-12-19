@@ -103,6 +103,7 @@ export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
       "blocks",
       "conStyle",
       "layout",
+      "style",
       "keepSizes",
       "KeepShown",
       "layoutHint",
@@ -211,6 +212,9 @@ export function getLayoutItem(
     if (item.name && shown && false === shown[item.name]) {
       continue;
     }
+    // if (item.name == "imd_lines_cp_ques") {
+    //   console.log("build block :", item);
+    // }
 
     // 准备布局项目
     let it = _.cloneDeep(item) as LayoutItem;

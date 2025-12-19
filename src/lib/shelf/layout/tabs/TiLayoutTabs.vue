@@ -17,8 +17,8 @@
     buildOneTab,
   } from "./use-layout-tabs";
   //-------------------------------------------------
-  import { TiLayoutGrid } from "../grid/ti-layout-grid-index";
   import _ from "lodash";
+  import { TiLayoutGrid } from "../grid/ti-layout-grid-index";
   //-------------------------------------------------
   const emit = defineEmits<{
     (eventName: "tab-change", payload: TabChangeEvent): void;
@@ -197,14 +197,15 @@
             <!-- 格子布局-->
             <TiLayoutGrid
               v-else-if="'grid' == MainTab.type"
-              v-bind="MainTab.propsForLayoutGrid"
+              v-bind="MainTab.propsForBlock?.comConf"
+              className="cover-parent"
               :sub-layout="true"
               :schema="schema"
               @_sub_block="emit('block', $event)" />
             <!-- 标签布局-->
             <TiLayoutTabs
               v-else-if="'tabs' == MainTab.type"
-              v-bind="MainTab.propsForLayoutTabs"
+              v-bind="MainTab.propsForBlock?.comConf"
               :sub-layout="true"
               :schema="schema"
               @_sub_block="emit('block', $event)" />
