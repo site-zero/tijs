@@ -1,23 +1,23 @@
-import { InputBoxProps, PlaceholderProps, ReadonlyProps } from '../../';
+import { InputBoxProps, PlaceholderProps, ReadonlyProps } from "../../";
 import {
   CommonProps,
   DateParseOptionsZone,
   DateTimeQuickParseMode,
-} from '../../../_type';
+} from "../../../_type";
 
 export type InputDatetimeProps = CommonProps &
   ReadonlyProps &
   PlaceholderProps &
   Pick<
     InputBoxProps,
-    'prefixIcon' | 'prefixHoverIcon' | 'suffixIcon' | 'suffixHoverIcon'
+    "prefixIcon" | "prefixHoverIcon" | "suffixIcon" | "suffixHoverIcon"
   > & {
     value?: number | Date | string;
     /**
      * - string 用字符串格式
      * - timestamp 直接存储时间戳
      */
-    valueType?: 'string' | 'timestamp';
+    valueType?: "string" | "timestamp";
     /**
      * 如果指定了 valueType==string，那么具体用什么格式存储
      * 默认为 yyyy-MM-dd HH:mm:ss
@@ -31,9 +31,6 @@ export type InputDatetimeProps = CommonProps &
 
     // 前缀按钮用来删除
     prefixIconForClean?: boolean;
-
-    // 后缀按钮用来复制
-    suffixIconForCopy?: boolean;
 
     // 显示的格式化方式格式化
     format?: string;

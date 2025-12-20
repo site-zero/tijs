@@ -27,6 +27,11 @@ export type InputBoxEmitter = {
   (event: "click", payload: any): void;
 };
 //--------------------------------------------------
+export type InputBoxExposeApi = {
+  getElement: () => HTMLElement | null;
+  getInputElement: () => HTMLElement | null;
+};
+//--------------------------------------------------
 export type InputBoxAspect = {
   /**
    * 隐藏输入框边框

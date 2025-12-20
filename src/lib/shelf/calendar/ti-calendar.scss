@@ -65,6 +65,8 @@
           border-radius: var(--cell-radius);
           &:hover {
             cursor: pointer;
+            background-color: var(--ti-color-highlight);
+            color: var(--ti-color-highlight-f);
           }
         }
         //-----------------------------------------------

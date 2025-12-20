@@ -13,7 +13,11 @@
   import { Rect, Vars } from "../../../_type";
   import { ListSelectEmitInfo } from "../../../lib";
   import { useDict, useValuePipe, useViewport } from "../../_features";
-  import { InputBoxEmitter, InputBoxProps } from "./ti-input-box-types";
+  import {
+    InputBoxEmitter,
+    InputBoxExposeApi,
+    InputBoxProps,
+  } from "./ti-input-box-types";
   import { useBoxAspect } from "./use-box-aspect";
   import { useBoxIcon } from "./use-box-icon";
   import { useBoxTips } from "./use-box-tips";
@@ -26,6 +30,11 @@
   const emit = defineEmits<InputBoxEmitter>();
   const $el = useTemplateRef<HTMLElement>("el");
   const $input = useTemplateRef<HTMLInputElement>("input");
+  //-------------------------------------------------
+  defineExpose<InputBoxExposeApi>({
+    getElement: () => $el.value,
+    getInputElement: () => $el.value,
+  });
   //-------------------------------------------------
   const _viewport = useViewport({
     el: $el,

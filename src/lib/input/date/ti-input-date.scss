@@ -1,2 +1,17 @@
-.ti-input-date {
+@use '@site0/tijs/sass/_all.scss' as *;
+
+.ti-input-data-popmask {
+  position: fixed;
+  inset: 0;
+  z-index: $z-mask;
+}
+.ti-input-date-popup {
+  position: fixed;
+  padding: var(--ti-gap-m);
+  background-color: var(--ti-color-body);
+  border-radius: var(--ti-measure-r-s);
+  box-shadow: -1px -1px var(--ti-color-light), 1px 1px var(--ti-color-dark),
+    4px 4px 12px var(--ti-color-mask-thin);
+  overflow: hidden;
+  z-index: $z-menu;
 }
