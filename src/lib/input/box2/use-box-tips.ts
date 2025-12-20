@@ -2,14 +2,14 @@ import _ from 'lodash';
 import { computed, ref } from 'vue';
 import { Rect } from '../../../_type';
 import { CssUtils, Rects } from '../../../core';
-import { DockProps, getDockingStyle } from '../../_features';
+import { DockingProps, getDockingStyle } from '../../_features';
 //--------------------------------------------------
 export type BoxTipsFeature = ReturnType<typeof useBoxTips>;
 //--------------------------------------------------
 export type BoxTipsProps = {
   getElement: () => HTMLElement | null;
   hideBoxTip: () => void;
-  getTipBoxDockStyle: (box: Rect) => DockProps;
+  getTipBoxDockStyle: (box: Rect) => DockingProps;
 };
 //--------------------------------------------------
 export function useBoxTips(props: BoxTipsProps) {
