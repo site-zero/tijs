@@ -2,15 +2,16 @@
   import { computed, ref, useTemplateRef } from "vue";
   import {
     InputBoxExposeApi,
+    InputDateTimeEmitter,
     InputDatetimeProps,
     TiCalendar,
     TiInput,
     useDocking,
-  } from "../../../lib";
-  import { InputDateEmitter } from "./ti-input-date-types";
-  import { useInputDateApi } from "./use-input-data-api";
+  } from "../../";
+  import { COM_TYPES } from "../../lib-com-types";
+  import { useInputDateTimeApi } from "../datetime/use-input-datetime-api";
   //-----------------------------------------------------
-  let emit = defineEmits<InputDateEmitter>();
+  let emit = defineEmits<InputDateTimeEmitter>();
   //-----------------------------------------------------
   const props = withDefaults(defineProps<InputDatetimeProps>(), {
     suffixIcon: "fas-calendar-days",
@@ -18,7 +19,11 @@
   });
   //-----------------------------------------------------
   const input = useTemplateRef<InputBoxExposeApi>("input");
-  const api = useInputDateApi(props, emit);
+  const api = useInputDateTimeApi(props, {
+    dftFormat: "yyyy-MM-dd",
+    COM_TYPE: COM_TYPES.InputDate,
+    emit,
+  });
   const dock = useDocking({
     getElement: () => input.value?.getElement(),
   });
@@ -37,7 +42,7 @@
   //-----------------------------------------------------
   function onClickCalendar(val: any) {
     console.log(val);
-    api.onValueChange(val);
+    api.onDateValueChange(val);
     _show_calendar.value = false;
   }
   //-----------------------------------------------------
@@ -53,7 +58,7 @@
     v-bind="InputProps"
     :value="InputValue"
     suffix-icon-for="click"
-    @change="api.onValueChange"
+    @change="api.onDateValueChange"
     @click:suffix-icon="onClickSuffixIcon">
     <template #tail>
       <template v-if="_show_calendar">

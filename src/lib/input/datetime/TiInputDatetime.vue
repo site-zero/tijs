@@ -7,7 +7,7 @@
     TiInputTime,
     useDocking,
   } from "../../../lib";
-  import { COM_TYPES } from "../../../lib/lib-com-types";
+  import { COM_TYPES } from "../../lib-com-types";
   import {
     InputDateTimeEmitter,
     InputDatetimeProps,

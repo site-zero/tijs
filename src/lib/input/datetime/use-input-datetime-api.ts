@@ -33,7 +33,10 @@ export function useInputDateTimeApi(
     return DateTime.getDefaultTimezoneProp(COM_TYPE, props.timezone);
   });
 
-  const TimeMode = computed(() => props.timeMode ?? "sec");
+  const TimeMode = computed(
+    () =>
+      props.timeMode ?? tiGetDefaultComPropValue(COM_TYPE, "timeMode", "sec")
+  );
 
   const ValueFormat = computed(
     () => props.valueFormat ?? _dft_prop("valueFormat", dftFormat)
