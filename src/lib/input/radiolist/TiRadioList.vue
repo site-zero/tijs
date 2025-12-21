@@ -22,9 +22,9 @@
   });
   //-----------------------------------------------------
   function onSelect(payload: ListSelectEmitInfo) {
-    let keys = Array.from(payload.checkedIds.keys());
-    let val = keys.length > 0 ? keys[0] : null;
-    console.log('onSelect', val);
+    let ids = payload.checkedIds;
+    let val = ids.length > 0 ? ids[0] : null;
+    //console.log('onSelect', val);
     if (!_.isEqual(val, props.value)) {
       emit('change', val);
     }
