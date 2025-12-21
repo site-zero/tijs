@@ -15,3 +15,10 @@
   overflow: hidden;
   z-index: $z-menu;
 }
+
+.ti-input-datetime-part-timer {
+  @include flex-center;
+  border-top: 2px solid var(--ti-color-border-thin);
+  background-color: var(--ti-color-body);
+  padding: 1em;
+}

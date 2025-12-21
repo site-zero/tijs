@@ -1,6 +1,12 @@
 <script lang="ts" setup>
   import { computed, ref, useTemplateRef } from "vue";
-  import { InputBoxExposeApi, TiInput, useDocking } from "../../../lib";
+  import {
+    InputBoxExposeApi,
+    TiCalendar,
+    TiInput,
+    TiInputTime,
+    useDocking,
+  } from "../../../lib";
   import { COM_TYPES } from "../../../lib/lib-com-types";
   import {
     InputDateTimeEmitter,
@@ -29,7 +35,9 @@
   //-----------------------------------------------------
   const InputValue = computed(() => api.getInputValue());
   //-----------------------------------------------------
-  const InputProps = computed(() => api.getInputConfig());
+  const InputConfig = computed(() => api.getInputConfig());
+  //-----------------------------------------------------
+  const InputTimeConfig = computed(() => api.getInputTimeConfig());
   //-----------------------------------------------------
   const PopupStyle = computed(() => {
     if (_show_calendar.value) {
@@ -39,8 +47,7 @@
   //-----------------------------------------------------
   function onClickCalendar(val: any) {
     console.log(val);
-    api.onValueChange(val);
-    _show_calendar.value = false;
+    api.onDateValueChange(val);
   }
   //-----------------------------------------------------
   function onClickSuffixIcon() {
@@ -52,25 +59,33 @@
 <template>
   <TiInput
     ref="input"
-    v-bind="InputProps"
+    v-bind="InputConfig"
     :value="InputValue"
     suffix-icon-for="click"
-    @change="api.onValueChange"
+    @change="api.onDateValueChange"
     @click:suffix-icon="onClickSuffixIcon">
     <template #tail>
       <template v-if="_show_calendar">
-        ddadasfas
         <div
           class="ti-input-datetime-popmask"
           @click.left="_show_calendar = false"></div>
         <div class="ti-input-datetime-popup" :style="PopupStyle">
           <TiCalendar
             :time-zone="api.TimeZone.value"
-            :value="api.ValueForCalendar.value"
+            :value="api.CalendarValue.value"
             value-type="str"
             width="240px"
-            height="240px"
-            @change="onClickCalendar" />
+            height="340px"
+            @change="onClickCalendar">
+            <template #tail>
+              <div class="ti-input-datetime-part-timer">
+                <TiInputTime
+                  v-bind="InputTimeConfig"
+                  :value="api.InputTimeValue.value"
+                  @change="api.onTimeValueChange($event as string)" />
+              </div>
+            </template>
+          </TiCalendar>
         </div>
       </template>
     </template>

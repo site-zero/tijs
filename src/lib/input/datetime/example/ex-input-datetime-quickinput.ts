@@ -5,8 +5,9 @@ export default {
   name: 'quickinput',
   text: 'i18n:ti-input-datetime-example-quickinput',
   comConf: {
-    value: '2024-05-1',
+    value: '2024-05-1 19:24:38',
     format: 'd MMM yyyy - EEEE HH:mm:ss',
     quickInputMode: 'dmy',
+    width: '400px',
   } as InputDatetimeProps,
 } as ComPropExample;

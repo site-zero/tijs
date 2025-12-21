@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { computed } from "vue";
-  import { TiInput } from "../../";
+  import { TiInput, TiTextSnippet } from "../../";
   import {
     isAspectSize,
     toAspectBoxPad,
@@ -59,28 +59,41 @@
 </script>
 <template>
   <div class="ti-calendar" :class="TopClass" :style="TopStyle">
-    
     <header>
-      <div class="switcher">
-        <!--年份-->
-        <TiInput
-          v-bind="YearDropConfig"
-          :value="_api.ViewYear.value"
-          @click:prefix-icon="_api.gotoPrevYear()"
-          @click:suffix-icon="_api.gotoNextYear()"
-          @change="_api.gotoYear($event)" />
-        <!--月份-->
-        <TiInput
-          v-bind="MonthDropConfig"
-          :value="_api.ViewMonth.value"
-          @click:prefix-icon="_api.gotoPrevMonth()"
-          @click:suffix-icon="_api.gotoNextMonth()"
-          @change="_api.gotoMonth($event)" />
-      </div>
-      <!--跳转今日-->
-      <a class="today" @click.left="_api.gotoToday()">{{
-        I18n.get("today")
-      }}</a>
+      <slot name="head">
+        <TiTextSnippet
+          v-if="props.head"
+          className="tablepart as-head"
+          :class="props.head.className"
+          :style="props.head.style"
+          :prefixIcon="props.head.icon"
+          :text="props.head.text ?? ''"
+          :textType="props.head.textType"
+          :comType="props.head.comType"
+          :comConf="props.head.comConf" />
+        <template v-else>
+          <div class="switcher">
+            <!--年份-->
+            <TiInput
+              v-bind="YearDropConfig"
+              :value="_api.ViewYear.value"
+              @click:prefix-icon="_api.gotoPrevYear()"
+              @click:suffix-icon="_api.gotoNextYear()"
+              @change="_api.gotoYear($event)" />
+            <!--月份-->
+            <TiInput
+              v-bind="MonthDropConfig"
+              :value="_api.ViewMonth.value"
+              @click:prefix-icon="_api.gotoPrevMonth()"
+              @click:suffix-icon="_api.gotoNextMonth()"
+              @change="_api.gotoMonth($event)" />
+          </div>
+          <!--跳转今日-->
+          <a class="today" @click.left="_api.gotoToday()">{{
+            I18n.get("today")
+          }}</a>
+        </template>
+      </slot>
     </header>
     <main>
       <!--星期头-->
@@ -109,6 +122,20 @@
         </div>
       </section>
     </main>
+    <footer>
+      <slot name="tail">
+        <TiTextSnippet
+          v-if="props.tail"
+          className="tablepart as-tail"
+          :class="props.tail.className"
+          :style="props.tail.style"
+          :prefixIcon="props.tail.icon"
+          :text="props.tail.text ?? ''"
+          :textType="props.tail.textType"
+          :comType="props.tail.comType"
+          :comConf="props.tail.comConf" />
+      </slot>
+    </footer>
   </div>
 </template>
 <style lang="scss">

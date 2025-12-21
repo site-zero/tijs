@@ -1,4 +1,10 @@
-import { InputBoxProps, PlaceholderProps, ReadonlyProps } from "../../";
+import {
+  InputBoxProps,
+  InputNumProps,
+  InputTimeMode,
+  PlaceholderProps,
+  ReadonlyProps,
+} from "../../";
 import {
   CommonProps,
   DateParseOptionsZone,
@@ -8,7 +14,6 @@ import {
 export type InputDateTimeEmitter = {
   (event: "change", payload: string | number | null): void;
 };
-
 
 export type InputDatetimeProps = CommonProps &
   ReadonlyProps &
@@ -52,4 +57,15 @@ export type InputDatetimeProps = CommonProps &
      * 如果未指定则采用默认时区
      */
     timezone?: DateParseOptionsZone;
+
+    /**
+     * 时间输入框的模式
+     * @see TiInputTime
+     */
+    timeMode?: InputTimeMode;
+
+    /**
+     * 时间输入框的配置
+     */
+    timeInput?: InputNumProps;
   };

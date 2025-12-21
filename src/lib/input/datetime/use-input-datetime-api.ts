@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { computed } from "vue";
-import { Alert, InputBoxProps } from "../../";
+import { Alert, InputBoxProps, InputNumProps, InputTimeProps } from "../../";
+import { TiTime } from "../../../";
 import { DateTime, tiGetDefaultComPropValue } from "../../../core";
 import { InputDatetimeProps } from "../datetime/ti-input-datetime-types";
 import { InputDateTimeEmitter } from "./ti-input-datetime-types";
@@ -32,40 +33,70 @@ export function useInputDateTimeApi(
     return DateTime.getDefaultTimezoneProp(COM_TYPE, props.timezone);
   });
 
-  const ValueAsDate = computed(() => {
+  const TimeMode = computed(() => props.timeMode ?? "sec");
+
+  const ValueFormat = computed(
+    () => props.valueFormat ?? _dft_prop("valueFormat", dftFormat)
+  );
+
+  const DateValue = computed(() => {
     return DateTime.parse(props.value, {
       timezone: TimeZone.value,
     });
   });
 
-  const ValueForCalendar = computed(() => {
-    if (!ValueAsDate.value) return null;
-    return DateTime.format(ValueAsDate.value, {
+  const CalendarValue = computed(() => {
+    if (!DateValue.value) return null;
+    return DateTime.format(DateValue.value, {
       fmt: "yyyy-MM-dd",
       timezone: TimeZone.value,
     });
   });
 
+  const InputTimeFormat = computed(() => {
+    if ("sec" == TimeMode.value) {
+      return "HH:mm:ss";
+    }
+    return "HH:mm";
+  });
+
+  const InputTimeValue = computed(() => {
+    if (!DateValue.value) return null;
+    return DateTime.format(DateValue.value, {
+      fmt: InputTimeFormat.value,
+      timezone: TimeZone.value,
+    });
+  });
+
+  const TimeObj = computed((): TiTime => {
+    let d = DateValue.value;
+    if (!d) {
+      return new TiTime(0);
+    }
+    return DateTime.parseTime(d, "s");
+  });
+
   const ValueAsStr = computed(() => {
-    if (!ValueAsDate.value) return null;
-    return DateTime.format(ValueAsDate.value, {
+    if (!DateValue.value) return null;
+    return DateTime.format(DateValue.value, {
       fmt: dftFormat,
       timezone: TimeZone.value,
     });
   });
 
   function getInputValue() {
-    if (!props.value) {
+    if (!DateValue.value) {
       return;
     }
     let format = props.format ?? _dft_prop("format", dftFormat);
 
-    return DateTime.format(props.value, {
+    return DateTime.format(DateValue.value, {
       fmt: format,
       trimZero: false,
       timezone: TimeZone.value,
     });
   }
+
   function getInputConfig() {
     let re: InputBoxProps = _.pickBy(props, (_v, k) => {
       if (/^(prefix|suffix)IconForClean$/.test(k)) {
@@ -81,13 +112,28 @@ export function useInputDateTimeApi(
     return re;
   }
 
-  function onValueChange(val: string, forbidQuickMode = false) {
+  function getInputTimeConfig(): InputTimeProps {
+    return {
+      readonly: props.readonly,
+      timeMode: TimeMode.value,
+      input: _.assign(
+        {
+          boxFontSize: "b",
+          boxPadding: "m",
+          width: "3em",
+        } as InputNumProps,
+        props.timeInput
+      ),
+    };
+  }
+
+  function onDateValueChange(val: string, forbidQuickMode = false) {
     val = _.trim(val);
     if (!val) {
       emit("change", null);
       return;
     }
-    let format = props.valueFormat ?? _dft_prop("valueFormat", dftFormat);
+    let format = ValueFormat.value;
     let quickMode = props.quickInputMode ?? _dft_prop("quickInputMode", "");
     //console.log('quickInputMode', quickMode);
 
@@ -112,28 +158,52 @@ export function useInputDateTimeApi(
       return;
     }
 
-    // 仅仅是时间戳
+    // 恢复时间
+    TimeObj.value.updateDate(d);
+
+    // 更新
+    tryNotifyChange(d);
+  }
+
+  function onTimeValueChange(val: string) {
+    let tm = new TiTime(val);
+
+    let d = new Date(DateValue.value || new Date());
+    tm.updateDate(d);
+
+    // 更新
+    tryNotifyChange(d);
+  }
+
+  function tryNotifyChange(d: Date) {
+    let val: string | number | null = null;
     if ("timestamp" == props.valueType) {
-      emit("change", d.getTime());
+      val = d.getTime();
     }
     // 默认采用时间字符串
     else {
-      let str = DateTime.format(d, {
-        fmt: format,
+      val = DateTime.format(d, {
+        fmt: ValueFormat.value,
         trimZero: false,
         timezone: TimeZone.value,
       });
-      emit("change", str);
+    }
+    if (val != props.value) {
+      emit("change", val);
     }
   }
 
   return {
     TimeZone,
-    ValueAsDate,
-    ValueForCalendar,
+    TimeObj,
+    DateValue: DateValue,
     ValueAsStr,
+    CalendarValue,
+    InputTimeValue,
     getInputValue,
     getInputConfig,
-    onValueChange,
+    getInputTimeConfig,
+    onDateValueChange,
+    onTimeValueChange,
   };
 }

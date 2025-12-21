@@ -5,6 +5,12 @@ export type InputTimeEmitter = {
   (event: "change", payload: TimeInput): void;
 };
 
+/**
+ * 模式:
+ * - min: 分钟模式, 显示格式为 HH:mm
+ * - sec: 秒模式, 显示格式为 HH:mm:ss
+ * 默认为 `min`
+ */
 export type InputTimeMode = "min" | "sec";
 
 export type InputTimeProps = CommonProps & {
@@ -15,7 +21,7 @@ export type InputTimeProps = CommonProps & {
    * - 45678: 从一天 `00:00:00` 开始的秒数格式, 例如 3688(01:01:28)
    * - {hours: 12, minutes: 34}
    */
-  value?: TimeInput;
+  value?: TimeInput | null;
 
   /**
    * 传出值的类型：
@@ -38,10 +44,7 @@ export type InputTimeProps = CommonProps & {
   valueType?: "str" | "sec" | "obj";
 
   /**
-   * 模式:
-   * - min: 分钟模式, 显示格式为 HH:mm
-   * - sec: 秒模式, 显示格式为 HH:mm:ss
-   * 默认为 `min`
+   时间输入框的模式
    */
   timeMode?: InputTimeMode;
 
@@ -51,7 +54,7 @@ export type InputTimeProps = CommonProps & {
   readonly?: boolean;
 
   /**
-   * 输入框的配置
+   * 时间输入框的配置
    */
   input?: InputNumProps;
 };
