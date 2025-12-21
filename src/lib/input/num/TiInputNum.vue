@@ -55,6 +55,11 @@
         decimalPlaces: props.decimalPlaces,
       });
     }
+    // 填充星号
+    if (props.padStart) {
+      let pad_char = props.padChar || "0";
+      re = _.padStart(re, props.padStart, pad_char);
+    }
     // 搞定
     _input_val.value = re;
     nextTick(() => {

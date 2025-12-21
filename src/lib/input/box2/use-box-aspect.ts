@@ -18,22 +18,6 @@ export function useBoxAspect(
     if (props.width) {
       re.width = props.width;
     }
-    return CssUtils.toStyle(re);
-  });
-  //--------------------------------------------------
-  const PartMainClass = computed(() => {
-    return {
-      "is-focused": _box.isFocused.value,
-      "show-tips": _tips.TipBoxStyleReady.value,
-      "is-readonly": _box.isReadonly.value,
-    };
-  });
-  //--------------------------------------------------
-  const PartMainStyle = computed(() => {
-    let re = _.assign(
-      CssUtils.toStyle(props.partMainStyle),
-      _tips.MainBoxStyle.value
-    );
     if (props.boxFontSize) {
       re["--box-fontsz"] = `var(--ti-fontsz-${props.boxFontSize})`;
     } else {
@@ -58,6 +42,22 @@ export function useBoxAspect(
         "--box-color-focus-bg": `var(--ti-color-${props.type}-r)`,
       });
     }
+    return CssUtils.toStyle(re);
+  });
+  //--------------------------------------------------
+  const PartMainClass = computed(() => {
+    return {
+      "is-focused": _box.isFocused.value,
+      "show-tips": _tips.TipBoxStyleReady.value,
+      "is-readonly": _box.isReadonly.value,
+    };
+  });
+  //--------------------------------------------------
+  const PartMainStyle = computed(() => {
+    let re = _.assign(
+      CssUtils.toStyle(props.partMainStyle),
+      _tips.MainBoxStyle.value
+    );
     re["--box-w"] = `${_viewport.size.width}px`;
     re["--box-h"] = `${_viewport.size.height}px`;
     return re;

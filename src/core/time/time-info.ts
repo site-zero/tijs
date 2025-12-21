@@ -1,5 +1,5 @@
-import _ from 'lodash';
-import { TimeInfo, TimeInput, TimeUpdateUnit } from '../../_type';
+import _ from "lodash";
+import { TimeInfo, TimeInput, TimeUpdateUnit } from "../../_type";
 
 type TimeCache = {
   value?: number;
@@ -50,7 +50,7 @@ export class TiTime implements TimeInfo {
     this.milliseconds = _.clamp(milliseconds ?? this.milliseconds, 0, 999);
   }
   //--------------------------------
-  update(input: TimeInput, unit: TimeUpdateUnit = 'ms') {
+  update(input: TimeInput, unit: TimeUpdateUnit = "ms") {
     this.__cached = {};
     // Date
     if (_.isDate(input)) {
@@ -139,7 +139,7 @@ export class TiTime implements TimeInfo {
     return this;
   } // update(input, unit="ms")
   //--------------------------------
-  get value() {
+  get valueInSeconds() {
     if (!_.isNumber(this.__cached.value)) {
       let val =
         this.hours * 3600 +
@@ -170,23 +170,32 @@ export class TiTime implements TimeInfo {
     d.setMilliseconds(this.milliseconds);
   }
   //--------------------------------
-  toString(fmt = 'auto') {
+  toInfo(): TimeInfo {
+    return {
+      hours: this.hours,
+      minutes: this.minutes,
+      seconds: this.seconds,
+      milliseconds: this.milliseconds,
+    };
+  }
+  //--------------------------------
+  toString(fmt = "auto") {
     // Auto
-    if ('auto' == fmt) {
+    if ("auto" == fmt) {
       fmt =
         this.milliseconds > 0
-          ? 'HH:mm:ss.SSS'
+          ? "HH:mm:ss.SSS"
           : this.seconds > 0
-          ? 'HH:mm:ss'
-          : 'HH:mm';
+          ? "HH:mm:ss"
+          : "HH:mm";
     }
     // To Min
-    else if ('min' == fmt) {
-      fmt = this.hours <= 0 ? 'mm:ss' : 'HH:mm:ss';
+    else if ("min" == fmt) {
+      fmt = this.hours <= 0 ? "mm:ss" : "HH:mm:ss";
     }
     const _S = (n: number) => n.toString();
     const FNS1 = {
-      a: () => (this.value > 43200 ? 'PM' : 'AM'), // am|pm
+      a: () => (this.valueInSeconds > 43200 ? "PM" : "AM"), // am|pm
       H: () => this.hours, // Hour in day (0-23)
       k: () => this.hours + 1, // Hour in day (1-24)
       K: () => this.hours % 12, // Hour in am/pm (0-11)
@@ -194,18 +203,18 @@ export class TiTime implements TimeInfo {
       m: () => this.minutes, // Minute in hour
       s: () => this.seconds, // Second in minute
       S: () => this.milliseconds, // Millisecond Number
-      HH: () => _.padStart(_S(this.hours), 2, '0'),
-      kk: () => _.padStart(_S(this.hours + 1), 2, '0'),
-      KK: () => _.padStart(_S(this.hours % 12), 2, '0'),
-      hh: () => _.padStart(_S((this.hours % 12) + 1), 2, '0'),
-      mm: () => _.padStart(_S(this.minutes), 2, '0'),
-      ss: () => _.padStart(_S(this.seconds), 2, '0'),
-      SSS: () => _.padStart(_S(this.milliseconds), 3, '0'),
+      HH: () => _.padStart(_S(this.hours), 2, "0"),
+      kk: () => _.padStart(_S(this.hours + 1), 2, "0"),
+      KK: () => _.padStart(_S(this.hours % 12), 2, "0"),
+      hh: () => _.padStart(_S((this.hours % 12) + 1), 2, "0"),
+      mm: () => _.padStart(_S(this.minutes), 2, "0"),
+      ss: () => _.padStart(_S(this.seconds), 2, "0"),
+      SSS: () => _.padStart(_S(this.milliseconds), 3, "0"),
     } as {
       [k: string]: { (): number | string };
     };
     // Formatting
-    let sb = '';
+    let sb = "";
     let ptn = /a|HH?|KK?|hh?|kk?|mm?|ss?|S(SS)?/g;
     let pos = 0;
     let m;

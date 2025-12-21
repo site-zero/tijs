@@ -5,6 +5,11 @@ import {
   DateTimeQuickParseMode,
 } from "../../../_type";
 
+export type InputDateTimeEmitter = {
+  (event: "change", payload: string | number | null): void;
+};
+
+
 export type InputDatetimeProps = CommonProps &
   ReadonlyProps &
   PlaceholderProps &

@@ -58,7 +58,7 @@
     <template #tail>
       <template v-if="_show_calendar">
         <div
-          class="ti-input-data-popmask"
+          class="ti-input-date-popmask"
           @click.left="_show_calendar = false"></div>
         <div class="ti-input-date-popup" :style="PopupStyle">
           <TiCalendar

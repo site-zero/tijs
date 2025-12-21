@@ -1,4 +1,10 @@
-@use '@site0/tijs/sass/_all.scss' as *;
+@use "@site0/tijs/sass/_all.scss" as *;
 
 .ti-input-time {
+  @include flex-align-nowrap;
+
+  .time-sep {
+    width: 0.5em;
+    text-align: center;
+  }
 }
