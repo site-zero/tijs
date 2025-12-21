@@ -7,7 +7,9 @@
   --box-color-focus-border: var(--ti-color-primary);
   --box-color-focus-text: var(--ti-color-highlight-f);
   --box-color-focus-bg: var(--ti-color-highlight);
+  --box-fontsz: inherits;
   @include flex-align-nowrap($ai: stretch);
+  font-size: var(--box-fontsz);
   //-----------------------------------------------------
   > aside {
     @include font-fixed;

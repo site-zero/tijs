@@ -51,6 +51,15 @@ export type InputNumProps = CommonProps &
     partSep?: string;
 
     /**
+     * 左填充值的宽度
+     */
+    padStart?: number;
+    /**
+     * 左填充值的占位符，默认为 '0'
+     */
+    padChar?: string;
+
+    /**
      * 分隔的方向：
      *
      * - `left` 从右向左分隔，通常用来格式化金额【默认】
