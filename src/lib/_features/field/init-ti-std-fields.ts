@@ -31,6 +31,7 @@ export function init_ti_std_fields() {
     comType: "TiLabel",
     comConf: {
       placeholder: "i18n:nil",
+      prefixIconFor: "copy",
     } as LabelProps,
   });
 

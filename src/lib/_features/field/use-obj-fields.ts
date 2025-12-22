@@ -385,6 +385,100 @@ export function fldLabel(
   };
 }
 
+export function fldLabelI(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: LabelProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    comType: "TiLabel",
+    comConf: _.assign(
+      {
+        align: "right",
+        type: "disable",
+        boxRadius: "none",
+      } as LabelProps,
+      comConf
+    ),
+  };
+}
+
+export function fldLabelF2(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: LabelProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    comType: "TiLabel",
+    comConf: _.assign(
+      {
+        align: "right",
+        valuePiping: "$F2",
+        hideBorder: true,
+        type: "disable",
+        boxRadius: "none",
+      } as LabelProps,
+      comConf
+    ),
+  };
+}
+
+export function fldLabelF3(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: LabelProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    comType: "TiLabel",
+    comConf: _.assign(
+      {
+        align: "right",
+        valuePiping: "$F3",
+        hideBorder: true,
+        type: "disable",
+        boxRadius: "none",
+      } as LabelProps,
+      comConf
+    ),
+  };
+}
+
+export function fldLabelF6(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: LabelProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    comType: "TiLabel",
+    comConf: _.assign(
+      {
+        align: "right",
+        valuePiping: "$F6",
+        hideBorder: true,
+        type: "disable",
+        boxRadius: "none",
+      } as LabelProps,
+      comConf
+    ),
+  };
+}
+
 export function fldDroplist(
   name: FieldName,
   titleAndTip: string | string[],
