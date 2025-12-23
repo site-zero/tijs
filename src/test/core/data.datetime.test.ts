@@ -1,5 +1,6 @@
 import _ from "lodash";
 import { assert, expect, test } from "vitest";
+import { getTimeZoneOffset } from "../../_type/core-types";
 import { DateTime, installTiCoreI18n } from "../../core";
 
 installTiCoreI18n("en-us");
@@ -7,9 +8,9 @@ installTiCoreI18n("en-us");
 test("setTimeWithTimeZone+UTC", () => {
   let d = new Date("2025-12-05 02:00+8");
   let fmt = "yyyy-MM-dd HH:mm";
-  expect(DateTime.format(d, { fmt, timezone: 'Z' })).eq("2025-12-04 18:00");
-  DateTime.setTime(d, "04:00", 'Z');
-  expect(DateTime.format(d, { fmt, timezone: 'Z' })).eq("2025-12-04 04:00");
+  expect(DateTime.format(d, { fmt, timezone: "Z" })).eq("2025-12-04 18:00");
+  DateTime.setTime(d, "04:00", "Z");
+  expect(DateTime.format(d, { fmt, timezone: "Z" })).eq("2025-12-04 04:00");
   expect(DateTime.format(d, { fmt, timezone: 8 })).eq("2025-12-04 12:00");
 });
 
@@ -23,11 +24,11 @@ test("setTimeWithTimeZone+02:00", () => {
 });
 
 test("getTimeZoneOffset", () => {
-  expect(DateTime.getTimeZoneOffset()).eq(0);
-  expect(DateTime.getTimeZoneOffset("Z")).eq(0);
-  expect(DateTime.getTimeZoneOffset(8)).eq(8);
-  expect(DateTime.getTimeZoneOffset(10)).eq(10);
-  expect(DateTime.getTimeZoneOffset(-9)).eq(-9);
+  expect(getTimeZoneOffset()).eq(0);
+  expect(getTimeZoneOffset("Z")).eq(0);
+  expect(getTimeZoneOffset(8)).eq(8);
+  expect(getTimeZoneOffset(10)).eq(10);
+  expect(getTimeZoneOffset(-9)).eq(-9);
 });
 
 test("quickParse with ymd mode", () => {

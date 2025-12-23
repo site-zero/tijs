@@ -1,11 +1,12 @@
 import _ from "lodash";
 import {
   DateParseOptionsZone,
+  getTimeZoneOffset,
+  setTimeToDate,
   TimeInfo,
   TimeInput,
   TimeUpdateUnit,
 } from "../../_type";
-import { DateTime } from "../ti-exports";
 
 type TimeCache = {
   value?: number;
@@ -91,7 +92,7 @@ export class TiTime implements TimeInfo {
     // Date
     if (_.isDate(input)) {
       let loff = input.getTimezoneOffset() / -60;
-      let diff = loff - DateTime.getTimeZoneOffset(tz);
+      let diff = loff - getTimeZoneOffset(tz);
       let dims = diff * 3600 * 1000;
       input.setTime(input.getTime() - dims);
       this.hours = input.getHours();
@@ -204,7 +205,7 @@ export class TiTime implements TimeInfo {
   }
   //--------------------------------
   updateDate(d: Date, tz?: DateParseOptionsZone) {
-    DateTime.setTime(d, this, tz);
+    setTimeToDate(d, this, tz);
   }
   //--------------------------------
   toInfo(): TimeInfo {

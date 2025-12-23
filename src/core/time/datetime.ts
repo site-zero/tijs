@@ -8,10 +8,11 @@ import {
   DateTimeQuickParseMode,
   DateTimeQuickParseOptions,
   DateTimeQuickParserSet,
+  setTimeToDate,
   TimeInput,
   TimeUpdateUnit,
 } from "../../_type";
-import { TiTime, toTimeInfo } from "./time-info";
+import { TiTime } from "./time-info";
 
 ///////////////////////////////////////////
 // const P_DATE = new RegExp(
@@ -534,27 +535,6 @@ export function formats(
 }
 
 /**
- * 获取时区偏移量(小时)。
- *
- * @param tz 时区值，默认值为 "Z"。
- * 可以是 "Z" 表示协调世界时（UTC），
- * 也可以是一个数字表示时区偏移量（以小时为单位）。
- * @returns 返回时区偏移量（以小时为单位）。
- * 如果 tz 为 "Z"，则返回 0；
- * 如果 tz 为数字，则返回该数字；
- * 否则抛出异常。
- */
-export function getTimeZoneOffset(tz: DateParseOptionsZone = "Z") {
-  if ("Z" == tz) {
-    return 0;
-  }
-  if (_.isNumber(tz)) {
-    return tz;
-  }
-  throw `Invalid timezone: [${tz}]`;
-}
-
-/**
  * 获取默认时区偏移量(小时)。
  *
  * @param {boolean} [dftAsLocal=true] -
@@ -815,55 +795,7 @@ export function setTime(
   time: TimeInput = { hours: 0, minutes: 0, seconds: 0, milliseconds: 0 },
   tz?: DateParseOptionsZone
 ) {
-  let tminfo = toTimeInfo(time);
-  let {
-    hours: HH = 0,
-    minutes: mm = 0,
-    seconds: ss = 0,
-    milliseconds: ms = 0,
-  } = tminfo;
-
-  // 指定时区，我们需要先偏移动，设置时间后，再偏移回来
-  //
-  // 譬如，给的时间是 2025-12-05 02:00 (GMT+8)
-  // > 相当于 2025-12-04 20:00 (GMT+2)
-  // 我们希望将这个时间设置为 (GMT+2) 时区的 04:00
-  //
-  // 换句话说，
-  // 浏览器显示: 2025-12-05 02:00 (GMT+8)
-  // 我们的心中: 2025-12-04 20:00 (GMT+2)
-  //
-  // 在我们心中，要将时间设置为 2025-12-04 04:00 (GMT+2)
-  // > 相当于浏览器: 2025-12-04 10:00 (GMT+8)
-  //
-  // 无论用 setUTCHours 还是 setHours 都没办法做到这一点。
-  //
-  // 我们只能这样来规避这个问题:
-  // 1. diff = Local - tz => 8 - 2 => 6
-  // 2. dims = diff * 3600 * 1000 = 21 600 000
-  // 3. (- dims)  :=> 2025-12-04 20:00 (GMT+8)
-  // 4. setTime   :=> 2025-12-04 04:00 (GMT+8)
-  // 5. (+ dims)  :=> 2025-12-04 10:00 (GMT+8)
-  //
-  if (tz) {
-    let loff = d.getTimezoneOffset() / -60;
-    let diff = loff - getTimeZoneOffset(tz);
-    let dims = diff * 3600 * 1000;
-    d.setTime(d.getTime() - dims);
-    if (_.inRange(HH, 0, 24)) d.setHours(HH);
-    if (_.inRange(mm, 0, 60)) d.setMinutes(mm);
-    if (_.inRange(ss, 0, 60)) d.setSeconds(ss);
-    if (_.inRange(ms, 0, 1000)) d.setMilliseconds(ms);
-    d.setTime(d.getTime() + dims);
-  }
-  // 默认采用本地时区
-  else {
-    if (_.inRange(HH, 0, 24)) d.setHours(HH);
-    if (_.inRange(mm, 0, 60)) d.setMinutes(mm);
-    if (_.inRange(ss, 0, 60)) d.setSeconds(ss);
-    if (_.inRange(ms, 0, 1000)) d.setMilliseconds(ms);
-  }
-  return d;
+  return setTimeToDate(d, time, tz);
 }
 
 /**
@@ -885,7 +817,7 @@ export function setDayLastTime(d: Date, tz?: DateParseOptionsZone) {
  * @returns 今天的日期对象，时间部分已归零
  */
 export function today(tz?: DateParseOptionsZone): Date {
-  return setTime(new Date(), {}, tz);
+  return setTimeToDate(new Date(), {}, tz);
 }
 
 /**
