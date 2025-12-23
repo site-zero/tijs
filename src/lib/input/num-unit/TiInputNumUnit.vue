@@ -24,7 +24,7 @@
     partWidth: 3,
     getNumber: "number",
     getUnit: "unit",
-    unitSelectOnly: true,
+    unitSelectOnly: false,
     unitWidth: "4em",
     valueInputAlign: "right",
   });

@@ -101,7 +101,7 @@ export function useTiCalendarApi(props: CalendarProps, emit: CalendarEmitter) {
   });
   //-----------------------------------------------------
   const ValueTimeZone = computed((): DateParseOptionsZone => {
-    return props.timezone ?? DateTime.getDefaultTimezoneOffset(true);
+    return props.timezone ?? DateTime.getDefaultTimezoneOffset(true) ?? "Z";
   });
   //-----------------------------------------------------
   const ViewDate = computed(() => {

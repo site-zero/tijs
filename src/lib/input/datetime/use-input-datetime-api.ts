@@ -76,7 +76,7 @@ export function useInputDateTimeApi(
     if (!d) {
       return new TiTime(0);
     }
-    return DateTime.parseTime(d, "s");
+    return DateTime.parseTime(d, "s", TimeZone.value);
   });
 
   const ValueAsStr = computed(() => {
@@ -136,7 +136,6 @@ export function useInputDateTimeApi(
       emit("change", null);
       return;
     }
-    let format = ValueFormat.value;
     let quickMode = props.quickInputMode ?? _dft_prop("quickInputMode", "");
     //console.log('quickInputMode', quickMode);
 
@@ -162,7 +161,7 @@ export function useInputDateTimeApi(
     }
 
     // 恢复时间
-    TimeObj.value.updateDate(d);
+    TimeObj.value.updateDate(d, TimeZone.value);
 
     // 更新
     tryNotifyChange(d);
@@ -172,7 +171,7 @@ export function useInputDateTimeApi(
     let tm = new TiTime(val);
 
     let d = new Date(DateValue.value || new Date());
-    tm.updateDate(d);
+    tm.updateDate(d, TimeZone.value);
 
     // 更新
     tryNotifyChange(d);

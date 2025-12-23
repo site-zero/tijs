@@ -1,10 +1,38 @@
 import _ from "lodash";
-import { TimeInfo, TimeInput, TimeUpdateUnit } from "../../_type";
+import {
+  DateParseOptionsZone,
+  TimeInfo,
+  TimeInput,
+  TimeUpdateUnit,
+} from "../../_type";
+import { DateTime } from "../ti-exports";
 
 type TimeCache = {
   value?: number;
   valueInMilliseconds?: number;
 };
+
+export function isTimeInfo(input: any): input is TimeInfo {
+  if (!input) {
+    return false;
+  }
+  if (input instanceof TiTime) {
+    return true;
+  }
+  for (let key of _.keys(input)) {
+    if (!/^(hours|minutes|seconds|milliseconds)$/.test(key)) {
+      return false;
+    }
+  }
+  return true;
+}
+
+export function toTimeInfo(input: TimeInput): TimeInfo {
+  if (isTimeInfo(input)) {
+    return input;
+  }
+  return new TiTime(input);
+}
 
 export class TiTime implements TimeInfo {
   hours = 0;
@@ -14,8 +42,12 @@ export class TiTime implements TimeInfo {
   __cached: TimeCache = {};
 
   //--------------------------------
-  constructor(input: TimeInput, unit?: TimeUpdateUnit) {
-    this.update(input, unit);
+  constructor(
+    input: TimeInput,
+    unit?: TimeUpdateUnit,
+    tz?: DateParseOptionsZone
+  ) {
+    this.update(input, unit, tz);
   }
   //--------------------------------
   clone() {
@@ -50,10 +82,18 @@ export class TiTime implements TimeInfo {
     this.milliseconds = _.clamp(milliseconds ?? this.milliseconds, 0, 999);
   }
   //--------------------------------
-  update(input: TimeInput, unit: TimeUpdateUnit = "ms") {
+  update(
+    input: TimeInput,
+    unit: TimeUpdateUnit = "ms",
+    tz?: DateParseOptionsZone
+  ) {
     this.__cached = {};
     // Date
     if (_.isDate(input)) {
+      let loff = input.getTimezoneOffset() / -60;
+      let diff = loff - DateTime.getTimeZoneOffset(tz);
+      let dims = diff * 3600 * 1000;
+      input.setTime(input.getTime() - dims);
       this.hours = input.getHours();
       this.minutes = input.getMinutes();
       this.seconds = input.getSeconds();
@@ -163,11 +203,8 @@ export class TiTime implements TimeInfo {
     return this.__cached.valueInMilliseconds;
   }
   //--------------------------------
-  updateDate(d: Date) {
-    d.setHours(this.hours);
-    d.setMinutes(this.minutes);
-    d.setSeconds(this.seconds);
-    d.setMilliseconds(this.milliseconds);
+  updateDate(d: Date, tz?: DateParseOptionsZone) {
+    DateTime.setTime(d, this, tz);
   }
   //--------------------------------
   toInfo(): TimeInfo {

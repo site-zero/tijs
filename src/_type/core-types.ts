@@ -1531,7 +1531,7 @@ export type DateTimeQuickParseOptions = {
  *  8  表示 GMT+8 时区
  * null | undefined 表示采用用户浏览器本地时区设置
  */
-export type DateParseOptionsZone = "Z" | number | null | undefined;
+export type DateParseOptionsZone = "Z" | number;
 export type DateInput = string | number | Date;
 export type DateFormatOptions = {
   fmt?: string;
@@ -1543,10 +1543,10 @@ export type DateFormatOptions = {
    */
   as?: "date" | "datetime";
   trimZero?: boolean;
-  timezone?: DateParseOptionsZone;
+  timezone?: DateParseOptionsZone | null | undefined;
 };
 export type DateParseOptions = {
-  timezone?: DateParseOptionsZone;
+  timezone?: DateParseOptionsZone | null | undefined;
   /**
    * 即使时间字符串里包括了时区，也需要强制用选项里的 timezone 覆盖它
    * 当然如果选项是未定义，则不会覆盖
