@@ -1,8 +1,8 @@
 import _ from "lodash";
 import { App, DefineComponent, InjectionKey, Ref } from "vue";
+import { toTimeInfo } from "../core/time/time-info";
 import { ActionBarProps, BlockOverflowMode, TipsApi } from "../lib";
 import { FieldComProps } from "./lib-type-fields";
-import { toTimeInfo } from "../core/time/time-info";
 
 export type DocumentIconType = "emoji" | "image/png" | "image/x-icon";
 export type EventModifier = "alt" | "ctrl" | "shift" | "meta";
@@ -1480,6 +1480,12 @@ export function toAspectRadius(
   return toAspectSizeValue("--ti-measure-r-", sz);
 }
 
+export function toAspectIconSize(
+  sz?: AspectSizeInput | null | undefined
+): string | undefined {
+  return toAspectSizeValue("--ti-iconsz-", sz);
+}
+
 export type DateTimeQuickParserSet = {
   /**
    * 假设今年是 2024 年
@@ -1554,7 +1560,6 @@ export type DateParseOptions = {
    */
   overrideTimezone?: boolean;
 };
-
 
 /**
  * 获取时区偏移量(小时)。

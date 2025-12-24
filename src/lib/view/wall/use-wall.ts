@@ -1,6 +1,7 @@
 import _ from "lodash";
 import { computed } from "vue";
 import {
+  ComRef,
   SelectableState,
   TableRowID,
   TiRoadblock,
@@ -191,12 +192,18 @@ export function useWall(
         getItemConClass?.(item, i)
       );
 
-      // 处理控件
-      let comType = Util.explainObj(
-        itVars,
-        props.comType ?? "TiThumb"
-      ) as string;
-      let comConf = Util.explainObj(itVars, props.comConf ?? {}) as Vars;
+      // 墙贴项具体的渲染控件
+      let com: Required<ComRef>;
+      if (props.wallItem) {
+        com = props.wallItem(itVars);
+      } else {
+        let comType = Util.explainObj(
+          itVars,
+          props.comType ?? "TiThumb"
+        ) as string;
+        let comConf = Util.explainObj(itVars, props.comConf ?? {}) as Vars;
+        com = { comType, comConf };
+      }
 
       let rowId = selectable.getDataId(item, i);
       _id_index.set(rowId, i);
@@ -209,8 +216,8 @@ export function useWall(
         className,
         conStyle,
         conClass,
-        comType: tiGetComponent(comType)?.com ?? TiRoadblock,
-        comConf,
+        comType: tiGetComponent(com.comType)?.com ?? TiRoadblock,
+        comConf: com.comConf,
       });
     }
 

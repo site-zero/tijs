@@ -59,6 +59,19 @@ export type WallProps = CommonProps &
     conStyle?: Vars;
 
     /**
+     * 自定义墙贴项。
+     *
+     * 通过 `comType|comConf` 可以指明墙贴项。
+     * 如果需要更高的定制性，可以声明本属性。
+     *
+     * 通过一个回调函数，可以为每个数据项指定不同的墙贴项
+     *
+     * @param itemContext 墙贴项渲染上下文 `{ ...vars, item }`
+     * @returns 墙贴项的控件具体渲染方式
+     */
+    wallItem?: (itemContext: Vars) => Required<ComRef>;
+
+    /**
      * 处理每个定制项目的事件
      */
     itemEventHandlers?: WallItemEventHandlers;
