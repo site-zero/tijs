@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from "lodash";
 import {
   Iconable,
   IconInput,
@@ -6,99 +6,99 @@ import {
   isIconObj,
   MessageMap,
   Vars,
-} from '../../_type';
-import { CssUtils } from '../web/';
+} from "../../_type";
+import { CssUtils } from "../web/";
 
 //-----------------------------------
 const TYPES = {
-  '7z': 'fas-file-archive',
-  'apk': 'zmdi-android',
-  'bin': 'fas-file',
-  'css': 'fab-css3',
-  'csv': 'fas-file-csv',
-  'doc': 'far-file-word',
-  'docx': 'fas-file-word',
-  'dmg': 'fab-apple',
-  'exe': 'zmdi-windows',
-  'gz': 'fas-file-archive',
-  'hmaker_site': 'zmdi-globe-alt',
-  'html': 'fab-html5',
-  'js': 'fab-node-js',
-  'sql': 'fas-file-fragment',
-  'json': 'far-file-code',
-  'less': 'fab-first-order-alt',
-  'md': 'fab-markdown',
-  'mjs': 'fab-node-js',
-  'mkv': 'far-file-video',
-  'mp': 'fas-file-signature',
-  'mp3': 'far-file-audio',
-  'mp4': 'far-file-video',
-  'msi': 'fab-windows',
-  'pdf': 'far-file-pdf',
-  'py': 'fab-python',
-  'rar': 'fas-file-archive',
-  'rss': 'fas-rss-square',
-  'sass': 'fab-first-order',
-  'tar': 'far-file-archive',
-  'tgz': 'fas-file-archive',
-  'comt': 'fas-flask',
-  'wnml': 'fas-file-code',
-  'xls': 'far-file-excel',
-  'xlsx': 'fas-file-excel',
-  'xml': 'far-file-code',
-  'youtube': 'fab-youtube',
-  'zip': 'fas-file-archive',
-  'category': 'zmdi-folder',
-  'article': 'zmdi-file-text',
+  "7z": "fas-file-archive",
+  "apk": "zmdi-android",
+  "bin": "fas-file",
+  "css": "fab-css3",
+  "csv": "fas-file-csv",
+  "doc": "far-file-word",
+  "docx": "fas-file-word",
+  "dmg": "fab-apple",
+  "exe": "zmdi-windows",
+  "gz": "fas-file-archive",
+  "hmaker_site": "zmdi-globe-alt",
+  "html": "fab-html5",
+  "js": "fab-node-js",
+  "sql": "fas-file-fragment",
+  "json": "far-file-code",
+  "less": "fab-first-order-alt",
+  "md": "fab-markdown",
+  "mjs": "fab-node-js",
+  "mkv": "far-file-video",
+  "mp": "fas-file-signature",
+  "mp3": "far-file-audio",
+  "mp4": "far-file-video",
+  "msi": "fab-windows",
+  "pdf": "far-file-pdf",
+  "py": "fab-python",
+  "rar": "fas-file-archive",
+  "rss": "fas-rss-square",
+  "sass": "fab-first-order",
+  "tar": "far-file-archive",
+  "tgz": "fas-file-archive",
+  "comt": "fas-flask",
+  "wnml": "fas-file-code",
+  "xls": "far-file-excel",
+  "xlsx": "fas-file-excel",
+  "xml": "far-file-code",
+  "youtube": "fab-youtube",
+  "zip": "fas-file-archive",
+  "category": "zmdi-folder",
+  "article": "zmdi-file-text",
 } as MessageMap;
 //-----------------------------------
 const MIMES = {
-  'audio': 'far-file-audio',
-  'image': 'far-file-image',
-  'text': 'far-file-alt',
-  'video': 'far-file-video',
-  'application': 'fas-window-maximize',
-  'text/css': 'fab-css3',
-  'text/html': 'fab-html5',
-  'application/x-zip-compressed': 'fas-file-archive',
-  'application/x-javascript': 'fab-js-square',
-  'application/vnd.ms-excel': 'fas-file-excel',
-  'application/json': 'far-file-code',
-  'text/javascript': 'fab-js-square',
+  "audio": "far-file-audio",
+  "image": "far-file-image",
+  "text": "far-file-alt",
+  "video": "far-file-video",
+  "application": "fas-window-maximize",
+  "text/css": "fab-css3",
+  "text/html": "fab-html5",
+  "application/x-zip-compressed": "fas-file-archive",
+  "application/x-javascript": "fab-js-square",
+  "application/vnd.ms-excel": "fas-file-excel",
+  "application/json": "far-file-code",
+  "text/javascript": "fab-js-square",
 } as MessageMap;
 //-----------------------------------
 const NAMES = {
-  add: 'zmdi-plus',
-  alert: 'zmdi-notifications-none',
-  backward: 'zmdi-chevron-left',
-  close: 'zmdi-close',
-  confirm: 'zmdi-help',
-  create: 'zmdi-audio',
-  del: 'zmdi-delete',
-  done: 'fas-thumbs-up',
-  download: 'zmdi-download',
-  edit: 'zmdi-edit',
-  error: 'zmdi-alert-octagon',
-  danger: 'zmdi-alert-octagon',
-  forward: 'zmdi-chevron-right',
-  help: 'zmdi-help-outline',
-  info: 'zmdi-info-outline',
-  loading: 'fas-spinner fa-spin',
-  moved: 'zmdi-gamepad',
-  processing: 'zmdi-settings zmdi-hc-spin',
-  ok: 'zmdi-check-circle',
-  prompt: 'zmdi-keyboard',
-  refresh: 'zmdi-refresh',
-  removed: 'far-trash-alt',
-  setting: 'zmdi-settings',
-  success: 'zmdi-check-circle',
-  track: 'zmdi-notifications-none',
-  warn: 'zmdi-alert-triangle',
+  add: "zmdi-plus",
+  alert: "zmdi-notifications-none",
+  backward: "zmdi-chevron-left",
+  close: "zmdi-close",
+  confirm: "zmdi-help",
+  create: "zmdi-audio",
+  del: "zmdi-delete",
+  done: "fas-thumbs-up",
+  download: "zmdi-download",
+  edit: "zmdi-edit",
+  error: "zmdi-alert-octagon",
+  danger: "zmdi-alert-octagon",
+  forward: "zmdi-chevron-right",
+  help: "zmdi-help-outline",
+  info: "zmdi-info-outline",
+  loading: "fas-spinner fa-spin",
+  moved: "zmdi-gamepad",
+  processing: "zmdi-settings zmdi-hc-spin",
+  ok: "zmdi-check-circle",
+  prompt: "zmdi-keyboard",
+  refresh: "zmdi-refresh",
+  removed: "far-trash-alt",
+  setting: "zmdi-settings",
+  success: "zmdi-check-circle",
+  track: "zmdi-notifications-none",
+  warn: "zmdi-alert-triangle",
 } as MessageMap;
 //-----------------------------------
 const RACES = {
-  FILE: 'far-file',
-  DIR: 'fas-folder',
+  FILE: "far-file",
+  DIR: "fas-folder",
 } as MessageMap;
 //-----------------------------------
 const ALL = {
@@ -108,10 +108,10 @@ const ALL = {
   ...NAMES,
 } as MessageMap;
 //-----------------------------------
-const _DFT_FONT_ICON = 'zmdi-cake';
+const _DFT_FONT_ICON = "zmdi-cake";
 const _DFT_FONT_ICON_OBJ = {
-  type: 'font',
-  className: 'zmdi zmdi-cake',
+  type: "font",
+  className: "zmdi zmdi-cake",
 } as IconObj;
 
 export function getDefaultIcon() {
@@ -143,7 +143,7 @@ export function isEmoji(str: string) {
 }
 
 export function getIcon(
-  input?: IconInput,
+  input?: string | Iconable,
   dft: IconInput = _DFT_FONT_ICON
 ): IconInput {
   // Default icon
@@ -182,11 +182,11 @@ export function toIconObj(val?: IconInput): IconObj {
   if (_.isString(val)) {
     return parseIcon(val);
   }
-  if ('font' == val.type && val.value) {
+  if ("font" == val.type && val.value) {
     let icon = parseIcon(val.value);
     icon.topClass = val.className;
     icon.style = val.style;
-    
+
     return icon;
   }
   return val;
@@ -201,16 +201,16 @@ export function parseIcon(val: IconInput, dft?: string | IconObj): IconObj {
     return val;
   }
 
-  let icon = { type: 'font' } as IconObj;
+  let icon = { type: "font" } as IconObj;
 
   // String as emoji
   if (isEmoji(val)) {
-    icon.type = 'emoji';
+    icon.type = "emoji";
     icon.value = val;
   }
   // String as Image
   else if (/\.(png|gif|jpe?g|webp|svg)$/i.test(val)) {
-    icon.type = 'image';
+    icon.type = "image";
     icon.src = val;
     icon.value = val;
   }
@@ -221,17 +221,16 @@ export function parseIcon(val: IconInput, dft?: string | IconObj): IconObj {
     if (m) {
       // fontawsome
       if (/^fa[a-z]$/.test(m[1])) {
-        icon.className = m[1] + ' fa-' + m[2];
+        icon.className = m[1] + " fa-" + m[2];
       }
       // Other font libs
       else {
-        icon.className = m[1] + ' ' + val;
+        icon.className = m[1] + " " + val;
       }
-      
     }
     // Default as image
     else {
-      icon.type = 'image';
+      icon.type = "image";
       icon.src = val;
     }
   }
