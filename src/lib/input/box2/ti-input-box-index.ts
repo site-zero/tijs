@@ -9,7 +9,7 @@ const en_us = {
 const zh_cn = {
   'com-name': '输入框',
   'example-options': '带选项',
-  'example-formated': '格式显示值',
+  'example-formated': '自动大写',
   'example-query': '动态查询',
   'example-droplist': '只读下拉',
 };

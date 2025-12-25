@@ -134,10 +134,12 @@
       if (_box.value.isReadonly.value) {
         return;
       }
-      //确保当前状态是 focused
+      // 确保当前状态是 focused
       _box.value.setFocused(true);
-      _box.value.applyPipe(val);
-      _box.value.debounceApplyTipsByHint(_box_state.usr_text ?? undefined);
+
+      // _box.value.applyPipe(val);
+      // _box.value.debounceApplyTipsByHint(_box_state.usr_text ?? undefined);
+      _box.value.debounceApplyPipeAndTips(val);
     },
   });
   //-----------------------------------------------------

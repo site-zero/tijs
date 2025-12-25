@@ -271,9 +271,21 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     }
   }
   //------------------------------------------------
-  const debounceApplyTipsByHint = _.debounce(
-    (usr_text?: string) => {
-      applyTipsByHint(usr_text);
+  // const debounceApplyTipsByHint = _.debounce(
+  //   (usr_text?: string) => {
+  //     applyTipsByHint(usr_text);
+  //   },
+  //   props.tipShowDelay,
+  //   {
+  //     leading: false,
+  //     trailing: true,
+  //   }
+  // );
+  //------------------------------------------------
+  const debounceApplyPipeAndTips = _.debounce(
+    (text0: string) => {
+      applyPipe(text0);
+      applyTipsByHint(_box_state.usr_text ?? undefined);
     },
     props.tipShowDelay,
     {
@@ -607,7 +619,8 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     whenFocused,
     applyPipe,
     applyTipsByHint,
-    debounceApplyTipsByHint,
+    //debounceApplyTipsByHint,
+    debounceApplyPipeAndTips,
     onPropsValueChange,
     debouncePropsValueChange,
     onKeyUpOrDown,

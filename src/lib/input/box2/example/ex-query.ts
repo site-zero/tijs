@@ -6,7 +6,7 @@ export default {
   text: 'i18n:ti-input-example-query',
   comConf: {
     value: undefined,
-    valueCase: 'upper',
+    valueCase: 'upperAll',
     trimed: true,
     placeholder: 'Keyin for tips',
     prefixIconForClean: true,

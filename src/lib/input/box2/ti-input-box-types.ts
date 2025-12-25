@@ -94,6 +94,7 @@ export type InputBoxProps = CommonProps &
 
     /**
      * 延迟多少毫秒（反弹跳）才查询提示信息，默认 500ms
+     * 同样，这个设置，也会影响 pipe 的应用反弹跳阈值
      */
     tipShowDelay?: number;
 

@@ -109,7 +109,7 @@ export function useValuePipe(props: ValuePipeProps) {
    */
   const __processers = computed(() => __build_processors());
 
-  // 返回处理函数
+  // 实际处理函数
   return (val: any) => {
     // if (val === "2025-09-09 00:00:00.000") {
     //   let vs = DateTime.format(val, { timezone: "Z" });
@@ -121,5 +121,5 @@ export function useValuePipe(props: ValuePipeProps) {
       re = processer(re, context);
     }
     return re;
-  };
+  }
 }
