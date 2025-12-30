@@ -166,7 +166,7 @@
     })
   );
   //-----------------------------------------------------
-  function onKeyDown(event: KeyboardEvent) {
+  async function onKeyDown(event: KeyboardEvent) {
     if (_box.value.isReadonly.value) {
       // console.log("skip onKeyDown");
       return;
@@ -192,6 +192,7 @@
     // 确认
     else if ("Enter" == event.key) {
       event.preventDefault();
+      await _box.value.applyPipeAndTips($input.value?.value || "");
       _box.value.emitIfChanged();
       _box.value.clearOptionsData();
     }
@@ -246,16 +247,17 @@
     let key_du = Date.now() - __last_down_at;
     let isBlurByTab = "Tab" == __last_down_key && key_du < 50;
     //console.log(`onInputBlur: isBlurByTab=${isBlurByTab}, key_du=${key_du}`);
-    _.delay(() => {
+    _.delay(async () => {
       // 如果有选项，那么需要等待一会，看看用户是否已经选择了选项
       if (_box.value.hasTips.value && !isBlurByTab) {
         //console.log('onInputBlur dely emitI_atfChanged');
-        _.delay(() => {
+        _.delay(async () => {
           let du = Date.now() - __last_select_at;
           //console.log(`onInputBlur du=${du}`);
           if (du > 1000) {
             //console.log('onInputBlur', 'notifyChange');
             _box_state.usr_text = null;
+            await _box.value.applyPipeAndTips($input.value?.value || "");
             _box.value.setFocused(false);
             _box.value.emitIfChanged();
           }
@@ -265,6 +267,7 @@
       else {
         //console.log('onInputBlur rightnow emitIfChanged');
         _box_state.usr_text = null;
+        await _box.value.applyPipeAndTips($input.value?.value || "");
         _box.value.setFocused(false);
         _box.value.emitIfChanged();
       }
@@ -304,9 +307,9 @@
   watch(
     () => [props.value, props.options],
     (_newVal, _oldVal) => {
-      if (/^[^0]/.test(props.value)) {
-        console.log("props.value changed", props.value);
-      }
+      // if (/^[^0]/.test(props.value)) {
+      //   console.log("props.value changed", props.value);
+      // }
       //if (newVal && null === newVal[0] && _box_state.box_text) {
       //if (newVal && "HKHKG" === newVal[0]) {
       // console.log("onPropsValueChange", {

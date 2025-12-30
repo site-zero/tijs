@@ -20,7 +20,7 @@ import _com_set_view from "../lib/view/all-views";
 import { TiComImpl } from "./_top/ti-com";
 import { I18n, Str, getEnv, setEnv } from "./ti-exports";
 
-const debug = true;
+const debug = false;
 
 /**
  * 定义一个组件的集合

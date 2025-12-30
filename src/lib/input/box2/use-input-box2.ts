@@ -147,7 +147,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
   //------------------------------------------------
   function applyPipe(text0: string) {
     let text1 = _pipe(text0);
-    console.log("applyPipe", text0, text1);
+    //console.log("applyPipe", text0, text1);
     // 无需修改
     if (text1 == _box_state.usr_text) {
       return;
@@ -283,11 +283,24 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
   //   }
   // );
   //------------------------------------------------
-  const debounceApplyPipeAndTips = _.debounce(
-    (text0: string) => {
+  let _apply_pipe_at = 0;
+  async function applyPipeAndTips(text0: string) {
+    // 为了防止用户数据字符，然后立刻回车
+    // 这样回车回导致输入确认后，有执行一遍本函数
+    let now = Date.now();
+    if (now - _apply_pipe_at <= 0) {
+      return;
+    }
+    try {
       applyPipe(text0);
-      applyTipsByHint(_box_state.usr_text ?? undefined);
-    },
+      return await applyTipsByHint(_box_state.usr_text ?? undefined);
+    } finally {
+      _apply_pipe_at = now;
+    }
+  }
+  //------------------------------------------------
+  const debounceApplyPipeAndTips = _.debounce(
+    applyPipeAndTips,
     props.tipShowDelay,
     {
       leading: false,
@@ -621,6 +634,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     applyPipe,
     applyTipsByHint,
     //debounceApplyTipsByHint,
+    applyPipeAndTips,
     debounceApplyPipeAndTips,
     onPropsValueChange,
     debouncePropsValueChange,
