@@ -258,7 +258,7 @@ export function buildDifferentItem(
     if (updateMeta) {
       // 动态计算
       if (_.isFunction(updateMeta)) {
-        _.assign(diff, updateMeta(myData, taData));
+        _.assign(diff, updateMeta(myData, taData, diff));
       }
       // 静态值
       else {

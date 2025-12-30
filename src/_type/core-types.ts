@@ -1373,13 +1373,31 @@ export type MetaPatcher =
 // 与 MetaPatcher 不同的时候，它的 remote 一定是存在的
 export type UpdateMetaPatcher =
   | Vars
-  | ((local: Vars, remote: Vars) => Vars | undefined);
+  | ((local: Vars, remote: Vars, diff: Vars) => Vars | undefined);
 
 export type MakeDiffOptions = {
   defaultMeta?: MetaPatcher;
+  /**
+   * 对于指定的 insertMeta 与 updateMeta，如果是定制函数
+   * 对于返回的结果如何与 meta 合并的模式
+   *
+   * - override-all: 直接用定制函数的返回值替换 meta
+   * - override-insert: 只在 insertMeta 中用定制函数的返回值替换 meta
+   * - override-update: 只在 updateMeta 中用定制函数的返回值替换 meta
+   * - assign: 用定制函数的返回值与 meta 合并
+   *
+   * 默认为 assign
+   */
+  overrideMode?: MetaPatchMode;
   insertMeta?: MetaPatcher;
   updateMeta?: UpdateMetaPatcher;
 };
+
+export type MetaPatchMode =
+  | "override-all"
+  | "override-insert"
+  | "override-update"
+  | "assign";
 
 export type DiffItem = {
   //index: number;
