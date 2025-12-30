@@ -304,6 +304,9 @@
   watch(
     () => [props.value, props.options],
     (_newVal, _oldVal) => {
+      if (/^[^0]/.test(props.value)) {
+        console.log("props.value changed", props.value);
+      }
       //if (newVal && null === newVal[0] && _box_state.box_text) {
       //if (newVal && "HKHKG" === newVal[0]) {
       // console.log("onPropsValueChange", {

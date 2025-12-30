@@ -1,6 +1,6 @@
-import _ from 'lodash';
-import { Str, Tmpl, Util } from '../../';
-import { ExplainOptions, Explainer, InvokePartial, Vars } from '../../../_type';
+import _ from "lodash";
+import { Str, Tmpl, Util } from "../../";
+import { ExplainOptions, Explainer, InvokePartial, Vars } from "../../../_type";
 
 type ValueGetter = (context: Vars, options: ExplainOptions) => any;
 type MakeValueGetter = (val: string, getDft: ValueGetter) => ValueGetter;
@@ -31,7 +31,7 @@ function __get_val(
     if (_.isNil(v)) {
       return getDft(context, options);
     }
-    if (autoJsValue) {
+    if (autoJsValue && options.jsValue) {
       v = Str.toJsValue(v, options.jsValue);
     }
     return v;
@@ -103,27 +103,27 @@ const _makers: MakerMap = {
   //
   // 函数
   //
-  '==>': (val) => __get_func(val, 'left'),
-  '==>?': (val) => __get_func(val, 'left?'),
-  '==>>': (val) => __get_func(val, 'right'),
-  '==>>?': (val) => __get_func(val, 'right?'),
+  "==>": (val) => __get_func(val, "left"),
+  "==>?": (val) => __get_func(val, "left?"),
+  "==>>": (val) => __get_func(val, "right"),
+  "==>>?": (val) => __get_func(val, "right?"),
   //
   // 赋值
   //
-  '==': (val, getDft) => __get_bool(val, { getDft }),
-  '!=': (val, getDft) => __get_bool(val, { getDft, not: true }),
-  '=': (val, getDft) => __get_val(val, { getDft, autoJsValue: true }),
+  "==": (val, getDft) => __get_bool(val, { getDft }),
+  "!=": (val, getDft) => __get_bool(val, { getDft, not: true }),
+  "=": (val, getDft) => __get_val(val, { getDft, autoJsValue: true }),
   //
   // 直接调用
   //
-  '=>': (val) => __get_call(val, 'left'),
-  '=>?': (val) => __get_call(val, 'left?'),
-  '=>>': (val) => __get_call(val, 'right'),
-  '=>>?': (val) => __get_call(val, 'right?'),
+  "=>": (val) => __get_call(val, "left"),
+  "=>?": (val) => __get_call(val, "left?"),
+  "=>>": (val) => __get_call(val, "right"),
+  "=>>?": (val) => __get_call(val, "right?"),
   //
   // 渲染模板
   //
-  '->': (val) => __get_tmpl(val),
+  "->": (val) => __get_tmpl(val),
 };
 
 export class StringExplainer implements Explainer {
@@ -178,15 +178,15 @@ export class StringExplainer implements Explainer {
         }
 
         // starts with "!=" or "==" auto covert to Boolean
-        if ('==' == m_type) {
+        if ("==" == m_type) {
           func = __static_bool(m_dft);
         }
         // starts with "!=" or "==" auto covert to Boolean
-        else if ('!=' == m_type) {
+        else if ("!=" == m_type) {
           func = __static_bool(m_dft, true);
         }
         // whole context  "=.."
-        else if ('..' == m_val) {
+        else if (".." == m_val) {
           func = (context) => {
             return _.cloneDeep(context);
           };

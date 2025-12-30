@@ -726,7 +726,7 @@ export interface ExplainOptions {
   funcSet?: any; // 如果不指定，则用 globalThis
   evalFunc?: boolean;
   iteratee?: { (it: any): any };
-  jsValue?: ToJsValueOptions;
+  jsValue?: ToJsValueOptions | null;
   showTmplKey?: boolean;
 }
 

@@ -147,6 +147,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
   //------------------------------------------------
   function applyPipe(text0: string) {
     let text1 = _pipe(text0);
+    console.log("applyPipe", text0, text1);
     // 无需修改
     if (text1 == _box_state.usr_text) {
       return;
