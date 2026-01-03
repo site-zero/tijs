@@ -60,6 +60,7 @@
   <TiInput
     ref="input"
     v-bind="InputConfig"
+    :trimed="false"
     :value="InputValue"
     suffix-icon-for="click"
     @change="api.onDateValueChange"

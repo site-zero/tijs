@@ -161,7 +161,7 @@ export function useInputDateTimeApi(
     }
 
     // 恢复时间
-    TimeObj.value.updateDate(d, TimeZone.value);
+    //TimeObj.value.updateDate(d, TimeZone.value);
 
     // 更新
     tryNotifyChange(d);

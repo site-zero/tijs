@@ -1,10 +1,26 @@
-import _ from 'lodash';
+import _ from "lodash";
 
-export function filterRecordNilValueDeeply(val: any): any {
+export type filterRecordValueOptions = {
+  /**
+   * 忽略哪些键
+   * @param k 字段的键
+   * @returns  true 表示要忽略
+   */
+  ignoreKey?: (k: string) => boolean;
+};
+
+export function filterRecordNilValueDeeply(
+  val: any,
+  options?: filterRecordValueOptions
+): any {
+  let ignoreKey = (k: string) => /^_/.test(k);
+  if (options?.ignoreKey) {
+    ignoreKey = options.ignoreKey;
+  }
   // 特殊值，有些时候需要保留 null 以便数据库判断 IS NULL 条件
   // 我们用特殊的  '<NULL>' 来表示，一边区分原生的 null，因为原生的 null
   // 主要意思是这个条件无视
-  if (val === '<NULL>') {
+  if (val === "<NULL>") {
     return null;
   }
   // 保持简单的值
@@ -34,8 +50,11 @@ export function filterRecordNilValueDeeply(val: any): any {
   let re = {} as any;
   let ks = _.keys(val);
   for (let k of ks) {
+    if (ignoreKey(k)) {
+      continue;
+    }
     let v = val[k];
-    if (_.isNil(v) || /^_/.test(k)) {
+    if (_.isNil(v)) {
       continue;
     }
     re[k] = filterRecordNilValueDeeply(v);

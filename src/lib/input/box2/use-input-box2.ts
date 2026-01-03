@@ -285,12 +285,13 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
   //------------------------------------------------
   let _apply_pipe_at = 0;
   async function applyPipeAndTips(text0: string) {
-    // 为了防止用户数据字符，然后立刻回车
+    // 为了防止用户输入字符，然后立刻回车
     // 这样回车回导致输入确认后，有执行一遍本函数
     let now = Date.now();
     if (now - _apply_pipe_at <= 0) {
       return;
     }
+    //console.log(`applyPipeAndTips [${text0}]`);
     try {
       applyPipe(text0);
       return await applyTipsByHint(_box_state.usr_text ?? undefined);
@@ -377,6 +378,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
   //------------------------------------------------
   async function onPropsValueChange() {
     let val = anyToStr(props.value);
+    //console.log("onPropsValueChange", val);
     let amend: InputBoxState = {
       usr_text: val ?? "",
       box_value: null,
@@ -404,6 +406,9 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
 
     // 更新状态
     __amend_box_state(amend);
+
+    // 1000ms 内，用户输入，将不再被处理
+    _apply_pipe_at = Date.now() + 1000;
   }
   //------------------------------------------------
   /**
