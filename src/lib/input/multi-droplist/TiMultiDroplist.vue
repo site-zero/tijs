@@ -1,17 +1,17 @@
 <script lang="ts" setup>
-  import _ from 'lodash';
-import { computed, nextTick, useTemplateRef, watch } from 'vue';
-import { TiList, TiTags } from '../../';
-import { CssUtils, I18n } from '../../../';
-import { Rect } from '../../../_type';
-import { useBoxTips } from '../box2/use-box-tips';
-import { useTipList } from '../box2/use-tip-list';
-import {
-  MultiDroplistEmitter,
-  MultiDroplistProps,
-} from './ti-multi-droplist-types';
-import { useMultiDroplist } from './use-multi-droplist';
-import { useMultiDroplistActions } from './use-multi-droplist-actions';
+  import _ from "lodash";
+  import { computed, nextTick, useTemplateRef, watch } from "vue";
+  import { TiList, TiTags } from "../../";
+  import { CssUtils, I18n } from "../../../";
+  import { Rect } from "../../../_type";
+  import { useBoxTips } from "../box2/use-box-tips";
+  import { useTipList } from "../box2/use-tip-list";
+  import {
+    MultiDroplistEmitter,
+    MultiDroplistProps,
+  } from "./ti-multi-droplist-types";
+  import { useMultiDroplist } from "./use-multi-droplist";
+  import { useMultiDroplistActions } from "./use-multi-droplist-actions";
   //-----------------------------------------------------
   const emit = defineEmits<MultiDroplistEmitter>();
   //-----------------------------------------------------
@@ -20,10 +20,11 @@ import { useMultiDroplistActions } from './use-multi-droplist-actions';
   });
   //-----------------------------------------------------
   const $el = useTemplateRef<HTMLElement>("el");
+  const $tipcon = useTemplateRef<HTMLElement>("tipcon");
   const _api = computed(() => useMultiDroplist(props, emit));
   const _menu = computed(() => useMultiDroplistActions(props, _api.value));
   //-----------------------------------------------------
-  const _tip_list = computed(() => useTipList(props));
+  const _tip_list = computed(() => useTipList(props, () => $tipcon.value));
   const _tip_box = computed(() =>
     useBoxTips({
       getElement: () => $el.value,
@@ -103,7 +104,7 @@ import { useMultiDroplistActions } from './use-multi-droplist-actions';
       <div class="part-mask" @click.left.stop="onClickMask"></div>
       <!--选项层：展开的选项存放的地方-->
       <div class="part-options" :style="_tip_box.TipWrapperStyle.value">
-        <div class="part-options-con">
+        <div class="part-options-con" ref="tipcon">
           <TiList
             v-bind="_tip_list.TipListConfig.value"
             :multi="true"

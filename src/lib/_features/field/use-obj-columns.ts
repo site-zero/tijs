@@ -6,6 +6,7 @@ import {
   InputDatetimeProps,
   InputNumProps,
   LabelProps,
+  TipOptionFormat,
   ToggleProps,
 } from "../../";
 import { ColumnRefer, FieldName, TableInputColumn } from "../../../_type";
@@ -450,6 +451,48 @@ export function colDroplist(
     activatedComConf: _.assign(
       {
         options,
+        boxFontSize: "s",
+        boxPadding: "s",
+        boxRadius: "none",
+        hideBorder: true,
+      } as DroplistProps,
+      comConf
+    ),
+  };
+}
+
+export function colDroplistVT(
+  name: FieldName,
+  titleAndTip: string | string[],
+  options: string,
+  placeholder?: string,
+  tipListMinWidth: string = "200px",
+  tipFormat: TipOptionFormat = "VT",
+  comConf?: DroplistProps,
+  readonlyComConf?: LabelProps
+): TableInputColumn {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    readonlyComType: "TiLabel",
+    readonlyComConf: _.assign(
+      {
+        placeholder,
+        type: "disable",
+        boxRadius: "none",
+      } as LabelProps,
+      readonlyComConf
+    ),
+    activatedComType: "TiInput",
+    activatedComConf: _.assign(
+      {
+        placeholder,
+        options,
+        tipFormat,
+        tipListMinWidth,
+        useRawValue: true,
         boxFontSize: "s",
         boxPadding: "s",
         boxRadius: "none",

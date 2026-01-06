@@ -521,6 +521,7 @@ export function fldDroplistVT(
         options,
         tipFormat,
         tipListMinWidth,
+        useRawValue: true,
       } as DroplistProps,
       comConf
     ),

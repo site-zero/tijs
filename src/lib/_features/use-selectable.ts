@@ -448,7 +448,7 @@ export function useSelectable<ID extends TableRowID>(
   }
 
   function canSelectItem(item: SelectableItem<ID>) {
-    if (_.isNil(item.id) || !item.rawData) {
+    if (_.isUndefined(item.id) || !item.rawData) {
       return false;
     }
     if (item.index < 0) {

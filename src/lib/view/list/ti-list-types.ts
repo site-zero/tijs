@@ -3,7 +3,7 @@ import {
   RoadblockProps,
   RowIndentation,
   StdListItemProps,
-} from '../../';
+} from "../../";
 import {
   AnyOptionItem,
   AspectSize,
@@ -15,11 +15,11 @@ import {
   TableRowID,
   ToggleRowStatusEmitter,
   Vars,
-} from '../../../_type';
+} from "../../../_type";
 import {
   SelectEmitInfo,
   SelectableProps,
-} from '../../../lib/_features/use-selectable';
+} from "../../../lib/_features/use-selectable";
 
 export type ListAspect = {
   style?: Vars;
@@ -46,7 +46,7 @@ export type ListAspect = {
    *    > 不显示标记图标，但是如果属性为 true
    *    > 则显示一个单选按钮 `['zmdi-circle-o','zmdi-dot-circle']`
    */
-  markerIcons?: [IconInput, IconInput] | 'auto';
+  markerIcons?: [IconInput, IconInput] | "auto";
 
   /**
    * 是否强制显示列表项的图标部分
@@ -58,7 +58,7 @@ export type ListAspect = {
    *
    * @default 'auto'
    */
-  forceShowRowIconPart?: 'auto' | 'no' | 'yes';
+  forceShowRowIconPart?: "auto" | "no" | "yes";
 
   /**
    * 如果开启了这个选项，那么显示的文本被认为是一个 HTML
@@ -91,22 +91,32 @@ export type ListAspect = {
    * 默认 true 表示选择的项目将会显示一个突出的背景
    * 对于 checklist 等控件，默认会关闭这个选项
    */
-  highlightChecked?: boolean|undefined;
+  highlightChecked?: boolean | undefined;
 
   /**
    * 是否显示列表鼠标 hover 高亮
    */
-  canHover?: boolean|undefined;
+  canHover?: boolean | undefined;
 
   /**
    * 可以鼠标选择文字，默认是 false
    */
-  allowUserSelect?: boolean|undefined;
+  allowUserSelect?: boolean | undefined;
 
   /**
    * 当选区变化，自动滚动
    */
-  autoScrollIntoView?:boolean|undefined;
+  autoScrollIntoView?: boolean | undefined;
+
+  /**
+   * 有时候， 列表所在一个容器元素内，列表自动延长。
+   * 这时候需要传入容器元素。
+   *
+   * 譬如在 droplist options 比较长的时候，就需要这样做
+   *
+   * @returns 如果自动滚动当前项目，可以指定滚动视口
+   */
+  scrollViewPort?: () => HTMLElement | undefined;
 
   /**
    * 列表文字是否需要自动翻译为多国语言
@@ -135,6 +145,7 @@ export type ListItem = AnyOptionItem & {
   canCheck: boolean;
   canSelect: boolean;
   className: Vars;
+  style?: Vars;
   index: number;
   displayText: string;
   rawData: Vars;
@@ -150,6 +161,6 @@ export type ListEvent = {
 export type ListSelectEmitInfo = SelectEmitInfo<TableRowID>;
 
 export type ListEmitter = ToggleRowStatusEmitter & {
-  (event: 'select', payload: ListSelectEmitInfo): void;
-  (event: 'open', payload: ListItem): void;
+  (event: "select", payload: ListSelectEmitInfo): void;
+  (event: "open", payload: ListItem): void;
 };

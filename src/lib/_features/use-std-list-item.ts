@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from "lodash";
 import {
   Convertor,
   IconInput,
@@ -6,7 +6,7 @@ import {
   StdOptionItem,
   TableRowID,
   Vars,
-} from '../../_type';
+} from "../../_type";
 
 export type StdListItemProps = {
   /**
@@ -84,12 +84,16 @@ export function useStdListItem(props: StdListItemProps) {
     if (isStdOptionItem(it)) {
       return it;
     }
-    return {
+    let re: StdOptionItem = {
       icon: getItemIcon(it),
       text: getItemText(it),
       tip: getItemTip(it),
       value: getItemValue(it, index),
     };
+    if (it.style) {
+      re.style = it.style;
+    }
+    return re;
   }
 
   function toStdItems(list: Vars[]): StdOptionItem[] {

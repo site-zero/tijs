@@ -142,19 +142,25 @@
     );
     // console.log("scrollIntoViewByIndex", index, $item);
     if ($item && $item.parentElement) {
-      let $main = $item.parentElement;
-      Dom.scrollIntoView($main, $item, options);
+      let $viewport: HTMLElement | undefined = undefined;
+      if (props.scrollViewPort) {
+        $viewport = props.scrollViewPort();
+      }
+      if (!$viewport) {
+        $viewport = $item.parentElement;
+      }
+      Dom.scrollIntoView($viewport, $item, options);
     }
   }
   //-----------------------------------------------------
-  function scrollCheckedIntoView() {
+  function scrollCheckedIntoView(smooth = true) {
     //console.log("scrollCheckedIntoView");
     let checkedIds = Util.mapTruthyKeys(selection.checkedIds);
     if (checkedIds.length > 0) {
       let fstId = checkedIds[0];
       let index = _list.value.getItemIndex(fstId);
       if (index >= 0) {
-        scrollIntoViewByIndex(index, { to: "center" });
+        scrollIntoViewByIndex(index, { to: "center", smooth });
       }
     }
   }
@@ -170,7 +176,7 @@
         props.checkedIds
       );
       nextTick(() => {
-        scrollCheckedIntoView();
+        scrollCheckedIntoView(false);
       });
     },
     { immediate: true }
@@ -203,6 +209,7 @@
         v-for="it in IndentlyItems"
         class="list-item"
         :class="it.className"
+        :style="it.style"
         @click.stop="onListItemClick(it, $event)"
         @dblclick="emit('open', it)">
         <!--***********************************-->

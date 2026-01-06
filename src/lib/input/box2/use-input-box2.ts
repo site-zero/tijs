@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { computed, nextTick, Ref, ref } from "vue";
 import { AnyOptionItem, IconInput, Vars } from "../../../_type";
-import { Dicts, I18n } from "../../../core";
+import { Dicts, I18n, Util } from "../../../core";
 import { anyToStr } from "../../../core/text/ti-str";
 import { usePlaceholder, useReadonly, ValuePipeFeature } from "../../_features";
 import { useDisplayText } from "./../../_features";
@@ -96,8 +96,12 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     // 显示清除选项
     if (props.showCleanOption) {
       re.push({
-        text: I18n.text("i18n:clear"),
+        icon: Util.fallback(props.clearOptionItemIcon, "zmdi-delete"),
+        text: I18n.text(props.clearOptionItemText ?? "i18n:clear"),
         value: null,
+        style: props.clearOptionItemStyle ?? {
+          color: "var(--ti-color-secondary)",
+        },
       });
     }
     if (_options) {

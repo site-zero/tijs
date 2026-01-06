@@ -1,14 +1,17 @@
 import _ from "lodash";
-import { ListProps } from "../../view/list/ti-list-types";
 import { computed, Ref } from "vue";
 import { AnyOptionItem, Vars } from "../../../_type";
+import { ListProps } from "../../view/list/ti-list-types";
 import { InputBoxProps } from "./ti-input-box-types";
 
 export type TipListSetup = {
   _options_data: Ref<Vars[] | undefined>;
 };
 
-export function useTipList(props: InputBoxProps) {
+export function useTipList(
+  props: InputBoxProps,
+  getTipContainer: () => HTMLElement | null
+) {
   /**
    * 提示列表的配置信息
    */
@@ -20,6 +23,8 @@ export function useTipList(props: InputBoxProps) {
         canHover: true,
         allowUserSelect: false,
         borderStyle: "solid",
+        autoScrollIntoView: true,
+        scrollViewPort: () => getTipContainer(),
       } as ListProps,
       props.tipList
     );

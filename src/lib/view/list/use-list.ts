@@ -154,7 +154,7 @@ export function useList(
       }
       // 选项信息
       let stdItem = toStdItem(li, index);
-      let { value, icon, text, tip } = stdItem;
+      let { value, icon, text, tip, style } = stdItem;
       // console.log("-", index, value, text);
 
       // 翻译多国语音
@@ -182,7 +182,7 @@ export function useList(
         icon,
         text,
         tip,
-
+        style,
         index,
         current: is_current,
         checked: is_checked,

@@ -30,6 +30,7 @@
   const emit = defineEmits<InputBoxEmitter>();
   const $el = useTemplateRef<HTMLElement>("el");
   const $input = useTemplateRef<HTMLInputElement>("input");
+  const $tipcon = useTemplateRef<HTMLElement>("tipcon");
   //-------------------------------------------------
   defineExpose<InputBoxExposeApi>({
     getElement: () => $el.value,
@@ -104,7 +105,7 @@
     })
   );
   //-----------------------------------------------------
-  const _tip_list = computed(() => useTipList(props));
+  const _tip_list = computed(() => useTipList(props, () => $tipcon.value));
   const _tip_box = computed(() =>
     useBoxTips({
       getElement: () => $el.value,
@@ -234,6 +235,7 @@
     if (_box_state.box_value != props.value) {
       _box.value.debouncePropsValueChange();
     }
+    __last_select_at = Date.now();
   }
   //-----------------------------------------------------
   function onInputBlur() {
@@ -247,6 +249,10 @@
     let key_du = Date.now() - __last_down_at;
     let isBlurByTab = "Tab" == __last_down_key && key_du < 50;
     //console.log(`onInputBlur: isBlurByTab=${isBlurByTab}, key_du=${key_du}`);
+    // 这里 delay 10ms 目的是，对于 options ，点击 mask 或者 options 都会触发 blur 事件
+    // 我们在 onOptionSelect 标记了一下 __last_select_at
+    // 那么就会进入到第一个分支，也就是 1000 后的检查
+    // 然后发现 __last_select_at 被在1秒内改动过，就什么也不做
     _.delay(async () => {
       // 如果有选项，那么需要等待一会，看看用户是否已经选择了选项
       if (_box.value.hasTips.value && !isBlurByTab) {
@@ -267,7 +273,9 @@
       else {
         //console.log('onInputBlur rightnow emitIfChanged');
         _box_state.usr_text = null;
-        await _box.value.applyPipeAndTips($input.value?.value || "");
+        if (props.canInput) {
+          await _box.value.applyPipeAndTips($input.value?.value || "");
+        }
         _box.value.setFocused(false);
         _box.value.emitIfChanged();
       }
@@ -280,7 +288,7 @@
     }
     __last_select_at = Date.now();
     _box_state.usr_text = null;
-    //console.log('onOptionSelect', payload);
+    console.log("onOptionSelect", payload);
     _box.value.setValueByItem(payload.current || null);
     _box.value.setFocused(false);
     _box.value.emitIfChanged();
@@ -405,7 +413,7 @@
       <div class="part-mask" @click.left.stop="onClickMask"></div>
       <!--选项层：展开的选项存放的地方-->
       <div class="part-options" :style="_tip_box.TipWrapperStyle.value">
-        <div class="part-options-con">
+        <div class="part-options-con" ref="tipcon">
           <TiList
             v-bind="_tip_list.TipListConfig.value"
             :currentId="_box_state.box_value"

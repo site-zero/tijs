@@ -157,6 +157,27 @@ export type InputBoxProps = CommonProps &
     showCleanOption?: boolean;
 
     /**
+     * 如果 showCleanOption 为 true，
+     * 可以用这个选项指定清除项目图标
+     * `null` 表示不显示图标
+     * 
+     * 默认显示 `zmdi-delete`
+     */
+    clearOptionItemIcon?: IconInput |null;
+    /**
+     * 如果 showCleanOption 为 true，
+     * 可以用这个选项指定清除项目文字，支持 `i18n` 的写法
+     * 默认为 `i18n:clear`
+     */
+    clearOptionItemText?: string;
+
+    /**
+     * 如果 showCleanOption 为 true，
+     * 可以用这个选项指定清除项目样式
+     */
+    clearOptionItemStyle?: Vars;
+
+    /**
      * 如果开启这个开关, 只要定义了字典，且 mustInOptions
      * 那么将自动根据选项设置前缀图标
      */
