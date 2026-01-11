@@ -7,7 +7,7 @@
   @include aspect_gap('&.item-gap');
   //---------------------------------------
   .sw-item {
-    @include flex-align-nowrap;
+    @include flex-align-nowrap($jc:center);
     @include aspect_radius('&.item-r');
     @include aspect_color('&.is-checked.is');
     @include aspect_color_fborder('&.is');

@@ -101,8 +101,8 @@
   watch(
     () => props.data,
     () => {
-      console.log("reset selection");
-      _wall.value.resetSelection(selection, props.data);
+      //console.log("reset selection");
+      _wall.value.OnItemCancel();
     },
     { immediate: true }
   );
@@ -128,7 +128,7 @@
     :class="TopClass"
     :style="TopStyle"
     :data-mode="props.mode || 'wall'"
-    @click.left="_wall.resetSelection(selection, props.data)">
+    @click.left="_wall.OnItemCancel()">
     <!--===: Wall Head :===-->
     <slot name="head">
       <TiTextSnippet
