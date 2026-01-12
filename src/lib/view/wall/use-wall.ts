@@ -84,6 +84,17 @@ export function useWall(
     );
   }
   //-----------------------------------------------------
+  function OnItemCancel() {
+    selectable.doAndEmit(
+      selection,
+      props.data,
+      () => {
+        selectable.resetSelection(selection);
+      },
+      emit
+    );
+  }
+  //-----------------------------------------------------
   function notifySelection() {
     selectable.doAndEmit(selection, props.data, () => {}, emit);
   }
@@ -246,10 +257,10 @@ export function useWall(
     getWallItemByIndex,
     getWallItemById,
     getItemId: selectable.getDataId,
-    resetSelection: selectable.resetSelection,
     getWallItemClass,
     OnItemSelect,
     OnItemCheck,
+    OnItemCancel,
     updateSelection: selectable.updateSelection,
     // 给调用者的 api
     selectItemById,
