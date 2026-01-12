@@ -395,17 +395,26 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
       amend.box_value = val;
     }
 
+    let item: AnyOptionItem | undefined = undefined;
+
+    // 查询固定值
+    if (_options) {
+      item = _options.getOptionItem(val);
+    }
+
     // 如果有值，就尝试查询一下
-    if (_dict && val) {
+    if (!item && _dict && val) {
       var hint = cookHint(val);
-      let item = await _dict.getStdItem(hint);
-      if (item) {
-        amend.usr_text = _display.value(item) ?? "";
-        amend.box_value = item.value;
-        amend.box_icon = item.icon ?? null;
-        amend.box_text = item.text ?? null;
-        amend.box_tip = item.tip ?? null;
-      }
+      let it = await _dict.getStdItem(hint);
+      item = it ? it.toOptionItem() : undefined;
+    }
+
+    if (item) {
+      amend.usr_text = _display.value(item) ?? "";
+      amend.box_value = item.value;
+      amend.box_icon = item.icon ?? null;
+      amend.box_text = item.text ?? null;
+      amend.box_tip = item.tip ?? null;
     }
 
     // 更新状态

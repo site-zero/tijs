@@ -44,11 +44,25 @@ export function useTipList(
     if (!re.textFormat && props.tipFormat) {
       re.textFormat = {
         T: `<em>\${text}</em>`,
-        VT: `<code>\${value}:</code><em>\${text}</em>`,
-        TV: `<em>\${text}</em><code>:\${value}</code>`,
-        TP: `<em>\${text}</em><abbr>\${tip}</abbr>`,
-        PT: `<code>\${tip}</code><em>\${text}</em>`,
-        VTP: `<code>\${value}:</code><em>\${text}</em><abbr>\${tip}</abbr>`,
+        VT: (it: AnyOptionItem): string => {
+          if (_.isNil(it.value)) return `<em>${it.text}</em>`;
+          return `<code>${it.value}:</code><em>${it.text}</em>`;
+        },
+        TV: (it: AnyOptionItem): string => {
+          if (_.isNil(it.value)) return `<em>${it.text}</em>`;
+          return `<em>${it.text}</em><code>:${it.value}</code>`;
+        },
+        TP: (it: AnyOptionItem): string => {
+          return `<em>${it.text}</em><abbr>${it.tip}</abbr>`;
+        },
+        PT: (it: AnyOptionItem): string => {
+          return `<code>${it.tip}</code><em>${it.text}</em>`;
+        },
+        VTP: (it: AnyOptionItem): string => {
+          if (_.isNil(it.value))
+            return `<em>${it.text}</em><abbr>${it.tip}</abbr>`;
+          return `<code>${it.value}:</code><em>${it.text}</em><abbr>${it.tip}</abbr>`;
+        },
         VpT: (it: AnyOptionItem): string => {
           let { value, text, tip } = it;
           if (tip) {
