@@ -1151,6 +1151,11 @@ export type ActionBarItem = VisibilityProps &
     items?: ActionBarItem[];
     action?: ActionBarAction;
     /**
+     * 如果指定了项目的值，在 action 回调函数里会用值作为第一个参数传递
+     * 否则，将用 uniqKey 代替
+     */
+    value?: any;
+    /**
      * 指定 action 的反弹跳时间(毫秒)，0 表示不要反弹跳。
      * 默认会指定为 1000ms
      */

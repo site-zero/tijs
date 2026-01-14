@@ -142,6 +142,7 @@ export type AbstractBarItem = Omit<ActionBarItemInfo, "action" | "type"> &
     aspect: ActionBarAspect;
     layoutMode: ActionBarLayoutMode;
     action?: ActionBarCallback;
+    value?: any;
   };
 
 export type ABarParsedItem = AbstractBarItem &

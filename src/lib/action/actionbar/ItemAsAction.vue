@@ -35,7 +35,8 @@
     //console.log("OnFireAction", props)
     if (_.isFunction(props.action)) {
       _in_action.value = true;
-      await props.action(props.uniqKey, state?.vars || {}, bus);
+      let val = props.value ?? props.uniqKey;
+      await props.action(val, state?.vars || {}, bus);
       _in_action.value = false;
     }
     state?.opened.clear();
