@@ -254,9 +254,9 @@ export function toJsValue(v: any = "", options = {} as ToJsValueOptions): any {
     autoMap = true,
     autoNum = true,
     autoBool = true,
-    autoVar = true,
-    autoDefault = true,
-    trimed = true,
+    autoVar = false,
+    autoDefault = false,
+    trimed = false,
     context = {},
   } = options || {};
   //...............................................

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
   import _ from "lodash";
-  import { computed, watch } from "vue";
+  import { watch } from "vue";
   import { ListSelectEmitInfo, TiList } from "../../";
-  import { Util } from "../../../core";
+  import { LogicType, Vars } from "../../../_type";
   import { CheckListEmitter, CheckListProps } from "./ti-check-list-types";
   import { useChecklist } from "./use-checklist";
   //-----------------------------------------------------
@@ -17,14 +17,22 @@
   //-----------------------------------------------------
   const _list = useChecklist(props);
   //-----------------------------------------------------
-  const checkedIds = computed(() => Util.arrayToMap(props.value));
-  //-----------------------------------------------------
   function onSelect(payload: ListSelectEmitInfo) {
     let ids = payload.checkedIds;
-    //console.log('onSelect', ids);
-    if (!_.isEqual(ids, props.value)) {
-      emit("change", ids);
+    let val = _.uniq(_.concat([], ids, props.fixedValues ?? []));
+    console.log("onSelect", ids, val, "value=", props.value);
+    if (!_.isEqual(val, props.value)) {
+      emit("change", val);
     }
+  }
+  //-----------------------------------------------------
+  function getRowType(data: Vars): LogicType | undefined {
+    if (props.fixedValues) {
+      if (props.fixedValues.indexOf(data.value) >= 0) {
+        return "track";
+      }
+    }
+    return;
   }
   //-----------------------------------------------------
   watch(
@@ -52,6 +60,7 @@
     :min-checked="props.minChecked"
     :can-select="true"
     :showChecker="true"
-    :checked-ids="checkedIds"
+    :get-row-type="getRowType"
+    :checked-ids="props.value"
     @select="onSelect" />
 </template>
