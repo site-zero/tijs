@@ -240,6 +240,7 @@ export function init_ti_std_fields() {
     comConf: {
       nowrap: true,
       placeholder: "i18n:nil",
+      prefixIconFor: "copy",
     } as LabelProps,
   });
   _ofs.setField("obj.pid", {
@@ -249,6 +250,7 @@ export function init_ti_std_fields() {
     comConf: {
       nowrap: true,
       placeholder: "i18n:nil",
+      prefixIconFor: "copy",
     } as LabelProps,
   });
   _ofs.setField("obj.title", {
