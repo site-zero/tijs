@@ -9,7 +9,6 @@ import {
   BoxColorMode,
   CommonProps,
   CssAlignment,
-  EventModifier,
   IconInput,
   LogicType,
   Vars,
@@ -64,6 +63,18 @@ export type LabelProps = CommonProps &
   DisplayTextProps &
   ClickCopyProps & {
     value?: any;
+
+    /**
+     * 检查当前的输入是否是有效输入，
+     * 默认的，如果 "" 或者 null/undefined 均算无效输入。
+     * 如果指定了这个函数，那么就会调用这个函数来检查输入是否有效。
+     * 它会影响 TopClass 里的 `has-value/nil-value` 类选择器。
+     * 从而导致控件外观的不同（采用 Placeholder 加灰显示）
+     *
+     * @param val 输入的属性值
+     * @returns 当前的输入是否是有效输入
+     */
+    hasValue?: (val: any) => boolean;
 
     tip?: string;
 

@@ -11,6 +11,9 @@ export function useLabelAspect(
 ) {
   //--------------------------------------------------
   const hasValue = computed(() => {
+    if (props.hasValue) {
+      return props.hasValue(props.value);
+    }
     if ("" === props.value || _.isNil(props.value)) {
       return false;
     }
