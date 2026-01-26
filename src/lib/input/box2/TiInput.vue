@@ -288,7 +288,7 @@
     }
     __last_select_at = Date.now();
     _box_state.usr_text = null;
-    console.log("onOptionSelect", payload);
+    //console.log("onOptionSelect", payload);
     _box.value.setValueByItem(payload.current || null);
     _box.value.setFocused(false);
     _box.value.emitIfChanged();
