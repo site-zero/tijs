@@ -68,6 +68,11 @@ export function useTiFilterBarApi(
       return;
     }
 
+    // 用户主动设置的回调
+    if (props.onChange) {
+      props.onChange(newVal);
+    }
+
     // 用户确认
     emit("change", newVal);
   }
@@ -77,7 +82,13 @@ export function useTiFilterBarApi(
   function onActionFire(event: ActionBarEvent) {
     let { name: eventName } = event;
     if (eventName === "do:search") {
-      emit("search", _.cloneDeep(props.value ?? {}));
+      let val = _.cloneDeep(props.value ?? {});
+      // 用户主动设置的回调
+      if (props.onChange) {
+        props.onChange(val);
+      }
+      // 通知事件
+      emit("search", val);
     } else if (eventName === "do:reset") {
       let val = props.resetValue ?? {};
       tryNotifyChange(val);

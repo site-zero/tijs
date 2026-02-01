@@ -84,7 +84,7 @@
   }
   //-----------------------------------------------------
   function onRemoveItem(it: TagItem) {
-    console.log("onRemoveItem", it, { editable: props.editable });
+    //console.log("onRemoveItem", it, { editable: props.editable });
     if (props.editable) {
       // 对于 TagItem[] 型的 value
       if (_.isArray(props.value)) {

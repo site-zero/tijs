@@ -2,6 +2,16 @@
 
 .ti-filter-bar {
   @include flex-align-nowrap;
+  gap: var(--ti-gap-s);
+  //-----------------------------------------------------
+  > .part-head {
+    @include flex-align-nowrap;
+    gap: var(--ti-gap-s);
+  }
+  //-----------------------------------------------------
+  > .part-tail {
+    @include flex-align-nowrap;
+  }
   //-----------------------------------------------------
   > .part-major {
     @include flex-align-nowrap;
