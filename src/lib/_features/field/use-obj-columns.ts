@@ -426,6 +426,50 @@ export function colLabelF6(
   };
 }
 
+export function colLabelDate(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: LabelProps
+): TableInputColumn {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    comType: "TiLabel",
+    comConf: _.assign(
+      {
+        valuePiping: "$DATE",
+        hideBorder: true,
+        boxRadius: "none",
+      } as LabelProps,
+      comConf
+    ),
+  };
+}
+
+export function colLabelDT(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: LabelProps
+): TableInputColumn {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    readonlyComType: "TiLabel",
+    readonlyComConf: _.assign(
+      {
+        valuePiping: "$DT",
+        hideBorder: true,
+        boxRadius: "none",
+      } as LabelProps,
+      comConf
+    ),
+  };
+}
+
 export function colDroplist(
   name: FieldName,
   titleAndTip: string | string[],

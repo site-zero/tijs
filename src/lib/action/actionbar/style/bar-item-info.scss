@@ -73,6 +73,9 @@
   &[aspect="sub"],
   &[bar-layout-mode="V"] {
     grid-template-columns: auto 1fr;
+    .item-text {
+      justify-content: flex-start;
+    }
   }
   //-----------------------------------------------------
   &.is-enabled {

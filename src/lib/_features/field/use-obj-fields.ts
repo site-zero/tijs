@@ -479,6 +479,50 @@ export function fldLabelF6(
   };
 }
 
+export function fldLabelDate(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: LabelProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    comType: "TiLabel",
+    comConf: _.assign(
+      {
+        valuePiping: "$DATE",
+        hideBorder: true,
+        boxRadius: "none",
+      } as LabelProps,
+      comConf
+    ),
+  };
+}
+
+export function fldLabelDT(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: LabelProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    readonlyComType: "TiLabel",
+    readonlyComConf: _.assign(
+      {
+        valuePiping: "$DT",
+        hideBorder: true,
+        boxRadius: "none",
+      } as LabelProps,
+      comConf
+    ),
+  };
+}
+
 export function fldDroplist(
   name: FieldName,
   titleAndTip: string | string[],

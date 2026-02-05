@@ -1,13 +1,13 @@
 <script lang="ts" setup>
-  import JSON5 from 'json5';
-import _ from 'lodash';
-import { computed, ref } from 'vue';
-import { CssUtils, Str } from '../../../core';
-import { InputTextProps } from './ti-input-text-types';
-import { useReadonly } from '../../';
+  import JSON5 from "json5";
+  import _ from "lodash";
+  import { computed, ref } from "vue";
+  import { CssUtils, Str } from "../../../core";
+  import { InputTextProps } from "./ti-input-text-types";
+  import { useReadonly } from "../../";
 
   const emit = defineEmits<{
-    (eventName: 'change', payload: any): void;
+    (eventName: "change", payload: any): void;
   }>();
   const _focused = ref(false);
 
@@ -20,12 +20,12 @@ import { useReadonly } from '../../';
 
   const TopClass = computed(() => {
     return CssUtils.mergeClassName(props.className, {
-      'has-value': hasValue.value,
-      'nil-value': !hasValue.value,
-      'is-focused': _focused.value,
-      'no-focused': !_focused.value,
-      'show-border': !props.hideBorder,
-      'hide-border': props.hideBorder,
+      "has-value": hasValue.value,
+      "nil-value": !hasValue.value,
+      "is-focused": _focused.value,
+      "no-focused": !_focused.value,
+      "show-border": !props.hideBorder,
+      "hide-border": props.hideBorder,
     });
   });
 
@@ -44,7 +44,7 @@ import { useReadonly } from '../../';
     let input = props.value;
 
     if (_.isNil(input)) {
-      return '';
+      return "";
     }
 
     if (_.isString(input)) {
@@ -53,18 +53,18 @@ import { useReadonly } from '../../';
 
     if (_.isArray(input)) {
       let ss = _.map(input, (it) => Str.anyToStr(it));
-      return ss.join('\n');
+      return ss.join("\n");
     }
 
     if (_.isError(input)) {
-      return [input.name, input.message].join(': ');
+      return [input.name, input.message].join(": ");
     }
 
     if (_.isObject(input)) {
-      return JSON5.stringify(input, null, '    ');
+      return JSON5.stringify(input, null, "    ");
     }
 
-    return input + '';
+    return input + "";
   });
 
   function onTextChange(evt: Event) {
@@ -73,13 +73,13 @@ import { useReadonly } from '../../';
     if (props.trimed) {
       v = _.trim(v);
     }
-    if ('list' == props.valueType) {
+    if ("list" == props.valueType) {
       let ss = Str.splitIgnoreBlank(v, /\r?\n/g);
-      emit('change', ss);
+      emit("change", ss);
     }
     // 简单文本值
     else {
-      emit('change', v);
+      emit("change", v);
     }
   }
 </script>
@@ -93,11 +93,10 @@ import { useReadonly } from '../../';
     @change="onTextChange"
     @focus="_focused = true"
     @blur="_focused = false"
-    >{{ TextValue }}</textarea
-  >
+    :value="TextValue"></textarea>
 </template>
 <style lang="scss" scoped>
-  @use '../../../assets/style/_all.scss' as *;
+  @use "../../../assets/style/_all.scss" as *;
 
   textarea {
     padding: 0.5em;
