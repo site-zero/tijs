@@ -41,7 +41,8 @@
     flex: 1 1 auto;
   }
   //-----------------------------------------------
-  &.has-tags > .ti-actionbar {
+  //&.has-tags > .ti-actionbar {
+  > .ti-actionbar {
     flex: 1 1 auto;
     margin: 0;
     padding: 0;

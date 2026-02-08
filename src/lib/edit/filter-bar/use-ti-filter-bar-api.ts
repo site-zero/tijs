@@ -39,11 +39,11 @@ export function useTiFilterBarApi(
   //-----------------------------------------------------
   // 操作菜单
   //-----------------------------------------------------
-  const { actions } = props;
   const ActionBarConfig = computed((): ActionBarProps | undefined => {
-    let re = _.cloneDeep(actions) ?? {};
+    let re = _.cloneDeep(props.actions) ?? {};
     _.defaults(re, {
       itemAlign: "right",
+      barItemSet: dft_flt_bar_action_items(),
     } as Partial<ActionBarProps>);
     // 用户确定不要显示动作条
     if (re && _.isArray(re.items) && _.isEmpty(re.items)) {
@@ -51,10 +51,10 @@ export function useTiFilterBarApi(
     }
     // 默认动作条项目
     if (!re.items) {
-      re.items = dft_flt_bar_action_items();
+      re.items = ["search", "edit_reset"];
     }
     // 默认上下文变量集
-    if (re.vars) {
+    if (!re.vars) {
       re.vars = props.vars;
     }
     return re;

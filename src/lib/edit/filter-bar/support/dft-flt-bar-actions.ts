@@ -1,8 +1,8 @@
 import { ActionBarItem } from "../../../../";
 
-export function dft_flt_bar_action_items(): ActionBarItem[] {
-  return [
-    {
+export function dft_flt_bar_action_items(): Record<string, ActionBarItem> {
+  return {
+    search: {
       text: "i18n:search",
       icon: "zmdi-search",
       altDisplay: {
@@ -12,7 +12,11 @@ export function dft_flt_bar_action_items(): ActionBarItem[] {
       },
       action: "do:search",
     },
-    {
+    edit: {
+      icon: "zmdi-settings-square",
+      action: "do:edit",
+    },
+    edit_reset: {
       icon: "zmdi-settings-square",
       action: "do:edit",
       items: [
@@ -23,5 +27,10 @@ export function dft_flt_bar_action_items(): ActionBarItem[] {
         },
       ],
     },
-  ];
+    reset: {
+      text: "i18n:reset",
+      icon: "zmdi-time-restore-setting",
+      action: "do:reset",
+    },
+  };
 }

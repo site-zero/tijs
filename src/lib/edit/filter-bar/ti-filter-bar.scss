@@ -3,6 +3,7 @@
 .ti-filter-bar {
   @include flex-align-nowrap;
   gap: var(--ti-gap-s);
+  padding: var(--ti-gap-s) var(--ti-gap-m);
   //-----------------------------------------------------
   > .part-head {
     @include flex-align-nowrap;
