@@ -495,6 +495,7 @@ export function colDroplist(
     activatedComConf: _.assign(
       {
         options,
+        canInput: false,
         boxFontSize: "s",
         boxPadding: "s",
         boxRadius: "none",

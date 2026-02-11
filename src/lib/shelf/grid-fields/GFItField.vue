@@ -37,13 +37,15 @@
   //-------------------------------------------------
   const hasTip = computed(() => (props.tip || props.tipBy ? true : false));
   //-------------------------------------------------
+  const isDisabled = computed(() => props.isDisabled(props.data));
+  //-------------------------------------------------
   const TopClass = computed(() => {
     return CssUtils.mergeClassName(props.className, props.fieldLayoutMode, {
       "with-title": hasTitle.value,
       "with-tip": hasTip.value,
       "no-title": !hasTitle.value,
       "no-tip": !hasTip.value,
-      "is-disabled": props.isDisabled(props.data),
+      "is-disabled": isDisabled.value,
     });
   });
   //-------------------------------------------------
@@ -196,6 +198,11 @@
     class="ti-grid-fiels-item part-field"
     :class="TopClass"
     :style="TopStyle"
+    :data-tip="isDisabled ? FieldCtrlTip : null"
+    data-tip-modifier="CTRL"
+    data-tip-max-width="640px"
+    data-tip-content-type="html"
+    data-tip-dock-mode="H"
     @mousedown="emit('field-actived', props.uniqKey)">
     <!--===============: 字段名 :===================-->
     <TiTextSnippet
