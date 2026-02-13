@@ -5,6 +5,7 @@ import {
   ActionBarCallback,
   ActionBarItem,
   ActionBarItemAltDisplay,
+  ActionBarItemRefer,
   TiAppBus,
   Vars,
   isActionEventInfo,
@@ -15,7 +16,6 @@ import {
   ABarAltDisplay,
   ABarParsedItem,
   ActionBarEmitter,
-  ActionBarItemRefer,
   ActionBarLayoutMode,
   ActionBarType,
 } from "./ti-action-bar-types";
