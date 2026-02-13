@@ -926,6 +926,7 @@ export function colInputDate(
     activatedComType: "TiInputDate",
     activatedComConf: _.assign(
       {
+        boxFontSize: "s",
         autoSelect: true,
         boxFocused: true,
         boxRadius: "none",

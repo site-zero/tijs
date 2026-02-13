@@ -1134,6 +1134,10 @@ export type ActionBarItemInfo = {
 export type ActionBarItemAltDisplay = ActionBarItemInfo & {
   test?: any;
 };
+export type ActionBarItemRefer =
+  | ActionBarItem
+  | string
+  | [string, Partial<ActionBarItem>];
 export type ActionBarItem = VisibilityProps &
   ActionBarItemInfo &
   Omit<
@@ -1148,7 +1152,7 @@ export type ActionBarItem = VisibilityProps &
     //.....................................
     altDisplay?: ActionBarItemAltDisplay | ActionBarItemAltDisplay[];
     //.....................................
-    items?: ActionBarItem[];
+    items?: ActionBarItemRefer[];
     action?: ActionBarAction;
     /**
      * 如果指定了项目的值，在 action 回调函数里会用值作为第一个参数传递

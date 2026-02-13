@@ -4,6 +4,7 @@ import {
   ActionBarCallback,
   ActionBarItem,
   ActionBarItemInfo,
+  ActionBarItemRefer,
   AspectSize,
   CommonProps,
   CssAlignment,
@@ -57,11 +58,6 @@ export type ABarAltDisplay = {
   info: ActionBarItemInfo;
   test?: TiMatch;
 };
-
-export type ActionBarItemRefer =
-  | ActionBarItem
-  | string
-  | [string, Partial<ActionBarItem>];
 
 export type ActionBarProps = CommonProps & {
   // 指明一个名称，可以方便调试的时候区分各个菜单
