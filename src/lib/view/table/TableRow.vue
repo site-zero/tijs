@@ -4,6 +4,7 @@
   import { CssUtils } from "../../../core";
   import TableCell from "./TableCell.vue";
   import {
+    TableCellEventPayload,
     TableRowEmitter,
     TableRowEventName,
     TableRowProps,
@@ -75,13 +76,12 @@
   //-------------------------------------------------------
   function onCell(
     eventName: TableRowEventName,
-    colUniqKey: string,
-    event: Event
+    payload: TableCellEventPayload
   ) {
     emit(eventName, {
       rowIndex: props.row.index,
-      colUniqKey,
-      event,
+      colUniqKey: payload.uniqKey,
+      event: payload.event,
       row: props.row,
     });
   }
@@ -133,7 +133,7 @@
     ></span>
   </div>
   <!--正式列单元格-->
-  <div
+  <template
     v-for="(cell, i) in props.columns"
     :key="cell.uniqKey"
     class="table-cell as-body"
@@ -150,9 +150,21 @@
       class="row-indent"
       :style="RowIndentStyle"></div>
     <!--插入单元格控件-->
-    <TableCell v-bind="cell" :rowIndex="props.row.index" :colIndex="i"
-    :data="props.row.rawData" :vars="props.vars" :activated="props.activated &&
-    cell.uniqKey == props.activedColUniqKey"" :editable="props.editable"
-    @cell-change="emit('cell-change', $event)" />
-  </div>
+    <TableCell
+      v-bind="cell"
+      :rowIndex="props.row.index"
+      :rowId="props.row.id"
+      :colIndex="i"
+      :data="props.row.rawData"
+      :vars="props.vars"
+      :show-indentor="ShowIndentor && i === 0"
+      :row-indent-style="RowIndentStyle"
+      :row-can-hover="props.canHover"
+      :row-checked="props.checked"
+      :activated="props.activated && cell.uniqKey == props.activedColUniqKey"
+      :editable="props.editable"
+      @cell-change="emit('cell-change', $event)"
+      @cell-select="onCell('cell-select', $event)"
+      @cell-open="onCell('cell-open', $event)" />
+  </template>
 </template>

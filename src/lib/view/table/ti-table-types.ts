@@ -62,9 +62,11 @@ export type TableRowEventName =
   | "cell-select"
   | "cell-open"
   | "cell-change";
-export type TableCellEventName = "cell-change";
-export type TableCellChanged = FieldChange &
-  Omit<TableCellEventPayload, "event">;
+export type TableCellChanged = FieldChange & {
+  uniqKey: string;
+  colIndex: number;
+  rowIndex: number;
+};
 
 export type TableEventPayload = {
   colUniqKey: string | null;
@@ -74,6 +76,7 @@ export type TableEventPayload = {
 };
 
 export type TableCellEventPayload = {
+  uniqKey: string;
   colIndex: number;
   rowIndex: number;
   event: Event;
@@ -103,8 +106,10 @@ export type TableRowEmitter = {
 };
 
 export type TableCellEmitter = {
-  (event: TableCellEventName, payload: TableCellEventPayload): void;
+  //(event: "cell-change", payload: TableCellEventPayload): void;
   (event: "cell-change", payload: TableCellChanged): void;
+  (event: "cell-select", payload: TableCellEventPayload): void;
+  (event: "cell-open", payload: TableCellEventPayload): void;
 };
 
 export type TableKeepProps = {
@@ -354,11 +359,25 @@ export type TableCellProps = Omit<
   /**
    * 行下标： 0 BASE
    */
-  rowIndex?: number;
+  rowIndex: number;
+
   /**
-   * 列下标： 0 BASE
+   * 行下标： 0 BASE
    */
-  colIndex?: number;
+  rowId: TableRowID;
+
+  rowChecked: boolean;
+  rowCanHover: boolean;
+  rowType?: LogicType;
+  rowIsOdd?: boolean;
+
+  showIndentor?: boolean;
+  rowIndentStyle?: Vars;
+  /**
+   * 显示的列下标:  0 BASE
+   * 过滤掉 candicate 后的显示列下标
+   */
+  colIndex: number;
 
   /**
    * 传入的数据对象

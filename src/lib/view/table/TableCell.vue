@@ -1,8 +1,14 @@
 <script lang="ts" setup>
   import { computed } from "vue";
   import { getFieldValue } from "../../../_type";
+  import { CssUtils } from "../../../core";
   import { useFieldCom } from "../../_features/field";
-  import { TableCellEmitter, TableCellProps } from "./ti-table-types";
+  import {
+    TableCellEmitter,
+    TableCellEventPayload,
+    TableCellProps,
+    TableEventPayload,
+  } from "./ti-table-types";
   //-------------------------------------------------------
   defineOptions({
     inheritAttrs: false,
@@ -16,6 +22,18 @@
     rowIndex: 0,
     colIndex: 0,
     editable: true,
+  });
+  //-------------------------------------------------------
+  const TopClass = computed(() => {
+    return CssUtils.mergeClassName({
+      "is-actived": FieldActived.value,
+      "is-checked": props.rowChecked,
+      "has-actived-com": props.activatedComType ? true : false,
+      "can-hover": props.rowCanHover,
+      [`is-${props.rowType ?? ""}`]: props.rowType ? true : false,
+      "is-odd": props.rowIsOdd,
+      "is-even": !props.rowIsOdd,
+    });
   });
   //-------------------------------------------------------
   const CellValue = computed(() => {
@@ -106,13 +124,42 @@
     return listen;
   });
   //-------------------------------------------------------
+  function onCell(eventName: "cell-select" | "cell-open", event: Event) {
+    let payload: TableCellEventPayload = {
+      uniqKey: props.uniqKey,
+      colIndex: props.colIndex,
+      rowIndex: props.rowIndex,
+      event,
+    };
+    if ("cell-select" === eventName) {
+      emit("cell-select", payload);
+    } else {
+      emit("cell-open", payload);
+    }
+  }
+  //-------------------------------------------------------
 </script>
 <template>
-  <div class="table-cell-wrapper">
-    <component
-      :is="CellCom.rawCom"
-      v-bind="CellCom.comConf"
-      v-on="CellListeners" />
+  <div
+    :key="props.uniqKey"
+    class="table-cell as-body"
+    :row-id="props.rowId"
+    :row-index="props.rowIndex"
+    :col="props.colIndex"
+    :class="TopClass"
+    ref="$cells"
+    @click.stop="onCell('cell-select', $event)"
+    @dblclick.stop="onCell('cell-open', $event)">
+    <div
+      v-if="0 === props.colIndex && props.showIndentor"
+      class="row-indent"
+      :style="props.rowIndentStyle"></div>
+    <div class="table-cell-wrapper">
+      <component
+        :is="CellCom.rawCom"
+        v-bind="CellCom.comConf"
+        v-on="CellListeners" />
+    </div>
   </div>
 </template>
 <style lang="scss">
