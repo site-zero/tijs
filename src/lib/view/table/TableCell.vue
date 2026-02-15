@@ -53,12 +53,22 @@
     return false;
   });
   //-------------------------------------------------------
+  const FieldActived = computed(() => {
+    if (!props.activated || FieldDisabled.value || FieldReadonly.value) {
+      return false;
+    }
+    if (props.useReadonly) {
+      return true;
+    }
+    return props.editable;
+  });
+  //-------------------------------------------------------
   const Cell = computed(() => useFieldCom(props));
   const CellCom = computed(() => {
     let readonly = FieldReadonly.value;
-    let disabled = FieldDisabled.value;
+    let actived = FieldActived.value;
     let re = Cell.value.autoGetCom(
-      { actived: props.activated && props.editable && !disabled, readonly },
+      { actived, readonly },
       CellDynamicContext.value,
       CellValue.value
     );

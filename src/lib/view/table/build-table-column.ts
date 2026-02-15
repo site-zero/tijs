@@ -1,7 +1,7 @@
-import _ from 'lodash';
-import { TableProps, TableStrictColumn, useObjColumns } from '../../';
-import { makeFieldUniqKey, parseFieldConverter } from '../../../_type';
-import { I18n, Match, Util } from '../../../core';
+import _ from "lodash";
+import { TableProps, TableStrictColumn, useObjColumns } from "../../";
+import { makeFieldUniqKey, parseFieldConverter } from "../../../_type";
+import { I18n, Match, Util } from "../../../core";
 
 export function buildTableColumnsMap(props: TableProps) {
   //console.log('buildTableColumns', props.columns.length);
@@ -36,15 +36,15 @@ export function buildTableColumnsMap(props: TableProps) {
         uniqKey,
         index: i,
         name: col.name,
-        type: col.type ?? 'String',
+        type: col.type ?? "String",
         className: col.className,
         title,
-        titleType: col.titleType ?? 'text',
+        titleType: col.titleType ?? "text",
         titleIcon: col.titleIcon,
         titleStyle: col.titleStyle,
         titleAlign: col.titleAlign,
         tip: col.tip,
-        tipType: col.tipType ?? 'text',
+        tipType: col.tipType ?? "text",
         tipBy: col.tipBy,
         tipStyle: col.tipStyle,
         tipAlign: col.tipAlign,
@@ -56,13 +56,14 @@ export function buildTableColumnsMap(props: TableProps) {
         // 单元格状态
         readonly: _.isNil(readonly) ? undefined : Match.parse(readonly, false),
         disabled: _.isNil(disabled) ? undefined : Match.parse(disabled, false),
+        useReadonly: col.useReadonly,
 
         // 表格默认控件
         dynamic: col.dynamic,
-        comType: col.comType ?? props.defaultCellComType ?? 'TiLabel',
+        comType: col.comType ?? props.defaultCellComType ?? "TiLabel",
         comConf: col.comConf ??
           props.defaultCellComConf ?? {
-            className: 'is-nowrap',
+            className: "is-nowrap",
           },
         autoValue: col.autoValue,
         readonlyComType: col.readonlyComType,
@@ -78,8 +79,8 @@ export function buildTableColumnsMap(props: TableProps) {
         ),
 
         transformer: parseFieldConverter(
-          col.type ?? 'String',
-          'transform',
+          col.type ?? "String",
+          "transform",
           col.typeTransformOptions,
           props.vars || {},
           col.transformer,
@@ -87,8 +88,8 @@ export function buildTableColumnsMap(props: TableProps) {
           col.transPartial
         ),
         serializer: parseFieldConverter(
-          col.type ?? 'String',
-          'serialize',
+          col.type ?? "String",
+          "serialize",
           col.typeSerializeOptions,
           props.vars || {},
           col.serializer,

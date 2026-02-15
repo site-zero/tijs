@@ -123,6 +123,12 @@ export type TableStrictColumn = CommonProps &
     readonly?: TiMatch;
 
     /**
+     * 采用 readonly 属性来决定 Active 控件的
+     * 默认的是， editable=false 或 readonly=true 都会让单元格只读
+     */
+    useReadonly?: boolean;
+
+    /**
      * 指定本列的单元格是否Disable，支持 Match
      */
     disabled?: TiMatch;

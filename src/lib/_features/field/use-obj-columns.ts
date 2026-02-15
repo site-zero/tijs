@@ -37,6 +37,9 @@ function defineObjColumns(featureName: string) {
     editable: boolean = true,
     column: Partial<TableInputColumn> = {}
   ): TableInputColumn {
+    // if ("imd.en.refund_rsn_code" == uniqKey) {
+    //   console.log(uniqKey, editable, column);
+    // }
     let col_info = parseNameColumn(uniqKey);
 
     // 获取字段定义
@@ -49,7 +52,8 @@ function defineObjColumns(featureName: string) {
     let re = _.cloneDeep(_column);
     _.assign(
       re,
-      _.omit(column, "comConf", "activatedComConf", "readonlyComConf")
+      _.omit(column, "comConf", "activatedComConf", "readonlyComConf"),
+      _.omit(col_info, "_key")
     );
 
     // 活动字段
@@ -75,10 +79,6 @@ function defineObjColumns(featureName: string) {
       );
     }
 
-    if (re.name == "as_main") {
-      console.log(re, column);
-    }
-
     // 默认字段
     if (!re.comType && !re.comConf && re.readonlyComConf) {
       re.comType = re.readonlyComType || undefined;
@@ -94,39 +94,38 @@ function defineObjColumns(featureName: string) {
     }
 
     // 如果不是可编辑的，那么就需要去掉活动控件定义
-    if (col_info.readonly || !editable) {
+    if (true === re.readonly || (_.isNil(re.readonly) && !editable)) {
       re.activatedComType = undefined;
       re.activatedComConf = undefined;
       re.readonly = true;
     }
 
-    if (col_info.disabled) {
+    if (true === re.disabled) {
       if (!re.comType || "TiLabel" === re.comType) {
         re.comConf.type = "disable";
       } else {
         re.comConf.disable = true;
       }
-      re.disabled = true;
     }
 
     // 候选字段
-    if (col_info.candidate) {
-      re.candidate = true;
-    }
+    // if (col_info.candidate) {
+    //   re.candidate = true;
+    // }
 
     // 指定列宽
-    if (_.isNumber(col_info.width)) {
-      re.width = col_info.width;
-    }
+    // if (_.isNumber(col_info.width)) {
+    //   re.width = col_info.width;
+    // }
     // 没有宽度的话，给个默认宽度
-    else if (_.isNil(re.width)) {
+    if (_.isNil(re.width)) {
       re.width = 100;
     }
 
     // 字段的名称和标题
     re.name = col_info.name ?? re.name ?? col_info._key;
-    re.title = col_info.title ?? re.title;
-    re.tip = col_info.tip ?? re.tip;
+    // re.title = col_info.title ?? re.title;
+    // re.tip = col_info.tip ?? re.tip;
 
     return re;
   }
