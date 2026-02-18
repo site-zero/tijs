@@ -2,4 +2,87 @@
 
 .ti-input-multi-lines {
   width: 100%;
+  //---------------------------------------------------
+  > main {
+    @include flex-align-v-nowrap;
+    gap: var(--ti-gap-s);
+    //-------------------------------------------------
+    > .line-item {
+      @include flex-align-nowrap($ai: stretch);
+      gap: var(--ti-gap-s);
+      border: 1px solid var(--ti-color-border-shallow);
+      border-radius: var(--ti-measure-r-s);
+      //-----------------------------------------------
+      &.is-checked {
+        color: var(--ti-color-highlight-f);
+        border-color: var(--ti-color-primary);
+        background-color: var(--ti-color-highlight);
+        > span.as-checker {
+          color: var(--ti-color-primary);
+        }
+      }
+      //-----------------------------------------------
+      &.is-current {
+        > span.as-checker {
+          background-color: var(--ti-color-primary-r);
+        }
+      }
+      //-----------------------------------------------
+      > span.as-checker {
+        @include flex-center;
+        width: 1.8em;
+        cursor: pointer;
+        &:hover {
+          color: var(--ti-color-primary);
+        }
+      }
+      //-----------------------------------------------
+      > input {
+        @include font-fixed;
+        flex: 1 1 auto;
+        outline: none;
+        padding: 0.5em 0.6em;
+        font-size: var(--ti-fontsz-m);
+        border: 0;
+        background-color: transparent;
+        color: inherit;
+        font-family: inherit;
+      }
+      //-----------------------------------------------
+      a.line-del {
+        cursor: pointer;
+        width: 1.6em;
+        color: inherit;
+        position: relative;
+        > i {
+          @include flex-center;
+          transition: 0.3s ease-in-out;
+          position: absolute;
+          inset: 0;
+        }
+        > i:first-child {
+          opacity: 1;
+        }
+        > i:last-child {
+          opacity: 0;
+        }
+        &:hover {
+          text-decoration: none;
+          background-color: var(--ti-color-secondary-r);
+          color: var(--ti-color-secondary);
+          > i {
+            transform: rotate(180deg);
+          }
+          > i:first-child {
+            opacity: 0;
+          }
+          > i:last-child {
+            opacity: 1;
+          }
+        }
+      } // .line-del
+      //-----------------------------------------------
+    } // .line-item
+    //-------------------------------------------------
+  }
 }

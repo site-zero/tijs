@@ -110,7 +110,7 @@
   watch(
     () => [props.currentId, props.checkedIds],
     () => {
-      console.log("updateSelection");
+      //console.log("updateSelection");
       _wall.value.updateSelection(
         selection,
         props.data ?? [],

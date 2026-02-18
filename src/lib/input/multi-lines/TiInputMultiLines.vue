@@ -5,9 +5,8 @@
     CssUtils,
     InputBoxProps,
     TiActionBar,
-    TiWall,
+    TiIcon,
     WallItemEventHandlers,
-    WallSelectEmitInfo,
   } from "../../../";
   import {
     InputMultiLinesEmitter,
@@ -56,30 +55,62 @@
     },
   } as WallItemEventHandlers;
   //-----------------------------------------------------
-  function onItemSelect(payload: WallSelectEmitInfo) {
-    _api.selectLines(payload.currentId, payload.checkedIds);
+  // function onItemSelect(payload: WallSelectEmitInfo) {
+  //   if (_api.selectLines(payload.currentId, payload.checkedIds)) {
+  //     _api.buildListItems();
+  //   }
+  // }
+  //-----------------------------------------------------
+  function onToggleItem(index: number) {
+    _api.toggleLine(index);
   }
+  //-----------------------------------------------------
+  function onInputFocus(index: number) {
+    _api.selectLines(index, [index]);
+  }
+  //-----------------------------------------------------
+  function onInputChange(index: number, evt: Event) {
+    let $el = evt.target as HTMLInputElement;
+    _api.onLineChange(index, $el.value);
+  }
+//-----------------------------------------------------
+  function onClearItem(index: number) {
+    _api.onLineChange(index, null);
+  }
+  //-----------------------------------------------------
+  // watch(
+  //   () => props.value,
+  //   (newVal, oldVal) => {
+  //     console.log(newVal, oldVal);
+  //     if (!_.isEqual(newVal, oldVal)) {
+  //       _api.buildListItems();
+  //     }
+  //   },
+  //   { immediate: true }
+  // );
   //-----------------------------------------------------
 </script>
 <template>
   <div class="ti-input-multi-lines" :class="TopClass" :style="TopStyle">
-    <TiWall
-      mode="list"
-      :multi="true"
-      :data="_api.LineItems.value"
-      :getId="'index'"
-      :currentId="_api.CurrentId.value"
-      :checkedIds="_api.CheckedIds.value"
-      comType="TiInput"
-      :comConf="InputConfig"
-      :canSelect="true"
-      :itemEventHandlers="WallItemEvents"
-      :emptyRoadblock="props.emptyRoadblock"
-      @select="onItemSelect">
-      <template #head>
-        <TiActionBar v-if="!props.readonly" v-bind="ActionBarConfig" />
-      </template>
-    </TiWall>
+    <TiActionBar v-if="!props.readonly" v-bind="ActionBarConfig" />
+    <main>
+      <div
+        v-for="(item, index) in _api.LineItems.value"
+        class="line-item"
+        :class="item.className">
+        <span class="as-checker" @click.left="onToggleItem(index)">
+          <TiIcon :value="item.prefixIcon" />
+        </span>
+        <input
+          :value="item.value"
+          @focus="onInputFocus(index)"
+          @change="onInputChange(index, $event)" />
+        <a class="line-del" @click.left="onClearItem(index)">
+          <i class="zmdi zmdi-minus"></i>
+          <i class="zmdi zmdi-close"></i>
+        </a>
+      </div>
+    </main>
   </div>
 </template>
 <style lang="scss">

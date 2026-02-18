@@ -1,12 +1,7 @@
 import _ from "lodash";
 import { computed, ref } from "vue";
-import {
-  CodeEditorProps,
-  LogicType,
-  openAppModal,
-  TableRowID,
-} from "../../../";
-import { MoveDirection, Str, Util } from "../../../core";
+import { CodeEditorProps, LogicType, openAppModal } from "../../../";
+import { I18n, MoveDirection, Str, Util } from "../../../core";
 import {
   InputMultiLinesEmitter,
   InputMultiLinesProps,
@@ -21,16 +16,23 @@ export function useTiInputMultiLinesApi(
   //-----------------------------------------------------
   // 状态
   //-----------------------------------------------------
-  const _checked_ids = ref<string[]>([]);
-  const _current_id = ref<string>();
+  const _checked_indexes = ref<number[]>([]);
+  const _current_index = ref<number>(-1);
+  //const _list_items = ref<Vars[]>([]);
   //-----------------------------------------------------
   // 计算属性
   //-----------------------------------------------------
-  const LineItems = computed(() => {
-    let checkedIdMap = Util.arrayToMap(_checked_ids.value);
+  const LineItems = computed(() => makeListItems());
+  //-----------------------------------------------------
+  function makeListItems() {
+    let checkedIdMap = Util.arrayToMap(_checked_indexes.value);
     let vals = splitValue();
+    // console.log(
+    //   `makeListItems: value=[${props.value}]; vals.length=${vals.length}`
+    // );
     return vals.map((val, index) => {
-      let checked = checkedIdMap.has(`${index}`);
+      let checked = checkedIdMap.has(index);
+      let current = _current_index.value === index;
       let type: LogicType | undefined = checked
         ? props.checkedItemType
         : undefined;
@@ -41,23 +43,29 @@ export function useTiInputMultiLinesApi(
           type = props.emptyItemType;
         }
       }
-      console.log(index, val, checked, type);
+      //console.log(index, val, checked, type);
       return {
         prefixIcon: checked ? "far-circle-check" : "far-circle",
         type,
-        value: val,
+        className: {
+          "is-checked": checked,
+          "no-checked": !checked,
+          "is-current": current,
+          "no-current": !current,
+        },
+        value: _.trim(val),
         index: index,
       };
     });
-  });
+  }
   //-----------------------------------------------------
   const isEmpty = computed(() => {
     return LineItems.value.length === 0;
   });
   //-----------------------------------------------------
   const ActionBarVars = computed(() => ({
-    hasCurrent: !_.isNil(_current_id.value),
-    hasChecked: _checked_ids.value.length > 0,
+    hasCurrent: _current_index.value >= 0,
+    hasChecked: _checked_indexes.value.length > 0,
   }));
   //-----------------------------------------------------
   // 处理数据
@@ -119,28 +127,80 @@ export function useTiInputMultiLinesApi(
     }
   }
   //-----------------------------------------------------
+  function __rebuild_item_selection(vals: string[]) {
+    // 建立就数据索引: Curent Item
+    let current_item_val: string | undefined = undefined;
+    if (
+      _current_index.value >= 0 &&
+      _current_index.value < LineItems.value.length
+    ) {
+      current_item_val = LineItems.value[_current_index.value].value;
+    }
+    // 建立就数据索引: Checked Items
+    let checked_item_vals = new Map<string, boolean>();
+    let idxMap = Util.arrayToMap(_checked_indexes.value);
+    for (let i = 0; i < LineItems.value.length; i++) {
+      let item = LineItems.value[i];
+      if (idxMap.get(item.index)) {
+        checked_item_vals.set(item.value, true);
+      }
+    }
+    // 准备新的选区值
+    let new_cc_idx = -1;
+    let new_ck_idxs = [] as number[];
+    // 循环值，建立新的选区
+    for (let i = 0; i < vals.length; i++) {
+      let v = vals[i];
+      if (new_cc_idx < 0 && v == current_item_val) {
+        new_cc_idx = i;
+      }
+      if (checked_item_vals.get(v)) {
+        new_ck_idxs.push(i);
+      }
+    }
+    // 更新选区
+    _current_index.value = new_cc_idx;
+    _checked_indexes.value = new_ck_idxs;
+  }
+  //-----------------------------------------------------
   // 响应操作
   //-----------------------------------------------------
   function selectLines(
-    currentId: TableRowID | undefined | null,
-    checkedIds: TableRowID[]
+    currentIndex: number | undefined | null,
+    checkedIndex: number[]
   ) {
-    _current_id.value = _.isNil(currentId) ? undefined : `${currentId}`;
-    _checked_ids.value = _.map(checkedIds, (id) => `${id}`);
+    if (
+      _current_index.value == currentIndex &&
+      _.isEqual(_checked_indexes.value, checkedIndex)
+    ) {
+      return false;
+    }
+    _current_index.value = currentIndex ?? -1;
+    _checked_indexes.value = checkedIndex;
+    //console.log("----------------------checked ids: ", _checked_indexes.value);
+    return true;
+  }
+  //-----------------------------------------------------
+  function toggleLine(index: number) {
+    let ckIdxs = [..._checked_indexes.value];
+    let I = _.findIndex(ckIdxs, (idx) => idx == index);
+    if (I >= 0) {
+      ckIdxs.splice(I, 1);
+      _checked_indexes.value = ckIdxs.sort();
+    } else {
+      ckIdxs.push(index);
+      _checked_indexes.value = ckIdxs.sort();
+    }
+    if (_current_index.value == index) {
+      _current_index.value = -1;
+    }
   }
   //-----------------------------------------------------
   function onLineChange(index: number, val: string | null) {
     let vals = LineItems.value.map((item) => item.value);
     //console.log(index, val);
     let list = [...vals];
-    // null 表示移除
-    if (_.isNil(val)) {
-      list.splice(index, 1);
-    }
-    // 其他的是更新
-    else {
-      list[index] = val;
-    }
+    list[index] = val || "";
     let newVal = joinValue(list);
     tryNotify(newVal);
   }
@@ -158,26 +218,24 @@ export function useTiInputMultiLinesApi(
   }
   //-----------------------------------------------------
   function removeChecked() {
-    if (_.isEmpty(_checked_ids.value)) return;
-    let idMap = Util.arrayToMap(_checked_ids.value);
+    if (_.isEmpty(_checked_indexes.value)) return;
+    let idxMap = Util.arrayToMap(_checked_indexes.value);
     let vals = LineItems.value.map((item) => item.value);
     let list = [...vals];
-    let list2 = _.filter(list, (_li, index) => !idMap.has(`${index}`));
+    let list2 = _.filter(list, (_li, index) => !idxMap.has(index));
     let newVal = joinValue(list2);
+    __rebuild_item_selection(list2);
     tryNotify(newVal);
-    _current_id.value = undefined;
-    _checked_ids.value = [];
   }
   //-----------------------------------------------------
   function moveChecked(dir: MoveDirection) {
     // 防空
-    if (_.isEmpty(_checked_ids.value)) return;
+    if (_.isEmpty(_checked_indexes.value)) return;
 
     // 为所有的项目分派 ID = 原始下标
-    let idMap = Util.arrayToMap(_checked_ids.value);
-    let currentId = `${_current_id.value ?? ""}`;
+    let idxMap = Util.arrayToMap(_checked_indexes.value);
     let list = LineItems.value.map((item, index) => ({
-      id: `${index}`,
+      index,
       val: item.value,
     }));
 
@@ -185,37 +243,30 @@ export function useTiInputMultiLinesApi(
     let list2 = Util.moveChecked(
       list,
       (li) => {
-        return idMap.has(li.id);
+        return idxMap.has(li.index);
       },
       dir
     );
 
     // 看看新列表， ID 都变成什么了
     // 做一下新下标的转换
-    let newCurrentId: string | undefined = undefined;
-    let newCheckedIds: string[] = [];
-    let newVals: string[] = [];
-    _.forEach(list2, (li, index) => {
-      if (currentId == li.id) {
-        newCurrentId = `${index}`;
-      }
-      if (idMap.has(li.id)) {
-        newCheckedIds.push(`${index}`);
-      }
-      newVals.push(li.val);
-    });
+    let newVals = _.map(list2, (li) => li.val);
+    __rebuild_item_selection(newVals);
 
     let newVal = joinValue(newVals);
     tryNotify(newVal);
-    _current_id.value = newCurrentId;
-    _checked_ids.value = newCheckedIds;
   }
   //-----------------------------------------------------
   async function viewCode() {
     let vals = LineItems.value.map((item) => item.value);
     let str = vals.join("\n");
+    let vjson = JSON.stringify(props.value);
+    if (vjson.length > 50) {
+      vjson = vjson.substring(0, 50) + "...";
+    }
+    let title = [I18n.get("edit"), `"${vjson}"`].join(": ");
     let res = await openAppModal({
-      title: "i18n:edit",
+      title,
       type: "primary",
       position: "top",
       width: "640px",
@@ -241,18 +292,17 @@ export function useTiInputMultiLinesApi(
   // 返回接口
   //-----------------------------------------------------
   return {
-    _checked_ids,
-    _current_id,
+    _checked_indexes,
+    _current_index,
     // 计算属性
     LineItems,
     isEmpty,
     ActionBarVars,
-    CurrentId: computed(() => _current_id.value),
-    CheckedIds: computed(() => _checked_ids.value),
     // 处理值
     joinValue,
     tryNotify,
     // 响应操作
+    toggleLine,
     selectLines,
     onLineChange,
     // 修改数据
