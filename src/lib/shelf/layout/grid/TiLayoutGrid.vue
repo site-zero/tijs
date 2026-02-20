@@ -114,7 +114,7 @@
   //-------------------------------------------------
   function onClickPanelMask(pan: LayoutPanelItem): void {
     if (pan.clickMaskToClose) {
-      console.log("OnClickPanelMask", pan.clickMaskToClose, pan);
+      //console.log("OnClickPanelMask", pan.clickMaskToClose, pan);
       emit("hide", pan.uniqKey);
     }
   }
@@ -200,7 +200,7 @@
     () => props.shown,
     (newShown: Vars, oldShown: Vars) => {
       if (!_.isEqual(newShown, oldShown)) {
-        console.log("props.show changed!!!!!", newShown);
+        //console.log("props.show changed!!!!!", newShown);
         state.shown = _.cloneDeep(newShown);
       }
     }

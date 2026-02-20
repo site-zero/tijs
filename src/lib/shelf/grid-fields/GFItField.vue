@@ -37,7 +37,9 @@
   //-------------------------------------------------
   const hasTip = computed(() => (props.tip || props.tipBy ? true : false));
   //-------------------------------------------------
-  const isDisabled = computed(() => props.isDisabled(props.data));
+  const isDisabled = computed(() =>
+    props.isDisabled(FieldDynamicContext.value)
+  );
   //-------------------------------------------------
   const TopClass = computed(() => {
     return CssUtils.mergeClassName(props.className, props.fieldLayoutMode, {
@@ -73,11 +75,13 @@
   //-------------------------------------------------
   const FieldDynamicContext = computed(() => {
     return {
-      ...(props.vars ?? {}),
-      uniqKey: props.uniqKey,
-      name: props.name,
-      value: FieldValue.value,
-      data: props.data,
+      ...props.data,
+      $vars: props.vars,
+      $field: {
+        uniqKey: props.uniqKey,
+        name: props.name,
+        value: FieldValue.value,
+      },
     };
   });
   //-------------------------------------------------

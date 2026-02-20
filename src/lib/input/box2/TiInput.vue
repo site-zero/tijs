@@ -35,6 +35,7 @@
   defineExpose<InputBoxExposeApi>({
     getElement: () => $el.value,
     getInputElement: () => $el.value,
+    debouncePropsValueChange: () => _box.value.debouncePropsValueChange(),
   });
   //-------------------------------------------------
   const _viewport = useViewport({

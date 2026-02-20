@@ -7,7 +7,6 @@
     TableCellEmitter,
     TableCellEventPayload,
     TableCellProps,
-    TableEventPayload,
   } from "./ti-table-types";
   //-------------------------------------------------------
   defineOptions({
@@ -49,11 +48,13 @@
   //-------------------------------------------------
   const CellDynamicContext = computed(() => {
     return {
-      ...(props.vars ?? {}),
-      uniqKey: props.uniqKey,
-      name: props.name,
-      value: CellValue.value,
-      data: props.data,
+      ...props.data,
+      $vars: props.vars,
+      $field: {
+        uniqKey: props.uniqKey,
+        name: props.name,
+        value: CellValue.value,
+      },
     };
   });
   //-------------------------------------------------

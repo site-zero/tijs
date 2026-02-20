@@ -30,6 +30,7 @@ export type InputBoxEmitter = {
 export type InputBoxExposeApi = {
   getElement: () => HTMLElement | null;
   getInputElement: () => HTMLElement | null;
+  debouncePropsValueChange: () => void;
 };
 //--------------------------------------------------
 export type InputBoxAspect = {
@@ -160,10 +161,10 @@ export type InputBoxProps = CommonProps &
      * 如果 showCleanOption 为 true，
      * 可以用这个选项指定清除项目图标
      * `null` 表示不显示图标
-     * 
+     *
      * 默认显示 `zmdi-delete`
      */
-    clearOptionItemIcon?: IconInput |null;
+    clearOptionItemIcon?: IconInput | null;
     /**
      * 如果 showCleanOption 为 true，
      * 可以用这个选项指定清除项目文字，支持 `i18n` 的写法

@@ -1,13 +1,15 @@
 <script lang="ts" setup>
   import _ from "lodash";
-  import { nextTick, ref, watch } from "vue";
-  import { InputBoxApi, TiInput } from "../../";
+  import { nextTick, ref, useTemplateRef, watch } from "vue";
+  import { InputBoxApi, InputBoxExposeApi, TiInput } from "../../";
   import { Bank, Num } from "../../../core";
   import { InputNumProps } from "./ti-input-num-types";
   //-----------------------------------------------------
   defineOptions({
     inheritAttrs: false,
   });
+  //-----------------------------------------------------
+  const $input_box = useTemplateRef<InputBoxExposeApi>("input_box");
   //-----------------------------------------------------
   const emit = defineEmits<{
     (event: "change", payload: number | null): void;
@@ -28,7 +30,9 @@
   let _box = ref<InputBoxApi>();
   //-----------------------------------------------------
   function formatInputValue(val?: any) {
-    //console.log('num:formatInputValue', typeof val, val);
+    // if ("ABCED" == props.placeholder) {
+    //   console.log("num:formatInputValue", typeof val, val);
+    // }
     if (_.isUndefined(val)) {
       val = props.value;
     }
@@ -63,7 +67,7 @@
     // 搞定
     _input_val.value = re;
     nextTick(() => {
-      _box.value?.debouncePropsValueChange();
+      $input_box.value?.debouncePropsValueChange();
     });
   }
   //-----------------------------------------------------
@@ -71,8 +75,9 @@
     let str = _.trim(s);
     if (!str) {
       emit("change", null);
+      return;
     }
-    //console.log('num:change', str);
+    // console.log('num:change', str);
     // 移除分隔符号
     if (props.partSep) {
       str = str.replaceAll(props.partSep, "");
@@ -89,11 +94,26 @@
     emit("change", v2);
   }
   //-----------------------------------------------------
-  watch(() => props.value, formatInputValue, { immediate: true });
+  watch(
+    () => {
+      // if ("ABCDE" == props.placeholder) {
+      //   console.log("Watch getter triggered, current:", props.value);
+      // }
+      return props.value;
+    },
+    (newVal, _oldVal) => {
+      // if ("ABCDE" == props.placeholder) {
+      //   console.log("num:watch:value", newVal, oldVal);
+      // }
+      formatInputValue(newVal);
+    },
+    { immediate: true, deep: true }
+  );
   //-----------------------------------------------------
 </script>
 <template>
   <TiInput
+    ref="input_box"
     :style="props.style"
     :readonly="props.readonly"
     :placeholder="props.placeholder"
@@ -111,6 +131,5 @@
     :boxRadius="boxRadius"
     :type="type"
     :width="props.width"
-    :exportApi="(box) => (_box = box)"
     @change="onChange" />
 </template>
