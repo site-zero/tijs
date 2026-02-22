@@ -53,7 +53,9 @@ function defineObjColumns(featureName: string) {
     _.assign(
       re,
       _.omit(column, "comConf", "activatedComConf", "readonlyComConf"),
-      _.omit(col_info, "_key")
+      _.omitBy(col_info, (v, k) => {
+        return /^_/.test(k) || _.isNil(v);
+      })
     );
 
     // 活动字段

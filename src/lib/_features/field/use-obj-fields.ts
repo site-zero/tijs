@@ -10,6 +10,7 @@ import {
   InputNumProps,
   InputNumUnitProps,
   LabelProps,
+  MultiDroplistProps,
   Str,
   TipOptionFormat,
   ToggleProps,
@@ -349,6 +350,58 @@ export function parseNameForObjField(key: string) {
   return re;
 }
 
+/*-------------------------------------------------------
+
+                     内置过滤器字段
+
+-------------------------------------------------------*/
+export function fldFilterID(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputBoxProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title: title || undefined,
+    tip,
+    comType: "TiInput",
+    comConf: _.assign(
+      {
+        placeholder: "i18n:no-set",
+        prefixIconFor: "clear",
+      } as InputBoxProps,
+      comConf
+    ),
+  };
+}
+
+export function fldFilterInput(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputBoxProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title: title || undefined,
+    tip,
+    comType: "TiInput",
+    comConf: _.assign(
+      {
+        placeholder: "i18n:no-set",
+        prefixIconFor: "clear",
+      } as InputBoxProps,
+      comConf
+    ),
+  };
+}
+
+/*-------------------------------------------------------
+
+                     内置表单字段
+
+-------------------------------------------------------*/
 export function fldID(
   name: FieldName,
   titleAndTip: string | string[],
@@ -381,7 +434,12 @@ export function fldLabel(
     title: title || undefined,
     tip,
     comType: "TiLabel",
-    comConf,
+    comConf: _.assign(
+      {
+        placeholder: "---",
+      } as LabelProps,
+      comConf
+    ),
   };
 }
 
@@ -492,6 +550,7 @@ export function fldLabelDate(
     comType: "TiLabel",
     comConf: _.assign(
       {
+        placeholder: "---",
         valuePiping: "$DATE",
         hideBorder: true,
         boxRadius: "none",
@@ -511,9 +570,10 @@ export function fldLabelDT(
     name,
     title,
     tip,
-    readonlyComType: "TiLabel",
-    readonlyComConf: _.assign(
+    comType: "TiLabel",
+    comConf: _.assign(
       {
+        placeholder: "---",
         valuePiping: "$DT",
         hideBorder: true,
         boxRadius: "none",
@@ -567,6 +627,28 @@ export function fldDroplistVT(
         tipListMinWidth,
         useRawValue: true,
       } as DroplistProps,
+      comConf
+    ),
+  };
+}
+
+export function fldMultiDroplist(
+  name: FieldName,
+  titleAndTip: string | string[],
+  options: string,
+  comConf?: DroplistProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title: title || undefined,
+    tip,
+    type: "Array",
+    comType: "TiMultiDroplist",
+    comConf: _.assign(
+      {
+        options,
+      } as MultiDroplistProps,
       comConf
     ),
   };
