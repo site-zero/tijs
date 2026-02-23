@@ -69,10 +69,10 @@
  * 然后，在需要触发的元素通过 `data-tip="::${tip.id}"` 可以标识触发元素
  * 监听控制器可以通过接口根据 ID 直接找到 tip 的详细配置。
  */
-import _ from 'lodash';
-import { Point2D } from '../../_type';
-import { Dom } from '../../core/web';
-import { ModifierKey, TipBoxProps, TipInstance } from './lib-tip-types';
+import _ from "lodash";
+import { Point2D } from "../../_type";
+import { Dom } from "../../core/web";
+import { ModifierKey, TipBoxProps, TipInstance } from "./lib-tip-types";
 
 export type TipsApi = ReturnType<typeof useTipsApi>;
 
@@ -131,13 +131,13 @@ export function useTipsApi() {
     let keys = _.castArray(modifier).sort();
 
     for (let key of keys) {
-      if (key === 'CTRL' && !ev.ctrlKey) {
+      if (key === "CTRL" && !ev.ctrlKey) {
         return false;
-      } else if (key === 'SHIFT' && !ev.shiftKey) {
+      } else if (key === "SHIFT" && !ev.shiftKey) {
         return false;
-      } else if (key === 'ALT' && !ev.altKey) {
+      } else if (key === "ALT" && !ev.altKey) {
         return false;
-      } else if (key === 'META' && !ev.metaKey) {
+      } else if (key === "META" && !ev.metaKey) {
         return false;
       }
     }
@@ -148,7 +148,7 @@ export function useTipsApi() {
     return Dom.closest(
       src,
       (el: HTMLElement) => {
-        return el.getAttribute('data-tip') ? true : false;
+        return el.getAttribute("data-tip") ? true : false;
       },
       { includeSelf: true }
     );
@@ -158,7 +158,7 @@ export function useTipsApi() {
     tipTrigger: HTMLElement
   ): TipBoxProps | undefined {
     // 首先根据 Element 找到 tip  的信息
-    let dataTip = tipTrigger.getAttribute('data-tip') || '';
+    let dataTip = tipTrigger.getAttribute("data-tip") || "";
     if (!dataTip) {
       return;
     }
@@ -166,7 +166,7 @@ export function useTipsApi() {
     // 准备返回值
     let re: TipBoxProps = {
       content: dataTip,
-      contentType: 'text',
+      contentType: "text",
     };
 
     // 复杂 tip 的配置
@@ -186,6 +186,7 @@ export function useTipsApi() {
         return _.lowerFirst(m[1]);
       }
     });
+    //console.log(dataTip, vars);
     if (vars && vars.modifier) {
       vars.modifier = vars.modifier.toUpperCase().split(/[,+]/g);
     }

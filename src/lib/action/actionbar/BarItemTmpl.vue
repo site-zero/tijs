@@ -1,7 +1,8 @@
 <script lang="ts" setup>
   import { computed, inject, ref } from "vue";
+  import { AspectSize } from "../../../_type";
   import { CssUtils, I18n } from "../../../core";
-  import { TiIcon } from "../../../lib";
+  import { TiIcon, TipDockMode } from "../../../lib";
   import { ABAR_STATE, ABarUsedItem } from "./ti-action-bar-types";
   import { openBarItem } from "./use-action-bar";
   //-------------------------------------------------------
@@ -56,6 +57,18 @@
     });
   });
   //-------------------------------------------------------
+  const ItemTipDockMode = computed((): TipDockMode | undefined => {
+    if (!props.tip) return;
+    if (props.aspect == "top") return "V";
+    return "H";
+  });
+  //-------------------------------------------------------
+  const TipPadding = computed((): AspectSize | undefined => {
+    if (!props.tip) return;
+    if (props.aspect == "top") return;
+    return "h";
+  });
+  //-------------------------------------------------------
   function OnEnter() {
     // Guard
     if (!state || props.depth == 0 || props.disabled || props.hidden) {
@@ -83,7 +96,10 @@
     :aspect="props.aspect"
     :item-depth="props.depth"
     :item-index="props.index"
-    :item-ukey="props.uniqKey">
+    :item-ukey="props.uniqKey"
+    :data-tip="props.tip"
+    :data-tip-dock-mode="ItemTipDockMode"
+    :data-tip-padding="TipPadding">
     <div
       class="bar-item-info"
       :class="InfoClass"

@@ -1,19 +1,19 @@
-import _ from 'lodash';
-import { Point2D } from '../../_type';
-import { Rects } from '../../core';
-import { TipInstance } from './lib-tip-types';
-import { drawTipBox, eraseTip } from './use-tip-box';
-import { useTipsApi } from './use-tips';
+import _ from "lodash";
+import { Point2D } from "../../_type";
+import { Rects } from "../../core";
+import { TipInstance } from "./lib-tip-types";
+import { drawTipBox, eraseTip } from "./use-tip-box";
+import { useTipsApi } from "./use-tips";
 
 export function useTipsWatcher() {
   const _api = useTipsApi();
   const _pointer: Point2D = { x: -1, y: -1 };
 
   function watchDocumentForTips($body = document.body) {
-    if (document.body.getAttribute('tips-watched')) {
+    if (document.body.getAttribute("tips-watched")) {
       return;
     }
-    $body.addEventListener('mouseover', (ev) => {
+    $body.addEventListener("mouseover", (ev) => {
       // 实时保存鼠标位置，以便延迟取消 tip 时进行判断
       _pointer.x = ev.pageX;
       _pointer.y = ev.pageY;
@@ -68,7 +68,7 @@ export function useTipsWatcher() {
         }, delayInMs);
       }
     });
-    document.body.setAttribute('tips-watched', 'yes');
+    document.body.setAttribute("tips-watched", "yes");
   }
 
   function tryEraseTip(tipObj: TipInstance) {
