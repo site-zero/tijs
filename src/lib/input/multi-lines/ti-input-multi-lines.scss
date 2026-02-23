@@ -7,11 +7,21 @@
     @include flex-align-v-nowrap;
     gap: var(--ti-gap-s);
     //-------------------------------------------------
+    > blockquote.as-empty {
+      margin: 0.3em;
+      padding: 0.5em;
+      border-radius: var(--ti-measure-r-s);
+      color: var(--ti-color-border-dark);
+      border: 1px dotted var(--ti-color-border-dark);
+      text-align: center;
+    }
+    //-------------------------------------------------
     > .line-item {
       @include flex-align-nowrap($ai: stretch);
       gap: var(--ti-gap-s);
       border: 1px solid var(--ti-color-border-shallow);
       border-radius: var(--ti-measure-r-s);
+      overflow: hidden;
       //-----------------------------------------------
       &.is-checked {
         color: var(--ti-color-highlight-f);

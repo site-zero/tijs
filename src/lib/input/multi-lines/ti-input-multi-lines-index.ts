@@ -6,9 +6,11 @@ const COM_TYPE = "TiInputMultiLines";
 
 const en_us = {
   "com-name": "TiInputMultiLines",
+  "as-empty": "No Data",
 };
 const zh_cn = {
   "com-name": "多行输入框",
+  "as-empty": "无数据",
 };
 
 const TiInputMultiLinesInfo: TiComInfo = {

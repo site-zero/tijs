@@ -3,6 +3,7 @@
   import { computed } from "vue";
   import {
     CssUtils,
+    I18n,
     InputBoxProps,
     TiActionBar,
     TiIcon,
@@ -73,7 +74,7 @@
     let $el = evt.target as HTMLInputElement;
     _api.onLineChange(index, $el.value);
   }
-//-----------------------------------------------------
+  //-----------------------------------------------------
   function onClearItem(index: number) {
     _api.onLineChange(index, null);
   }
@@ -94,22 +95,27 @@
   <div class="ti-input-multi-lines" :class="TopClass" :style="TopStyle">
     <TiActionBar v-if="!props.readonly" v-bind="ActionBarConfig" />
     <main>
-      <div
-        v-for="(item, index) in _api.LineItems.value"
-        class="line-item"
-        :class="item.className">
-        <span class="as-checker" @click.left="onToggleItem(index)">
-          <TiIcon :value="item.prefixIcon" />
-        </span>
-        <input
-          :value="item.value"
-          @focus="onInputFocus(index)"
-          @change="onInputChange(index, $event)" />
-        <a class="line-del" @click.left="onClearItem(index)">
-          <i class="zmdi zmdi-minus"></i>
-          <i class="zmdi zmdi-close"></i>
-        </a>
-      </div>
+      <template v-if="_api.LineItems.value.length > 0">
+        <div
+          v-for="(item, index) in _api.LineItems.value"
+          class="line-item"
+          :class="item.className">
+          <span class="as-checker" @click.left="onToggleItem(index)">
+            <TiIcon :value="item.prefixIcon" />
+          </span>
+          <input
+            :value="item.value"
+            @focus="onInputFocus(index)"
+            @change="onInputChange(index, $event)" />
+          <a class="line-del" @click.left="onClearItem(index)">
+            <i class="zmdi zmdi-minus"></i>
+            <i class="zmdi zmdi-close"></i>
+          </a>
+        </div>
+      </template>
+      <blockquote v-else class="as-empty">
+        {{ I18n.text("i18n:ti-input-multi-lines-as-empty") }}
+      </blockquote>
     </main>
   </div>
 </template>
