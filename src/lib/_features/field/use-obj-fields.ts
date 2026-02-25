@@ -457,8 +457,8 @@ export function fldLabelI(
     comConf: _.assign(
       {
         align: "right",
-        type: "disable",
-        boxRadius: "none",
+        type: "fog",
+        boxRadius: "s",
       } as LabelProps,
       comConf
     ),
@@ -480,9 +480,8 @@ export function fldLabelF2(
       {
         align: "right",
         valuePiping: "$F2",
-        hideBorder: true,
-        type: "disable",
-        boxRadius: "none",
+        type: "fog",
+        boxRadius: "s",
       } as LabelProps,
       comConf
     ),
@@ -504,9 +503,54 @@ export function fldLabelF3(
       {
         align: "right",
         valuePiping: "$F3",
-        hideBorder: true,
-        type: "disable",
-        boxRadius: "none",
+        type: "fog",
+        boxRadius: "s",
+      } as LabelProps,
+      comConf
+    ),
+  };
+}
+
+export function fldLabelF4(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: LabelProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    comType: "TiLabel",
+    comConf: _.assign(
+      {
+        align: "right",
+        valuePiping: "$F4",
+        type: "fog",
+        boxRadius: "s",
+      } as LabelProps,
+      comConf
+    ),
+  };
+}
+
+export function fldLabelF5(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: LabelProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    comType: "TiLabel",
+    comConf: _.assign(
+      {
+        align: "right",
+        valuePiping: "$F5",
+        type: "fog",
+        boxRadius: "s",
       } as LabelProps,
       comConf
     ),
@@ -528,9 +572,8 @@ export function fldLabelF6(
       {
         align: "right",
         valuePiping: "$F6",
-        hideBorder: true,
-        type: "disable",
-        boxRadius: "none",
+        type: "fog",
+        boxRadius: "s",
       } as LabelProps,
       comConf
     ),
@@ -552,8 +595,8 @@ export function fldLabelDate(
       {
         placeholder: "---",
         valuePiping: "$DATE",
-        hideBorder: true,
-        boxRadius: "none",
+        type: "fog",
+        boxRadius: "s",
       } as LabelProps,
       comConf
     ),
@@ -575,8 +618,8 @@ export function fldLabelDT(
       {
         placeholder: "---",
         valuePiping: "$DT",
-        hideBorder: true,
-        boxRadius: "none",
+        type: "fog",
+        boxRadius: "s",
       } as LabelProps,
       comConf
     ),

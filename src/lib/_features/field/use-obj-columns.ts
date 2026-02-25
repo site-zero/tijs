@@ -9,7 +9,7 @@ import {
   TipOptionFormat,
   ToggleProps,
 } from "../../";
-import { ColumnRefer, FieldName, TableInputColumn } from "../../../_type";
+import { ColumnRefer, FieldName, LogicType, TableInputColumn } from "../../../_type";
 import { I18n } from "../../../core";
 //-----------------------------------------------
 type QuickColumnInfo = {
@@ -104,7 +104,7 @@ function defineObjColumns(featureName: string) {
 
     if (true === re.disabled) {
       if (!re.comType || "TiLabel" === re.comType) {
-        re.comConf.type = "disable";
+        re.comConf.type = "fog";
       } else {
         re.comConf.disable = true;
       }
@@ -229,6 +229,7 @@ function defineObjColumns(featureName: string) {
 }
 //-----------------------------------------------
 const _OBJ_COLUMN_INSTANCES = new Map<string, ObjColumnsApi>();
+const _LBL_TYPE: LogicType = "fog";
 //-----------------------------------------------
 export function useObjColumns(name = "_DEFAULT_COLUMN_SET"): ObjColumnsApi {
   let re = _OBJ_COLUMN_INSTANCES.get(name);
@@ -347,7 +348,7 @@ export function colLabelI(
     comConf: _.assign(
       {
         align: "right",
-        type: "disable",
+        type: _LBL_TYPE,
         boxRadius: "none",
       } as LabelProps,
       comConf
@@ -371,7 +372,7 @@ export function colLabelF2(
         align: "right",
         valuePiping: "$F2",
         hideBorder: true,
-        type: "disable",
+        type: _LBL_TYPE,
         boxRadius: "none",
       } as LabelProps,
       comConf
@@ -395,7 +396,55 @@ export function colLabelF3(
         align: "right",
         valuePiping: "$F3",
         hideBorder: true,
-        type: "disable",
+        type: _LBL_TYPE,
+        boxRadius: "none",
+      } as LabelProps,
+      comConf
+    ),
+  };
+}
+
+export function colLabelF4(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: LabelProps
+): TableInputColumn {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    comType: "TiLabel",
+    comConf: _.assign(
+      {
+        align: "right",
+        valuePiping: "$F4",
+        hideBorder: true,
+        type: _LBL_TYPE,
+        boxRadius: "none",
+      } as LabelProps,
+      comConf
+    ),
+  };
+}
+
+export function colLabelF5(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: LabelProps
+): TableInputColumn {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    comType: "TiLabel",
+    comConf: _.assign(
+      {
+        align: "right",
+        valuePiping: "$F5",
+        hideBorder: true,
+        type: _LBL_TYPE,
         boxRadius: "none",
       } as LabelProps,
       comConf
@@ -419,7 +468,7 @@ export function colLabelF6(
         align: "right",
         valuePiping: "$F6",
         hideBorder: true,
-        type: "disable",
+        type: _LBL_TYPE,
         boxRadius: "none",
       } as LabelProps,
       comConf
@@ -486,7 +535,6 @@ export function colDroplist(
     readonlyComType: "TiLabel",
     readonlyComConf: _.assign(
       {
-        type: "disable",
         boxRadius: "none",
         options,
       } as LabelProps,
@@ -526,7 +574,6 @@ export function colDroplistVT(
     readonlyComConf: _.assign(
       {
         placeholder,
-        type: "disable",
         boxRadius: "none",
       } as LabelProps,
       readonlyComConf
@@ -563,7 +610,6 @@ export function colInput(
     readonlyComType: "TiLabel",
     readonlyComConf: _.assign(
       {
-        type: "disable",
         boxRadius: "none",
       } as LabelProps,
       readonlyComConf
@@ -636,7 +682,6 @@ export function colInputI(
     readonlyComType: "TiLabel",
     readonlyComConf: {
       align: "right",
-      type: "disable",
       boxRadius: "none",
     } as LabelProps,
     activatedComType: "TiInputNum",
@@ -666,7 +711,6 @@ export function colInputF2(
       align: "right",
       valuePiping: "$F2",
       hideBorder: true,
-      type: "disable",
       boxRadius: "none",
     } as LabelProps,
     activatedComType: "TiInputNum",
@@ -697,7 +741,6 @@ export function colInputF3(
       align: "right",
       valuePiping: "$F3",
       hideBorder: true,
-      type: "disable",
       boxRadius: "none",
     } as LabelProps,
     activatedComType: "TiInputNum",
@@ -728,7 +771,6 @@ export function colInputF4(
       align: "right",
       valuePiping: "$F4",
       hideBorder: true,
-      type: "disable",
       boxRadius: "none",
     } as LabelProps,
     activatedComType: "TiInputNum",
@@ -759,7 +801,6 @@ export function colInputF5(
       align: "right",
       valuePiping: "$F5",
       hideBorder: true,
-      type: "disable",
       boxRadius: "none",
     } as LabelProps,
     activatedComType: "TiInputNum",
@@ -790,7 +831,6 @@ export function colInputF6(
       align: "right",
       valuePiping: "$F6",
       hideBorder: true,
-      type: "disable",
       boxRadius: "none",
     } as LabelProps,
     activatedComType: "TiInputNum",

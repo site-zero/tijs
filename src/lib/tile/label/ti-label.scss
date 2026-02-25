@@ -1,4 +1,4 @@
-@use '@site0/tijs/sass/_all.scss' as *;
+@use "@site0/tijs/sass/_all.scss" as *;
 
 .ti-label {
   @include flex-align-nowrap($ai: center);
@@ -8,8 +8,10 @@
   //min-height: var(--ti-measure-box-height);
   font-size: var(--box-fontsz);
   border-radius: var(--box-radius);
-  //background-color: var(--box-color-bg);
+  color: var(--box-color-text);
+  background-color: var(--box-color-bg);
   border-color: var(--box-color-border);
+
   &.can-click {
     cursor: pointer;
   }
@@ -74,7 +76,9 @@
       position: absolute;
       inset: 0;
       font-size: calc(var(--box-fontsz) * 1.2);
-      transition: transform 0.6s, opacity 0.3s;
+      transition:
+        transform 0.6s,
+        opacity 0.3s;
     }
     &.can-hover {
       cursor: pointer;

@@ -228,7 +228,8 @@ $BARLINE: 1px;
   $bg: var(--ti-color-card)
 ) {
   background-color: $bg;
-  background-image: linear-gradient(
+  background-image:
+    linear-gradient(
       45deg,
       $color 25%,
       transparent 25%,
@@ -245,7 +246,9 @@ $BARLINE: 1px;
       $color
     );
   background-size: $sz $sz;
-  background-position: 0 0, calc($sz/2) calc($sz/2);
+  background-position:
+    0 0,
+    calc($sz/2) calc($sz/2);
 }
 //-------------------------------------------------------------
 @mixin __color_by_name($name) {
@@ -268,6 +271,8 @@ $BARLINE: 1px;
 
 //-------------------------------------------------------------
 @mixin colorized() {
+  @include __color_by_name(primary);
+  @include __color_by_name(secondary);
   @include __color_by_name(success);
   @include __color_by_name(warn);
   @include __color_by_name(info);
@@ -276,18 +281,19 @@ $BARLINE: 1px;
   @include __color_by_name(disable);
   @include __color_by_name(text);
   @include __color_by_name(number);
-  @include __color_by_name(primary);
-  @include __color_by_name(secondary);
+  @include __color_by_name(tip);
+  @include __color_by_name(star);
+  @include __color_by_name(fog);
 }
 
 //-------------------------------------------------------------
-@mixin __fontsz($prefix, $sz, $suffix: '') {
+@mixin __fontsz($prefix, $sz, $suffix: "") {
   #{$prefix}-#{$sz} #{$suffix} {
     font-size: var(--ti-fontsz-#{$sz});
   }
 }
 //-------------------------------------------------------------
-@mixin aspect_fontsize($prefix, $suffix: '') {
+@mixin aspect_fontsize($prefix, $suffix: "") {
   @include __fontsz($prefix, t, $suffix);
   @include __fontsz($prefix, s, $suffix);
   @include __fontsz($prefix, m, $suffix);
@@ -296,13 +302,13 @@ $BARLINE: 1px;
 }
 
 //-------------------------------------------------------------
-@mixin __gap($prefix, $sz, $suffix: '') {
+@mixin __gap($prefix, $sz, $suffix: "") {
   #{$prefix}-#{$sz} #{$suffix} {
     gap: var(--ti-gap-#{$sz});
   }
 }
 //-------------------------------------------------------------
-@mixin aspect_gap($prefix, $suffix: '') {
+@mixin aspect_gap($prefix, $suffix: "") {
   @include __gap($prefix, t, $suffix);
   @include __gap($prefix, s, $suffix);
   @include __gap($prefix, m, $suffix);
@@ -311,13 +317,13 @@ $BARLINE: 1px;
 }
 
 //-------------------------------------------------------------
-@mixin __pad($prefix, $sz, $suffix: '') {
+@mixin __pad($prefix, $sz, $suffix: "") {
   #{$prefix}-#{$sz} #{$suffix} {
     padding: var(--ti-gap-#{$sz});
   }
 }
 //-------------------------------------------------------------
-@mixin aspect_pad($prefix, $suffix: '') {
+@mixin aspect_pad($prefix, $suffix: "") {
   @include __pad($prefix, t, $suffix);
   @include __pad($prefix, s, $suffix);
   @include __pad($prefix, m, $suffix);
@@ -326,13 +332,13 @@ $BARLINE: 1px;
 }
 
 //-------------------------------------------------------------
-@mixin __radius($prefix, $sz, $suffix: '') {
+@mixin __radius($prefix, $sz, $suffix: "") {
   #{$prefix}-#{$sz} #{$suffix} {
     border-radius: var(--ti-measure-r-#{$sz});
   }
 }
 //-------------------------------------------------------------
-@mixin aspect_radius($prefix, $suffix: '') {
+@mixin aspect_radius($prefix, $suffix: "") {
   @include __radius($prefix, t, $suffix);
   @include __radius($prefix, s, $suffix);
   @include __radius($prefix, m, $suffix);
@@ -351,7 +357,9 @@ $BARLINE: 1px;
   }
 }
 //-------------------------------------------------------------
-@mixin aspect_color($prefix: '&.is') {
+@mixin aspect_color($prefix: "&.is") {
+  @include __color(primary, $prefix);
+  @include __color(secondary, $prefix);
   @include __color(success, $prefix);
   @include __color(warn, $prefix);
   @include __color(info, $prefix);
@@ -360,8 +368,9 @@ $BARLINE: 1px;
   @include __color(disable, $prefix);
   @include __color(text, $prefix);
   @include __color(number, $prefix);
-  @include __color(primary, $prefix);
-  @include __color(secondary, $prefix);
+  @include __color(tip, $prefix);
+  @include __color(star, $prefix);
+  @include __color(fog, $prefix);
 }
 
 //-------------------------------------------------------------
@@ -372,7 +381,9 @@ $BARLINE: 1px;
   }
 }
 //-------------------------------------------------------------
-@mixin aspect_color_fborder($prefix: '&.is') {
+@mixin aspect_color_fborder($prefix: "&.is") {
+  @include __color_fborder(primary, $prefix);
+  @include __color_fborder(secondary, $prefix);
   @include __color_fborder(success, $prefix);
   @include __color_fborder(warn, $prefix);
   @include __color_fborder(info, $prefix);
@@ -381,8 +392,9 @@ $BARLINE: 1px;
   @include __color_fborder(disable, $prefix);
   @include __color_fborder(text, $prefix);
   @include __color_fborder(number, $prefix);
-  @include __color_fborder(primary, $prefix);
-  @include __color_fborder(secondary, $prefix);
+  @include __color_fborder(tip, $prefix);
+  @include __color_fborder(star, $prefix);
+  @include __color_fborder(fog, $prefix);
 }
 
 //-------------------------------------------------------------

@@ -94,7 +94,7 @@
     // 暗戳戳的标记一下控件的 disabled 状态，因为有些控件可以针对这个状态做特殊显示
     if (re.comConf && FieldDisabled.value) {
       if ("TiLabel" === re.comType.name) {
-        re.comConf.type = "disable";
+        re.comConf.type = "fog";
       } else {
         re.comConf.disable = true;
       }

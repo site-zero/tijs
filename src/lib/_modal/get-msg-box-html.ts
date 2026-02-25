@@ -42,6 +42,7 @@ export function __get_msg_box_html(options: MsgBoxHtmlOptions) {
       secondary: "zmdi-info-outline",
       tip: "zmdi-info",
       star: "fas-star",
+      fog: "zmdi-blur",
     }[type];
     msgIcon = Icons.parseIcon(icon_str);
   }

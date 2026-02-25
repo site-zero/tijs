@@ -487,7 +487,8 @@ export type LogicType =
   | "primary"
   | "secondary"
   | "tip"
-  | "star";
+  | "star"
+  | "fog";
 
 export type LogicColorSuffix = "b" | "r";
 

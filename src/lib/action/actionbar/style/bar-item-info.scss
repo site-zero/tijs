@@ -53,9 +53,10 @@
     cursor: pointer;
     &:hover,
     &.is-highlight {
-      color: var(--ti-color-secondary-r);
-      background-color: var(--ti-color-secondary);
+      color: var(--ti-color-highlight-f);
+      background-color: var(--ti-color-highlight);
       text-shadow: 1px 1px 3px var(--ti-color-mask-thin);
+      border-color: var(--ti-color-selected-f);
     }
   }
   //-----------------------------------------------------
@@ -79,8 +80,8 @@
   }
   //-----------------------------------------------------
   &.is-enabled {
-    color: var(--ti-color-menu-r);
-    background-color: var(--ti-color-menu);
+    // color: var(--ti-color-menu-r);
+    // background-color: var(--ti-color-menu);
   }
   //-----------------------------------------------------
   &.is-enabled.is-opened {
