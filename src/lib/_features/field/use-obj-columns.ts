@@ -9,7 +9,12 @@ import {
   TipOptionFormat,
   ToggleProps,
 } from "../../";
-import { ColumnRefer, FieldName, LogicType, TableInputColumn } from "../../../_type";
+import {
+  ColumnRefer,
+  FieldName,
+  LogicType,
+  TableInputColumn,
+} from "../../../_type";
 import { I18n } from "../../../core";
 //-----------------------------------------------
 type QuickColumnInfo = {
@@ -544,12 +549,14 @@ export function colDroplist(
     activatedComConf: _.assign(
       {
         options,
+        autoSelect: false,
         canInput: false,
         boxFontSize: "s",
         boxPadding: "s",
         boxRadius: "none",
         hideBorder: true,
-      } as DroplistProps,
+        tipListMinWidth: "320px",
+      } as InputBoxProps,
       comConf
     ),
   };
@@ -560,7 +567,7 @@ export function colDroplistVT(
   titleAndTip: string | string[],
   options: string,
   placeholder?: string,
-  tipListMinWidth: string = "200px",
+  tipListMinWidth: string = "320px",
   tipFormat: TipOptionFormat = "VT",
   comConf?: DroplistProps,
   readonlyComConf?: LabelProps
@@ -585,12 +592,13 @@ export function colDroplistVT(
         options,
         tipFormat,
         tipListMinWidth,
+        canInput: false,
         useRawValue: true,
         boxFontSize: "s",
         boxPadding: "s",
         boxRadius: "none",
         hideBorder: true,
-      } as DroplistProps,
+      } as InputBoxProps,
       comConf
     ),
   };

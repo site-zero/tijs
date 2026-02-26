@@ -1,4 +1,6 @@
 import { TiComSet } from "../../_type";
+import { TiCrumbInfo } from "./crumb/ti-crumb-index";
+import { TiHtmlFrameInfo } from "./html-frame/ti-html-frame-index";
 import { TiHtmlSnippetInfo } from "./html-snippet/html-snippet-index";
 import { TiIconInfo } from "./icon/ti-icon-index";
 import { TiImageInfo } from "./image/ti-image-index";
@@ -10,11 +12,11 @@ import { TiTextSnippetInfo } from "./text-snippet/text-snippet-index";
 import { TiThumbInfo } from "./thumb/ti-thumb-index";
 import { TiUploadBarInfo } from "./upload/bar/ti-upload-bar-index";
 import { TiUploadTileInfo } from "./upload/tile/ti-upload-tile-index";
-import { TiCrumbInfo } from "./crumb/ti-crumb-index";
 
 export default {
   TiCrumb: TiCrumbInfo,
   TiHtmlSnippet: TiHtmlSnippetInfo,
+  TiHtmlFrame: TiHtmlFrameInfo,
   TiIcon: TiIconInfo,
   TiImage: TiImageInfo,
   TiLabel: TiLabelInfo,
@@ -28,6 +30,7 @@ export default {
 } as TiComSet;
 
 export * from "./crumb/ti-crumb-index";
+export * from "./html-frame/ti-html-frame-index";
 export * from "./html-snippet/html-snippet-index";
 export * from "./icon/ti-icon-index";
 export * from "./image/ti-image-index";

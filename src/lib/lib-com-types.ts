@@ -16,6 +16,7 @@ export const COM_TYPES = {
   //------------------- TILE
   Crumb: "TiCrumb",
   HtmlSnippet: "TiHtmlSnippet",
+  HtmlFrame: "TiHtmlFrame",
   TextSnippet: "TiTextSnippet",
   HtmlPage: "TiHtmlPage",
   Icon: "TiIcon",
