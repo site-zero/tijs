@@ -55,7 +55,7 @@
   //-----------------------------------------------------
 </script>
 <template>
-  <div class="ti-html-frame" :class="TopClass" :style="TopStyle">
+  <div class="ti-html-frame fit-parent" :class="TopClass" :style="TopStyle">
     <iframe
       width="100%"
       height="100%"
