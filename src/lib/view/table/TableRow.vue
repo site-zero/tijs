@@ -161,6 +161,7 @@
       :row-indent-style="RowIndentStyle"
       :row-can-hover="props.canHover"
       :row-checked="props.checked"
+      :row-type="props.row.type"
       :activated="props.activated && cell.uniqKey == props.activedColUniqKey"
       :editable="props.editable"
       @cell-change="emit('cell-change', $event)"
