@@ -184,6 +184,9 @@ function defineObjFields(featureName: string) {
    * @param field
    */
   function addField(uniqKey: string, field: FormField) {
+    // if ("c_id" == uniqKey) {
+    //   console.warn(`field '${uniqKey}'`);
+    // }
     if (_FIELDS.has(uniqKey)) {
       console.warn(`field '${uniqKey}' already exists!!`);
     }

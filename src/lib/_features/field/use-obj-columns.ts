@@ -186,6 +186,9 @@ function defineObjColumns(featureName: string) {
   }
   //---------------------------------------------
   function addColumn(uniqKey: string, column: Partial<TableInputColumn>) {
+    // if("c_id" == uniqKey) {
+    //   console.warn(`column '${uniqKey}'`);
+    // }
     if (_COLUMNS.has(uniqKey)) {
       console.warn(`column '${uniqKey}' already exists!!`);
     }

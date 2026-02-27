@@ -52,7 +52,8 @@
   }
   //-----------------------------------------------------
   function onClickSuffixIcon() {
-    console.log(input.value?.getElement());
+    //console.log(input.value?.getElement());
+    if (props.readonly) return;
     _show_calendar.value = true;
   }
   //-----------------------------------------------------
