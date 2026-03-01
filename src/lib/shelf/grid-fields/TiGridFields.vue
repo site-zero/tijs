@@ -14,10 +14,6 @@
   import GFItField from "./GFItField.vue";
   import GFItGroup from "./GFItGroup.vue";
   import GFItLabel from "./GFItLabel.vue";
-  // import {
-  //   buildGridFieldsLayoutStyle,
-  //   parseGridLayout,
-  // } from './build-grid-field-layout';
   import {
     FIELD_STATUS_KEY,
     GridFieldsDomReadyInfo,

@@ -1,4 +1,4 @@
-@use '@site0/tijs/sass/_all.scss' as *;
+@use "@site0/tijs/sass/_all.scss" as *;
 
 .ti-grid-fiels-item.part-field {
   @include colorized;
@@ -8,26 +8,28 @@
   }
   //-------------------------------------------------------------
   &.is-disabled {
-    position: relative;
-    user-select: none;
     filter: grayscale(100%) blur(0px);
     opacity: 0.7;
-    &::after {
-      display: block;
-      content: '';
-      position: absolute;
-      inset: 0;
-      z-index: 1;
+    > .field-part.as-value {
+      user-select: none;
+      &::after {
+        display: block;
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+      }
     }
   }
   //-------------------------------------------------------------
   @mixin __data_align($align, $jc) {
-    &[data-align='#{$align}'] {
+    &[data-align="#{$align}"] {
       justify-content: $jc;
     }
   }
   //-------------------------------------------------------------
   > .field-part {
+    position: relative;
     &[data-align] {
       @include flex-align($ai: flex-start);
     }
@@ -37,10 +39,10 @@
     @include __data_align(justify, space-between);
     @include __data_align(start, flex-start);
     @include __data_align(end, flex-end);
-    &[data-align='start'] {
+    &[data-align="start"] {
       text-align: start;
     }
-    &[data-align='end'] {
+    &[data-align="end"] {
       text-align: end;
     }
     //-----------------------------------------------------------
@@ -50,7 +52,9 @@
       flex-wrap: nowrap;
       align-items: stretch;
       align-content: center;
-      transition: color 1s, background-color 1s;
+      transition:
+        color 1s,
+        background-color 1s;
       > .as-snippet-text .required-mark {
         @include font-fixed;
         color: var(--ti-color-danger);

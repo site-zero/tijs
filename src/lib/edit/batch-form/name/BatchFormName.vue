@@ -10,6 +10,13 @@
   const emit = defineEmits<BatchFormNameEmitter>();
   const props = withDefaults(defineProps<BatchFormNameProps>(), {});
   //-----------------------------------------------------
+  const TopClass = computed(() => {
+    return CssUtils.mergeClassName({}, props.className, {
+      "is-checked": isChecked.value,
+      "no-checked": !isChecked.value,
+    });
+  });
+  //-----------------------------------------------------
   const TopStyle = computed(() => {
     return CssUtils.mergeStyles([
       {
@@ -36,12 +43,16 @@
     return "zmdi " + FieldCheckIcon.value;
   });
   //-----------------------------------------------------
+  function onToggle() {
+    emit("change", !isChecked.value);
+  }
+  //-----------------------------------------------------
 </script>
 <template>
   <div>
-    <div class="batch-form-name" :style="TopStyle">
+    <div class="batch-form-name" :class="TopClass" :style="TopStyle">
       <span class="as-text">{{ props.title }}</span>
-      <span class="as-icon">
+      <span class="as-icon" @click.left="onToggle">
         <i :class="FieldCheckIconClass"></i>
       </span>
     </div>

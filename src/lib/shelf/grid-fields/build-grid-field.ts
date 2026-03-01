@@ -7,12 +7,13 @@ import {
   useVisibility,
 } from "../../_features";
 import {
-  FieldRefer,
-  GridFieldsInput,
-  GridFieldsProps,
   AbstractFormItem,
+  FieldOverrideVisibilityMode,
+  FieldRefer,
   FormFieldItem,
   FormItemGroup,
+  GridFieldsInput,
+  GridFieldsProps,
   OneFormItem,
 } from "./ti-grid-fields-types";
 
@@ -24,14 +25,37 @@ export function buildOneGridField(
 ): OneFormItem {
   let field: GridFieldsInput = fieldSet.getFieldBy(fr);
 
-  if ("db_table" == field.name) {
-    console.log(field);
+  let fovMode: FieldOverrideVisibilityMode =
+    dft.overrideVisibility ?? "defaults";
+
+  if ("override" == fovMode) {
+    _.assign(
+      field,
+      _.pickBy(dft, (_v, k) => {
+        return /^(disabled|enabled|hidden|visible|readonly)$/.test(k);
+      })
+    );
+  } else if ("assign" == fovMode) {
+    _.assign(
+      field,
+      _.pickBy(dft, (v, k) => {
+        return (
+          !_.isUndefined(v) &&
+          /^(disabled|enabled|hidden|visible|readonly)$/.test(k)
+        );
+      })
+    );
+  } else {
+    _.defaults(field, {
+      readonly: dft.readonly,
+      disabled: dft.disabled,
+      enabled: dft.enabled,
+      hidden: dft.hidden,
+      visible: dft.visible,
+    });
   }
 
   _.defaults(field, {
-    readonly: dft.readonly,
-    disabled: dft.disabled,
-    enabled: dft.enabled,
     required: dft.required,
   });
 
@@ -190,6 +214,7 @@ export function buildOneGridField(
       dft.defaultFieldTypeSerializeOptions;
     grp.defaultComType = field.defaultComType ?? dft.defaultComType;
     grp.defaultComConf = field.defaultComConf ?? dft.defaultComConf;
+    grp.overrideVisibility = field.overrideVisibility ?? dft.overrideVisibility;
 
     // 递归构建嵌套子项目
     grp.fields = buildGridFields(fieldSet, indexes, field.fields, {

@@ -202,11 +202,7 @@
     class="ti-grid-fiels-item part-field"
     :class="TopClass"
     :style="TopStyle"
-    :data-tip="isDisabled ? FieldCtrlTip : null"
-    data-tip-modifier="CTRL"
-    data-tip-max-width="640px"
-    data-tip-content-type="html"
-    data-tip-dock-mode="H"
+    
     @mousedown="emit('field-actived', props.uniqKey)">
     <!--===============: 字段名 :===================-->
     <TiTextSnippet

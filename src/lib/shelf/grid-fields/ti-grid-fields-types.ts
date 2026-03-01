@@ -114,6 +114,17 @@ export type GridFieldsProps = Omit<
      */
     fieldStatusIcons?: FieldStatusIcons;
   };
+
+/**
+ * 默认的，父级的 visibility 是当前字段的默认值。
+ *
+ * - `defaults` : 仅作为下属字段的默认值
+ * - `assign` : 下属字段的设置作为默认值
+ * - `override` : 开启，用字段的 visibility 设定，并且强制设为 `visible`
+ *
+ * 默认值为 `defaults`
+ */
+export type FieldOverrideVisibilityMode = "defaults" | "assign" | "override";
 //-----------------------------------------------
 /*
 栅格字段组，是一个支持无穷嵌套的字段组合，依靠 CSS Grid 布局。
@@ -132,7 +143,7 @@ export type FieldInfo = [
   (
     | Partial<GridFieldsInput>
     | ((field: GridFieldsInput) => GridFieldsInput | void)
-  )
+  ),
 ];
 //-----------------------------------------------
 export type FieldRefer = GridFieldsInput | FieldInfo | string;
@@ -233,6 +244,16 @@ export type GridFieldsInput = CommonProps &
 
     defaultComType?: string;
     defaultComConf?: Vars;
+    /**
+     * 默认的，父级的 visibility 是当前字段的默认值。
+     *
+     * - `defaults` : 仅作为下属字段的默认值
+     * - `assign` : 下属字段的设置作为默认值
+     * - `override` : 开启，用字段的 visibility 设定，并且强制设为 `visible`
+     *
+     * 默认值为 `defaults`
+     */
+    overrideVisibility?: FieldOverrideVisibilityMode;
   };
 //-----------------------------------------------
 /*
@@ -364,6 +385,7 @@ export type FormItemGroup = AbstractFormItem &
 
     defaultComType?: string;
     defaultComConf?: Vars;
+    overrideVisibility?: FieldOverrideVisibilityMode;
   };
 //-----------------------------------------------
 export type FormFieldItem = AbstractFormItem &
