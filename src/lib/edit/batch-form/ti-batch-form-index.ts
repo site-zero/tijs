@@ -39,9 +39,13 @@ const TiBatchFormInfo: TiComInfo = {
       name: "simple",
       text: "i18n:simple",
       comConf: {
+        data: { age: 23, name: "xiaobai" },
+        style: { width: "300px" },
         layoutHint: 1,
+        changeMode: "all",
+        maxFieldNameWidth: "120px",
         fields: [
-          "#INPUT=name/Name",
+          "#INPUT=name/Name is for very long text",
           "#INPUT-INT=age/Age",
           "#TOGGLE=is_admin/Is Admin",
         ],

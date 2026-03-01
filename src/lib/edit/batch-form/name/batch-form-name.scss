@@ -1,0 +1,21 @@
+@use "@site0/tijs/sass/_all.scss" as *;
+
+.batch-form-name {
+  @include flex-align-nowrap($jc: flex-end);
+  gap: var(--ti-gap-m);
+  > span {
+    &.as-text {
+      text-align: right;
+    }
+    &.as-icon {
+      cursor: pointer;
+      font-size: 1.2em;
+      padding: 0.3em;
+      border-radius: var(--ti-meassure-r-s);
+      &:hover {
+        background-color: var(--ti-color-highlight);
+        color: var(--ti-color-primary);
+      }
+    }
+  }
+}

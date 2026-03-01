@@ -5,5 +5,7 @@ export type BatchFormNameEmitter = {
 };
 
 export type BatchFormNameProps = CommonProps & {
-  // 这里放置控件支持的属性
+  title: string;
+  name: string | string[];
+  checkedNames: Record<string, boolean>;
 };
