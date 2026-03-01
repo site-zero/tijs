@@ -100,6 +100,14 @@ export function init_ti_std_fields() {
     } as InputNumProps,
   });
 
+  _ofs.setField("#INPUT-INT", {
+    type: "Integer",
+    comType: "TiInputNum",
+    comConf: {
+      precision: 1,
+    } as InputNumProps,
+  });
+
   _ofs.setField("#INPUT-F2", {
     type: "String",
     readonlyComType: "TiLabel",

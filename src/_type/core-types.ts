@@ -861,6 +861,10 @@ export enum TiComRace {
    *  视图: 通常来处理比较复杂的数据，在页面上占用的面积也比较大
    */
   VIEW = "VIEW",
+  /**
+   *  内部: 不建议直接使用
+   */
+  INNER = "INNER",
 }
 
 export interface ComPropExample {
