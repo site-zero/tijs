@@ -171,7 +171,6 @@ export type InputBoxProps = CommonProps &
      * 默认为 `i18n:clear`
      */
     clearOptionItemText?: string;
-
     /**
      * 如果 showCleanOption 为 true，
      * 可以用这个选项指定清除项目样式

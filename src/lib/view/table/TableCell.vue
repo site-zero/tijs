@@ -95,14 +95,14 @@
     const isComLabel = "TiLabel" === re.comType.name;
     // 暗戳戳的标记一下控件的 disabled 状态，因为有些控件可以针对这个状态做特殊显示
     if (re.comConf && FieldDisabled.value) {
-      if (isComLabel) {
+      if (isComLabel && !re.comConf.type) {
         re.comConf.type = "fog";
       } else {
         re.comConf.disable = true;
       }
     }
     // 有主题的 row 可以让 Label 继承自己的颜色
-    if (props.rowType && isComLabel) {
+    if (props.rowType && isComLabel && !re.comConf.boxInherit) {
       re.comConf.boxInherit = ["text"];
     }
     return re;
