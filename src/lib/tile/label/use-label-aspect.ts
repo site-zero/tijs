@@ -82,6 +82,11 @@ export function useLabelAspect(
         "--box-color-border": "var(--ti-color-border-dark)",
       });
     }
+    if (props.boxInherit) {
+      for (let key of props.boxInherit) {
+        re[`--box-color-${key}`] = "inherit";
+      }
+    }
     return re;
   });
   //--------------------------------------------------

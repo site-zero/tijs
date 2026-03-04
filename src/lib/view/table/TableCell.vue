@@ -91,13 +91,19 @@
       CellDynamicContext.value,
       CellValue.value
     );
+    // 如果是标签控件，可以悄悄做更都操作
+    const isComLabel = "TiLabel" === re.comType.name;
     // 暗戳戳的标记一下控件的 disabled 状态，因为有些控件可以针对这个状态做特殊显示
     if (re.comConf && FieldDisabled.value) {
-      if ("TiLabel" === re.comType.name) {
+      if (isComLabel) {
         re.comConf.type = "fog";
       } else {
         re.comConf.disable = true;
       }
+    }
+    // 有主题的 row 可以让 Label 继承自己的颜色
+    if (props.rowType && isComLabel) {
+      re.comConf.boxInherit = ["text"];
     }
     return re;
   });

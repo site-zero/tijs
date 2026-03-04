@@ -37,6 +37,8 @@ export type LabelIconFor =
   | "click"
   | ((label: LabelApi) => void);
 
+export type BoxColorInherit = "border" | "bg" | "text";
+
 export type LabelAspectProps = {
   boxFontSize?: AspectSize;
   boxPadding?: AspectSize;
@@ -44,6 +46,7 @@ export type LabelAspectProps = {
   showBorder?: boolean;
   align?: CssAlignment;
   type?: LogicType;
+  boxInherit?: BoxColorInherit[];
   /**
    * 如果通过 type 来指定控件的颜色，有时候，我们希望
    * 整体背景是主颜色，这时候可以设置 colorMode 为 'box'

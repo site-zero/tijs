@@ -762,8 +762,8 @@ export function fldInputText(
     name,
     title: title || undefined,
     tip,
-    activatedComType: "TiInput",
-    activatedComConf: _.assign(
+    comType: "TiInput",
+    comConf: _.assign(
       {
         trimed: true,
         autoSelect: true,
