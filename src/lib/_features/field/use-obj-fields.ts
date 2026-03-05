@@ -9,6 +9,7 @@ import {
   InputDatetimeProps,
   InputNumProps,
   InputNumUnitProps,
+  InputTextProps,
   LabelProps,
   MultiDroplistProps,
   Str,
@@ -768,6 +769,27 @@ export function fldInputText(
         trimed: true,
         autoSelect: true,
       } as InputBoxProps,
+      comConf
+    ),
+  };
+}
+
+export function fldInputMultiLineText(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputTextProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title: title || undefined,
+    tip,
+    comType: "TiInputText",
+    comConf: _.assign(
+      {
+        trimed: true,
+        height: "4.2em",
+      } as InputTextProps,
       comConf
     ),
   };
