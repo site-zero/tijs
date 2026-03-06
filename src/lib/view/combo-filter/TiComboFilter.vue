@@ -1,6 +1,6 @@
 <script lang="ts" setup>
-  import _ from 'lodash';
-  import { computed, onMounted, ref, watch } from 'vue';
+  import _ from "lodash";
+  import { computed, onMounted, ref, watch } from "vue";
   import {
     ComboFilterEmitter,
     ComboFilterProps,
@@ -11,16 +11,16 @@
     TiFilter,
     TiSorter,
     useKeep,
-  } from '../../';
-  import { ActionBarItem } from '../../../_type';
-  import { CssUtils, Util } from '../../../core';
-  import { useComboFilterKeep } from './use-combo-filter-keep';
+  } from "../../";
+  import { ActionBarItem } from "../../../_type";
+  import { CssUtils, Util } from "../../../core";
+  import { useComboFilterKeep } from "./use-combo-filter-keep";
   //-------------------------------------------------
   const emit = defineEmits<ComboFilterEmitter>();
   //-------------------------------------------------
   const props = withDefaults(defineProps<ComboFilterProps>(), {
-    layout: 'comfy',
-    changeMode: 'all',
+    layout: "comfy",
+    changeMode: "all",
   });
   //-------------------------------------------------
   const _major_fields = ref<string[]>([]);
@@ -28,19 +28,19 @@
   const KeepMajor = computed(() => useKeep(props.keepMajor));
   //-------------------------------------------------
   const FltValue = computed(() => {
-    return _.get(props.value, 'filter') || {};
+    return _.get(props.value, "filter") || {};
   });
   //-------------------------------------------------
   const SrtValue = computed(() => {
-    return _.get(props.value, 'sorter') || {};
+    return _.get(props.value, "sorter") || {};
   });
   //-------------------------------------------------
   const FltConfig = computed(() =>
-    _.omit(props.filterConfig, 'value', 'moreActions', 'majorFields')
+    _.omit(props.filterConfig, "value", "moreActions", "majorFields")
   );
   //-------------------------------------------------
   const SrtConfig = computed(() =>
-    _.omit(props.sorterConfig, 'value', 'exportApi')
+    _.omit(props.sorterConfig, "value", "exportApi")
   );
   //-------------------------------------------------
   const TopClass = computed(() => CssUtils.mergeClassName(props.className));
@@ -62,42 +62,41 @@
   //-------------------------------------------------
   function onFilterChange(flt: FilterValue) {
     // 差异模式
-    if ('diff' == props.changeMode) {
+    if ("diff" == props.changeMode) {
       let old = _.cloneDeep(props.value?.filter ?? {});
       let diff = Util.getRecordDiff(old, flt, { checkRemoveFromOrgin: true });
-      console.log('---', old, diff);
-      emit('change', { filter: diff });
+      console.log("---", old, diff);
+      emit("change", { filter: diff });
     }
     // 全量模式
     else {
       let val = _.cloneDeep(props.value) ?? {};
       val.filter = flt;
-      emit('change', val);
+      emit("change", val);
     }
   }
   //-------------------------------------------------
   function onSorterChange(srt: SorterValue) {
     // 差异模式
-    if ('diff' == props.changeMode) {
+    if ("diff" == props.changeMode) {
       let old = _.cloneDeep(props.value?.sorter ?? {});
       let diff = Util.getRecordDiff(old, srt, { checkRemoveFromOrgin: true });
-      emit('change', { sorter: diff });
+      emit("change", { sorter: diff });
     }
     // 全量模式
     else {
       let val = _.cloneDeep(props.value) ?? {};
       val.sorter = srt;
-      emit('change', val);
+      emit("change", val);
     }
   }
   //-------------------------------------------------
   const MoreActions = computed(() => {
     let re: ActionBarItem[] = [
       {
-        icon: 'zmdi-sort-asc',
-        text: 'i18n:ti-combo-filter-sort-setup',
+        icon: "zmdi-sort-asc",
+        text: "i18n:ti-combo-filter-sort-setup",
         action: () => {
-          console.log(_sorter_api.value);
           _sorter_api.value?.setupSorterFields();
         },
       },
@@ -164,11 +163,11 @@
         title="i18n:ti-combo-filter-sort-title"
         v-bind="SrtConfig"
         :value="SrtValue"
-        :export-api="regSorterApi"
+        __export-api="regSorterApi"
         @change="onSorterChange" />
     </template>
   </TiFilter>
 </template>
 <style lang="scss" scoped>
-  @use './ti-combo-filter.scss';
+  @use "./ti-combo-filter.scss";
 </style>

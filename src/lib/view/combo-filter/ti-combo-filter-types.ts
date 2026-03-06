@@ -4,10 +4,11 @@ import {
   FilterValue,
   KeepInfo,
   SorterExportApi,
+  //SorterExportApi,
   SorterProps,
   SorterValue,
-} from '../../';
-import { ActionBarItem, CommonProps } from '../../../_type';
+} from "../../";
+import { ActionBarItem, CommonProps } from "../../../_type";
 
 export type ComboFilterExportApi = FilterExportApi & SorterExportApi;
 
@@ -17,8 +18,8 @@ export type ComboFilterValue = {
 };
 
 export type ComboFilterEmitter = {
-  (event: 'change', payload: ComboFilterValue): void;
-  (event: 'search' | 'reset'): void;
+  (event: "change", payload: ComboFilterValue): void;
+  (event: "search" | "reset"): void;
 };
 
 export type ComboFilterProps = CommonProps & {
@@ -33,7 +34,7 @@ export type ComboFilterProps = CommonProps & {
    *  - `diff` 只传递差异 `{age: 40}`
    *  - `all` 传递合并后的数据 `{... age:40 ...}` 默认
    */
-  changeMode?: 'diff' | 'all';
+  changeMode?: "diff" | "all";
 
   /**
    * 布局模式
@@ -41,7 +42,7 @@ export type ComboFilterProps = CommonProps & {
    * - comfy : 默认
    * - online : 尽量保持一行
    */
-  layout?: 'oneline' | 'comfy';
+  layout?: "oneline" | "comfy";
 
   /**
    * 更多自定义命令
@@ -56,9 +57,9 @@ export type ComboFilterProps = CommonProps & {
   /**
    * 对于 Filter 的设置
    */
-  filterConfig?: Omit<FilterProps, 'value' | 'moreActions'>;
+  filterConfig?: Omit<FilterProps, "value" | "moreActions">;
 
-  sorterConfig?: Omit<SorterProps, 'value' | 'exportApi'>;
+  sorterConfig?: Omit<SorterProps, "value" | "exportApi">;
 
   /**
    * @param api 本控件导出的可被外部使用的方法

@@ -12,6 +12,7 @@ import {
   InputTextProps,
   LabelProps,
   MultiDroplistProps,
+  OptionsInput,
   Str,
   SwitcherProps,
   TipOptionFormat,
@@ -634,7 +635,7 @@ export function fldLabelDT(
 export function fldSwitcher(
   name: string,
   titleAndTip: string | string[],
-  options: string,
+  options: OptionsInput,
   comConf?: SwitcherProps
 ): FormField {
   let [title, tip] = _.concat(titleAndTip);
@@ -650,7 +651,7 @@ export function fldSwitcher(
 export function fldMultiSwitcher(
   name: string,
   titleAndTip: string | string[],
-  options: string,
+  options: OptionsInput,
   comConf?: SwitcherProps
 ): FormField {
   let [title, tip] = _.concat(titleAndTip);
@@ -659,8 +660,9 @@ export function fldMultiSwitcher(
     title: title || undefined,
     type: "Array",
     tip,
+    emptyAs: '~~undefined~~',
     comType: "TiSwitcher",
-    comConf: _.assign({ options, multi: true } as SwitcherProps, comConf),
+    comConf: _.assign({ options, multi: true,  } as SwitcherProps, comConf),
   };
 }
 
@@ -1002,6 +1004,27 @@ export function fldCheck(
     title: title || undefined,
     tip,
     type: "Integer",
+    comType: "TiCheck",
+    comConf: _.assign(
+      {
+        texts: ["i18n:no", "i18n:yes"],
+        values: [0, 1],
+      } as CheckProps,
+      comConf
+    ),
+  };
+}
+
+export function fldCheckStr(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: CheckProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title: title || undefined,
+    tip,
     comType: "TiCheck",
     comConf: _.assign(
       {

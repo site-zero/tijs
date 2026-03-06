@@ -1,8 +1,12 @@
-import { OptionsInput } from '../../';
-import { CommonProps, IconInput, LogicType } from '../../../_type';
+import { OptionsInput } from "../../";
+import { CommonProps, IconInput, LogicType } from "../../../_type";
 
 export type SorterExportApi = {
   setupSorterFields: () => Promise<void>;
+};
+
+export type SorterEmitter = {
+  (event: "change", payload: SorterValue): void;
 };
 
 /**
@@ -36,4 +40,9 @@ export type SorterProps = CommonProps & {
    * @param api 本控件导出的可被外部使用的方法
    */
   exportApi?: (api: SorterExportApi) => void;
+
+  //-----------------------------------------------------
+  // 定制事件响应
+  //-----------------------------------------------------
+  onChange?: (val: SorterValue) => void;
 };

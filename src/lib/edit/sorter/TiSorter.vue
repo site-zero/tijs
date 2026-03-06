@@ -1,13 +1,11 @@
 <script lang="ts" setup>
-  import { computed, onMounted, watch } from 'vue';
-  import { TagItem, TiTags } from '../../';
-  import { CssUtils } from '../../../core';
-  import { SorterProps, SorterValue } from './ti-sorter-types';
-  import { SorterItem, useSorter } from './use-sorter';
+  import { computed, onMounted, watch } from "vue";
+  import { TagItem, TiTags } from "../../";
+  import { CssUtils } from "../../../core";
+  import { SorterEmitter, SorterProps } from "./ti-sorter-types";
+  import { SorterItem, useSorter } from "./use-sorter";
   //-----------------------------------------------------
-  const emit = defineEmits<{
-    (event: 'change', payload: SorterValue): void;
-  }>();
+  const emit = defineEmits<SorterEmitter>();
   //-----------------------------------------------------
   const props = withDefaults(defineProps<SorterProps>(), {
     canSetup: true,
@@ -19,22 +17,32 @@
   //-----------------------------------------------------
   function onRemoveItem(it: TagItem) {
     let sv = Sorter.value.removeValue(it as SorterItem);
-    emit('change', sv);
+    if (props.onChange) {
+      props.onChange(sv);
+    }
+    emit("change", sv);
   }
   //-----------------------------------------------------
   function onToggleItem(it: TagItem) {
     let sv = Sorter.value.toggleValue(it as SorterItem);
-    emit('change', sv);
+    // console.log("onToggleItem", sv);
+    if (props.onChange) {
+      props.onChange(sv);
+    }
+    emit("change", sv);
   }
   //-----------------------------------------------------
   async function onSetupSorterFields() {
-    let re = await Sorter.value.onSetupSorterValue();
+    let sv = await Sorter.value.onSetupSorterValue();
     // 用户取消
-    if (!re) {
+    if (!sv) {
       return;
     }
     // 更新值
-    emit('change', re);
+    if (props.onChange) {
+      props.onChange(sv);
+    }
+    emit("change", sv);
   }
   //-----------------------------------------------------
   watch(
@@ -57,27 +65,22 @@
   //-----------------------------------------------------
 </script>
 <template>
-  <div
-    class="ti-sorter"
-    :class="TopClass">
+  <div class="ti-sorter" :class="TopClass">
     <div class="part-items">
       <TiTags
         :title="props.title"
         :value="Sorter.SorterItems.value"
-        :editable="true"
+        :editable="false"
         :tag-clickable="true"
         :default-tag-type="props.colorType"
         @remove="onRemoveItem"
         @click-tag="onToggleItem" />
     </div>
-    <div
-      v-if="props.canSetup"
-      class="part-setup"
-      @click="onSetupSorterFields">
+    <div v-if="props.canSetup" class="part-setup" @click="onSetupSorterFields">
       <a><i class="zmdi zmdi-settings"></i></a>
     </div>
   </div>
 </template>
 <style lang="scss">
-  @use './ti-sorter.scss';
+  @use "./ti-sorter.scss";
 </style>

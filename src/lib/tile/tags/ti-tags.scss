@@ -25,11 +25,16 @@
     margin-right: var(--ti-gap-s);
   }
   //-----------------------------------------------
+  > .as-sep {
+    flex: 1 1 auto;
+  }
+  //-----------------------------------------------
   > .ti-label {
     margin: SZ(1);
     flex: 0 0 auto;
   }
   //-----------------------------------------------
+  // Sortable 的样式
   > .as-sorting-ghost {
     opacity: 0.5;
     color: var(--ti-color-highlight-f);

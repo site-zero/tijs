@@ -165,6 +165,7 @@
         @click-suffix-icon="onRemoveItem(it)"
         @click-prefix-icon="onClickItem(it)"
         @click="onClickItem(it)" />
+      <div class="as-sep"></div>
     </template>
     <div v-else class="as-empty">
       <span>{{ _placeholder }}</span>

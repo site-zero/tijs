@@ -115,7 +115,7 @@
       class="icon-part at-prefix"
       :class="_prefix.IconPartClass.value"
       v-html="_prefix.IconPartHtml.value"
-      @click.left.stop="_prefix.onClick"></div>
+      @click.left="_prefix.onClick"></div>
     <!--====================================-->
     <div class="value-part" :style="_aspect.ValuePartStyle.value">
       <a
@@ -136,7 +136,7 @@
       class="icon-part at-suffix"
       :class="_suffix.IconPartClass.value"
       v-html="_suffix.IconPartHtml.value"
-      @click.left.stop="_suffix.onClick"></div>
+      @click.left="_suffix.onClick"></div>
     <!--====================================-->
   </div>
 </template>

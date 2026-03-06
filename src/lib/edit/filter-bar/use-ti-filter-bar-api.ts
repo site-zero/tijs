@@ -7,6 +7,7 @@ import {
   FormProps,
   openAppModal,
   useFieldChange,
+  Util,
   Vars,
 } from "@site0/tijs";
 import _ from "lodash";
@@ -85,17 +86,23 @@ export function useTiFilterBarApi(
   //-----------------------------------------------------
   function tryNotifyChange(newVal: Vars) {
     // 用户取消
-    if (!newVal || _.isEqual(newVal, props.value)) {
+    if (!newVal) {
+      return;
+    }
+
+    // 过滤空值
+    let v2 = Util.filterRecord(newVal, (v) => !_.isUndefined(v));
+    if (_.isEqual(v2, props.value)) {
       return;
     }
 
     // 用户主动设置的回调
     if (props.onChange) {
-      props.onChange(newVal);
+      props.onChange(v2);
     }
 
     // 用户确认
-    emit("change", newVal);
+    emit("change", v2);
   }
   //-----------------------------------------------------
   // 响应事件

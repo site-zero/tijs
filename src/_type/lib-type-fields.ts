@@ -45,7 +45,7 @@ export type Field = {
   /**
    * 当字段为空时的默认值
    */
-  emptyAs?: any;
+  emptyAs?: "~~undefined~~" | any;
 
   transformer?: (val: any, data: Vars, name: FieldName) => any;
   serializer?: (val: any, data: Vars, name: FieldName) => any;
