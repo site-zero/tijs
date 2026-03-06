@@ -13,6 +13,7 @@ import {
   LabelProps,
   MultiDroplistProps,
   Str,
+  SwitcherProps,
   TipOptionFormat,
   ToggleProps,
 } from "@site0/tijs";
@@ -627,6 +628,39 @@ export function fldLabelDT(
       } as LabelProps,
       comConf
     ),
+  };
+}
+
+export function fldSwitcher(
+  name: string,
+  titleAndTip: string | string[],
+  options: string,
+  comConf?: SwitcherProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title: title || undefined,
+    tip,
+    comType: "TiSwitcher",
+    comConf: _.assign({ options } as SwitcherProps, comConf),
+  };
+}
+
+export function fldMultiSwitcher(
+  name: string,
+  titleAndTip: string | string[],
+  options: string,
+  comConf?: SwitcherProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title: title || undefined,
+    type: "Array",
+    tip,
+    comType: "TiSwitcher",
+    comConf: _.assign({ options, multi: true } as SwitcherProps, comConf),
   };
 }
 

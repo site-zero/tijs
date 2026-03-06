@@ -28,6 +28,27 @@ export function useTiFilterBarApi(
   const MajorFields = computed(() => major.getFields());
   const hasMajorFields = computed(() => major.hasMajorFields());
   //-----------------------------------------------------
+  const MajorFieldNames = computed(() => {
+    let map = new Map<string, boolean>();
+    for (let fld of MajorFields.value) {
+      let nms = _.concat(fld.name);
+      for (let nm of nms) {
+        map.set(nm, true);
+      }
+    }
+    return map;
+  });
+  //-----------------------------------------------------
+  const FilterTagValue = computed(() => {
+    let re: Vars = {};
+    _.forEach(props.value, (v, k) => {
+      if (!MajorFieldNames.value.has(k)) {
+        re[k] = v;
+      }
+    });
+    return re;
+  });
+  //-----------------------------------------------------
   // 字段改动接口
   //-----------------------------------------------------
   const _major_change = computed(() => {
@@ -155,6 +176,7 @@ export function useTiFilterBarApi(
     // 常驻字段
     MajorFields,
     hasMajorFields,
+    FilterTagValue,
     // 操作菜单
     ActionBarConfig,
     // 响应事件

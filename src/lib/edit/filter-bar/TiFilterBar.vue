@@ -42,8 +42,8 @@
         <GFItField
           v-bind="fld"
           :data="props.value ?? {}"
-          :titleAsPlaceholder="props.majorTitleAsPlaceholder" 
-          @value-change="api.onMajorFieldChange"/>
+          :titleAsPlaceholder="props.majorTitleAsPlaceholder"
+          @value-change="api.onMajorFieldChange" />
       </template>
     </div>
     <!-------主体--------->
@@ -54,7 +54,7 @@
       :nowrap="true"
       v-bind="props.tags"
       :placeholder="props.placeholder"
-      :value="props.value"
+      :value="api.FilterTagValue.value"
       @change="api.onTagsChange"
       @click="api.openFilterEditor()"
       @fire="api.onActionFire" />

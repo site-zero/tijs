@@ -174,6 +174,7 @@
       <TiActionBar
         topItemAspectMode="button"
         :topItemMinWidth="null"
+        :style="{ flex: '0 0 auto' }"
         :vars="props.vars"
         v-bind="props.actions"
         @fire="emit('fire', $event)" />
