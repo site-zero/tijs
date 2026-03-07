@@ -5,6 +5,15 @@ import { InputNumRangeProps } from "./inrange-types";
 
 const COM_TYPE = "TiInputNumRange";
 
+// "info-in": "${minValue} < N < ${maxValue}",
+// "info-in-le": "${minValue} ≤ N < ${maxValue}",
+// "info-in-re": "${minValue} < N ≤ ${maxValue}",
+// "info-in-lre": "${minValue} ≤ N ≤ ${maxValue}",
+// "info-lt": "N < ${maxValue}",
+// "info-lte": "N ≤ ${maxValue}",
+// "info-gt": "N > ${minValue}",
+// "info-gte": "N ≥ ${minValue}",
+
 const en_us = {
   "com-name": "Number Range",
   "edit-title": "Edit Range",
