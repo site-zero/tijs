@@ -5,8 +5,8 @@ import { TiCheckListInfo } from "./checklist/ti-check-list-index";
 import { TiInputCodeInfo } from "./code/ti-input-code-index";
 import { TiInputColorInfo } from "./color/ti-input-color-index";
 import { TiInputCurrencyInfo } from "./currency/ti-input-currency-index";
+import { TiInputDateRangeInfo } from "./date-range/ti-input-date-range-index";
 import { TiInputDateInfo } from "./date/ti-input-date-index";
-import { TiInputDateRangeInfo } from "./daterange/ti-daterange-index";
 import { TiInputDatetimeInfo } from "./datetime/ti-input-datetime-index";
 import { TiDroplistInfo } from "./droplist/ti-droplist-index";
 import { TiInputGroupInfo } from "./group/ti-input-group-index";
@@ -14,6 +14,7 @@ import { TiInputIconInfo } from "./icon/ti-input-icon-index";
 import { TiInputLatLngInfo } from "./latlng/ti-input-latlng-index";
 import { TiMultiDroplistInfo } from "./multi-droplist/ti-multi-droplist-index";
 import { TiInputMultiLinesInfo } from "./multi-lines/ti-input-multi-lines-index";
+import { TiInputNumRangeInfo } from "./num-range/ti-input-num-range-index";
 import { TiInputNumUnitInfo } from "./num-unit/ti-input-num-unit-index";
 import { TiInputNumInfo } from "./num/ti-input-num-index";
 import { TiInputPickerInfo } from "./picker/ti-input-picker-index";
@@ -24,7 +25,7 @@ import { TiInputTextInfo } from "./text/ti-input-text-index";
 import { TiInputTimeInfo } from "./time/ti-input-time-index";
 import { TiToggleInfo } from "./toggle/ti-toggle-index";
 import { TiTransferInfo } from "./transfer/ti-transfer-index";
-export * from "./radiolist/ti-radio-list-index";
+
 
 export default {
   TiCheck: TiCheckInfo,
@@ -41,6 +42,7 @@ export default {
   TiInputIcon: TiInputIconInfo,
   TiInputLatLng: TiInputLatLngInfo,
   TiInputNum: TiInputNumInfo,
+  TiInputNumRange: TiInputNumRangeInfo,
   TiInputNumUnit: TiInputNumUnitInfo,
   TiInputPicker: TiInputPickerInfo,
   TiInputText: TiInputTextInfo,
@@ -61,7 +63,6 @@ export * from "./code/ti-input-code-index";
 export * from "./color/ti-input-color-index";
 export * from "./currency/ti-input-currency-index";
 export * from "./date/ti-input-date-index";
-export * from "./daterange/ti-daterange-index";
 export * from "./datetime/ti-input-datetime-index";
 export * from "./droplist/ti-droplist-index";
 export * from "./group/ti-input-group-index";
@@ -79,3 +80,4 @@ export * from "./text/ti-input-text-index";
 export * from "./time/ti-input-time-index";
 export * from "./toggle/ti-toggle-index";
 export * from "./transfer/ti-transfer-index";
+

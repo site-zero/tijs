@@ -87,7 +87,10 @@
   //-------------------------------------------------
   const _readonly = computed(() => useReadonly(props));
   const FieldReadonly = computed(() => {
-    return _readonly.value.isReadonly(FieldDynamicContext.value);
+    if (isDisabled.value) return true;
+    let ctx = { ...FieldDynamicContext.value };
+    let re = _readonly.value.isReadonly(ctx);
+    return re;
   });
   //-------------------------------------------------
   const TitleAlign = computed(() => getFieldTitleAlign(props));
@@ -202,7 +205,6 @@
     class="ti-grid-fiels-item part-field"
     :class="TopClass"
     :style="TopStyle"
-    
     @mousedown="emit('field-actived', props.uniqKey)">
     <!--===============: 字段名 :===================-->
     <TiTextSnippet

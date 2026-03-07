@@ -1,0 +1,41 @@
+@use "@site0/tijs/sass/_all.scss" as *;
+
+.ti-input-num-range {
+  font-size: var(--ti-fontsz-s);
+  padding: 0.3em 0.5em;
+  border-radius: var(--ti-measure-r-s);
+  @include flex-align-nowrap;
+  gap: 0.5em;
+  &.is-empty {
+    border: 1px dashed var(--ti-color-border-weak);
+    span {
+      color: var(--ti-color-track);
+      margin: 0 0.8em;
+    }
+  }
+  > a {
+    &.for-val {
+      margin-right: 0.2em;
+    }
+    &.for-del {
+      width: 2em;
+      text-align: center;
+      > i {
+        transition: transform 0.5s;
+      }
+      &:hover {
+        background-color: var(--ti-color-mask-weak);
+        > i {
+          transform: scale(1.5) rotate(180deg);
+          color: var(--ti-color-secondary);
+        }
+      }
+    }
+    &.for-edit {
+      transition: transform 0.3s;
+      &:hover {
+        transform: scale(1.2);
+      }
+    }
+  }
+}
