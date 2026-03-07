@@ -96,7 +96,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     // 显示清除选项
     if (props.showCleanOption) {
       re.push({
-        icon: Util.fallback(props.clearOptionItemIcon, "zmdi-delete"),
+        icon: props.clearOptionItemIcon,
         text: I18n.text(props.clearOptionItemText ?? "i18n:clear"),
         value: null,
         style: props.clearOptionItemStyle ?? {

@@ -660,9 +660,9 @@ export function fldMultiSwitcher(
     title: title || undefined,
     type: "Array",
     tip,
-    emptyAs: '~~undefined~~',
+    emptyAs: "~~undefined~~",
     comType: "TiSwitcher",
-    comConf: _.assign({ options, multi: true,  } as SwitcherProps, comConf),
+    comConf: _.assign({ options, multi: true } as SwitcherProps, comConf),
   };
 }
 
@@ -680,7 +680,9 @@ export function fldDroplist(
     comType: "TiDroplist",
     comConf: _.assign(
       {
+        placeholder: "i18n:null",
         options,
+        showCleanOption: true,
       } as DroplistProps,
       comConf
     ),
@@ -691,7 +693,7 @@ export function fldDroplistVT(
   name: FieldName,
   titleAndTip: string | string[],
   options: string,
-  placeholder?: string,
+  placeholder: string = "i18n:null",
   tipListMinWidth: string = "200px",
   tipFormat: TipOptionFormat = "VT",
   comConf?: DroplistProps
@@ -706,6 +708,7 @@ export function fldDroplistVT(
       {
         placeholder,
         options,
+        showCleanOption: true,
         tipFormat,
         tipListMinWidth,
         useRawValue: true,
