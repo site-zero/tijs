@@ -1,9 +1,10 @@
 <script lang="ts" setup>
   import _ from "lodash";
-  import { nextTick, ref, useTemplateRef, watch } from "vue";
-  import { InputBoxApi, InputBoxExposeApi, TiInput } from "../../";
-  import { Bank, Num } from "../../../core";
-  import { InputNumProps } from "./ti-input-num-types";
+  import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
+  import { InputBoxExposeApi, TiInput } from "../../";
+  import { Bank, Num, tiGetDefaultComPropValue } from "../../../core";
+  import { COM_TYPES } from "../../lib-com-types";
+  import { InputNumProps, InputNumValueType } from "./ti-input-num-types";
   //-----------------------------------------------------
   defineOptions({
     inheritAttrs: false,
@@ -12,7 +13,7 @@
   const $input_box = useTemplateRef<InputBoxExposeApi>("input_box");
   //-----------------------------------------------------
   const emit = defineEmits<{
-    (event: "change", payload: number | null): void;
+    (event: "change", payload: number | string | null): void;
   }>();
   //-----------------------------------------------------
   const props = withDefaults(defineProps<InputNumProps>(), {
@@ -27,7 +28,19 @@
   });
   //-----------------------------------------------------
   const _input_val = ref("");
-  let _box = ref<InputBoxApi>();
+  //-----------------------------------------------------
+  const ValueType = computed((): InputNumValueType => {
+    let vt: InputNumValueType | "auto" =
+      props.valueType ||
+      tiGetDefaultComPropValue(COM_TYPES.InputNum, "ValueType", "auto");
+    if ("auto" == vt) {
+      if (!_.isNil(props.value) && _.isString(props.value)) {
+        return "str";
+      }
+      return "num";
+    }
+    return vt;
+  });
   //-----------------------------------------------------
   function formatInputValue(val?: any) {
     // if ("ABCED" == props.placeholder) {
@@ -90,8 +103,24 @@
     if (!_.isNil(props.minValue) && v2 < props.minValue) {
       v2 = props.minValue;
     }
+
+    // 提前格式化一下，这样显示速度会快
     formatInputValue(v2);
-    emit("change", v2);
+
+    // 纯数字
+    if ("num" == ValueType.value) {
+      emit("change", v2);
+    }
+    // 固定长度字符串
+    else if (props.decimalPlaces > 0 && "fixed" == ValueType.value) {
+      let s = v.toFixed(props.decimalPlaces);
+      emit("change", s);
+    }
+    // 转换为字符串
+    else {
+      let s = `${v2}`;
+      emit("change", s);
+    }
   }
   //-----------------------------------------------------
   watch(

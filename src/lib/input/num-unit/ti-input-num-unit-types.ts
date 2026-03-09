@@ -1,9 +1,9 @@
-import { InputBoxProps, InputNumProps } from '../../';
-import { AspectSize, Vars } from '../../../_type';
+import { InputBoxProps, InputNumProps } from "../../";
+import { AspectSize, Vars } from "../../../_type";
 
-export type InputNumUnitEmitter = (event: 'change', payload: Vars) => void;
+export type InputNumUnitEmitter = (event: "change", payload: Vars) => void;
 
-export type InputNumUnitProps = Omit<InputNumProps, 'value'> & {
+export type InputNumUnitProps = Omit<InputNumProps, "value"> & {
   //-----------------------------------------------------
   // 处理值
   //-----------------------------------------------------
@@ -14,7 +14,7 @@ export type InputNumUnitProps = Omit<InputNumProps, 'value'> & {
    */
   value?: Vars;
   getNumber?: string | ((vars: Vars) => number);
-  setNumber?: string | ((vars: Vars, num: number) => void);
+  setNumber?: string | ((vars: Vars, num: number | string) => void);
   getUnit?: string | ((vars: Vars) => string);
   setUnit?: string | ((vars: Vars, unit: string) => void);
   /**
@@ -33,7 +33,7 @@ export type InputNumUnitProps = Omit<InputNumProps, 'value'> & {
   //-----------------------------------------------------
   // 处理单位
   //-----------------------------------------------------
-  units?: Omit<InputBoxProps, 'value'>;
+  units?: Omit<InputBoxProps, "value">;
   /**
    * 单位是否支持直接输入，true 标识只能下拉选择
    */

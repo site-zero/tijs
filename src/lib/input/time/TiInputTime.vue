@@ -17,6 +17,16 @@
   //-----------------------------------------------------
   const api = useInputTimeApi(props, emit);
   //-----------------------------------------------------
+  function _NUM(n?: string | number | null | undefined) {
+    if (_.isNil(n)) {
+      return undefined;
+    }
+    if (_.isString(n)) {
+      n = Number(n);
+    }
+    return n;
+  }
+  //-----------------------------------------------------
   const InputNumConfig = computed(() => {
     return _.assign(
       {
@@ -40,20 +50,20 @@
       v-bind="InputNumConfig"
       :value="api.Time.value.HH"
       :max-value="23"
-      @change="api.updateTime({ hours: $event ?? undefined })" />
+      @change="api.updateTime({ hours: _NUM($event) })" />
     <div class="time-sep">:</div>
     <TiInputNum
       v-bind="InputNumConfig"
       :value="api.Time.value.mm"
       :max-value="59"
-      @change="api.updateTime({ minutes: $event ?? undefined })" />
+      @change="api.updateTime({ minutes: _NUM($event) })" />
     <template v-if="api.TimeMode.value == 'sec'">
       <div class="time-sep">:</div>
       <TiInputNum
         v-bind="InputNumConfig"
         :value="api.Time.value.ss"
         :max-value="59"
-        @change="api.updateTime({ seconds: $event ?? undefined })" />
+        @change="api.updateTime({ seconds: _NUM($event) })" />
     </template>
   </div>
 </template>

@@ -5,7 +5,8 @@ import {
   ReadonlyProps,
 } from "../../";
 import { CommonProps, HDirecton, Vars } from "../../../_type";
-import { ValueOptionsProps } from "../box2/use-value-options";
+
+export type InputNumValueType = "num" | "str" | "fixed";
 
 export type InputNumProps = CommonProps &
   PlaceholderProps &
@@ -20,6 +21,7 @@ export type InputNumProps = CommonProps &
     | "options"
   > & {
     value?: number | string | boolean | null;
+    valueType?: InputNumValueType | "auto";
     style?: Vars;
     autoSelect?: boolean;
     autoFocus?: boolean;

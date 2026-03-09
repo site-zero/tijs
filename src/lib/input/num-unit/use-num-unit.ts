@@ -1,9 +1,9 @@
-import _ from 'lodash';
-import { Vars } from '../../../_type';
+import _ from "lodash";
+import { Vars } from "../../../_type";
 import {
   InputNumUnitEmitter,
   InputNumUnitProps,
-} from './ti-input-num-unit-types';
+} from "./ti-input-num-unit-types";
 
 function _get_key(
   input: (string | Function | undefined)[],
@@ -40,7 +40,7 @@ export function useNumUnit(
   //------------------------------------------
   let getNumber: (vars: Vars) => number;
   if (!props.getNumber || _.isString(props.getNumber)) {
-    let key = _get_key([props.getNumber], 'number');
+    let key = _get_key([props.getNumber], "number");
     getNumber = (vars: Vars): number => {
       let v = _.get(vars, key);
       return _any_to_number(v, _dft_num);
@@ -53,11 +53,11 @@ export function useNumUnit(
 
   //------------------------------------------
   // 设置数字部分
-  let setNumber: (vars: Vars, num: number) => void;
+  let setNumber: (vars: Vars, num: number | string) => void;
   if (!props.setNumber || _.isString(props.setNumber)) {
-    let key = _get_key([props.setNumber, props.getNumber], 'number');
-    setNumber = (vars: Vars, num: number) => {
-      let val = props.numAsStr ? `${num}` : num;
+    let key = _get_key([props.setNumber, props.getNumber], "number");
+    setNumber = (vars: Vars, num: number | string) => {
+      let val = num;
       _.set(vars, key, val);
     };
   }
@@ -71,7 +71,7 @@ export function useNumUnit(
   //------------------------------------------
   let getUnit: (vars: Vars) => string;
   if (!props.getUnit || _.isString(props.getUnit)) {
-    let key = _get_key([props.getUnit], 'unit');
+    let key = _get_key([props.getUnit], "unit");
     getUnit = (vars: Vars): string => {
       return _.get(vars, key);
     };
@@ -89,7 +89,7 @@ export function useNumUnit(
   // 设置单位部分
   let setUnit: (vars: Vars, unit: string) => void;
   if (!props.setUnit || _.isString(props.setUnit)) {
-    let key = _get_key([props.setUnit, props.getUnit], 'unit');
+    let key = _get_key([props.setUnit, props.getUnit], "unit");
     setUnit = (vars: Vars, unit: string) => {
       let val = unit || null;
       _.set(vars, key, val);
@@ -103,18 +103,17 @@ export function useNumUnit(
   //------------------------------------------
   // 通知改动
   //------------------------------------------
-  function emitNumberChange(num: number | null) {
+  function emitNumberChange(num: number | string | null) {
     if (_.isNil(num)) {
       num = props.defaultNumber ?? 0;
     }
-    console.log('emitNumberChange', num);
     let data = _.cloneDeep(props.value ?? {});
     setNumber(data, num);
     if (!hasUnit(data) && props.defaultUnit) {
       setUnit(data, props.defaultUnit);
     }
     if (!_.isEqual(data, props.value)) {
-      emit('change', data);
+      emit("change", data);
     }
   }
   //------------------------------------------
@@ -122,7 +121,7 @@ export function useNumUnit(
     let data = _.cloneDeep(props.value ?? {});
     setUnit(data, unit);
     if (!_.isEqual(data, props.value)) {
-      emit('change', data);
+      emit("change", data);
     }
   }
 

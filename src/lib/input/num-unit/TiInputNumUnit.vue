@@ -27,6 +27,7 @@
     unitSelectOnly: false,
     unitWidth: "4em",
     valueInputAlign: "right",
+    autoSelect: true,
   });
   //-----------------------------------------------------
   const NU = computed(() => useNumUnit(props, emit));
@@ -64,7 +65,6 @@
       "setNumber",
       "getUnit",
       "setUnit",
-      "numAsStr",
       "defaultNumber",
       "defaultUnit",
       "units",
@@ -109,7 +109,7 @@
     return re;
   });
   //-----------------------------------------------------
-  function onNumberChange(val: number | null) {
+  function onNumberChange(val: number | string | null) {
     NU.value.emitNumberChange(val);
   }
   //-----------------------------------------------------
