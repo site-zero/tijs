@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { computed, nextTick, Ref, ref } from "vue";
 import { AnyOptionItem, IconInput, Vars } from "../../../_type";
-import { Dicts, I18n, Util } from "../../../core";
+import { Dicts, I18n } from "../../../core";
 import { anyToStr } from "../../../core/text/ti-str";
 import { usePlaceholder, useReadonly, ValuePipeFeature } from "../../_features";
 import { useDisplayText } from "./../../_features";
@@ -660,7 +660,7 @@ export function useInputBox2(props: InputBoxProps, setup: InputBoxSetup) {
     clearOptionsData,
     getItemByValue,
     showOptions: async () => {
-      if (!hasTips.value && !isInputReadonly.value) {
+      if (!hasTips.value && !isReadonly.value) {
         await _options?.reloadOptioinsData();
       }
     },
