@@ -1,28 +1,27 @@
-import _ from 'lodash';
-import { openAppModal } from '..';
+import _ from "lodash";
+import { openAppModal } from "..";
 import {
   AppModalProps,
   IconInput,
   LogicType,
   PopItemProps,
   Vars,
-} from '../../_type';
-import { __get_msg_box_html } from './get-msg-box-html';
-import { Tmpl } from '../../core';
+} from "../../_type";
+import { __get_msg_box_html } from "./get-msg-box-html";
 
 export type ConfirmOptions = PopItemProps & {
   icon?: IconInput;
   title?: string;
   vars?: Vars;
   type?: LogicType;
-  iconOk?: IconInput;
-  textOk?: string;
-  iconCancel?: IconInput;
-  textCancel?: string;
+  iconOk?: IconInput | null;
+  textOk?: string | null;
+  iconCancel?: IconInput | null;
+  textCancel?: string | null;
   bodyIcon?: IconInput;
   bodyClass?: any;
   bodyStyle?: Vars;
-  contentType?: 'text' | 'html';
+  contentType?: "text" | "html";
 };
 
 export async function Confirm(
@@ -32,22 +31,22 @@ export async function Confirm(
   // Build html
   let html = __get_msg_box_html({
     msg,
-    type: options.type || 'info',
-    bodyIcon: options.bodyIcon ?? options.icon ?? 'zmdi-help',
-    msgAsHtml: 'html' == options.contentType,
+    type: options.type || "info",
+    bodyIcon: options.bodyIcon ?? options.icon ?? "zmdi-help",
+    msgAsHtml: "html" == options.contentType,
     vars: options.vars,
   });
   // Prepare dialog
   let dialog = {
-    icon: 'zmdi-help',
-    title: 'i18n:confirm',
-    type: 'info',
-    textOk: 'i18n:yes',
-    textCancel: 'i18n:no',
-    position: 'center',
-    maxWidth: '80vw',
+    icon: "zmdi-help",
+    title: "i18n:confirm",
+    type: "info",
+    textOk: "i18n:yes",
+    textCancel: "i18n:no",
+    position: "center",
+    maxWidth: "80vw",
     result: true,
-    comType: 'TiHtmlSnippet',
+    comType: "TiHtmlSnippet",
     comConf: {
       content: html,
       className: options.bodyClass,
@@ -55,7 +54,7 @@ export async function Confirm(
     },
     showMask: true,
     clickMaskToClose: false,
-    ..._.omit(options, 'bodyIcon', 'contentType'),
+    ..._.omit(options, "bodyIcon", "contentType"),
   } as AppModalProps;
 
   let re = await openAppModal(dialog);

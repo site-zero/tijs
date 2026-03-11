@@ -18,6 +18,7 @@
   const FrameStyle = computed(() => CssUtils.toStyle(props.frameStyle));
   //-----------------------------------------------------
   function updateFrameContent() {
+    //console.log("updateFrameContent", $iframe, props.value);
     // 防守
     if (!_frame_ready.value || !$iframe.value) return;
     let frm = $iframe.value;
@@ -42,7 +43,8 @@
     }
   );
   //-----------------------------------------------------
-  onMounted(() => {
+  onMounted(async () => {
+    //await nextTick();
     if ($iframe.value) {
       $iframe.value.addEventListener("load", (_a) => {
         // console.log('iframe loade d', a.target);
@@ -60,6 +62,7 @@
       width="100%"
       height="100%"
       frameborder="0"
+      srcdoc="about:blank"
       ref="iframe"
       :class="FrameClass"
       :style="FrameStyle"></iframe>
