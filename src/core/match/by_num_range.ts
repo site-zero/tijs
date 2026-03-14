@@ -1,6 +1,6 @@
-import { I18n, NumRange, Str } from '../';
-import { ExplainI18n, TiMatch } from '../../_type';
-import { MakeTiMatch } from './ti-match';
+import { I18n, NumRange, Str } from "../";
+import { ExplainI18n, TiMatch } from "../../_type";
+import { MakeTiMatch } from "./ti-match";
 
 export const gen_by_num_range: MakeTiMatch<string> = function (
   src: string
@@ -9,8 +9,7 @@ export const gen_by_num_range: MakeTiMatch<string> = function (
 
   return {
     test: (input: any): boolean => {
-      let n = Math.round(input);
-      return rg.contains(n);
+      return rg.contains(input);
     },
     explainText: (i18n: ExplainI18n): string => {
       let { left, right } = rg;

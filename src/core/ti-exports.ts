@@ -2,6 +2,7 @@ export * as Features from "../lib/_features";
 export * from "./_top/color";
 export * from "./_top/ms-range";
 export * from "./_top/num-range";
+export * from "./_top/str-range";
 export * as Bank from "./_top/ti-bank";
 export * from "./_top/ti-bus";
 export * from "./_top/ti-com";

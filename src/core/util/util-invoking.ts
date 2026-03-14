@@ -1,6 +1,6 @@
-import _ from 'lodash';
-import { getGUIExplainContext, Str } from '../';
-import { Invoke, InvokeOptions } from '../../_type';
+import _ from "lodash";
+import { getGUIExplainContext, Str } from "../";
+import { Invoke, InvokeOptions } from "../../_type";
 
 /**
  * 根据一个调用语句，返回一个包裹的函数调用
@@ -33,7 +33,7 @@ export function genInvokingBy(
     context = {},
     args = [],
     funcSet = globalThis,
-    partial = 'left',
+    partial = "left",
     dft,
   } = options;
 
@@ -68,7 +68,9 @@ export function genInvokingBy(
   }
 
   let invokeArgs = _.map(callArgs, (v) => {
-    if (_.isString(v) || _.isArray(v)) return Str.toJsValue(v, { context });
+    if (_.isString(v) || _.isArray(v)) {
+      return Str.toJsValue(v, { context, autoVar: true });
+    }
     return v;
   });
 
@@ -81,7 +83,7 @@ export function genInvokingBy(
 
   let re = {
     // [ ? --> ... ]
-    'right': function (...input: any[]) {
+    "right": function (...input: any[]) {
       // 这里不能像 right? 一样忽略 undefined,
       // 因为 Ti.Types.toBoolStr， 一般用作表格的布尔字段显示
       // 而有的字段，布尔值是 undefined 的
@@ -90,19 +92,19 @@ export function genInvokingBy(
       return func.apply(that, as);
     },
     // [ ? --> ... ] 同时去掉参数里的 undefined
-    'right?': function (...input: any[]) {
+    "right?": function (...input: any[]) {
       let ins = _.without(input, undefined);
       let as = _.concat([], ins, invokeArgs);
       return func.apply(that, as);
     },
     // [ ... <-- ?]
-    'left': function (...input: any[]) {
+    "left": function (...input: any[]) {
       let ins = input;
       let as = _.concat([], invokeArgs, ins);
       return func.apply(that, as);
     },
     // [ ... <-- ?]
-    'left?': function (...input: any[]) {
+    "left?": function (...input: any[]) {
       let ins = _.without(input, undefined);
       let as = _.concat([], invokeArgs, ins);
       return func.apply(that, as);
@@ -126,7 +128,7 @@ export function parseInvoking(str: string | Invoke): Invoke {
   }
 
   let ivk = {
-    name: '',
+    name: "",
     args: [],
   } as Invoke;
   let m = /^([^()]+)(\((.+)\))?$/.exec(str);

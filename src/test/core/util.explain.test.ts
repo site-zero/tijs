@@ -1,60 +1,60 @@
-import _ from 'lodash';
-import { expect, test } from 'vitest';
-import { Vars } from '../../_type';
-import { Util } from '../../core/';
+import _ from "lodash";
+import { expect, test } from "vitest";
+import { Vars } from "../../_type";
+import { Util } from "../../core/";
 
-test('BaseExplain', () => {
+test("BaseExplain", () => {
   let context = {
-    name: 'xiaobai',
+    name: "xiaobai",
     age: 12,
   } as Vars;
 
-  expect({ a: 'xiaobai', b: 12 }).toStrictEqual(
+  expect({ a: "xiaobai", b: 12 }).toStrictEqual(
     Util.explainObj(context, {
-      a: '=name',
-      b: '=age',
+      a: "=name",
+      b: "=age",
     })
   );
 });
 
-test('CutString', () => {
+test("CutString", () => {
   let context = {
-    name: 'xiao bai',
+    name: "xiao bai",
   } as Vars;
 
-  expect({ a: 'xiao' }).toStrictEqual(
+  expect({ a: "xiao" }).toStrictEqual(
     Util.explainObj(context, {
-      a: '->${name<:@sub=4>}',
+      a: "->${name<:@sub=4>}",
     })
   );
-  expect({ a: 'ia' }).toStrictEqual(
+  expect({ a: "ia" }).toStrictEqual(
     Util.explainObj(context, {
-      a: '->${name<:@sub=1/3>}',
+      a: "->${name<:@sub=1/3>}",
     })
   );
-  expect({ a: 'bai' }).toStrictEqual(
+  expect({ a: "bai" }).toStrictEqual(
     Util.explainObj(context, {
-      a: '->${name<:@sub=5/>}',
+      a: "->${name<:@sub=5/>}",
     })
   );
-  expect({ a: 'xi' }).toStrictEqual(
+  expect({ a: "xi" }).toStrictEqual(
     Util.explainObj(context, {
-      a: '->${name<:@sub=/2>}',
+      a: "->${name<:@sub=/2>}",
     })
   );
 });
 
-test('InvokeExplain', () => {
+test("InvokeExplain", () => {
   let context = {
-    name: 'xiao bai',
+    name: "xiao bai",
     age: 12,
   } as Vars;
 
-  expect({ a: 'XiaoBai' }).toStrictEqual(
+  expect({ a: "XiaoBai" }).toStrictEqual(
     Util.explainObj(
       context,
       {
-        a: '=>transName(name)',
+        a: "=>transName(name)",
       },
       {
         funcSet: {
@@ -67,51 +67,51 @@ test('InvokeExplain', () => {
   );
 });
 
-test('BoolExplain', () => {
+test("BoolExplain", () => {
   let context = {
-    name: 'asdfasdf',
+    name: "asdfasdf",
     age: 12,
   } as Vars;
 
-  expect(true).toStrictEqual(Util.explainObj(context, '==name'));
+  expect(true).toStrictEqual(Util.explainObj(context, "==name"));
 });
 
-test('MapExplain', () => {
+test("MapExplain", () => {
   let context = {
-    name: 'abc',
+    name: "abc",
     age: 12,
     pet: {
-      name: 'xx',
+      name: "xx",
     },
   } as Vars;
 
   expect(
-    Util.explainObj(context, { a: '=name', b: '=pet.name', c: '=age' })
+    Util.explainObj(context, { a: "=name", b: "=pet.name", c: "=age" })
   ).toStrictEqual({
-    a: 'abc',
-    b: 'xx',
+    a: "abc",
+    b: "xx",
     c: 12,
   });
 });
 
-test('ArrayExplain', () => {
+test("ArrayExplain", () => {
   let context = {
-    name: 'abc',
+    name: "abc",
     age: 12,
-    pet: { name: 'xx' },
+    pet: { name: "xx" },
   } as Vars;
 
   expect(
-    Util.explainObj(context, ['=name', { b: '=pet.name' }, '=age'])
-  ).toStrictEqual(['abc', { b: 'xx' }, 12]);
+    Util.explainObj(context, ["=name", { b: "=pet.name" }, "=age"])
+  ).toStrictEqual(["abc", { b: "xx" }, 12]);
 });
 
-test('ArrayScopeExplain', () => {
+test("ArrayScopeExplain", () => {
   let context = {
     list: [
-      { name: 'abc', age: 12 },
-      { name: 'def', age: 14 },
-      { name: 'ghi', age: 30 },
+      { name: "abc", age: 12 },
+      { name: "def", age: 14 },
+      { name: "ghi", age: 30 },
     ],
   } as Vars;
 
@@ -119,91 +119,92 @@ test('ArrayScopeExplain', () => {
     Util.explainObj(context, {
       list: [
         {
-          a: '=name',
-          b: '=age',
+          a: "=name",
+          b: "=age",
         },
       ],
     })
   ).toStrictEqual({
     list: [
-      { a: 'abc', b: 12 },
-      { a: 'def', b: 14 },
-      { a: 'ghi', b: 30 },
+      { a: "abc", b: 12 },
+      { a: "def", b: 14 },
+      { a: "ghi", b: 30 },
     ],
   });
 });
 
-test('ArrayScopeExplain2', () => {
+test("ArrayScopeExplain2", () => {
   let context = {
     list: [
-      { name: 'abc', age: 12 },
-      { name: 'def', age: 14 },
-      { name: 'ghi', age: 30 },
+      { name: "abc", age: 12 },
+      { name: "def", age: 14 },
+      { name: "ghi", age: 30 },
     ],
   } as Vars;
 
   expect(
     Util.explainObj(context, {
       xyz: [
-        ':scope=list',
+        ":scope=list",
         {
-          a: '=name',
-          b: '=age',
+          a: "=name",
+          b: "=age",
         },
       ],
     })
   ).toStrictEqual({
     xyz: [
-      { a: 'abc', b: 12 },
-      { a: 'def', b: 14 },
-      { a: 'ghi', b: 30 },
+      { a: "abc", b: 12 },
+      { a: "def", b: 14 },
+      { a: "ghi", b: 30 },
     ],
   });
 });
 
-test('ArrayMapping', () => {
+test("ArrayMapping", () => {
   let context = {
     pets: [
-      { name: 'red', age: 12 },
-      { name: 'green', age: 14 },
-      { name: 'blue', age: 30 },
+      { name: "red", age: 12 },
+      { name: "green", age: 14 },
+      { name: "blue", age: 30 },
     ],
   } as Vars;
 
   expect(
-    Util.explainObj(context, [':scope=pets', { nm: '=name' }])
-  ).toStrictEqual([{ nm: 'red' }, { nm: 'green' }, { nm: 'blue' }]);
+    Util.explainObj(context, [":scope=pets", { nm: "=name" }])
+  ).toStrictEqual([{ nm: "red" }, { nm: "green" }, { nm: "blue" }]);
 });
 
-test('WholeContextExplain', () => {
+test("WholeContextExplain", () => {
   let context = {
-    name: 'abc',
+    name: "abc",
     age: 12,
     pet: {
-      name: 'xx',
+      name: "xx",
     },
   } as Vars;
 
-  expect(_.get(Util.explainObj(context, '=..'), 'name')).toStrictEqual('abc');
+  expect(_.get(Util.explainObj(context, "=.."), "name")).toStrictEqual("abc");
 });
 
-test('ZeroIndexExplain', () => {
-  expect(Util.explainObj({ index: 1 }, '->list.${index}')).toStrictEqual(
-    'list.1'
+test("ZeroIndexExplain", () => {
+  expect(Util.explainObj({ index: 1 }, "->list.${index}")).toStrictEqual(
+    "list.1"
   );
-  expect(Util.explainObj({ index: 0 }, '->list.${index}')).toStrictEqual(
-    'list.0'
+  expect(Util.explainObj({ index: 0 }, "->list.${index}")).toStrictEqual(
+    "list.0"
   );
 });
 
-test('MapValExplain', () => {
+test("MapValExplain", () => {
   let pos = new Map<string, number>();
-  pos.set('x', 100);
-  pos.set('y', 99);
-  let posObj = Util.mapToObj(pos);
-  expect(Util.explainObj({ pos }, '=pos')).toStrictEqual(posObj);
+  pos.set("x", 100);
+  pos.set("y", 99);
+  let posObj = new Map(pos);
+  expect(Util.explainObj({ pos }, "=pos")).toStrictEqual(posObj);
 
   let aa = new Map();
-  aa.set(0, 'a');
-  expect(Util.explainObj({ aa }, '=aa')).toStrictEqual({ '0': 'a' });
+  aa.set(0, "a");
+  let bb = new Map(aa);
+  expect(Util.explainObj({ aa }, "=aa")).toStrictEqual(bb);
 });

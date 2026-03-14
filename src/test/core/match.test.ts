@@ -10,7 +10,7 @@ test('str_float_range', () => {
 test('match_num', () => {
   expect(Match.test('[2,5)', 5)).eq(false);
   expect(Match.test('[2,5)', 3)).eq(true);
-  expect(Match.test('[2,5)', 'abd')).eq(false);
+  expect(Match.test('[2,5)', 'abdd')).eq(false);
 });
 
 test('simple', () => {

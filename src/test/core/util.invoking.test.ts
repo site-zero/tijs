@@ -11,5 +11,5 @@ test('Simple', () => {
       },
     },
   });
-  expect('demo: 1400').eq(invoke(5, 9));
+  expect(invoke(5, 9)).eq('demo: 1400');
 });
