@@ -3,11 +3,11 @@ import {
   FormProps,
   I18n,
   InputNumProps,
+  NumRangeInfo,
   openAppModal,
 } from "@site0/tijs";
 import _ from "lodash";
 import { InputNumRangeProps } from "../inrange-types";
-import { NumRangeInfo } from "./inrange-inner-types";
 import { getNumRangeInfoMsgKey, inrangeToNumRange } from "./parse-inrange";
 
 export async function open_inrange_editor(
@@ -60,6 +60,7 @@ export async function open_inrange_editor(
       titleType: "html",
       layoutHint: 2,
       changeMode: "all",
+      maxFieldNameWidth: 50,
       fields: [
         {
           title: _T("min"),
@@ -79,13 +80,16 @@ export async function open_inrange_editor(
               comConf: num_input_config(),
             },
             {
-              title: _T("min-included"),
+              title: "&nbsp;",
+              titleType: "html",
               name: "minValueIncluded",
               type: "Boolean",
               enabled: { hasMinValue: true },
               readonly: { hasMinValue: false },
               comType: "TiCheck",
-              comConf: checkbox_config(),
+              comConf: checkbox_config({
+                text: _T("min-included"),
+              }),
             },
           ],
         },
@@ -107,13 +111,16 @@ export async function open_inrange_editor(
               comConf: num_input_config(),
             },
             {
-              title: _T("max-included"),
+              title: "&nbsp;",
+              titleType: "html",
               name: "maxValueIncluded",
               type: "Boolean",
               enabled: { hasMaxValue: true },
               readonly: { hasMaxValue: false },
               comType: "TiCheck",
-              comConf: checkbox_config(),
+              comConf: checkbox_config({
+                text: _T("max-included"),
+              }),
             },
           ],
         },

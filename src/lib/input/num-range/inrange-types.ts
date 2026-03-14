@@ -3,16 +3,18 @@ import {
   CheckProps,
   CommonProps,
   InputNumProps,
+  NumRangeObj,
+  NumRangeInfo,
 } from "@site0/tijs";
 
 export type InputNumRangeEmitter = {
   (event: "change", payload: string | null): void;
 };
 
-export type NumRangeInputValue = string | number[];
+export type NumRangeInputValue = string | number[] | NumRangeInfo | NumRangeObj;
 
 export type InputNumRangeProps = CommonProps & {
-  value?: NumRangeInputValue|null;
+  value?: NumRangeInputValue | null;
   readonly?: boolean;
   numConfig?: InputNumProps;
   checkConfig?: CheckProps;

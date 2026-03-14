@@ -1,15 +1,29 @@
-import { NumRange } from "@site0/tijs";
+import { NumRangeObj, NumRangeInfo, isNumRangeInfo, isNumRangeObj, NumRange } from "@site0/tijs";
 import _, { max } from "lodash";
 import { NumRangeInputValue } from "../inrange-types";
-import { NumRangeInfo } from "./inrange-inner-types";
 
 export function parse_inrange(
   input?: NumRangeInputValue | undefined | null
 ): NumRangeInfo {
+  // 防空
+  if(_.isNil(input)){
+    return inrangeFromNumRange(null);
+  }
+  // 解析 
   // 解析
-  const nr = !input || _.isEmpty(input) ? null : new NumRange(input);
-  // 搞定
-  return inrangeFromNumRange(nr);
+  if(isNumRangeInfo(input)){
+    return input;
+  }
+
+  // // {$gt:12,$lt:20}
+  // if(isNumRangeObj(input)){
+  //   return inrangeFromNumRange(input);
+  // }
+  // // [12,20]
+  
+  // // 搞定
+  // return inrangeFromNumRange(nr);
+  throw 'input is not a num range info object: ' + JSON.stringify(input);
 }
 
 export function inrangeFromNumRange(nr?: NumRange | null) {

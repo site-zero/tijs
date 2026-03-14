@@ -1,7 +1,6 @@
-import { I18n } from "@site0/tijs";
+import { I18n, NumRangeInfo } from "@site0/tijs";
 import { computed } from "vue";
 import { InputNumRangeEmitter, InputNumRangeProps } from "./inrange-types";
-import { NumRangeInfo } from "./support/inrange-inner-types";
 import { open_inrange_editor } from "./support/open-inrange-editor";
 import {
   getNumRangeInfoMsgKey,
@@ -15,10 +14,6 @@ export function useTiInputNumRangeApi(
   props: InputNumRangeProps,
   emit: InputNumRangeEmitter
 ) {
-  //-----------------------------------------------------
-  // 数据模型
-  //-----------------------------------------------------
-
   //-----------------------------------------------------
   // 计算属性
   //-----------------------------------------------------
