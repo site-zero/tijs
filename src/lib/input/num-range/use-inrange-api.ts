@@ -1,12 +1,9 @@
-import { I18n, NumRangeInfo } from "@site0/tijs";
+import { I18n, NumRange, NumRangeInfo } from "@site0/tijs";
+import _ from "lodash";
 import { computed } from "vue";
 import { InputNumRangeEmitter, InputNumRangeProps } from "./inrange-types";
 import { open_inrange_editor } from "./support/open-inrange-editor";
-import {
-  getNumRangeInfoMsgKey,
-  inrangeToNumRange,
-  parse_inrange,
-} from "./support/parse-inrange";
+import { getNumRangeInfoMsgKey } from "./support/parse-inrange";
 
 export type TiInputNumRangeApi = ReturnType<typeof useTiInputNumRangeApi>;
 
@@ -17,8 +14,12 @@ export function useTiInputNumRangeApi(
   //-----------------------------------------------------
   // 计算属性
   //-----------------------------------------------------
+  const _range = computed(() => {
+    return new NumRange(props.value);
+  });
+  //-----------------------------------------------------
   const Info = computed(() => {
-    return parse_inrange(props.value);
+    return _range.value.toRangeInfo();
   });
   //-----------------------------------------------------
   const isEmpty = computed(() => {
@@ -50,6 +51,20 @@ export function useTiInputNumRangeApi(
 
     let info = re as NumRangeInfo;
 
+    if (!re.hasMinValue) {
+      info.minValue = undefined;
+      info.minValueIncluded = undefined;
+    } else if (_.isNil(info.minValue)) {
+      info.minValue = info.maxValue ?? 0;
+    }
+
+    if (!re.hasMaxValue) {
+      info.maxValue = undefined;
+      info.maxValueIncluded = undefined;
+    } else if (_.isNil(info.maxValue)) {
+      info.maxValue = info.minValue ?? 0;
+    }
+
     // 删除值
     if (!re.hasMinValue && !re.hasMaxValue) {
       emit("change", null);
@@ -57,7 +72,7 @@ export function useTiInputNumRangeApi(
     }
 
     // 转换
-    let nr = inrangeToNumRange(info);
+    let nr = new NumRange(info);
     let val = nr.toString() || null;
 
     console.log(val, re);
@@ -73,6 +88,7 @@ export function useTiInputNumRangeApi(
   //-----------------------------------------------------
   return {
     // 计算属性
+    _range,
     Info,
     InfoText,
     isEmpty,

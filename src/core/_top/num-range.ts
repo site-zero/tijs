@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { I18n } from "../";
+import { NumRangeInfo, NumRangeObj } from "../../_type";
 import { AnyRange } from "./any-range";
 
 /**
@@ -11,29 +11,39 @@ import { AnyRange } from "./any-range";
  * [20] => left:{value:20}, right:{value:20}
  * </pre>
  */
-
 export class NumRange extends AnyRange<number> {
   //--------------------------------
   // (1638861356185,1641798956185]
   // @return {left:{val:163.., open:true}, right:{val:163...,open:false}}
   // (1638861356185,]
   // @return {left:{val:163.., open:true}, right:{val:NaN,open:false}}
-  constructor(input: NumRange | string | number[]) {
+  constructor(
+    input?:
+      | NumRange
+      | NumRangeInfo
+      | NumRangeObj
+      | string
+      | number[]
+      | null
+      | undefined
+  ) {
     super(
-      input,
-      (v) => {
-        if (_.isNumber(v)) {
-          return v;
-        }
-        return Number(v);
+      {
+        anyToValue: (v) => {
+          if (_.isNumber(v)) {
+            return v;
+          }
+          return Number(v);
+        },
+        compareValue: (v1, v2) => v1 - v2,
+        isMatchType: (v): v is number => {
+          if (isNaN(v)) {
+            return false;
+          }
+          return _.isNumber(v);
+        },
       },
-      (v1, v2) => v1 - v2,
-      (v): v is number => {
-        if (isNaN(v)) {
-          return false;
-        }
-        return _.isNumber(v);
-      }
+      input
     );
   }
 }

@@ -1,19 +1,38 @@
 import _ from "lodash";
 import { I18n } from "../";
+import {
+  AnyToValue,
+  CompareValue,
+  isRangeInfo,
+  isRangeObj,
+  MatchValueType,
+  RangeInfo,
+  RangeObj,
+  toRangeInfo,
+  toRangeObj,
+} from "../../_type";
 
-export interface AnyRangeBorder<T> {
+//-----------------------------------------------
+// 定义类型
+//-----------------------------------------------
+/**
+ * 范围边界定义
+ * @template T 边界值的类型
+ */
+type AnyRangeBorder<T> = {
   open: boolean;
   value: T;
-}
-type MatchValueType<T> = (v: any) => v is T;
-type AnyToValue<T> = (v: any) => T;
-/**
- * -1: v1 < v2
- *  0: v1 = v2
- *  1: v1 > v2
- */
-type CompareValue<T> = (v1: T, v2: T) => number;
+};
 
+export type AnyRangeSetup<T> = {
+  anyToValue: AnyToValue<T>;
+  compareValue: CompareValue<T>;
+  isMatchType: MatchValueType<T>;
+};
+
+//-----------------------------------------------
+// 定义工具类
+//-----------------------------------------------
 export class AnyRange<T> {
   public invalid?: boolean;
   public left?: AnyRangeBorder<T>;
@@ -28,14 +47,26 @@ export class AnyRange<T> {
   // (1638861356185,]
   // @return {left:{val:163.., open:true}, right:{val:NaN,open:false}}
   constructor(
-    input: AnyRange<T> | string | T[],
-    atv: AnyToValue<T>,
-    cv: CompareValue<T>,
-    imvt: MatchValueType<T>
+    setup: AnyRangeSetup<T>,
+    input?:
+      | AnyRange<T>
+      | RangeObj<T>
+      | RangeInfo<T>
+      | string
+      | T[]
+      | null
+      | undefined
   ) {
-    this.anyToValue = atv;
-    this.compareValue = cv;
-    this.isMatchValueType = imvt;
+    //.........................................
+    this.anyToValue = setup.anyToValue;
+    this.compareValue = setup.compareValue;
+    this.isMatchValueType = setup.isMatchType;
+    //.........................................
+    if (_.isNil(input)) {
+      this.invalid = true;
+      return;
+    }
+    //.........................................
     // Another Range
     if (input instanceof AnyRange) {
       if (input.invalid) {
@@ -51,6 +82,59 @@ export class AnyRange<T> {
       this.compareValue = input.compareValue;
       return;
     }
+    //.........................................
+    // RangeInfo: { minValue, maxValue ... }
+    if (isRangeInfo<T>(input, setup.isMatchType)) {
+      let info = toRangeInfo(input, setup.isMatchType);
+      if (info.hasMinValue && !_.isNil(info.minValue)) {
+        this.left = {
+          open: info.minValueIncluded ? false : true,
+          value: info.minValue,
+        };
+      }
+      if (info.hasMaxValue && !_.isNil(info.maxValue)) {
+        this.right = {
+          open: info.maxValueIncluded ? false : true,
+          value: info.maxValue,
+        };
+      }
+      return;
+    }
+    //.........................................
+    if (isRangeObj<T>(input, setup.isMatchType)) {
+      let ro = toRangeObj(input, setup.isMatchType);
+      // {$ne: 99} = > `(99)`
+      if (!_.isNil(ro.$ne)) {
+        this.left = { open: true, value: ro.$ne };
+        this.right = { open: true, value: ro.$ne };
+      }
+      // {$eq: 99} = > `[99]`
+      else if (!_.isNil(ro.$eq)) {
+        this.left = { open: false, value: ro.$eq };
+        this.right = { open: false, value: ro.$eq };
+      }
+      // {$gt,$gte,$lt,$lte}
+      else {
+        // {$gt, ...}
+        if (!_.isNil(ro.$gt)) {
+          this.left = { open: true, value: ro.$gt };
+        }
+        // {$gte, ...}
+        else if (!_.isNil(ro.$gte)) {
+          this.left = { open: false, value: ro.$gte };
+        }
+        // {..., $lt}
+        if (!_.isNil(ro.$lt)) {
+          this.right = { open: true, value: ro.$lt };
+        }
+        // {..., $lte}
+        else if (!_.isNil(ro.$lte)) {
+          this.right = { open: false, value: ro.$lte };
+        }
+      }
+      return;
+    }
+    //.........................................
     // String
     type NRValType = T | undefined;
     let vals: NRValType[];
@@ -70,17 +154,21 @@ export class AnyRange<T> {
       borderOpen[0] = "(" == _.trim(m[1]);
       borderOpen[1] = ")" == _.trim(m[3]);
     }
+    //.........................................
     // Array
     else if (_.isArray(input)) {
       vals = _.map(input, (v) => this.anyToValue(v));
     }
+    //.........................................
     // Others not support
     else {
       vals = [];
       this.invalid = true;
       return;
     }
-
+    //.........................................
+    // 搞一下左右边界的值
+    //.........................................
     let [v0, v1] = vals;
     if (vals.length == 1) {
       v1 = v0;
@@ -106,6 +194,9 @@ export class AnyRange<T> {
   }
   //--------------------------------
   contains(v: T): boolean {
+    if (this.invalid) {
+      return false;
+    }
     let n = this.anyToValue(v);
     if (!this.isMatchValueType(n)) {
       return false;
@@ -159,7 +250,14 @@ export class AnyRange<T> {
     rightClose = "]",
   } = {}) {
     if (this.invalid) {
-      return "<!!!Invalid MsRange!!!>";
+      return (
+        "<!!!Invalid Range!!!>: " +
+        JSON.stringify({
+          invalid: this.invalid,
+          left: this.left,
+          right: this.right,
+        })
+      );
     }
     let leftText = this.left
       ? this.left.open
@@ -204,6 +302,82 @@ export class AnyRange<T> {
     }
     ss.push(rightText);
     return ss.join("");
+  }
+  //--------------------------------
+  toRangeInfo(): RangeInfo<T> {
+    if (this.invalid) {
+      return {};
+    }
+    let re = {} as RangeInfo<T>;
+    if (this.left) {
+      re.hasMinValue = true;
+      re.minValue = this.left.value;
+      if (_.isNil(this.left.open)) {
+        re.minValueIncluded = true;
+      } else {
+        re.minValueIncluded = !this.left.open;
+      }
+    } else {
+      re.hasMinValue = false;
+    }
+    if (this.right) {
+      re.hasMaxValue = true;
+      re.maxValue = this.right.value;
+      if (_.isNil(this.right.open)) {
+        re.maxValueIncluded = true;
+      } else {
+        re.maxValueIncluded = !this.right.open;
+      }
+    } else {
+      re.hasMaxValue = false;
+    }
+    return re;
+  }
+  //--------------------------------
+  toRangeObj(): RangeObj<T> {
+    if (this.invalid) {
+      return {};
+    }
+    let info = this.toRangeInfo();
+    let {
+      hasMinValue,
+      minValue,
+      minValueIncluded,
+      hasMaxValue,
+      maxValue,
+      maxValueIncluded,
+    } = info;
+
+    let _nil_min_val = _.isNil(minValue);
+    let _nil_max_val = _.isNil(maxValue);
+
+    // {$ne}
+    if (hasMinValue && hasMaxValue && !_nil_min_val && !_nil_max_val) {
+      if (this.compareValue(minValue!, maxValue!) === 0) {
+        if (!minValueIncluded && !maxValueIncluded) {
+          return { $ne: minValue };
+        }
+        return { $eq: minValue };
+      }
+    }
+    let ro = {} as RangeObj<T>;
+    // {$gt, $gte}
+    if (!_nil_min_val) {
+      if (minValueIncluded) {
+        ro.$gte = minValue;
+      } else {
+        ro.$gt = minValue;
+      }
+    }
+    // {$lt, $lte}
+    if (!_nil_max_val) {
+      if (maxValueIncluded) {
+        ro.$lte = maxValue;
+      } else {
+        ro.$lt = maxValue;
+      }
+    }
+    return ro;
   }
   //--------------------------------
 }

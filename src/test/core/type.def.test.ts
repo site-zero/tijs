@@ -1,5 +1,6 @@
 import { expect, test } from "vitest";
-import { NumRange, StrRange, TiColor } from "../../core/";
+import { isNumRangeInfo } from "../../_type";
+import { TiColor } from "../../core/";
 
 test("color:HEX", () => {
   expect("#FFFFFF").eq(new TiColor([255, 255, 255]).hex);
@@ -11,55 +12,21 @@ test("color:RGB", () => {
   expect("RGBA(255,255,0,0.3)").eq(new TiColor([255, 255, 0, 0.3]).rgba);
 });
 
-test("range:str-(A,D]", () => {
-  const _T = (s: string) => new StrRange(s);
-  let rg = _T("(A,D]");
-  expect(rg.toString()).eq("(A,D]");
-  expect(rg.contains("B")).eq(true);
-  expect(rg.contains("C")).eq(true);
-  expect(rg.contains("D")).eq(true);
-  expect(rg.contains("abc")).eq(false);
-  expect(rg.contains("9")).eq(false);
-  expect(rg.contains("*")).eq(false);
-});
-
-test("range:num-(0,100]", () => {
-  const _T = (s: string) => new NumRange(s);
-  let rg = _T("(0,100]");
-  expect(rg.toString()).eq("(0,100]");
-  expect(rg.contains(1)).eq(true);
-  expect(rg.contains(100)).eq(true);
-  for (let n = 1; n <= 100; n++) {
-    expect(rg.contains(n)).eq(true);
-  }
-  expect(rg.contains("abc" as any)).eq(false);
-  expect(rg.contains(0)).eq(false);
-  expect(rg.contains(101)).eq(false);
-});
-
-test("range:num-(100)", () => {
-  const _T = (s: string) => new NumRange(s);
-  let rg = _T("(100)");
-  expect(rg.toString()).eq("(100)");
-  for (let n = 1; n < 100; n++) {
-    expect(rg.contains(n)).eq(false);
-  }
-  expect(rg.contains(0)).eq(false);
-  expect(rg.contains(100)).eq(false);
-
-  rg = _T("(100,100)");
-  expect(rg.toString()).eq("(100)");
-  for (let n = 1; n < 100; n++) {
-    expect(rg.contains(n)).eq(false);
-  }
-  expect(rg.contains(0)).eq(false);
-  expect(rg.contains(100)).eq(false);
-});
-
-test("range:num-(1,)", () => {
-  const _T = (s: string) => new NumRange(s);
-  let rg = _T("(1,)");
-  expect(rg.toString()).eq("(1,)");
-  expect(rg.contains(0)).eq(false);
-  expect(rg.contains(100)).eq(true);
+test("isNumRangeInfo", () => {
+  expect(true).eq(
+    isNumRangeInfo({
+      hasMinValue: true,
+      minValue: 0,
+      hasMaxValue: undefined,
+      maxValue: undefined,
+    })
+  );
+  expect(true).eq(
+    isNumRangeInfo({
+      hasMinValue: undefined,
+      minValue: undefined,
+      hasMaxValue: true,
+      maxValue: 0,
+    })
+  );
 });

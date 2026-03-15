@@ -1,76 +1,19 @@
-import { NumRangeObj, NumRangeInfo, isNumRangeInfo, isNumRangeObj, NumRange } from "@site0/tijs";
-import _, { max } from "lodash";
-import { NumRangeInputValue } from "../inrange-types";
+import { NumRangeInfo } from "@site0/tijs";
 
-export function parse_inrange(
-  input?: NumRangeInputValue | undefined | null
-): NumRangeInfo {
-  // 防空
-  if(_.isNil(input)){
-    return inrangeFromNumRange(null);
-  }
-  // 解析 
-  // 解析
-  if(isNumRangeInfo(input)){
-    return input;
-  }
+type RangeInfoMsgKey =
+  | "NA"
+  | "ne"
+  | "eq"
+  | "gt"
+  | "gte"
+  | "lt"
+  | "lte"
+  | "gtlt"
+  | "gtelt"
+  | "gtlte"
+  | "gtelte";
 
-  // // {$gt:12,$lt:20}
-  // if(isNumRangeObj(input)){
-  //   return inrangeFromNumRange(input);
-  // }
-  // // [12,20]
-  
-  // // 搞定
-  // return inrangeFromNumRange(nr);
-  throw 'input is not a num range info object: ' + JSON.stringify(input);
-}
-
-export function inrangeFromNumRange(nr?: NumRange | null) {
-  let info: NumRangeInfo = {
-    hasMaxValue: false,
-    hasMinValue: false,
-    maxValue: 0,
-    maxValueIncluded: false,
-    minValue: 0,
-    minValueIncluded: false,
-  };
-  if (!nr) {
-    return info;
-  }
-  if (nr.left) {
-    info.hasMinValue = true;
-    info.minValue = nr.left.value;
-    info.minValueIncluded = !nr.left.open;
-  }
-  if (nr.right) {
-    info.hasMaxValue = true;
-    info.maxValue = nr.right.value;
-    info.maxValueIncluded = !nr.right.open;
-  }
-  return info;
-}
-
-export function inrangeToNumRange(info: NumRangeInfo) {
-  let {
-    hasMaxValue,
-    hasMinValue,
-    maxValue,
-    maxValueIncluded,
-    minValue,
-    minValueIncluded,
-  } = info;
-  const re = new NumRange([]);
-  if (hasMinValue) {
-    re.left = { value: minValue, open: !minValueIncluded };
-  }
-  if (hasMaxValue) {
-    re.right = { value: maxValue, open: !maxValueIncluded };
-  }
-  return re;
-}
-
-export function getNumRangeInfoMsgKey(info: NumRangeInfo) {
+export function getNumRangeInfoMsgKey(info: NumRangeInfo): RangeInfoMsgKey {
   let {
     hasMaxValue,
     hasMinValue,
@@ -80,17 +23,25 @@ export function getNumRangeInfoMsgKey(info: NumRangeInfo) {
     maxValue,
   } = info;
   if (hasMaxValue && hasMinValue) {
+    // {$eq, $ne}
+    if (minValue === maxValue) {
+      if (maxValueIncluded && minValueIncluded) {
+        return "eq";
+      } else if (!maxValueIncluded && !minValueIncluded) {
+        return "ne";
+      }
+    }
+    // {$lt, $lte, $gt, $gte}
     if (maxValueIncluded && minValueIncluded) {
-      if (minValue === maxValue) return "eq";
-      return "in-lre";
+      return "gtelte";
     }
     if (minValueIncluded) {
-      return "in-le";
+      return "gtelt";
     }
     if (maxValueIncluded) {
-      return "in-re";
+      return "gtlte";
     }
-    return "in";
+    return "gtelte";
   }
   if (hasMinValue) {
     if (minValueIncluded) {
@@ -104,5 +55,5 @@ export function getNumRangeInfoMsgKey(info: NumRangeInfo) {
     }
     return "lt";
   }
-  return "na";
+  return "NA";
 }

@@ -3,12 +3,14 @@ import {
   FormProps,
   I18n,
   InputNumProps,
+  LinkFieldChange,
+  NumRange,
   NumRangeInfo,
   openAppModal,
 } from "@site0/tijs";
 import _ from "lodash";
 import { InputNumRangeProps } from "../inrange-types";
-import { getNumRangeInfoMsgKey, inrangeToNumRange } from "./parse-inrange";
+import { getNumRangeInfoMsgKey } from "./parse-inrange";
 
 export async function open_inrange_editor(
   props: InputNumRangeProps,
@@ -33,7 +35,7 @@ export async function open_inrange_editor(
     comConf: {
       title: ({ data }) => {
         let info = data as NumRangeInfo;
-        let nr = inrangeToNumRange(info);
+        let nr = new NumRange(info);
         let msgkey = getNumRangeInfoMsgKey(info);
         const html = [
           `<div style="
@@ -125,6 +127,32 @@ export async function open_inrange_editor(
           ],
         },
       ],
+      linkFields: {
+        hasMinValue: async (
+          v,
+          data
+        ): Promise<LinkFieldChange[] | undefined> => {
+          if (!v) {
+            return [{ name: "minValue", value: null }];
+          }
+          // 默认弄个值
+          else if (_.isNil(data.minValue)) {
+            return [{ name: "minValue", value: data.maxValue ?? 0 }];
+          }
+        },
+        hasMaxValue: async (
+          v,
+          data
+        ): Promise<LinkFieldChange[] | undefined> => {
+          if (!v) {
+            return [{ name: "maxValue", value: null }];
+          }
+          // 默认弄个值
+          else if (_.isNil(data.maxValue)) {
+            return [{ name: "maxValue", value: data.minValue ?? 0 }];
+          }
+        },
+      },
     } as FormProps,
   });
 

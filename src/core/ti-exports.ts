@@ -1,15 +1,5 @@
 export * as Features from "../lib/_features";
-export * from "./_top/color";
-export * from "./_top/ms-range";
-export * from "./_top/num-range";
-export * from "./_top/str-range";
-export * as Bank from "./_top/ti-bank";
-export * from "./_top/ti-bus";
-export * from "./_top/ti-com";
-export * from "./_top/ti-env";
-export * as Icons from "./_top/ti-icons";
-export * from "./_top/ti-random";
-export * as Rects from "./_top/ti-rect";
+export * from "./_top";
 export * as Alg from "./alg/ti-alg";
 export * from "./dict/dict-types";
 export * as Dicts from "./dict/ti-dict";

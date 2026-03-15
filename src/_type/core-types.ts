@@ -758,6 +758,15 @@ export interface WnStack<T> {
 
   popAll(): T[];
 }
+
+export type AnyToValue<T> = (v: any) => T;
+/**
+ * -1: v1 < v2
+ *  0: v1 = v2
+ *  1: v1 > v2
+ */
+export type CompareValue<T> = (v1: T, v2: T) => number;
+export type MatchValueType<T> = (v: any) => v is T;
 /*-------------------------------------------
 
               dom 相关的类型
