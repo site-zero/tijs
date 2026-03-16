@@ -644,7 +644,7 @@ export function fldSwitcher(
     title: title || undefined,
     tip,
     comType: "TiSwitcher",
-    comConf: _.assign({ options } as SwitcherProps, comConf),
+    comConf: _.assign({ options, nowrap: true } as SwitcherProps, comConf),
   };
 }
 
@@ -662,7 +662,10 @@ export function fldMultiSwitcher(
     tip,
     emptyAs: "~~undefined~~",
     comType: "TiSwitcher",
-    comConf: _.assign({ options, multi: true } as SwitcherProps, comConf),
+    comConf: _.assign(
+      { options, multi: true, nowrap: true } as SwitcherProps,
+      comConf
+    ),
   };
 }
 
