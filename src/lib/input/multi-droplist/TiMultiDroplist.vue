@@ -30,8 +30,16 @@
       getElement: () => $el.value,
       hideBoxTip: () => _api.value.clearOptionsData(),
       getTipBoxDockStyle: (box: Rect) => {
+        let minWidth = `${box.width}px`;
+        let mw = box.width;
+        if (props.tipListMinWidth) {
+          let tlmw = CssUtils.toAbsPixel(props.tipListMinWidth);
+          if (tlmw > mw) {
+            minWidth = `${tlmw}px`;
+          }
+        }
         return {
-          minWidth: props.tipListMinWidth ?? `${box.width}px`,
+          minWidth,
           width: props.tipListWidth,
         };
       },

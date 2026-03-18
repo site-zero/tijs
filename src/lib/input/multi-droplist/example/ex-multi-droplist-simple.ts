@@ -5,7 +5,7 @@ export default {
   name: 'simple',
   text: 'i18n:simple',
   comConf: {
-    value: ['otter', 'locust', 'dove', 'bugs', 'hippo', 'spider', 'cat'],
+    value: ['otter', 'locust', /*'dove', 'bugs', 'hippo', 'spider', 'cat'*/],
     placeholder: 'Choose one Animal',
     options: [
       { value: 'hippo', text: 'Hippo' },
