@@ -737,6 +737,7 @@ export function fldMultiDroplist(
     comConf: _.assign(
       {
         options,
+        tipListMinWidth: "200px",
       } as MultiDroplistProps,
       comConf
     ),

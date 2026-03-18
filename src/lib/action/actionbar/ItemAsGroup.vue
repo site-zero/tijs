@@ -7,6 +7,7 @@
   import ItemAsAction from "./ItemAsAction.vue";
   import ItemAsCombin from "./ItemAsCombin.vue";
   import ItemAsCustomized from "./ItemAsCustomized.vue";
+  import { useAsyncFire } from "./support/use-async-fire";
   import { ABAR_STATE, ABarUsedItem } from "./ti-action-bar-types";
   import { openBarItem } from "./use-action-bar";
   //-------------------------------------------------------
@@ -18,6 +19,17 @@
   const bus = inject(BUS_KEY);
   //-------------------------------------------------------
   const props = defineProps<ABarUsedItem>();
+  //-------------------------------------------------------
+  // 阻止用户频繁点击
+  const _async_fire = computed(() => {
+    let val = props.value ?? props.uniqKey;
+    let args = [val, state?.vars || {}, bus];
+    return useAsyncFire({
+      fn: props.action,
+      args,
+      logName: "ItemAsGroup:" + props.uniqKey,
+    });
+  });
   //-------------------------------------------------------
   const OpenStatus = computed(() => {
     if (state) {
@@ -40,11 +52,23 @@
     };
   });
   //-------------------------------------------------------
-  function OnClickHead() {
+  async function OnClickHead() {
     //console.log('OnClickHead', props.uniqKey);
     // 指定了动作
     if (props.action) {
-      props.action(props.uniqKey, state?.vars || {}, bus);
+      // // 上一个动作还未执行完毕
+      // if (_in_action.value) {
+      //   console.warn("OnClickHead: action is running");
+      //   return;
+      // }
+      // console.log("OnClickHead", props);
+      // _in_action.value = true;
+      // let val = props.value ?? props.uniqKey;
+      // console.log("OnClickHead: in_action=", _in_action.value);
+      // await props.action(val, state?.vars || {}, bus);
+      // _in_action.value = false;
+      // console.log("OnClickHead: in_action=", _in_action.value);
+      await _async_fire.value();
     }
     // 否则就相当于 ClickSuffix
     else {

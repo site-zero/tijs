@@ -39,8 +39,5 @@ export async function openAppModal(props: AppModalProps): Promise<any> {
       releaseDom,
     } as AppModalInitProps);
     app.mount($gasket);
-
-    // 关闭对话框时，也移除创建的元素
-    //app.unmount();
   });
 }

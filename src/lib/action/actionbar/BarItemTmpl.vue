@@ -82,8 +82,9 @@
     if (props.hidden || props.disabled) {
       return;
     }
-    //console.log('onClikeItem', props.uniqKey);
+    //console.log("onClikeItem: before emit:click", props.uniqKey);
     emit("click", props);
+    //console.log("onClikeItem: after emit:click", props.uniqKey);
   }
   //-------------------------------------------------------
 </script>

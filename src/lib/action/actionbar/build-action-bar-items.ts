@@ -6,12 +6,12 @@ import {
   ActionBarItem,
   ActionBarItemAltDisplay,
   ActionBarItemRefer,
-  TiAppBus,
-  Vars,
   isActionEventInfo,
   isInvoke,
+  TiAppBus,
+  Vars,
 } from "../../../_type";
-import { CssUtils, Match, Util } from "../../../core";
+import { CssUtils, isAsyncFunc, Match, Util } from "../../../core";
 import {
   ABarAltDisplay,
   ABarParsedItem,
@@ -106,14 +106,14 @@ function makeItemAction(
 
   // Invoke
   if (isInvoke(action)) {
-    return (vars: Vars) => {
+    return async (vars: Vars) => {
       let fn = Util.genInvokingBy(action, {
         context: vars,
         dft: () => {
           throw new Error("fail to parse: " + action);
         },
       });
-      return fn();
+      return await fn();
     };
   }
 
@@ -127,12 +127,18 @@ function makeItemAction(
 function makeItemActionWithDebounce(
   emit: ActionBarEmitter,
   action?: ActionBarAction,
-  debounce = 1000
+  debounce = 300
 ): ActionBarCallback | undefined {
   let fn = makeItemAction(emit, action);
   if (!fn) {
     return;
   }
+  // // 如果是异步函数，就不要防抖了
+  // // 因为防抖会破坏函数的异步声明，这样在调用时就不能 await 了
+  // if (isAsyncFunc(fn)) {
+  //   return fn;
+  // }
+  // 默认搞个防抖
   if (debounce > 0) {
     return _.debounce(fn, debounce, {
       leading: true,

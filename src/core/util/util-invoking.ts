@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { getGUIExplainContext, Str } from "../";
+import { getGUIExplainContext, isAsyncFunc, Str } from "../";
 import { Invoke, InvokeOptions } from "../../_type";
 
 /**
@@ -113,6 +113,12 @@ export function genInvokingBy(
 
   if (_.isFunction(re)) {
     return re;
+  }
+
+  if (isAsyncFunc(func)) {
+    return async function () {
+      return await func.apply(that, invokeArgs);
+    };
   }
 
   // 默认返回

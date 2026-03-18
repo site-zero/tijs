@@ -148,7 +148,7 @@
         :comConf="props.head.comConf" />
     </slot>
     <!--===: Bar Mask :===-->
-    <div class="bar-mask" v-if="HasOpenedGroup" @click.left="OnClickMask"></div>
+    <div class="bar-mask" v-if="HasOpenedGroup" @click.left.stop="OnClickMask"></div>
     <!--===: Show Bar Items :===-->
     <div class="bar-item-wrapper" :item-align="props.itemAlign">
       <template v-for="it in UsedBarItems" :key="it.uniqKey">
