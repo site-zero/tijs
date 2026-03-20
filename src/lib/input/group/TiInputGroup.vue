@@ -1,15 +1,16 @@
 <script lang="ts" setup>
   import _ from "lodash";
   import { computed } from "vue";
-  import { TiGridFields } from "../../";
+  import { FormProps, TiGridFields } from "../../";
   import { Vars } from "../../../_type";
   import { GridFieldsInput } from "../../shelf/grid-fields/ti-grid-fields-types";
+  import { getGroupFields } from "./ti-input-group-api";
   import { InputGroupProps } from "./ti-input-group-types";
-
+  //-----------------------------------------------------
   const emit = defineEmits<{
     (eventName: "change", payload: Vars): void;
   }>();
-
+  //-----------------------------------------------------
   const props = withDefaults(defineProps<InputGroupProps>(), {
     bodyPartGap: "s",
     maxFieldNameWidth: "auto",
@@ -17,14 +18,19 @@
     defaultComType: "TiInput",
     ignoreNil: false,
     changeMode: "all",
-
+    fieldSeparator: "-",
+    fieldTitleAs: "dft-placeholder",
     fields: () => [] as GridFieldsInput[],
   });
-
-  const FormProps = computed(() => _.omit(props, "data", "value"));
-
+  //-----------------------------------------------------
+  const InnerFormConfig = computed(() => {
+    let re: FormProps = _.omit(props, "data", "value", "fields");
+    re.fields = getGroupFields(props);
+    return re;
+  });
+  //-----------------------------------------------------
   const LayoutHint = computed(() => (props.fields ? props.fields.length : 0));
-
+  //-----------------------------------------------------
   function onValueChange(change: Vars) {
     let delta = _.cloneDeep(change);
     if ("all" == props.changeMode) {
@@ -44,10 +50,11 @@
     //console.log('onValueChange', change, val);
     emit("change", delta);
   }
+  //-----------------------------------------------------
 </script>
 <template>
   <TiGridFields
-    v-bind="FormProps"
+    v-bind="InnerFormConfig"
     class="ti-input-group no-body-padding"
     :data="props.value"
     :layout-hint="LayoutHint"

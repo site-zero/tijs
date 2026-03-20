@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { FieldRefer, GridFieldsInput, TiObjFieldsApi } from '../../../';
+import { FieldRefer, GridFieldsInput, ObjFieldsApi } from '../../../';
 import { getFieldUniqKey } from '../../../../_type';
 import { I18n, Util } from '../../../../core';
 
@@ -19,7 +19,7 @@ export function getFieldsNames(fields: GridFieldsInput[] = []) {
 }
 
 export function makeFieldsMap(
-  fieldSet: TiObjFieldsApi,
+  fieldSet: ObjFieldsApi,
   flds?: FieldRefer[]
 ) {
   let map = new Map<string, GridFieldsInput[]>();
@@ -58,7 +58,7 @@ export function makeFieldsMap(
 }
 
 export function joinFieldsList(
-  fieldSet: TiObjFieldsApi,
+  fieldSet: ObjFieldsApi,
   fields: FieldRefer[],
   list: GridFieldsInput[] = []
 ): GridFieldsInput[] {

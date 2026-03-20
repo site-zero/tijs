@@ -37,13 +37,13 @@
     @include flex-align-nowrap($ai: stretch);
     > .bar-head {
       @include flex-align-nowrap($ai: center);
+      gap: 1em;
       flex: 1 1 auto;
       font-weight: bold;
       padding: 0 var(--ti-gap-m);
       > .ti-icon {
         flex: 0 0 auto;
         font-size: 1.5em;
-        margin-right: 0.3em;
       }
       > .as-snippet-text {
         flex: 1 1 auto;

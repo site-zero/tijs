@@ -3,7 +3,7 @@ import { makeFieldUniqKey, parseFieldConverter, Vars } from "../../../_type";
 import { CssUtils, Match } from "../../../core";
 import {
   buildFieldValidatorGroup,
-  TiObjFieldsApi,
+  ObjFieldsApi,
   useVisibility,
 } from "../../_features";
 import {
@@ -18,7 +18,7 @@ import {
 } from "./ti-grid-fields-types";
 
 export function buildOneGridField(
-  fieldSet: TiObjFieldsApi,
+  fieldSet: ObjFieldsApi,
   indexes: number[],
   fr: FieldRefer,
   dft: GridFieldsProps
@@ -234,7 +234,7 @@ export function buildOneGridField(
 }
 
 export function buildGridFields(
-  fieldSet: TiObjFieldsApi,
+  fieldSet: ObjFieldsApi,
   indexes: number[],
   fields: FieldRefer[],
   dft: GridFieldsInput

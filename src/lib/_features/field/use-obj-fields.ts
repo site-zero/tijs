@@ -37,7 +37,7 @@ export type QuickFieldInfo = {
 };
 
 //-----------------------------------------------
-export type TiObjFieldsApi = ReturnType<typeof defineObjFields>;
+export type ObjFieldsApi = ReturnType<typeof defineObjFields>;
 //-----------------------------------------------
 /**
  * 定义表单管理特性
@@ -226,9 +226,9 @@ function defineObjFields(featureName: string) {
   };
 }
 //-----------------------------------------------
-const _OBJ_FIELDS_INSTANCES = new Map<string, TiObjFieldsApi>();
+const _OBJ_FIELDS_INSTANCES = new Map<string, ObjFieldsApi>();
 //-----------------------------------------------
-export function useObjFields(name = "_DEFAULT_FIELD_SET"): TiObjFieldsApi {
+export function useObjFields(name = "_DEFAULT_FIELD_SET"): ObjFieldsApi {
   let re = _OBJ_FIELDS_INSTANCES.get(name);
   if (!re) {
     re = defineObjFields(name);

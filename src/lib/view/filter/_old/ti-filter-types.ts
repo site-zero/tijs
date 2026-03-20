@@ -2,7 +2,7 @@ import { ComputedRef, Ref } from 'vue';
 import {
   FieldRefer,
   GridFieldsInput,
-  TiObjFieldsApi,
+  ObjFieldsApi,
   ValueTranslatorProps,
 } from '../../../';
 import {
@@ -201,7 +201,7 @@ export type FilterFeature = {
 
   MajorData: ComputedRef<Vars>;
   MoreData: ComputedRef<Vars>;
-  FieldSet: ComputedRef<TiObjFieldsApi>;
+  FieldSet: ComputedRef<ObjFieldsApi>;
 
   useDiffData: (diff: Vars) => Vars;
   loadMoreItems: () => Promise<void>;
