@@ -21,7 +21,7 @@
   //-----------------------------------------------------
 </script>
 <template>
-  <div class="ti-input-num-range" :class="TopClass" :style="TopStyle">
+  <div class="ti-input-range-box as-num" :class="TopClass" :style="TopStyle">
     <span v-if="props.readonly">{{ _api.InfoText.value }}</span>
     <template v-else>
       <a class="for-edit" @click.left="_api.editRange()"

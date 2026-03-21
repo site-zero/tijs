@@ -1,28 +1,45 @@
 import {
-  CheckProps,
   FormProps,
   I18n,
-  InputNumProps,
   LinkFieldChange,
-  NumRange,
-  NumRangeInfo,
   openAppModal,
+  RangeApiProps,
+  RangeInfo,
+  Vars,
 } from "@site0/tijs";
 import _ from "lodash";
-import { InputNumRangeProps } from "../inrange-types";
-import { get_num_range_info_msg_key } from "./range-info-msg-key";
+import { InputRangeApiSetup } from "./use-input-range-api";
+import { get_range_info_msg_key } from "./range-msg-key";
 
-export async function open_inrange_editor(
-  props: InputNumRangeProps,
-  info: NumRangeInfo
-) {
-  const _T = (s: string) => `i18n:ti-input-num-range-${s}`;
-  const num_input_config = (conf: InputNumProps = {}) => {
+/**
+ *
+ * @param props 不解释
+ * @param info 标准值
+ * @param msgPrefix 显示的字符串前缀
+ * @returns 标准值
+ */
+export async function open_range_editor<T, C extends Vars, V extends Vars>(
+  props: RangeApiProps<T, C, V>,
+  info: RangeInfo<T>,
+  setup: InputRangeApiSetup<T>
+): Promise<RangeInfo<T>> {
+  const { valueToRange, emit, msgPrefix, defaultValue } = setup;
+
+  // 帮助函数: 国际化字符串
+  const pfx = _.kebabCase(msgPrefix);
+  const _T = (s: string) => `i18n:${pfx}-range-${s}`;
+
+  // 帮助函数: 控件: 录值
+  const num_input_config = (conf: Vars = {}) => {
     return _.assign({}, props.valueComConf, conf);
   };
-  const checkbox_config = (conf: CheckProps = {}) => {
+
+  // 帮助函数: 控件: 包含
+  const checkbox_config = (conf: Vars = {}) => {
     return _.assign({}, props.checkComConf, conf);
   };
+
+  // 打开对话框
   let re = await openAppModal({
     icon: "zmdi-collection-item-2",
     title: _T("edit-title"),
@@ -34,9 +51,9 @@ export async function open_inrange_editor(
     comType: "TiForm",
     comConf: {
       title: ({ data }) => {
-        let info = data as NumRangeInfo;
-        let nr = new NumRange(info);
-        let msgkey = get_num_range_info_msg_key(info);
+        let info = data as RangeInfo<T>;
+        let nr = valueToRange(info);
+        let msgkey = get_range_info_msg_key(info);
         const html = [
           `<div style="
           font-size: var(--ti-fontsz-s);

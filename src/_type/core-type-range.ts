@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { MatchValueType } from "./core-types";
+import { AppModalProps, MatchValueType, Vars } from "./core-types";
 
 //-----------------------------------------------
 // RangeObj: { $gt, $gte, $lt, $lte, $eq, $ne }
@@ -173,3 +173,32 @@ export function toStrRangeInfo(input: any): StrRangeInfo {
 export function toNumRangeInfo(input: any): NumRangeInfo {
   return toRangeInfo<number>(input, (v) => _.isNumber(v));
 }
+
+//-----------------------------------------------
+// 界面控件需要的类型标注
+//-----------------------------------------------
+export type RangeValue<T> = string | T[] | RangeInfo<T> | RangeObj<T>;
+
+export type RangeValueType = "str" | "array" | "info" | "obj";
+
+export type RangeApiProps<T, C extends Vars, V extends Vars> = {
+  value?: RangeValue<T> | null;
+  valueType?: RangeValueType | "auto";
+  readonly?: boolean;
+  valueComConf?: V;
+  checkComConf?: C;
+  dialog?: Omit<AppModalProps, "comType" | "comConf">;
+};
+
+export type RangeInfoMsgKey =
+  | "NA"
+  | "ne"
+  | "eq"
+  | "gt"
+  | "gte"
+  | "lt"
+  | "lte"
+  | "gtlt"
+  | "gtelt"
+  | "gtlte"
+  | "gtelte";

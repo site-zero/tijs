@@ -1,22 +1,16 @@
 import {
-  AppModalProps,
   CheckProps,
   CommonProps,
   InputNumProps,
-  NumRangeObj,
+  InputRangeEmitter,
   NumRangeInfo,
+  NumRangeObj,
+  RangeApiProps,
 } from "@site0/tijs";
 
-export type InputNumRangeEmitter = {
-  (event: "change", payload: string | null): void;
-};
+export type InputNumRangeEmitter = InputRangeEmitter<number>;
 
 export type NumRangeInputValue = string | number[] | NumRangeInfo | NumRangeObj;
 
-export type InputNumRangeProps = CommonProps & {
-  value?: NumRangeInputValue | null;
-  readonly?: boolean;
-  numConfig?: InputNumProps;
-  checkConfig?: CheckProps;
-  dialog?: Omit<AppModalProps, "comType" | "comConf">;
-};
+export type InputNumRangeProps = CommonProps &
+  RangeApiProps<number, CheckProps, InputNumProps>;

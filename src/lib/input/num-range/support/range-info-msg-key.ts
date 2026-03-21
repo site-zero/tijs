@@ -13,7 +13,7 @@ type RangeInfoMsgKey =
   | "gtlte"
   | "gtelte";
 
-export function getNumRangeInfoMsgKey(info: NumRangeInfo): RangeInfoMsgKey {
+export function get_num_range_info_msg_key(info: NumRangeInfo): RangeInfoMsgKey {
   let {
     hasMaxValue,
     hasMinValue,

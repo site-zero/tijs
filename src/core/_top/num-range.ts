@@ -36,14 +36,16 @@ export class NumRange extends AnyRange<number> {
           return Number(v);
         },
         compareValue: (v1, v2) => v1 - v2,
-        isMatchType: (v): v is number => {
-          if (isNaN(v)) {
-            return false;
-          }
-          return _.isNumber(v);
-        },
+        isMatchType: is_number,
       },
       input
     );
   }
+}
+
+export function is_number(v: any): v is number {
+  if (isNaN(v)) {
+    return false;
+  }
+  return _.isNumber(v);
 }
