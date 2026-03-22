@@ -683,7 +683,7 @@ export function fldDroplist(
     comType: "TiDroplist",
     comConf: _.assign(
       {
-        placeholder: "i18n:null",
+        placeholder: "i18n:no-set",
         options,
         showCleanOption: true,
       } as DroplistProps,
