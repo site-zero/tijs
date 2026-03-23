@@ -2,6 +2,12 @@ import _ from "lodash";
 import { anyToStr } from "../text/ti-str";
 import { genObjGetter } from "./util-getter";
 
+export function V<T>(getter?: (() => T) | null | undefined): T | undefined {
+  if (getter) {
+    return getter();
+  }
+}
+
 /**
  * 使用 `JSON.stringify` 和 `JSON.parse` 对一个对象进行深拷贝。
  *

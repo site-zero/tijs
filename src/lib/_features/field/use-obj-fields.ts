@@ -1,8 +1,10 @@
 import {
+  CheckListProps,
   CheckProps,
   DroplistProps,
   FieldName,
   FieldRefer,
+  FieldValueType,
   FormField,
   I18n,
   InputBoxProps,
@@ -13,6 +15,7 @@ import {
   LabelProps,
   MultiDroplistProps,
   OptionsInput,
+  RadioListProps,
   Str,
   SwitcherProps,
   TipOptionFormat,
@@ -672,7 +675,7 @@ export function fldMultiSwitcher(
 export function fldDroplist(
   name: FieldName,
   titleAndTip: string | string[],
-  options: string,
+  options: OptionsInput,
   comConf?: DroplistProps
 ): FormField {
   let [title, tip] = _.concat(titleAndTip);
@@ -683,7 +686,7 @@ export function fldDroplist(
     comType: "TiDroplist",
     comConf: _.assign(
       {
-        placeholder: "i18n:null",
+        placeholder: "i18n:no-set",
         options,
         showCleanOption: true,
       } as DroplistProps,
@@ -695,7 +698,7 @@ export function fldDroplist(
 export function fldDroplistVT(
   name: FieldName,
   titleAndTip: string | string[],
-  options: string,
+  options: OptionsInput,
   placeholder: string = "i18n:null",
   tipListMinWidth: string = "200px",
   tipFormat: TipOptionFormat = "VT",
@@ -724,7 +727,7 @@ export function fldDroplistVT(
 export function fldMultiDroplist(
   name: FieldName,
   titleAndTip: string | string[],
-  options: string,
+  options: OptionsInput,
   comConf?: DroplistProps
 ): FormField {
   let [title, tip] = _.concat(titleAndTip);
@@ -741,6 +744,41 @@ export function fldMultiDroplist(
       } as MultiDroplistProps,
       comConf
     ),
+  };
+}
+
+export function fldRadioList(
+  name: FieldName,
+  titleAndTip: string | string[],
+  options: OptionsInput,
+  fldType: FieldValueType = "String",
+  comConf?: RadioListProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title: title || undefined,
+    tip,
+    type: fldType,
+    comType: "TiRadioList",
+    comConf: _.assign({ options } as RadioListProps, comConf),
+  };
+}
+
+export function fldChecklist(
+  name: FieldName,
+  titleAndTip: string | string[],
+  options: OptionsInput,
+  comConf?: CheckListProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title: title || undefined,
+    tip,
+    type: "Array",
+    comType: "TiCheckList",
+    comConf: _.assign({ options } as CheckListProps, comConf),
   };
 }
 

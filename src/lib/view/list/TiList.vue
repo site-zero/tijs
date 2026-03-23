@@ -48,10 +48,19 @@
   const IndentlyItems = computed(() => {
     let re: IndentlyItem[] = [];
     for (let it of _list.value.Items.value) {
-      re.push({
+      let item = {
         ...it,
         ..._indent.value.getRowIndentation(it.value, it, it.icon),
-      });
+      };
+      // 永远不显示当前
+      if (
+        _.isNil(props.currentId) &&
+        it.className &&
+        it.className["is-current"]
+      ) {
+        it.className["is-current"] = false;
+      }
+      re.push(item);
     }
     return re;
   });

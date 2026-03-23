@@ -1,12 +1,13 @@
-import { TextArm, VisibilityFeature } from '../..';
+import { TextArm, VisibilityFeature } from "../..";
 import {
   AbstractField,
   FieldName,
+  FieldStatus,
   FieldValidation,
   FieldValueType,
   VisibilityProps,
-} from '../../../_type';
-import { ReadonlyProps } from '../use-readonly';
+} from "../../../_type";
+import { ReadonlyProps } from "../use-readonly";
 
 export type DataValidationProps = {
   fields?: ValidatableFieldRefer[];
@@ -26,7 +27,7 @@ export type ValidatableField = VisibilityProps &
 
 export type ValidatableFieldInfo = [
   string,
-  Partial<ValidatableField> | ((field: ValidatableField) => ValidatableField)
+  Partial<ValidatableField> | ((field: ValidatableField) => ValidatableField),
 ];
 
 export type ValidatableFieldRefer =
@@ -46,3 +47,5 @@ export type DataValidatableField = AbstractField &
     minLen?: number;
     maxLen?: number;
   };
+
+export type FieldValidateResult = Record<string, FieldStatus>;

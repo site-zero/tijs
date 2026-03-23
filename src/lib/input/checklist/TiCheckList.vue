@@ -61,6 +61,7 @@
     :can-select="true"
     :showChecker="true"
     :get-row-type="getRowType"
+    :current-id="null"
     :checked-ids="props.value"
     @select="onSelect" />
 </template>

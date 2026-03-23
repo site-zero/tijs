@@ -16,8 +16,10 @@ export type InputNumProps = CommonProps &
     InputBoxProps,
     | "prefixIcon"
     | "prefixHoverIcon"
+    | "prefixIconFor"
     | "suffixIcon"
     | "suffixHoverIcon"
+    | "suffixIconFor"
     | "options"
   > & {
     value?: number | string | boolean | null;
