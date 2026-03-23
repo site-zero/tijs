@@ -728,7 +728,7 @@ export function fldMultiDroplist(
   name: FieldName,
   titleAndTip: string | string[],
   options: OptionsInput,
-  comConf?: DroplistProps
+  comConf?: MultiDroplistProps
 ): FormField {
   let [title, tip] = _.concat(titleAndTip);
   return {
@@ -779,6 +779,34 @@ export function fldChecklist(
     type: "Array",
     comType: "TiCheckList",
     comConf: _.assign({ options } as CheckListProps, comConf),
+  };
+}
+
+export function fldInputStrTags(
+  name: FieldName,
+  titleAndTip: string | string[],
+  options: OptionsInput,
+  comConf?: MultiDroplistProps
+) {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title: title || undefined,
+    tip,
+    type: "String",
+    transformer: "anyToStrArray",
+    serializer: "arrayToStr",
+    comType: "TiMultiDroplist",
+    comConf: _.assign(
+      {
+        options,
+        tipFormat: "VT",
+        tipList: {
+          borderStyle: "dotted",
+        },
+      } as MultiDroplistProps,
+      comConf
+    ),
   };
 }
 

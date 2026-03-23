@@ -54,8 +54,9 @@
   </div>
 </template>
 <style scoped lang="scss">
-  @use "../../../assets/style/_all.scss" as *;
+  @use "@site0/tijs/sass/_all.scss" as *;
   .ti-check {
+    @include flex-align-nowrap;
     > .check-con {
       @include flex-align-nowrap;
       cursor: pointer;
