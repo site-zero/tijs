@@ -8,8 +8,8 @@ import {
   Vars,
 } from "@site0/tijs";
 import _ from "lodash";
-import { InputRangeApiSetup } from "./use-input-range-api";
 import { get_range_info_msg_key } from "./range-msg-key";
+import { InputRangeApiSetup } from "./use-input-range-api";
 
 /**
  *
@@ -23,14 +23,15 @@ export async function open_range_editor<T, C extends Vars, V extends Vars>(
   info: RangeInfo<T>,
   setup: InputRangeApiSetup<T>
 ): Promise<RangeInfo<T>> {
-  const { valueToRange, emit, msgPrefix, defaultValue } = setup;
+  const { valueToRange, msgPrefix } = setup;
+  const valueComType = props.valueType || setup.valueComType();
 
   // 帮助函数: 国际化字符串
   const pfx = _.kebabCase(msgPrefix);
-  const _T = (s: string) => `i18n:${pfx}-range-${s}`;
+  const _T = (s: string) => `i18n:${pfx}-${s}`;
 
   // 帮助函数: 控件: 录值
-  const num_input_config = (conf: Vars = {}) => {
+  const val_input_config = (conf: Vars = {}) => {
     return _.assign({}, props.valueComConf, conf);
   };
 
@@ -95,8 +96,8 @@ export async function open_range_editor<T, C extends Vars, V extends Vars>(
               type: "Number",
               enabled: { hasMinValue: true },
               readonly: { hasMinValue: false },
-              comType: "TiInputNum",
-              comConf: num_input_config(),
+              comType: valueComType,
+              comConf: val_input_config(),
             },
             {
               title: "&nbsp;",
@@ -126,8 +127,8 @@ export async function open_range_editor<T, C extends Vars, V extends Vars>(
               type: "Number",
               enabled: { hasMaxValue: true },
               readonly: { hasMaxValue: false },
-              comType: "TiInputNum",
-              comConf: num_input_config(),
+              comType: valueComType,
+              comConf: val_input_config(),
             },
             {
               title: "&nbsp;",

@@ -1,9 +1,11 @@
-import { CheckProps, I18n, InputNumProps, is_number, NumRange, NumRangeInfo, useInputRangeApi } from "@site0/tijs";
-import _ from "lodash";
-import { computed } from "vue";
+import {
+  CheckProps,
+  InputNumProps,
+  is_number,
+  NumRange,
+  useInputRangeApi,
+} from "@site0/tijs";
 import { InputNumRangeEmitter, InputNumRangeProps } from "./inrange-types";
-import { open_inrange_editor } from "./support/open-inrange-editor";
-import { get_num_range_info_msg_key } from "./support/range-info-msg-key";
 
 export type TiInputNumRangeApi = ReturnType<typeof useTiInputNumRangeApi>;
 
@@ -11,7 +13,8 @@ export function useTiInputNumRangeApi(
   props: InputNumRangeProps,
   emit: InputNumRangeEmitter
 ) {
-  const _api = useInputRangeApi<number, CheckProps, InputNumProps>(props,{
+  const _api = useInputRangeApi<number, CheckProps, InputNumProps>(props, {
+    valueComType: () => "TiInputNum",
     valueToRange: (v) => new NumRange(v),
     emit,
     isMatchType: is_number,

@@ -24,6 +24,8 @@ export type InputRangeApi<T, C extends Vars, V extends Vars> = ReturnType<
 >;
 
 export type InputRangeApiSetup<T> = {
+  //默认值编辑控件
+  valueComType: () => string;
   valueToRange: (value: RangeValue<T>) => AnyRange<T>;
   emit: InputRangeEmitter<T>;
   isMatchType: MatchValueType<T>;
@@ -57,7 +59,7 @@ export function useInputRangeApi<T, C extends Vars, V extends Vars>(
   const InfoText = computed(() => {
     const msg = get_range_info_msg_key(Info.value);
     const { maxValue, minValue } = Info.value;
-    const msgKey = `i18n:${_.kebabCase(msgPrefix)}}-info-${msg}`;
+    const msgKey = `i18n:${_.kebabCase(msgPrefix)}-info-${msg}`;
     return I18n.textf(msgKey, { maxValue, minValue });
   });
   //-----------------------------------------------------

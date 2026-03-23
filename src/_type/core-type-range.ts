@@ -185,6 +185,7 @@ export type RangeApiProps<T, C extends Vars, V extends Vars> = {
   value?: RangeValue<T> | null;
   valueType?: RangeValueType | "auto";
   readonly?: boolean;
+  valueComType?: V;
   valueComConf?: V;
   checkComConf?: C;
   dialog?: Omit<AppModalProps, "comType" | "comConf">;

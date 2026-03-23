@@ -140,9 +140,9 @@ export class AnyRange<T> {
     let vals: NRValType[];
     let borderOpen = [false, false] as [boolean, boolean];
     if (_.isString(input)) {
-      let m = /^([(\[])([^\]]+)([)\]])$/.exec(input);
+      let m = /^([(\[])([^\]]*)([)\]])$/.exec(input);
       if (!m) {
-        throw `Invalid TiMsRange: ${input}`;
+        throw `Invalid Range: [${input}]`;
       }
       // 解析成功
       let str = _.trim(m[2]);
