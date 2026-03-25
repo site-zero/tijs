@@ -1,12 +1,12 @@
-import _ from 'lodash';
-import { FieldStatus, getFieldValue, Vars } from '../../../_type';
-import { Util } from '../../../core';
-import { useObjFields } from '../field/use-obj-fields';
-import { _build_validatable_field } from './build-validation';
+import _ from "lodash";
+import { FieldStatus, getFieldValue, Vars } from "../../../_type";
+import { Util } from "../../../core";
+import { useObjFields } from "../field/use-obj-fields";
+import { _build_validatable_field } from "./build-validation";
 import {
   DataValidatableField,
   DataValidationProps,
-} from './data-validate-types';
+} from "./data-validate-types";
 
 export type ValidateOptions = {
   /**
@@ -21,7 +21,7 @@ export type ValidateOptions = {
    * 'ignore' - 忽略，不设置任何值，主要用在全量检查场景
    * 'ok' - {type:'ok'} 维持 ok 的值
    */
-  okAs?: 'null' | 'ignore' | 'ok';
+  okAs?: "null" | "ignore" | "ok";
 
   /**
    * 隐藏字段也要检查, 默认 false
@@ -79,10 +79,10 @@ export function useDataValidate(props: DataValidationProps) {
     options: ValidateOptions
   ) {
     const __set_ok = function () {
-      if ('null' == options.okAs) {
+      if ("null" == options.okAs) {
         status[key] = null;
-      } else if ('ok' == options.okAs) {
-        status[key] = { type: 'ok' };
+      } else if ("ok" == options.okAs) {
+        status[key] = { type: "ok" };
       }
     };
 
@@ -95,14 +95,14 @@ export function useDataValidate(props: DataValidationProps) {
     }
 
     // 检查空值
-    if (_.isNil(val)) {
+    if (_.isNil(val) || "" === val) {
       if (!options.checkRequired) {
         return;
       }
       if (fld.isRequired && fld.isRequired(data)) {
         let title = Util.selectValue(data, fld.title);
         status[key] = {
-          type: 'error',
+          type: "error",
           text: `Field '${title}' is required`,
         };
       } else {
@@ -120,7 +120,7 @@ export function useDataValidate(props: DataValidationProps) {
         if (s.length < fld.minLen) {
           let title = Util.selectValue(data, fld.title);
           status[key] = {
-            type: 'error',
+            type: "error",
             text: `Field '${title}' value too short, it should be at least ${fld.minLen} characters`,
           };
           return;
@@ -133,7 +133,7 @@ export function useDataValidate(props: DataValidationProps) {
         if (s.length > fld.maxLen) {
           let title = Util.selectValue(data, fld.title);
           status[key] = {
-            type: 'error',
+            type: "error",
             text: `Field '${title}' value too long, it should be at most ${fld.maxLen} characters`,
           };
           return;
@@ -143,14 +143,14 @@ export function useDataValidate(props: DataValidationProps) {
 
     // 检查值内容
     if (fld.validate) {
-      let re = (await fld.validate(val, fld, data)) ?? { type: 'OK' };
-      if ('OK' == re.type) {
+      let re = (await fld.validate(val, fld, data)) ?? { type: "OK" };
+      if ("OK" == re.type) {
         __set_ok();
       } else {
         let title = Util.selectValue(data, fld.title);
         status[key] = {
-          type: 'error',
-          text: [`Field '${title}' Invalid`, re.message].join(': '),
+          type: "error",
+          text: [`Field '${title}' Invalid`, re.message].join(": "),
         };
       }
     }
@@ -178,6 +178,7 @@ export function useDataValidate(props: DataValidationProps) {
       let fld = _field_map.get(key);
 
       if (!fld) {
+        console.warn("!fld, key=", key);
         continue;
       }
 
@@ -207,6 +208,7 @@ export function useDataValidate(props: DataValidationProps) {
       let key = fld.uniqKey;
       await __validate_with_fld(status, fld, key, val, data, options);
     }
+    //console.log("validateData: status=", _.cloneDeep(status));
 
     return status;
   }
@@ -217,9 +219,9 @@ export function useDataValidate(props: DataValidationProps) {
       let name = `${fld.name}`;
       let title = `${fld.title}`;
       let vlidation = `[${fld.srcValidation}]`;
-      rows.push([name, title, vlidation].join(','));
+      rows.push([name, title, vlidation].join(","));
     }
-    return rows.join('\n');
+    return rows.join("\n");
   }
 
   return {

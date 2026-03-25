@@ -38,7 +38,9 @@ export function useValidateResults(options: ValidateResultsOptions) {
     const vali = getValidation();
     if (!vali) return;
 
-    let result = await vali.validateData(item);
+    let result = await vali.validateData(item, {
+      checkRequired: true,
+    });
     updateVarifyResult(id, result);
   }
   //-----------------------------------------------------
