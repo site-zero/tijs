@@ -2,6 +2,15 @@ import { expect, test } from "vitest";
 import { ToBankTextOptions } from "../../_type";
 import { Bank } from "../../core";
 
+test("big_neg", function () {
+  expect(Bank.toBankText("-1223450.345678")).eq("-1,223,450.35");
+  expect(Bank.toBankText("-36717653246")).eq("-36,717,653,246.00");
+
+  let opt = { decimalFixed: false };
+  expect(Bank.toBankText("-3345.5432", opt)).eq("-3,345.54");
+  expect(Bank.toBankText("-671713.7", opt)).eq("-671,713.7");
+});
+
 test("exchange_bridge", function () {
   expect(
     Bank.exchange(10, {
@@ -270,7 +279,7 @@ test("toBankText", function () {
 test("toBankText_dft", function () {
   expect(Bank.toBankText("10")).eq("10.00");
   expect(Bank.toBankText("1001")).eq("1,001.00");
-  expect(Bank.toBankText("1001.12345")).eq("1,001.12345");
+  expect(Bank.toBankText("1001.12345")).eq("1,001.12");
   expect(Bank.toBankText("821034121001.5")).eq("821,034,121,001.50");
   expect(Bank.toBankText("1001.15", { to: "right" })).eq("100,1.15");
 });

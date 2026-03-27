@@ -601,7 +601,13 @@ export function toBankText(
   }
 
   // 处理参数
-  let { width = 3, sep = ",", to = "left", decimalPlaces = 2 } = options;
+  let {
+    width = 3,
+    sep = ",",
+    to = "left",
+    decimalPlaces = 2,
+    decimalFixed = true,
+  } = options;
 
   // 如果是字符串，则处理一下一些分隔符号
   let str: string;
@@ -642,9 +648,24 @@ export function toBankText(
   parts[0] += Str.partitions(part_int, { width, sep, to });
   // 对于小数部分，对齐精度
   if (decimalPlaces > 0) {
-    parts.push(_.padEnd(part_fra, decimalPlaces, "0"));
+    if (part_fra.length > decimalPlaces) {
+      let dp =
+        part_fra.substring(0, decimalPlaces) +
+        "." +
+        part_fra.substring(decimalPlaces);
+      let fr = Math.round(Number(dp));
+      parts.push(`${fr}`);
+    }
+    // 强制对其精度
+    else if (decimalFixed) {
+      parts.push(_.padEnd(part_fra || "", decimalPlaces, "0"));
+    }
+    // 默认填入小数部分
+    else if (part_fra) {
+      parts.push(part_fra);
+    }
   }
-  // 如果不需要强制精度，则有值就显示
+  // 默认填入小数部分
   else if (part_fra) {
     parts.push(part_fra);
   }
