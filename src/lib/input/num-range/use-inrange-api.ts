@@ -19,6 +19,7 @@ export function useTiInputNumRangeApi(
     emit,
     isMatchType: is_number,
     msgPrefix: "ti-input-num-range",
+    editFieldType: "Number",
     defaultValue: 0,
   });
   //-----------------------------------------------------

@@ -1,5 +1,7 @@
 import {
   AnyRange,
+  AppModalProps,
+  FieldValueType,
   I18n,
   isRangeInfo,
   isRangeObj,
@@ -34,6 +36,11 @@ export type InputRangeApiSetup<T> = {
    */
   msgPrefix: string;
   defaultValue: T;
+  editFieldType: FieldValueType;
+  /**
+   * 编辑对话框的细节配置
+   */
+  editDialog?: () => AppModalProps;
 };
 
 export function useInputRangeApi<T, C extends Vars, V extends Vars>(

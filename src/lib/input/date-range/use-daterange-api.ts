@@ -1,5 +1,6 @@
 import {
   CheckProps,
+  DateTime,
   InputDatetimeProps,
   StrRange,
   useInputRangeApi,
@@ -13,13 +14,18 @@ export function useTiInputDateRangeApi(
   props: InputDateRangeProps,
   emit: InputDateRangeEmitter
 ) {
+  const today = DateTime.format(new Date(), { fmt: "yyyy-MM-dd" });
   const _api = useInputRangeApi<string, CheckProps, InputDatetimeProps>(props, {
     valueComType: () => "TiInputDate",
     valueToRange: (v) => new StrRange(v),
     emit,
     isMatchType: _.isString,
     msgPrefix: "ti-input-date-range",
-    defaultValue: "",
+    defaultValue: today,
+    editFieldType: "String",
+    editDialog: () => ({
+      width: "640px",
+    }),
   });
   //-----------------------------------------------------
   // 返回接口

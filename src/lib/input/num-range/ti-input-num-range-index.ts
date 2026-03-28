@@ -16,6 +16,9 @@ const COM_TYPE = "TiInputNumRange";
 
 const en_us = {
   "com-name": "Number Range",
+  "example-as-array": "As Array",
+  "example-as-info": "As Info",
+  "example-as-obj": "As Object",
   "edit-title": "Edit Range",
   "scope": "Range",
   "info-NA": "No range",
@@ -51,6 +54,9 @@ const en_us = {
 };
 const zh_cn = {
   "com-name": "数字范围",
+  "example-as-array": "数组值",
+  "example-as-info": "表单信息",
+  "example-as-obj": "比较对象",
   "edit-title": "编辑数值范围",
   "scope": "数值区间",
   "info-NA": "未指定数值范围",
@@ -107,6 +113,40 @@ const TiInputNumRangeInfo: TiComInfo = {
       text: "i18n:simple",
       comConf: {
         value: "[1,23]",
+      } as InputNumRangeProps,
+    },
+    {
+      name: "as-info",
+      text: "i18n:ti-input-num-range-example-as-info",
+      comConf: {
+        value: {
+          hasMinValue: true,
+          minValue: 1,
+          minValueIncluded: true,
+          hasMaxValue: true,
+          maxValue: 99,
+          maxValueIncluded: true,
+        },
+        valueType: "info",
+      } as InputNumRangeProps,
+    },
+    {
+      name: "as-obj",
+      text: "i18n:ti-input-num-range-example-as-obj",
+      comConf: {
+        value: {
+          $gte: 1,
+          $lte: 99,
+        },
+        valueType: "obj",
+      } as InputNumRangeProps,
+    },
+    {
+      name: "as-array",
+      text: "i18n:ti-input-num-range-example-as-array",
+      comConf: {
+        value: [1, 99],
+        valueType: "array",
       } as InputNumRangeProps,
     },
   ],
