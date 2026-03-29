@@ -4,12 +4,12 @@ import {
   PlaceholderProps,
   ReadonlyProps,
   TagsProps,
-} from '../../';
-import { CommonProps, TableRowID, Vars } from '../../../_type';
-import { ValueOptionsProps } from '../box2/use-value-options';
+} from "../../";
+import { CommonProps, TableRowID, Vars } from "../../../_type";
+import { ValueOptionsProps } from "../../../";
 
 export type MultiDroplistEmitter = {
-  (event: 'change', vals: null | TableRowID[]): void;
+  (event: "change", vals: null | TableRowID[]): void;
 };
 
 export type MultiDroplistProps = CommonProps &
@@ -33,7 +33,7 @@ export type MultiDroplistProps = CommonProps &
     /**
      * 提示列表的配置
      */
-    tipList?: Omit<ListProps, 'data'>;
+    tipList?: Omit<ListProps, "data">;
 
     /**
      * 展出提示框宽度，如果不声明，则采用与 box 相同的宽度

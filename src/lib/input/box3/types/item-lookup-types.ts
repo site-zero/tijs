@@ -1,5 +1,5 @@
-import _ from 'lodash';
-import { Vars } from '../../../_type';
+import _ from "lodash";
+import { Vars } from "../../../../_type";
 //--------------------------------------------------
 /**
  * 判断测试值(val)是否能匹配候选值(canValue)。
@@ -59,13 +59,13 @@ function _str_to_lookup(str: string): ItemFieldLookup {
     key: m[3] || str,
     mode: toValueMatchMode(
       {
-        '=': 'equals',
-        '^': 'startsWith',
-        '$': 'endsWith',
-        '*': 'contains',
-      }[m[1]] || 'equals'
+        "=": "equals",
+        "^": "startsWith",
+        "$": "endsWith",
+        "*": "contains",
+      }[m[1]] || "equals"
     ),
-    ignoreCase: m[2] == '~',
+    ignoreCase: m[2] == "~",
   };
 }
 //--------------------------------------------------
@@ -78,7 +78,7 @@ function _to_item_matcher(input: ItemLookupInput): ItemMatcher {
   }
 
   let { key, ignoreCase, mode } = lookup;
-  let is_match_value = getValueMatcher(mode || 'equals');
+  let is_match_value = getValueMatcher(mode || "equals");
   return (item: Vars, hint: string) => {
     let can_val = `${item[key]}`;
     let hint_val = `${hint}`;

@@ -1,11 +1,5 @@
-import {
-  AspectSize,
-  CommonProps,
-  CssAlignment,
-  IconInput,
-  LogicType,
-  Vars,
-} from "../../../_type";
+import { InputBoxAspect, ListProps, ValueHintCookingProps } from "../../";
+import { CommonProps, IconInput, Vars } from "../../../_type";
 import {
   DictProps,
   DisplayTextProps,
@@ -13,10 +7,8 @@ import {
   ReadonlyProps,
   ValuePipeProps,
 } from "../../_features";
-import { ListProps } from "../../view/all-views";
+import { ValueOptionsProps } from "./../../../";
 import { useInputBox2 } from "./use-input-box2";
-import { ValueHintCookingProps } from "./use-value-hint-cooking";
-import { ValueOptionsProps } from "./use-value-options";
 //--------------------------------------------------
 export type InputBoxEmitter = {
   (event: "change", value: any): void;
@@ -33,33 +25,15 @@ export type InputBoxExposeApi = {
   debouncePropsValueChange: () => void;
 };
 //--------------------------------------------------
-export type InputBoxAspect = {
-  /**
-   * 隐藏输入框边框
-   */
-  hideBorder?: boolean;
-
-  style?: Vars;
-  inputStyle?: Vars;
-  partMainStyle?: Vars;
-  mainBodyStyle?: Vars;
-  align?: CssAlignment;
-  boxFontSize?: AspectSize;
-  boxPadding?: AspectSize;
-  boxRadius?: AspectSize | "none";
-  type?: LogicType;
-  width?: string;
-};
-//--------------------------------------------------
 export type InputBoxProps = CommonProps &
-  ValuePipeProps &
   DictProps &
-  ValueOptionsProps &
-  ValueHintCookingProps &
-  PlaceholderProps &
+  DisplayTextProps &
   InputBoxAspect &
+  PlaceholderProps &
   ReadonlyProps &
-  DisplayTextProps & {
+  ValueHintCookingProps &
+  ValueOptionsProps &
+  ValuePipeProps & {
     /**
      * 输入值
      */

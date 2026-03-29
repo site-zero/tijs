@@ -1,10 +1,10 @@
-import JSON5 from 'json5';
-import _ from 'lodash';
-import { Convertor, IconInput, Vars } from '../../_type';
-import { DictName, Dicts, isDictSetup } from '../../core';
+import JSON5 from "json5";
+import _ from "lodash";
+import { Convertor, IconInput, Vars } from "../../_type";
+import { DictName, Dicts, isDictSetup } from "../../core";
 
 export type BoxDictFeature = ReturnType<typeof useDict>;
-export type DictInput = string | DictName | DictProps | Vars[];
+export type DictInput = string | DictName | Vars[];
 
 export type DictProps = {
   options?: DictInput;
