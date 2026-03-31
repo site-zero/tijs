@@ -30,6 +30,6 @@ const TiInputBox3Info: TiComInfo = {
   exampleProps: [],
 };
 
+export * from "./_fea";
 export * from "./ti-input-box3-types";
-export * from "./types";
 export { TiInputBox3, TiInputBox3Info };
