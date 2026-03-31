@@ -675,7 +675,7 @@ export function useSelectable<ID extends TableRowID>(
       selection.currentId = undefined;
     }
     // 唯一选择，默认也选中当前
-    if (1 === selection.checkedIds.size && !selection.currentId) {
+    else if (1 === selection.checkedIds.size && !selection.currentId) {
       selection.currentId = id;
     }
     selection.lastSelectId = id;
