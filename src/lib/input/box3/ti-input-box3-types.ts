@@ -2,11 +2,12 @@ import {
   CommonProps,
   DictProps,
   DisplayTextProps,
+  InputBoxAspect,
   PlaceholderProps,
   ReadonlyProps,
+  ValueHintCookingProps,
   ValuePipeProps,
 } from "@site0/tijs";
-import { InputBoxAspect } from "./types";
 
 export type TiInputBox3Emitter = {
   (event: "change", value: any): void;
@@ -23,4 +24,5 @@ export type TiInputBox3Props = CommonProps &
   InputBoxAspect &
   PlaceholderProps &
   ReadonlyProps &
+  ValueHintCookingProps &
   ValuePipeProps & {};
