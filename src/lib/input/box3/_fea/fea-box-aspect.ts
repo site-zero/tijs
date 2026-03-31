@@ -1,15 +1,27 @@
+import { CssUtils, InputBoxAspect, Vars, ViewportApi } from "@site0/tijs";
 import _ from "lodash";
 import { computed } from "vue";
-import { CssUtils, InputBoxAspect, ViewportApi } from "../../../";
-import { InputBoxApi, InputBoxProps } from "./ti-input-box-types";
-import { BoxTipsFeature } from "./use-box-tips";
 
-export function useBoxAspect(
-  props: InputBoxProps,
-  _box: InputBoxApi,
-  _tips: BoxTipsFeature,
-  _viewport: ViewportApi
+export type FeaBoxAspectOptions = {
+  isFocused: () => boolean;
+  isTipBoxReady: () => boolean;
+  isReadonly: () => boolean;
+  getViewport: () => ViewportApi;
+  getTipMainBoxStyle: () => Vars;
+};
+
+export function feaBoxAspect(
+  props: InputBoxAspect,
+  options: FeaBoxAspectOptions
 ) {
+  const {
+    isFocused,
+    isTipBoxReady,
+    isReadonly,
+    getViewport,
+    getTipMainBoxStyle,
+  } = options;
+  const _viewport = getViewport();
   //--------------------------------------------------
   const TopClass = computed(() => CssUtils.mergeClassName(props.className));
   //--------------------------------------------------
@@ -17,16 +29,16 @@ export function useBoxAspect(
   //--------------------------------------------------
   const PartMainClass = computed(() => {
     return {
-      "is-focused": _box.isFocused.value,
-      "show-tips": _tips.TipBoxStyleReady.value,
-      "is-readonly": _box.isReadonly.value,
+      "is-focused": isFocused(),
+      "show-tips": isTipBoxReady(),
+      "is-readonly": isReadonly(),
     };
   });
   //--------------------------------------------------
   const PartMainStyle = computed(() => {
     let re = _.assign(
       CssUtils.toStyle(props.partMainStyle),
-      _tips.MainBoxStyle.value
+      getTipMainBoxStyle()
     );
     re["--box-w"] = `${_viewport.size.width}px`;
     re["--box-h"] = `${_viewport.size.height}px`;

@@ -3,7 +3,7 @@ import { Callback, Rect, Size2D } from '../../_type';
 import { Rects } from '../../core';
 import _ from 'lodash';
 
-export type ViewportFeature = ReturnType<typeof useViewport>;
+export type ViewportApi = ReturnType<typeof useViewport>;
 
 export type ViewportOptions = {
   el: Ref<HTMLElement | undefined | null>;

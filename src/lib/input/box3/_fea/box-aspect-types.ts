@@ -1,7 +1,13 @@
-import { AspectSize, CssAlignment, LogicType, Vars } from "../../../../_type";
+import {
+  AspectSize,
+  CommonProps,
+  CssAlignment,
+  LogicType,
+  Vars,
+} from "@site0/tijs";
 
 //--------------------------------------------------
-export type InputBoxAspect = {
+export type InputBoxAspect = CommonProps & {
   /**
    * 隐藏输入框边框
    */
