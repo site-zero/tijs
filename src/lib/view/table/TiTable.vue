@@ -70,6 +70,7 @@
     colGap: 1,
     changeMode: "diff",
     colDefaultWidth: 0,
+    autoPickCurrent: true,
     data: () => [],
     emptyRoadblock: () => ({
       text: "i18n:empty-data",

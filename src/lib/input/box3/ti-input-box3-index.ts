@@ -15,7 +15,7 @@ const TiInputBox3Info: TiComInfo = {
   icon: "fas-address-book",
   race: TiComRace.VIEW,
   name: COM_TYPE,
-  text: "i18n:ti-input-box3-com-name",
+  text: "i18n:ti-input-box-3-com-name",
   i18n: {
     en_us: en_us,
     en_uk: en_us,

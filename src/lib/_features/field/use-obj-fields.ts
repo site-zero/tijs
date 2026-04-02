@@ -452,6 +452,18 @@ export function fldLabel(
   };
 }
 
+export function fldLabelPfxCp(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: LabelProps
+): FormField {
+  return fldLabel(
+    name,
+    titleAndTip,
+    _.assign({ prefixIconFor: "copy" }, comConf)
+  );
+}
+
 export function fldLabelI(
   name: FieldName,
   titleAndTip: string | string[],
@@ -741,6 +753,32 @@ export function fldMultiDroplist(
       {
         options,
         tipListMinWidth: "200px",
+      } as MultiDroplistProps,
+      comConf
+    ),
+  };
+}
+
+export function fldMultiDroplistAsStr(
+  name: FieldName,
+  titleAndTip: string | string[],
+  options: OptionsInput,
+  comConf?: MultiDroplistProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title: title || undefined,
+    tip,
+    type: "Array",
+    transformer: "anyToStrArray",
+    serializer: "arrayToStr",
+    comType: "TiMultiDroplist",
+    comConf: _.assign(
+      {
+        options,
+        tipListMinWidth: "200px",
+        tipFormat: "VT",
       } as MultiDroplistProps,
       comConf
     ),

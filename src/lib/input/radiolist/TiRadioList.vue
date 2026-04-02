@@ -1,15 +1,15 @@
 <script lang="ts" setup>
-  import _ from 'lodash';
-  import { computed, watch } from 'vue';
-  import { ListSelectEmitInfo, TiList } from '../../';
-  import { RadioListEmitter, RadioListProps } from './ti-radio-list-types';
-  import { useRadioList } from './use-radio-list';
+  import _ from "lodash";
+  import { computed, watch } from "vue";
+  import { ListSelectEmitInfo, TiList } from "../../";
+  import { RadioListEmitter, RadioListProps } from "./ti-radio-list-types";
+  import { useRadioList } from "./use-radio-list";
   //-----------------------------------------------------
   const emit = defineEmits<RadioListEmitter>();
   //-----------------------------------------------------
   const props = withDefaults(defineProps<RadioListProps>(), {
     textAsHtml: true,
-    borderStyle: 'solid',
+    borderStyle: "solid",
     highlightChecked: false,
     canHover: true,
   });
@@ -26,7 +26,7 @@
     let val = ids.length > 0 ? ids[0] : null;
     //console.log('onSelect', val);
     if (!_.isEqual(val, props.value)) {
-      emit('change', val);
+      emit("change", val);
     }
   }
   //-----------------------------------------------------
@@ -48,6 +48,8 @@
     :max-checked="1"
     :can-select="true"
     :showChecker="true"
-    :checked-ids="checkedIds"
+    :currentId="null"
+    :checkedIds="checkedIds"
+    :autoPickCurrent="false"
     @select="onSelect" />
 </template>
