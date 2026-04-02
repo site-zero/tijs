@@ -8,6 +8,7 @@ import {
   FormField,
   I18n,
   InputBoxProps,
+  InputDateRangeProps,
   InputDatetimeProps,
   InputNumProps,
   InputNumUnitProps,
@@ -404,6 +405,67 @@ export function fldFilterInput(
       comConf
     ),
   };
+}
+
+export function fldFilterInputUpper(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputBoxProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title: title || undefined,
+    tip,
+    comType: "TiInput",
+    comConf: _.assign(
+      {
+        placeholder: "i18n:no-set",
+        valueCase: "upperAll",
+        prefixIconFor: "clear",
+      } as InputBoxProps,
+      comConf
+    ),
+  };
+}
+
+export function fldInputDateRange(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputDateRangeProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title: title || undefined,
+    tip,
+    comType: "TiInputDateRange",
+    comConf: _.assign(
+      {
+        placeholder: "i18n:no-set",
+        valueCase: "upperAll",
+        prefixIconFor: "clear",
+      } as InputDateRangeProps,
+      comConf
+    ),
+  };
+}
+
+export function fldInputDateRangeUTC(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputDateRangeProps
+): FormField {
+  return fldInputDateRange(
+    name,
+    titleAndTip,
+    _.assign(
+      {
+        timezone: "Z",
+      },
+      comConf
+    )
+  );
 }
 
 /*-------------------------------------------------------
