@@ -91,7 +91,6 @@ export function useTiInputBox3Api(
   //-----------------------------------------------------
   // 操作函数
   //-----------------------------------------------------
-  
 
   //-----------------------------------------------------
   // 数据改动
@@ -103,7 +102,8 @@ export function useTiInputBox3Api(
   async function reloadCurrentItem() {
     _current_item.value = undefined;
     if (_box_options.value) {
-      _current_item.value = _box_options.value.loadRawItemByValue(props.value);
+      let opts = _box_options.value;
+      _current_item.value = await opts.loadRawItemByValue(props.value);
     }
   }
   //-----------------------------------------------------
