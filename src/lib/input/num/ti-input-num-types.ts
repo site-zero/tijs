@@ -1,5 +1,5 @@
 import {
-  InputBoxAspect,
+  BoxAspectProps,
   InputBoxProps,
   PlaceholderProps,
   ReadonlyProps,
@@ -11,7 +11,7 @@ export type InputNumValueType = "num" | "str" | "fixed";
 export type InputNumProps = CommonProps &
   PlaceholderProps &
   ReadonlyProps &
-  InputBoxAspect &
+  BoxAspectProps &
   Pick<
     InputBoxProps,
     | "prefixIcon"

@@ -1,4 +1,4 @@
-import { InputBoxAspect, ListProps, ValueHintCookingProps } from "../../";
+import { BoxAspectProps, ListProps } from "../../";
 import { CommonProps, IconInput, Vars } from "../../../_type";
 import {
   DictProps,
@@ -7,8 +7,10 @@ import {
   ReadonlyProps,
   ValuePipeProps,
 } from "../../_features";
-import { ValueOptionsProps } from "./../../../";
+
 import { useInputBox2 } from "./use-input-box2";
+import { ValueHintCookingProps } from "./use-value-hint-cooking";
+import { ValueOptionsProps } from "./use-value-options";
 //--------------------------------------------------
 export type InputBoxEmitter = {
   (event: "change", value: any): void;
@@ -28,7 +30,7 @@ export type InputBoxExposeApi = {
 export type InputBoxProps = CommonProps &
   DictProps &
   DisplayTextProps &
-  InputBoxAspect &
+  BoxAspectProps &
   PlaceholderProps &
   ReadonlyProps &
   ValueHintCookingProps &

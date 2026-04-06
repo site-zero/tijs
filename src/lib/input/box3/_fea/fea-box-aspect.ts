@@ -1,8 +1,9 @@
-import { CssUtils, InputBoxAspect, Vars, ViewportApi } from "@site0/tijs";
+import { CssUtils, Vars, ViewportApi } from "@site0/tijs";
 import _ from "lodash";
 import { computed } from "vue";
+import { BoxAspectProps } from "./types-box-aspect";
 
-export type FeaBoxAspectOptions = {
+export type FeaBoxAspectSetup = {
   isFocused: () => boolean;
   isTipBoxReady: () => boolean;
   isReadonly: () => boolean;
@@ -11,8 +12,8 @@ export type FeaBoxAspectOptions = {
 };
 
 export function feaBoxAspect(
-  props: InputBoxAspect,
-  options: FeaBoxAspectOptions
+  props: BoxAspectProps,
+  options: FeaBoxAspectSetup
 ) {
   const {
     isFocused,
@@ -70,7 +71,7 @@ export function feaBoxAspect(
   };
 }
 
-export function makeBoxAspectStyle(props: InputBoxAspect) {
+export function makeBoxAspectStyle(props: BoxAspectProps) {
   let re = _.assign({}, props.style);
   if (props.width) {
     re.width = props.width;

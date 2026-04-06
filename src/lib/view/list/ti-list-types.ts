@@ -21,6 +21,10 @@ import {
   SelectableProps,
 } from "../../../lib/_features/use-selectable";
 
+export type ListItemTextFormat =
+  | string
+  | ((it: AnyOptionItem, raw: Vars) => string);
+
 export type ListAspect = {
   style?: Vars;
   /**
@@ -33,7 +37,7 @@ export type ListAspect = {
    *
    * 默认相当于 `${text}`
    */
-  textFormat?: string | ((it: AnyOptionItem, raw: Vars) => string);
+  textFormat?: ListItemTextFormat;
 
   /**
    * 每行的选中图标的样子。

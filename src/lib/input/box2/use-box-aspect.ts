@@ -1,6 +1,6 @@
+import { BoxAspectProps, CssUtils, ViewportApi } from "@site0/tijs";
 import _ from "lodash";
 import { computed } from "vue";
-import { CssUtils, InputBoxAspect, ViewportApi } from "../../../";
 import { InputBoxApi, InputBoxProps } from "./ti-input-box-types";
 import { BoxTipsFeature } from "./use-box-tips";
 
@@ -58,7 +58,7 @@ export function useBoxAspect(
   };
 }
 
-export function makeBoxAspectStyle(props: InputBoxAspect) {
+export function makeBoxAspectStyle(props: BoxAspectProps) {
   let re = _.assign({}, props.style);
   if (props.width) {
     re.width = props.width;

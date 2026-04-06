@@ -1,13 +1,7 @@
 <script lang="ts" setup>
+  import _ from "lodash";
   import "prosemirror-menu/style/menu.css"; // 菜单样式
-  import {
-    onBeforeMount,
-    onMounted,
-    onUnmounted,
-    provide,
-    useTemplateRef,
-    watch,
-  } from "vue";
+  import { onMounted, onUnmounted, provide, useTemplateRef, watch } from "vue";
   import { useViewport } from "../../../_features";
   import EditorDocTree from "./EditorDocTree.vue";
   import EditorFooter from "./EditorFooter.vue";
@@ -18,7 +12,6 @@
     TiEditRichProseProps,
   } from "./ti-edit-rich-prose-types";
   import { useTiEditRichProseApi } from "./use-editor-api";
-  import _ from "lodash";
 
   //-----------------------------------------------------
   const $main = useTemplateRef<HTMLElement>("main");
@@ -32,7 +25,8 @@
   //-------------------------------------------------
   const $el = useTemplateRef<HTMLElement>("el");
   const _viewport = useViewport({
-    el: $el,
+    //el: $el,
+    getElement: () => $el.value,
     onMounted,
     onUnmounted,
   });
@@ -42,10 +36,10 @@
   watch(
     () => props.value,
     (newValue, oldValue) => {
-      console.log("updateContent:watch", {newValue, oldValue});
+      console.log("updateContent:watch", { newValue, oldValue });
       // _api.initEditor();
       if (newValue && !_.isEqual(newValue, oldValue)) {
-        console.log("It will change")
+        console.log("It will change");
         //_api.updateContent(newValue, 1);
       }
     }

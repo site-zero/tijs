@@ -1,36 +1,37 @@
 <script lang="ts" setup>
-  import _ from 'lodash';
-  import { computed, onMounted, onUnmounted, ref } from 'vue';
-  import { InputBoxApi, InputBoxProps, TiInput, useViewport } from '../../';
-  import { AnyOptionItem, ToStr } from '../../../_type';
-  import { CssUtils, Util } from '../../../core';
-  import { InputCodeProps } from './ti-input-code-types';
+  import _ from "lodash";
+  import { computed, onMounted, onUnmounted, ref } from "vue";
+  import { InputBoxApi, InputBoxProps, TiInput, useViewport } from "../../";
+  import { AnyOptionItem, ToStr } from "../../../_type";
+  import { CssUtils, Util } from "../../../core";
+  import { InputCodeProps } from "./ti-input-code-types";
   //-----------------------------------------------------
   const emit = defineEmits<{
-    (event: 'change', payload: string): void;
+    (event: "change", payload: string): void;
   }>();
   //-----------------------------------------------------
   const props = withDefaults(defineProps<InputCodeProps>(), {
-    tipShowTime: 'focus',
+    tipShowTime: "focus",
     tipUseHint: false,
-    tipTidyBy: () => ['main'],
+    tipTidyBy: () => ["main"],
     canInput: true,
     trimed: true,
     mustInOptions: true,
-    gap: 't',
+    gap: "t",
     // 自动，如果可编辑，就是 true ，否则就是 false
     checkValueWhenClose: undefined,
     autoSelect: true,
     useRawValue: true,
-    valueCase: 'upperAll',
-    codeWidth: '3em',
+    valueCase: "upperAll",
+    codeWidth: "3em",
     hideDescription: false,
   });
   //-------------------------------------------------
   const $el = ref<HTMLElement>();
   //-------------------------------------------------
   const _viewport = useViewport({
-    el: $el,
+    //el: $el,
+    getElement: () => $el.value,
     onMounted,
     onUnmounted,
   });
@@ -41,23 +42,23 @@
   const InputConfig = computed(() => {
     let re: InputBoxProps = _.omit(
       props,
-      'style',
-      'className',
-      'codeWidth',
-      'textStyle',
-      'gap',
-      'getDescription',
-      'hideDescription',
-      'tipListWidth'
+      "style",
+      "className",
+      "codeWidth",
+      "textStyle",
+      "gap",
+      "getDescription",
+      "hideDescription",
+      "tipListWidth"
     );
     re.tipListWidth = props.tipListWidth ?? `${_viewport.size.width}px`;
     if (!re.tipFormat) {
-      re.tipFormat = 'VT';
+      re.tipFormat = "VT";
     }
     if (props.codeWidth && !props.hideDescription) {
       re.mainBodyStyle = {
         width: CssUtils.toSize(props.codeWidth),
-        flex: '0 0 auto',
+        flex: "0 0 auto",
       };
     }
     return re;
@@ -102,14 +103,14 @@
   //-----------------------------------------------------
   const InputText = computed(() => {
     if (!_item.value) {
-      return props.descriptionPlaceholder ?? '';
+      return props.descriptionPlaceholder ?? "";
     }
     return GetDescription.value(_item.value);
   });
   //-----------------------------------------------------
   function onBoxItemChange(it: AnyOptionItem | null) {
     _item.value = it ?? undefined;
-    emit('change', it?.value || null);
+    emit("change", it?.value || null);
   }
   //-----------------------------------------------------
   async function onBoxExportApi(box: InputBoxApi) {

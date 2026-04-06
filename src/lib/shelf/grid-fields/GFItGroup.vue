@@ -1,25 +1,25 @@
 <script lang="ts" setup>
-  import { computed, onMounted, onUnmounted, ref } from 'vue';
+  import { computed, onMounted, onUnmounted, ref } from "vue";
   import {
     TiTextSnippet,
     useGridLayoutStyle,
     useGridLayoutTrack,
     useViewport,
-  } from '../../';
-  import { CssUtils, Tmpl } from '../../../core';
-  import GFItField from './GFItField.vue';
-  import GFItLabel from './GFItLabel.vue';
+  } from "../../";
+  import { CssUtils, Tmpl } from "../../../core";
+  import GFItField from "./GFItField.vue";
+  import GFItLabel from "./GFItLabel.vue";
   import {
     FormFieldItem,
     FormItemGroup,
     FormLabelItem,
     GridItemEmitter,
-  } from './ti-grid-fields-types';
+  } from "./ti-grid-fields-types";
   import {
     getBodyPartStyle,
     getFieldTextInfo,
     getGridItemStyle,
-  } from './use-field-style';
+  } from "./use-field-style";
   //-------------------------------------------------
   defineOptions({
     inheritAttrs: false,
@@ -35,7 +35,8 @@
   const $main = ref<HTMLElement>();
   //-------------------------------------------------
   const _viewport = useViewport({
-    el: $main,
+    //el: $main,
+    getElement: () => $main.value,
     onMounted,
     onUnmounted,
   });
@@ -46,7 +47,7 @@
   );
   //-------------------------------------------------
   const TopClass = computed(() => {
-    let names = [`aspect-${props.groupAspect ?? 'legend'}`];
+    let names = [`aspect-${props.groupAspect ?? "legend"}`];
     if (props.bodyPartGap) {
       names.push(`body-gap-${props.bodyPartGap}`);
     }
@@ -54,7 +55,7 @@
       names.push(`fsz-${props.bodyPartFontSize}`);
     }
     return CssUtils.mergeClassName(props.className, names, {
-      'is-disabled': props.isDisabled(props.data),
+      "is-disabled": props.isDisabled(props.data),
     });
   });
   //-------------------------------------------------
@@ -82,7 +83,7 @@
       let ctx = { data: props.data, vars: props.vars };
       return Tmpl.exec(GroupText.value.title, ctx);
     }
-    return '';
+    return "";
   });
   //-------------------------------------------------
 </script>
@@ -127,16 +128,13 @@
       :changeEventName="props.tipBy?.changeEventName"
       :vars="props.data" />
     <!--===============: 组体 :===================-->
-    <div
-      class="as-group-body"
-      :style="BodyStyle"
-      ref="$main">
+    <div class="as-group-body" :style="BodyStyle" ref="$main">
       <template v-for="fld in props.fields">
         <template v-if="!fld.isHidden(props.data)">
           <!------[:Field:]---------->
           <GFItField
             v-if="'field' == fld.race"
-            v-bind="(fld as FormFieldItem)"
+            v-bind="fld as FormFieldItem"
             :max-track-count="GridLayoutStyle.trackCount"
             :is-actived="fld.uniqKey == props.activedUniqKey"
             @name-change="emit('name-change', $event)"
@@ -146,7 +144,7 @@
           <!------[:Group:]---------->
           <GFItGroup
             v-else-if="'group' == fld.race"
-            v-bind="(fld as FormItemGroup)"
+            v-bind="fld as FormItemGroup"
             :max-track-count="GridLayoutStyle.trackCount"
             :actived-uniq-key="props.activedUniqKey"
             @name-change="emit('name-change', $event)"
@@ -154,7 +152,7 @@
           <!------[:Label:]---------->
           <GFItLabel
             v-else-if="'label' == fld.race"
-            v-bind="(fld as FormLabelItem)"
+            v-bind="fld as FormLabelItem"
             :max-track-count="GridLayoutStyle.trackCount" />
           <!------[!Invalid!]---------->
           <blockquote
@@ -170,5 +168,5 @@
   </div>
 </template>
 <style lang="scss">
-  @use './style/gf-it-group.scss';
+  @use "./style/gf-it-group.scss";
 </style>

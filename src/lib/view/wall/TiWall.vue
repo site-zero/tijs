@@ -29,7 +29,7 @@
   //-------------------------------------------------
   const $el = useTemplateRef<HTMLElement>("$el");
   const _viewport = useViewport({
-    el: $el,
+    getElement: () => $el.value,
     onMounted,
     onUnmounted,
   });

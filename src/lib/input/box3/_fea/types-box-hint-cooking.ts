@@ -1,6 +1,6 @@
 import { Vars } from "../../../../_type";
 
-export type ValueHintCookingProps = {
+export type BoxHintCookingProps = {
   /**
    * 动态渲染提示信息的上下文环境
    */

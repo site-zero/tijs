@@ -66,7 +66,8 @@
   let emit = defineEmits<LayoutGridEmitter>();
   //-------------------------------------------------
   const _viewport = useViewport({
-    el: $main,
+    //el: $main,
+    getElement: () => $main.value,
     emit,
     onMounted,
     onUnmounted,

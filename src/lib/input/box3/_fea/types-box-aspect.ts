@@ -6,8 +6,7 @@ import {
   Vars,
 } from "@site0/tijs";
 
-//--------------------------------------------------
-export type InputBoxAspect = CommonProps & {
+export type BoxAspectProps = CommonProps & {
   /**
    * 隐藏输入框边框
    */

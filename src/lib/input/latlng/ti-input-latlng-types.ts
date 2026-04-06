@@ -4,7 +4,7 @@ import {
   LbsMapValue,
   LbsMapValueCoords,
 } from "../../view/all-views";
-import { InputBoxAspect } from "../all-input";
+import { BoxAspectProps } from "../all-input";
 
 export type InputLatLngEmitter = {
   (event: "change", payload: LbsMapValue | null): void;
@@ -50,5 +50,5 @@ export type InputLatLngProps = CommonProps & {
    */
   mapOptions?: LbsMapProps;
 
-  boxAspect?: InputBoxAspect;
+  boxAspect?: BoxAspectProps;
 };

@@ -1,12 +1,16 @@
 import {
+  BoxOptionsDataProps,
+  CommonProps,
+  TableRowID,
+  Vars,
+} from "@site0/tijs";
+import {
   DictProps,
   ListProps,
   PlaceholderProps,
   ReadonlyProps,
   TagsProps,
 } from "../../";
-import { CommonProps, TableRowID, Vars } from "../../../_type";
-import { ValueOptionsProps } from "../../../";
 
 export type MultiDroplistEmitter = {
   (event: "change", vals: null | TableRowID[]): void;
@@ -16,7 +20,7 @@ export type MultiDroplistProps = CommonProps &
   PlaceholderProps &
   ReadonlyProps &
   DictProps &
-  ValueOptionsProps & {
+  BoxOptionsDataProps & {
     /**
      * 值，通常应该是数组，如果不是，会被转换为数组处理
      */

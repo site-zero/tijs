@@ -1,8 +1,8 @@
 import _ from "lodash";
 import { computed, Ref } from "vue";
 import { AnyOptionItem, Vars } from "../../../_type";
-import { ListProps } from "../../view/list/ti-list-types";
-import { InputBoxProps } from "./ti-input-box-types";
+import { ListItemTextFormat, ListProps } from "../../view/list/ti-list-types";
+import { InputBoxProps, TipOptionFormat } from "./ti-input-box-types";
 
 export type TipListSetup = {
   _options_data: Ref<Vars[] | undefined>;
@@ -42,35 +42,36 @@ export function useTipList(
 
     // 设置快速格式化
     if (!re.textFormat && props.tipFormat) {
-      re.textFormat = {
-        T: `<em>\${text}</em>`,
-        VT: (it: AnyOptionItem): string => {
-          if (_.isNil(it.value)) return `<em>${it.text}</em>`;
-          return `<code>${it.value}:</code><em>${it.text}</em>`;
-        },
-        TV: (it: AnyOptionItem): string => {
-          if (_.isNil(it.value)) return `<em>${it.text}</em>`;
-          return `<em>${it.text}</em><code>:${it.value}</code>`;
-        },
-        TP: (it: AnyOptionItem): string => {
-          return `<em>${it.text}</em><abbr>${it.tip}</abbr>`;
-        },
-        PT: (it: AnyOptionItem): string => {
-          return `<code>${it.tip}</code><em>${it.text}</em>`;
-        },
-        VTP: (it: AnyOptionItem): string => {
-          if (_.isNil(it.value))
+      const tfmt_set : Record<TipOptionFormat, ListItemTextFormat> = {
+T: `<em>\${text}</em>`,
+          VT: (it: AnyOptionItem): string => {
+            if (_.isNil(it.value)) return `<em>${it.text}</em>`;
+            return `<code>${it.value}:</code><em>${it.text}</em>`;
+          },
+          TV: (it: AnyOptionItem): string => {
+            if (_.isNil(it.value)) return `<em>${it.text}</em>`;
+            return `<em>${it.text}</em><code>:${it.value}</code>`;
+          },
+          TP: (it: AnyOptionItem): string => {
             return `<em>${it.text}</em><abbr>${it.tip}</abbr>`;
-          return `<code>${it.value}:</code><em>${it.text}</em><abbr>${it.tip}</abbr>`;
-        },
-        VpT: (it: AnyOptionItem): string => {
-          let { value, text, tip } = it;
-          if (tip) {
-            return `<code>${value}:</code><code>${tip}</code><em>${text}</em>`;
-          }
-          return `<code>${value}:</code><em>${text}</em>`;
-        },
-      }[props.tipFormat];
+          },
+          PT: (it: AnyOptionItem): string => {
+            return `<code>${it.tip}</code><em>${it.text}</em>`;
+          },
+          VTP: (it: AnyOptionItem): string => {
+            if (_.isNil(it.value))
+              return `<em>${it.text}</em><abbr>${it.tip}</abbr>`;
+            return `<code>${it.value}:</code><em>${it.text}</em><abbr>${it.tip}</abbr>`;
+          },
+          VpT: (it: AnyOptionItem): string => {
+            let { value, text, tip } = it;
+            if (tip) {
+              return `<code>${value}:</code><code>${tip}</code><em>${text}</em>`;
+            }
+            return `<code>${value}:</code><em>${text}</em>`;
+          },
+      }
+      re.textFormat = tfmt_set[props.tipFormat as TipOptionFormat];
     }
 
     return re;

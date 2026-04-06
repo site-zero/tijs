@@ -40,7 +40,8 @@
   const $el = ref<HTMLElement>();
   //-------------------------------------------------
   const _viewport = useViewport({
-    el: $el,
+    //el: $el,
+    getElement: () => $el.value,
     onMounted,
     onUnmounted,
   });
