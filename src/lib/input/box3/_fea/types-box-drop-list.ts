@@ -1,14 +1,14 @@
 import {
   BoxAspectProps,
+  BoxOptionsDataProps,
   DictProps,
   ListProps,
-  ValueOptionsProps,
 } from "@site0/tijs";
 
 export type BoxDropItemFormat = "T" | "VT" | "TV" | "VTP" | "TP" | "PT" | "VpT";
 
 export type BoxDropListProps = Pick<BoxAspectProps, "boxFontSize"> &
-  Pick<ValueOptionsProps, "optionKeepRaw"> &
+  Pick<BoxOptionsDataProps, "optionKeepRaw"> &
   Pick<DictProps, "getIcon" | "getText" | "getTip" | "getValue"> & {
     /**
      * 提示列表的配置

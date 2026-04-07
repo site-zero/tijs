@@ -1,16 +1,8 @@
-import { Str } from "@site0/tijs";
-import _ from "lodash";
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import {
   BoxCompositionProps,
   BoxCompositionSetup,
-  CoolingKeyMatcher,
 } from "./types-box-composition";
-
-type InnerCooling = {
-  matchKey: CoolingKeyMatcher;
-  cooling: number;
-};
 
 export function useBoxComposition(
   props: BoxCompositionProps,
@@ -22,60 +14,6 @@ export function useBoxComposition(
     key: "", // 按键的值 ArrowUp|ArrowDown|Escape|Enter...
     pressAt: 0, // 按键的时间戳
   };
-
-  /**
-   * 计算冷却配置的计算属性。
-   *
-   * 该计算属性根据 `options.waitCooling` 配置生成一个 `InnerCooling` 数组。
-   * 每个 `InnerCooling` 对象包含一个 `matchKey` 函数和一个 `cooling` 时间。
-   *
-   * `options.waitCooling` 可以包含以下两种形式的 `key`：
-   * 1. 自定义匹配方法：如果 `key` 是一个函数，则直接使用该函数作为 `matchKey`。
-   * 2. 指定的键：如果 `key` 是一个字符串或字符串数组，则生成一个匹配函数，该函数会检查给定的键是否在指定的键列表中。
-   *
-   * @returns {InnerCooling[]} 返回包含冷却配置的数组。
-   */
-  const _cooling = computed(() => {
-    let re: InnerCooling[] = [];
-    let _input = props.waitCooling || [
-      { key: "Escape|Enter|Escape", cooling: 300 },
-      { key: (k) => /^Arrow/.test(k), cooling: 300 },
-    ];
-    for (let _in of _input) {
-      // 定制了匹配方法
-      if (_.isFunction(_in.key)) {
-        re.push({
-          matchKey: _in.key,
-          cooling: _in.cooling,
-        });
-      }
-      // 指定了 key
-      else {
-        let ks: string[];
-        if (_.isString(_in.key)) {
-          ks = Str.splitIgnoreBlank(_in.key, /[|,; ]/g);
-        } else {
-          ks = _in.key;
-        }
-        re.push({
-          matchKey: (key: string) => {
-            return ks.indexOf(key) >= 0;
-          },
-          cooling: _in.cooling,
-        });
-      }
-    }
-    return re;
-  });
-
-  function _find_cooling(key: string) {
-    for (let _c of _cooling.value) {
-      if (_c.matchKey(key)) {
-        return _c.cooling;
-      }
-    }
-    return 0;
-  }
 
   function onKeyPress(event: KeyboardEvent) {
     _keypress.key = event.key;
@@ -109,14 +47,6 @@ export function useBoxComposition(
     }
     if (_compositing.value) {
       return;
-    }
-    // 看看是否是需要冷却的按键
-    let cooling = _find_cooling(_keypress.key);
-    if (cooling > 0) {
-      let passed = Date.now() - _keypress.pressAt;
-      if (passed < cooling) {
-        return;
-      }
     }
 
     // 更新值

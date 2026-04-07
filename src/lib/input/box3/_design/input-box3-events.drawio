@@ -1,0 +1,52 @@
+<mxfile host="65bd71144e">
+    <diagram id="-cJ4864SoaLs_oP2aHiB" name="第 1 页">
+        <mxGraphModel dx="988" dy="549" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="2" value="InputBox" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0" vertex="1" parent="1">
+                    <mxGeometry x="170" y="80" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="3" value="&lt;div&gt;&lt;font style=&quot;color: rgb(51, 51, 255);&quot;&gt;_focused: boolean&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(51, 51, 255);&quot;&gt;_options_data: [..]&lt;/font&gt;&lt;/div&gt;&lt;div&gt;&lt;font style=&quot;color: rgb(51, 51, 255);&quot;&gt;_current_item: {..}&lt;/font&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;align=left;spacing=11;spacingTop=2;fontSize=10;fontColor=#3333FF;dashed=1;" vertex="1" parent="1">
+                    <mxGeometry x="360" y="80" width="160" height="60" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="Arrow Up/Down" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="280" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="Blur: Tab Key" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="310" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="Compose End" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="250" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="Blur: Click Masker" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="340" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="Focus Input" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="370" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="Click Load Options" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="400" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="Click Options Items" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="430" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="Mark Focused" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;" vertex="1" parent="1">
+                    <mxGeometry x="390" y="220" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="props.value changed" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;fillColor=#e51400;strokeColor=#B20000;fontColor=#ffffff;" vertex="1" parent="1">
+                    <mxGeometry x="200" y="220" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="16" value="_focused: boolean" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;dashed=1;strokeWidth=1;" vertex="1" parent="1">
+                    <mxGeometry x="640" y="240" width="160" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="17" value="_option_data: [..]" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;dashed=1;strokeWidth=1;" vertex="1" parent="1">
+                    <mxGeometry x="640" y="300" width="160" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="18" value="_current_item: {..}" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;dashed=1;strokeWidth=1;" vertex="1" parent="1">
+                    <mxGeometry x="640" y="360" width="160" height="40" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>

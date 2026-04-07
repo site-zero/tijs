@@ -1,5 +1,5 @@
 import { IconInput } from "@site0/tijs";
-import { BoxIconFor } from "./types-box-icon";
+import { Box3IconFor } from "./types-box-icon";
 
 export type BoxPrefixSuffixProps = {
   /**
@@ -16,7 +16,7 @@ export type BoxPrefixSuffixProps = {
   /**
    * 声明了这个动作，则表示这个图标可以点击
    */
-  prefixIconFor?: BoxIconFor;
+  prefixIconFor?: Box3IconFor;
 
   /**
    * 后缀图标
@@ -26,5 +26,5 @@ export type BoxPrefixSuffixProps = {
   /**
    * 声明了这个动作，则表示这个图标可以点击
    */
-  suffixIconFor?: BoxIconFor;
+  suffixIconFor?: Box3IconFor;
 };

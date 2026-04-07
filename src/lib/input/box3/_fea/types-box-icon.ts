@@ -1,21 +1,21 @@
 import { IconInput } from "@site0/tijs";
 import { InputBox3Api } from "../ti-input-box3-types";
 
-export type BoxIconHandler = (box: InputBox3Api) => void;
-export type BoxIconFor =
+export type Box3IconHandler = (box: InputBox3Api) => void;
+export type Box3IconFor =
   | "copy"
   | "load-options"
   | "clear"
   | "click"
   | "open"
-  | BoxIconHandler;
+  | Box3IconHandler;
 
 export type BoxIconEmit = "click:prefix-icon" | "click:suffix-icon";
 
 export type BoxIconProps = {
   icon?: IconInput | null;
   hoverIcon?: IconInput | null;
-  iconFor?: BoxIconFor;
+  iconFor?: Box3IconFor;
   autoIcon?: IconInput;
   clickEmit: BoxIconEmit;
 };

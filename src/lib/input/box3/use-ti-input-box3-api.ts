@@ -1,17 +1,22 @@
 import {
+  Box3IconHandler,
   feaBoxAspect,
+  Str,
+  useBoxComposition,
   useBoxHintCooking,
   useBoxOptionsData,
   useDict,
   useDisplayText,
+  usePlaceholder,
   useReadonly,
   useValuePipe,
   useViewport,
   Vars,
 } from "@site0/tijs";
+import _ from "lodash";
 import { computed, ref } from "vue";
 import { useBoxPrefixSuffix } from "./_fea/fea-box-prefix-suffix";
-import { BoxIconEmit, BoxIconHandler } from "./_fea/types-box-icon";
+import { BoxIconEmit } from "./_fea/types-box-icon";
 import { InputBox3Emitter, InputBox3Props } from "./ti-input-box3-types";
 
 export type TiInputBox3Setup = {
@@ -40,21 +45,23 @@ export function useTiInputBox3Api(
     })
   );
   //-----------------------------------------------------
-  const _aspect = feaBoxAspect(props, {
-    isFocused: () => _focused.value,
-    isTipBoxReady: () => false,
-    isReadonly: () => _readonly.value.isReadonly(props),
-    getViewport: () => _viewport.value,
-    getTipMainBoxStyle: () => {
-      return {};
-    },
-  });
+  const _aspect = computed(() =>
+    feaBoxAspect(props, {
+      isFocused: () => _focused.value,
+      isTipBoxReady: () => false,
+      isReadonly: () => _readonly.value.isReadonly(props),
+      getViewport: () => _viewport.value,
+      getTipMainBoxStyle: () => {
+        return {};
+      },
+    })
+  );
   //-----------------------------------------------------
   const _presuffix = computed(() =>
     useBoxPrefixSuffix(props, {
       getBoxIcon: () => undefined,
       isReadonly: () => _readonly.value.isReadonly(props),
-      onInvoke: (hdl: BoxIconHandler) => {
+      onInvoke: (hdl: Box3IconHandler) => {
         hdl(api);
       },
       onEmit: (clickEmit: BoxIconEmit) => {
@@ -82,12 +89,32 @@ export function useTiInputBox3Api(
     });
   });
   //-----------------------------------------------------
+  const _compose = computed(() => {
+    return useBoxComposition(props, {
+      isReadonly: () => isInputReadonly.value,
+      onChange: (val: string) => {
+        console.error("need Implement onChange", val);
+      },
+    });
+  });
   //-----------------------------------------------------
   //-----------------------------------------------------
   // 计算属性
   //-----------------------------------------------------
+  const isFocused = computed(() => _focused.value);
   const isReadonly = computed(() => _readonly.value.isReadonly(props.value));
   const isInputReadonly = computed(() => isReadonly.value || !props.canInput);
+  const Placeholder = computed(() => usePlaceholder(props));
+  //-----------------------------------------------------
+  const DisplayText = computed(() => {
+    if (_current_item.value) {
+      return _display.value(_current_item.value);
+    }
+    if (_.isNil(props.value)) {
+      return "";
+    }
+    return Str.anyToStr(props.value);
+  });
   //-----------------------------------------------------
   // 操作函数
   //-----------------------------------------------------
@@ -110,11 +137,21 @@ export function useTiInputBox3Api(
   // 返回接口
   //-----------------------------------------------------
   const api = {
+    Aspect: _aspect,
+    PreSuffix: _presuffix,
+    Display: _display,
+    Compose: _compose,
     // 计算属性
+    isFocused,
+    isReadonly,
+    isInputReadonly,
+    Placeholder,
+    DisplayText,
     // 操作函数
     // 数据校验
     // 数据改动
     // 远程操作
+    reloadCurrentItem,
   };
   return api;
 }

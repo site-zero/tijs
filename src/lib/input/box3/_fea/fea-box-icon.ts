@@ -1,15 +1,11 @@
 import { Icons } from "@site0/tijs";
 import _ from "lodash";
 import { computed } from "vue";
-import {
-    BoxIconEmit,
-    BoxIconHandler,
-    BoxIconProps,
-} from "./types-box-icon";
+import { Box3IconHandler, BoxIconEmit, BoxIconProps } from "./types-box-icon";
 
 export type BoxIconSetup = {
   isReadonly: () => boolean;
-  onInvoke: (hdl: BoxIconHandler) => void;
+  onInvoke: (hdl: Box3IconHandler) => void;
   onEmit: (clickEmit: BoxIconEmit) => void;
   onClear: () => void;
   onCopy: () => void;
