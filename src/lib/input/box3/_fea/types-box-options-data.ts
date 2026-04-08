@@ -74,7 +74,7 @@ export type BoxOptionsDataProps = ItemLookupProps & {
 };
 
 //--------------------------------------------------
-export type ValueOptionsSetup = {
+export type BoxOptionsDataSetup = {
   /**
    * 准备好的字典实例
    */
@@ -82,8 +82,8 @@ export type ValueOptionsSetup = {
   /**
    * 要处理的选项数据列表
    */
-  getOptionsData?: () => Vars[] | undefined;
-  setOptionsData: (data: Vars[]) => void;
+  // getOptionsData?: () => Vars[] | undefined;
+  // setOptionsData: (data: Vars[]) => void;
 
   /**
    * 对于搜索提示信息进行预处理

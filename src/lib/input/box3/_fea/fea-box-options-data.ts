@@ -12,24 +12,17 @@ import { computed } from "vue";
 import { BoxOptionFilterMaker, useItemLookup } from "../../..";
 import {
   BoxOptionsDataProps,
-  ValueOptionsSetup,
+  BoxOptionsDataSetup,
 } from "./types-box-options-data";
 //--------------------------------------------------
 export type ValueOptions = ReturnType<typeof useBoxOptionsData>;
 //--------------------------------------------------
 export function useBoxOptionsData(
   props: BoxOptionsDataProps,
-  setup: ValueOptionsSetup
+  setup: BoxOptionsDataSetup
 ) {
-  let { dict, getOptionsData, setOptionsData, cookHint } = setup;
+  let { dict, cookHint } = setup;
   let { optionKeepRaw = false } = props;
-  //------------------------------------------------
-  function _load_options_data() {
-    if (getOptionsData) {
-      return getOptionsData() || [];
-    }
-    return [];
-  }
   //------------------------------------------------
   const _options_filter = computed(() => {
     if (props.optionFilter) {
@@ -66,7 +59,7 @@ export function useBoxOptionsData(
     return list;
   });
   //------------------------------------------------
-  const OptionsData = computed(() => {
+  function filterOptionsData(_options_data: Vars[]) {
     let list: Vars[] = [];
     // 显示清除选项
     if (props.showCleanOption) {
@@ -82,7 +75,6 @@ export function useBoxOptionsData(
     // 添加固定项目
     list.push(...FixedOptionsData.value);
     // 添加动态项目
-    let _options_data = _load_options_data();
     for (let it of _options_data) {
       if (_options_filter.value(it)) {
         // 我只是想要一个副本，或许能规避一些潜在的副作用
@@ -90,16 +82,7 @@ export function useBoxOptionsData(
       }
     }
     return list;
-  });
-  //------------------------------------------------
-  const isDataEmpty = computed(() => {
-    let _options_data = _load_options_data();
-    return _.isEmpty(_options_data);
-  });
-  //------------------------------------------------
-  const isFilteredDataEmpty = computed(() => {
-    return _.isEmpty(OptionsData.value);
-  });
+  }
   //------------------------------------------------
   let lastAbort: AbortController | null = null;
   const ABORT_REASON = "abort-value-options-reload";
@@ -110,10 +93,15 @@ export function useBoxOptionsData(
       lastAbort = null;
     }
   }
-
   //------------------------------------------------
-  function getOptionItemIndex(value: any): number {
-    const list = OptionsData.value ?? [];
+  function toOptionItem(it: Vars): AnyOptionItem {
+    if (isAnyOptionItem(it)) {
+      return it;
+    }
+    return dict.toStdItem(it).toOptionItem();
+  }
+  //------------------------------------------------
+  function getOptionItemIndex(list: Vars[], value: any): number {
     if (_.isNil(value) || !list || _.isEmpty(list)) {
       return -1;
     }
@@ -135,18 +123,11 @@ export function useBoxOptionsData(
     return -1;
   }
   //------------------------------------------------
-  function toOptionItem(it: Vars): AnyOptionItem {
-    if (isAnyOptionItem(it)) {
-      return it;
-    }
-    return dict.toStdItem(it).toOptionItem();
-  }
-  //------------------------------------------------
   function getOptionItemAt(
+    list: Vars[],
     index: number,
     offset: number = 0
   ): AnyOptionItem | undefined {
-    const list = OptionsData.value ?? [];
     // 防空
     if (index < 0 || !list || index >= list.length) {
       return undefined;
@@ -162,12 +143,15 @@ export function useBoxOptionsData(
     return toOptionItem(it);
   }
   //------------------------------------------------
-  function getOptionItem(value: any): AnyOptionItem | undefined {
-    if (_.isNil(value) || _.isEmpty(OptionsData.value)) {
+  function getOptionItemByVal(
+    list: Vars[],
+    value: any
+  ): AnyOptionItem | undefined {
+    if (_.isNil(value) || _.isEmpty(list)) {
       return;
     }
     // 逐个寻找选项对象
-    for (let it of OptionsData.value) {
+    for (let it of list) {
       let stdItem: AnyOptionItem;
       if (isAnyOptionItem(it)) {
         stdItem = it;
@@ -180,12 +164,12 @@ export function useBoxOptionsData(
     }
   }
   //------------------------------------------------
-  function getRawItem(value: any): Vars | undefined {
-    if (_.isNil(value) || _.isEmpty(OptionsData.value)) {
+  function getRawItemByVal(list: Vars[], value: any): Vars | undefined {
+    if (_.isNil(value) || _.isEmpty(list)) {
       return;
     }
     // 逐个寻找选项对象
-    for (let it of OptionsData.value) {
+    for (let it of list) {
       let itVal: any;
       if (isAnyOptionItem(it)) {
         itVal = it.value;
@@ -198,15 +182,17 @@ export function useBoxOptionsData(
     }
   }
   //------------------------------------------------
-  function lookupOptionItem(hint: string): AnyOptionItem | undefined {
-    let _options_data = _load_options_data();
-    if (!hint || !_options_data || _.isEmpty(_options_data)) {
+  function lookupOptionItem(
+    list: Vars[],
+    hint: string
+  ): AnyOptionItem | undefined {
+    if (!hint || !list || _.isEmpty(list)) {
       return;
     }
     //
     const _lookup_for_hint = useItemLookup(props);
     // 逐个寻找选项对象
-    for (let it of _options_data) {
+    for (let it of list) {
       if (_lookup_for_hint(it, hint)) {
         return toOptionItem(it);
       }
@@ -215,7 +201,10 @@ export function useBoxOptionsData(
   //------------------------------------------------
   // 异步方法
   //------------------------------------------------
-  async function reloadOptioinsData(hint?: string, whenAbort?: () => void) {
+  async function reloadOptioinsData(
+    hint?: string,
+    whenAbort?: () => void
+  ): Promise<Vars[]> {
     // 取消重入
     if (lastAbort) {
       lastAbort.abort({ abort: true, reason: ABORT_REASON });
@@ -250,7 +239,7 @@ export function useBoxOptionsData(
       }
 
       // 计入返回结果集
-      setOptionsData(_data);
+      return _data;
     } catch (_e) {
       // 处理错误
       // 对于主动 abort 的操作，忍受异常
@@ -259,7 +248,7 @@ export function useBoxOptionsData(
         if (whenAbort) {
           await whenAbort();
         }
-        return;
+        return [];
       }
       throw err;
     } finally {
@@ -269,6 +258,7 @@ export function useBoxOptionsData(
   }
   //------------------------------------------------
   async function loadStdItemByValue(
+    list: Vars[],
     val: any
   ): Promise<AnyOptionItem | undefined> {
     // 防空
@@ -276,7 +266,7 @@ export function useBoxOptionsData(
       return;
     }
     // 本地有数据
-    let re = getOptionItem(val);
+    let re = getOptionItemByVal(list, val);
     if (re) {
       return re;
     }
@@ -287,13 +277,16 @@ export function useBoxOptionsData(
     }
   }
   //------------------------------------------------
-  async function loadRawItemByValue(val: any): Promise<Vars | undefined> {
+  async function loadRawItemByValue(
+    list: Vars[],
+    val: any
+  ): Promise<Vars | undefined> {
     // 防空
     if (_.isNil(val)) {
       return;
     }
     // 本地有数据
-    let re = getRawItem(val);
+    let re = getRawItemByVal(list, val);
     if (re) {
       return re;
     }
@@ -307,13 +300,11 @@ export function useBoxOptionsData(
   // 返回特性
   //------------------------------------------------
   return {
-    OptionsData,
-    isDataEmpty,
-    isFilteredDataEmpty,
-    getOptionItem,
+    filterOptionsData,
     getOptionItemIndex,
     getOptionItemAt,
-    getRawItem,
+    getOptionItemByVal,
+    getRawItemByVal,
     toOptionItem,
     lookupOptionItem,
     reloadOptioinsData,

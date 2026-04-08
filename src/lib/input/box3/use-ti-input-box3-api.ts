@@ -2,7 +2,6 @@ import {
   Box3IconHandler,
   feaBoxAspect,
   Str,
-  useBoxComposition,
   useBoxHintCooking,
   useBoxOptionsData,
   useDict,
@@ -25,6 +24,8 @@ export type TiInputBox3Setup = {
   getInputElement: () => HTMLElement | null;
 };
 
+export type Box3OptionsStatus = "loading" | "ready" | "hide";
+
 export function useTiInputBox3Api(
   props: InputBox3Props,
   setup: TiInputBox3Setup
@@ -35,6 +36,7 @@ export function useTiInputBox3Api(
   //-----------------------------------------------------
   const _focused = ref<boolean>(false);
   const _options_data = ref<Vars[]>([]);
+  const _options_status = ref<Box3OptionsStatus>("hide");
   const _current_item = ref<Vars>();
   //-----------------------------------------------------
   const _readonly = computed(() => useReadonly(props));
@@ -83,21 +85,9 @@ export function useTiInputBox3Api(
     if (!_dict.value) return;
     return useBoxOptionsData(props, {
       dict: _dict.value,
-      getOptionsData: () => _options_data.value,
-      setOptionsData: (data: Vars[]) => (_options_data.value = data || []),
       cookHint: _cook_hint.value,
     });
   });
-  //-----------------------------------------------------
-  const _compose = computed(() => {
-    return useBoxComposition(props, {
-      isReadonly: () => isInputReadonly.value,
-      onChange: (val: string) => {
-        console.error("need Implement onChange", val);
-      },
-    });
-  });
-  //-----------------------------------------------------
   //-----------------------------------------------------
   // 计算属性
   //-----------------------------------------------------
@@ -105,6 +95,18 @@ export function useTiInputBox3Api(
   const isReadonly = computed(() => _readonly.value.isReadonly(props.value));
   const isInputReadonly = computed(() => isReadonly.value || !props.canInput);
   const Placeholder = computed(() => usePlaceholder(props));
+  //-----------------------------------------------------
+  const FilteredOptionsData = computed(() => {
+    return _box_options.value?.filterOptionsData(_options_data.value || []);
+  });
+  //-----------------------------------------------------
+  const isOptionsDataEmpty = computed(() => {
+    return _.isEmpty(_options_data.value);
+  });
+  //-----------------------------------------------------
+  const isFilteredOptionsDataEmpty = computed(() => {
+    return _.isEmpty(FilteredOptionsData.value);
+  });
   //-----------------------------------------------------
   const DisplayText = computed(() => {
     if (_current_item.value) {
@@ -118,7 +120,21 @@ export function useTiInputBox3Api(
   //-----------------------------------------------------
   // 操作函数
   //-----------------------------------------------------
-
+  function setFocused(focused: boolean) {
+    _focused.value = focused;
+  }
+  //-----------------------------------------------------
+  function setOptionsReady(st: Box3OptionsStatus) {
+    _options_status.value = st;
+  }
+  //-----------------------------------------------------
+  function setOptionsStatus(status: Box3OptionsStatus) {
+    _options_status.value = status;
+  }
+  //-----------------------------------------------------
+  function setCurrentItem(item?: Vars | null) {
+    _current_item.value = item ?? undefined;
+  }
   //-----------------------------------------------------
   // 数据改动
   //-----------------------------------------------------
@@ -130,8 +146,20 @@ export function useTiInputBox3Api(
     _current_item.value = undefined;
     if (_box_options.value) {
       let opts = _box_options.value;
-      _current_item.value = await opts.loadRawItemByValue(props.value);
+      _current_item.value = await opts.loadRawItemByValue(
+        _options_data.value,
+        props.value
+      );
     }
+  }
+  //-----------------------------------------------------
+  async function reloadOptionsData() {
+    _options_status.value = "loading";
+    if (_box_options.value) {
+      let opts = _box_options.value;
+      _options_data.value = await opts.reloadOptioinsData();
+    }
+    _options_status.value = "ready";
   }
   //-----------------------------------------------------
   // 返回接口
@@ -140,18 +168,25 @@ export function useTiInputBox3Api(
     Aspect: _aspect,
     PreSuffix: _presuffix,
     Display: _display,
-    Compose: _compose,
     // 计算属性
     isFocused,
     isReadonly,
     isInputReadonly,
     Placeholder,
+    FilteredOptionsData,
+    isOptionsDataEmpty,
+    isFilteredOptionsDataEmpty,
     DisplayText,
     // 操作函数
+    setFocused,
+    setOptionsReady,
+    setOptionsStatus,
+    setCurrentItem,
     // 数据校验
     // 数据改动
     // 远程操作
     reloadCurrentItem,
+    reloadOptionsData,
   };
   return api;
 }

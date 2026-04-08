@@ -1,5 +1,7 @@
 <script lang="ts" setup>
   import { computed, useTemplateRef } from "vue";
+  import { useBoxComposition } from "./_fea";
+  import { try_update_by_input } from "./support";
   import { InputBox3Emitter, InputBox3Props } from "./ti-input-box3-types";
   import { useTiInputBox3Api } from "./use-ti-input-box3-api";
   //-----------------------------------------------------
@@ -8,12 +10,33 @@
   //-----------------------------------------------------
   const emit = defineEmits<InputBox3Emitter>();
   //-----------------------------------------------------
-  const props = withDefaults(defineProps<InputBox3Props>(), {});
+  const props = withDefaults(defineProps<InputBox3Props>(), {
+    canInput: true,
+    value: "",
+    autoI18n: true,
+    tipShowTime: "focus",
+    tipShowDelay: 500,
+    tipUseHint: false,
+    trimed: true,
+    autoSelect: true,
+    // boxFontSize: "m",
+    // boxPadding: "m",
+    // boxRadius: "s",
+  });
   //-----------------------------------------------------
   const api = useTiInputBox3Api(props, {
     emit,
     getTopElement: () => $el.value,
     getInputElement: () => $input.value,
+  });
+  //-----------------------------------------------------
+  const Compose = computed(() => {
+    return useBoxComposition(props, {
+      isReadonly: () => api.isInputReadonly.value,
+      onChange: (val: string) => {
+        try_update_by_input(api, val);
+      },
+    });
   });
   //-----------------------------------------------------
   const Aspect = computed(() => api.Aspect.value);
@@ -23,7 +46,7 @@
 </script>
 <template>
   <div
-    class="ti-input"
+    class="ti-input-box3"
     :class="Aspect.TopClass.value"
     :style="Aspect.TopStyle.value">
     <!--=============| MAIN PART |==================-->
@@ -52,9 +75,9 @@
           :readonly="api.isInputReadonly.value"
           spellcheck="false"
           __@keydown="onKeyDown"
-          @keyup="api.Compose.value.onKeyUp"
-          @compositionstart="api.Compose.value.onStart"
-          @compositionend="api.Compose.value.onEnd"
+          @keyup="Compose.onKeyUp"
+          @compositionstart="Compose.onStart"
+          @compositionend="Compose.onEnd"
           __@focus.stop="onInputFocused"
           __@blur.stop="onInputBlur"
           __@dblclick.stop />
