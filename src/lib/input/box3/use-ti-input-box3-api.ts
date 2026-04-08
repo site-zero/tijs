@@ -92,15 +92,22 @@ export function useTiInputBox3Api(
   });
   //-----------------------------------------------------
   const DisplayText = computed(() => {
-    if (_current_item.value) {
-      if(isOptionsDataShow.value && !props.useTextWhenFocus){
-        return _current_item.value;
+    let boxItem = _current_item.value;
+    let boxOpts = _box_options.value;
+    if (boxOpts && boxItem) {
+      // 如果聚焦了输入框，指明显示裸值，就显示裸值
+      if (isOptionsDataShow.value && !props.useTextWhenFocus) {
+        let std = boxOpts.toOptionItem(boxItem);
+        return Str.anyToStr(std.value);
       }
-      return _display.value(_current_item.value);
+      // 否则翻译显示值
+      return _display.value(boxItem);
     }
+    // 空值，一定归一化为空串
     if (_.isNil(props.value)) {
       return "";
     }
+    // 直接显示值
     return Str.anyToStr(props.value);
   });
   //-----------------------------------------------------
@@ -123,7 +130,7 @@ export function useTiInputBox3Api(
       return;
     }
     $input.focus();
-    if (props.autoSelect) {
+    if (props.autoSelect && props.canInput) {
       $input.select();
     }
   }
@@ -160,7 +167,7 @@ export function useTiInputBox3Api(
 
   //-----------------------------------------------------
   // 远程操作
-  //-----------------------------------------------------
+  //----------------------reloadCurrentItem-------------------------------
   async function reloadCurrentItem() {
     _current_item.value = undefined;
     if (_box_options.value) {
@@ -169,6 +176,13 @@ export function useTiInputBox3Api(
         _options_data.value,
         props.value
       );
+    }
+  }
+  //-----------------------------------------------------
+  async function tryReloadCurrentItem() {
+    let cv = _current_item.value;
+    if (!_.isEqual(cv, props.value)) {
+      await reloadCurrentItem();
     }
   }
   //-----------------------------------------------------
@@ -228,6 +242,7 @@ export function useTiInputBox3Api(
     // 数据改动
     // 远程操作
     reloadCurrentItem,
+    tryReloadCurrentItem,
     reloadOptionsData,
     tryReloadOptionsData,
   };

@@ -1,14 +1,16 @@
+import { AnyOptionItem, ListItemTextFormat, ListProps } from "@site0/tijs";
 import _ from "lodash";
-import { computed, Ref } from "vue";
-import { AnyOptionItem, Vars } from "@site0/tijs";
-import { ListItemTextFormat, ListProps } from "@site0/tijs";
+import { computed } from "vue";
 import {
   BoxDropItemFormat,
   BoxDropListProps,
   BoxDropListSetup,
 } from "./types-box-drop-list";
 
-export function useBoxDropList(props: BoxDropListProps, setup: BoxDropListSetup) {
+export function useBoxDropList(
+  props: BoxDropListProps,
+  setup: BoxDropListSetup
+) {
   const { getTipContainer } = setup;
   /**
    * 提示列表的配置信息
@@ -57,9 +59,17 @@ export function useBoxDropList(props: BoxDropListProps, setup: BoxDropListSetup)
           return `<code>${it.tip}</code><em>${it.text}</em>`;
         },
         VTP: (it: AnyOptionItem): string => {
-          if (_.isNil(it.value))
-            return `<em>${it.text}</em><abbr>${it.tip}</abbr>`;
-          return `<code>${it.value}:</code><em>${it.text}</em><abbr>${it.tip}</abbr>`;
+          let ss = [];
+          if (!_.isNil(it.value)) {
+            ss.push(`<code>${it.value}:</code>`);
+          }
+          if (!_.isNil(it.text)) {
+            ss.push(`<em>${it.text}</em>`);
+          }
+          if (!_.isNil(it.tip)) {
+            ss.push(`<abbr>${it.tip}</abbr>`);
+          }
+          return ss.join("");
         },
         VpT: (it: AnyOptionItem): string => {
           let { value, text, tip } = it;

@@ -5,10 +5,10 @@ import TiInputBox3 from "./TiInputBox3.vue";
 const COM_TYPE = "TiInput";
 
 const en_us = {
-  "com-name": "Input Box 3",
+  "com-name": "Input Box",
 };
 const zh_cn = {
-  "com-name": "输入框3",
+  "com-name": "输入框",
   "example-options": "带选项",
   "example-formated": "自动大写",
   "example-query": "动态查询",
@@ -57,6 +57,7 @@ const TiInputBox3Info: TiComInfo = {
         suffixIconFor: "load-options",
         mustInOptions: true,
         lookup: ["*~text"],
+        tipFormat:'VTP',
         options: [
           { value: "A", text: "甲" },
           { value: "B", text: "乙" },

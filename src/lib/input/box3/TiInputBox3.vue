@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { TiList, useBoxDropList } from "@site0/tijs";
-  import { computed, onMounted, useTemplateRef } from "vue";
+  import { computed, onMounted, useTemplateRef, watch } from "vue";
   import {
     Box3IconHandler,
     BoxIconEmit,
@@ -9,15 +9,17 @@
     useBoxPrefixSuffix,
   } from "./_fea";
   import { try_update_by_input } from "./support";
+  import { on_click_top } from "./support/on_click_top";
+  import { on_input_keydown } from "./support/on_input_keydown";
   import { try_blur } from "./support/try_blur";
   import { try_click_mask } from "./support/try_click_mask";
   import { try_focus } from "./support/try_focus";
   import { try_select_option_item } from "./support/try_select_option_item";
   import { try_show_options } from "./support/try_show_options";
   import { try_submit_change } from "./support/try_submit_change";
+  import { try_update_by_props } from "./support/try_update_by_props";
   import { InputBox3Emitter, InputBoxProps } from "./ti-input-box3-types";
   import { useTiInputBox3Api } from "./use-ti-input-box3-api";
-import { on_click_top } from "./support/on_click_top";
   //-----------------------------------------------------
   defineOptions({ inheritAttrs: false });
   //-----------------------------------------------------
@@ -94,6 +96,14 @@ import { on_click_top } from "./support/on_click_top";
     })
   );
   //-----------------------------------------------------
+  watch(
+    () => [props.value, props.options],
+    async () => {
+      await try_update_by_props(api);
+    },
+    { immediate: true }
+  );
+  //-----------------------------------------------------
   onMounted(() => {
     if (props.autoFocus) {
       api.setFocused(true);
@@ -114,7 +124,7 @@ import { on_click_top } from "./support/on_click_top";
       class="part-main"
       :class="Aspect.PartMainClass.value"
       :style="Aspect.PartMainStyle.value"
-      @click.stop="on_click_top(api,props)">
+      @click.stop="on_click_top(api, props)">
       <!----------|> MAIN PART: HEAD |---------->
       <slot name="head"></slot>
       <!----------|> MAIN PART: BODY |---------->
@@ -134,7 +144,7 @@ import { on_click_top } from "./support/on_click_top";
           :value="api.DisplayText.value"
           :readonly="api.isInputReadonly.value"
           spellcheck="false"
-          __@keydown="onKeyDown"
+          @keydown="on_input_keydown(api, $event)"
           @change="try_submit_change(api)"
           @keyup="Compose.onKeyUp"
           @compositionstart="Compose.onStart"
