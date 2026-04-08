@@ -1,16 +1,66 @@
-import { IconInput } from "@site0/tijs";
+import {
+  AnyOptionItem,
+  Be,
+  Convertor,
+  IconInput,
+  Tmpl,
+  Vars,
+} from "@site0/tijs";
+import _ from "lodash";
 import { BoxIconSetup, useBoxIcon } from "./fea-box-icon";
 import { BoxPrefixSuffixProps } from "./types-box-prefix-suffix";
 
 export type BoxPrefixSuffixSetup = BoxIconSetup & {
   getBoxIcon: () => IconInput | undefined;
+  getBoxValue: () => any;
+  toOptionItem: (it: Vars) => AnyOptionItem;
 };
 
 export function useBoxPrefixSuffix(
   props: BoxPrefixSuffixProps,
-  setup: BoxPrefixSuffixSetup
+  setup: Omit<BoxPrefixSuffixSetup, "onOpen">
 ) {
-  const { getBoxIcon } = setup;
+  const { getBoxIcon, toOptionItem, getBoxValue } = setup;
+  //-----------------------------------------------------
+  // 打开链接
+  //-----------------------------------------------------
+  function getOpenLinkConvertor(): Convertor<AnyOptionItem, string> {
+    if (props.openLink) {
+      // 采用模板
+      if (_.isString(props.openLink)) {
+        const tmpl = Tmpl.parse(props.openLink);
+        return (it) => {
+          return tmpl.render(it);
+        };
+      }
+      // 自定义函数
+      if (_.isFunction(props.openLink)) {
+        const fn = props.openLink;
+        return (it) => {
+          return fn(it);
+        };
+      }
+    }
+    // 默认采用值
+    return (it) => {
+      return it.value || "#";
+    };
+  }
+  //-----------------------------------------------------
+  function genOpenLinkPayload() {
+    let val = getBoxValue();
+    if (_.isObject(val)) {
+      return toOptionItem(val);
+    }
+    return { value: val };
+  }
+  //-----------------------------------------------------
+  function doOpenLink() {
+    const payload = genOpenLinkPayload();
+    const link = getOpenLinkConvertor();
+    const url = link(payload);
+    Be.OpenUrl(url);
+  }
   //-----------------------------------------------------
   // Prefix
   //-----------------------------------------------------
@@ -23,7 +73,7 @@ export function useBoxPrefixSuffix(
         autoIcon: getBoxIcon(),
         clickEmit: "click:prefix-icon",
       },
-      setup
+      { ...setup, onOpen: doOpenLink }
     );
   }
   //-----------------------------------------------------
@@ -38,7 +88,7 @@ export function useBoxPrefixSuffix(
         autoIcon: getBoxIcon(),
         clickEmit: "click:suffix-icon",
       },
-      setup
+      { ...setup, onOpen: doOpenLink }
     );
   }
   //-----------------------------------------------------

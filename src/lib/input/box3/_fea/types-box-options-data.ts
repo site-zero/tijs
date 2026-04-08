@@ -48,6 +48,12 @@ export type BoxOptionsDataProps = ItemLookupProps & {
   forceCookHint?: boolean;
 
   /**
+   *  查询提示信息的时候，采用输入的值
+   * 默认 false
+   */
+  tipUseHint?: boolean;
+
+  /**
    * 是否要在选项的首部，增加一个【清除】 的选项
    */
   showCleanOption?: boolean;

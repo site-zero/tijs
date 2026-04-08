@@ -116,7 +116,7 @@
   async function onBoxExportApi(box: InputBoxApi) {
     _box.value = box;
     if (props.value) {
-      _item.value = await _box.value?.getItemByValue(props.value);
+      _item.value = await _box.value?.getOptionItemByVal(props.value);
     } else {
       _item.value = undefined;
     }

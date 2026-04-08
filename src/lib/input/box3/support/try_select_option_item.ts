@@ -10,8 +10,9 @@ export function try_select_option_item(
   api: InputBoxApi,
   payload: ListSelectEmitInfo
 ) {
+  console.log("try_select_option_item", payload);
   let val = payload.currentId ?? null;
   api.notifyChange(val);
   api.setFocused(false);
-  api.setOptionsReady('hide')
+  api.tryDeferBlur();
 }

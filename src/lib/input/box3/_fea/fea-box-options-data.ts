@@ -123,24 +123,42 @@ export function useBoxOptionsData(
     return -1;
   }
   //------------------------------------------------
+  function getRawItemAt(
+    list: Vars[],
+    index: number,
+    offset: number = 0
+  ): Vars | undefined {
+    // 防空
+    if (!list || _.isEmpty(list)) {
+      return undefined;
+    }
+
+    // 准备返回值
+    let N = list.length;
+    let I = index;
+
+    // Index 区域外
+    if (I < 0 || I >= list.length) {
+      I = Num.scrollIndex(I, N);
+    }
+    // 获取对象
+    else if (offset != 0) {
+      I = Num.scrollIndex(index + offset, N);
+    }
+    let it: Vars | undefined = list[I];
+    return it;
+  }
+  //------------------------------------------------
   function getOptionItemAt(
     list: Vars[],
     index: number,
     offset: number = 0
-  ): AnyOptionItem | undefined {
-    // 防空
-    if (index < 0 || !list || index >= list.length) {
-      return undefined;
+  ): Vars | undefined {
+    const it = getRawItemAt(list, index, offset);
+    if (it) {
+      return toOptionItem(it);
     }
-
-    // 获取对象
-    let N = list.length;
-    let I = index;
-    if (offset != 0) {
-      I = Num.scrollIndex(index + offset, N);
-    }
-    let it = list[I];
-    return toOptionItem(it);
+    return undefined;
   }
   //------------------------------------------------
   function getOptionItemByVal(
@@ -182,10 +200,7 @@ export function useBoxOptionsData(
     }
   }
   //------------------------------------------------
-  function lookupOptionItem(
-    list: Vars[],
-    hint: string
-  ): AnyOptionItem | undefined {
+  function lookupItem(list: Vars[], hint: string): Vars | undefined {
     if (!hint || !list || _.isEmpty(list)) {
       return;
     }
@@ -194,7 +209,7 @@ export function useBoxOptionsData(
     // 逐个寻找选项对象
     for (let it of list) {
       if (_lookup_for_hint(it, hint)) {
-        return toOptionItem(it);
+        return it;
       }
     }
   }
@@ -214,7 +229,7 @@ export function useBoxOptionsData(
     try {
       let re: Vars[];
       // 采用关键词查询
-      if (hint || props.forceCookHint) {
+      if (props.tipUseHint && (hint || props.forceCookHint)) {
         // 预处理搜索条件
         if (cookHint) {
           hint = cookHint(hint ?? "");
@@ -292,6 +307,7 @@ export function useBoxOptionsData(
     }
     // 尝试远程加载
     let it = await dict.getItem(val);
+    console.log(`loadRawItemByValue: val=${val} : it=`, it);
     if (it) {
       return it;
     }
@@ -302,11 +318,16 @@ export function useBoxOptionsData(
   return {
     filterOptionsData,
     getOptionItemIndex,
+    //------------------
     getOptionItemAt,
     getOptionItemByVal,
+    //------------------
+    getRawItemAt,
     getRawItemByVal,
+    //------------------
     toOptionItem,
-    lookupOptionItem,
+    lookupItem,
+    //------------------
     reloadOptioinsData,
     abortOptonsLoading,
     loadRawItemByValue,

@@ -17,13 +17,12 @@ export function useBoxIcon(props: BoxIconProps, setup: BoxIconSetup) {
   const { icon, hoverIcon, iconFor, autoIcon, clickEmit } = props;
   //--------------------------------------------------
   const _icon = computed(() => {
-    if (autoIcon) return autoIcon;
     if (_.isNull(icon)) return;
     if (icon) return icon;
-    if (_.isFunction(iconFor)) return;
+    if (_.isFunction(iconFor)) return "zmdi-settings";
     if (iconFor) {
       return {
-        "clear": "zmdi-minus",
+        "clear": autoIcon || "zmdi-minus",
         "copy": "zmdi-copy",
         "load-options": "zmdi-caret-down",
         "click": "zmdi-more",

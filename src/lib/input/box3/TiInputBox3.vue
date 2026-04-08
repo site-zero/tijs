@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { TiList, useBoxDropList } from "@site0/tijs";
+  import { Be, TiList, useBoxDropList, Vars } from "@site0/tijs";
   import { computed, onMounted, useTemplateRef, watch } from "vue";
   import {
     Box3IconHandler,
@@ -12,6 +12,7 @@
   import { on_click_top } from "./support/on_click_top";
   import { on_input_keydown } from "./support/on_input_keydown";
   import { try_blur } from "./support/try_blur";
+  import { try_clear_value } from "./support/try_clear_value";
   import { try_click_mask } from "./support/try_click_mask";
   import { try_focus } from "./support/try_focus";
   import { try_select_option_item } from "./support/try_select_option_item";
@@ -61,7 +62,9 @@
   //-----------------------------------------------------
   const PreSuffix = computed(() =>
     useBoxPrefixSuffix(props, {
-      getBoxIcon: () => undefined,
+      getBoxIcon: () => api.CurrentItem.value?.icon,
+      getBoxValue: () => api.CurrentItem.value ?? props.value,
+      toOptionItem: (it: Vars) => api.toOptionItem(it)!,
       isReadonly: () => api.isReadonly.value,
       onInvoke: (hdl: Box3IconHandler) => {
         hdl(api);
@@ -69,9 +72,13 @@
       onEmit: (clickEmit: BoxIconEmit) => {
         emit(clickEmit);
       },
-      onClear: () => {},
-      onCopy: () => {},
-      onOpen: () => {},
+      onClear: () => {
+        try_clear_value(api);
+      },
+      onCopy: () => {
+        Be.Clipboard.write(props.value);
+        Be.BlinkIt($el.value);
+      },
       onLoadOptions: () => {
         try_show_options(api);
       },
@@ -118,6 +125,7 @@
     class="ti-input-box3"
     :class="Aspect.TopClass.value"
     :style="Aspect.TopStyle.value">
+    <pre style="font-size:8px;padding:0;margin:0;">{{ JSON.stringify(api.CurrentItem.value) }}</pre>
     <!--=============| MAIN PART |==================-->
     <div
       ref="el"
@@ -179,7 +187,7 @@
         <div class="part-options-con" ref="tipcon">
           <TiList
             v-bind="BoxDropList.value"
-            :currentId="api.CurrentOptionItemValue.value"
+            :currentId="api.CurrentItemValue.value"
             :data="api.FilteredOptionsData.value"
             @select="try_select_option_item(api, $event)" />
         </div>

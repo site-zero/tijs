@@ -8,7 +8,7 @@ import { try_show_options } from "./try_show_options";
  * @param input
  */
 export function try_focus(api: InputBoxApi, props: BoxDropListProps) {
-  if(api.isFocused.value){
+  if (api.isFocused.value) {
     return;
   }
   if ("focus" === props.tipShowTime) {

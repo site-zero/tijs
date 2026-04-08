@@ -10,7 +10,6 @@
   --box-fontsz: inherit;
   --box-padding: var(--ti-box-pad-m);
   --box-radius: var(--ti-measure-r-s);
-  @include flex-align-nowrap($ai: stretch);
   font-size: var(--box-fontsz);
   //-----------------------------------------------------
   > aside {
