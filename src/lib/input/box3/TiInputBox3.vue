@@ -125,7 +125,7 @@
     class="ti-input-box3"
     :class="Aspect.TopClass.value"
     :style="Aspect.TopStyle.value">
-    <pre style="font-size:8px;padding:0;margin:0;">{{ JSON.stringify(api.CurrentItem.value) }}</pre>
+    <!--pre style="font-size:8px;padding:0;margin:0;">{{ JSON.stringify(api.CurrentItem.value) }}</pre-->
     <!--=============| MAIN PART |==================-->
     <div
       ref="el"

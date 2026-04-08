@@ -192,6 +192,9 @@ export function useTiInputBox3Api(
       return;
     }
     emit("change", val);
+    if (props.onValueChange) {
+      props.onValueChange(val);
+    }
   }
   //-----------------------------------------------------
   async function tryNotifyChange(val: any) {
@@ -246,8 +249,11 @@ export function useTiInputBox3Api(
   }
   //-----------------------------------------------------
   async function tryReloadOptionsData(hint?: string) {
-    const with_hint = hint && props.tipUseHint? true:false;
-    if (with_hint || (!isOptionsDataReady.value && !isOptionsDataLoading.value)) {
+    const with_hint = hint && props.tipUseHint ? true : false;
+    if (
+      with_hint ||
+      (!isOptionsDataReady.value && !isOptionsDataLoading.value)
+    ) {
       await reloadOptionsData(hint);
     }
   }

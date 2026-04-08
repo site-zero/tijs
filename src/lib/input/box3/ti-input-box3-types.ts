@@ -1,5 +1,6 @@
 import {
   BoxDropListProps,
+  Callback1,
   CommonProps,
   DictProps,
   DisplayTextProps,
@@ -78,6 +79,8 @@ export type InputBoxProps = CommonProps &
      * 输入值
      */
     value?: any;
+
+    onValueChange?: Callback1<any>;
     /**
      * 如果值为空字符串，那么默认的会给 null
      * 但是有时候，我们还是想区分出空串与 null
