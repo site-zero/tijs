@@ -1,49 +1,43 @@
 <mxfile host="65bd71144e">
     <diagram id="-cJ4864SoaLs_oP2aHiB" name="第 1 页">
-        <mxGraphModel dx="988" dy="549" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
+        <mxGraphModel dx="1065" dy="779" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1600" pageHeight="900" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="4" value="Arrow Up/Down" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" vertex="1" parent="1">
-                    <mxGeometry x="40" y="265" width="120" height="20" as="geometry"/>
+                <mxCell id="4" value="Arrow Up/Down" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="256" width="120" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="6" value="Blur: Tab Key" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" vertex="1" parent="1">
-                    <mxGeometry x="40" y="295" width="120" height="20" as="geometry"/>
+                <mxCell id="6" value="Blur: Tab Key" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="285" width="120" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="7" value="Compose End" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" vertex="1" parent="1">
-                    <mxGeometry x="40" y="235" width="120" height="20" as="geometry"/>
+                <mxCell id="7" value="Compose End" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;fillColor=#0050ef;strokeColor=#001DBC;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="228" width="120" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="8" value="Blur: Click Masker" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" vertex="1" parent="1">
-                    <mxGeometry x="40" y="325" width="120" height="20" as="geometry"/>
+                <mxCell id="8" value="Blur: Click Masker" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="343" width="120" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="23" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="9" target="12">
-                    <mxGeometry relative="1" as="geometry"/>
-                </mxCell>
-                <mxCell id="9" value="Focus Input" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" vertex="1" parent="1">
+                <mxCell id="9" value="Focus Input" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" parent="1" vertex="1">
                     <mxGeometry x="40" y="170" width="120" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="10" value="Click Load Options" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" vertex="1" parent="1">
-                    <mxGeometry x="40" y="360" width="120" height="20" as="geometry"/>
+                <mxCell id="10" value="Click Load Options" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="371" width="120" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="11" value="Click Options Items" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" vertex="1" parent="1">
-                    <mxGeometry x="40" y="390" width="120" height="20" as="geometry"/>
+                <mxCell id="11" value="Click Options Items" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;fillColor=#008a00;fontColor=#ffffff;strokeColor=#005700;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="400" width="120" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="12" value="Mark Focused" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;" vertex="1" parent="1">
+                <mxCell id="12" value="tryFocus" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;" parent="1" vertex="1">
                     <mxGeometry x="280" y="170" width="140" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="24" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="13" target="21">
-                    <mxGeometry relative="1" as="geometry"/>
+                <mxCell id="13" value="props.value changed" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;fillColor=#e51400;strokeColor=#B20000;fontColor=#ffffff;" parent="1" vertex="1">
+                    <mxGeometry x="40" y="199" width="120" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="13" value="props.value changed" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;fillColor=#e51400;strokeColor=#B20000;fontColor=#ffffff;" vertex="1" parent="1">
-                    <mxGeometry x="40" y="205" width="120" height="20" as="geometry"/>
-                </mxCell>
-                <mxCell id="16" value="_focused: boolean" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;dashed=1;strokeWidth=1;align=left;spacingLeft=4;" vertex="1" parent="1">
+                <mxCell id="16" value="_focused: boolean" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;dashed=1;strokeWidth=1;align=left;spacingLeft=4;" parent="1" vertex="1">
                     <mxGeometry x="140" y="10" width="160" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="17" value="_options_data: [..]&lt;br&gt;_options_ready: boolean" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;dashed=1;strokeWidth=1;align=left;spacingLeft=6;" vertex="1" parent="1">
+                <mxCell id="17" value="_options_data: [..]&lt;br&gt;_options_ready: boolean" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;dashed=1;strokeWidth=1;align=left;spacingLeft=6;" parent="1" vertex="1">
                     <mxGeometry x="510" y="10" width="160" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="18" value="_current_item: {..}" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;dashed=1;strokeWidth=1;spacingLeft=4;align=left;" vertex="1" parent="1">
+                <mxCell id="18" value="_current_item: {..}" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;dashed=1;strokeWidth=1;spacingLeft=4;align=left;" parent="1" vertex="1">
                     <mxGeometry x="320" y="10" width="160" height="40" as="geometry"/>
                 </mxCell>
                 <mxCell id="20" value="1. auto options" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;align=left;spacingLeft=5;" vertex="1" parent="1">
@@ -62,7 +56,7 @@
                     <mxGeometry x="770" y="288" width="140" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="41" value="tryUpdateByInput" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;" vertex="1" parent="1">
-                    <mxGeometry x="280" y="235" width="140" height="20" as="geometry"/>
+                    <mxGeometry x="520" y="450" width="140" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="42" value="Load Current Item" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;" vertex="1" parent="1">
                     <mxGeometry x="510" y="90" width="140" height="20" as="geometry"/>
@@ -74,7 +68,7 @@
                     <mxGeometry x="280" y="295" width="140" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="45" value="tryShowOptions" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;" vertex="1" parent="1">
-                    <mxGeometry x="280" y="325" width="140" height="20" as="geometry"/>
+                    <mxGeometry x="280" y="233" width="140" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="46" value="tryApplyOptionItem" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;" vertex="1" parent="1">
                     <mxGeometry x="280" y="355" width="140" height="20" as="geometry"/>
@@ -102,6 +96,9 @@
                 </mxCell>
                 <mxCell id="54" value="" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;" vertex="1" parent="1">
                     <mxGeometry x="320" y="110" width="140" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="55" value="@Input Change" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fontStyle=0;fontSize=10;fillColor=#0050ef;fontColor=#ffffff;strokeColor=#001DBC;" vertex="1" parent="1">
+                    <mxGeometry x="40" y="314" width="120" height="20" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import { computed, ref, useTemplateRef } from "vue";
   import {
-    InputBoxExposeApi,
+    InputBoxApi,
     InputDateTimeEmitter,
     InputDatetimeProps,
     TiCalendar,
@@ -18,14 +18,14 @@
     autoSelect: true,
   });
   //-----------------------------------------------------
-  const input = useTemplateRef<InputBoxExposeApi>("input");
+  const input = useTemplateRef<InputBoxApi>("input");
   const api = useInputDateTimeApi(props, {
     dftFormat: "yyyy-MM-dd",
     COM_TYPE: COM_TYPES.InputDate,
     emit,
   });
   const dock = useDocking({
-    getElement: () => input.value?.getElement(),
+    getElement: () => input.value?.getTopElement(),
   });
   //-----------------------------------------------------
   const _show_calendar = ref(false);

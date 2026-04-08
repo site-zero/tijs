@@ -6,7 +6,7 @@ import {
   InputDatetimeProps,
   InputNumProps,
   LabelProps,
-  TipOptionFormat,
+  BoxDropItemFormat,
   ToggleProps,
 } from "../../";
 import {
@@ -571,7 +571,7 @@ export function colDroplistVT(
   options: string,
   placeholder?: string,
   tipListMinWidth: string = "320px",
-  tipFormat: TipOptionFormat = "VT",
+  tipFormat: BoxDropItemFormat = "VT",
   comConf?: DroplistProps,
   readonlyComConf?: LabelProps
 ): TableInputColumn {

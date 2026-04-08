@@ -8,11 +8,7 @@ import {
   BoxDropListSetup,
 } from "./types-box-drop-list";
 
-export type TipListSetup = {
-  _options_data: Ref<Vars[] | undefined>;
-};
-
-export function useTipList(props: BoxDropListProps, setup: BoxDropListSetup) {
+export function useBoxDropList(props: BoxDropListProps, setup: BoxDropListSetup) {
   const { getTipContainer } = setup;
   /**
    * 提示列表的配置信息

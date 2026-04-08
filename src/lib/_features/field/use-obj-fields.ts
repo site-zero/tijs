@@ -18,7 +18,7 @@ import {
   RadioListProps,
   Str,
   SwitcherProps,
-  TipOptionFormat,
+  BoxDropItemFormat,
   ToggleProps,
 } from "@site0/tijs";
 import _ from "lodash";
@@ -701,7 +701,7 @@ export function fldDroplistVT(
   options: OptionsInput,
   placeholder: string = "i18n:null",
   tipListMinWidth: string = "200px",
-  tipFormat: TipOptionFormat = "VT",
+  tipFormat: BoxDropItemFormat = "VT",
   comConf?: DroplistProps
 ): FormField {
   let [title, tip] = _.concat(titleAndTip);

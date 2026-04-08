@@ -22,4 +22,14 @@ export type BoxAspectProps = CommonProps & {
   boxRadius?: AspectSize | "none";
   type?: LogicType;
   width?: string;
+
+  /**
+   * 展出提示框最小宽度，如果不声明，则采用与 box 相同的宽度
+   */
+  tipListWidth?: string;
+
+  /**
+   * 展出提示框最小宽度，如果不声明，则采用与 box 相同的宽度
+   */
+  tipListMinWidth?: string;
 };

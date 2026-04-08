@@ -18,7 +18,7 @@ const COM_TYPE = 'TiInput';
 
 const TiInputInfo: TiComInfo = {
   icon: 'fas-i-cursor',
-  race: TiComRace.INPUT,
+  race: TiComRace.INNER,
   name: COM_TYPE,
   text: 'i18n:ti-input-com-name',
   i18n: {

@@ -1,8 +1,8 @@
-import { InputBox3Props, TiComInfo, TiComRace } from "@site0/tijs";
+import { InputBoxProps, TiComInfo, TiComRace } from "@site0/tijs";
 import { App } from "vue";
 import TiInputBox3 from "./TiInputBox3.vue";
 
-const COM_TYPE = "TiInputBox3";
+const COM_TYPE = "TiInput";
 
 const en_us = {
   "com-name": "Input Box 3",
@@ -16,10 +16,10 @@ const zh_cn = {
 };
 
 const TiInputBox3Info: TiComInfo = {
-  icon: "fas-address-book",
-  race: TiComRace.VIEW,
+  icon: "fas-keyboard",
+  race: TiComRace.INPUT,
   name: COM_TYPE,
-  text: "i18n:ti-input-box-3-com-name",
+  text: "i18n:ti-input-com-name",
   i18n: {
     en_us: en_us,
     en_uk: en_us,
@@ -28,10 +28,10 @@ const TiInputBox3Info: TiComInfo = {
   },
   com: TiInputBox3,
   liveStyle: {
-    width: '80%',
-    minWidth: '120px',
-    maxWidth: '300px',
-    margin: "40px auto"
+    width: "80%",
+    minWidth: "120px",
+    maxWidth: "300px",
+    margin: "40px auto",
   },
   install: (app: App) => {
     app.component(COM_TYPE, TiInputBox3Info);
@@ -43,30 +43,30 @@ const TiInputBox3Info: TiComInfo = {
       text: "i18n:simple",
       comConf: {
         value: "Some Text",
-      } as InputBox3Props,
+      } as InputBoxProps,
     },
     {
-      name: 'options',
-      text: 'i18n:ti-input-box-3-example-options',
+      name: "options",
+      text: "i18n:ti-input-example-options",
       comConf: {
-        value: 'A',
-        valueCase: 'upperAll',
+        value: "A",
+        valueCase: "upperAll",
         trimed: true,
-        placeholder: 'Choose one options',
-        prefixIconFor: 'clear',
-        suffixIconFor: 'load-options',
+        placeholder: "Choose one options",
+        prefixIconFor: "clear",
+        suffixIconFor: "load-options",
         mustInOptions: true,
-        lookup: ['*~text'],
+        lookup: ["*~text"],
         options: [
-          { value: 'A', text: '甲' },
-          { value: 'B', text: '乙' },
-          { value: 'C', text: '丙' },
+          { value: "A", text: "甲" },
+          { value: "B", text: "乙" },
+          { value: "C", text: "丙" },
         ],
-      } as InputBox3Props,
-    }
+      } as InputBoxProps,
+    },
   ],
 };
 
 export * from "./_fea";
 export * from "./ti-input-box3-types";
-export { TiInputBox3, TiInputBox3Info };
+export { TiInputBox3 as TiInput, TiInputBox3Info as TiInputInfo };

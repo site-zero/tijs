@@ -1,7 +1,7 @@
 import { IconInput } from "@site0/tijs";
-import { InputBox3Api } from "../ti-input-box3-types";
+import { InputBoxApi } from "../ti-input-box3-types";
 
-export type Box3IconHandler = (box: InputBox3Api) => void;
+export type Box3IconHandler = (box: InputBoxApi) => void;
 export type Box3IconFor =
   | "copy"
   | "load-options"

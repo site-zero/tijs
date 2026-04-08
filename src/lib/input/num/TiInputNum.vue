@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import _ from "lodash";
-  import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
-  import { InputBoxExposeApi, TiInput } from "../../";
+  import { computed, ref, watch } from "vue";
+  import { TiInput } from "../../";
   import { Bank, Num, tiGetDefaultComPropValue } from "../../../core";
   import { COM_TYPES } from "../../lib-com-types";
   import { InputNumProps, InputNumValueType } from "./ti-input-num-types";
@@ -9,8 +9,6 @@
   defineOptions({
     inheritAttrs: false,
   });
-  //-----------------------------------------------------
-  const $input_box = useTemplateRef<InputBoxExposeApi>("input_box");
   //-----------------------------------------------------
   const emit = defineEmits<{
     (event: "change", payload: number | string | null): void;
@@ -79,9 +77,6 @@
     }
     // 搞定
     _input_val.value = re;
-    nextTick(() => {
-      $input_box.value?.debouncePropsValueChange();
-    });
   }
   //-----------------------------------------------------
   function onChange(s: string) {

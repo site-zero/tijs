@@ -90,7 +90,7 @@
     //---------------------------------------------------
     > .icon-part {
       flex: 0 0 auto;
-      width: min(var(--box-h), 1.8em);
+      width:1.2em;
       position: relative;
       i {
         @include flex-center;
