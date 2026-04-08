@@ -166,8 +166,8 @@
       FieldDynamicContext.value,
       FieldValue.value
     );
-    if (props.titleAsPlaceholder) {
-      _.defaults(re.comConf, {
+    if (props.titleAsPlaceholder && FieldText.value.title) {
+      _.assign(re.comConf, {
         placeholder: FieldText.value.title,
       });
     }

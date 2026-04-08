@@ -26,6 +26,7 @@
     textAsHtml: true,
     showChecker: undefined,
     highlightChecked: true,
+    autoPickCurrent: true,
   });
   //-----------------------------------------------------
   const emit = defineEmits<ListEmitter>();

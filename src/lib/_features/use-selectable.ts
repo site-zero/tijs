@@ -89,6 +89,14 @@ export type SelectableProps<ID extends TableRowID> = {
   showChecker?: boolean | undefined;
 
   /**
+   * 开启这个选项，当用户勾选项目的时候，会自动决定一个当前项目
+   *
+   * - 当前勾选项选中： 自动成为 current
+   * - 否则自动选择第一个作为 current
+   */
+  autoPickCurrent?: boolean;
+
+  /**
    * @param itemData 行数据
    * @param itemId 行标准 ID
    * @returns  本行是否可以选中
@@ -671,13 +679,25 @@ export function useSelectable<ID extends TableRowID>(
     let checked: boolean = selection.checkedIds.get(id) ?? false;
     checked = checked ? false : true;
     selection.checkedIds.set(id, checked);
-    if (!checked && selection.currentId === id) {
+    let ckIds = Util.mapTruthyKeys(selection.checkedIds);
+    // 木有选择了，那么也同时取消当前
+    if (ckIds.length == 0) {
       selection.currentId = undefined;
     }
-    // 唯一选择，默认也选中当前
-    if (1 === selection.checkedIds.size && !selection.currentId) {
-      selection.currentId = id;
+    // 有选择，那么总也得搞一个 current
+    if (
+      props.autoPickCurrent &&
+      ckIds.length > 0 &&
+      (!selection.currentId || !selection.checkedIds.get(selection.currentId))
+    ) {
+      if (selection.checkedIds.get(id)) {
+        selection.currentId = id;
+      } else {
+        selection.currentId = _.first(ckIds);
+      }
     }
+
+    // 标记最后一次选择
     selection.lastSelectId = id;
     clampSelect(selection);
   }

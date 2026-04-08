@@ -8,6 +8,7 @@ import {
   FormField,
   I18n,
   InputBoxProps,
+  InputDateRangeProps,
   InputDatetimeProps,
   InputNumProps,
   InputNumUnitProps,
@@ -406,6 +407,67 @@ export function fldFilterInput(
   };
 }
 
+export function fldFilterInputUpper(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputBoxProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title: title || undefined,
+    tip,
+    comType: "TiInput",
+    comConf: _.assign(
+      {
+        placeholder: "i18n:no-set",
+        valueCase: "upperAll",
+        prefixIconFor: "clear",
+      } as InputBoxProps,
+      comConf
+    ),
+  };
+}
+
+export function fldInputDateRange(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputDateRangeProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title: title || undefined,
+    tip,
+    comType: "TiInputDateRange",
+    comConf: _.assign(
+      {
+        placeholder: "i18n:no-set",
+        valueCase: "upperAll",
+        prefixIconFor: "clear",
+      } as InputDateRangeProps,
+      comConf
+    ),
+  };
+}
+
+export function fldInputDateRangeUTC(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputDateRangeProps
+): FormField {
+  return fldInputDateRange(
+    name,
+    titleAndTip,
+    _.assign(
+      {
+        timezone: "Z",
+      },
+      comConf
+    )
+  );
+}
+
 /*-------------------------------------------------------
 
                      内置表单字段
@@ -450,6 +512,18 @@ export function fldLabel(
       comConf
     ),
   };
+}
+
+export function fldLabelPfxCp(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: LabelProps
+): FormField {
+  return fldLabel(
+    name,
+    titleAndTip,
+    _.assign({ prefixIconFor: "copy" }, comConf)
+  );
 }
 
 export function fldLabelI(
@@ -741,6 +815,32 @@ export function fldMultiDroplist(
       {
         options,
         tipListMinWidth: "200px",
+      } as MultiDroplistProps,
+      comConf
+    ),
+  };
+}
+
+export function fldMultiDroplistAsStr(
+  name: FieldName,
+  titleAndTip: string | string[],
+  options: OptionsInput,
+  comConf?: MultiDroplistProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title: title || undefined,
+    tip,
+    type: "Array",
+    transformer: "anyToStrArray",
+    serializer: "arrayToStr",
+    comType: "TiMultiDroplist",
+    comConf: _.assign(
+      {
+        options,
+        tipListMinWidth: "200px",
+        tipFormat: "VT",
       } as MultiDroplistProps,
       comConf
     ),

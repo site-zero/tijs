@@ -63,6 +63,7 @@ export * from "./checklist/ti-check-list-index";
 export * from "./code/ti-input-code-index";
 export * from "./color/ti-input-color-index";
 export * from "./currency/ti-input-currency-index";
+export * from "./date-range/ti-input-date-range-index";
 export * from "./date/ti-input-date-index";
 export * from "./datetime/ti-input-datetime-index";
 export * from "./droplist/ti-droplist-index";
