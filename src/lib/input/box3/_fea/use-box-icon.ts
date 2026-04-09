@@ -1,4 +1,4 @@
-import { Icons } from "@site0/tijs";
+import { Icons, KeyboardStatus } from "@site0/tijs";
 import _ from "lodash";
 import { computed } from "vue";
 import { Box3IconHandler, BoxIconEmit, BoxIconProps } from "./types-box-icon";
@@ -8,7 +8,7 @@ export type BoxIconSetup = {
   onInvoke: (hdl: Box3IconHandler) => void;
   onEmit: (clickEmit: BoxIconEmit) => void;
   onClear: () => void;
-  onCopy: () => void;
+  onCopy: (kbs: KeyboardStatus) => void;
   onOpen: () => void;
   onLoadOptions: () => void;
 };
@@ -68,7 +68,7 @@ export function useBoxIcon(props: BoxIconProps, setup: BoxIconSetup) {
     return html.join("");
   });
   //--------------------------------------------------
-  function onClick() {
+  function onClick(evt: MouseEvent) {
     if (!iconFor) return;
     // 自定义动作
     if (_.isFunction(iconFor)) {
@@ -84,7 +84,13 @@ export function useBoxIcon(props: BoxIconProps, setup: BoxIconSetup) {
     }
     // 写入剪贴板
     else if ("copy" === iconFor) {
-      setup.onCopy();
+      let kbs: KeyboardStatus = {
+        altKey: evt.altKey,
+        ctrlKey: evt.ctrlKey,
+        shiftKey: evt.shiftKey,
+        metaKey: evt.metaKey,
+      };
+      setup.onCopy(kbs);
     }
     // 打开目标
     else if ("open" === iconFor) {

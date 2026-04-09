@@ -1,5 +1,7 @@
 import {
   AnyOptionItem,
+  BoxOptionsStatus,
+  isAnyOptionItem,
   Str,
   useBoxHintCooking,
   useBoxOptionsData,
@@ -8,22 +10,20 @@ import {
   usePlaceholder,
   useReadonly,
   useValuePipe,
-  useViewport,
   Vars,
-  ViewportApi,
 } from "@site0/tijs";
 import _ from "lodash";
 import { computed, ref } from "vue";
-import { useLastHint } from "./_fea/fea-last-hint";
+import { useLastHint } from "./_fea";
 import { InputBox3Emitter, InputBoxProps } from "./ti-input-box3-types";
+
+const debug = false;
 
 export type TiInputBox3Setup = {
   emit: InputBox3Emitter;
   getTopElement: () => HTMLElement | null;
   getInputElement: () => HTMLInputElement | null;
 };
-
-export type Box3OptionsStatus = "loading" | "ready" | "hide";
 
 export function useTiInputBox3Api(
   props: InputBoxProps,
@@ -35,7 +35,7 @@ export function useTiInputBox3Api(
   //-----------------------------------------------------
   const _focused = ref<boolean>(false);
   const _options_data = ref<Vars[]>([]);
-  const _options_status = ref<Box3OptionsStatus>("hide");
+  const _options_status = ref<BoxOptionsStatus>("hide");
   const _current_item = ref<Vars>();
   //-----------------------------------------------------
   // 在 try_blur 里面会有可能注册一个延迟处理函数
@@ -44,12 +44,6 @@ export function useTiInputBox3Api(
   const _last_hint = useLastHint();
   //-----------------------------------------------------
   const _readonly = computed(() => useReadonly(props));
-  //-----------------------------------------------------
-  const _viewport = computed((): ViewportApi => {
-    return useViewport({
-      getElement: api.getTopElement,
-    });
-  });
   //-----------------------------------------------------
   const _display = computed(() => useDisplayText(props));
   const _pipe = computed(() => useValuePipe(props));
@@ -78,6 +72,22 @@ export function useTiInputBox3Api(
   const isOptionsDataHide = computed(() => _options_status.value === "hide");
   const isOptionsDataShow = computed(() => !isOptionsDataHide.value);
   const hasOptionsData = computed(() => (_dict.value ? true : false));
+  //-----------------------------------------------------
+  const BoxValueType = computed(() => props.valueType || "val");
+  const BoxPropsValue = computed(() => props.value);
+  const BoxInputValue = computed(() => {
+    if (_.isNil(props.value)) {
+      return null;
+    }
+    if (isAnyOptionItem(props.value)) {
+      return Str.anyToStr(props.value.value ?? null);
+    }
+    if (_.isPlainObject(props.value)) {
+      let it = toOptionItem(props.value);
+      return Str.anyToStr(it?.value ?? null);
+    }
+    return Str.anyToStr(props.value);
+  });
   //-----------------------------------------------------
   const FilteredOptionsData = computed(() => {
     return _box_options.value?.filterOptionsData(_options_data.value || []);
@@ -129,7 +139,7 @@ export function useTiInputBox3Api(
     if (_.isNil(props.value)) {
       return "";
     }
-    
+
     // 直接显示值
     return Str.anyToStr(props.value);
   });
@@ -177,7 +187,7 @@ export function useTiInputBox3Api(
     }
   }
   //-----------------------------------------------------
-  function setOptionsStatus(status: Box3OptionsStatus) {
+  function setOptionsStatus(status: BoxOptionsStatus) {
     _options_status.value = status;
   }
   //-----------------------------------------------------
@@ -203,32 +213,59 @@ export function useTiInputBox3Api(
     return val;
   }
   //-----------------------------------------------------
-  function notifyChange(val: any) {
-    console.log("notifyChange", val);
-    // 没必要做重复操作
-    if (_.isEqual(props.value, val)) {
-      return;
-    }
-    emit("change", val);
-    if (props.onValueChange) {
-      props.onValueChange(val);
-    }
-  }
-  //-----------------------------------------------------
   async function tryNotifyChange(val: any) {
-    console.log("tryNotifyChange", val);
+    if (debug) console.log("tryNotifyChange", val);
     // 如果有选项，则需要检查选项
-    if (hasOptionsData.value && props.mustInOptions) {
+    if (hasOptionsData.value) {
       let item = await reloadItem(val);
       if (!item) {
-        val = null;
+        _current_item.value = undefined;
+        if (props.mustInOptions) {
+          val = null;
+        }
+      } else {
+        _current_item.value = item;
       }
     }
+
+    // 准备值
+    let vtype = BoxValueType.value;
+    let newVal: any = null;
+    if (!_.isNil(val)) {
+      // 裸对象
+      if ("raw-item" == vtype) {
+        if (_current_item.value) {
+          newVal = _.cloneDeep(_current_item.value);
+        } else {
+          newVal = { value: val };
+        }
+      }
+      // 标准对象
+      else if ("std-item" == vtype) {
+        if (_current_item.value) {
+          newVal = toOptionItem(_current_item.value);
+        } else {
+          newVal = { value: val };
+        }
+      }
+      // 默认就用值
+      else {
+        newVal = val;
+      }
+    }
+
     // 没必要做重复操作
-    if (_.isEqual(props.value, val)) {
+    if (_.isEqual(props.value, newVal)) {
       return;
     }
-    emit("change", val);
+
+    // 回调函数
+    if (props.onValueChange) {
+      props.onValueChange(newVal);
+    }
+
+    // 通知改动
+    emit("change", newVal);
   }
   //-----------------------------------------------------
   // 远程操作
@@ -241,14 +278,12 @@ export function useTiInputBox3Api(
   }
   //-----------------------------------------------------
   async function reloadCurrentItem() {
-    _current_item.value = await reloadItem(props.value);
-  }
-  //-----------------------------------------------------
-  async function tryReloadCurrentItem() {
-    let cv = _current_item.value;
-    if (!_.isEqual(cv, props.value)) {
-      await reloadCurrentItem();
+    const inputVal = BoxInputValue.value;
+    // 没必要重新加载了
+    if (_.isEqual(inputVal, CurrentItemValue.value)) {
+      return;
     }
+    _current_item.value = await reloadItem(inputVal);
   }
   //-----------------------------------------------------
   function lookupItem(hint?: string) {
@@ -261,7 +296,8 @@ export function useTiInputBox3Api(
     if (_box_options.value) {
       _options_status.value = "loading";
       let opts = _box_options.value;
-      _options_data.value = await opts.reloadOptioinsData(hint);
+      let piped_hint = _pipe.value(hint);
+      _options_data.value = await opts.reloadOptioinsData(piped_hint);
       _options_status.value = "ready";
     }
   }
@@ -300,7 +336,6 @@ export function useTiInputBox3Api(
   // 返回接口
   //-----------------------------------------------------
   const api = {
-    BoxView: _viewport,
     // 计算属性
     isFocused,
     isReadonly,
@@ -312,6 +347,10 @@ export function useTiInputBox3Api(
     isOptionsDataHide,
     isOptionsDataShow,
     hasOptionsData,
+    //--------
+    BoxValueType,
+    BoxPropsValue,
+    BoxInputValue,
     //--------
     FilteredOptionsData,
     isOptionsDataEmpty,
@@ -339,12 +378,10 @@ export function useTiInputBox3Api(
     tryDeferBlur,
     // 数据改动
     applyPipe,
-    notifyChange,
     tryNotifyChange,
     // 远程操作
     reloadItem,
     reloadCurrentItem,
-    tryReloadCurrentItem,
     lookupItem,
     reloadOptionsData,
     tryReloadOptionsData,

@@ -22,6 +22,10 @@ export type BoxAspectProps = CommonProps & {
   boxRadius?: AspectSize | "none";
   type?: LogicType;
   width?: string;
+  /**
+   * 自动适配父元素的宽（如果父元素是 flex 布局的话）
+   */
+  flexAuto?: boolean;
 
   /**
    * 展出提示框最小宽度，如果不声明，则采用与 box 相同的宽度

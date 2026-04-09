@@ -5,7 +5,7 @@ import TiCalendar from "./TiCalendar.vue";
 const COM_TYPE = "TiCalendar";
 
 const en_us = {
-  "com-name": "TiCalendar",
+  "com-name": "Calendar",
 };
 const zh_cn = {
   "com-name": "日历",

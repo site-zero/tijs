@@ -11,6 +11,9 @@
   --box-padding: var(--ti-box-pad-m);
   --box-radius: var(--ti-measure-r-s);
   font-size: var(--box-fontsz);
+  &.flex-auto {
+    flex: 1 1 auto;
+  }
   //-----------------------------------------------------
   > aside {
     @include font-fixed;
@@ -89,7 +92,7 @@
     //---------------------------------------------------
     > .icon-part {
       flex: 0 0 auto;
-      width:1.5em;
+      width: 1.5em;
       position: relative;
       i {
         @include flex-center;
@@ -179,4 +182,31 @@
     } // > .part-options-con {
   }
   //-----------------------------------------------------
+}
+
+.ti-input-box3 {
+  > .debug-info {
+    @include flex-align($ai:center);
+    @include font-fixed;
+    gap: 0.3em;
+    font-size: 10px;
+    padding: 2px;
+    margin: 0;
+    line-height: 1.5em;
+    span {
+      color: var(--ti-color-primary);
+      &:after {
+        display: inline;
+        content: ":";
+      }
+    }
+    code {
+      display: block;
+      padding: 3px 0.5em;
+      border: 1px dotted var(--ti-color-secondary);
+      background-color: var(--ti-color-card);
+      color: var(--ti-color-secondary);
+      border-radius: 4px;
+    }
+  }
 }

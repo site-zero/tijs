@@ -35,7 +35,9 @@ export type InputBox3Emitter = {
  * - `std-item` : 整体标准对象
  * - `raw-item` : 整体原始对象
  */
-export type Box3EmitType = "value" | "std-item" | "raw-item";
+export type BoxEmitType = "value" | "std-item" | "raw-item";
+
+export type BoxOptionsStatus = "loading" | "ready" | "hide";
 
 /**
  * 提示框的显示时机
@@ -44,9 +46,11 @@ export type Box3EmitType = "value" | "std-item" | "raw-item";
  * - auto  : 只有需要才显示
  * - Box3OptionsShowTimeTester : 自定义测试函数
  */
-export type Box3OptionsShowTime = "focus" | "auto" | Box3OptionsShowTimeTester;
+export type BoxOptionsShowTime = "focus" | "auto" | BoxOptionsShowTimeTester;
 
-export type Box3OptionsShowTimeTester = (input: string) => boolean;
+export type BoxOptionsShowTimeTester = (input: string) => boolean;
+
+export type BoxValueType = "raw-item" | "std-item" | "val";
 
 /**
  * 对于提示列表的快速格式模式，
@@ -61,7 +65,7 @@ export type Box3OptionsShowTimeTester = (input: string) => boolean;
  *
  * 在没有声明  tipList.textFormat 的前提下，它可以为其快速设置格式化方式
  */
-export type Box3OptionFormat = "T" | "VT" | "TV" | "VTP" | "TP" | "PT" | "VpT";
+export type BoxOptionFormat = "T" | "VT" | "TV" | "VTP" | "TP" | "PT" | "VpT";
 
 export type InputBoxProps = CommonProps &
   BoxCompositionProps &
@@ -79,6 +83,15 @@ export type InputBoxProps = CommonProps &
      * 输入值
      */
     value?: any;
+    
+    /**
+     * 输入框的值类型
+     *
+     * - `raw-item`: 选项的原生对象
+     * - `std-item`: 选项的标准对象
+     * - `val` : 「默认」值
+     */
+    valueType?: BoxValueType;
 
     onValueChange?: Callback1<any>;
     /**
@@ -90,7 +103,18 @@ export type InputBoxProps = CommonProps &
 
     autoI18n?: boolean;
 
-    emitType?: Box3EmitType;
+    emitType?: BoxEmitType;
+
+    /**
+     * 提示列表的配置
+     */
+    tipShowTime?: BoxOptionsShowTime;
+
+    /**
+     * 延迟多少毫秒（反弹跳）才查询提示信息，默认 500ms
+     * 同样，这个设置，也会影响 pipe 的应用反弹跳阈值
+     */
+    tipShowDelay?: number;
 
     /**
      * 当 focus 自动聚焦 Input 框

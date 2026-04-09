@@ -11,7 +11,6 @@ export async function try_show_options(api: InputBoxApi) {
   }
   // 可以加载就加载
   if (api.hasOptionsData.value) {
-    api.BoxView.value.updateViewPortSize();
     await api.tryReloadOptionsData();
   }
 }

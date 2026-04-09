@@ -1,10 +1,10 @@
 import _ from "lodash";
 import { NumOptionItem } from "../../../_type";
 import { I18n } from "../../../core";
-import { InputBoxProps, InputNumProps } from "../../input/all-input";
+import { InputBoxProps } from "../../input/all-input";
 import { CalendarProps } from "./ti-calendar-types";
 
-export function useYearDropConfig(props: CalendarProps): InputNumProps {
+export function useYearDropConfig(props: CalendarProps): InputBoxProps {
   let options = [] as NumOptionItem[];
   let year = new Date().getFullYear();
   if (props.yearDropBegin) {
@@ -34,7 +34,7 @@ export function useYearDropConfig(props: CalendarProps): InputNumProps {
   );
 }
 
-export function useMonthDropConfig(props: CalendarProps): InputNumProps {
+export function useMonthDropConfig(props: CalendarProps): InputBoxProps {
   let options = [] as NumOptionItem[];
   for (let month = 0; month < 12; month++) {
     options.push({

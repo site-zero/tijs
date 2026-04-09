@@ -1,8 +1,6 @@
 import { BoxCompositionProps, useBoxComposition } from "../_fea";
 import { InputBoxApi } from "../ti-input-box3-types";
-import { try_show_options } from "./try_show_options";
-import { try_submit_change } from "./try_submit_change";
-import { try_update_by_input } from "./try_update_by_input";
+import { try_show_options, try_submit_change, try_update_by_input } from "./";
 
 export function create_box_composition(
   props: BoxCompositionProps,

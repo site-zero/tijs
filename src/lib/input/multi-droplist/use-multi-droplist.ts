@@ -1,10 +1,16 @@
+import {
+  BoxOptionsStatus,
+  ListSelectEmitInfo,
+  TableRowID,
+  TagItem,
+  useBoxOptionsData,
+  useDict,
+  useReadonly,
+  Util,
+  Vars,
+} from "@site0/tijs";
 import _ from "lodash";
 import { computed, ref } from "vue";
-import { ListSelectEmitInfo, TagItem } from "../../";
-import { TableRowID, Vars } from "../../../_type";
-import { Util } from "../../../core";
-import { useDict, useReadonly } from "../../_features";
-import { useValueOptions } from "../box2/use-value-options";
 import {
   MultiDroplistEmitter,
   MultiDroplistProps,
@@ -20,23 +26,40 @@ export function useMultiDroplist(
   //-----------------------------------------------------
   // 数据模型
   //-----------------------------------------------------
-  const _options_data = ref<Vars[]>();
-  const _readonly = computed(() => useReadonly(props));
-  const _dict = useDict(props)!;
-  const _options = useValueOptions({ dict: _dict, _options_data }, props);
   const _items = ref<TagItem[]>();
   const _it_values = ref<TableRowID[]>();
-
+  //-----------------------------------------------------
+  const _options_data = ref<Vars[]>();
+  const _options_status = ref<BoxOptionsStatus>("hide");
+  //-----------------------------------------------------
+  const _readonly = computed(() => useReadonly(props));
+  //-----------------------------------------------------
+  const _dict = computed(() => useDict(props));
+  //-----------------------------------------------------
+  const _box_options = computed(() => {
+    if (!_dict.value) return;
+    return useBoxOptionsData(props, {
+      dict: _dict.value,
+    });
+  });
   //-----------------------------------------------------
   // 计算属性
   //-----------------------------------------------------
-  const TagItems = computed(() => _items.value);
+  const isReadonly = computed(() => _readonly.value.isReadonly(props.value));
   //-----------------------------------------------------
-  const OptionsData = computed(() => {
-    return _options.OptionsData.value;
+  const isOptionsDataReady = computed(() => _options_status.value === "ready");
+  const isOptionsDataLoading = computed(
+    () => _options_status.value === "loading"
+  );
+  const isOptionsDataHide = computed(() => _options_status.value === "hide");
+  const isOptionsDataShow = computed(() => !isOptionsDataHide.value);
+  const hasOptionsData = computed(() => (_dict.value ? true : false));
+  //-----------------------------------------------------
+  const FilteredOptionsData = computed(() => {
+    return _box_options.value?.filterOptionsData(_options_data.value || []);
   });
   //-----------------------------------------------------
-  const hasTips = computed(() => (_options_data.value ? true : false));
+  const TagItems = computed(() => _items.value);
   //-----------------------------------------------------
   const TagValues = computed(() => {
     if (_it_values.value) {
@@ -49,7 +72,11 @@ export function useMultiDroplist(
     return vals;
   });
   //-----------------------------------------------------
-  // 同步方法
+  // 操作函数
+  //-----------------------------------------------------
+  function setOptionsStatus(status: BoxOptionsStatus) {
+    _options_status.value = status;
+  }
   //-----------------------------------------------------
   function changeItems(items: TagItem[]) {
     let vals = _.map(items, (it) => it.value);
@@ -95,6 +122,7 @@ export function useMultiDroplist(
   //-----------------------------------------------------
   async function cancelChange() {
     clearOptionsData();
+    setOptionsStatus("hide");
     await onPropsValueChange();
   }
   //-----------------------------------------------------
@@ -102,7 +130,12 @@ export function useMultiDroplist(
     if (props.readonly) {
       return;
     }
-    await _options.reloadOptioinsData();
+    let opts = _box_options.value;
+    if (opts) {
+      _options_status.value = "loading";
+      _options_data.value = await opts.reloadOptioinsData();
+      _options_status.value = "ready";
+    }
   }
   //-----------------------------------------------------
   let delay_load: (TableRowID[] | undefined)[] | null = null;
@@ -129,7 +162,7 @@ export function useMultiDroplist(
     // 逐个值来处理
     if (vals) {
       for (let val of vals) {
-        let it = await _dict.getStdItem(val);
+        let it = await _dict.value?.getStdItem(val);
         if (!it) {
           items.push({
             text: `${val}`,
@@ -171,13 +204,18 @@ export function useMultiDroplist(
   //-----------------------------------------------------
   return {
     // 计算属性
+    isReadonly,
+    isOptionsDataReady,
+    isOptionsDataLoading,
+    isOptionsDataHide,
+    isOptionsDataShow,
+    hasOptionsData,
+    FilteredOptionsData,
     TagItems,
-    OptionsData,
-    hasTips,
-    isReadonly: computed(() => _readonly.value.isReadonly({})),
     TagValues,
 
-    // 同步方法
+    // 操作函数
+    setOptionsStatus,
     changeItems,
     removeItem,
     clearOptionsData,

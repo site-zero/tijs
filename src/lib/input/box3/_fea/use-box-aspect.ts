@@ -1,17 +1,17 @@
-import { CssUtils, getDockingStyle, Rect, Rects } from "@site0/tijs";
+import { CssUtils, getDockingStyle, Rect, Rects, Vars } from "@site0/tijs";
 import _ from "lodash";
-import { computed, ref } from "vue";
+import { computed, ComputedRef } from "vue";
 import { BoxAspectProps } from "./types-box-aspect";
 
 export type FeaBoxAspectSetup = {
   isFocused: () => boolean;
-  isTipBoxReady: () => boolean;
+  isTipBoxReady: ComputedRef<boolean>;
   isReadonly: () => boolean;
   getElement: () => HTMLElement | null;
   getDockingElement: () => HTMLElement | null;
 };
 
-export function feaBoxAspect(
+export function useBoxAspect(
   props: BoxAspectProps,
   options: FeaBoxAspectSetup
 ) {
@@ -23,25 +23,32 @@ export function feaBoxAspect(
     getDockingElement,
   } = options;
   //--------------------------------------------------
-  const _box_rect = ref<Rect>();
-  //--------------------------------------------------
-  const TopClass = computed(() => CssUtils.mergeClassName(props.className));
+  const TopClass = computed(() =>
+    CssUtils.mergeClassName(props.className, {
+      "flex-auto": props.flexAuto,
+    })
+  );
   //--------------------------------------------------
   const TopStyle = computed(() => makeBoxAspectStyle(props));
   //--------------------------------------------------
   const PartMainClass = computed(() => {
     return {
       "is-focused": isFocused(),
-      "show-tips": isTipBoxReady(),
+      "show-tips": isTipBoxReady.value,
       "is-readonly": isReadonly(),
     };
   });
   //--------------------------------------------------
   const PartMainStyle = computed(() => {
-    let re = _.assign(props.partMainStyle, {
-      width: _box_rect.value?.width,
-      height: _box_rect.value?.height,
-    });
+    let re = _.assign({}, props.partMainStyle);
+    if (isTipBoxReady.value) {
+      let $el = getElement();
+      let _box_rect = Rects.createBy($el!);
+      _.assign(re, {
+        width: _box_rect.width,
+        height: _box_rect.height,
+      });
+    }
     return CssUtils.toStyle(re);
   });
   //--------------------------------------------------
@@ -63,15 +70,13 @@ export function feaBoxAspect(
     if (!$el) {
       return {};
     }
-    if (!isTipBoxReady()) {
-      _box_rect.value = undefined;
+    if (!isTipBoxReady.value) {
       return;
     }
-    _box_rect.value = Rects.createBy($el);
+    let _box_rect = Rects.createBy($el);
     return CssUtils.toStyle({
-      width: _box_rect.value.width,
-      height: _box_rect.value.height,
-      background: "red",
+      width: _box_rect.width,
+      height: _box_rect.height,
     });
   });
   //--------------------------------------------------
@@ -117,9 +122,12 @@ export function feaBoxAspect(
 }
 
 export function makeBoxAspectStyle(props: BoxAspectProps) {
-  let re = _.assign({}, props.style);
+  let re: Vars = {};
   if (props.width) {
     re.width = props.width;
+  }
+  if (props.style) {
+    _.assign(re, props.style);
   }
   if (props.boxFontSize) {
     re["--box-fontsz"] = `var(--ti-fontsz-${props.boxFontSize})`;

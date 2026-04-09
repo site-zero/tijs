@@ -6,6 +6,10 @@ import example from './example';
 
 const en_us = {
   'com-name': 'Drop List',
+  'example-with-icon': 'Option with Icon',
+  'example-with-tip': 'Option with Tip',
+  'example-multi-with-icon': 'Multi-select with Icon',
+  'example-multi-with-tip': 'Multi-select with Tip',
 };
 const zh_cn = {
   'com-name': '下拉列表',

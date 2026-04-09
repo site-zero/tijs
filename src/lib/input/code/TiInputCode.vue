@@ -18,12 +18,10 @@
     trimed: true,
     mustInOptions: true,
     gap: "t",
-    // 自动，如果可编辑，就是 true ，否则就是 false
-    checkValueWhenClose: undefined,
     autoSelect: true,
     useRawValue: true,
     valueCase: "upperAll",
-    codeWidth: "3em",
+    codeWidth: "5em",
     hideDescription: false,
   });
   //-------------------------------------------------
@@ -94,14 +92,7 @@
     return props.getDescription;
   });
   //-----------------------------------------------------
-  const InputValue = computed(() => {
-    if (_.isUndefined(_item.value)) {
-      return props.value;
-    }
-    return _item.value.value;
-  });
-  //-----------------------------------------------------
-  const InputText = computed(() => {
+  const CodeText = computed(() => {
     if (!_item.value) {
       return props.descriptionPlaceholder ?? "";
     }
@@ -127,7 +118,8 @@
   <TiInput
     v-bind="InputConfig"
     :emit-type="'std-item'"
-    :value="InputValue"
+    :value="_item"
+    valueType="std-item"
     :export-api="onBoxExportApi"
     @change="onBoxItemChange">
     <template v-slot:tail>
@@ -135,7 +127,7 @@
         v-if="!props.hideDescription"
         class="box-part as-code-text"
         :style="CodeTextStyle">
-        {{ InputText }}
+        {{ CodeText }}
       </div>
     </template>
   </TiInput>

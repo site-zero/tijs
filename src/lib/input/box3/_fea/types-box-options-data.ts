@@ -1,5 +1,5 @@
 import { IconInput, TiDict, Vars } from "@site0/tijs";
-import { BoxHintCooking } from "./fea-box-hint-cooking";
+import { BoxHintCooking } from "./use-box-hint-cooking";
 import { ItemLookupProps } from "./types-item-lookup";
 
 //--------------------------------------------------

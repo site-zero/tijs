@@ -15,6 +15,8 @@ import {
   BoxOptionsDataSetup,
 } from "./types-box-options-data";
 //--------------------------------------------------
+const debug = false;
+//--------------------------------------------------
 export type ValueOptions = ReturnType<typeof useBoxOptionsData>;
 //--------------------------------------------------
 export function useBoxOptionsData(
@@ -235,7 +237,7 @@ export function useBoxOptionsData(
       lastAbort.abort({ abort: true, reason: ABORT_REASON });
       lastAbort = new AbortController();
     }
-    console.log("reloadOptioinsData: hint=", hint);
+    if (debug) console.log("reloadOptioinsData: hint=", hint);
     // 准备查询结果列表
     try {
       let re: Vars[];
@@ -319,9 +321,9 @@ export function useBoxOptionsData(
     }
     // 尝试远程加载
     let it = await dict.getItem(val);
-    console.log(`loadRawItemByValue: val=${val} : it=`, it);
+    if (debug) console.log(`loadRawItemByValue: val=${val} : it=`, it);
     if (it) {
-      return it;
+      return _.cloneDeep(it);
     }
   }
   //------------------------------------------------

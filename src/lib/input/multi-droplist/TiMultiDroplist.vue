@@ -1,11 +1,14 @@
 <script lang="ts" setup>
+  import {
+    CssUtils,
+    useBoxAspect,
+    I18n,
+    TiList,
+    TiTags,
+    useBoxDropList,
+  } from "@site0/tijs";
   import _ from "lodash";
   import { computed, nextTick, useTemplateRef, watch } from "vue";
-  import { TiList, TiTags } from "../../";
-  import { CssUtils, I18n } from "../../../";
-  import { Rect } from "../../../_type";
-  import { useBoxTips } from "../box2/use-box-tips";
-  import { useTipList } from "../box2/use-tip-list";
   import {
     MultiDroplistEmitter,
     MultiDroplistProps,
@@ -21,33 +24,29 @@
   //-----------------------------------------------------
   const $el = useTemplateRef<HTMLElement>("el");
   const $tipcon = useTemplateRef<HTMLElement>("tipcon");
-  const _api = computed(() => useMultiDroplist(props, emit));
-  const _menu = computed(() => useMultiDroplistActions(props, _api.value));
   //-----------------------------------------------------
-  const _tip_list = computed(() => useTipList(props, () => $tipcon.value));
-  const _tip_box = computed(() =>
-    useBoxTips({
+  const api = useMultiDroplist(props, emit);
+  //-----------------------------------------------------
+  const _menu = computed(() => useMultiDroplistActions(props, api));
+  //-----------------------------------------------------
+  const Aspect = computed(() =>
+    useBoxAspect(props, {
       getElement: () => $el.value,
-      hideBoxTip: () => _api.value.clearOptionsData(),
-      getTipBoxDockStyle: (box: Rect) => {
-        let minWidth = `${box.width}px`;
-        let mw = box.width;
-        if (props.tipListMinWidth) {
-          let tlmw = CssUtils.toAbsPixel(props.tipListMinWidth);
-          if (tlmw > mw) {
-            minWidth = `${tlmw}px`;
-          }
-        }
-        return {
-          minWidth,
-          width: props.tipListWidth,
-        };
-      },
+      getDockingElement: () => $tipcon.value,
+      isFocused: () => false,
+      isTipBoxReady: api.isOptionsDataReady,
+      isReadonly: () => api.isReadonly.value,
+    })
+  );
+  //-----------------------------------------------------
+  const BoxDropList = computed(() =>
+    useBoxDropList(props, {
+      getTipContainer: () => $tipcon.value,
     })
   );
   //-----------------------------------------------------
   const TopClass = computed(() => {
-    let readonly = _api.value.isReadonly.value;
+    let readonly = api.isReadonly.value;
     return CssUtils.mergeClassName({
       "is-readonly": readonly,
       "is-editable": !readonly,
@@ -65,22 +64,16 @@
   const TagActions = computed(() => _menu.value.getBoxActionBarProps());
   //-----------------------------------------------------
   function onClickMask() {
-    _api.value.tryNotifyChange();
-    _api.value.clearOptionsData();
+    api.tryNotifyChange();
+    api.clearOptionsData();
+    api.setOptionsStatus("hide");
   }
-  //-----------------------------------------------------
-  watch(
-    () => _api.value.hasTips.value,
-    (visible) => {
-      _tip_box.value.whenTipBoxVisibleChange(visible);
-    }
-  );
   //-----------------------------------------------------
   watch(
     () => [props.value, props.options],
     () => {
       nextTick(() => {
-        _api.value.onPropsValueChange();
+        api.onPropsValueChange();
       });
     },
     { immediate: true }
@@ -90,44 +83,44 @@
 <template>
   <div class="ti-multi-droplist" :class="TopClass" :style="TopStyle">
     <div
-      :tabindex="_api.isReadonly.value ? undefined : '0'"
+      :tabindex="api.isReadonly.value ? undefined : '0'"
       class="part-main"
       :style="props.style"
       ref="el"
-      @click.left="_api.openOptions()">
+      @click.left="api.openOptions()">
       <TiTags
         :style="props.tagsStyle"
         :placeholder="props.placeholder"
         default-tag-type="primary"
-        :editable="_api.isReadonly.value ? false : true"
+        :editable="api.isReadonly.value ? false : true"
         :actions="TagActions"
         :nowrap="props.nowrap"
         v-bind="props.tags"
-        :value="_api.TagItems.value"
-        @remove="_api.removeItem($event)"
-        @sorted="_api.changeItems" />
+        :value="api.TagItems.value"
+        @remove="api.removeItem($event)"
+        @sorted="api.changeItems" />
     </div>
-    <template v-if="_tip_box.TipBoxStyleReady.value">
+    <template v-if="api.isOptionsDataShow.value">
       <!--遮罩层：展开选项后，会用这个来捕获全局 click-->
       <div class="part-mask" @click.left.stop="onClickMask"></div>
       <!--选项层：展开的选项存放的地方-->
-      <div class="part-options" :style="_tip_box.TipWrapperStyle.value">
+      <div class="part-options" :style="Aspect.BoxTipWrapperStyle.value">
         <div class="part-options-con" ref="tipcon">
           <TiList
-            v-bind="_tip_list.TipListConfig.value"
+            v-bind="BoxDropList.value"
             :multi="true"
             :can-select="true"
             :showChecker="true"
-            :checked-ids="_api.TagValues.value"
-            :data="_api.OptionsData?.value"
-            @select="_api.onOptionSelect" />
+            :checked-ids="api.TagValues.value"
+            :data="api.FilteredOptionsData.value"
+            @select="api.onOptionSelect" />
         </div>
         <footer>
-          <a @click.left="_api.tryNotifyChange(null)">
+          <a @click.left="api.tryNotifyChange(null)">
             <i class="zmdi zmdi-delete"></i><span>{{ I18n.get("clear") }}</span>
           </a>
           <hr />
-          <a @click.left="_api.cancelChange()">
+          <a @click.left="api.cancelChange()">
             <span>{{ I18n.get("cancel") }}</span>
           </a>
         </footer>

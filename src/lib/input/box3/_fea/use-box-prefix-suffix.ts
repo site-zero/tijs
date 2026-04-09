@@ -7,8 +7,8 @@ import {
   Vars,
 } from "@site0/tijs";
 import _ from "lodash";
-import { BoxIconSetup, useBoxIcon } from "./fea-box-icon";
 import { BoxPrefixSuffixProps } from "./types-box-prefix-suffix";
+import { BoxIconSetup, useBoxIcon } from "./use-box-icon";
 
 export type BoxPrefixSuffixSetup = BoxIconSetup & {
   getBoxIcon: () => IconInput | undefined;

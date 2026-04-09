@@ -3,7 +3,7 @@ import {
   CommonProps,
   ComRef,
   DateParseOptionsZone,
-  InputBoxProps,
+  InputNumProps,
   LogicType,
   TextFragment,
 } from "@site0/tijs";
@@ -12,7 +12,7 @@ export type CalendarEmitter = {
   (event: "change", payload: any): void;
 };
 
-export type CalendarValueType = "date" | "str" | "ms"
+export type CalendarValueType = "date" | "str" | "ms";
 
 export type CalendarProps = CommonProps &
   ComRef & {
@@ -43,7 +43,7 @@ export type CalendarProps = CommonProps &
     /**
      * 如果输入值为 str 时，指定其时区
      * `null|undefined` 默认采用环境变量指定的时区
-     * 
+     *
      * @see `datetime.ts#getDefaultTimezoneOffset
      */
     timezone?: DateParseOptionsZone;
@@ -121,8 +121,8 @@ export type CalendarProps = CommonProps &
      */
     i18nPrefix?: "dt-w" | "dt-week";
 
-    yearBox?: InputBoxProps;
-    monthBox?: InputBoxProps;
+    yearBox?: InputNumProps;
+    monthBox?: InputNumProps;
 
     mainPadding?: AspectSize;
     headBg?: LogicType;

@@ -125,7 +125,7 @@ export function isStdOptionItem(item: any): item is StdOptionItem {
 }
 
 export function isAnyOptionItem(item: any): item is AnyOptionItem {
-  if (!_.isNil(item.value)) {
+  if (!_.isUndefined(item.value)) {
     for (let key of _.keys(item)) {
       if (!/^(icon|text|tip|className|value|style)$/.test(key)) {
         return false;

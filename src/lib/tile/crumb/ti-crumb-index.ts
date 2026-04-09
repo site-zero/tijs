@@ -7,7 +7,7 @@ import * as example from "./example/index";
 const COM_TYPE = COM_TYPES.Crumb;
 
 const en_us = {
-  "com-name": "TiCrumb",
+  "com-name": "Crumb",
   "example-with-icon": "With Icon",
   "example-with-head": "With Head",
 };

@@ -6,10 +6,8 @@ export async function try_update_by_input(api: InputBoxApi, input: string) {
     return;
   }
   // 整理值
-  let val = api.applyPipe(input);
-  console.log("input:", input, "val:", val);
-  api.BoxView.value.updateViewPortSize();
-  await api.tryReloadOptionsData(val);
-  let it = api.lookupItem(val);
+  //console.log("input:", input);
+  await api.tryReloadOptionsData(input);
+  let it = api.lookupItem(input);
   api.setCurrentItem(it);
 }

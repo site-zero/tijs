@@ -1,21 +1,15 @@
 <script lang="ts" setup>
-  import { Be, TiList, useBoxDropList, Vars } from "@site0/tijs";
+  import { TiList, useBoxDropList } from "@site0/tijs";
   import { computed, onMounted, useTemplateRef, watch } from "vue";
-  import {
-    Box3IconHandler,
-    BoxIconEmit,
-    feaBoxAspect,
-    useBoxPrefixSuffix,
-  } from "./_fea";
+  import { useBoxAspect } from "./_fea";
   import {
     create_box_composition,
+    create_prefix_suffix,
     on_click_top,
     try_blur,
-    try_clear_value,
     try_click_mask,
     try_focus,
     try_select_option_item,
-    try_show_options,
     try_submit_change,
     try_update_by_props,
   } from "./support";
@@ -33,11 +27,13 @@
   const props = withDefaults(defineProps<InputBoxProps>(), {
     canInput: true,
     value: "",
+    valueType: "val",
     autoI18n: true,
     tipShowTime: "focus",
     tipShowDelay: 500,
     tipUseHint: false,
     trimed: true,
+    flexAuto: true,
     // autoSelect: true,
     // autoFocus: true,
     // boxFontSize: "m",
@@ -53,39 +49,18 @@
   //-----------------------------------------------------
   const Compose = computed(() => create_box_composition(props, api));
   //-----------------------------------------------------
-  const PreSuffix = computed(() =>
-    useBoxPrefixSuffix(props, {
-      getBoxIcon: () => api.CurrentItem.value?.icon,
-      getBoxValue: () => api.CurrentItem.value ?? props.value,
-      toOptionItem: (it: Vars) => api.toOptionItem(it)!,
-      isReadonly: () => api.isReadonly.value,
-      onInvoke: (hdl: Box3IconHandler) => {
-        hdl(api);
-      },
-      onEmit: (clickEmit: BoxIconEmit) => {
-        emit(clickEmit);
-      },
-      onClear: () => {
-        try_clear_value(api);
-      },
-      onCopy: () => {
-        Be.Clipboard.write(props.value);
-        Be.BlinkIt($el.value);
-      },
-      onLoadOptions: () => {
-        try_show_options(api);
-      },
-    })
+  const PrefixSuffix = computed(() =>
+    create_prefix_suffix(props, api, emit, () => $el.value)
   );
-  const Prefix = computed(() => PreSuffix.value.getBoxPrefix());
-  const Suffix = computed(() => PreSuffix.value.getBoxSuffix());
+  const Prefix = computed(() => PrefixSuffix.value.getBoxPrefix());
+  const Suffix = computed(() => PrefixSuffix.value.getBoxSuffix());
   //-----------------------------------------------------
   const Aspect = computed(() =>
-    feaBoxAspect(props, {
+    useBoxAspect(props, {
       getElement: () => $el.value,
       getDockingElement: () => $tipcon.value,
       isFocused: () => api.isFocused.value,
-      isTipBoxReady: () => false,
+      isTipBoxReady: api.isOptionsDataReady,
       isReadonly: () => api.isReadonly.value,
     })
   );
@@ -118,11 +93,15 @@
     class="ti-input-box3"
     :class="Aspect.TopClass.value"
     :style="Aspect.TopStyle.value">
-    <!--div style="font-size: 9px; padding: 0; margin: 0">
-      <span>val: "{{ props.value }}"</span>
-      <span>cit: "{{ api.CurrentItemValue }}"</span>
-      <span>hin: "{{ api.LastHint }}"</span>
-      <span>dis: "{{ api.DisplayText }}"</span>
+    <!--div class="debug-info">
+      <span>prop</span
+      ><code>{{ JSON.stringify(api.BoxPropsValue.value) }}</code>
+      <span>boxV</span
+      ><code>{{ JSON.stringify(api.BoxInputValue.value) }}</code>
+      <span>cItem</span
+      ><code>{{ JSON.stringify(api.CurrentItemValue.value) }}</code>
+      <span>Hint</span><code>{{ api.LastHint }}</code> <span>Display</span
+      ><code>{{ api.DisplayText }}</code>
     </div-->
     <!--=============| MAIN PART |==================-->
     <div
