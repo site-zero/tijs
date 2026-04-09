@@ -1,5 +1,6 @@
 import { InputBoxProps, TiComInfo, TiComRace } from "@site0/tijs";
 import { App } from "vue";
+import { MOCK_ANIMALS } from "./example/mock-animals";
 import TiInputBox3 from "./TiInputBox3.vue";
 
 const COM_TYPE = "TiInput";
@@ -11,6 +12,8 @@ const zh_cn = {
   "com-name": "输入框",
   "example-options": "带选项",
   "example-formated": "自动大写",
+  "example-lookup": "提示选项",
+  "example-filter": "过滤选项",
   "example-query": "动态查询",
   "example-open-copy": "复制和打开",
   "example-droplist": "只读下拉",
@@ -77,6 +80,45 @@ const TiInputBox3Info: TiComInfo = {
       } as InputBoxProps,
     },
     {
+      name: "lookup",
+      text: "i18n:ti-input-example-lookup",
+      comConf: {
+        value: undefined,
+        valueCase: "upperAll",
+        trimed: true,
+        autoSelect: true,
+        placeholder: "2 Digital Country Code",
+        prefixIconFor: "clear",
+        options: "#Countries",
+        mustInOptions: true,
+        tipFormat: "VT",
+        tipShowTime: "auto",
+        useTextWhenFocus: true,
+        tipUseHint: false,
+        tipListMinWidth: "420px",
+        lookup: ["^~value", "^~text"],
+      } as InputBoxProps,
+    },
+    {
+      name: "filter",
+      text: "i18n:ti-input-example-filter",
+      comConf: {
+        value: undefined,
+        valueCase: "upperAll",
+        trimed: true,
+        autoSelect: true,
+        placeholder: "2 Digital QU",
+        prefixIconFor: "clear",
+        options: "#Quantities",
+        mustInOptions: true,
+        tipShowTime: "auto",
+        useTextWhenFocus: true,
+        tipUseHint: true,
+        tipListMinWidth: "420px",
+        lookup: ["*~value", "*~text"],
+      } as InputBoxProps,
+    },
+    {
       name: "query",
       text: "i18n:ti-input-example-query",
       comConf: {
@@ -100,7 +142,7 @@ const TiInputBox3Info: TiComInfo = {
       name: "droplist",
       text: "i18n:ti-input-example-droplist",
       comConf: {
-        value: "otter",
+        //value: null,
         trimed: false,
         placeholder: "Choose one Animal",
         type: "primary",
@@ -110,26 +152,7 @@ const TiInputBox3Info: TiComInfo = {
         mustInOptions: true,
         autoPrefixIcon: true,
         canInput: false,
-        options: [
-          { value: "hippo", text: "Hippo", icon: "fas-hippo" },
-          { value: "cow", text: "Cow", icon: "fas-cow" },
-          { value: "spider", text: "Spider", icon: "fas-spider" },
-          { value: "frog", text: "Frog", icon: "fas-frog" },
-          { value: "bugs", text: "Bugs", icon: "fas-bugs" },
-          { value: "otter", text: "Otter", icon: "fas-otter" },
-          { value: "feather", text: "Feather", icon: "fas-feather" },
-          { value: "fish", text: "Fish", icon: "fas-fish" },
-          { value: "dragon", text: "Dragon", icon: "fas-dragon" },
-          { value: "locust", text: "Locust", icon: "fas-locust" },
-          { value: "dove", text: "Dove", icon: "fas-dove" },
-          { value: "crow", text: "Crow", icon: "fas-crow" },
-          { value: "dog", text: "Dog", icon: "fas-dog" },
-          { value: "worm", text: "Worm", icon: "fas-worm" },
-          { value: "shrimp", text: "Shrimp", icon: "fas-shrimp" },
-          { value: "mosquito", text: "Mosquito", icon: "fas-mosquito" },
-          { value: "horse", text: "Horse", icon: "fas-horse" },
-          { value: "cat", text: "Cat", icon: "fas-cat" },
-        ],
+        options: MOCK_ANIMALS,
       } as InputBoxProps,
     },
   ],

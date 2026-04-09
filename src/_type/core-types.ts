@@ -652,6 +652,11 @@ export type ValTester<V> = ValGetter<V, boolean>;
 export type AnyGetter = ValGetter<any, any>;
 export type AnyTester = ValGetter<any, boolean>;
 
+export type AsyncWaiting<T, E> = {
+  resolve: Callback1<T>;
+  reject: Callback1<E>;
+};
+
 export type FuncSet = {
   [k: string]: Function;
 };

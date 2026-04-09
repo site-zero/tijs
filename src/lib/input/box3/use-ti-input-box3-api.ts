@@ -14,6 +14,7 @@ import {
 } from "@site0/tijs";
 import _ from "lodash";
 import { computed, ref } from "vue";
+import { useLastHint } from "./_fea/fea-last-hint";
 import { InputBox3Emitter, InputBoxProps } from "./ti-input-box3-types";
 
 export type TiInputBox3Setup = {
@@ -39,6 +40,8 @@ export function useTiInputBox3Api(
   //-----------------------------------------------------
   // 在 try_blur 里面会有可能注册一个延迟处理函数
   const _defer_blur = ref<Function>();
+  //-----------------------------------------------------
+  const _last_hint = useLastHint();
   //-----------------------------------------------------
   const _readonly = computed(() => useReadonly(props));
   //-----------------------------------------------------
@@ -88,6 +91,13 @@ export function useTiInputBox3Api(
     return _.isEmpty(FilteredOptionsData.value);
   });
   //-----------------------------------------------------
+  const LastHint = computed(() => _last_hint.LastHint.value);
+  //------------------------------------------------
+  function clearHints() {
+    _last_hint.setLastHint(undefined);
+    _last_hint.rejectPending("!ClearHints!");
+  }
+  //-----------------------------------------------------
   const CurrentItem = computed(() => {
     if (!_current_item.value) return;
     return _box_options.value?.toOptionItem(_current_item.value);
@@ -97,6 +107,12 @@ export function useTiInputBox3Api(
   });
   //-----------------------------------------------------
   const DisplayText = computed(() => {
+    // 明确的记录了 lastHint
+    if (LastHint.value) {
+      return LastHint.value;
+    }
+
+    // 尝试采用选择的 Item
     let boxItem = _current_item.value;
     let boxOpts = _box_options.value;
     if (boxOpts && boxItem) {
@@ -108,10 +124,12 @@ export function useTiInputBox3Api(
       // 否则翻译显示值
       return _display.value(boxItem);
     }
+
     // 空值，一定归一化为空串
     if (_.isNil(props.value)) {
       return "";
     }
+    
     // 直接显示值
     return Str.anyToStr(props.value);
   });
@@ -249,20 +267,39 @@ export function useTiInputBox3Api(
   }
   //-----------------------------------------------------
   async function tryReloadOptionsData(hint?: string) {
-    const with_hint = hint && props.tipUseHint ? true : false;
-    if (
-      with_hint ||
-      (!isOptionsDataReady.value && !isOptionsDataLoading.value)
-    ) {
-      await reloadOptionsData(hint);
+    // 如果在需要 hint 展示不同 options 的时候，那么就要实时刷新
+    // 否则读取一次 options 就不需要再次读取了
+    let need_reload_options = false;
+    if (hasOptionsData.value) {
+      if (props.tipUseHint || !isOptionsDataShow.value) {
+        need_reload_options = true;
+      }
     }
+
+    // 记录一下最后一次查询
+    _last_hint.setLastHint(hint);
+
+    // 已经在读取内容了，加入等待队列
+    let ing = _last_hint.tryPending(hint);
+    if (ing) {
+      return ing;
+    }
+
+    // 需要重新加载
+    if (need_reload_options) {
+      try {
+        await reloadOptionsData(hint);
+      } catch (err) {
+        _last_hint.rejectPending(err, hint);
+      }
+    }
+    // 解决 pending 的处理过程
+    _last_hint.resolvePending(_options_data.value, hint);
   }
   //-----------------------------------------------------
   // 返回接口
   //-----------------------------------------------------
   const api = {
-    Display: _display,
-    Pipe: _pipe,
     BoxView: _viewport,
     // 计算属性
     isFocused,
@@ -279,6 +316,9 @@ export function useTiInputBox3Api(
     FilteredOptionsData,
     isOptionsDataEmpty,
     isFilteredOptionsDataEmpty,
+    //--------
+    LastHint,
+    clearHints,
     //--------
     CurrentItem: CurrentItem,
     CurrentItemValue: CurrentItemValue,

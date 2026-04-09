@@ -15,4 +15,5 @@ export function try_select_option_item(
   api.notifyChange(val);
   api.setFocused(false);
   api.tryDeferBlur();
+  api.clearHints();
 }

@@ -8,17 +8,13 @@ export function useBoxComposition(
   props: BoxCompositionProps,
   options: BoxCompositionSetup
 ) {
-  let { onChange } = options;
+  let { isReadonly, onChange, funcKeys } = options;
   const _compositing = ref(false);
-  const _keypress = {
-    key: "", // 按键的值 ArrowUp|ArrowDown|Escape|Enter...
-    pressAt: 0, // 按键的时间戳
-  };
-
-  function onKeyPress(event: KeyboardEvent) {
-    _keypress.key = event.key;
-    _keypress.pressAt = Date.now();
-  }
+  /**
+   * 标记了有功能按键被按下，这样在 onKeyUp 的时候就不要触发 onChange 了
+   * 通常 ArrowUp|ArrowDown|Escape|Enter|Tab... 这些键被按下，会做这个标记
+   */
+  const _will_gen_input_key = ref(false);
 
   function onStart() {
     _compositing.value = true;
@@ -34,7 +30,23 @@ export function useBoxComposition(
     if (_compositing.value) {
       return;
     }
+    //console.log("onKeyDown", event.key);
     __update_value(event.target as HTMLInputElement);
+  }
+
+  function onBeforeInput(event: InputEvent) {
+    //console.error("onBeforeInput", event.data);
+    _will_gen_input_key.value = event.data ? true : false;
+  }
+
+  async function onKeyDown(event: KeyboardEvent) {
+    //console.log("onKeyDown", event.key);
+    // 默认设置为 false，当有可打印字符的时候， onBeforeInput 会被调用
+    _will_gen_input_key.value = false;
+    let hdl = funcKeys[event.key];
+    if (hdl) {
+      await hdl();
+    }
   }
 
   function __update_value($input: HTMLInputElement) {
@@ -42,10 +54,13 @@ export function useBoxComposition(
       return;
     }
     // 只读防守
-    if (options.isReadonly()) {
+    if (isReadonly()) {
       return;
     }
     if (_compositing.value) {
+      return;
+    }
+    if (!_will_gen_input_key.value) {
       return;
     }
 
@@ -56,9 +71,10 @@ export function useBoxComposition(
 
   return {
     _compositing,
-    onKeyPress,
     onStart,
     onEnd,
+    onBeforeInput,
     onKeyUp,
+    onKeyDown,
   };
 }

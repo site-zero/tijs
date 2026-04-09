@@ -21,8 +21,10 @@ export function useBoxOptionsData(
   props: BoxOptionsDataProps,
   setup: BoxOptionsDataSetup
 ) {
-  let { dict, cookHint } = setup;
-  let { optionKeepRaw = false } = props;
+  const { dict, cookHint } = setup;
+  const { optionKeepRaw = false } = props;
+  //------------------------------------------------
+  // 动态过滤器
   //------------------------------------------------
   const _options_filter = computed(() => {
     if (props.optionFilter) {
@@ -59,6 +61,8 @@ export function useBoxOptionsData(
     return list;
   });
   //------------------------------------------------
+  // 数据计算
+  //------------------------------------------------
   function filterOptionsData(_options_data: Vars[]) {
     let list: Vars[] = [];
     // 显示清除选项
@@ -87,12 +91,7 @@ export function useBoxOptionsData(
   let lastAbort: AbortController | null = null;
   const ABORT_REASON = "abort-value-options-reload";
   //------------------------------------------------
-  function abortOptonsLoading() {
-    if (lastAbort) {
-      lastAbort.abort({ abort: true, reason: ABORT_REASON });
-      lastAbort = null;
-    }
-  }
+  // 帮助函数
   //------------------------------------------------
   function toOptionItem(it: Vars): AnyOptionItem {
     if (isAnyOptionItem(it)) {
@@ -139,7 +138,11 @@ export function useBoxOptionsData(
 
     // Index 区域外
     if (I < 0 || I >= list.length) {
-      I = Num.scrollIndex(I, N);
+      if (offset < 0) {
+        I = Num.scrollIndex(offset, N);
+      } else {
+        I = 0;
+      }
     }
     // 获取对象
     else if (offset != 0) {
@@ -147,6 +150,24 @@ export function useBoxOptionsData(
     }
     let it: Vars | undefined = list[I];
     return it;
+  }
+  //------------------------------------------------
+  function getRawItemByVal(list: Vars[], value: any): Vars | undefined {
+    if (_.isNil(value) || _.isEmpty(list)) {
+      return;
+    }
+    // 逐个寻找选项对象
+    for (let it of list) {
+      let itVal: any;
+      if (isAnyOptionItem(it)) {
+        itVal = it.value;
+      } else {
+        itVal = dict.getItemValue(it, -1);
+      }
+      if (value == itVal) {
+        return it;
+      }
+    }
   }
   //------------------------------------------------
   function getOptionItemAt(
@@ -182,24 +203,6 @@ export function useBoxOptionsData(
     }
   }
   //------------------------------------------------
-  function getRawItemByVal(list: Vars[], value: any): Vars | undefined {
-    if (_.isNil(value) || _.isEmpty(list)) {
-      return;
-    }
-    // 逐个寻找选项对象
-    for (let it of list) {
-      let itVal: any;
-      if (isAnyOptionItem(it)) {
-        itVal = it.value;
-      } else {
-        itVal = dict.getItemValue(it, -1);
-      }
-      if (value == itVal) {
-        return it;
-      }
-    }
-  }
-  //------------------------------------------------
   function lookupItem(list: Vars[], hint: string): Vars | undefined {
     if (!hint || !list || _.isEmpty(list)) {
       return;
@@ -216,6 +219,13 @@ export function useBoxOptionsData(
   //------------------------------------------------
   // 异步方法
   //------------------------------------------------
+  function abortOptonsLoading() {
+    if (lastAbort) {
+      lastAbort.abort({ abort: true, reason: ABORT_REASON });
+      lastAbort = null;
+    }
+  }
+  //------------------------------------------------
   async function reloadOptioinsData(
     hint?: string,
     whenAbort?: () => void
@@ -225,16 +235,18 @@ export function useBoxOptionsData(
       lastAbort.abort({ abort: true, reason: ABORT_REASON });
       lastAbort = new AbortController();
     }
+    console.log("reloadOptioinsData: hint=", hint);
     // 准备查询结果列表
     try {
       let re: Vars[];
       // 采用关键词查询
       if (props.tipUseHint && (hint || props.forceCookHint)) {
+        let cooked_hint = hint;
         // 预处理搜索条件
         if (cookHint) {
-          hint = cookHint(hint ?? "");
+          cooked_hint = cookHint(hint ?? "");
         }
-        re = await dict.queryData(hint, lastAbort?.signal);
+        re = await dict.queryData(cooked_hint, lastAbort?.signal);
       }
       // 默认全量查询
       else {
@@ -316,20 +328,24 @@ export function useBoxOptionsData(
   // 返回特性
   //------------------------------------------------
   return {
+    // 计算属性
+    FixedOptionsData,
+
+    // 数据计算
     filterOptionsData,
+
+    // 帮助函数
+    toOptionItem,
     getOptionItemIndex,
-    //------------------
-    getOptionItemAt,
-    getOptionItemByVal,
-    //------------------
     getRawItemAt,
     getRawItemByVal,
-    //------------------
-    toOptionItem,
+    getOptionItemAt,
+    getOptionItemByVal,
     lookupItem,
-    //------------------
-    reloadOptioinsData,
+
+    // 异步方法
     abortOptonsLoading,
+    reloadOptioinsData,
     loadRawItemByValue,
     loadStdItemByValue,
   };

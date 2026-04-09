@@ -5,20 +5,20 @@
     Box3IconHandler,
     BoxIconEmit,
     feaBoxAspect,
-    useBoxComposition,
     useBoxPrefixSuffix,
   } from "./_fea";
-  import { try_update_by_input } from "./support";
-  import { on_click_top } from "./support/on_click_top";
-  import { on_input_keydown } from "./support/on_input_keydown";
-  import { try_blur } from "./support/try_blur";
-  import { try_clear_value } from "./support/try_clear_value";
-  import { try_click_mask } from "./support/try_click_mask";
-  import { try_focus } from "./support/try_focus";
-  import { try_select_option_item } from "./support/try_select_option_item";
-  import { try_show_options } from "./support/try_show_options";
-  import { try_submit_change } from "./support/try_submit_change";
-  import { try_update_by_props } from "./support/try_update_by_props";
+  import {
+    create_box_composition,
+    on_click_top,
+    try_blur,
+    try_clear_value,
+    try_click_mask,
+    try_focus,
+    try_select_option_item,
+    try_show_options,
+    try_submit_change,
+    try_update_by_props,
+  } from "./support";
   import { InputBox3Emitter, InputBoxProps } from "./ti-input-box3-types";
   import { useTiInputBox3Api } from "./use-ti-input-box3-api";
   //-----------------------------------------------------
@@ -51,14 +51,7 @@
     getInputElement: () => $input.value,
   });
   //-----------------------------------------------------
-  const Compose = computed(() => {
-    return useBoxComposition(props, {
-      isReadonly: () => api.isInputReadonly.value,
-      onChange: (val: string) => {
-        try_update_by_input(api, val);
-      },
-    });
-  });
+  const Compose = computed(() => create_box_composition(props, api));
   //-----------------------------------------------------
   const PreSuffix = computed(() =>
     useBoxPrefixSuffix(props, {
@@ -125,7 +118,12 @@
     class="ti-input-box3"
     :class="Aspect.TopClass.value"
     :style="Aspect.TopStyle.value">
-    <!--pre style="font-size:8px;padding:0;margin:0;">{{ JSON.stringify(api.CurrentItem.value) }}</pre-->
+    <!--div style="font-size: 9px; padding: 0; margin: 0">
+      <span>val: "{{ props.value }}"</span>
+      <span>cit: "{{ api.CurrentItemValue }}"</span>
+      <span>hin: "{{ api.LastHint }}"</span>
+      <span>dis: "{{ api.DisplayText }}"</span>
+    </div-->
     <!--=============| MAIN PART |==================-->
     <div
       ref="el"
@@ -152,9 +150,10 @@
           :value="api.DisplayText.value"
           :readonly="api.isInputReadonly.value"
           spellcheck="false"
-          @keydown="on_input_keydown(api, $event)"
           @change="try_submit_change(api)"
           @keyup="Compose.onKeyUp"
+          @keydown="Compose.onKeyDown"
+          @beforeinput="Compose.onBeforeInput"
           @compositionstart="Compose.onStart"
           @compositionend="Compose.onEnd"
           @focus.stop="try_focus(api, props)"
