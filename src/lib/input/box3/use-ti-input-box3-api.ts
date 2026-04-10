@@ -17,7 +17,7 @@ import { computed, ref } from "vue";
 import { useLastHint } from "./_fea";
 import { InputBox3Emitter, InputBoxProps } from "./ti-input-box3-types";
 
-const debug = true;
+const debug = false;
 
 export type TiInputBox3Setup = {
   emit: InputBox3Emitter;
@@ -103,7 +103,7 @@ export function useTiInputBox3Api(
   //-----------------------------------------------------
   const LastHint = computed(() => _last_hint.LastHint.value);
   //------------------------------------------------
-  function clearHints() {
+  function clearLastHints() {
     _last_hint.setLastHint(undefined);
     _last_hint.rejectPending("!ClearHints!");
   }
@@ -118,7 +118,7 @@ export function useTiInputBox3Api(
   //-----------------------------------------------------
   const DisplayText = computed(() => {
     // 明确的记录了 lastHint
-    if (LastHint.value) {
+    if (!_.isNil(LastHint.value)) {
       return LastHint.value;
     }
 
@@ -241,19 +241,26 @@ export function useTiInputBox3Api(
   }
   //-----------------------------------------------------
   async function tryNotifyChange(val: any) {
-    if (debug) console.log("tryNotifyChange", val);
+    if (debug) console.log(`tryNotifyChange(${val})`);
     // 如果有选项，则需要检查选项
     if (hasOptionsData.value) {
       let item = await reloadItem(val);
       if (!item) {
+        if (debug) console.log(`tryNotifyChange(${val}) !item=> undefined`);
         _current_item.value = undefined;
         if (props.mustInOptions) {
           val = null;
         }
       } else {
+        if (debug) console.log(`tryNotifyChange(${val}) item=`, { ...item });
         _current_item.value = item;
       }
     }
+    if (debug)
+      console.log(
+        `tryNotifyChange(${val}) _current_item=`,
+        _.cloneDeep(_current_item.value)
+      );
 
     // 准备值
     let vtype = BoxValueType.value;
@@ -280,9 +287,12 @@ export function useTiInputBox3Api(
         newVal = val;
       }
     }
+    if (debug)
+      console.log(`tryNotifyChange(${val}) vtype=${vtype}, newVal=`, newVal);
 
     // 没必要做重复操作
     if (_.isEqual(props.value, newVal)) {
+      if (debug) console.log(`tryNotifyChange(${val}): skip for isEqual`);
       return;
     }
 
@@ -293,6 +303,7 @@ export function useTiInputBox3Api(
 
     // 通知改动
     emit("change", newVal);
+    if (debug) console.log(`tryNotifyChange(${val}): emit change`, newVal);
   }
   //-----------------------------------------------------
   // 远程操作
@@ -309,11 +320,19 @@ export function useTiInputBox3Api(
   //-----------------------------------------------------
   async function reloadCurrentItem() {
     const inputVal = PropsStrValue.value;
+    if (debug) console.log(`>>> reloadCurrentItem: inputVal=${inputVal}`);
     // 没必要重新加载了
     if (_.isEqual(inputVal, CurrentItemValue.value)) {
+      if (debug)
+        console.log(`<<< reloadCurrentItem(${inputVal}): skip for isEqual`);
       return;
     }
     _current_item.value = await reloadItem(inputVal);
+    if (debug)
+      console.log(
+        `<<< reloadCurrentItem: _current_item=`,
+        _.cloneDeep(_current_item.value)
+      );
   }
   //-----------------------------------------------------
   function lookupItem(hint?: string) {
@@ -390,7 +409,7 @@ export function useTiInputBox3Api(
     isFilteredOptionsDataEmpty,
     //--------
     LastHint,
-    clearHints,
+    clearLastHints,
     //--------
     CurrentItem: CurrentItem,
     CurrentItemValue: CurrentItemValue,

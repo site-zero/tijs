@@ -10,3 +10,4 @@ export * from "./try-show-options";
 export * from "./try-submit-change";
 export * from "./try-update-by-input";
 export * from "./try-update-by-props";
+export * from "./on-input-change";

@@ -12,4 +12,5 @@ export type InputCodeProps = InputBoxProps & {
    */
   hideDescription?: boolean;
 
+  showDebugInfo?: boolean;
 };

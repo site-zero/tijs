@@ -14,5 +14,5 @@ export async function try_select_option_item(
   let val = payload.currentId ?? null;
   await api.tryNotifyChange(val);
   api.tryDeferBlur();
-  api.clearHints();
+  api.clearLastHints();
 }

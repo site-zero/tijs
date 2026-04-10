@@ -1,6 +1,7 @@
 @use "@site0/tijs/sass/_all.scss" as *;
 
 .ti-input-box3 {
+  @include flex-align-v-nowrap($jc: stretch);
   --box-color-border: var(--ti-color-border-dark);
   --box-color-text: var(--ti-color-box-f);
   --box-color-bg: var(--ti-color-box);
@@ -186,14 +187,17 @@
 
 .ti-input-box3 {
   > .debug-info {
-    @include flex-align($ai:center);
     @include font-fixed;
-    gap: 0.3em;
     font-size: 10px;
-    padding: 2px;
+    padding: 0;
     margin: 0;
-    line-height: 1.5em;
-    span {
+    min-height: 20em;
+    line-height: 1.2em;
+    td,
+    th {
+      font-size: inherit;
+    }
+    th {
       color: var(--ti-color-primary);
       &:after {
         display: inline;

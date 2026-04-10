@@ -2,6 +2,7 @@ import { CssUtils, getDockingStyle, Rect, Rects, Vars } from "@site0/tijs";
 import _ from "lodash";
 import { computed, ComputedRef } from "vue";
 import { BoxAspectProps } from "./types-box-aspect";
+import { position } from "html2canvas/dist/types/css/property-descriptors/position";
 
 export type FeaBoxAspectSetup = {
   isFocused: () => boolean;
@@ -45,6 +46,9 @@ export function useBoxAspect(
       let $el = getElement();
       let _box_rect = Rects.createBy($el!);
       _.assign(re, {
+        position:"fixed",
+        top: _box_rect.top,
+        left: _box_rect.left,
         width: _box_rect.width,
         height: _box_rect.height,
       });

@@ -19,7 +19,7 @@ export async function try_submit_change(api: InputBoxApi) {
 export async function do_submit_change(api: InputBoxApi) {
   if (api.debug) console.log("do_submit_change");
   let val: any = null;
-  // // 如果选择了一个已经存在的项目
+  // 如果选择了一个已经存在的项目
   let curIt = api.CurrentItem.value;
   if (curIt) {
     val = curIt.value ?? null;
@@ -35,5 +35,5 @@ export async function do_submit_change(api: InputBoxApi) {
   // 提交
   await api.tryNotifyChange(val);
   // 清理一下
-  api.clearHints();
+  api.clearLastHints();
 }

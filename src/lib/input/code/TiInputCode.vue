@@ -1,10 +1,19 @@
 <script lang="ts" setup>
   import _ from "lodash";
-  import { computed, onMounted, ref, useTemplateRef, watch } from "vue";
+  import {
+    computed,
+    nextTick,
+    onMounted,
+    ref,
+    useTemplateRef,
+    watch,
+  } from "vue";
   import { InputBoxApi, InputBoxProps, TiInput } from "../../";
   import { AnyOptionItem, ToStr } from "../../../_type";
   import { CssUtils, Util } from "../../../core";
   import { InputCodeProps } from "./ti-input-code-types";
+  //-----------------------------------------------------
+  const debug = false;
   //-----------------------------------------------------
   const emit = defineEmits<{
     (event: "change", payload: string): void;
@@ -96,36 +105,49 @@
   }
   //-----------------------------------------------------
   async function updateItem() {
-    if (!_box.value) {
+    const boxApi = _box.value;
+    if (!boxApi) {
       console.warn("TiInputCode: _box.value is undefined");
       return;
     }
-    console.log("TiInputCode: updateItem", props.value);
+    if (debug) console.log(`TiInputCode: updateItem(${props.value})`);
+
     _item.value = null;
     if (props.value) {
-      let it = await _box.value?.reloadItem(props.value);
+      let it = await boxApi.reloadItem(props.value);
       if (it) {
-        _item.value = _box.value?.toOptionItem(it) ?? null;
+        _item.value = boxApi.toOptionItem(it) ?? null;
       }
     }
+    if (debug)
+      console.log(
+        `TiInputCode: updateItem(${props.value}) _item.value=`,
+        JSON.stringify(_item.value)
+      );
   }
   //-----------------------------------------------------
   watch(
     () => props.value,
-    async () => {
-      await updateItem();
+    () => {
+      nextTick(() => {
+        updateItem();
+      });
     }
   );
   //-----------------------------------------------------
   watch(
     () => [props.dictVars, props.options],
     async () => {
-      await updateItem();
+      nextTick(() => {
+        updateItem();
+      });
     }
   );
   //-----------------------------------------------------
-  onMounted(async () => {
-    await updateItem();
+  onMounted(() => {
+    nextTick(() => {
+      updateItem();
+    });
   });
   //-----------------------------------------------------
 </script>
@@ -134,7 +156,7 @@
     ref="box"
     v-bind="InputConfig"
     :emit-type="'std-item'"
-    :value="_item"
+    :value="_.cloneDeep(_item)"
     valueType="std-item"
     @change="onBoxItemChange">
     <template v-slot:tail>

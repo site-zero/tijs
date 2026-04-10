@@ -35,6 +35,6 @@ export function try_blur(api: InputBoxApi) {
 async function do_blur(api: InputBoxApi) {
   if (api.debug) console.log("do_blur");
   api.setOptionsStatus("hide");
-  api.clearHints();
-  await api.reloadCurrentItem();
+  api.clearLastHints();
+  //await api.reloadCurrentItem();
 }

@@ -1,16 +1,17 @@
 <script lang="ts" setup>
   import { TiList, useBoxDropList } from "@site0/tijs";
+  import _ from "lodash";
   import { computed, onMounted, useTemplateRef, watch } from "vue";
   import { useBoxAspect } from "./_fea";
   import {
     create_box_composition,
     create_prefix_suffix,
     on_click_top,
+    on_input_change,
     try_blur,
     try_click_mask,
     try_focus,
     try_select_option_item,
-    try_submit_change,
     try_update_by_props,
   } from "./support";
   import { InputBox3Emitter, InputBoxProps } from "./ti-input-box3-types";
@@ -72,20 +73,32 @@
   );
   //-----------------------------------------------------
   watch(
-    () => [props.value, props.options],
+    () => props.value,
     async () => {
       await try_update_by_props(api);
     },
-    { immediate: true }
+    {deep: true}
   );
   //-----------------------------------------------------
-  onMounted(() => {
+  watch(
+    () => props.options,
+    async () => {
+      await try_update_by_props(api);
+    },
+  );
+  //-----------------------------------------------------
+  onMounted(async () => {
+    await try_update_by_props(api);
     if (props.autoFocus) {
       api.setFocused(true);
     }
   });
   //-----------------------------------------------------
   defineExpose(api);
+  //-----------------------------------------------------
+  const LastHintText = computed(() =>
+    _.isNil(api.LastHint.value) ? "<nil>" : api.LastHint.value
+  );
   //-----------------------------------------------------
 </script>
 <template>
@@ -94,14 +107,46 @@
     :class="Aspect.TopClass.value"
     :style="Aspect.TopStyle.value">
     <div class="debug-info" v-if="props.showDebugInfo">
-      <span>I:raw</span
-      ><code>{{ JSON.stringify(api.PropsRawValue.value) }}</code>
-      <span>I:str</span
-      ><code>{{ JSON.stringify(api.PropsStrValue.value) }}</code>
-      <span>cItem</span><code>{{ JSON.stringify(api.CurrentItem.value) }}</code>
-      <span>Hint</span><code>{{ api.LastHint }}</code> <span>Display</span
-      ><code>{{ api.DisplayText }}</code> <span>Options</span
-      ><code>{{ api.FilteredOptionsData.value?.length || 0 }}</code>
+      <table>
+        <tbody>
+          <tr>
+            <th>I:raw</th>
+            <td>
+              <code>{{ JSON.stringify(api.PropsRawValue.value) }}</code>
+            </td>
+          </tr>
+          <tr>
+            <th>I:str</th>
+            <td>
+              <code>{{ JSON.stringify(api.PropsStrValue.value) }}</code>
+            </td>
+          </tr>
+          <tr>
+            <th>cItem</th>
+            <td>
+              <code>{{ JSON.stringify(api.CurrentItem.value) }}</code>
+            </td>
+          </tr>
+          <tr>
+            <th>Hint</th>
+            <td>
+              <code>{{ LastHintText }}</code>
+            </td>
+          </tr>
+          <tr>
+            <th>Display</th>
+            <td>
+              <code>{{ api.DisplayText }}</code>
+            </td>
+          </tr>
+          <tr>
+            <th>Options</th>
+            <td>
+              <code>{{ api.FilteredOptionsData.value?.length || 0 }}</code>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
     <!--=============| MAIN PART |==================-->
     <div
@@ -129,7 +174,7 @@
           :value="api.DisplayText.value"
           :readonly="api.isInputReadonly.value"
           spellcheck="false"
-          @change="try_submit_change(api)"
+          @change="on_input_change(api)"
           @keyup="Compose.onKeyUp"
           @keydown="Compose.onKeyDown"
           @beforeinput="Compose.onBeforeInput"

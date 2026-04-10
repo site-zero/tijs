@@ -4,7 +4,7 @@ import {
   BoxCompositionSetup,
 } from "./types-box-composition";
 
-const debug = true;
+const debug = false;
 
 export function useBoxComposition(
   props: BoxCompositionProps,
@@ -16,7 +16,7 @@ export function useBoxComposition(
    * 标记了有功能按键被按下，这样在 onKeyUp 的时候就不要触发 onChange 了
    * 通常 ArrowUp|ArrowDown|Escape|Enter|Tab... 这些键被按下，会做这个标记
    */
-  const _will_gen_input_key = ref(false);
+  const _will_change_input = ref(false);
   const _last_down_key = ref<string>("");
 
   function onStart() {
@@ -39,20 +39,28 @@ export function useBoxComposition(
 
   function onBeforeInput(event: InputEvent) {
     let $input = event.target as HTMLInputElement;
-    // 回退或者删除，并不会导致查询
-    if (!/^Backspace|Delete$/.test(_last_down_key.value)) {
-      _will_gen_input_key.value = event.data ? true : false;
+    // 回退或者删除，要导致查询
+    if (/^Backspace|Delete$/.test(_last_down_key.value)) {
+      _will_change_input.value = true;
+    }
+    // 有实质内容才会导致查询，因此 Enter 等按钮将会被无视
+    else {
+      _will_change_input.value = event.data ? true : false;
     }
     if (debug)
       console.log(
-        `onBeforeInput: data=${event.data}, value=${$input.value}, __=${_will_gen_input_key.value}`
+        `onBeforeInput:`,
+        `data=${event.data}`,
+        `value=${$input.value}`,
+        `_will_change_input=${_will_change_input.value}`,
+        `_last_down_key=${_last_down_key.value}`
       );
   }
 
   async function onKeyDown(event: KeyboardEvent) {
     if (debug) console.log("onKeyDown", event.key);
     // 默认设置为 false，当有可打印字符的时候， onBeforeInput 会被调用
-    _will_gen_input_key.value = false;
+    _will_change_input.value = false;
     _last_down_key.value = event.key;
     let hdl = funcKeys[event.key];
     if (hdl) {
@@ -71,7 +79,7 @@ export function useBoxComposition(
     if (_compositing.value) {
       return;
     }
-    if (!_will_gen_input_key.value) {
+    if (!_will_change_input.value) {
       return;
     }
 

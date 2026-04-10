@@ -31,16 +31,20 @@ export function create_box_composition(
         }
       },
       Tab: async () => {
+        if (api.debug) console.log("compose<Tab>");
         do_submit_change(api);
         api.setFocused(false);
         api.setOptionsStatus("hide");
       },
       Escape: async () => {
+        if (api.debug) console.log("compose<Escape>");
         api.setOptionsStatus("hide");
         await api.reloadCurrentItem();
       },
       Enter: async () => {
+        if (api.debug) console.log("compose<Enter>");
         do_submit_change(api);
+        api.setOptionsStatus("hide");
       },
     },
   });
