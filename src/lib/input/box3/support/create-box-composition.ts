@@ -1,6 +1,6 @@
 import { BoxCompositionProps, useBoxComposition } from "../_fea";
 import { InputBoxApi } from "../ti-input-box3-types";
-import { try_show_options, try_submit_change, try_update_by_input } from "./";
+import { do_submit_change, try_show_options, try_update_by_input } from "./";
 
 export function create_box_composition(
   props: BoxCompositionProps,
@@ -31,17 +31,16 @@ export function create_box_composition(
         }
       },
       Tab: async () => {
-        try_submit_change(api);
+        do_submit_change(api);
         api.setFocused(false);
         api.setOptionsStatus("hide");
       },
       Escape: async () => {
-        api.setFocused(false);
         api.setOptionsStatus("hide");
         await api.reloadCurrentItem();
       },
       Enter: async () => {
-        try_submit_change(api);
+        do_submit_change(api);
       },
     },
   });

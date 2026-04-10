@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import _ from "lodash";
-  import { computed, onMounted, onUnmounted, ref } from "vue";
-  import { InputBoxApi, InputBoxProps, TiInput, useViewport } from "../../";
+  import { computed, onMounted, ref, useTemplateRef, watch } from "vue";
+  import { InputBoxApi, InputBoxProps, TiInput } from "../../";
   import { AnyOptionItem, ToStr } from "../../../_type";
   import { CssUtils, Util } from "../../../core";
   import { InputCodeProps } from "./ti-input-code-types";
@@ -25,17 +25,9 @@
     hideDescription: false,
   });
   //-------------------------------------------------
-  const $el = ref<HTMLElement>();
-  //-------------------------------------------------
-  const _viewport = useViewport({
-    //el: $el,
-    getElement: () => $el.value,
-    onMounted,
-    onUnmounted,
-  });
+  const _box = useTemplateRef<InputBoxApi>("box");
   //-----------------------------------------------------
-  const _item = ref<AnyOptionItem>();
-  const _box = ref<InputBoxApi>();
+  const _item = ref<AnyOptionItem | null>(null);
   //-----------------------------------------------------
   const InputConfig = computed(() => {
     let re: InputBoxProps = _.omit(
@@ -49,7 +41,6 @@
       "hideDescription",
       "tipListWidth"
     );
-    re.tipListWidth = props.tipListWidth ?? `${_viewport.size.width}px`;
     if (!re.tipFormat) {
       re.tipFormat = "VT";
     }
@@ -100,27 +91,51 @@
   });
   //-----------------------------------------------------
   function onBoxItemChange(it: AnyOptionItem | null) {
-    _item.value = it ?? undefined;
+    _item.value = it ?? null;
     emit("change", it?.value || null);
   }
   //-----------------------------------------------------
-  async function onBoxExportApi(box: InputBoxApi) {
-    _box.value = box;
+  async function updateItem() {
+    if (!_box.value) {
+      console.warn("TiInputCode: _box.value is undefined");
+      return;
+    }
+    console.log("TiInputCode: updateItem", props.value);
+    _item.value = null;
     if (props.value) {
-      _item.value = await _box.value?.getOptionItemByVal(props.value);
-    } else {
-      _item.value = undefined;
+      let it = await _box.value?.reloadItem(props.value);
+      if (it) {
+        _item.value = _box.value?.toOptionItem(it) ?? null;
+      }
     }
   }
+  //-----------------------------------------------------
+  watch(
+    () => props.value,
+    async () => {
+      await updateItem();
+    }
+  );
+  //-----------------------------------------------------
+  watch(
+    () => [props.dictVars, props.options],
+    async () => {
+      await updateItem();
+    }
+  );
+  //-----------------------------------------------------
+  onMounted(async () => {
+    await updateItem();
+  });
   //-----------------------------------------------------
 </script>
 <template>
   <TiInput
+    ref="box"
     v-bind="InputConfig"
     :emit-type="'std-item'"
     :value="_item"
     valueType="std-item"
-    :export-api="onBoxExportApi"
     @change="onBoxItemChange">
     <template v-slot:tail>
       <div

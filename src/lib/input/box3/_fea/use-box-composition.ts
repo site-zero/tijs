@@ -4,6 +4,8 @@ import {
   BoxCompositionSetup,
 } from "./types-box-composition";
 
+const debug = true;
+
 export function useBoxComposition(
   props: BoxCompositionProps,
   options: BoxCompositionSetup
@@ -15,6 +17,7 @@ export function useBoxComposition(
    * 通常 ArrowUp|ArrowDown|Escape|Enter|Tab... 这些键被按下，会做这个标记
    */
   const _will_gen_input_key = ref(false);
+  const _last_down_key = ref<string>("");
 
   function onStart() {
     _compositing.value = true;
@@ -30,19 +33,27 @@ export function useBoxComposition(
     if (_compositing.value) {
       return;
     }
-    //console.log("onKeyDown", event.key);
+    if (debug) console.log("onKeyUp", event.key);
     __update_value(event.target as HTMLInputElement);
   }
 
   function onBeforeInput(event: InputEvent) {
-    //console.error("onBeforeInput", event.data);
-    _will_gen_input_key.value = event.data ? true : false;
+    let $input = event.target as HTMLInputElement;
+    // 回退或者删除，并不会导致查询
+    if (!/^Backspace|Delete$/.test(_last_down_key.value)) {
+      _will_gen_input_key.value = event.data ? true : false;
+    }
+    if (debug)
+      console.log(
+        `onBeforeInput: data=${event.data}, value=${$input.value}, __=${_will_gen_input_key.value}`
+      );
   }
 
   async function onKeyDown(event: KeyboardEvent) {
-    //console.log("onKeyDown", event.key);
+    if (debug) console.log("onKeyDown", event.key);
     // 默认设置为 false，当有可打印字符的时候， onBeforeInput 会被调用
     _will_gen_input_key.value = false;
+    _last_down_key.value = event.key;
     let hdl = funcKeys[event.key];
     if (hdl) {
       await hdl();
@@ -66,6 +77,7 @@ export function useBoxComposition(
 
     // 更新值
     let value = $input.value;
+    if (debug) console.log(`__update_value: onChange('${value}')`);
     onChange(value);
   }
 

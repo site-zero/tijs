@@ -16,7 +16,7 @@ export function create_prefix_suffix(
 ) {
   return useBoxPrefixSuffix(props, {
     getBoxIcon: () => api.CurrentItem.value?.icon,
-    getBoxValue: () => api.BoxInputValue.value,
+    getBoxValue: () => api.PropsStrValue.value,
     toOptionItem: (it: Vars) => api.toOptionItem(it)!,
     isReadonly: () => api.isReadonly.value,
     onInvoke: (hdl: Box3IconHandler) => {
@@ -30,9 +30,9 @@ export function create_prefix_suffix(
     },
     onCopy: ({ ctrlKey }) => {
       if (ctrlKey) {
-        Be.Clipboard.write(api.BoxInputValue.value);
+        Be.Clipboard.write(api.PropsStrValue.value);
       } else {
-        Be.Clipboard.write(api.BoxPropsValue.value);
+        Be.Clipboard.write(api.PropsRawValue.value);
       }
       Be.BlinkIt(getElement());
     },

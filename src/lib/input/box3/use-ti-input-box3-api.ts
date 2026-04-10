@@ -17,7 +17,7 @@ import { computed, ref } from "vue";
 import { useLastHint } from "./_fea";
 import { InputBox3Emitter, InputBoxProps } from "./ti-input-box3-types";
 
-const debug = false;
+const debug = true;
 
 export type TiInputBox3Setup = {
   emit: InputBox3Emitter;
@@ -74,8 +74,8 @@ export function useTiInputBox3Api(
   const hasOptionsData = computed(() => (_dict.value ? true : false));
   //-----------------------------------------------------
   const BoxValueType = computed(() => props.valueType || "val");
-  const BoxPropsValue = computed(() => props.value);
-  const BoxInputValue = computed(() => {
+  const PropsRawValue = computed(() => props.value);
+  const PropsStrValue = computed(() => {
     if (_.isNil(props.value)) {
       return null;
     }
@@ -123,8 +123,8 @@ export function useTiInputBox3Api(
     }
 
     // 尝试采用选择的 Item
-    let boxItem = _current_item.value;
     let boxOpts = _box_options.value;
+    let boxItem = _current_item.value;
     if (boxOpts && boxItem) {
       // 如果聚焦了输入框，指明显示裸值，就显示裸值
       if (isOptionsDataShow.value && !props.useTextWhenFocus) {
@@ -141,7 +141,7 @@ export function useTiInputBox3Api(
     }
 
     // 直接显示值
-    return Str.anyToStr(props.value);
+    return PropsStrValue.value;
   });
   //-----------------------------------------------------
   function toOptionItem(it?: Vars | null | undefined): AnyOptionItem | null {
@@ -165,6 +165,33 @@ export function useTiInputBox3Api(
     const val = CurrentItemValue.value;
     let index = box.getOptionItemIndex(list, val);
     return box.getRawItemAt(list, index, offset);
+  }
+  //-----------------------------------------------------
+  function getInputLiveValue() {
+    let $input = getInputElement();
+    if (!$input) {
+      return "";
+    }
+    return $input.value;
+  }
+  //-----------------------------------------------------
+  /**
+   * 在 `try_show_options` 时候，如果需要重新加载 options data
+   * 我们可能需要重新获取当前输入框的 live value 作为 hint
+   *
+   * 因为，服务器在 tipUseHint 时，表示总是需要你输入点什么，它才好
+   * 查询数据，通常这是因为目标数据数量太多，需要客户端给点提示。
+   *
+   * 因此在这个场景下，我们就需要直接从输入框取值，提供给 reload 函数。
+   *
+   * 但是在大多数少量数据的场景，就不需要，因为它总是获取全量数据的。
+   * 并且这通常也会被 TiDict 缓存
+   */
+  function getLiveHintForReloadOptions() {
+    if (!props.tipUseHint) {
+      return undefined;
+    }
+    return getInputLiveValue();
   }
   //-----------------------------------------------------
   // 操作函数
@@ -273,12 +300,15 @@ export function useTiInputBox3Api(
   async function reloadItem(val: any) {
     if (_box_options.value) {
       let opts = _box_options.value;
-      return await opts.loadRawItemByValue(_options_data.value, val);
+      if (props.optionKeepRaw) {
+        return await opts.loadRawItemByValue(_options_data.value, val);
+      }
+      return await opts.loadStdItemByValue(_options_data.value, val);
     }
   }
   //-----------------------------------------------------
   async function reloadCurrentItem() {
-    const inputVal = BoxInputValue.value;
+    const inputVal = PropsStrValue.value;
     // 没必要重新加载了
     if (_.isEqual(inputVal, CurrentItemValue.value)) {
       return;
@@ -293,6 +323,7 @@ export function useTiInputBox3Api(
   }
   //-----------------------------------------------------
   async function reloadOptionsData(hint?: string) {
+    if (debug) console.log(`reloadOptionsData(${hint})`);
     if (_box_options.value) {
       _options_status.value = "loading";
       let opts = _box_options.value;
@@ -303,6 +334,7 @@ export function useTiInputBox3Api(
   }
   //-----------------------------------------------------
   async function tryReloadOptionsData(hint?: string) {
+    if (debug) console.log(`tryReloadOptionsData(${hint})`);
     // 如果在需要 hint 展示不同 options 的时候，那么就要实时刷新
     // 否则读取一次 options 就不需要再次读取了
     let need_reload_options = false;
@@ -336,6 +368,7 @@ export function useTiInputBox3Api(
   // 返回接口
   //-----------------------------------------------------
   const api = {
+    debug,
     // 计算属性
     isFocused,
     isReadonly,
@@ -349,8 +382,8 @@ export function useTiInputBox3Api(
     hasOptionsData,
     //--------
     BoxValueType,
-    BoxPropsValue,
-    BoxInputValue,
+    PropsRawValue,
+    PropsStrValue,
     //--------
     FilteredOptionsData,
     isOptionsDataEmpty,
@@ -367,6 +400,8 @@ export function useTiInputBox3Api(
     toOptionItem,
     getOptionItemByVal,
     getNextOptionItem,
+    getInputLiveValue,
+    getLiveHintForReloadOptions,
     //--------
     getTopElement,
     getInputElement,

@@ -20,7 +20,7 @@ import { InputBoxApi } from "../ti-input-box3-types";
  * 4. 为了保底，我还需要注册一个500ms 的定时器，确保这个延迟处理函数一定会被调用
  */
 export function try_blur(api: InputBoxApi) {
-  //console.log("try_blur");
+  if (api.debug) console.log("try_blur");
   api.setFocused(false);
   if (api.hasOptionsData.value && api.isOptionsDataShow.value) {
     api.setDeferBlur(async () => await do_blur(api));
@@ -33,7 +33,7 @@ export function try_blur(api: InputBoxApi) {
 }
 
 async function do_blur(api: InputBoxApi) {
-  //console.log("do_blur");
+  if (api.debug) console.log("do_blur");
   api.setOptionsStatus("hide");
   api.clearHints();
   await api.reloadCurrentItem();

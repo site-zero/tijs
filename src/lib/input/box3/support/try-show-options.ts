@@ -10,7 +10,8 @@ export async function try_show_options(api: InputBoxApi) {
     api.setFocused(true);
   }
   // 可以加载就加载
-  if (api.hasOptionsData.value) {
-    await api.tryReloadOptionsData();
+  if (api.hasOptionsData.value && !api.isOptionsDataShow.value) {
+    let hint = api.getLiveHintForReloadOptions();
+    await api.tryReloadOptionsData(hint);
   }
 }

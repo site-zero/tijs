@@ -93,16 +93,16 @@
     class="ti-input-box3"
     :class="Aspect.TopClass.value"
     :style="Aspect.TopStyle.value">
-    <!--div class="debug-info">
-      <span>prop</span
-      ><code>{{ JSON.stringify(api.BoxPropsValue.value) }}</code>
-      <span>boxV</span
-      ><code>{{ JSON.stringify(api.BoxInputValue.value) }}</code>
-      <span>cItem</span
-      ><code>{{ JSON.stringify(api.CurrentItemValue.value) }}</code>
+    <div class="debug-info" v-if="props.showDebugInfo">
+      <span>I:raw</span
+      ><code>{{ JSON.stringify(api.PropsRawValue.value) }}</code>
+      <span>I:str</span
+      ><code>{{ JSON.stringify(api.PropsStrValue.value) }}</code>
+      <span>cItem</span><code>{{ JSON.stringify(api.CurrentItem.value) }}</code>
       <span>Hint</span><code>{{ api.LastHint }}</code> <span>Display</span
-      ><code>{{ api.DisplayText }}</code>
-    </div-->
+      ><code>{{ api.DisplayText }}</code> <span>Options</span
+      ><code>{{ api.FilteredOptionsData.value?.length || 0 }}</code>
+    </div>
     <!--=============| MAIN PART |==================-->
     <div
       ref="el"

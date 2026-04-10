@@ -5,8 +5,10 @@ export async function try_update_by_input(api: InputBoxApi, input: string) {
   if (!api.hasOptionsData.value) {
     return;
   }
+  // 首先清理一下当前值
+  api.setCurrentItem(null);
   // 整理值
-  //console.log("input:", input);
+  if (api.debug) console.log("input:", input);
   await api.tryReloadOptionsData(input);
   let it = api.lookupItem(input);
   api.setCurrentItem(it);

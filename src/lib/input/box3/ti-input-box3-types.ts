@@ -139,6 +139,8 @@ export type InputBoxProps = CommonProps &
      * 让用户聚焦输入框就显示可怕的 UUID，这会让很多初级用户产生不舒适甚至恐慌
      */
     useTextWhenFocus?: boolean;
+
+    showDebugInfo?: boolean;
   };
 
 export type InputBoxApi = ReturnType<typeof useTiInputBox3Api>;
