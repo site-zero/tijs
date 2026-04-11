@@ -17,7 +17,7 @@ import { computed, ref } from "vue";
 import { useLastHint } from "./_fea";
 import { InputBoxEmitter, InputBoxProps } from "./ti-input-box3-types";
 
-const debug = true;
+const debug = false;
 
 export type InputBox3Setup = {
   emit: InputBoxEmitter;
@@ -188,6 +188,9 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
   // 操作函数
   //-----------------------------------------------------
   function setFocused(focused: boolean) {
+    if (isReadonly.value || isInputReadonly.value) {
+      return;
+    }
     if (focused && _focused.value) return;
     _focused.value = focused;
     if (!focused) {

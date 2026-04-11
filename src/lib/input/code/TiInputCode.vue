@@ -105,20 +105,24 @@
   }
   //-----------------------------------------------------
   async function updateItem() {
-    const boxApi = _box.value;
-    if (!boxApi) {
-      console.warn("TiInputCode: _box.value is undefined");
-      return;
-    }
-    if (debug) console.log(`TiInputCode: updateItem(${props.value})`);
-
     _item.value = null;
+    //......................................
     if (props.value) {
+      //....................................
+      const boxApi = _box.value;
+      if (!boxApi) {
+        console.warn(`TiInputCode[${props.value}]: _box.value is undefined`);
+        return;
+      }
+      //....................................
+      if (debug) console.log(`TiInputCode: updateItem(${props.value})`);
+      //....................................
       let it = await boxApi.reloadItem(props.value);
       if (it) {
         _item.value = boxApi.toOptionItem(it) ?? null;
       }
     }
+    //......................................
     if (debug)
       console.log(
         `TiInputCode: updateItem(${props.value}) _item.value=`,
@@ -127,16 +131,7 @@
   }
   //-----------------------------------------------------
   watch(
-    () => props.value,
-    () => {
-      nextTick(() => {
-        updateItem();
-      });
-    }
-  );
-  //-----------------------------------------------------
-  watch(
-    () => [props.dictVars, props.options],
+    () => [props.dictVars, props.options, props.value, _box.value],
     async () => {
       nextTick(() => {
         updateItem();

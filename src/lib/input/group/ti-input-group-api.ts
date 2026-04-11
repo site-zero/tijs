@@ -16,15 +16,14 @@ export function getGroupFields(props: InputGroupProps): GridFieldsInput[] {
     let fld = _ofs.getFieldBy(fr);
     let fldTitle = fld.title || undefined;
 
-    if (!keepFieldTitle) {
-      // 第一个字段不显示标题
-      if (index == 0) {
-        fld.title = undefined;
-      }
-      // 后面的采用分隔符
-      else {
-        fld.title = fld_sep;
-      }
+    // 第一个字段不显示标题
+    if (index == 0) {
+      fld.title = undefined;
+    }
+    // 后面的采用分隔符
+    else if (!keepFieldTitle) {
+      fld.title = fld_sep;
+
       // 自动填充 placeholder
       if (autoFieldPlaceholder) {
         if (!fld.comConf) {

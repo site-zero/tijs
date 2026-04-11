@@ -6,6 +6,9 @@ import { InputBoxApi } from "../ti-input-box3-types";
  * @param input
  */
 export async function try_show_options(api: InputBoxApi) {
+  if (api.isReadonly.value) {
+    return;
+  }
   if (!api.isFocused.value) {
     api.setFocused(true);
   }

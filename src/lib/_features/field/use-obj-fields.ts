@@ -1,4 +1,5 @@
 import {
+  BoxDropItemFormat,
   CheckListProps,
   CheckProps,
   DroplistProps,
@@ -8,6 +9,7 @@ import {
   FormField,
   I18n,
   InputBoxProps,
+  InputCodeProps,
   InputDateRangeProps,
   InputDatetimeProps,
   InputNumProps,
@@ -19,7 +21,6 @@ import {
   RadioListProps,
   Str,
   SwitcherProps,
-  BoxDropItemFormat,
   ToggleProps,
 } from "@site0/tijs";
 import _ from "lodash";
@@ -1279,6 +1280,35 @@ export function fldInputDateTime(
         boxFocused: true,
         trimed: true,
       } as InputDatetimeProps,
+      comConf
+    ),
+  };
+}
+
+export function fldInputCode(
+  name: string,
+  titleAndTip: string | string[],
+  options: OptionsInput,
+  comConf?: InputCodeProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title,
+    tip,
+    comType: "TiInputCode",
+    comConf: _.assign(
+      {
+        options,
+        tipUseHint: false,
+        useRawValue: true,
+        tipShowTime: "auto",
+        valueCase: "upperAll",
+        codeWidth: "160px",
+        tipListMinWidth: "320px",
+        tipFormat: "VT",
+        lookup: ["^~value", "^~text"],
+      } as InputCodeProps,
       comConf
     ),
   };

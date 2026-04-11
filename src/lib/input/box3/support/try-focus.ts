@@ -10,6 +10,9 @@ export function try_focus(api: InputBoxApi, props: InputBoxProps) {
   if (api.isFocused.value) {
     return;
   }
+  if (api.isInputReadonly.value || api.isReadonly.value) {
+    return;
+  }
   if ("focus" === props.tipShowTime) {
     try_show_options(api);
   }
