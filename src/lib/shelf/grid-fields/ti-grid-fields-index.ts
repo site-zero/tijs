@@ -20,7 +20,7 @@ const COM_TYPE = COM_TYPES.GridFields;
 
 const TiGridFieldsInfo: TiComInfo = {
   icon: 'zmdi-view-list',
-  race: TiComRace.SHELF,
+  race: TiComRace.INNER,
   name: COM_TYPE,
   text: 'i18n:ti-grid-fields-com-name',
   i18n: {

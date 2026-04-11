@@ -1,5 +1,6 @@
 import {
   BoxDropListProps,
+  BoxValueProps,
   Callback1,
   CommonProps,
   DictProps,
@@ -28,15 +29,6 @@ export type InputBox3Emitter = {
   (event: "click", payload: any): void;
 };
 
-/**
- * 通知改动时候采用什么值
- *
- * - `value` : 普通值
- * - `std-item` : 整体标准对象
- * - `raw-item` : 整体原始对象
- */
-export type BoxEmitType = "value" | "std-item" | "raw-item";
-
 export type BoxOptionsStatus = "loading" | "ready" | "hide";
 
 /**
@@ -49,8 +41,6 @@ export type BoxOptionsStatus = "loading" | "ready" | "hide";
 export type BoxOptionsShowTime = "focus" | "auto" | BoxOptionsShowTimeTester;
 
 export type BoxOptionsShowTimeTester = (input: string) => boolean;
-
-export type BoxValueType = "raw-item" | "std-item" | "val";
 
 /**
  * 对于提示列表的快速格式模式，
@@ -78,21 +68,11 @@ export type InputBoxProps = CommonProps &
   BoxDropListProps &
   BoxHintCookingProps &
   ValuePipeProps &
-  BoxPrefixSuffixProps & {
+  BoxPrefixSuffixProps &
+  BoxValueProps & {
     /**
-     * 输入值
+     * 抛开事件机制不谈，我们有时候总归是需要这样一个回调的
      */
-    value?: any;
-    
-    /**
-     * 输入框的值类型
-     *
-     * - `raw-item`: 选项的原生对象
-     * - `std-item`: 选项的标准对象
-     * - `val` : 「默认」值
-     */
-    valueType?: BoxValueType;
-
     onValueChange?: Callback1<any>;
     /**
      * 如果值为空字符串，那么默认的会给 null
@@ -102,8 +82,6 @@ export type InputBoxProps = CommonProps &
     keepEmptyValue?: boolean;
 
     autoI18n?: boolean;
-
-    emitType?: BoxEmitType;
 
     /**
      * 提示列表的配置

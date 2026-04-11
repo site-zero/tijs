@@ -1,6 +1,4 @@
 import { TiComSet } from "../../_type";
-import { TiFilterBarInfo } from "../edit/filter-bar/ti-filter-bar-index";
-import { TiSearchBarInfo } from "../edit/search-bar/ti-search-bar-index";
 import { TiComboFilterInfo } from "./combo-filter/ti-combo-filter-index";
 import { TiFallsInfo } from "./falls/ti-falls-index";
 import { TiFilterInfo } from "./filter/_old/ti-filter-index";
@@ -19,14 +17,12 @@ export default {
   TiComboFilter: TiComboFilterInfo,
   TiFalls: TiFallsInfo,
   TiFilter: TiFilterInfo,
-  TiFilterBar: TiFilterBarInfo,
   TiHtmlPage: TiHtmlPageInfo,
   TiLbsMap: TiLbsMapInfo,
   TiList: TiListInfo,
   TiLoading: TiLoadingInfo,
   TiProcess: TiProcessInfo,
   TiRoadblock: TiRoadblockInfo,
-  TiSearchBar: TiSearchBarInfo,
   TiTable: TiTableInfo,
   TiTree: TiTreeInfo,
   TiTreeTable: TiTreeTableInfo,
@@ -34,7 +30,6 @@ export default {
 } as TiComSet;
 
 export * from "../edit/filter-bar/ti-filter-bar-index";
-export * from "../edit/search-bar/ti-search-bar-index";
 export * from "./combo-filter/ti-combo-filter-index";
 export * from "./falls/ti-falls-index";
 export * from "./filter/_old/ti-filter-index";

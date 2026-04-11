@@ -2,7 +2,6 @@ import {
   CheckProps,
   DroplistProps,
   InputBoxProps,
-  InputCurrencyProps,
   InputDatetimeProps,
   InputNumProps,
   InputTextProps,
@@ -188,26 +187,6 @@ export function init_ti_std_fields() {
         },
       },
     } as LabelProps,
-  });
-
-  //--------------------------------------------------
-  // 通用: 货币数值
-  //--------------------------------------------------
-  _ofs.setField("#INPUT-CURRENCY", {
-    type: "Object",
-    comType: "TiInputCurrency",
-    comConf: {
-      valueKeys: ["amount", "currency"],
-      currencies: {
-        mustInOptions: true,
-        options: "#Currencies",
-        tipListMinWidth: "350px",
-        valueCase: "upperAll",
-        useRawValue: true,
-        tipFormat: "VT",
-        lookup: ["^~text", "*~value"],
-      },
-    } as InputCurrencyProps,
   });
 
   //--------------------------------------------------

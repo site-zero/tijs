@@ -1,10 +1,10 @@
 import {
   AnyOptionItem,
   BoxOptionsStatus,
-  isAnyOptionItem,
   Str,
   useBoxHintCooking,
   useBoxOptionsData,
+  useBoxValue,
   useDict,
   useDisplayText,
   usePlaceholder,
@@ -19,16 +19,13 @@ import { InputBox3Emitter, InputBoxProps } from "./ti-input-box3-types";
 
 const debug = false;
 
-export type TiInputBox3Setup = {
+export type InputBox3Setup = {
   emit: InputBox3Emitter;
   getTopElement: () => HTMLElement | null;
   getInputElement: () => HTMLInputElement | null;
 };
 
-export function useTiInputBox3Api(
-  props: InputBoxProps,
-  setup: TiInputBox3Setup
-) {
+export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
   const { emit, getTopElement, getInputElement } = setup;
   //-----------------------------------------------------
   // 数据模型
@@ -58,6 +55,12 @@ export function useTiInputBox3Api(
     });
   });
   //-----------------------------------------------------
+  const _box_val = computed(() => {
+    return useBoxValue(props, {
+      toOptionItem,
+    });
+  });
+  //-----------------------------------------------------
   // 计算属性
   //-----------------------------------------------------
   const isFocused = computed(() => _focused.value);
@@ -73,21 +76,9 @@ export function useTiInputBox3Api(
   const isOptionsDataShow = computed(() => !isOptionsDataHide.value);
   const hasOptionsData = computed(() => (_dict.value ? true : false));
   //-----------------------------------------------------
-  const BoxValueType = computed(() => props.valueType || "val");
-  const PropsRawValue = computed(() => props.value);
-  const PropsStrValue = computed(() => {
-    if (_.isNil(props.value)) {
-      return null;
-    }
-    if (isAnyOptionItem(props.value)) {
-      return Str.anyToStr(props.value.value ?? null);
-    }
-    if (_.isPlainObject(props.value)) {
-      let it = toOptionItem(props.value);
-      return Str.anyToStr(it?.value ?? null);
-    }
-    return Str.anyToStr(props.value);
-  });
+  const BoxValueType = computed(() => _box_val.value.BoxValueType.value);
+  const PropsRawValue = computed(() => _box_val.value.PropsRawValue.value);
+  const PropsStrValue = computed(() => _box_val.value.PropsStrValue.value);
   //-----------------------------------------------------
   const FilteredOptionsData = computed(() => {
     return _box_options.value?.filterOptionsData(_options_data.value || []);
@@ -263,32 +254,36 @@ export function useTiInputBox3Api(
       );
 
     // 准备值
-    let vtype = BoxValueType.value;
-    let newVal: any = null;
-    if (!_.isNil(val)) {
-      // 裸对象
-      if ("raw-item" == vtype) {
-        if (_current_item.value) {
-          newVal = _.cloneDeep(_current_item.value);
-        } else {
-          newVal = { value: val };
-        }
-      }
-      // 标准对象
-      else if ("std-item" == vtype) {
-        if (_current_item.value) {
-          newVal = toOptionItem(_current_item.value);
-        } else {
-          newVal = { value: val };
-        }
-      }
-      // 默认就用值
-      else {
-        newVal = val;
-      }
-    }
+    // let vtype = BoxValueType.value;
+    // let newVal: any = null;
+    // if (!_.isNil(val)) {
+    //   // 裸对象
+    //   if ("raw-item" == vtype) {
+    //     if (_current_item.value) {
+    //       newVal = _.cloneDeep(_current_item.value);
+    //     } else {
+    //       newVal = { value: val };
+    //     }
+    //   }
+    //   // 标准对象
+    //   else if ("std-item" == vtype) {
+    //     if (_current_item.value) {
+    //       newVal = toOptionItem(_current_item.value);
+    //     } else {
+    //       newVal = { value: val };
+    //     }
+    //   }
+    //   // 默认就用值
+    //   else {
+    //     newVal = val;
+    //   }
+    // }
+    let newVal = _box_val.value.unifyValue(val, _current_item.value);
     if (debug)
-      console.log(`tryNotifyChange(${val}) vtype=${vtype}, newVal=`, newVal);
+      console.log(
+        `tryNotifyChange(${val}) vtype=${BoxValueType.value}, newVal=`,
+        newVal
+      );
 
     // 没必要做重复操作
     if (_.isEqual(props.value, newVal)) {
@@ -411,8 +406,8 @@ export function useTiInputBox3Api(
     LastHint,
     clearLastHints,
     //--------
-    CurrentItem: CurrentItem,
-    CurrentItemValue: CurrentItemValue,
+    CurrentItem,
+    CurrentItemValue,
     //--------
     DisplayText,
     //--------

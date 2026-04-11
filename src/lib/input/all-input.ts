@@ -5,7 +5,6 @@ import { TiCheckInfo } from "./check/ti-check-index";
 import { TiCheckListInfo } from "./checklist/ti-check-list-index";
 import { TiInputCodeInfo } from "./code/ti-input-code-index";
 import { TiInputColorInfo } from "./color/ti-input-color-index";
-import { TiInputCurrencyInfo } from "./currency/ti-input-currency-index";
 import { TiInputDateRangeInfo } from "./date-range/ti-input-date-range-index";
 import { TiInputDateInfo } from "./date/ti-input-date-index";
 import { TiInputDatetimeInfo } from "./datetime/ti-input-datetime-index";
@@ -34,7 +33,6 @@ export default {
   TiInput: TiInputInfo,
   TiInputCode: TiInputCodeInfo,
   TiInputColor: TiInputColorInfo,
-  TiInputCurrency: TiInputCurrencyInfo,
   TiInputDate: TiInputDateInfo,
   TiInputDateRange: TiInputDateRangeInfo,
   TiInputDatetime: TiInputDatetimeInfo,
@@ -62,7 +60,6 @@ export * from "./check/ti-check-index";
 export * from "./checklist/ti-check-list-index";
 export * from "./code/ti-input-code-index";
 export * from "./color/ti-input-color-index";
-export * from "./currency/ti-input-currency-index";
 export * from "./date-range/ti-input-date-range-index";
 export * from "./date/ti-input-date-index";
 export * from "./datetime/ti-input-datetime-index";
