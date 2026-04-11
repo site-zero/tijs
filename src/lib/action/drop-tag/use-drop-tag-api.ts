@@ -12,6 +12,8 @@ import _ from "lodash";
 import { computed, ref } from "vue";
 import { DropTagEmitter, DropTagProps } from "./ti-drop-tag-types";
 
+const debug = false;
+
 export type DropTagApi = ReturnType<typeof useDropTagApi>;
 
 export type DropTagSetup = {
@@ -19,7 +21,8 @@ export type DropTagSetup = {
   getElement: () => HTMLElement | null;
 };
 
-export function useDropTagApi(props: DropTagProps, emit: DropTagEmitter) {
+export function useDropTagApi(props: DropTagProps, setup: DropTagSetup) {
+  const { emit, getElement } = setup;
   //-----------------------------------------------------
   // 数据模型
   //-----------------------------------------------------
@@ -75,6 +78,27 @@ export function useDropTagApi(props: DropTagProps, emit: DropTagEmitter) {
     if (!_current_item.value) return;
     return _box_options.value?.toOptionItem(_current_item.value);
   });
+  //-----------------------------------------------------
+  const CurrentItemIcon = computed(() => {
+    return CurrentItem.value?.icon;
+  });
+  //-----------------------------------------------------
+  const CurrentItemText = computed(() => {
+    return CurrentItem.value?.text;
+  });
+  //-----------------------------------------------------
+  const CurrentItemTip = computed(() => {
+    return CurrentItem.value?.tip;
+  });
+  //-----------------------------------------------------
+  const CurrentItemStyle = computed(() => {
+    return CurrentItem.value?.style;
+  });
+  //-----------------------------------------------------
+  const CurrentItemClass = computed(() => {
+    return CurrentItem.value?.className;
+  });
+  //-----------------------------------------------------
   const CurrentItemValue = computed(() => {
     return CurrentItem.value?.value;
   });
@@ -120,6 +144,53 @@ export function useDropTagApi(props: DropTagProps, emit: DropTagEmitter) {
     emit("change", newVal);
   }
   //-----------------------------------------------------
+  // 远程操作
+  //-----------------------------------------------------
+  async function reloadItem(val: any) {
+    if (_box_options.value) {
+      let opts = _box_options.value;
+      if (props.optionKeepRaw) {
+        return await opts.loadRawItemByValue(_options_data.value, val);
+      }
+      return await opts.loadStdItemByValue(_options_data.value, val);
+    }
+  }
+  //-----------------------------------------------------
+  async function reloadCurrentItem() {
+    const inputVal = PropsStrValue.value;
+    if (debug) console.log(`>>> reloadCurrentItem: inputVal=${inputVal}`);
+    // 没必要重新加载了
+    if (_.isEqual(inputVal, CurrentItemValue.value)) {
+      if (debug)
+        console.log(`<<< reloadCurrentItem(${inputVal}): skip for isEqual`);
+      return;
+    }
+    _current_item.value = await reloadItem(inputVal);
+    if (debug)
+      console.log(
+        `<<< reloadCurrentItem: _current_item=`,
+        _.cloneDeep(_current_item.value)
+      );
+  }
+  //-----------------------------------------------------
+  async function reloadOptionsData() {
+    if (debug) console.log(`reloadOptionsData`);
+    if (_box_options.value) {
+      _options_status.value = "loading";
+      let opts = _box_options.value;
+      _options_data.value = await opts.reloadOptioinsData();
+      _options_status.value = "ready";
+    }
+  }
+  //-----------------------------------------------------
+  async function tryReloadOptionsData() {
+    if (debug) console.log(`tryReloadOptionsData`);
+    // 需要重新加载
+    if (!isOptionsDataShow.value) {
+      await reloadOptionsData();
+    }
+  }
+  //-----------------------------------------------------
   // 返回接口
   //-----------------------------------------------------
   return {
@@ -141,6 +212,11 @@ export function useDropTagApi(props: DropTagProps, emit: DropTagEmitter) {
     isFilteredOptionsDataEmpty,
     //--------
     CurrentItem,
+    CurrentItemIcon,
+    CurrentItemText,
+    CurrentItemTip,
+    CurrentItemStyle,
+    CurrentItemClass,
     CurrentItemValue,
     //--------
     toOptionItem,
@@ -152,5 +228,11 @@ export function useDropTagApi(props: DropTagProps, emit: DropTagEmitter) {
 
     // 数据改动
     tryNotifyChange,
+
+    // 远程操作
+    reloadItem,
+    reloadCurrentItem,
+    reloadOptionsData,
+    tryReloadOptionsData,
   };
 }

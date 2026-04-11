@@ -19,7 +19,17 @@ export type DropTagProps = CommonProps &
   DisplayTextProps &
   BoxAspectProps &
   PlaceholderProps &
-  BoxOptionsDataProps &
+  Pick<
+    BoxOptionsDataProps,
+    | "fixedOptions"
+    | "optionFilter"
+    | "optionFilterVars"
+    | "optionKeepRaw"
+    | "showCleanOption"
+    | "clearOptionItemIcon"
+    | "clearOptionItemText"
+    | "clearOptionItemStyle"
+  > &
   BoxDropListProps & {
     /**
      * 输入值

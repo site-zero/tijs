@@ -19,7 +19,7 @@ import {
 } from "./_fea";
 import { useTiInputBox3Api } from "./use-ti-input-box3-api";
 
-export type InputBox3Emitter = {
+export type InputBoxEmitter = {
   (event: "change", value: any): void;
   (event: "blur"): void;
   (event: "focus"): void;

@@ -14,7 +14,7 @@
     try_select_option_item,
     try_update_by_props,
   } from "./support";
-  import { InputBox3Emitter, InputBoxProps } from "./ti-input-box3-types";
+  import { InputBoxEmitter, InputBoxProps } from "./ti-input-box3-types";
   import { useTiInputBox3Api } from "./use-ti-input-box3-api";
   //-----------------------------------------------------
   defineOptions({ inheritAttrs: false });
@@ -23,7 +23,7 @@
   const $input = useTemplateRef<HTMLInputElement>("input");
   const $tipcon = useTemplateRef<HTMLElement>("tipcon");
   //-----------------------------------------------------
-  const emit = defineEmits<InputBox3Emitter>();
+  const emit = defineEmits<InputBoxEmitter>();
   //-----------------------------------------------------
   const props = withDefaults(defineProps<InputBoxProps>(), {
     canInput: true,

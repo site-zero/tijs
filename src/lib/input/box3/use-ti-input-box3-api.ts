@@ -15,12 +15,12 @@ import {
 import _ from "lodash";
 import { computed, ref } from "vue";
 import { useLastHint } from "./_fea";
-import { InputBox3Emitter, InputBoxProps } from "./ti-input-box3-types";
+import { InputBoxEmitter, InputBoxProps } from "./ti-input-box3-types";
 
 const debug = true;
 
 export type InputBox3Setup = {
-  emit: InputBox3Emitter;
+  emit: InputBoxEmitter;
   getTopElement: () => HTMLElement | null;
   getInputElement: () => HTMLInputElement | null;
 };

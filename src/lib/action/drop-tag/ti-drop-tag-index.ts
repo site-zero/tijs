@@ -2,7 +2,7 @@ import { App } from "vue";
 import { TiComInfo, TiComRace } from "../../../_type";
 import { COM_TYPES } from "../../lib-com-types";
 import TiDropTag from "./TiDropTag.vue";
-import example from "./example";
+import { DropTagProps } from "./ti-drop-tag-types";
 
 const en_us = {
   "com-name": "Drop Tag",
@@ -31,9 +31,18 @@ const TiDropTagInfo: TiComInfo = {
     app.component(COM_TYPE, TiDropTag);
   },
   defaultProps: "simple",
-  exampleProps: [example.simple, example.withIcon],
+  exampleProps: [
+    {
+      name: "simple",
+      text: "i18n:simple",
+      comConf: {
+        value: "CN",
+        options: "#Countries",
+      } as DropTagProps,
+    },
+  ],
 };
 
 export * from "./ti-drop-tag-types";
-export { TiDropTag, TiDropTagInfo };
 export type { DropTagApi } from "./use-drop-tag-api";
+export { TiDropTag, TiDropTagInfo };

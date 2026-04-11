@@ -1,4 +1,4 @@
-import { Be, InputBox3Emitter, KeyboardStatus, Vars } from "@site0/tijs";
+import { Be, InputBoxEmitter, KeyboardStatus, Vars } from "@site0/tijs";
 import {
   Box3IconHandler,
   BoxIconEmit,
@@ -11,7 +11,7 @@ import { try_clear_value, try_show_options } from "./";
 export function create_prefix_suffix(
   props: BoxPrefixSuffixProps,
   api: InputBoxApi,
-  emit: InputBox3Emitter,
+  emit: InputBoxEmitter,
   getElement: () => HTMLElement | null
 ) {
   return useBoxPrefixSuffix(props, {
