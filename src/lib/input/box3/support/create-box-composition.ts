@@ -18,6 +18,7 @@ export function create_box_composition(
         let offset = api.isOptionsDataShow.value ? -1 : 0;
         try_show_options(api);
         if (offset) {
+          api.clearLastHints();
           let nextIt = api.getNextOptionItem(offset);
           api.setCurrentItem(nextIt);
         }
@@ -26,6 +27,7 @@ export function create_box_composition(
         let offset = api.isOptionsDataShow.value ? 1 : 0;
         try_show_options(api);
         if (offset) {
+          api.clearLastHints();
           let nextIt = api.getNextOptionItem(offset);
           api.setCurrentItem(nextIt);
         }

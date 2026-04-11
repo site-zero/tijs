@@ -77,14 +77,14 @@
     async () => {
       await try_update_by_props(api);
     },
-    {deep: true}
+    { deep: true }
   );
   //-----------------------------------------------------
   watch(
     () => props.options,
     async () => {
       await try_update_by_props(api);
-    },
+    }
   );
   //-----------------------------------------------------
   onMounted(async () => {
@@ -174,7 +174,7 @@
           :value="api.DisplayText.value"
           :readonly="api.isInputReadonly.value"
           spellcheck="false"
-          @change="on_input_change(api)"
+          @change="on_input_change(api, Compose)"
           @keyup="Compose.onKeyUp"
           @keydown="Compose.onKeyDown"
           @beforeinput="Compose.onBeforeInput"

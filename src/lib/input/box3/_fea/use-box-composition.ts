@@ -1,10 +1,12 @@
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import {
   BoxCompositionProps,
   BoxCompositionSetup,
 } from "./types-box-composition";
 
 const debug = false;
+
+export type BoxCompositionApi = ReturnType<typeof useBoxComposition>;
 
 export function useBoxComposition(
   props: BoxCompositionProps,
@@ -90,7 +92,9 @@ export function useBoxComposition(
   }
 
   return {
-    _compositing,
+    isCompositing: computed(() => _compositing.value),
+    willChangeInput: computed(() => _will_change_input.value),
+    LastDownKey: computed(() => _last_down_key.value),
     onStart,
     onEnd,
     onBeforeInput,

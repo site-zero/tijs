@@ -17,7 +17,7 @@ import { computed, ref } from "vue";
 import { useLastHint } from "./_fea";
 import { InputBox3Emitter, InputBoxProps } from "./ti-input-box3-types";
 
-const debug = false;
+const debug = true;
 
 export type InputBox3Setup = {
   emit: InputBox3Emitter;
