@@ -1,6 +1,7 @@
 import {
   AnyOptionItem,
   BoxOptionsStatus,
+  isAsyncFunc,
   Str,
   useBoxHintCooking,
   useBoxOptionsData,
@@ -35,8 +36,20 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
   const _options_status = ref<BoxOptionsStatus>("hide");
   const _current_item = ref<Vars>();
   //-----------------------------------------------------
-  // 在 try_blur 里面会有可能注册一个延迟处理函数
-  const _defer_blur = ref<Function>();
+  /**
+   * 下面的操作
+   *  - blur
+   *  - on_input_change
+   * 有可能是下面操作导致的:
+   * 1. 点击输入框以外区域
+   *    > 我们需要延迟的处理所有的 defer
+   * 2. 点击选项: 会先触发 change/blur,
+   *    > 我们需要保留 options 的 DOM，为此 change/blur 的操作会被 defer
+   *    > 在 try_select_option_item 我们可以有机会无视这些 defer
+   * 3. Enter 键: 可以立即处理
+   * 4. Tab 键: 可以立即处理
+   */
+  const _defer_list = ref<Function[]>([]);
   //-----------------------------------------------------
   const _last_hint = useLastHint();
   //-----------------------------------------------------
@@ -63,6 +76,9 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
   //-----------------------------------------------------
   // 计算属性
   //-----------------------------------------------------
+  const shouldDelayTipReload = computed(
+    () => props.tipShowDelay && props.tipShowDelay > 0
+  );
   const isFocused = computed(() => _focused.value);
   const isReadonly = computed(() => _readonly.value.isReadonly(props.value));
   const isInputReadonly = computed(() => isReadonly.value || !props.canInput);
@@ -216,15 +232,23 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
     _current_item.value = item ?? undefined;
   }
   //-----------------------------------------------------
-  function setDeferBlur(do_blur: Function) {
-    _defer_blur.value = do_blur;
+  function addDefer(deferFn: Function) {
+    _defer_list.value.push(deferFn);
   }
   //-----------------------------------------------------
-  async function tryDeferBlur() {
-    if (_defer_blur.value) {
-      await _defer_blur.value();
-      _defer_blur.value = undefined;
+  function clearDefer() {
+    _defer_list.value = [];
+  }
+  //-----------------------------------------------------
+  async function tryDeferList() {
+    for (let deferFn of _defer_list.value) {
+      if (isAsyncFunc(deferFn)) {
+        await deferFn();
+      } else {
+        deferFn();
+      }
     }
+    _defer_list.value = [];
   }
   //-----------------------------------------------------
   // 数据改动
@@ -382,11 +406,24 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
     _last_hint.resolvePending(_options_data.value, hint);
   }
   //-----------------------------------------------------
+  async function tryReloadOptionsDataAndLookupItem(input: string) {
+    if (api.debug) console.log(`tryReloadOptionsDataAndLookupItem(${input})`);
+    await api.tryReloadOptionsData(input);
+    let it = api.lookupItem(input);
+    api.setCurrentItem(it);
+  }
+  //-----------------------------------------------------
+  const debounceTryReloadOptionsDataAndLookupItem = _.debounce(
+    tryReloadOptionsDataAndLookupItem,
+    props.tipShowDelay
+  );
+  //-----------------------------------------------------
   // 返回接口
   //-----------------------------------------------------
   const api = {
     debug,
     // 计算属性
+    shouldDelayTipReload,
     isFocused,
     isReadonly,
     isInputReadonly,
@@ -426,8 +463,9 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
     setFocused,
     setOptionsStatus,
     setCurrentItem,
-    setDeferBlur,
-    tryDeferBlur,
+    addDefer,
+    clearDefer,
+    tryDeferList,
     // 数据改动
     applyPipe,
     tryNotifyChange,
@@ -437,6 +475,8 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
     lookupItem,
     reloadOptionsData,
     tryReloadOptionsData,
+    tryReloadOptionsDataAndLookupItem,
+    debounceTryReloadOptionsDataAndLookupItem,
   };
   return api;
 }

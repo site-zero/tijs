@@ -9,6 +9,8 @@ import {
   toValueMatchMode,
 } from "./types-item-lookup";
 //--------------------------------------------------
+export type ItemLookupApi = ReturnType<typeof useItemLookup>;
+//--------------------------------------------------
 function _to_item_matcher(input: ItemLookupInput): ItemMatcher {
   let lookup: ItemFieldLookup;
   if (_.isString(input)) {
@@ -46,30 +48,39 @@ function _str_to_lookup(str: string): ItemFieldLookup {
   };
 }
 //--------------------------------------------------
-export function useItemLookup(props: ItemLookupProps): ItemMatcher {
-  // 防空
-  if (!props.lookup || _.isEmpty(props.lookup)) {
-    return () => false;
-  }
-  // 定制
-  if (_.isFunction(props.lookup)) {
-    return props.lookup;
-  }
+export function useItemLookup(props: ItemLookupProps) {
+  let matchers: ItemMatcher[] = [];
+  //--------------------------------------------------
   // 逐个编制
-  let _lookups = _.concat([], props.lookup);
-  let _matchers: ItemMatcher[] = [];
-  for (let look of _lookups) {
-    let match = _to_item_matcher(look);
-    _matchers.push(match);
+  //--------------------------------------------------
+  let lookups = _.concat([], props.lookup);
+  for (let lookup of lookups) {
+    if(!lookup){
+      continue;
+    }
+    if(_.isFunction(lookup)){
+      matchers.push(lookup);
+      continue;
+    }
+    let match = _to_item_matcher(lookup);
+    matchers.push(match);
   }
-  // 返回判断函数，任何一个条件满足就能匹配
-  return (it: Vars, hint: string) => {
-    for (let match of _matchers) {
+  //--------------------------------------------------
+  // 判断函数，任何一个条件满足就能匹配
+  function matchAll(it: Vars, hint: string): boolean {
+    for (let match of matchers) {
       if (match(it, hint)) {
         return true;
       }
     }
     return false;
+  }
+  //--------------------------------------------------
+  // 返回输出接口
+  //--------------------------------------------------
+  return {
+    matchers,
+    matchAll,
   };
 }
-//--------------------------------------------------
+

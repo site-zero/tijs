@@ -23,16 +23,18 @@ export function try_blur(api: InputBoxApi) {
   if (api.debug) console.log("try_blur");
   api.setFocused(false);
   if (api.hasOptionsData.value && api.isOptionsDataShow.value) {
-    api.setDeferBlur(async () => await do_blur(api));
-    _.delay(() => api.tryDeferBlur(), 500);
+    api.addDefer(() => {
+      do_box_blur(api);
+    });
+    _.delay(() => api.tryDeferList(), 500);
   }
   // 放心处理失焦
   else {
-    do_blur(api);
+    do_box_blur(api);
   }
 }
 
-async function do_blur(api: InputBoxApi) {
+function do_box_blur(api: InputBoxApi) {
   if (api.debug) console.log("do_blur");
   api.setOptionsStatus("hide");
   api.clearLastHints();

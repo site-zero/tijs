@@ -209,12 +209,15 @@ export function useBoxOptionsData(
     if (!hint || !list || _.isEmpty(list)) {
       return;
     }
-    //
-    const _lookup_for_hint = useItemLookup(props);
-    // 逐个寻找选项对象
-    for (let it of list) {
-      if (_lookup_for_hint(it, hint)) {
-        return it;
+    const itLookup = useItemLookup(props);
+    const matchers = itLookup.matchers;
+    // 逐个 matcher 寻找
+    for (let is_match of matchers) {
+      // 逐个寻找选项对象
+      for (let it of list) {
+        if (is_match(it, hint)) {
+          return it;
+        }
       }
     }
   }

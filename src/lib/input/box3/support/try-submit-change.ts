@@ -7,8 +7,8 @@ import { InputBoxApi } from "../ti-input-box3-types";
  */
 export async function try_submit_change(api: InputBoxApi) {
   if (api.hasOptionsData.value && api.isOptionsDataShow.value) {
-    api.setDeferBlur(async () => await do_submit_change(api));
-    _.delay(() => api.tryDeferBlur(), 500);
+    api.addDefer(async () => await do_submit_change(api));
+    _.delay(() => api.tryDeferList(), 500);
   }
   // 放心处理失焦
   else {

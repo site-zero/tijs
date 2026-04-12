@@ -31,7 +31,7 @@
     valueType: "val",
     autoI18n: true,
     tipShowTime: "focus",
-    tipShowDelay: 500,
+    tipShowDelay: 0,
     tipUseHint: false,
     trimed: true,
     flexAuto: true,
