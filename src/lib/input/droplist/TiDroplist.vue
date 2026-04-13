@@ -1,24 +1,21 @@
 <script lang="ts" setup>
-  import { TiInput } from '../../';
-  import { DroplistProps } from './ti-droplist-types';
+  import { TiInput } from "../../";
+  import { DroplistEmitter, DroplistProps } from "./ti-droplist-types";
   //-----------------------------------------------------
   defineOptions({
-    inheritAttrs: false,
+    inheritAttrs: true,
   });
   //-----------------------------------------------------
-  let emit = defineEmits<{
-    (event: 'change', payload: string): void;
-  }>();
+  let emit = defineEmits<DroplistEmitter>();
   //-----------------------------------------------------
   let props = withDefaults(defineProps<DroplistProps>(), {
     autoI18n: true,
-    tipShowTime: 'focus',
+    tipShowTime: "focus",
     tipUseHint: false,
-    tipTidyBy: () => ['main'],
-    suffixIconFor: 'load-options',
+    suffixIconFor: "load-options",
     autoPrefixIcon: true,
     autoSelect: false,
-    lookup: () => ['=text', '=value'],
+    lookup: () => ["=text", "=value"],
   });
   //-----------------------------------------------------
   // type CleansSetup = Pick<InputBoxProps, 'prefixIconFor' | 'showCleanOption'>;
@@ -35,7 +32,7 @@
   //-----------------------------------------------------
   function onInputChange(val: any) {
     //console.log('onInputChange', val);
-    emit('change', val);
+    emit("change", val);
   }
   //-----------------------------------------------------
 </script>
@@ -48,5 +45,5 @@
     @change="onInputChange" />
 </template>
 <style lang="scss" scoped>
-  @use './ti-droplist.scss';
+  @use "./ti-droplist.scss";
 </style>

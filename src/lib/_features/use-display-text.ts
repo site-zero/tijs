@@ -1,7 +1,7 @@
-import { Vars } from '../../_type';
-import { Str } from '../../core';
+import { Vars } from "../../_type";
+import { Str } from "../../core";
 
-import _ from 'lodash';
+import _ from "lodash";
 
 export type DisplayTextProps = {
   /**
@@ -19,19 +19,21 @@ export type DisplayTextProps = {
   useRawValue?: boolean;
 };
 
-export function useDisplayText(props: DisplayTextProps) {
+export type PickDisplayText = (item: Vars) => string;
+
+export function useDisplayText(props: DisplayTextProps): PickDisplayText {
   // 分析参数
   let { getDisplayText } = props;
   if (!getDisplayText) {
     if (props.useRawValue) {
-      getDisplayText = 'value';
+      getDisplayText = "value";
     } else {
-      getDisplayText = 'text|value';
+      getDisplayText = "text|value";
     }
   }
 
   // 拆分键
-  let keys = Str.splitIgnoreBlank(getDisplayText, '|');
+  let keys = Str.splitIgnoreBlank(getDisplayText, "|");
 
   // 返回
   return (item: Vars) => {
@@ -41,5 +43,6 @@ export function useDisplayText(props: DisplayTextProps) {
         return v;
       }
     }
+    return "";
   };
 }

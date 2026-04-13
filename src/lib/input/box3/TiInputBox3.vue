@@ -17,7 +17,7 @@
   import { InputBoxEmitter, InputBoxProps } from "./ti-input-box3-types";
   import { useTiInputBox3Api } from "./use-ti-input-box3-api";
   //-----------------------------------------------------
-  defineOptions({ inheritAttrs: false });
+  defineOptions({ inheritAttrs: true });
   //-----------------------------------------------------
   const $el = useTemplateRef<HTMLElement>("el");
   const $input = useTemplateRef<HTMLInputElement>("input");
@@ -103,7 +103,7 @@
 </script>
 <template>
   <div
-    class="ti-input-box3"
+    class="ti-input-box"
     :class="Aspect.TopClass.value"
     :style="Aspect.TopStyle.value">
     <div class="debug-info" v-if="props.showDebugInfo">
@@ -195,7 +195,10 @@
       <slot name="tail"> </slot>
     </div>
     <!--=========| TIP OPTIONS PART |============-->
-    <template v-if="api.isOptionsDataShow.value">
+    <template
+      v-if="
+        api.isOptionsDataShow.value && !api.isFilteredOptionsDataEmpty.value
+      ">
       <!--
       占位支撑框。 当展开选项时，主体框会浮动到最顶层
       这就需要一个占位框来保证页面布局不会变化

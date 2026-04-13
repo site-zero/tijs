@@ -22,6 +22,8 @@ export async function on_input_change(
   const input = $input?.value;
   val = api.applyPipe(input);
 
+  if (api.debug) console.log(`on_input_change(input:[${input}], val:[${val}])`);
+
   if (api.hasOptionsData.value && api.isOptionsDataShow.value) {
     api.addDefer(async () => {
       await do_apply_input_change(api, val);

@@ -1,8 +1,8 @@
 import {
   AnyOptionItem,
+  BoxOptionsDataApi,
   BoxOptionsStatus,
   isAsyncFunc,
-  Str,
   useBoxHintCooking,
   useBoxOptionsData,
   useBoxValue,
@@ -16,6 +16,7 @@ import {
 import _ from "lodash";
 import { computed, ref } from "vue";
 import { useLastHint } from "./_fea";
+import { getBoxDisplayText } from "./_fea/get-box-display-text";
 import { InputBoxEmitter, InputBoxProps } from "./ti-input-box3-types";
 
 const debug = false;
@@ -60,7 +61,7 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
   const _dict = computed(() => useDict(props));
   const _cook_hint = computed(() => useBoxHintCooking(props));
   //-----------------------------------------------------
-  const _box_options = computed(() => {
+  const _box_options = computed((): BoxOptionsDataApi | undefined => {
     if (!_dict.value) return;
     return useBoxOptionsData(props, {
       dict: _dict.value,
@@ -110,6 +111,10 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
   //-----------------------------------------------------
   const LastHint = computed(() => _last_hint.LastHint.value);
   //------------------------------------------------
+  function setLastHint(hint: string | undefined) {
+    _last_hint.setLastHint(hint);
+  }
+  //------------------------------------------------
   function clearLastHints() {
     _last_hint.setLastHint(undefined);
     _last_hint.rejectPending("!ClearHints!");
@@ -124,31 +129,17 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
   });
   //-----------------------------------------------------
   const DisplayText = computed(() => {
-    // 明确的记录了 lastHint
-    if (!_.isNil(LastHint.value)) {
-      return LastHint.value;
-    }
-
-    // 尝试采用选择的 Item
-    let boxOpts = _box_options.value;
-    let boxItem = _current_item.value;
-    if (boxOpts && boxItem) {
-      // 如果聚焦了输入框，指明显示裸值，就显示裸值
-      if (isOptionsDataShow.value && !props.useTextWhenFocus) {
-        let std = boxOpts.toOptionItem(boxItem);
-        return Str.anyToStr(std.value);
-      }
-      // 否则翻译显示值
-      return _display.value(boxItem);
-    }
-
-    // 空值，一定归一化为空串
-    if (_.isNil(props.value)) {
-      return "";
-    }
-
-    // 直接显示值
-    return PropsStrValue.value;
+    let re = getBoxDisplayText({
+      lastHint: LastHint.value,
+      boxOptions: _box_options.value,
+      boxItem: _current_item.value,
+      isOptionsDataShow: isOptionsDataShow.value,
+      useTextWhenFocus: props.useTextWhenFocus ?? false,
+      pickDisplayText: _display.value,
+      InputStrValue: PropsStrValue.value,
+    });
+    if (debug) console.log(`DisplayText: [${re}]`);
+    return re;
   });
   //-----------------------------------------------------
   function toOptionItem(it?: Vars | null | undefined): AnyOptionItem | null {
@@ -204,7 +195,7 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
   // 操作函数
   //-----------------------------------------------------
   function setFocused(focused: boolean) {
-    if (isReadonly.value || isInputReadonly.value) {
+    if (isReadonly.value) {
       return;
     }
     if (focused && _focused.value) return;
@@ -332,11 +323,11 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
   //-----------------------------------------------------
   async function reloadItem(val: any) {
     if (_box_options.value) {
-      let opts = _box_options.value;
+      let box = _box_options.value;
       if (props.optionKeepRaw) {
-        return await opts.loadRawItemByValue(_options_data.value, val);
+        return await box.loadRawItemByValue(_options_data.value, val);
       }
-      return await opts.loadStdItemByValue(_options_data.value, val);
+      return await box.loadStdItemByValue(_options_data.value, val);
     }
   }
   //-----------------------------------------------------
@@ -444,6 +435,7 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
     isFilteredOptionsDataEmpty,
     //--------
     LastHint,
+    setLastHint,
     clearLastHints,
     //--------
     CurrentItem,

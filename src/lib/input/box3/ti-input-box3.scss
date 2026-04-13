@@ -1,6 +1,6 @@
 @use "@site0/tijs/sass/_all.scss" as *;
 
-.ti-input-box3 {
+.ti-input-box {
   @include flex-align-v-nowrap($jc: stretch);
   --box-color-border: var(--ti-color-border-dark);
   --box-color-text: var(--ti-color-box-f);

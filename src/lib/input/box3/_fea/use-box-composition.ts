@@ -4,7 +4,7 @@ import {
   BoxCompositionSetup,
 } from "./types-box-composition";
 
-const debug = false;
+const debug = true;
 
 export type BoxCompositionApi = ReturnType<typeof useBoxComposition>;
 

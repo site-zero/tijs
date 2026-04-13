@@ -17,7 +17,7 @@ import {
 //--------------------------------------------------
 const debug = false;
 //--------------------------------------------------
-export type ValueOptions = ReturnType<typeof useBoxOptionsData>;
+export type BoxOptionsDataApi = ReturnType<typeof useBoxOptionsData>;
 //--------------------------------------------------
 export function useBoxOptionsData(
   props: BoxOptionsDataProps,
@@ -103,12 +103,17 @@ export function useBoxOptionsData(
   }
   //------------------------------------------------
   function getOptionItemIndex(list: Vars[], value: any): number {
+    const dft_re = props.showCleanOption ? 0 : -1;
     if (_.isNil(value) || !list || _.isEmpty(list)) {
-      return -1;
+      return dft_re;
     }
     // 逐个寻找选项对象
     let N = list.length;
     for (let i = 0; i < N; i++) {
+      // 跳过清除选项
+      if (i == 0 && props.showCleanOption) {
+        continue;
+      }
       let it = list[i];
       let it_val: any;
       if (isAnyOptionItem(it)) {
@@ -121,7 +126,7 @@ export function useBoxOptionsData(
       }
     }
 
-    return -1;
+    return dft_re;
   }
   //------------------------------------------------
   function getRawItemAt(

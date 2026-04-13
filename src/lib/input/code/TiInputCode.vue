@@ -22,7 +22,6 @@
   const props = withDefaults(defineProps<InputCodeProps>(), {
     tipShowTime: "focus",
     tipUseHint: false,
-    tipTidyBy: () => ["main"],
     canInput: true,
     trimed: true,
     mustInOptions: true,
