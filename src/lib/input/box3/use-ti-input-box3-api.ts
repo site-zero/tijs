@@ -225,10 +225,12 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
   //-----------------------------------------------------
   function addDefer(deferFn: Function) {
     _defer_list.value.push(deferFn);
+    if (debug) console.log("addDefer: len=", _defer_list.value.length);
   }
   //-----------------------------------------------------
   function clearDefer() {
     _defer_list.value = [];
+    if (debug) console.log("clearDefer: len=", _defer_list.value.length);
   }
   //-----------------------------------------------------
   async function tryDeferList() {
@@ -355,18 +357,31 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
   }
   //-----------------------------------------------------
   async function reloadOptionsData(hint?: string) {
+    // 防守
+    if (isReadonly.value) {
+      setOptionsStatus("hide");
+      _options_data.value = [];
+      return;
+    }
     if (debug) console.log(`reloadOptionsData(${hint})`);
     if (_box_options.value) {
-      _options_status.value = "loading";
+      setOptionsStatus("loading");
       let opts = _box_options.value;
       let piped_hint = _pipe.value(hint);
       _options_data.value = await opts.reloadOptioinsData(piped_hint);
-      _options_status.value = "ready";
+
+      // 最有防守一下，也许再这一时刻， box 变只读了呢？
+      if (isReadonly.value) {
+        setOptionsStatus("hide");
+      } else {
+        setOptionsStatus("ready");
+      }
     }
   }
   //-----------------------------------------------------
   async function tryReloadOptionsData(hint?: string) {
     if (debug) console.log(`tryReloadOptionsData(${hint})`);
+
     // 如果在需要 hint 展示不同 options 的时候，那么就要实时刷新
     // 否则读取一次 options 就不需要再次读取了
     let need_reload_options = false;
@@ -399,6 +414,19 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
   //-----------------------------------------------------
   async function tryReloadOptionsDataAndLookupItem(input: string) {
     if (api.debug) console.log(`tryReloadOptionsDataAndLookupItem(${input})`);
+
+    // 如果 Tab 走的很快，那么 debounceTryReloadOptionsDataAndLookupItem
+    // 会导致一个延迟加载，这会一个怪异的现象：
+    // 输入框分明已经失焦了，但是几百毫秒以后，仍然会自动展现出选项下拉
+    // 为此，我们加个判断，来防守一下
+    if (!_focused.value) {
+      if (api.debug)
+        console.log(
+          `tryReloadOptionsDataAndLookupItem(${input}) ignore for focused==false`
+        );
+      return;
+    }
+
     await api.tryReloadOptionsData(input);
     let it = api.lookupItem(input);
     api.setCurrentItem(it);

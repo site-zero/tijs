@@ -87,6 +87,15 @@
     }
   );
   //-----------------------------------------------------
+  // 如果当前 Input 本来是可编辑的，且带选项
+  // 用户改了别的字段（导致了本控件变为只读）同时以迅雷不及掩耳之势
+  // 按 Tab 切换到了本控件，本控件正在加载选项，然后瞬间变成了只读
+  // 那么就会位置（占位和选项框）会乱掉
+  // 这里稍微做一下防守
+  watch(()=>[api.isReadonly.value],()=>{
+    api.setOptionsStatus('hide')
+  })
+  //-----------------------------------------------------
   onMounted(async () => {
     await try_update_by_props(api);
     if (props.autoFocus) {
@@ -143,6 +152,12 @@
             <th>Options</th>
             <td>
               <code>{{ api.FilteredOptionsData.value?.length || 0 }}</code>
+            </td>
+          </tr>
+          <tr>
+            <th>LastKey</th>
+            <td>
+              <code>{{ Compose.LastDownKey.value }}</code>
             </td>
           </tr>
         </tbody>

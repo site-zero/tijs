@@ -4,7 +4,7 @@ import {
   BoxCompositionSetup,
 } from "./types-box-composition";
 
-const debug = true;
+const debug = false;
 
 export type BoxCompositionApi = ReturnType<typeof useBoxComposition>;
 
@@ -45,6 +45,10 @@ export function useBoxComposition(
     if (/^Backspace|Delete$/.test(_last_down_key.value)) {
       _will_change_input.value = true;
     }
+    // Tab 会失焦，不要查询
+    else if (/^Tab$/.test(_last_down_key.value)) {
+      _will_change_input.value = false;
+    }
     // 有实质内容才会导致查询，因此 Enter 等按钮将会被无视
     else {
       _will_change_input.value = event.data ? true : false;
@@ -60,7 +64,7 @@ export function useBoxComposition(
   }
 
   async function onKeyDown(event: KeyboardEvent) {
-    if (debug) console.log("onKeyDown", event.key);
+    //if (debug) console.log("onKeyDown", event.key);
     // 默认设置为 false，当有可打印字符的时候， onBeforeInput 会被调用
     _will_change_input.value = false;
     _last_down_key.value = event.key;

@@ -21,8 +21,10 @@ export async function try_update_by_input(api: InputBoxApi, input: string) {
 
   // 整理值
   if (api.shouldDelayTipReload.value) {
+    if (api.debug) console.log(`try_update_by_input(input:[${input}]) debounce reload`);
     api.debounceTryReloadOptionsDataAndLookupItem(input);
   } else {
+    if (api.debug) console.log(`try_update_by_input(input:[${input}]) immediate reload`);
     await api.tryReloadOptionsDataAndLookupItem(input);
   }
 }

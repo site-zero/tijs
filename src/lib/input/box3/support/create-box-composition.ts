@@ -37,6 +37,7 @@ export function create_box_composition(
         do_submit_change(api);
         api.setFocused(false);
         api.setOptionsStatus("hide");
+        api.clearLastHints();
       },
       Escape: async () => {
         if (api.debug) console.log("compose<Escape>");
