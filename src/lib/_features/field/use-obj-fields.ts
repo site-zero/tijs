@@ -774,8 +774,8 @@ export function fldDroplistVT(
   name: FieldName,
   titleAndTip: string | string[],
   options: OptionsInput,
-  placeholder: string = "i18n:null",
-  tipListMinWidth: string = "200px",
+  placeholder: string = "i18n:no-set",
+  tipListMinWidth: string = "320px",
   tipFormat: BoxDropItemFormat = "VT",
   comConf?: DroplistProps
 ): FormField {
@@ -787,7 +787,7 @@ export function fldDroplistVT(
     comType: "TiDroplist",
     comConf: _.assign(
       {
-        placeholder,
+        placeholder: placeholder || "i18n:no-set",
         options,
         showCleanOption: true,
         tipFormat,
