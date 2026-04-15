@@ -49,3 +49,21 @@ export type AjaxResult = {
   msg?: string;
   data?: any;
 };
+
+export function isAjaxRetult(input: any): input is AjaxResult {
+  if (!input) return false;
+  if (!_.isBoolean(input.ok)) return false;
+  if (!_.isNil(input.errCode) && !_.isString(input.errCode)) return false;
+  if (!_.isNil(input.msg) && !_.isString(input.msg)) return false;
+  return true;
+}
+
+export function toAjaxResult(input: any): AjaxResult {
+  if (isAjaxRetult(input)) {
+    return input;
+  }
+  if (_.isBoolean(input)) {
+    return { ok: input };
+  }
+  return { ok: false, errCode: "e.ajax.unknown", data: input };
+}
