@@ -61,9 +61,9 @@ export type InputBoxProps = CommonProps &
   BoxCompositionProps &
   DictProps &
   DisplayTextProps &
-  BoxAspectProps &
   PlaceholderProps &
   ReadonlyProps &
+  BoxAspectProps &
   BoxOptionsDataProps &
   BoxDropListProps &
   BoxHintCookingProps &

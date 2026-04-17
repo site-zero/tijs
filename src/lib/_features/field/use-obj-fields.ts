@@ -905,6 +905,7 @@ export function fldInputStrTags(
         tipList: {
           borderStyle: "dotted",
         },
+        tipListMinWidth: "480px",
       } as MultiDroplistProps,
       comConf
     ),

@@ -9,10 +9,11 @@ test("BaseExplain", () => {
     age: 12,
   } as Vars;
 
-  expect({ a: "xiaobai", b: 12 }).toStrictEqual(
+  expect({ a: "xiaobai", b: 12, c: "red" }).toStrictEqual(
     Util.explainObj(context, {
       a: "=name",
       b: "=age",
+      c: "=color?red",
     })
   );
 });

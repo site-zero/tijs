@@ -1,4 +1,5 @@
 import {
+  BoxAspectProps,
   BoxDropListProps,
   BoxOptionsDataProps,
   CommonProps,
@@ -12,9 +13,10 @@ export type MultiDroplistEmitter = {
 };
 
 export type MultiDroplistProps = CommonProps &
+  DictProps &
   PlaceholderProps &
   ReadonlyProps &
-  DictProps &
+  BoxAspectProps &
   BoxOptionsDataProps &
   BoxDropListProps & {
     /**
@@ -33,12 +35,7 @@ export type MultiDroplistProps = CommonProps &
     //-----------------------------------------------------
     // 外观与样式
     //-----------------------------------------------------
-    hideBorder?: boolean;
-
-    style?: Vars;
     tagsStyle?: Vars;
-    width?: string;
-
     /**
      * 强制不换行
      */

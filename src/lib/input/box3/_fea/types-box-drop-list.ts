@@ -1,9 +1,9 @@
 import {
-  BoxOptionsShowTime,
   BoxAspectProps,
   BoxOptionsDataProps,
   DictProps,
   ListProps,
+  Vars,
 } from "@site0/tijs";
 
 export type BoxDropItemFormat = "T" | "VT" | "TV" | "VTP" | "TP" | "PT" | "VpT";
@@ -20,10 +20,14 @@ export type BoxDropListProps = Pick<BoxAspectProps, "boxFontSize"> &
      * 提示信息的格式
      */
     tipFormat?: BoxDropItemFormat;
-    
+
+    tipItemTagStyles?: {
+      text?: Vars;
+      tip?: Vars;
+      value?: Vars;
+    };
   };
 
 export type BoxDropListSetup = {
   getTipContainer: () => HTMLElement | null;
 };
-

@@ -1,4 +1,9 @@
-import { AnyOptionItem, ListItemTextFormat, ListProps } from "@site0/tijs";
+import {
+  AnyOptionItem,
+  CssUtils,
+  ListItemTextFormat,
+  ListProps,
+} from "@site0/tijs";
 import _ from "lodash";
 import { computed } from "vue";
 import {
@@ -40,43 +45,60 @@ export function useBoxDropList(
       re.getTip = re.getTip ?? props.getTip;
     }
 
+    type ItemKey = "tip" | "text" | "value";
+    const _build_html = (
+      it: AnyOptionItem,
+      ks: ItemKey[],
+      tagMapping: Record<ItemKey, string> = {
+        text: "em",
+        tip: "abbr",
+        value: "code",
+      }
+    ): string => {
+      let ss = [];
+      for (let k of ks) {
+        let tagName = tagMapping[k];
+        let tagStyle = props.tipItemTagStyles?.[k];
+        if (!tagName) continue;
+        let v = it[k];
+        if (!_.isNil(v)) {
+          ss.push(`<${tagName}`);
+          if (tagStyle && !_.isEmpty(tagStyle)) {
+            ss.push(` style="${CssUtils.renderCssRule(tagStyle)}"`);
+          }
+          ss.push(">");
+          ss.push(_.escape(v));
+          ss.push(`</${tagName}>`);
+        }
+      }
+      return ss.join("");
+    };
+
     // 设置快速格式化
     if (!re.textFormat && props.tipFormat) {
       const tfmt_set: Record<BoxDropItemFormat, ListItemTextFormat> = {
         T: `<em>\${text}</em>`,
         VT: (it: AnyOptionItem): string => {
-          if (_.isNil(it.value)) return `<em>${it.text}</em>`;
-          return `<code>${it.value}:</code><em>${it.text}</em>`;
+          return _build_html(it, ["value", "text"]);
         },
         TV: (it: AnyOptionItem): string => {
-          if (_.isNil(it.value)) return `<em>${it.text}</em>`;
-          return `<em>${it.text}</em><code>:${it.value}</code>`;
+          return _build_html(it, ["text", "value"]);
         },
         TP: (it: AnyOptionItem): string => {
-          return `<em>${it.text}</em><abbr>${it.tip}</abbr>`;
+          return _build_html(it, ["text", "tip"]);
         },
         PT: (it: AnyOptionItem): string => {
-          return `<code>${it.tip}</code><em>${it.text}</em>`;
+          return _build_html(it, ["tip", "text"]);
         },
         VTP: (it: AnyOptionItem): string => {
-          let ss = [];
-          if (!_.isNil(it.value)) {
-            ss.push(`<code>${it.value}:</code>`);
-          }
-          if (!_.isNil(it.text)) {
-            ss.push(`<em>${it.text}</em>`);
-          }
-          if (!_.isNil(it.tip)) {
-            ss.push(`<abbr>${it.tip}</abbr>`);
-          }
-          return ss.join("");
+          return _build_html(it, ["value", "text", "tip"]);
         },
         VpT: (it: AnyOptionItem): string => {
-          let { value, text, tip } = it;
-          if (tip) {
-            return `<code>${value}:</code><code>${tip}</code><em>${text}</em>`;
-          }
-          return `<code>${value}:</code><em>${text}</em>`;
+          return _build_html(it, ["value", "tip", "text"], {
+            value: "code",
+            text: "em",
+            tip: "code",
+          });
         },
       };
       re.textFormat = tfmt_set[props.tipFormat];
