@@ -1,8 +1,14 @@
-import { CssUtils, getDockingStyle, Rect, Rects, Vars } from "@site0/tijs";
+import {
+  CssAlignment,
+  CssUtils,
+  getDockingStyle,
+  Rect,
+  Rects,
+  Vars,
+} from "@site0/tijs";
 import _ from "lodash";
 import { computed, ComputedRef } from "vue";
 import { BoxAspectProps } from "./types-box-aspect";
-import { position } from "html2canvas/dist/types/css/property-descriptors/position";
 
 export type FeaBoxAspectSetup = {
   isFocused: () => boolean;
@@ -10,6 +16,8 @@ export type FeaBoxAspectSetup = {
   isReadonly: () => boolean;
   getElement: () => HTMLElement | null;
   getDockingElement: () => HTMLElement | null;
+  autoFloatWhenTipReady: () => boolean;
+  getBoxAlign?: (align?: CssAlignment) => string | undefined;
 };
 
 export function useBoxAspect(
@@ -22,6 +30,8 @@ export function useBoxAspect(
     isReadonly,
     getElement,
     getDockingElement,
+    autoFloatWhenTipReady,
+    getBoxAlign = (align?: CssAlignment) => align,
   } = options;
   //--------------------------------------------------
   const TopClass = computed(() =>
@@ -30,7 +40,7 @@ export function useBoxAspect(
     })
   );
   //--------------------------------------------------
-  const TopStyle = computed(() => makeBoxAspectStyle(props));
+  const TopStyle = computed(() => makeBoxAspectStyle(props, getBoxAlign));
   //--------------------------------------------------
   const PartMainClass = computed(() => {
     return {
@@ -41,12 +51,13 @@ export function useBoxAspect(
   });
   //--------------------------------------------------
   const PartMainStyle = computed(() => {
-    let re = _.assign({}, props.partMainStyle);
-    if (isTipBoxReady.value) {
+    let re: Vars = {};
+    _.assign(re, props.partMainStyle);
+    if (isTipBoxReady.value && autoFloatWhenTipReady()) {
       let $el = getElement();
       let _box_rect = Rects.createBy($el!);
       _.assign(re, {
-        position:"fixed",
+        position: "fixed",
         top: _box_rect.top,
         left: _box_rect.left,
         width: _box_rect.width,
@@ -125,18 +136,16 @@ export function useBoxAspect(
   };
 }
 
-export function makeBoxAspectStyle(props: BoxAspectProps) {
+export function makeBoxAspectStyle(
+  props: BoxAspectProps,
+  getBoxAlign: (align?: CssAlignment) => string | undefined
+) {
   let re: Vars = {};
   if (props.width) {
     re.width = props.width;
   }
-  if (props.style) {
-    _.assign(re, props.style);
-  }
   if (props.boxFontSize) {
     re["--box-fontsz"] = `var(--ti-fontsz-${props.boxFontSize})`;
-  } else {
-    re["--box-fontsz"] = `inherit`;
   }
   if (props.boxPadding) {
     re["--box-padding"] = `var(--ti-box-pad-${props.boxPadding})`;
@@ -144,8 +153,9 @@ export function makeBoxAspectStyle(props: BoxAspectProps) {
   if (props.boxRadius) {
     re["--box-radius"] = `var(--ti-measure-r-${props.boxRadius})`;
   }
-  if (props.align) {
-    re["--box-align"] = props.align;
+  let align = getBoxAlign(props.align);
+  if (align) {
+    re["--box-align"] = align;
   }
   if (props.type) {
     _.assign(re, {
@@ -157,5 +167,11 @@ export function makeBoxAspectStyle(props: BoxAspectProps) {
       "--box-color-focus-bg": `var(--ti-color-${props.type}-r)`,
     });
   }
+
+  // 无论如何 style 有更高的优先级
+  if (props.style) {
+    _.assign(re, props.style);
+  }
+
   return CssUtils.toStyle(re);
 }

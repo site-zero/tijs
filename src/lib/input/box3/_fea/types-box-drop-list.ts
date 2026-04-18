@@ -2,6 +2,7 @@ import {
   BoxAspectProps,
   BoxOptionsDataProps,
   DictProps,
+  GetDataLogicTypeOptions,
   ListProps,
   Vars,
 } from "@site0/tijs";
@@ -30,4 +31,5 @@ export type BoxDropListProps = Pick<BoxAspectProps, "boxFontSize"> &
 
 export type BoxDropListSetup = {
   getTipContainer: () => HTMLElement | null;
+  dftRowType?: GetDataLogicTypeOptions;
 };

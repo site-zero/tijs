@@ -2,8 +2,8 @@
   import { computed, onMounted, useTemplateRef, watch } from "vue";
 
   import {
+    CssAlignment,
     ListSelectEmitInfo,
-    TiIcon,
     TiList,
     useBoxAspect,
     useBoxDropList,
@@ -19,15 +19,14 @@
   const emit = defineEmits<DropTagEmitter>();
   //-----------------------------------------------------
   const props = withDefaults(defineProps<DropTagProps>(), {
-    canInput: true,
     value: "",
     valueType: "val",
-    autoI18n: true,
     tipShowTime: "focus",
     tipShowDelay: 500,
     tipUseHint: false,
     trimed: true,
     flexAuto: true,
+    type: "info",
     // autoSelect: true,
     // autoFocus: true,
     // boxFontSize: "m",
@@ -37,7 +36,6 @@
   //-----------------------------------------------------
   const api = useDropTagApi(props, {
     emit,
-    getElement: () => $el.value,
   });
   //-----------------------------------------------------
   const Aspect = computed(() =>
@@ -47,12 +45,22 @@
       isFocused: () => false,
       isTipBoxReady: computed(() => false),
       isReadonly: () => false,
+      autoFloatWhenTipReady: () => false,
+      getBoxAlign: (align?: CssAlignment) => {
+        if (!align) return;
+        return {
+          left: "flex-start",
+          center: "center",
+          right: "flex-end",
+        }[align];
+      },
     })
   );
   //-----------------------------------------------------
   const BoxDropList = computed(() =>
     useBoxDropList(props, {
       getTipContainer: () => $tipcon.value,
+      dftRowType: () => props.type,
     })
   );
   //-----------------------------------------------------
@@ -83,7 +91,7 @@
 </script>
 <template>
   <div
-    class="ti-input-box3"
+    class="ti-drop-tag"
     :class="Aspect.TopClass.value"
     :style="Aspect.TopStyle.value">
     <div
@@ -93,22 +101,7 @@
       :style="Aspect.PartMainStyle.value"
       @click.stop="on_click_top">
       <!----------|> MAIN PART: BODY |---------->
-      <div class="main-body">
-        <!--|> MAIN PART: BODY > Icon |-->
-        <TiIcon
-          v-if="api.CurrentItemIcon.value"
-          :value="api.CurrentItemIcon.value" />
-
-        <!--|> MAIN PART: BODY > Text |-->
-        <span class="as-text" v-if="api.CurrentItemText.value">{{
-          api.CurrentItemText.value
-        }}</span>
-
-        <!--|> MAIN PART: BODY > Tip |-->
-        <span class="as-tip" v-if="api.CurrentItemTip.value">{{
-          api.CurrentItemTip.value
-        }}</span>
-      </div>
+      <div class="main-body" v-html="api.CurrentItemHTML.value"></div>
     </div>
     <!--=========| TIP OPTIONS PART |============-->
     <template v-if="api.isOptionsDataShow.value">

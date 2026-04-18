@@ -1,7 +1,6 @@
 import {
   BoxDropListProps,
   BoxValueProps,
-  Callback1,
   CommonProps,
   DictProps,
   DisplayTextProps,
@@ -71,17 +70,11 @@ export type InputBoxProps = CommonProps &
   BoxPrefixSuffixProps &
   BoxValueProps & {
     /**
-     * 抛开事件机制不谈，我们有时候总归是需要这样一个回调的
-     */
-    onValueChange?: Callback1<any>;
-    /**
      * 如果值为空字符串，那么默认的会给 null
      * 但是有时候，我们还是想区分出空串与 null
      * 打开这个选项即可
      */
     keepEmptyValue?: boolean;
-
-    autoI18n?: boolean;
 
     /**
      * 提示列表的配置

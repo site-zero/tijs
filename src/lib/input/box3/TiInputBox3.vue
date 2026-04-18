@@ -29,7 +29,6 @@
     canInput: true,
     value: "",
     valueType: "val",
-    autoI18n: true,
     tipShowTime: "focus",
     tipShowDelay: 0,
     tipUseHint: false,
@@ -63,6 +62,7 @@
       isFocused: () => api.isFocused.value,
       isTipBoxReady: api.isOptionsDataReady,
       isReadonly: () => api.isReadonly.value,
+      autoFloatWhenTipReady: () => true,
     })
   );
   //-----------------------------------------------------
@@ -92,9 +92,12 @@
   // 按 Tab 切换到了本控件，本控件正在加载选项，然后瞬间变成了只读
   // 那么就会位置（占位和选项框）会乱掉
   // 这里稍微做一下防守
-  watch(()=>[api.isReadonly.value],()=>{
-    api.setOptionsStatus('hide')
-  })
+  watch(
+    () => [api.isReadonly.value],
+    () => {
+      api.setOptionsStatus("hide");
+    }
+  );
   //-----------------------------------------------------
   onMounted(async () => {
     await try_update_by_props(api);

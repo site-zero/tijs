@@ -1,10 +1,11 @@
 import {
   AnyOptionItem,
   BoxOptionsStatus,
+  I18n,
+  Icons,
   useBoxOptionsData,
   useBoxValue,
   useDict,
-  useDisplayText,
   usePlaceholder,
   Vars,
 } from "@site0/tijs";
@@ -18,11 +19,10 @@ export type DropTagApi = ReturnType<typeof useDropTagApi>;
 
 export type DropTagSetup = {
   emit: DropTagEmitter;
-  getElement: () => HTMLElement | null;
 };
 
 export function useDropTagApi(props: DropTagProps, setup: DropTagSetup) {
-  const { emit, getElement } = setup;
+  const { emit } = setup;
   //-----------------------------------------------------
   // 数据模型
   //-----------------------------------------------------
@@ -30,7 +30,6 @@ export function useDropTagApi(props: DropTagProps, setup: DropTagSetup) {
   const _options_status = ref<BoxOptionsStatus>("hide");
   const _current_item = ref<Vars>();
   //-----------------------------------------------------
-  const _display = computed(() => useDisplayText(props));
   const _dict = computed(() => useDict(props));
   //-----------------------------------------------------
   const _box_options = computed(() => {
@@ -75,32 +74,48 @@ export function useDropTagApi(props: DropTagProps, setup: DropTagSetup) {
   });
   //-----------------------------------------------------
   const CurrentItem = computed(() => {
-    if (!_current_item.value) return;
-    return _box_options.value?.toOptionItem(_current_item.value);
+    return _current_item.value;
   });
   //-----------------------------------------------------
-  const CurrentItemIcon = computed(() => {
-    return CurrentItem.value?.icon;
-  });
-  //-----------------------------------------------------
-  const CurrentItemText = computed(() => {
-    return CurrentItem.value?.text;
-  });
-  //-----------------------------------------------------
-  const CurrentItemTip = computed(() => {
-    return CurrentItem.value?.tip;
-  });
-  //-----------------------------------------------------
-  const CurrentItemStyle = computed(() => {
-    return CurrentItem.value?.style;
-  });
-  //-----------------------------------------------------
-  const CurrentItemClass = computed(() => {
-    return CurrentItem.value?.className;
+  const CurrentStdItem = computed(() => {
+    if (!CurrentItem.value) return;
+    return _box_options.value?.toOptionItem(CurrentItem.value);
   });
   //-----------------------------------------------------
   const CurrentItemValue = computed(() => {
-    return CurrentItem.value?.value;
+    return CurrentStdItem.value?.value;
+  });
+  //-----------------------------------------------------
+  const CurrentItemHTML = computed(() => {
+    if (props.renderHtml) {
+      return props.renderHtml(CurrentItem.value);
+    }
+    let html: string[] = [];
+    let it = CurrentItem.value;
+    if (!it) {
+      html.push(`<div class="as-empty>`);
+      html.push(I18n.text(props.placeholder || "i18n:empty"));
+      html.push("</div>");
+    }
+    // 渲染 HTML
+    else {
+      if (it.icon && !props.hideIcon) {
+        html.push(`<span class="as-icon">`);
+        html.push(Icons.fontIconHtmlWithStyle(it.icon));
+        html.push(`</span>`);
+      }
+      if (it.text && !props.hideText) {
+        let text = _.escape(it.text);
+        text = I18n.text(text);
+        html.push(`<span class="as-text">${text}</span>`);
+      }
+      if (it.tip && !props.hideTip) {
+        let tip = _.escape(it.tip);
+        tip = I18n.text(tip);
+        html.push(`<span class="as-tip">${tip}</span>`);
+      }
+    }
+    return html.join("");
   });
   //-----------------------------------------------------
   function toOptionItem(it?: Vars | null | undefined): AnyOptionItem | null {
@@ -212,12 +227,9 @@ export function useDropTagApi(props: DropTagProps, setup: DropTagSetup) {
     isFilteredOptionsDataEmpty,
     //--------
     CurrentItem,
-    CurrentItemIcon,
-    CurrentItemText,
-    CurrentItemTip,
-    CurrentItemStyle,
-    CurrentItemClass,
+    CurrentStdItem,
     CurrentItemValue,
+    CurrentItemHTML,
     //--------
     toOptionItem,
     getOptionItemByVal,

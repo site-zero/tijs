@@ -16,7 +16,7 @@ export function useBoxDropList(
   props: BoxDropListProps,
   setup: BoxDropListSetup
 ) {
-  const { getTipContainer } = setup;
+  const { getTipContainer, dftRowType } = setup;
   /**
    * 提示列表的配置信息
    */
@@ -30,6 +30,7 @@ export function useBoxDropList(
         borderStyle: "solid",
         autoScrollIntoView: true,
         scrollViewPort: () => getTipContainer(),
+        getRowType: dftRowType,
       } as ListProps,
       props.tipList
     );

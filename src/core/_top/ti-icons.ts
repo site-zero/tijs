@@ -237,7 +237,7 @@ export function parseIcon(val: IconInput, dft?: string | IconObj): IconObj {
   return icon;
 }
 
-export function fontIconHtml(val: string | IconObj, dft?: string | IconObj) {
+export function fontIconHtml(val: IconInput, dft?: string | IconObj) {
   let icon = _.isString(val) ? parseIcon(val, dft) : val;
   return `<i class="${icon.className}"></i>`;
 }

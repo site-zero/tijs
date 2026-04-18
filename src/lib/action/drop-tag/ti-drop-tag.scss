@@ -1,4 +1,95 @@
-@use '@site0/tijs/sass/_all.scss' as *;
+@use "@site0/tijs/sass/_all.scss" as *;
 
-.ti-tags {
+.ti-drop-tag {
+  @include flex-align-nowrap($ai: stretch);
+  --box-hover-color: var(--ti-color-highlight-f);
+  --box-hover-bg-color: var(--ti-color-highlight);
+  --box-color-border: var(--ti-color-info);
+  --box-fontsz: inherit;
+  --box-padding: var(--ti-box-pad-m);
+  --box-radius: var(--ti-measure-r-s);
+  cursor: pointer;
+  font-size: var(--box-fontsz);
+  justify-content: var(--box-align);
+  &.flex-auto {
+    flex: 1 1 auto;
+  }
+  //-----------------------------------------------------
+  > .part-main {
+    @include flex-align-nowrap($ai: stretch);
+    flex: 0 0 auto;
+    width: fit-content;
+  }
+  //-----------------------------------------------------
+  > .part-main > .main-body {
+    flex: 1 1 auto;
+    @include flex-align($ai: center, $ac: center);
+    justify-content: var(--box-align);
+    gap: 0.5em;
+    user-select: none;
+    padding: var(--box-padding);
+    border-radius: var(--box-radius);
+    //---------------------------------------------------
+    &:hover {
+      background-color: var(--box-hover-bg-color);
+      color: var(--box-hover-color);
+    }
+    //---------------------------------------------------
+    :deep(> .as-icon) {
+      font-size: 1.3em;
+    }
+    //---------------------------------------------------
+  } // > .part-main {
+  //-----------------------------------------------------
+  > .part-mask {
+    position: fixed;
+    z-index: $z-mask;
+    inset: 0;
+  }
+  //-----------------------------------------------------
+  > .part-options {
+    @include flex-align-v-nowrap;
+    position: fixed;
+    z-index: $z-mask + 2;
+    padding: SZ(2) 0;
+    > .part-options-con {
+      flex: 1 1 auto;
+      background-color: var(--ti-color-card);
+      border: 1px solid var(--box-color-border);
+      border-radius: var(--ti-measure-r-s);
+      box-shadow:
+        -1px -1px var(--ti-color-light),
+        1px 1px var(--ti-color-dark),
+        4px 4px 12px var(--ti-color-mask-thin);
+      //box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+      overflow: auto;
+      .ti-list {
+        .list-item > .list-part.as-text {
+          @include flex-align-nowrap;
+          gap: 0.5em;
+          em {
+            font-style: normal;
+          }
+          abbr {
+            font-size: 0.9em;
+            opacity: 0.7;
+            margin-left: auto;
+          }
+          code {
+            color: var(--ti-color-primary);
+            // 当 code 顶头 的时候，给定一个固定的最小宽度
+            &:first-child {
+              @include font-fixed;
+              min-width: 4em;
+            }
+          }
+          code + code {
+            color: var(--ti-color-secondary);
+            font-size: 0.8em;
+          }
+        }
+      }
+    } // > .part-options-con {
+  }
+  //-----------------------------------------------------
 }

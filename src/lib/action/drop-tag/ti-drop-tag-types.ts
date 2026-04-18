@@ -2,11 +2,11 @@ import {
   BoxAspectProps,
   BoxDropListProps,
   BoxOptionsDataProps,
-  BoxValueType,
-  Callback1,
+  BoxValueProps,
+  Convertor,
   DictProps,
-  DisplayTextProps,
   PlaceholderProps,
+  Vars,
 } from "@site0/tijs";
 import { CommonProps } from "../../../_type";
 
@@ -16,7 +16,6 @@ export type DropTagEmitter = {
 
 export type DropTagProps = CommonProps &
   DictProps &
-  DisplayTextProps &
   BoxAspectProps &
   PlaceholderProps &
   Pick<
@@ -30,19 +29,10 @@ export type DropTagProps = CommonProps &
     | "clearOptionItemText"
     | "clearOptionItemStyle"
   > &
-  BoxDropListProps & {
-    /**
-     * 输入值
-     */
-    value?: any;
-    /**
-     * 输入框的值类型
-     *
-     * - `raw-item`: 选项的原生对象
-     * - `std-item`: 选项的标准对象
-     * - `val` : 「默认」值
-     */
-    valueType?: BoxValueType;
-    onValueChange?: Callback1<any>;
-    autoI18n?: boolean;
+  BoxDropListProps &
+  BoxValueProps & {
+    hideIcon?: boolean;
+    hideText?: boolean;
+    hideTip?: boolean;
+    renderHtml?: Convertor<Vars | undefined, string>;
   };

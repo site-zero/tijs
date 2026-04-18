@@ -1,10 +1,10 @@
 <script lang="ts" setup>
   import {
     CssUtils,
-    useBoxAspect,
     I18n,
     TiList,
     TiTags,
+    useBoxAspect,
     useBoxDropList,
   } from "@site0/tijs";
   import _ from "lodash";
@@ -36,6 +36,7 @@
       isFocused: () => false,
       isTipBoxReady: api.isOptionsDataReady,
       isReadonly: () => api.isReadonly.value,
+      autoFloatWhenTipReady: () => false,
     })
   );
   //-----------------------------------------------------
