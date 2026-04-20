@@ -1,8 +1,9 @@
-import { TextShowProps } from '.';
-import { I18n } from '../../core';
+import { TextShowProps } from ".";
+import { I18n } from "../../core";
 
-export type PlaceholderProps = Pick<TextShowProps, 'autoI18n'> & {
+export type PlaceholderProps = Pick<TextShowProps, "autoI18n"> & {
   placeholder?: string;
+  autoI18n?: boolean;
 };
 
 // export type PlaceholderFeature = {
@@ -32,7 +33,7 @@ export type PlaceholderProps = Pick<TextShowProps, 'autoI18n'> & {
  *
  */
 export function usePlaceholder(props: PlaceholderProps): string {
-  let placeholder = props.placeholder ?? '';
+  let placeholder = props.placeholder ?? "";
   let autoI18n = props.autoI18n ?? true;
   if (autoI18n && placeholder) {
     placeholder = I18n.text(placeholder);

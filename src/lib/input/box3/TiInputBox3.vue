@@ -34,6 +34,7 @@
     tipUseHint: false,
     trimed: true,
     flexAuto: true,
+    autoI18n: true,
     // autoSelect: true,
     // autoFocus: true,
     // boxFontSize: "m",
