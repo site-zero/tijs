@@ -121,6 +121,7 @@
     if (props.type) {
       conf.className.push(`is-${props.type}`);
     }
+    conf.actionBar = props.actionBar;
     conf.actions = [
       {
         icon: "zmdi-close",

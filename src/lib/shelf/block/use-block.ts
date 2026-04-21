@@ -84,7 +84,7 @@ export function useBlock(props: BlockProps, _options: BlockOptions) {
     if (_.isEmpty(HeadActions.items)) {
       HeadActions.items = [...props.actions];
     } else {
-      HeadActions.items?.push({}, ...props.actions);
+      HeadActions.items?.push(...props.actions);
     }
   }
   if (props.actionVars) {
