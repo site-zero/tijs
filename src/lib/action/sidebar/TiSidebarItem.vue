@@ -1,59 +1,39 @@
 <script lang="ts" setup>
-  import _ from 'lodash';
-  import { computed } from 'vue';
-  import { TiIcon } from '../../';
-  import { SideBarItem } from '../../../_type';
-  import { I18n } from '../../../core';
-
-  let emit = defineEmits<(event: 'click-item', payload: SideBarItem) => void>();
-
-  type BarItemProps = Omit<SideBarItem, 'key'> & {
-    uniqKey: string;
-    useCapture?: boolean;
-    openNewTab: boolean;
-  };
-  const props = defineProps<BarItemProps>();
-
+  import { I18n, TiIcon } from "@site0/tijs";
+  import _ from "lodash";
+  import { computed } from "vue";
+  import { SidebarItemEmitter, SidebarItemProps } from "./ti-sidebar-types";
+  //-------------------------------------------------------
+  let emit = defineEmits<SidebarItemEmitter>();
+  //-------------------------------------------------------
+  const props = defineProps<SidebarItemProps>();
+  //-------------------------------------------------------
   const ItemTitle = computed(() =>
     props.title ? I18n.text(props.title) : null
   );
-
+  //-------------------------------------------------------
   const hasChild = computed(() => !_.isEmpty(props.items));
-
+  //-------------------------------------------------------
   const TopClass = computed(() => ({
-    'has-child': hasChild.value,
-    'at-top': 0 == props.depth,
-    'at-sub': props.depth > 0,
-    'is-current': props.current,
+    "has-child": hasChild.value,
+    "at-top": 0 == props.depth,
+    "at-sub": props.depth > 0,
+    "is-current": props.current,
+    "is-enabled": !props.disabled,
+    "is-disabled": props.disabled,
   }));
-
+  //-------------------------------------------------------
   const DTClass = computed(() => ({
-    'at-top': 0 == props.depth,
-    'at-sub': props.depth > 0,
+    "at-top": 0 == props.depth,
+    "at-sub": props.depth > 0,
   }));
-
-  function OnClickItem() {
-    let it: SideBarItem = _.assign(
-      { key: props.uniqKey },
-      _.cloneDeep(_.omit(props, 'uniqKey', 'useCapture', 'openNewTab', 'items'))
-    );
-    emit('click-item', it);
-  }
+  //-------------------------------------------------------
 </script>
 <template>
-  <dl
-    :depth="props.depth"
-    class="sidebar-item"
-    :class="TopClass">
-    <dt
-      :class="DTClass"
-      @click="OnClickItem">
-      <div
-        v-for="_index in props.depth"
-        class="as-indent-block"></div>
-      <TiIcon
-        v-if="props.icon"
-        :value="props.icon" />
+  <dl :depth="props.depth" class="sidebar-item" :class="TopClass">
+    <dt :class="DTClass" @click="emit('click-item', props)">
+      <div v-for="_index in props.depth" class="as-indent-block"></div>
+      <TiIcon v-if="props.icon" :value="props.icon" />
       <div class="as-title">
         <a
           v-if="href"
@@ -67,16 +47,19 @@
     </dt>
     <dd v-if="hasChild">
       <div class="bar-items-con">
-        <TiSidebarItem
-          v-for="child in props.items"
-          v-bind="child"
-          :openNewTab="openNewTab"
-          :uniq-key="child.key"
-          @click-item="emit('click-item', $event)" />
+        <template v-for="barItem in props.items" :key="barItem.id">
+          <template v-if="!barItem.hidden">
+            <TiSidebarItem
+              v-bind="barItem"
+              :useCapture="useCapture"
+              :openNewTab="openNewTab"
+              @click-item="emit('click-item', $event)" />
+          </template>
+        </template>
       </div>
     </dd>
   </dl>
 </template>
 <style lang="scss">
-  @use './style/sidebar-item.scss';
+  @use "./style/sidebar-item.scss";
 </style>

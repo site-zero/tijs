@@ -1,4 +1,10 @@
-import { CommonProps, IconInput, TextContentType, Vars } from "./core-types";
+import {
+  CommonProps,
+  IconInput,
+  TextContentType,
+  Vars,
+  VisibilityProps,
+} from "./core-types";
 
 /*---------------------------------------------------
 
@@ -53,11 +59,8 @@ export type WnObjStatus = {
                       Sidebar
 
 ---------------------------------------------------*/
-export type SideBarItem = {
-  key: string;
-  depth: number;
-  current?: boolean;
-  id: string;
+export type SideBarItem = VisibilityProps & {
+  id?: string;
   path?: string;
   href?: string;
   icon?: IconInput;

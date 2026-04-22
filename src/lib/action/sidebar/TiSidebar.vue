@@ -1,71 +1,34 @@
 <script lang="ts" setup>
-  import _ from 'lodash';
-  import { computed } from 'vue';
-  import { SideBarItem } from '../../../_type';
-  import TiSidebarItem from './TiSidebarItem.vue';
-
-  let emit = defineEmits<(event: 'fire', payload: SideBarItem) => void>();
-
-  const props = withDefaults(
-    defineProps<{
-      items: SideBarItem[];
-      isCurrent?: (item: SideBarItem) => boolean;
-      useCapture?: boolean;
-      openNewTab?: boolean;
-    }>(),
-    {
-      useCapture: false,
-      openNewTab: false,
-    }
-  );
-
-  function tidyBarItem(
-    it: SideBarItem,
-    { index = 0, depth = 0 } = {}
-  ): SideBarItem {
-    it.depth = depth;
-    it.key = it.key ?? `D${depth}-I${index}`;
-    it.id = it.id ?? it.key;
-    if (_.isFunction(props.isCurrent)) {
-      it.current = props.isCurrent(it);
-    }
-    if (it.items) {
-      let list = [] as SideBarItem[];
-      for (let i = 0; i < it.items.length; i++) {
-        let child = tidyBarItem(it.items[i], { index: i, depth: depth + 1 });
-        list.push(child);
-      }
-      it.items = list;
-    }
-    return it;
-  }
-
-  const BarItems = computed(() => {
-    let items = _.cloneDeep(props.items);
-    for (let i = 0; i < items.length; i++) {
-      let it = items[i];
-      tidyBarItem(it, { index: i });
-    }
-    return items;
+  import { computed } from "vue";
+  import TiSidebarItem from "./TiSidebarItem.vue";
+  import { useSidebarApi } from "./_support/use-sidebar-item";
+  import { SidebarEmitter, SidebarProps } from "./ti-sidebar-types";
+  //-------------------------------------------------------
+  let emit = defineEmits<SidebarEmitter>();
+  //-------------------------------------------------------
+  const props = withDefaults(defineProps<SidebarProps>(), {
+    useCapture: false,
+    openNewTab: false,
   });
-
-  function OnClickItem(it: SideBarItem) {
-    emit('fire', it);
-  }
+  //-------------------------------------------------------
+  const api = computed(() => useSidebarApi(props, emit));
+  //-------------------------------------------------------
 </script>
 <template>
   <nav class="ti-sidebar">
-    <TiSidebarItem
-      v-for="child in BarItems"
-      v-bind="child"
-      :useCapture="useCapture"
-      :openNewTab="openNewTab"
-      :uniq-key="child.key"
-      @click-item="OnClickItem" />
+    <template v-for="barItem in api.BarItems.value" :key="barItem.id">
+      <template v-if="!barItem.hidden">
+        <TiSidebarItem
+          v-bind="barItem"
+          :useCapture="useCapture"
+          :openNewTab="openNewTab"
+          @click-item="api.onClickItem" />
+      </template>
+    </template>
   </nav>
 </template>
 <style lang="scss">
-  @use '../../../assets/style/_all.scss' as *;
+  @use "../../../assets/style/_all.scss" as *;
 
   nav {
     user-select: none;

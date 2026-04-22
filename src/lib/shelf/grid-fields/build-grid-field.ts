@@ -1,11 +1,14 @@
-import _ from "lodash";
-import { makeFieldUniqKey, parseFieldConverter, Vars } from "../../../_type";
-import { CssUtils, Match } from "../../../core";
 import {
   buildFieldValidatorGroup,
+  CssUtils,
+  makeFieldUniqKey,
+  Match,
   ObjFieldsApi,
+  parseFieldConverter,
   useVisibility,
-} from "../../_features";
+  Vars,
+} from "@site0/tijs";
+import _ from "lodash";
 import {
   AbstractFormItem,
   FieldOverrideVisibilityMode,
