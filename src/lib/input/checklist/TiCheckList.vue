@@ -20,7 +20,7 @@
   function onSelect(payload: ListSelectEmitInfo) {
     let ids = payload.checkedIds;
     let val = _.uniq(_.concat([], ids, props.fixedValues ?? []));
-    console.log("onSelect", ids, val, "value=", props.value);
+    //console.log("onSelect", ids, val, "value=", props.value);
     if (!_.isEqual(val, props.value)) {
       emit("change", val);
     }
