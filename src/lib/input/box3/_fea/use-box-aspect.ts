@@ -40,7 +40,17 @@ export function useBoxAspect(
     })
   );
   //--------------------------------------------------
-  const TopStyle = computed(() => makeBoxAspectStyle(props, getBoxAlign));
+  const TopStyle = computed(() => {
+    const re = makeBoxAspectStyle(props, getBoxAlign);
+    if (isTipBoxReady.value && autoFloatWhenTipReady()) {
+      let $el = getElement();
+      let _box_rect = Rects.createBy($el!);
+      _.assign(re, {
+        height: `${_box_rect.height}px`,
+      });
+    }
+    return re;
+  });
   //--------------------------------------------------
   const PartMainClass = computed(() => {
     return {
