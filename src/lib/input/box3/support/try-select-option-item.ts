@@ -15,7 +15,7 @@ export async function try_select_option_item(
 
   // 既然到了这里，显然我们需要无视所有的延迟处理
   // 我们直接给出最直接的操作，这样会比较快
-  api.clearDefer();
+  api.DeferList.clearDefer();
 
   // 应用值并清理状态
   await api.tryNotifyChange(val);

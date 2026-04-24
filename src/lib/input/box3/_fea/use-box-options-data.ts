@@ -1,15 +1,10 @@
 import {
   AnyOptionItem,
-  I18n,
-  isAnyOptionItem,
-  Match,
-  Num,
-  Util,
+  useOptionItem,
+  useOptionsFilter,
   Vars,
 } from "@site0/tijs";
 import _ from "lodash";
-import { computed } from "vue";
-import { BoxOptionFilterMaker, useItemLookup } from "../../..";
 import {
   BoxOptionsDataProps,
   BoxOptionsDataSetup,
@@ -28,66 +23,13 @@ export function useBoxOptionsData(
   //------------------------------------------------
   // 动态过滤器
   //------------------------------------------------
-  const _options_filter = computed(() => {
-    if (props.optionFilter) {
-      let flt_vars = props.optionFilterVars ?? {};
-      // 如果是函数
-      if (_.isFunction(props.optionFilter)) {
-        let maker = props.optionFilter as BoxOptionFilterMaker;
-        return maker(flt_vars);
-      }
-      // 否则，就是对象
-      let m_input = props.optionFilter;
-      if (!_.isEmpty(flt_vars)) {
-        m_input = Util.explainObj(flt_vars, props.optionFilter);
-      }
-      let _mat = Match.parse(m_input, false);
-      return (item: Vars) => {
-        return _mat.test(item);
-      };
-    }
-    return () => true;
-  });
+  const _oflt = useOptionsFilter(props);
+  const _item = useOptionItem<any>(props);
   //------------------------------------------------
   // 计算属性
   //------------------------------------------------
-  const FixedOptionsData = computed(() => {
-    let list: Vars[] = [];
-    if (props.fixedOptions) {
-      if (_.isFunction(props.fixedOptions)) {
-        list.push(...props.fixedOptions());
-      } else {
-        list.push(...props.fixedOptions);
-      }
-    }
-    return list;
-  });
-  //------------------------------------------------
-  // 数据计算
-  //------------------------------------------------
-  function filterOptionsData(_options_data: Vars[]) {
-    let list: Vars[] = [];
-    // 显示清除选项
-    if (props.showCleanOption) {
-      list.push({
-        icon: props.clearOptionItemIcon,
-        text: I18n.text(props.clearOptionItemText ?? "i18n:clear"),
-        value: null,
-        style: props.clearOptionItemStyle ?? {
-          color: "var(--ti-color-secondary)",
-        },
-      });
-    }
-    // 添加固定项目
-    list.push(...FixedOptionsData.value);
-    // 添加动态项目
-    for (let it of _options_data) {
-      if (_options_filter.value(it)) {
-        // 我只是想要一个副本，或许能规避一些潜在的副作用
-        list.push(_.cloneDeep(it));
-      }
-    }
-    return list;
+  function filterOptionsData(list: Vars[]) {
+    return _oflt.filterOptionsData(list);
   }
   //------------------------------------------------
   let lastAbort: AbortController | null = null;
@@ -96,37 +38,11 @@ export function useBoxOptionsData(
   // 帮助函数
   //------------------------------------------------
   function toOptionItem(it: Vars): AnyOptionItem {
-    if (isAnyOptionItem(it)) {
-      return it;
-    }
-    return dict.toStdItem(it).toOptionItem();
+    return _item.toOptionItem(it);
   }
   //------------------------------------------------
   function getOptionItemIndex(list: Vars[], value: any): number {
-    const dft_re = props.showCleanOption ? 0 : -1;
-    if (_.isNil(value) || !list || _.isEmpty(list)) {
-      return dft_re;
-    }
-    // 逐个寻找选项对象
-    let N = list.length;
-    for (let i = 0; i < N; i++) {
-      // 跳过清除选项
-      if (i == 0 && props.showCleanOption) {
-        continue;
-      }
-      let it = list[i];
-      let it_val: any;
-      if (isAnyOptionItem(it)) {
-        it_val = it.value;
-      } else {
-        it_val = dict.getItemValue(it, i);
-      }
-      if (value == it_val) {
-        return i;
-      }
-    }
-
-    return dft_re;
+    return _item.getOptionItemIndex(list, value);
   }
   //------------------------------------------------
   function getRawItemAt(
@@ -134,97 +50,30 @@ export function useBoxOptionsData(
     index: number,
     offset: number = 0
   ): Vars | undefined {
-    // 防空
-    if (!list || _.isEmpty(list)) {
-      return undefined;
-    }
-
-    // 准备返回值
-    let N = list.length;
-    let I = index;
-
-    // Index 区域外
-    if (I < 0 || I >= list.length) {
-      if (offset < 0) {
-        I = Num.scrollIndex(offset, N);
-      } else {
-        I = 0;
-      }
-    }
-    // 获取对象
-    else if (offset != 0) {
-      I = Num.scrollIndex(index + offset, N);
-    }
-    let it: Vars | undefined = list[I];
-    return it;
+    return _item.getRawItemAt(list, index, offset);
   }
   //------------------------------------------------
   function getRawItemByVal(list: Vars[], value: any): Vars | undefined {
-    if (_.isNil(value) || _.isEmpty(list)) {
-      return;
-    }
-    // 逐个寻找选项对象
-    for (let it of list) {
-      let itVal: any;
-      if (isAnyOptionItem(it)) {
-        itVal = it.value;
-      } else {
-        itVal = dict.getItemValue(it, -1);
-      }
-      if (value == itVal) {
-        return it;
-      }
-    }
+    return _item.getRawItemByVal(list, value);
   }
   //------------------------------------------------
   function getOptionItemAt(
     list: Vars[],
     index: number,
     offset: number = 0
-  ): Vars | undefined {
-    const it = getRawItemAt(list, index, offset);
-    if (it) {
-      return toOptionItem(it);
-    }
-    return undefined;
+  ): AnyOptionItem | undefined {
+    return _item.getOptionItemAt(list, index, offset);
   }
   //------------------------------------------------
   function getOptionItemByVal(
     list: Vars[],
     value: any
   ): AnyOptionItem | undefined {
-    if (_.isNil(value) || _.isEmpty(list)) {
-      return;
-    }
-    // 逐个寻找选项对象
-    for (let it of list) {
-      let stdItem: AnyOptionItem;
-      if (isAnyOptionItem(it)) {
-        stdItem = it;
-      } else {
-        stdItem = dict.toStdItem(it).toOptionItem();
-      }
-      if (value == stdItem.value) {
-        return stdItem;
-      }
-    }
+    return _item.getOptionItemByVal(list, value);
   }
   //------------------------------------------------
   function lookupItem(list: Vars[], hint: string): Vars | undefined {
-    if (!hint || !list || _.isEmpty(list)) {
-      return;
-    }
-    const itLookup = useItemLookup(props);
-    const matchers = itLookup.matchers;
-    // 逐个 matcher 寻找
-    for (let is_match of matchers) {
-      // 逐个寻找选项对象
-      for (let it of list) {
-        if (is_match(it, hint)) {
-          return it;
-        }
-      }
-    }
+    return _item.lookupItem(list, hint);
   }
   //------------------------------------------------
   // 异步方法
@@ -339,9 +188,6 @@ export function useBoxOptionsData(
   //------------------------------------------------
   return {
     // 计算属性
-    FixedOptionsData,
-
-    // 数据计算
     filterOptionsData,
 
     // 帮助函数

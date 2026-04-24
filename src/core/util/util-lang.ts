@@ -104,7 +104,7 @@ export function getOrPick(obj: any, key: string | string[], dft: any): any {
   let getter = genObjGetter(key, {
     test: (val: any) => !_.isUndefined(val),
     enableKeyPath: true,
-    dft,
+    getDefault: () => dft,
   });
   return getter(obj);
 }

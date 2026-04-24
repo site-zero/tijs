@@ -1,11 +1,13 @@
 import _ from "lodash";
-import { AnyGetter, AnyTester, Vars } from "../../_type";
+import { AnyGetter, AnyTester, Convertor, Vars } from "../../_type";
 import { splitIgnoreBlank, splitQuote } from "../text/ti-str";
 
-export type GetOptions = {
+export type ObjGetterOptions<T> = Partial<GetterOptions<T>>;
+
+export type GetterOptions<T> = {
   test?: AnyTester;
   enableKeyPath?: boolean;
-  dft?: any;
+  getDefault: () => T;
 };
 
 export const DefaultIdGetter = (it: Vars) => {
@@ -76,9 +78,9 @@ export function genObjPathGetter(input: string): AnyGetter {
  */
 export function genObjGetter(
   input: string,
-  options = {} as GetOptions
+  options = {} as ObjGetterOptions<any>
 ): AnyGetter {
-  let { test = (v) => !_.isNil(v), enableKeyPath = true, dft } = options;
+  let { test = (v) => !_.isNil(v), enableKeyPath = true, getDefault } = options;
 
   let keyFallback = splitIgnoreBlank(input, "|");
   let keyGetters = [] as AnyGetter[];
@@ -101,6 +103,50 @@ export function genObjGetter(
         return v;
       }
     }
-    return dft;
+    if (getDefault) {
+      return getDefault();
+    }
   };
+}
+
+/**
+ * 根据输入生成一个统一的取值函数。
+ *
+ * - 当 `input` 为函数时，直接返回该函数
+ * - 当 `input` 为字符串时，会按 `genObjGetter` 的规则生成对象取值函数
+ *
+ * @param input 取值表达式或自定义取值函数
+ * @param options 当 `input` 为字符串时使用的取值配置
+ * @return 一个可从对象中提取目标值的转换函数
+ */
+export function genGetter<T>(
+  input?: string | Convertor<Vars, T | undefined>,
+  options = {} as ObjGetterOptions<T>
+): Convertor<Vars, T | undefined> {
+  // 防空
+  if (!input) {
+    return () => undefined;
+  }
+  // 用户直接指定了
+  if (_.isFunction(input)) {
+    return input;
+  }
+  // 生成 Getter 函数
+  return genObjGetter(input, options);
+}
+
+export function genGetterWithDft<T>(
+  input: string | Convertor<Vars, T>,
+  options: GetterOptions<T>
+): Convertor<Vars, T> {
+  // 防空
+  if (!input) {
+    return options.getDefault;
+  }
+  // 用户直接指定了
+  if (_.isFunction(input)) {
+    return input;
+  }
+  // 生成 Getter 函数
+  return genObjGetter(input, options);
 }

@@ -17,3 +17,4 @@ export * from "./use-box-prefix-suffix";
 export * from "./use-box-value";
 export * from "./use-item-lookup";
 export * from "./use-last-hint";
+export * from "./get-box-display-text";

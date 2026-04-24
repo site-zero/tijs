@@ -83,6 +83,5 @@ export function _gen_dict_opt_getter(input: string | AnyGetter): AnyGetter {
   return Util.genObjGetter(input, {
     test: (v: any) => !_.isNil(v),
     enableKeyPath: true,
-    dft: undefined,
   });
 }

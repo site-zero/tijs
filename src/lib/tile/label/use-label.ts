@@ -1,12 +1,12 @@
 import _ from 'lodash';
 import { computed, ComputedRef } from 'vue';
 import { Str, TiDict, Tmpl } from '../../../core';
-import { useDisplayText, ValuePipeFeature } from '../../_features';
+import { useDisplayText, ValuePipeApi } from '../../_features';
 import { LabelEmitter, LabelProps, LabelState } from './ti-label-types';
 
 export type LabelOptions = {
   _state: LabelState;
-  _pipe: ComputedRef<ValuePipeFeature>;
+  _pipe: ComputedRef<ValuePipeApi>;
   _dict: ComputedRef<TiDict | undefined>;
   getElement: () => HTMLElement;
   emit: LabelEmitter;

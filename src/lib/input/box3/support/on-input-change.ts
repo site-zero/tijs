@@ -25,7 +25,7 @@ export async function on_input_change(
   if (api.debug) console.log(`on_input_change(input:[${input}], val:[${val}])`);
 
   if (api.hasOptionsData.value && api.isOptionsDataShow.value) {
-    api.addDefer(async () => {
+    api.DeferList.addDefer(async () => {
       await do_apply_input_change(api, val);
     });
   }

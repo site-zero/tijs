@@ -4,7 +4,7 @@ import { StrCaseMode, ValueProcesser, Vars } from "../../_type";
 import { Str } from "../../core";
 import { getDefaultValPipes } from "./val-pipes/dft-val-pipes";
 
-export type ValuePipeFeature = ReturnType<typeof useValuePipe>;
+export type ValuePipeApi = ReturnType<typeof useValuePipe>;
 
 export type ValuePipeProps = {
   /**

@@ -2,6 +2,8 @@ import { AsyncWaiting, Vars } from "@site0/tijs";
 import _ from "lodash";
 import { computed, ref } from "vue";
 
+export type LastHintApi = ReturnType<typeof useLastHint>;
+
 export function useLastHint() {
   const _last_hint = ref<string>();
   // 如果连续多次查询，都是同样的 hint，只有第一次的 hint

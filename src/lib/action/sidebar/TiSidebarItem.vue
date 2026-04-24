@@ -60,6 +60,6 @@
     </dd>
   </dl>
 </template>
-<style lang="scss">
-  @use "./style/sidebar-item.scss";
+<style scoped lang="scss">
+  @use "./ti-sidebar-item.scss";
 </style>

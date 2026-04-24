@@ -2,10 +2,10 @@ import {
   AnyOptionItem,
   BoxOptionsDataApi,
   BoxOptionsStatus,
-  isAsyncFunc,
   useBoxHintCooking,
   useBoxOptionsData,
   useBoxValue,
+  useDeferList,
   useDict,
   useDisplayText,
   usePlaceholder,
@@ -21,13 +21,13 @@ import { InputBoxEmitter, InputBoxProps } from "./ti-input-box3-types";
 
 const debug = false;
 
-export type InputBox3Setup = {
+export type InputBoxSetup = {
   emit: InputBoxEmitter;
   getTopElement: () => HTMLElement | null;
   getInputElement: () => HTMLInputElement | null;
 };
 
-export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
+export function useTiInputBox3Api(props: InputBoxProps, setup: InputBoxSetup) {
   const { emit, getTopElement, getInputElement } = setup;
   //-----------------------------------------------------
   // 数据模型
@@ -50,7 +50,7 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
    * 3. Enter 键: 可以立即处理
    * 4. Tab 键: 可以立即处理
    */
-  const _defer_list = ref<Function[]>([]);
+  const _defer_list = useDeferList();
   //-----------------------------------------------------
   const _last_hint = useLastHint();
   //-----------------------------------------------------
@@ -131,7 +131,7 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
   const DisplayText = computed(() => {
     let re = getBoxDisplayText({
       lastHint: LastHint.value,
-      boxOptions: _box_options.value,
+      toOptionItem,
       boxItem: _current_item.value,
       isOptionsDataShow: isOptionsDataShow.value,
       useTextWhenFocus: props.useTextWhenFocus ?? false,
@@ -206,7 +206,6 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
     // 自动聚焦
     let $input = getInputElement();
     if (!$input) {
-      console.warn("TiInputBox3: 没有找到 Input 元素");
       return;
     }
     $input.focus();
@@ -223,25 +222,10 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
     _current_item.value = item ?? undefined;
   }
   //-----------------------------------------------------
-  function addDefer(deferFn: Function) {
-    _defer_list.value.push(deferFn);
-    if (debug) console.log("addDefer: len=", _defer_list.value.length);
-  }
-  //-----------------------------------------------------
-  function clearDefer() {
-    _defer_list.value = [];
-    if (debug) console.log("clearDefer: len=", _defer_list.value.length);
-  }
-  //-----------------------------------------------------
-  async function tryDeferList() {
-    for (let deferFn of _defer_list.value) {
-      if (isAsyncFunc(deferFn)) {
-        await deferFn();
-      } else {
-        deferFn();
-      }
+  function lookupItem(hint?: string) {
+    if (_box_options.value && hint) {
+      return _box_options.value.lookupItem(_options_data.value, hint);
     }
-    _defer_list.value = [];
   }
   //-----------------------------------------------------
   // 数据改动
@@ -274,30 +258,6 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
       );
 
     // 准备值
-    // let vtype = BoxValueType.value;
-    // let newVal: any = null;
-    // if (!_.isNil(val)) {
-    //   // 裸对象
-    //   if ("raw-item" == vtype) {
-    //     if (_current_item.value) {
-    //       newVal = _.cloneDeep(_current_item.value);
-    //     } else {
-    //       newVal = { value: val };
-    //     }
-    //   }
-    //   // 标准对象
-    //   else if ("std-item" == vtype) {
-    //     if (_current_item.value) {
-    //       newVal = toOptionItem(_current_item.value);
-    //     } else {
-    //       newVal = { value: val };
-    //     }
-    //   }
-    //   // 默认就用值
-    //   else {
-    //     newVal = val;
-    //   }
-    // }
     let newVal = _box_val.value.unifyValue(val, _current_item.value);
     if (debug)
       console.log(
@@ -348,12 +308,6 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
         `<<< reloadCurrentItem: _current_item=`,
         _.cloneDeep(_current_item.value)
       );
-  }
-  //-----------------------------------------------------
-  function lookupItem(hint?: string) {
-    if (_box_options.value && hint) {
-      return _box_options.value.lookupItem(_options_data.value, hint);
-    }
   }
   //-----------------------------------------------------
   async function reloadOptionsData(hint?: string) {
@@ -413,23 +367,23 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
   }
   //-----------------------------------------------------
   async function tryReloadOptionsDataAndLookupItem(input: string) {
-    if (api.debug) console.log(`tryReloadOptionsDataAndLookupItem(${input})`);
+    if (debug) console.log(`tryReloadOptionsDataAndLookupItem(${input})`);
 
     // 如果 Tab 走的很快，那么 debounceTryReloadOptionsDataAndLookupItem
     // 会导致一个延迟加载，这会一个怪异的现象：
     // 输入框分明已经失焦了，但是几百毫秒以后，仍然会自动展现出选项下拉
     // 为此，我们加个判断，来防守一下
     if (!_focused.value) {
-      if (api.debug)
+      if (debug)
         console.log(
           `tryReloadOptionsDataAndLookupItem(${input}) ignore for focused==false`
         );
       return;
     }
 
-    await api.tryReloadOptionsData(input);
-    let it = api.lookupItem(input);
-    api.setCurrentItem(it);
+    await tryReloadOptionsData(input);
+    let it = lookupItem(input);
+    setCurrentItem(it);
   }
   //-----------------------------------------------------
   const debounceTryReloadOptionsDataAndLookupItem = _.debounce(
@@ -483,9 +437,7 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBox3Setup) {
     setFocused,
     setOptionsStatus,
     setCurrentItem,
-    addDefer,
-    clearDefer,
-    tryDeferList,
+    DeferList: _defer_list,
     // 数据改动
     applyPipe,
     tryNotifyChange,

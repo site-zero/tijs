@@ -23,10 +23,10 @@ export function try_blur(api: InputBoxApi) {
   if (api.debug) console.log("try_blur");
   api.setFocused(false);
   if (api.hasOptionsData.value && api.isOptionsDataShow.value) {
-    api.addDefer(() => {
+    api.DeferList.addDefer(() => {
       do_box_blur(api);
     });
-    _.delay(() => api.tryDeferList(), 500);
+    _.delay(() => api.DeferList.tryDeferList(), 500);
   }
   // 放心处理失焦
   else {

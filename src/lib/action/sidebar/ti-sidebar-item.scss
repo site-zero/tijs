@@ -1,0 +1,89 @@
+@use "@site0/tijs/sass/_all.scss" as *;
+
+dl.sidebar-item {
+  &.at-top {
+    margin-block-start: 0.2em;
+    margin-block-end: 1em;
+    &.is-current {
+      > dt {
+        padding-left: 1em;
+      }
+    }
+  }
+  &.is-current {
+    > dt,
+    > dt:hover {
+      color: var(--ti-color-primary);
+      background-color: var(--ti-color-mask-weak);
+    }
+    > dt::before {
+      display: block;
+      content: "";
+      position: absolute;
+      top: var(--ti-gap-s);
+      bottom: var(--ti-gap-s);
+      left: var(--ti-gap-s);
+      width: 3px;
+      background-color: var(--ti-color-primary);
+    }
+    > dt.at-sub {
+      > .ti-icon {
+        transform: scale(1.4) rotate(360deg);
+      }
+    }
+  }
+}
+
+dl.sidebar-item dt {
+  @include flex-align-nowrap;
+  line-height: 2em;
+  cursor: pointer;
+  position: relative;
+  > .as-indent-block {
+    min-width: 2em;
+    &::before {
+      display: inline;
+      content: "";
+    }
+  }
+  > .ti-icon {
+    min-width: 24px;
+    font-size: 16px;
+    transition: transform 0.5s;
+    color: inherit;
+  }
+  > .as-title {
+    padding: 0 0.4em;
+    white-space: nowrap;
+    a {
+      color: inherit;
+      font-size: 0.9em;
+    }
+  }
+  &.at-top {
+    border-bottom: 1px dashed var(--ti-color-border-weak);
+    padding-left: 0.5em;
+    > .as-title {
+      font-weight: bold;
+    }
+  }
+  &.at-sub {
+    > .ti-icon {
+      font-size: 1em;
+    }
+    > .as-title {
+      font-size: 1em;
+    }
+  }
+  &:hover {
+    background-color: var(--ti-color-highlight);
+    color: var(--ti-color-highlight-f);
+    > .ti-icon {
+      transform: scale(1.2) rotate(360deg);
+    }
+  }
+}
+
+dl.sidebar-item dd {
+  margin: 0.5em 0;
+}

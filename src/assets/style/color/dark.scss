@@ -1,7 +1,14 @@
 @mixin use_color_theme_dark {
   /*区域*/
+  --ti-color-sky: #000;
+  --ti-color-sky-f: #fff;
+  --ti-color-foot: #000;
+  --ti-color-foot-f: #aaa;
+  --ti-color-chute: #000;
+  --ti-color-chute-f: #999;
   --ti-color-body: #292929;
   --ti-color-body-f: #ddd;
+  //......
   --ti-color-card: #000;
   --ti-color-card-f: #eee;
   --ti-color-menu: #222;
@@ -12,6 +19,7 @@
   --ti-color-tab-f: #ddd;
   --ti-color-box: #000;
   --ti-color-box-f: #eee;
+  //......
   --ti-color-mask-heavy: rgba(255, 255, 255, 0.5);
   --ti-color-mask-bushy: rgba(255, 255, 255, 0.3);
   --ti-color-mask-thin: rgba(255, 255, 255, 0.2);

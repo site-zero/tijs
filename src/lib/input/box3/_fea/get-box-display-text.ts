@@ -1,21 +1,26 @@
-import { PickDisplayText, Str, Vars } from "@site0/tijs";
+import {
+  AnyOptionItem,
+  Convertor,
+  PickDisplayText,
+  Str,
+  Vars,
+} from "@site0/tijs";
 import _ from "lodash";
-import { BoxOptionsDataApi } from "./use-box-options-data";
 
 export type BoxDisplayTextSetup = {
   lastHint: string | undefined | null;
-  boxOptions: BoxOptionsDataApi | undefined;
+  toOptionItem?: Convertor<Vars | null | undefined, AnyOptionItem | null>;
   boxItem: Vars | undefined | null;
   isOptionsDataShow: boolean;
-  useTextWhenFocus: boolean;
   pickDisplayText: PickDisplayText;
   InputStrValue: string | undefined | null;
+  useTextWhenFocus: boolean;
 };
 
 export function getBoxDisplayText(props: BoxDisplayTextSetup) {
   const {
     lastHint,
-    boxOptions,
+    toOptionItem,
     boxItem,
     isOptionsDataShow,
     useTextWhenFocus,
@@ -28,11 +33,13 @@ export function getBoxDisplayText(props: BoxDisplayTextSetup) {
   }
 
   // 尝试采用选择的 Item
-  if (boxOptions && boxItem) {
+  if (toOptionItem && boxItem) {
     // 如果聚焦了输入框，指明显示裸值，就显示裸值
     if (isOptionsDataShow && !useTextWhenFocus) {
-      let std = boxOptions.toOptionItem(boxItem);
-      return Str.anyToStr(std.value);
+      let std = toOptionItem(boxItem);
+      if (std) {
+        return Str.anyToStr(std.value);
+      }
     }
     // 否则翻译显示值
     return pickDisplayText(boxItem);
