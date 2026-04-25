@@ -24,9 +24,15 @@ export function useOptionItem<T>(props: OptionItemProps<T>) {
   //-----------------------------------------------------
   // 计算属性
   //-----------------------------------------------------
-  const _get_icon = computed(() => Util.genGetter(props.getIcon));
-  const _get_text = computed(() => Util.genGetter(props.getText));
-  const _get_tip = computed(() => Util.genGetter(props.getTip));
+  const _get_icon = computed(() =>
+    Util.genGetter(props.getIcon || ((it) => it.icon))
+  );
+  const _get_text = computed(() =>
+    Util.genGetter(props.getText || ((it) => it.text || it.title))
+  );
+  const _get_tip = computed(() =>
+    Util.genGetter(props.getTip || ((it) => it.tip))
+  );
   //-----------------------------------------------------
   const _get_value = computed(() => {
     if (!props.getValue) {
@@ -61,12 +67,15 @@ export function useOptionItem<T>(props: OptionItemProps<T>) {
   }
   //-----------------------------------------------------
   function toOptionItem(vars: Vars): OptionItem<T> {
-    return {
-      icon: getIcon(vars),
-      text: getText(vars),
-      tip: getTip(vars),
-      value: getValue(vars),
-    };
+    if (isAnyOptionItem(vars)) {
+      return vars;
+    }
+    let icon = getIcon(vars);
+    let text = getText(vars);
+    let tip = getTip(vars);
+    let value = getValue(vars);
+
+    return { icon, text, tip, value };
   }
   //------------------------------------------------
   function getOptionItemIndex(list: Vars[], value: any): number {

@@ -149,7 +149,6 @@
   <TiInput
     ref="box"
     v-bind="InputConfig"
-    :emit-type="'std-item'"
     :value="_.cloneDeep(_item)"
     valueType="std-item"
     @change="onBoxItemChange">
