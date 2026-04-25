@@ -287,9 +287,9 @@ export function getFieldConvertor(type: FieldValueType): FieldConvertor {
   return FIELD_CONVERTERS[type];
 }
 
-export function getFieldTypeByValue(input?: any): FieldValueType {
+export function getFieldTypeByValue(input?: any, dftType:FieldValueType='String'): FieldValueType {
   if (_.isUndefined(input) || _.isString(input)) {
-    return "String";
+    return dftType;
   }
   if (_.isNumber(input)) {
     if (Number.isInteger(input)) {

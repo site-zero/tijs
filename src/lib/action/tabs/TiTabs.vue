@@ -4,7 +4,7 @@
   import { TabDisplayItem, TiIcon, useKeep } from "../../";
   import { CssUtils } from "../../../core";
   import { TabsEmitter, TabsProps } from "./ti-tabs-types";
-  import { useTabsItem } from "./use-tabs-item";
+  import { useTabsItemApi } from "./use-tabs-item";
   import { TabsOverflow, useTabsOverflowObserver } from "./use-tabs-overflow";
   //-------------------------------------------------------
   const emit = defineEmits<TabsEmitter>();
@@ -25,7 +25,7 @@
     right: false,
   } as TabsOverflow);
   //-------------------------------------------------------
-  const TabItems = computed(() => useTabsItem(props));
+  const TabItems = computed(() => useTabsItemApi(props));
   //-------------------------------------------------------
   const TabOverflow = useTabsOverflowObserver({
     ul: $ul,
