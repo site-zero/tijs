@@ -1,17 +1,70 @@
 <mxfile host="65bd71144e">
-    <diagram id="2twSuv5CwROOLij5-yFz" name="第 1 页">
-        <mxGraphModel dx="1002" dy="551" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+    <diagram id="2twSuv5CwROOLij5-yFz" name="模式">
+        <mxGraphModel dx="776" dy="551" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
-                <mxCell id="2" value="InputObj" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;" vertex="1" parent="1">
-                    <mxGeometry x="120" y="120" width="120" height="40" as="geometry"/>
+                <mxCell id="2" value="InputObj" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fillColor=#fff2cc;strokeColor=#d6b656;fontStyle=1" parent="1" vertex="1">
+                    <mxGeometry x="320" y="200" width="120" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="3" value="Tab" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;" vertex="1" parent="1">
-                    <mxGeometry x="320" y="80" width="80" height="40" as="geometry"/>
+                <mxCell id="3" value="TabsForm" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;" parent="1" vertex="1">
+                    <mxGeometry x="320" y="120" width="120" height="40" as="geometry"/>
                 </mxCell>
-                <mxCell id="4" value="Form" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;" vertex="1" parent="1">
-                    <mxGeometry x="320" y="160" width="80" height="40" as="geometry"/>
+                <mxCell id="4" value="SimpleForm" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;" parent="1" vertex="1">
+                    <mxGeometry x="320" y="280" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="FlatObj" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+                    <mxGeometry x="160" y="200" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="NestedObj" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="200" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" value="GroupForm" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;" parent="1" vertex="1">
+                    <mxGeometry x="320" y="360" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;Tabs&lt;/span&gt;Flat&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="160" y="120" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;Tabs&lt;/span&gt;Nested" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="120" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="11" value="&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;SimpleFlat&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="160" y="280" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="&lt;span style=&quot;color: rgb(0, 0, 0);&quot;&gt;GroupFlat&lt;/span&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="160" y="360" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="SimpleNested" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="280" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="14" value="GroupNested" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=12;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="360" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="15" value="Text" style="text;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" parent="1" vertex="1">
+                    <mxGeometry x="160" y="80" width="120" height="40" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+    <diagram id="Y6U1a6McXY8lyTFA16nX" name="第 2 页">
+        <mxGraphModel dx="776" dy="551" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="HWrA46RKdfjbCz10xMLr-4" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="HWrA46RKdfjbCz10xMLr-1" target="HWrA46RKdfjbCz10xMLr-2">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="HWrA46RKdfjbCz10xMLr-1" value="InputObj" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;" vertex="1" parent="1">
+                    <mxGeometry x="80" y="80" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="HWrA46RKdfjbCz10xMLr-5" style="edgeStyle=none;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="HWrA46RKdfjbCz10xMLr-2" target="HWrA46RKdfjbCz10xMLr-3">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="HWrA46RKdfjbCz10xMLr-2" value="Field[]" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;" vertex="1" parent="1">
+                    <mxGeometry x="280" y="80" width="120" height="40" as="geometry"/>
+                </mxCell>
+                <mxCell id="HWrA46RKdfjbCz10xMLr-3" value="Grouped Fields&lt;br&gt;{g0:[],g1:[]}" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Lucida Console;" vertex="1" parent="1">
+                    <mxGeometry x="480" y="80" width="120" height="40" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>

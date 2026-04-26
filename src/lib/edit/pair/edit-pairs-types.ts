@@ -14,6 +14,23 @@ export type TiEditPairsEmitter = {
 };
 
 export type EditPairsValueType = "obj" | "str";
+export type EditPairsValueMode = "flat" | "nested";
+export type EditPairsFormMode = "tabs" | "simple" | "group";
+/**
+ * 定义组
+ */
+export type EditPairsGroup = StrOptionItem & {
+  /**
+   * 指明如何什么样的字段输入本组.
+   * 这是一个Match表达式，它的输入就是一个 FormField 对象
+   */
+  testField: any;
+
+  /**
+   * 无论如何，本组都要显示这些字段
+   */
+  fields?: FieldRefer[];
+};
 
 export type TiEditPairsProps = CommonProps &
   TabsAspect & {
@@ -27,17 +44,37 @@ export type TiEditPairsProps = CommonProps &
     valueType?: EditPairsValueType | "auto";
 
     /**
-     * 如果指定这个选项，输入的对象，第一层，会被认为是字段分组
-     * 会用 `TiTabsForm` 来渲染表单，这个数据就是 `tabs` 选项
+     * 输入对象的模式:
      *
-     * 其中 `tabs[0].value` 对应的是对象第一层的键名
+     * - `flat`：输入的对象是一个扁平对象，所有字段都是一级键
+     * - `nested`：输入的对象是一个嵌套对象，第一层的键，用了做字段分组键
+     *
+     * 因此在`flat`模式下，如果还想支持分组显示(`tabs|group`) 就需要
+     * 定义 `groups` 选项
      */
-    tabs?: StrOptionItem[];
+    valueMode?: EditPairsValueMode;
+
     /**
-     * 如果没被tabs 包括的字段，会被丢弃
-     * 如果不想被丢弃，那么需要生命这个属性
+     * 用什么方式呈现这个对象编辑界面
+     * - `tabs`：用 `TiTabsForm` 来渲染表单
+     * - `Simple`：用 `TiForm` 来渲染表单
+     * - `Group`：用 `TiForm` 来渲染表单，同时要对字段进行分组
      */
-    otherTabs?: StrOptionItem;
+    formMode?: EditPairsFormMode;
+
+    /**
+     * 字段分组方式：
+     * 如果 `formMode='tabs|group'`，且 `valueMode='flat'`
+     * 那么就需要这个选项来为字段分组。
+     * 同时，如果是 `nested` 的对象，通过这个选项，可以定制组的图标和标题
+     */
+    groups?: EditPairsGroup[];
+
+    /**
+     * 未归纳分组的字段，如果不想被丢弃，那么需要声明这个属性
+     * 在 `formMode='simple'` 模式下，将只关注这个选项
+     */
+    otherGroup?: EditPairsGroup;
 
     /**
      * 如果指定了 tabs, 可以为各个 tab 定制表单
@@ -53,6 +90,13 @@ export type TiEditPairsProps = CommonProps &
      * 可以精细指明各个字段的控件类型
      */
     fields?: Record<string, FieldRefer>;
+
+    /**
+     * 指明各个字段的标题【最高优先级】
+     * 如果指定它会覆盖 fields 选项的 title 配置
+     * 如果是嵌套对象，用 "a.b.c" 这样的键路径来表示
+     */
+    titles?: Record<string, string>;
 
     /**
      * 默认的根据字段值，返回控件
