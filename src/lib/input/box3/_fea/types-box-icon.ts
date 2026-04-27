@@ -1,21 +1,23 @@
 import { IconInput } from "@site0/tijs";
-import { InputBoxApi } from "../ti-input-box3-types";
 
-export type Box3IconHandler = (box: InputBoxApi) => void;
-export type Box3IconFor =
+/**
+ * Icon 的自定义回调处理
+ */
+export type BoxIconHandler<A> = (boxApi: A) => void;
+export type BoxIconFor<A> =
   | "copy"
   | "load-options"
   | "clear"
   | "click"
   | "open"
-  | Box3IconHandler;
+  | BoxIconHandler<A>;
 
 export type BoxIconEmit = "click:prefix-icon" | "click:suffix-icon";
 
-export type BoxIconProps = {
+export type BoxIconProps<A> = {
   icon?: IconInput | null;
   hoverIcon?: IconInput | null;
-  iconFor?: Box3IconFor;
+  iconFor?: BoxIconFor<A>;
   autoIcon?: IconInput;
   clickEmit: BoxIconEmit;
 };

@@ -1,8 +1,8 @@
 import { ListSelectEmitInfo } from "@site0/tijs";
-import { InputBoxApi } from "../ti-input-box3-types";
+import { InputComboApi } from "../use-input-combo-api";
 
 export async function try_select_option_item(
-  api: InputBoxApi,
+  api: InputComboApi,
   payload: ListSelectEmitInfo
 ) {
   if (api.debug) console.log("try_select_option_item", payload);

@@ -67,7 +67,7 @@ export type InputBoxProps = CommonProps &
   BoxDropListProps &
   BoxHintCookingProps &
   ValuePipeProps &
-  BoxPrefixSuffixProps &
+  BoxPrefixSuffixProps<any> &
   BoxValueProps & {
     /**
      * 如果值为空字符串，那么默认的会给 null

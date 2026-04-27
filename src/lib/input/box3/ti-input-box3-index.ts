@@ -47,7 +47,7 @@ const TiInputBox3Info: TiComInfo = {
   install: (app: App) => {
     app.component(COM_TYPE, TiInputBox3Info);
   },
-  defaultProps: "",
+  defaultProps: "simple",
   exampleProps: [
     {
       name: "simple",

@@ -4,6 +4,7 @@
   @include flex-align-nowrap($ai: center);
   overflow: hidden;
   flex: 1 1 auto;
+
   //-----------------------------------------------
   //min-height: var(--ti-measure-box-height);
   font-size: var(--box-fontsz);
@@ -25,6 +26,7 @@
   // 空值
   //-----------------------------------------------
   &.nil-value {
+    color: var(--ti-color-nil);
     > .value-part {
       opacity: 0.62;
       font-style: italic;

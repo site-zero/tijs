@@ -1,17 +1,20 @@
-import { Be, InputBoxEmitter, Vars } from "@site0/tijs";
 import {
+  Be,
   BoxIconEmit,
   BoxIconHandler,
   BoxPrefixSuffixProps,
   useBoxPrefixSuffix,
-} from "../_fea";
-import { InputBoxApi } from "../ti-input-box3-types";
+  Vars,
+} from "@site0/tijs";
+
+import { InputComboEmitter } from "../input-combo-types";
+import { InputComboApi } from "../use-input-combo-api";
 import { try_clear_value, try_show_options } from "./";
 
 export function create_prefix_suffix(
-  props: BoxPrefixSuffixProps<InputBoxApi>,
-  api: InputBoxApi,
-  emit: InputBoxEmitter,
+  props: BoxPrefixSuffixProps<InputComboApi>,
+  api: InputComboApi,
+  emit: InputComboEmitter,
   getElement: () => HTMLElement | null
 ) {
   return useBoxPrefixSuffix(props, {
@@ -19,7 +22,7 @@ export function create_prefix_suffix(
     getBoxValue: () => api.PropsStrValue.value,
     toOptionItem: (it: Vars) => api.toOptionItem(it)!,
     isReadonly: () => api.isReadonly.value,
-    onInvoke: (hdl: BoxIconHandler<InputBoxApi>) => {
+    onInvoke: (hdl: BoxIconHandler<InputComboApi>) => {
       hdl(api);
     },
     onEmit: (clickEmit: BoxIconEmit) => {

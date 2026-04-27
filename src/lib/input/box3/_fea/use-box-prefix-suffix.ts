@@ -10,15 +10,15 @@ import _ from "lodash";
 import { BoxPrefixSuffixProps } from "./types-box-prefix-suffix";
 import { BoxIconSetup, useBoxIcon } from "./use-box-icon";
 
-export type BoxPrefixSuffixSetup = BoxIconSetup & {
+export type BoxPrefixSuffixSetup<A> = BoxIconSetup<A> & {
   getBoxIcon: () => IconInput | undefined;
   getBoxValue: () => any;
   toOptionItem: (it: Vars) => AnyOptionItem;
 };
 
-export function useBoxPrefixSuffix(
-  props: BoxPrefixSuffixProps,
-  setup: Omit<BoxPrefixSuffixSetup, "onOpen">
+export function useBoxPrefixSuffix<A>(
+  props: BoxPrefixSuffixProps<A>,
+  setup: Omit<BoxPrefixSuffixSetup<A>, "onOpen">
 ) {
   const { getBoxIcon, toOptionItem, getBoxValue } = setup;
   //-----------------------------------------------------

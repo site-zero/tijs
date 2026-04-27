@@ -1,0 +1,208 @@
+<script lang="ts" setup>
+  import { TiList, useBoxAspect, useBoxDropList } from "@site0/tijs";
+  import _ from "lodash";
+  import { computed, useTemplateRef, watch } from "vue";
+  import { InputComboEmitter, InputComboProps } from "./input-combo-types";
+  import {
+    create_combo_composition,
+    create_prefix_suffix,
+    on_click_top,
+    on_input_change,
+    try_blur,
+    try_click_mask,
+    try_focus,
+    try_select_option_item,
+  } from "./support";
+  import { useTiInputComboApi } from "./use-input-combo-api";
+  //-----------------------------------------------------
+  defineOptions({ inheritAttrs: true });
+  //-----------------------------------------------------
+  const $el = useTemplateRef<HTMLElement>("el");
+  const $input = useTemplateRef<HTMLInputElement>("input");
+  const $tipcon = useTemplateRef<HTMLElement>("tipcon");
+  //-----------------------------------------------------
+  const emit = defineEmits<InputComboEmitter>();
+  //-----------------------------------------------------
+  const props = withDefaults(defineProps<InputComboProps>(), {
+    valueType: "raw-item",
+  });
+  //-----------------------------------------------------
+  const api = useTiInputComboApi(props, {
+    emit,
+    getTopElement: () => $el.value,
+    getInputElement: () => $input.value,
+  });
+  //-----------------------------------------------------
+  const Compose = computed(() => create_combo_composition(api));
+  //-----------------------------------------------------
+  const PrefixSuffix = computed(() =>
+    create_prefix_suffix(props, api, emit, () => $el.value)
+  );
+  const Prefix = computed(() => PrefixSuffix.value.getBoxPrefix());
+  const Suffix = computed(() => PrefixSuffix.value.getBoxSuffix());
+  //-----------------------------------------------------
+  const Aspect = computed(() =>
+    useBoxAspect(props, {
+      getElement: () => $el.value,
+      getDockingElement: () => $tipcon.value,
+      isFocused: () => api.isFocused.value,
+      isTipBoxReady: api.isOptionsDataReady,
+      isReadonly: () => api.isReadonly.value,
+      autoFloatWhenTipReady: () => true,
+    })
+  );
+  //-----------------------------------------------------
+  const BoxDropList = computed(() =>
+    useBoxDropList(props, {
+      getTipContainer: () => $tipcon.value,
+    })
+  );
+  //-----------------------------------------------------
+  // 如果当前 Input 本来是可编辑的，且带选项
+  // 用户改了别的字段（导致了本控件变为只读）同时以迅雷不及掩耳之势
+  // 按 Tab 切换到了本控件，本控件正在加载选项，然后瞬间变成了只读
+  // 那么就会位置（占位和选项框）会乱掉
+  // 这里稍微做一下防守
+  watch(
+    () => [api.isReadonly.value],
+    () => {
+      api.setOptionsStatus("hide");
+    }
+  );
+  //-----------------------------------------------------
+  defineExpose(api);
+  //-----------------------------------------------------
+  const LastHintText = computed(() =>
+    _.isNil(api.LastHint.value) ? "<nil>" : api.LastHint.value
+  );
+  //-----------------------------------------------------
+</script>
+<template>
+  <div
+    class="ti-input-combo"
+    :class="Aspect.TopClass.value"
+    :style="Aspect.TopStyle.value">
+    <div class="debug-info" v-if="props.showDebugInfo">
+      <table>
+        <tbody>
+          <tr>
+            <th>I:raw</th>
+            <td>
+              <code>{{ JSON.stringify(api.PropsRawValue.value) }}</code>
+            </td>
+          </tr>
+          <tr>
+            <th>I:str</th>
+            <td>
+              <code>{{ JSON.stringify(api.PropsStrValue.value) }}</code>
+            </td>
+          </tr>
+          <tr>
+            <th>cItem</th>
+            <td>
+              <code>{{ JSON.stringify(api.CurrentItem.value) }}</code>
+            </td>
+          </tr>
+          <tr>
+            <th>Hint</th>
+            <td>
+              <code>{{ LastHintText }}</code>
+            </td>
+          </tr>
+          <tr>
+            <th>Display</th>
+            <td>
+              <code>{{ api.DisplayText }}</code>
+            </td>
+          </tr>
+          <tr>
+            <th>Options</th>
+            <td>
+              <code>{{ api.FilteredOptionsData.value?.length || 0 }}</code>
+            </td>
+          </tr>
+          <tr>
+            <th>LastKey</th>
+            <td>
+              <code>{{ Compose.LastDownKey.value }}</code>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!--=============| MAIN PART |==================-->
+    <div
+      ref="el"
+      class="part-main"
+      :class="Aspect.PartMainClass.value"
+      :style="Aspect.PartMainStyle.value"
+      @click.stop="on_click_top(api, props)">
+      <!----------|> MAIN PART: HEAD |---------->
+      <slot name="head"></slot>
+      <!----------|> MAIN PART: BODY |---------->
+      <div class="main-body" :style="Aspect.MainBodyStyle.value">
+        <!--|> MAIN PART: BODY > prefix icon |-->
+        <div
+          v-if="Prefix.hasIcon.value"
+          class="icon-part at-prefix"
+          :class="Prefix.IconPartClass.value"
+          v-html="Prefix.IconPartHtml.value"
+          @click.left.stop="Prefix.onClick"></div>
+        <!--|> MAIN PART: BODY > raw input |-->
+        <input
+          ref="input"
+          :style="Aspect.InputStyle.value"
+          :placeholder="api.Placeholder.value"
+          :value="api.DisplayText.value"
+          :readonly="api.isReadonly.value"
+          spellcheck="false"
+          @change="on_input_change(api, Compose)"
+          @keyup="Compose.onKeyUp"
+          @keydown="Compose.onKeyDown"
+          @beforeinput="Compose.onBeforeInput"
+          @compositionstart="Compose.onStart"
+          @compositionend="Compose.onEnd"
+          @focus.stop="try_focus(api, props)"
+          @blur.stop="try_blur(api)"
+          @dblclick.stop />
+        <!--|> MAIN PART: BODY > suffix icon |-->
+        <div
+          v-if="Suffix.hasIcon.value"
+          class="icon-part at-suffix"
+          :class="Suffix.IconPartClass.value"
+          v-html="Suffix.IconPartHtml.value"
+          @click.left.stop="Suffix.onClick"></div>
+      </div>
+      <!----------|> MAIN PART: TAIL |---------->
+      <slot name="tail"> </slot>
+    </div>
+    <!--=========| TIP OPTIONS PART |============-->
+    <template
+      v-if="
+        api.isOptionsDataShow.value && !api.isFilteredOptionsDataEmpty.value
+      ">
+      <!--
+      占位支撑框。 当展开选项时，主体框会浮动到最顶层
+      这就需要一个占位框来保证页面布局不会变化
+      -->
+      <div class="part-brace" :style="Aspect.BoxBraceStyle.value">
+        <!--纯占位而已，似乎不需要内容-->
+      </div>
+      <!--遮罩层：展开选项后，会用这个来捕获全局 click-->
+      <div class="part-mask" @click.left.stop="try_click_mask(api)"></div>
+      <!--选项层：展开的选项存放的地方-->
+      <div class="part-options" :style="Aspect.BoxTipWrapperStyle.value">
+        <div class="part-options-con" ref="tipcon">
+          <TiList
+            v-bind="BoxDropList.value"
+            :currentId="api.CurrentItemValue.value"
+            :data="api.FilteredOptionsData.value"
+            @select="try_select_option_item(api, $event)" />
+        </div>
+      </div>
+    </template>
+  </div>
+</template>
+<style lang="scss">
+  @use "./input-combo.scss";
+</style>

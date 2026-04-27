@@ -1,11 +1,11 @@
 import { Icons, KeyboardStatus } from "@site0/tijs";
 import _ from "lodash";
 import { computed } from "vue";
-import { Box3IconHandler, BoxIconEmit, BoxIconProps } from "./types-box-icon";
+import { BoxIconEmit, BoxIconHandler, BoxIconProps } from "./types-box-icon";
 
-export type BoxIconSetup = {
+export type BoxIconSetup<A> = {
   isReadonly: () => boolean;
-  onInvoke: (hdl: Box3IconHandler) => void;
+  onInvoke: (hdl: BoxIconHandler<A>) => void;
   onEmit: (clickEmit: BoxIconEmit) => void;
   onClear: () => void;
   onCopy: (kbs: KeyboardStatus) => void;
@@ -13,7 +13,7 @@ export type BoxIconSetup = {
   onLoadOptions: () => void;
 };
 
-export function useBoxIcon(props: BoxIconProps, setup: BoxIconSetup) {
+export function useBoxIcon<A>(props: BoxIconProps<A>, setup: BoxIconSetup<A>) {
   const { icon, hoverIcon, iconFor, autoIcon, clickEmit } = props;
   //--------------------------------------------------
   const _icon = computed(() => {

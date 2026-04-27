@@ -1,7 +1,7 @@
 import { AnyOptionItem, Convertor, IconInput } from "@site0/tijs";
-import { Box3IconFor } from "./types-box-icon";
+import { BoxIconFor } from "./types-box-icon";
 
-export type BoxPrefixSuffixProps = {
+export type BoxPrefixSuffixProps<A> = {
   /**
    * 如果 prefix/suffix Icon 被指定为打开链接，
    * 那么这个选项将被用来生成链接。
@@ -34,7 +34,7 @@ export type BoxPrefixSuffixProps = {
   /**
    * 声明了这个动作，则表示这个图标可以点击
    */
-  prefixIconFor?: Box3IconFor;
+  prefixIconFor?: BoxIconFor<A>;
 
   /**
    * 后缀图标
@@ -44,5 +44,5 @@ export type BoxPrefixSuffixProps = {
   /**
    * 声明了这个动作，则表示这个图标可以点击
    */
-  suffixIconFor?: Box3IconFor;
+  suffixIconFor?: BoxIconFor<A>;
 };

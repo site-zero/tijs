@@ -1,10 +1,10 @@
 import { TiComSet } from "../../_type";
-//import { TiInputInfo } from "./box2/ti-input-box-index";
 import { TiInputInfo } from "./box3/ti-input-box3-index";
 import { TiCheckInfo } from "./check/ti-check-index";
 import { TiCheckListInfo } from "./checklist/ti-check-list-index";
 import { TiInputCodeInfo } from "./code/ti-input-code-index";
 import { TiInputColorInfo } from "./color/ti-input-color-index";
+import { TiInputComboInfo } from "./combo/ti-input-combo-index";
 import { TiInputDateRangeInfo } from "./date-range/ti-input-date-range-index";
 import { TiInputDateInfo } from "./date/ti-input-date-index";
 import { TiInputDatetimeInfo } from "./datetime/ti-input-datetime-index";
@@ -27,6 +27,7 @@ import { TiToggleInfo } from "./toggle/ti-toggle-index";
 import { TiTransferInfo } from "./transfer/ti-transfer-index";
 
 export default {
+  TiInputCombo: TiInputComboInfo,
   TiCheck: TiCheckInfo,
   TiCheckList: TiCheckListInfo,
   TiDroplist: TiDroplistInfo,
@@ -54,12 +55,12 @@ export default {
   TiInputMultiLines: TiInputMultiLinesInfo,
 } as TiComSet;
 
-//export * from "./box2/ti-input-box-index";
 export * from "./box3/ti-input-box3-index";
 export * from "./check/ti-check-index";
 export * from "./checklist/ti-check-list-index";
 export * from "./code/ti-input-code-index";
 export * from "./color/ti-input-color-index";
+export * from "./combo/ti-input-combo-index";
 export * from "./date-range/ti-input-date-range-index";
 export * from "./date/ti-input-date-index";
 export * from "./datetime/ti-input-datetime-index";
