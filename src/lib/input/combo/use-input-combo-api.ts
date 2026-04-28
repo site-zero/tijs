@@ -181,7 +181,7 @@ export function useTiInputComboApi(
       return;
     }
     $input.focus();
-    if (props.autoSelect && props.canInput) {
+    if (props.autoSelect) {
       $input.select();
     }
   }

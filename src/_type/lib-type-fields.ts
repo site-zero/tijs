@@ -127,6 +127,7 @@ type FieldConvertorSet = {
   Boolean: FieldConvertor;
   Timestamp: FieldConvertor;
   AMS: FieldConvertor;
+  Raw: FieldConvertor;
 };
 const FIELD_CONVERTERS: FieldConvertorSet = {
   String: { transform: toStr, serialize: toStr },
@@ -138,6 +139,7 @@ const FIELD_CONVERTERS: FieldConvertorSet = {
   Boolean: { transform: toBoolean, serialize: toBoolean },
   Timestamp: { transform: toDatetimeText, serialize: toAMS },
   AMS: { transform: toDateTime, serialize: toAMS },
+  Raw: { transform: _.identity, serialize: _.identity },
 };
 
 export function isFieldType(type: string): type is FieldValueType {
@@ -287,7 +289,10 @@ export function getFieldConvertor(type: FieldValueType): FieldConvertor {
   return FIELD_CONVERTERS[type];
 }
 
-export function getFieldTypeByValue(input?: any, dftType:FieldValueType='String'): FieldValueType {
+export function getFieldTypeByValue(
+  input?: any,
+  dftType: FieldValueType = "String"
+): FieldValueType {
   if (_.isUndefined(input) || _.isString(input)) {
     return dftType;
   }

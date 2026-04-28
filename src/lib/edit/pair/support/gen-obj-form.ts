@@ -63,6 +63,11 @@ const DEFAULT_FIELDS: Record<FieldValueType, FormField> = {
       type: "json",
     } as CodeEditorProps,
   },
+  Raw: {
+    type: "Raw",
+    comType: "TiInput",
+    comConf: {} as InputBoxProps,
+  },
 };
 
 type GenObjFormFieldSetup = {

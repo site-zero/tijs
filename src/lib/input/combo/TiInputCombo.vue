@@ -12,6 +12,7 @@
     try_click_mask,
     try_focus,
     try_select_option_item,
+    try_update_by_props,
   } from "./support";
   import { useTiInputComboApi } from "./use-input-combo-api";
   //-----------------------------------------------------
@@ -56,6 +57,14 @@
     useBoxDropList(props, {
       getTipContainer: () => $tipcon.value,
     })
+  );
+  //-----------------------------------------------------
+  watch(
+    () => props.value,
+    async () => {
+      await try_update_by_props(api);
+    },
+    { deep: true }
   );
   //-----------------------------------------------------
   // 如果当前 Input 本来是可编辑的，且带选项

@@ -45,7 +45,7 @@ export function useBoxValue(props: BoxValueProps, setup: BoxValueSetup) {
         if (currentItem) {
           newVal = _.cloneDeep(currentItem);
         } else {
-          newVal = { value: val };
+          newVal = val;
         }
       }
       // 标准对象
