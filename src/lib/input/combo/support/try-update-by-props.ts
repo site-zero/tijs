@@ -1,6 +1,6 @@
 import { InputComboApi } from "../use-input-combo-api";
 
-const debug = false;
+const debug = true;
 
 export async function try_update_by_props(api: InputComboApi) {
   if (debug)

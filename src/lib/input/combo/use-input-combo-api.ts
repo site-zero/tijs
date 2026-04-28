@@ -18,7 +18,7 @@ import _ from "lodash";
 import { computed, ref } from "vue";
 import { InputComboEmitter, InputComboProps } from "./input-combo-types";
 
-const debug = false;
+const debug = true;
 
 export type InputComboApi = ReturnType<typeof useTiInputComboApi>;
 
@@ -191,6 +191,7 @@ export function useTiInputComboApi(
   }
   //-----------------------------------------------------
   function setCurrentItem(item?: Vars | null) {
+    console.log("setCurrentItem", item);
     _current_item.value = item ?? undefined;
   }
   //-----------------------------------------------------
@@ -218,6 +219,9 @@ export function useTiInputComboApi(
         `tryNotifyChange(${val}) vtype=${BoxValueType.value}, newVal=`,
         newVal
       );
+
+    // 清理一下显示对象
+    setCurrentItem(undefined);
 
     // 没必要做重复操作
     if (_.isEqual(props.value, newVal)) {
