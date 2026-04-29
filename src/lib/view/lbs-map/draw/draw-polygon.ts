@@ -1,11 +1,11 @@
 import L from "leaflet";
-import { LatLngObj, LatLngTuple } from "../ti-lbs-map-types";
+import { LngLatObj, LngLatTuple } from "../ti-lbs-map-types";
 import { draw_obj_list_as_point, draw_tuple_list_as_point } from "./draw-point";
 import { LbsMapDrawingSetup } from "./draw-types";
 
 //--------------------------------------
 export function draw_obj_list_as_polygon(
-  latlngs: LatLngObj[],
+  latlngs: LngLatObj[],
   setup: LbsMapDrawingSetup
 ) {
   let { _dc, props } = setup;
@@ -33,7 +33,7 @@ export function draw_obj_list_as_polygon(
 }
 //--------------------------------------
 export function draw_tuple_list_as_polygon(
-  latlngs: LatLngTuple[],
+  latlngs: LngLatTuple[],
   setup: LbsMapDrawingSetup
 ) {
   let { _dc, props } = setup;

@@ -1,5 +1,5 @@
 import L from "leaflet";
-import { isLatLngObj, LbsMapValue } from "../ti-lbs-map-types";
+import { isLngLatObj, LbsMapValue } from "../ti-lbs-map-types";
 import { draw_obj_as_point, draw_tuple_as_point } from "./draw-point";
 import { LbsMapDrawingSetup } from "./draw-types";
 
@@ -9,7 +9,7 @@ export function draw_point_as_circle(
   setup: LbsMapDrawingSetup,
   autoFitBounds?: boolean
 ) {
-  let { _dc, props, api } = setup;
+  let { _dc, props,  } = setup;
   // 防空
   let { $map, $live } = _dc;
   if (!$map || !$live || !props.circleRadius) {
@@ -24,7 +24,7 @@ export function draw_point_as_circle(
   }).addTo($live);
 
   if (props.showMarker) {
-    if (isLatLngObj(latlng)) {
+    if (isLngLatObj(latlng)) {
       draw_obj_as_point(latlng, setup);
     } else {
       draw_tuple_as_point(latlng, setup);

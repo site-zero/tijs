@@ -4,15 +4,15 @@ import { draw_map_data } from "./draw";
 import {
   getLatlngObjBounds,
   getLatlngTupleBounds,
-  latlngObjToTuple,
-  latlngTupleToObj,
+  lnglatObjToTuple,
+  lnglatTupleToObj,
   translateCoordsForLatlngObj,
 } from "./gis";
 import {
-  isLatLngObj,
-  isLatLngTuple,
-  LatLngObj,
-  LatLngTuple,
+  isLngLatObj,
+  isLngLatTuple,
+  LngLatObj,
+  LngLatTuple,
   LbsMapDrawContext,
   LbsMapProps,
 } from "./ti-lbs-map-types";
@@ -139,15 +139,15 @@ export function initMapView(props: LbsMapProps, _dc: LbsMapDrawContext) {
   // Default view
   if (_dc.$map) {
     // 采用【北京】作为默认的位置
-    let lal: LatLngObj = {
+    let lal: LngLatObj = {
       lat: 39.907576,
       lng: 116.391275,
     };
     if (props.center) {
-      if (isLatLngObj(props.center)) {
+      if (isLngLatObj(props.center)) {
         lal = props.center;
-      } else if (isLatLngTuple(props.center)) {
-        lal = latlngTupleToObj(props.center);
+      } else if (isLngLatTuple(props.center)) {
+        lal = lnglatTupleToObj(props.center);
       } else {
         throw "Invalid defaultLocation: " + props.center;
       }
@@ -159,11 +159,11 @@ export function initMapView(props: LbsMapProps, _dc: LbsMapDrawContext) {
     ) {
       // 元组值
       if (_.isArray(props.value)) {
-        lal = latlngTupleToObj(props.value as LatLngTuple);
+        lal = lnglatTupleToObj(props.value as LngLatTuple);
       }
       // 那么必然就是对象值
       else {
-        lal = props.value as LatLngObj;
+        lal = props.value as LngLatObj;
       }
     }
     let dftCenter = translateCoordsForLatlngObj(fromCoords, toCoords, lal);
@@ -174,16 +174,16 @@ export function initMapView(props: LbsMapProps, _dc: LbsMapDrawContext) {
   // Auto fit the data
   //..................................
   if ("obj" == props.valueType) {
-    let lal = mapData as LatLngObj;
+    let lal = mapData as LngLatObj;
     _dc.$map!.setView(lal, zoom);
   }
   //..................................
   else if ("obj-list" == props.valueType) {
-    let list = mapData as LatLngObj[];
+    let list = mapData as LngLatObj[];
     if (list.length > 1) {
       let gr = getLatlngObjBounds(list);
-      let SW = latlngObjToTuple(gr.SW);
-      let NE = latlngObjToTuple(gr.NE);
+      let SW = lnglatObjToTuple(gr.SW);
+      let NE = lnglatObjToTuple(gr.NE);
       _dc.$map!.fitBounds([SW, NE]);
     } else if (list.length == 1) {
       let latlng = list[0];
@@ -192,16 +192,16 @@ export function initMapView(props: LbsMapProps, _dc: LbsMapDrawContext) {
   }
   //..................................
   else if ("tuple" == props.valueType) {
-    let lal = latlngTupleToObj(mapData as LatLngTuple);
+    let lal = lnglatTupleToObj(mapData as LngLatTuple);
     _dc.$map!.setView(lal, zoom);
   }
   //..................................
   else if ("tuple-list" == props.valueType) {
-    let list = mapData as LatLngTuple[];
+    let list = mapData as LngLatTuple[];
     if (list.length > 1) {
       let gr = getLatlngTupleBounds(list);
-      let SW = latlngObjToTuple(gr.SW);
-      let NE = latlngObjToTuple(gr.NE);
+      let SW = lnglatObjToTuple(gr.SW);
+      let NE = lnglatObjToTuple(gr.NE);
       _dc.$map!.fitBounds([SW, NE]);
     } else if (list.length == 1) {
       let latlng = list[0];

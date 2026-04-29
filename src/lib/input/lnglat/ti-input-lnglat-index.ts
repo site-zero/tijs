@@ -1,8 +1,8 @@
 import { App } from "vue";
-import { InputLatLngProps } from "../../";
 import { TiComInfo, TiComRace } from "../../../_type";
 import { COM_TYPES } from "../../lib-com-types";
-import TiInputLatLng from "./TiInputLatLng.vue";
+import { InputLngLatProps } from "./ti-input-lnglat-types";
+import TiInputLngLat from "./TiInputLngLat.vue";
 
 const en_us = {
   "com-name": "Input Lat-Lng",
@@ -25,39 +25,43 @@ const zh_cn = {
   "example-free": "自由编辑",
 };
 
-const COM_TYPE = COM_TYPES.InputLatLng;
+const COM_TYPE = COM_TYPES.InputLngLat;
 
-const TiInputLatLngInfo: TiComInfo = {
+const TiInputLngLatInfo: TiComInfo = {
   icon: "fas-map-marker-alt",
   race: TiComRace.INPUT,
   name: COM_TYPE,
-  text: "i18n:ti-input-lat-lng-com-name",
+  text: "i18n:ti-input-lng-lat-com-name",
   i18n: {
     en_us: en_us,
     en_uk: en_us,
     zh_cn: zh_cn,
     zh_hk: zh_cn,
   },
-  com: TiInputLatLng,
+  com: TiInputLngLat,
   install: (app: App) => {
-    app.component(COM_TYPE, TiInputLatLngInfo);
+    app.component(COM_TYPE, TiInputLngLatInfo);
   },
   defaultProps: "drag",
   exampleProps: [
     {
       name: "drag",
-      text: "i18n:ti-input-lat-lng-example-drag",
+      text: "i18n:ti-input-lng-lat-example-drag",
       comConf: {
+        value: {
+          lat: 39.968706,
+          lng: 116.402893,
+        },
         editPoint: "drag",
         canInput: false,
         mapOptions: {
           flyToOptions: true,
         },
-      } as InputLatLngProps,
+      } as InputLngLatProps,
     },
     {
       name: "pin",
-      text: "i18n:ti-input-lat-lng-example-pin",
+      text: "i18n:ti-input-lng-lat-example-pin",
       comConf: {
         editPoint: "pin",
         canInput: false,
@@ -66,21 +70,21 @@ const TiInputLatLngInfo: TiComInfo = {
         mapOptions: {
           zoom: 15,
         },
-      } as InputLatLngProps,
+      } as InputLngLatProps,
     },
     {
       name: "free",
-      text: "i18n:ti-input-lat-lng-example-free",
+      text: "i18n:ti-input-lng-lat-example-free",
       comConf: {
         editPoint: "drag",
         canInput: true,
         mapOptions: {
-          keepZoomBy: "Demo-InputLatLng-Zoom",
+          keepZoomBy: "Demo-InputLngLat-Zoom",
         },
-      } as InputLatLngProps,
+      } as InputLngLatProps,
     },
   ],
 };
 
-export * from "./ti-input-latlng-types";
-export { TiInputLatLng, TiInputLatLngInfo };
+export * from "./ti-input-lnglat-types";
+export { TiInputLngLat, TiInputLngLatInfo };

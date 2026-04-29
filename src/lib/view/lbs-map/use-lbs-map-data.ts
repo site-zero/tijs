@@ -1,6 +1,6 @@
 import _ from 'lodash'
-import { latlngObjToTuple, translateCoordsForLatlngObj, translateCoordsForLatlngTuple } from "./gis"
-import { GeoJson, LatLngObj, LatLngTuple, LbsMapData, LbsMapProps, LbsMapValueCoords, LbsMapValueType } from "./ti-lbs-map-types"
+import { lnglatObjToTuple, translateCoordsForLatlngObj, translateCoordsForLatlngTuple } from "./gis"
+import { GeoJson, LngLatObj, LngLatTuple, LbsMapData, LbsMapProps, LbsMapValueCoords, LbsMapValueType } from "./ti-lbs-map-types"
 
 export function getMapData(props: LbsMapProps, baseTileCoords: LbsMapValueCoords): LbsMapData | null {
   let val = props.value
@@ -33,18 +33,18 @@ function evalMapData(
 
   // 处理对象
   if ('obj' == valType) {
-    let lal: LatLngObj = value || dftLo;
+    let lal: LngLatObj = value || dftLo;
     return translateCoordsForLatlngObj(
       valueCoords, baseTileCoords, lal);
   }
 
   // 处理对象列表
   if ('obj-list' == valType) {
-    let re: LatLngObj[] = []
+    let re: LngLatObj[] = []
     for (let lal of value) {
       let { lat, lng } = translateCoordsForLatlngObj(
         valueCoords, baseTileCoords,
-        lal as LatLngObj);
+        lal as LngLatObj);
       re.push({ lat, lng })
     }
     return re;
@@ -52,18 +52,18 @@ function evalMapData(
 
   // 元组
   if ('tuple' == valType) {
-    let lal: LatLngTuple = value || dftLo;
+    let lal: LngLatTuple = value || dftLo;
     return translateCoordsForLatlngTuple(
       valueCoords, baseTileCoords, lal)
   }
 
   // 处理元组列表
   if ('tuple-list' == valType) {
-    let re: LatLngTuple[] = []
+    let re: LngLatTuple[] = []
     for (let lal of value) {
       let [lat, lng] = translateCoordsForLatlngTuple(
         valueCoords, baseTileCoords,
-        lal as LatLngTuple);
+        lal as LngLatTuple);
       re.push([lat, lng])
     }
     return re;
@@ -74,7 +74,7 @@ function evalMapData(
     if (!value) {
       return {
         type: "Point",
-        coordinates: latlngObjToTuple(dftLo)
+        coordinates: lnglatObjToTuple(dftLo)
       }
     }
     return value as GeoJson

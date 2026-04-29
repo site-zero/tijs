@@ -6,11 +6,11 @@ import {
 } from "../../view/all-views";
 import { BoxAspectProps } from "../all-input";
 
-export type InputLatLngEmitter = {
+export type InputLngLatEmitter = {
   (event: "change", payload: LbsMapValue | null): void;
 };
 
-export type InputLatLngProps = CommonProps & {
+export type InputLngLatProps = CommonProps & {
   /**
    * 值，可以是对象，也可以是元组
    */

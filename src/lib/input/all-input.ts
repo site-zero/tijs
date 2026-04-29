@@ -11,7 +11,7 @@ import { TiInputDatetimeInfo } from "./datetime/ti-input-datetime-index";
 import { TiDroplistInfo } from "./droplist/ti-droplist-index";
 import { TiInputGroupInfo } from "./group/ti-input-group-index";
 import { TiInputIconInfo } from "./icon/ti-input-icon-index";
-import { TiInputLatLngInfo } from "./latlng/ti-input-latlng-index";
+import { TiInputLngLatInfo } from "./lnglat/ti-input-lnglat-index";
 import { TiMultiDroplistInfo } from "./multi-droplist/ti-multi-droplist-index";
 import { TiInputMultiLinesInfo } from "./multi-lines/ti-input-multi-lines-index";
 import { TiInputNumRangeInfo } from "./num-range/ti-input-num-range-index";
@@ -39,7 +39,7 @@ export default {
   TiInputDatetime: TiInputDatetimeInfo,
   TiInputGroup: TiInputGroupInfo,
   TiInputIcon: TiInputIconInfo,
-  TiInputLatLng: TiInputLatLngInfo,
+  TiInputLngLat: TiInputLngLatInfo,
   TiInputNum: TiInputNumInfo,
   TiInputNumRange: TiInputNumRangeInfo,
   TiInputNumUnit: TiInputNumUnitInfo,
@@ -67,7 +67,7 @@ export * from "./datetime/ti-input-datetime-index";
 export * from "./droplist/ti-droplist-index";
 export * from "./group/ti-input-group-index";
 export * from "./icon/ti-input-icon-index";
-export * from "./latlng/ti-input-latlng-index";
+export * from "./lnglat/ti-input-lnglat-index";
 export * from "./multi-droplist/ti-multi-droplist-index";
 export * from "./multi-lines/ti-input-multi-lines-index";
 export * from "./num-unit/ti-input-num-unit-index";

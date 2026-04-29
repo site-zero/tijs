@@ -508,7 +508,7 @@ export function fldLabel(
     comType: "TiLabel",
     comConf: _.assign(
       {
-        placeholder: "---",
+        placeholder: "NO VALUE",
       } as LabelProps,
       comConf
     ),

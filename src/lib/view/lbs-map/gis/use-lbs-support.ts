@@ -1,14 +1,14 @@
 import _ from "lodash";
 import { Num } from "../../../../core";
 import {
-  isLatLngObj,
-  isLatLngTuple,
-  LatLngObj,
-  LatLngTuple,
+  isLngLatObj,
+  isLngLatTuple,
   LbsMapBound,
   LbsMapBoundInput,
   LbsMapData,
   LbsMapValue,
+  LngLatObj,
+  LngLatTuple,
 } from "../ti-lbs-map-types";
 
 export function getLngToWest(lng: number, west: number) {
@@ -67,8 +67,8 @@ lat_min|lng_min         |                  |
 @return [SW, NE]
 */
 export function getBounds(
-  lalList: LatLngObj[] = []
-): undefined | [LatLngObj, LatLngObj] {
+  lalList: LngLatObj[] = []
+): undefined | [LngLatObj, LngLatObj] {
   let lng_max: number | undefined = undefined;
   let lng_min: number | undefined = undefined;
   let lat_max: number | undefined = undefined;
@@ -102,7 +102,7 @@ export function getBounds(
   ];
 }
 
-export function getCenter(lalList: LatLngObj[] = []) {
+export function getCenter(lalList: LngLatObj[] = []) {
   let bounds = getBounds(lalList);
   if (!bounds) {
     return;
@@ -123,12 +123,12 @@ export function isInBounds(lat: number, lng: number, bounds: LbsMapBound) {
   return true;
 }
 //------------------------------------------------
-export function isLatLngObjInBounds(lal: LatLngObj, bounds: LbsMapBound) {
+export function isLatLngObjInBounds(lal: LngLatObj, bounds: LbsMapBound) {
   let { lat, lng } = lal;
   return isInBounds(lat, lng, bounds);
 }
 //------------------------------------------------
-export function isLatLngTupleInBounds(lal: LatLngTuple, bounds: LbsMapBound) {
+export function isLatLngTupleInBounds(lal: LngLatTuple, bounds: LbsMapBound) {
   let [lat, lng] = lal;
   return isInBounds(lat, lng, bounds);
 }
@@ -151,7 +151,7 @@ function __build_bounds(bounds: LbsMapBoundInput) {
   };
 }
 //------------------------------------------------
-export function getLatlngTupleBounds(latlngPairs: LatLngTuple[]) {
+export function getLatlngTupleBounds(latlngPairs: LngLatTuple[]) {
   let bo = {
     N: -90,
     S: 90,
@@ -168,7 +168,7 @@ export function getLatlngTupleBounds(latlngPairs: LatLngTuple[]) {
   return __build_bounds(bo);
 }
 //------------------------------------------------
-export function getLatlngObjBounds(latlngObjs: LatLngObj[]) {
+export function getLatlngObjBounds(latlngObjs: LngLatObj[]) {
   let bo = {
     N: -90,
     S: 90,
@@ -185,28 +185,28 @@ export function getLatlngObjBounds(latlngObjs: LatLngObj[]) {
   return __build_bounds(bo);
 }
 //------------------------------------------------
-export function latlngTupleToObj(lal: LatLngTuple): LatLngObj {
-  let [lat, lng, alt] = lal;
-  return { lat, lng, alt };
+export function lnglatTupleToObj(lal: LngLatTuple): LngLatObj {
+  let [lng, lat, alt] = lal;
+  return { lng, lat, alt };
 }
 //------------------------------------------------
-export function latlngObjToTuple(lal: LatLngObj): LatLngTuple {
-  let { lat, lng, alt } = lal;
-  return [lat, lng, alt];
+export function lnglatObjToTuple(lal: LngLatObj): LngLatTuple {
+  let { lng, lat, alt } = lal;
+  return [lng, lat, alt];
 }
 //------------------------------------------------
 export function tidyLatLng(
   lal: LbsMapValue,
   precision: number = 6
 ): LbsMapValue {
-  if (isLatLngTuple(lal)) {
-    let [lat, lng] = lal;
-    return [Num.precise(lat, precision), Num.precise(lng, precision)];
+  if (isLngLatTuple(lal)) {
+    let [lng, lat] = lal;
+    return [Num.precise(lng, precision), Num.precise(lat, precision)];
   }
-  let { lat, lng } = lal;
+  let { lng, lat } = lal;
   return {
-    lat: Num.precise(lat, precision),
     lng: Num.precise(lng, precision),
+    lat: Num.precise(lat, precision),
   };
 }
 //------------------------------------------------
@@ -215,7 +215,7 @@ export function tidyLatLngData(
   precision: number = 6
 ): LbsMapData {
   // 经纬度对象或者元组
-  if (isLatLngTuple(lalData) || isLatLngObj(lalData)) {
+  if (isLngLatTuple(lalData) || isLngLatObj(lalData)) {
     return tidyLatLng(lalData, precision);
   }
   // 经纬度点集

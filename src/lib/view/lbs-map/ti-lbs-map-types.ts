@@ -34,8 +34,8 @@ export type LbsMapDrawContext = {
   loading: boolean;
 
   // 鼠标经纬度坐标
-  pointerClick: Ref<LatLngObj | undefined>;
-  pointerHover: Ref<LatLngObj | undefined>;
+  pointerClick: Ref<LngLatObj | undefined>;
+  pointerHover: Ref<LngLatObj | undefined>;
 
   // 冷却状态
   cooling: number; // 冷却的绝对时间戳
@@ -52,11 +52,11 @@ export type LBSMapGeo = Partial<
 >;
 
 export type LbsMapBound = LbsMapBoundInput & {
-  center: LatLngObj;
-  SW: LatLngObj;
-  SE: LatLngObj;
-  NE: LatLngObj;
-  NW: LatLngObj;
+  center: LngLatObj;
+  SW: LngLatObj;
+  SE: LngLatObj;
+  NE: LngLatObj;
+  NW: LngLatObj;
 };
 
 export type LbsMapBoundInput = {
@@ -101,17 +101,22 @@ export type LbsMapValueType =
   | "tuple-list"
   | "geojson";
 
-export type LatLngObj = { lat: number; lng: number; alt?: number };
-export type LatLngTuple = [number, number, number?];
+export type LngLatObj = {
+  lng: number;
+  lat: number;
+  alt?: number;
+};
+export type LngLatTuple = [number, number, number?];
+
 export type GeoJson = Vars;
-export type LbsMapValue = LatLngObj | LatLngTuple;
+export type LbsMapValue = LngLatObj | LngLatTuple;
 export type LbsMapData = LbsMapValue | LbsMapValue[] | GeoJson;
 
-export function isLatLngObj(input: any): input is LatLngObj {
+export function isLngLatObj(input: any): input is LngLatObj {
   return input && _.isNumber(input.lat) && _.isNumber(input.lng);
 }
 
-export function isLatLngTuple(input: any): input is LatLngTuple {
+export function isLngLatTuple(input: any): input is LngLatTuple {
   return (
     _.isArray(input) &&
     input.length == 2 &&

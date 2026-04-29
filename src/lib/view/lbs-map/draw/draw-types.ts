@@ -1,5 +1,5 @@
 import {
-  LatLngObj,
+  LngLatObj,
   LbsMakerOptions,
   LbsMapData,
   LbsMapDrawContext,
@@ -13,7 +13,7 @@ export type LbsMapDrawingSetup = LbsMakerOptions & {
   api: LbsMapApi;
   // 通知改动前，需要转换为什么值的形式
   // 默认为 LatLngObj ，不转换
-  convert?: (lal: LatLngObj) => LbsMapData;
+  convert?: (lal: LngLatObj) => LbsMapData;
 
   showMarker?: boolean;
   autoFitBounds?: boolean;

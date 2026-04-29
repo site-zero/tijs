@@ -1,10 +1,10 @@
 import L, { LatLngTuple } from "leaflet";
 import _ from "lodash";
-import { LatLngObj } from "../ti-lbs-map-types";
+import { LngLatObj } from "../ti-lbs-map-types";
 import { __customize_marker_behaviors } from "./customize_marker";
 import { LbsMapDrawingSetup } from "./draw-types";
 
-export function draw_obj_as_point(latlng: LatLngObj, setup: LbsMapDrawingSetup) {
+export function draw_obj_as_point(latlng: LngLatObj, setup: LbsMapDrawingSetup) {
   let { _dc, props, api } = setup;
   // 防空
   let { $map, $live } = _dc;
@@ -13,7 +13,7 @@ export function draw_obj_as_point(latlng: LatLngObj, setup: LbsMapDrawingSetup) 
   }
 
   // 绘制点
-  let convert = setup.convert ?? ((lal: LatLngObj) => lal);
+  let convert = setup.convert ?? ((lal: LngLatObj) => lal);
   let $marker = L.marker(latlng, {
     autoPan: true,
     ...(props.markerOptions ?? {}),
@@ -35,12 +35,12 @@ export function draw_obj_as_point(latlng: LatLngObj, setup: LbsMapDrawingSetup) 
   // Can edit by move map
   else if ("pin" == props.editPoint) {
     $map.on("move", () => {
-      let newLatlng: LatLngObj = { ...$map.getCenter() };
+      let newLatlng: LngLatObj = { ...$map.getCenter() };
       newLatlng = api.trans_obj_from_value_to_tiles(newLatlng);
       $marker.setLatLng(newLatlng);
     });
     $map.on("moveend", () => {
-      let newLatlng: LatLngObj = { ...$map.getCenter() };
+      let newLatlng: LngLatObj = { ...$map.getCenter() };
       let newData = convert(newLatlng);
       api.notifyChange(newData);
     });
@@ -62,7 +62,7 @@ export function draw_tuple_as_point(
 }
 //-------------------------------------------------------
 export function draw_obj_list_as_point(
-  list: LatLngObj[],
+  list: LngLatObj[],
   setup: LbsMapDrawingSetup
 ) {
   let { _dc, props, api } = setup;
@@ -73,7 +73,7 @@ export function draw_obj_list_as_point(
   }
 
   // 准备转换函数
-  let convert = setup.convert ?? ((lal: LatLngObj) => lal);
+  let convert = setup.convert ?? ((lal: LngLatObj) => lal);
   _.forEach(list, (latlng, index) => {
     let $marker = L.marker(latlng, {
       autoPan: true,
@@ -92,7 +92,7 @@ export function draw_obj_list_as_point(
         newLatlng = api.trans_obj_from_tiles_to_value(newLatlng);
         newLatlng = convert(newLatlng);
 
-        let list = _.cloneDeep(props.value) as LatLngObj[];
+        let list = _.cloneDeep(props.value) as LngLatObj[];
         list[targetIndex] = newLatlng;
         api.notifyChange(list);
       });

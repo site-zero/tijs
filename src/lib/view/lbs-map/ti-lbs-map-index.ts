@@ -50,8 +50,8 @@ const TiLbsMapInfo: TiComInfo = {
         valueCoords: "WGS84",
         zoom: 12,
         value: {
-          lat: 39.907576,
           lng: 116.391275,
+          lat: 39.907576,
         },
         valueType: "obj",
         showInfo: {
@@ -69,8 +69,8 @@ const TiLbsMapInfo: TiComInfo = {
         valueCoords: "GCJ02",
         zoom: 12,
         value: {
-          lat: 39.962606,
           lng: 116.46331,
+          lat: 39.962606,
         },
         valueType: "obj",
         editPoint: "drag",
@@ -91,13 +91,13 @@ const TiLbsMapInfo: TiComInfo = {
         zoom: 12,
         value: [
           // 鸟巢
-          { lat: 39.9987, lng: 116.4026 },
+          { lng: 116.4026, lat: 39.9987 },
           // 颐和园（东宫门）
-          { lat: 39.907576, lng: 116.391275 },
+          { lng: 116.391275, lat: 39.907576 },
           // 天坛
-          { lat: 39.916667, lng: 116.397222 },
+          { lng: 116.397222, lat: 39.916667 },
           // 北京站
-          { lat: 39.904722, lng: 116.407222 },
+          { lng: 116.407222, lat: 39.904722 },
         ],
         valueType: "obj-list",
         displayType: "Point",

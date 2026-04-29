@@ -1,11 +1,11 @@
 import L from "leaflet";
-import { LatLngObj, LatLngTuple } from "../ti-lbs-map-types";
+import { LngLatObj, LngLatTuple } from "../ti-lbs-map-types";
 import { draw_obj_list_as_point, draw_tuple_list_as_point } from "./draw-point";
 import { LbsMapDrawingSetup } from "./draw-types";
 
 //--------------------------------------
 export function draw_obj_list_as_rectangle(
-  latlngs: LatLngObj[],
+  latlngs: LngLatObj[],
   setup: LbsMapDrawingSetup
 ) {
   let { _dc, props, api } = setup;
@@ -16,8 +16,8 @@ export function draw_obj_list_as_rectangle(
   }
 
   let [SW, NE] = latlngs;
-  let swTuple: LatLngTuple = [SW.lat, SW.lng];
-  let neTuple: LatLngTuple = [NE.lat, NE.lng];
+  let swTuple: LngLatTuple = [SW.lat, SW.lng];
+  let neTuple: LngLatTuple = [NE.lat, NE.lng];
   let $rect = L.rectangle([swTuple, neTuple], {
     color: "#08F",
     ...(props.polylineOptions ?? {}),
@@ -37,7 +37,7 @@ export function draw_obj_list_as_rectangle(
 }
 //--------------------------------------
 export function draw_tuple_list_as_rectangle(
-  latlngs: LatLngTuple[],
+  latlngs: LngLatTuple[],
   setup: LbsMapDrawingSetup
 ) {
   let { _dc, props, api } = setup;

@@ -1,6 +1,6 @@
 @use "@site0/tijs/sass/_all.scss" as *;
 
-.ti-input-latlng {
+.ti-input-lnglat {
   @include flex-align-nowrap;
   //-----------------------------------------------------
   > .prefix-actions {

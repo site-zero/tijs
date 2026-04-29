@@ -2,17 +2,17 @@ import _ from "lodash";
 import { computed } from "vue";
 import { LbsMapProps, openAppModal } from "../../";
 import {
-  isLatLngObj,
-  isLatLngTuple,
-  LatLngObj,
+  isLngLatObj,
+  isLngLatTuple,
+  LngLatObj,
   LbsMapValue,
 } from "../../view/all-views";
-import { latlngTupleToObj } from "../../view/lbs-map/gis";
-import { InputLatLngEmitter, InputLatLngProps } from "./ti-input-latlng-types";
+import { lnglatTupleToObj } from "../../view/lbs-map/gis";
+import { InputLngLatEmitter, InputLngLatProps } from "./ti-input-lnglat-types";
 
 export function useInputLatLngApi(
-  props: InputLatLngProps,
-  emit: InputLatLngEmitter
+  props: InputLngLatProps,
+  emit: InputLngLatEmitter
 ) {
   //-----------------------------------------------------
   // 数据处理
@@ -22,10 +22,10 @@ export function useInputLatLngApi(
       return props.valueType;
     }
     if (props.value) {
-      if (isLatLngObj(props.value)) {
+      if (isLngLatObj(props.value)) {
         return "obj";
       }
-      if (isLatLngTuple(props.value)) {
+      if (isLngLatTuple(props.value)) {
         return "tuple";
       }
     }
@@ -33,15 +33,15 @@ export function useInputLatLngApi(
   });
   //-----------------------------------------------------
   function getLatLngObj() {
-    if (isLatLngTuple(props.value)) {
-      return latlngTupleToObj(props.value);
+    if (isLngLatTuple(props.value)) {
+      return lnglatTupleToObj(props.value);
     }
-    if (isLatLngObj(props.value)) {
+    if (isLngLatObj(props.value)) {
       return props.value;
     }
   }
   //-----------------------------------------------------
-  function toLatLngValue(lal: LatLngObj): LbsMapValue {
+  function toLatLngValue(lal: LngLatObj): LbsMapValue {
     let { lat, lng } = lal;
     if ("tuple" == ValueType.value) {
       return [lat, lng];
@@ -103,7 +103,7 @@ export function useInputLatLngApi(
     emit("change", null);
   }
   //-----------------------------------------------------
-  function onUpdate(key: keyof LatLngObj, val: any) {
+  function onUpdate(key: keyof LngLatObj, val: any) {
     if (_.isNil(val)) {
       update({ [key]: 0 });
     }
@@ -117,7 +117,7 @@ export function useInputLatLngApi(
     }
   }
   //-----------------------------------------------------
-  function update(delta: Partial<LatLngObj>) {
+  function update(delta: Partial<LngLatObj>) {
     if (!_.isEmpty(delta)) {
       let lal = getLatLngObj() ?? { lat: 0, lng: 0 };
       _.assign(lal, delta);

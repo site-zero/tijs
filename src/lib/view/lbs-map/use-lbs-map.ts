@@ -7,10 +7,10 @@ import { translateCoordsForLatlngObj } from "./gis/use-lbs-coords";
 import { tidyLatLngData } from "./gis/use-lbs-support";
 import {
   getLbsMapStdTileLayer,
-  isLatLngObj,
-  isLatLngTuple,
+  isLngLatObj,
+  isLngLatTuple,
   isLbsMapStdTileType,
-  LatLngObj,
+  LngLatObj,
   LbsMapData,
   LbsMapDrawContext,
   LbsMapEditMarkerIconOptions,
@@ -145,7 +145,7 @@ export function useLbsMap(
     return ss.join(".");
   }
   //--------------------------------------
-  function GeoPointStr(obj?: LatLngObj) {
+  function GeoPointStr(obj?: LngLatObj) {
     if (!obj) {
       return "";
     }
@@ -163,18 +163,18 @@ export function useLbsMap(
       return "obj";
     }
     // 自动判断值的类型
-    if (isLatLngObj(mapData)) {
+    if (isLngLatObj(mapData)) {
       return "obj";
     }
-    if (isLatLngTuple(mapData)) {
+    if (isLngLatTuple(mapData)) {
       return "tuple";
     }
     // 数组的话，深入看一看是那种类型
     else if (_.isArray(mapData)) {
-      if (isLatLngObj(mapData[0])) {
+      if (isLngLatObj(mapData[0])) {
         return "obj-list";
       }
-      if (isLatLngTuple(mapData[0])) {
+      if (isLngLatTuple(mapData[0])) {
         return "tuple-list";
       }
     }
@@ -186,10 +186,10 @@ export function useLbsMap(
   //--------------------------------------
   const _val_coords = props.valueCoords ?? "WGS84";
   //--------------------------------------
-  function trans_obj_from_tiles_to_value(obj: LatLngObj) {
+  function trans_obj_from_tiles_to_value(obj: LngLatObj) {
     return translateCoordsForLatlngObj(_dc.baseTileCoords, _val_coords, obj);
   }
-  function trans_obj_from_value_to_tiles(obj: LatLngObj) {
+  function trans_obj_from_value_to_tiles(obj: LngLatObj) {
     return translateCoordsForLatlngObj(_val_coords, _dc.baseTileCoords, obj);
   }
   //--------------------------------------
@@ -225,7 +225,7 @@ export function useLbsMap(
 
     // 根据类型自动移动地图中心点
     if ("obj" == valueType) {
-      __move_to(mapData as LatLngObj);
+      __move_to(mapData as LngLatObj);
     }
   }
 

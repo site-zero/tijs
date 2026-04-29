@@ -1,6 +1,6 @@
 import { LatLngTuple } from "leaflet";
 import {
-  LatLngObj,
+  LngLatObj,
   LbsMapData,
   LbsMapDisplayType,
   LbsMapValue,
@@ -36,7 +36,7 @@ const drawing: Record<
   //-------------------------------------<obj>
   "obj": {
     Point: (data, setup) => {
-      draw_obj_as_point(data as LatLngObj, setup);
+      draw_obj_as_point(data as LngLatObj, setup);
     },
     Polyline: () => {
       throw `Polyline not support for valueType=[obj]`;
@@ -84,16 +84,16 @@ const drawing: Record<
   //-------------------------------------<obj-list>
   "obj-list": {
     Point: (data, setup) => {
-      draw_obj_list_as_point(data as LatLngObj[], setup);
+      draw_obj_list_as_point(data as LngLatObj[], setup);
     },
     Polyline: (data, setup) => {
-      draw_obj_list_as_polyline(data as LatLngObj[], setup);
+      draw_obj_list_as_polyline(data as LngLatObj[], setup);
     },
     Polygon: (data, setup) => {
-      draw_obj_list_as_polygon(data as LatLngObj[], setup);
+      draw_obj_list_as_polygon(data as LngLatObj[], setup);
     },
     Rectangle: (data, setup) => {
-      draw_obj_list_as_rectangle(data as LatLngObj[], setup);
+      draw_obj_list_as_rectangle(data as LngLatObj[], setup);
     },
     Circle: (data, setup) => {
       draw_list_as_circle(data as LbsMapValue[], setup);

@@ -2,12 +2,12 @@ import L from "leaflet";
 import _ from "lodash";
 import { Vars } from "../../../..";
 import { I18n, Util } from "../../../../core";
-import { LatLngObj } from "../ti-lbs-map-types";
+import { LngLatObj } from "../ti-lbs-map-types";
 import { LbsMapDrawingSetup } from "./draw-types";
 
 export function __customize_marker_behaviors(
   $marker: L.Marker,
-  obj: LatLngObj,
+  obj: LngLatObj,
   setup: LbsMapDrawingSetup
 ) {
   let { _dc, api } = setup;
