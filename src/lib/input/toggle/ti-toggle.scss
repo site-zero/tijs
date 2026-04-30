@@ -31,11 +31,15 @@
     transition: background-color 0.2s;
     cursor: pointer;
     > b {
-      display: block;
+      @include flex-center;
       border-radius: 50%;
       width: var(--btn-size);
       height: var(--btn-size);
       transition: margin-left 0.2s;
+      > .ti-icon {
+        font-size: 0.6em;
+        opacity: 0.6;
+      }
     }
   }
   //-----------------------------------------
@@ -50,6 +54,7 @@
       background-color: var(--color-off-bg);
       border-color: var(--color-off);
       b {
+        color: var(--color-off-bg);
         background-color: var(--color-off);
         border: var(--border) solid var(--color-off);
       }
@@ -62,6 +67,7 @@
       background-color: var(--color-on-bg);
       border: var(--border) solid var(--color-on);
       b {
+        color: var(--color-on-bg);
         background-color: var(--color-on);
         border-color: var(--color-on);
         margin-left: var(--on-left);

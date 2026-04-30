@@ -1,9 +1,17 @@
-import { BooleanProps, ReadonlyProps } from "../../";
-import { AspectSize, CommonProps, LogicType } from "../../../_type";
+import {
+  AspectSize,
+  BooleanProps,
+  CommonProps,
+  IconInput,
+  LogicType,
+  ReadonlyProps,
+} from "@site0/tijs";
 
 export type ToggleProps = CommonProps &
   BooleanProps &
   ReadonlyProps & {
     type?: LogicType;
     boxFontSize?: AspectSize;
+    width?: string;
+    btnIcon?: IconInput;
   };

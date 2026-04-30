@@ -23,6 +23,7 @@
     return CssUtils.mergeClassName(props.className, {
       "is-on": yes,
       "is-off": !yes,
+      "is-readonly": Bool.Readonly.value,
     });
   });
 
@@ -69,6 +70,15 @@
       }
       &:hover {
         color: var(--ti-color-link-hover);
+      }
+    }
+    &.is-readonly {
+      > .check-con {
+        cursor: default;
+        opacity: 0.6;
+        &:hover {
+          color: inherit;
+        }
       }
     }
   }

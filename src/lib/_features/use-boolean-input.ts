@@ -23,7 +23,7 @@ export function useBooleanInput(
   options: BooleanOptions
 ) {
   let { emit } = options;
-  const Readonly = useReadonly(props);
+  const _readonly = computed(() => useReadonly(props));
   // function getTrueValue() {
   //   return _.nth(props.values, 1) ?? true;
   // }
@@ -31,6 +31,7 @@ export function useBooleanInput(
   const rawValue = computed(() => props.value);
   const Yes = computed(() => isTrue(props.value));
   const Text = computed(() => getBoolText());
+  const Readonly = computed(() => _readonly.value.isReadonly(props.value));
 
   function getBoolText() {
     if (_.isString(props.text)) {
@@ -73,7 +74,7 @@ export function useBooleanInput(
   }
 
   function emitToggle() {
-    if (Readonly.isReadonly(props.value)) {
+    if (Readonly.value) {
       return;
     }
     const BoolValues = getBoolValues();
@@ -83,9 +84,10 @@ export function useBooleanInput(
   }
 
   return {
-    rawValue: computed(() => props.value),
+    rawValue,
     Yes,
     Text,
     emitToggle,
+    Readonly,
   };
 }
