@@ -44,7 +44,7 @@
       items: [
         {
           icon: "zmdi-pin",
-          tip: "i18n:ti-input-lat-lng-edit",
+          tip: "i18n:ti-input-lng-lat-edit",
           className: "is-primary-r",
           action: () => {
             _api.doEditPoint();

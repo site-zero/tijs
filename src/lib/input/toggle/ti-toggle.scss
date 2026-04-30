@@ -1,21 +1,28 @@
-@use '@site0/tijs/sass/_all.scss' as *;
+@use "@site0/tijs/sass/_all.scss" as *;
 
 .ti-toggle {
   @include flex-align-nowrap;
   padding: 1px;
   user-select: none;
+  //.............................
+  --color-on: var(--ti-color-primary);
+  --color-on-bg: var(--ti-color-body);
+  //.............................
+  --color-off: var(--ti-color-mask-thin);
+  --color-off-bg: var(--ti-color-border-shallow);
+  //.............................
   > aside {
     position: relative;
-    width: SZ(40);
-    padding: 1px;
+    width: SZ(32);
+    padding: SZ(3);
     cursor: pointer;
     border-radius: SZ(20);
     transition: background-color 0.2s;
     b {
       display: block;
       border-radius: 50%;
-      width: SZ(18);
-      height: SZ(18);
+      width: SZ(12);
+      height: SZ(12);
       transition: margin-left 0.2s;
     }
   }
@@ -23,24 +30,28 @@
     margin-left: 0.8em;
   }
   //-----------------------------------------
-  &.is-off aside {
-    color: var(--ti-color-body);
-    background-color: var(--ti-color-body-r);
-    border: 1px solid var(--ti-color-border-dark);
-    b {
-      background-color: var(--ti-color-bar);
-      border: 1px solid var(--ti-color-border-dark);
+  &.is-off {
+    color: var(--color-off);
+    aside {
+      background-color: var(--color-off-bg);
+      border: 1px solid var(--color-off);
+      b {
+        background-color: var(--color-off);
+        border: 1px solid var(--color-off);
+      }
     }
   }
   //-----------------------------------------
-  &.is-on aside {
-    color: var(--ti-color-primary-r);
-    background-color: var(--ti-color-primary);
-    border: 1px solid var(--ti-color-primary-r);
-    b {
-      background-color: var(--ti-color-primary-r);
-      border: 1px solid transparent;
-      margin-left: SZ(18);
+  &.is-on {
+    color: var(--color-on);
+    aside {
+      background-color: var(--color-on-bg);
+      border: 1px solid var(--color-on);
+      b {
+        background-color: var(--color-on);
+        border: 1px solid var(--color-on);
+        margin-left: SZ(12);
+      }
     }
   }
   //-----------------------------------------
