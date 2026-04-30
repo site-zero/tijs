@@ -5,6 +5,7 @@
   & {
     display: grid;
     row-gap: var(--ti-gap-t);
+    min-height: 2.3em;
   }
   //-------------------------------------------------------------
   &.is-disabled {
@@ -48,7 +49,6 @@
     //-----------------------------------------------------------
     &.as-title {
       grid-area: title;
-      line-height: var(--ti-measure-box-height);
       flex-wrap: nowrap;
       align-items: stretch;
       align-content: center;
@@ -65,7 +65,8 @@
         flex: 0 0 auto;
         opacity: 0.6;
         transition: 300ms;
-        height: var(--ti-measure-box-height);
+        height: auto;
+        align-self: stretch;
         cursor: pointer;
         &.at-prefix {
           margin-right: 0.2em;

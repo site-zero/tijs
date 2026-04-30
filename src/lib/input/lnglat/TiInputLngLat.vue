@@ -79,7 +79,7 @@
   <div class="ti-input-lnglat">
     <div class="prefix-actions" v-if="!props.readonly">
       <a
-        data-tip="i18n:ti-input-lat-lng-clear"
+        data-tip="i18n:ti-input-lng-lat-clear"
         @click.left.stop="_api.doClearValue()">
         <i class="fa-solid fa-map-location-dot"></i>
         <i class="zmdi zmdi-close"></i>

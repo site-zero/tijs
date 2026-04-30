@@ -1,12 +1,12 @@
-import _ from 'lodash';
+import _ from "lodash";
 import {
   CssGridLayout,
   FieldStatusInfo,
   IconInput,
   TextContentType,
   Vars,
-} from '../../../_type';
-import { I18n, Util } from '../../../core';
+} from "../../../_type";
+import { I18n, Util } from "../../../core";
 import {
   FieldDynamicContext,
   FormFieldLayoutMode,
@@ -14,7 +14,7 @@ import {
   AbstractFormItem,
   FormFieldItem,
   FormItemGroup,
-} from './ti-grid-fields-types';
+} from "./ti-grid-fields-types";
 
 type FieldItemStyleOptions = {
   hasTitle: boolean;
@@ -42,148 +42,148 @@ function getFieldLayoutStyle(
   let NW = _.isNumber(nameWidth) ? `${nameWidth}px` : nameWidth;
   let css = {} as CssGridLayout;
 
-  let ss = layoutMode.split('-');
+  let ss = layoutMode.split("-");
   let lk = [ss[0]];
   if (!/^(title|value)$/.test(ss[1])) {
     lk.push(ss[1]);
   }
   if (options.hasTitle) {
-    lk.push('title');
+    lk.push("title");
   }
   if (options.hasTip) {
-    lk.push('tip');
+    lk.push("tip");
   }
-  let lyKey = lk.join('-');
+  let lyKey = lk.join("-");
 
   _.assign(
     css,
     {
       // 左右布局，提示在底部，与值等宽
-      'h-wrap-title-tip': {
+      "h-wrap-title-tip": {
         gridTemplateColumns: `${NW} 1fr`,
-        gridTemplateRows: 'auto 1fr',
+        gridTemplateRows: "auto 1fr",
         gridTemplateAreas: `
           "title value"
           "title tip"`,
       },
-      'h-wrap-title': {
+      "h-wrap-title": {
         gridTemplateColumns: `${NW} 1fr`,
-        gridTemplateRows: 'auto',
+        gridTemplateRows: "auto",
         gridTemplateAreas: `"title value"`,
       },
-      'h-wrap-tip': {
+      "h-wrap-tip": {
         gridTemplateColumns: `1fr`,
-        gridTemplateRows: 'auto 1fr',
+        gridTemplateRows: "auto 1fr",
         gridTemplateAreas: `
           "value"
           "tip"`,
       },
-      'h-wrap': {
+      "h-wrap": {
         gridTemplateColumns: `1fr`,
-        gridTemplateRows: 'auto',
+        gridTemplateRows: "auto",
         gridTemplateAreas: `"value"`,
       },
       // 左右布局，提示在底部单独一整行
-      'h-bottom-title-tip': {
+      "h-bottom-title-tip": {
         gridTemplateColumns: `${NW} 1fr`,
-        gridTemplateRows: 'auto 1fr',
+        gridTemplateRows: "auto 1fr",
         gridTemplateAreas: `
           "title value"
           "tip   tip"`,
       },
-      'h-bottom-title': {
+      "h-bottom-title": {
         gridTemplateColumns: `${NW} 1fr`,
-        gridTemplateRows: 'auto',
+        gridTemplateRows: "auto",
         gridTemplateAreas: `"title value"`,
       },
-      'h-bottom-tip': {
+      "h-bottom-tip": {
         gridTemplateColumns: `1fr`,
-        gridTemplateRows: 'auto',
+        gridTemplateRows: "auto",
         gridTemplateAreas: `
           "value"
           "tip"`,
       },
-      'h-bottom': {
+      "h-bottom": {
         gridTemplateColumns: `1fr`,
-        gridTemplateRows: 'auto',
+        gridTemplateRows: "auto",
         gridTemplateAreas: `"value"`,
       },
       // 上下布局，提示在底部
-      'v-wrap-title-tip': {
-        gridTemplateColumns: '1fr',
-        gridTemplateRows: 'auto auto 1fr',
+      "v-wrap-title-tip": {
+        gridTemplateColumns: "1fr",
+        gridTemplateRows: "auto auto 1fr",
         gridTemplateAreas: `
           "title"
           "value"
           "tip"`,
       },
-      'v-wrap-title': {
-        gridTemplateColumns: '1fr',
-        gridTemplateRows: 'auto auto',
+      "v-wrap-title": {
+        gridTemplateColumns: "1fr",
+        gridTemplateRows: "auto auto",
         gridTemplateAreas: `
           "title"
           "value"`,
       },
-      'v-wrap-tip': {
-        gridTemplateColumns: '1fr',
-        gridTemplateRows: 'auto 1fr',
+      "v-wrap-tip": {
+        gridTemplateColumns: "1fr",
+        gridTemplateRows: "auto 1fr",
         gridTemplateAreas: `
           "value"
           "tip"`,
       },
-      'v-wrap': {
+      "v-wrap": {
         gridTemplateColumns: `1fr`,
-        gridTemplateRows: 'auto',
+        gridTemplateRows: "auto",
         gridTemplateAreas: `"value"`,
       },
       // 左右布局，提示作为图标
-      'h-title-tip': {
+      "h-title-tip": {
         gridTemplateColumns: `${NW} 1fr`,
-        gridTemplateRows: 'auto',
+        gridTemplateRows: "auto",
         gridTemplateAreas: `
           "title value"`,
       },
-      'h-title': {
+      "h-title": {
         gridTemplateColumns: `${NW} 1fr`,
-        gridTemplateRows: 'auto',
+        gridTemplateRows: "auto",
         gridTemplateAreas: `"title value"`,
       },
-      'h-tip': {
-        gridTemplateColumns: '1fr',
-        gridTemplateRows: 'auto',
+      "h-tip": {
+        gridTemplateColumns: "1fr",
+        gridTemplateRows: "auto",
         gridTemplateAreas: `"value"`,
       },
-      'h': {
-        gridTemplateColumns: '1fr',
-        gridTemplateRows: 'auto',
+      "h": {
+        gridTemplateColumns: "1fr",
+        gridTemplateRows: "auto",
         gridTemplateAreas: `"value"`,
       },
       // 上下布局，提示作为图标
-      'v-title-tip': {
-        gridTemplateColumns: '1fr',
-        gridTemplateRows: 'auto auto fr',
+      "v-title-tip": {
+        gridTemplateColumns: "1fr",
+        gridTemplateRows: "auto auto fr",
         gridTemplateAreas: `
           "title"
           "value"
           "tip"`,
       },
-      'v-title': {
-        gridTemplateColumns: '1fr',
-        gridTemplateRows: 'auto auto',
+      "v-title": {
+        gridTemplateColumns: "1fr",
+        gridTemplateRows: "auto auto",
         gridTemplateAreas: `
           "title"
           "value"`,
       },
-      'v-tip': {
-        gridTemplateColumns: '1fr',
-        gridTemplateRows: 'auto 1fr',
+      "v-tip": {
+        gridTemplateColumns: "1fr",
+        gridTemplateRows: "auto 1fr",
         gridTemplateAreas: `
           "value"
           "tip`,
       },
-      'v': {
-        gridTemplateColumns: '1fr',
-        gridTemplateRows: '1fr',
+      "v": {
+        gridTemplateColumns: "1fr",
+        gridTemplateRows: "1fr",
         gridTemplateAreas: `"value"`,
       },
     }[lyKey]
@@ -216,20 +216,25 @@ export function getFieldTitleStyle(
 ) {
   let re = _.assign({}, field.titleStyle);
   if (status && status.type) {
+    // 前景
     let colorType = {
-      pending: 'secondary',
-      error: 'danger',
-      warn: 'warn',
-      ok: 'success',
-      highlight: 'hightlight',
+      pending: "primary",
+      error: "danger",
+      warn: "warn",
+      ok: "success",
+      highlight: "hightlight",
     }[status.type];
+
+    // 背景
     let bgColorType = {
-      pending: 'secondary-r',
-      error: 'danger-r',
-      warn: 'warn-r',
-      ok: 'success-r',
-      highlight: 'hightlight-f',
+      pending: null,
+      error: "danger-r",
+      warn: "warn-r",
+      ok: "success-r",
+      highlight: "hightlight-f",
     }[status.type];
+
+    // 合并样式
     _.assign(re, {
       backgroundColor: `var(--ti-color-${bgColorType})`,
       color: `var(--ti-color-${colorType})`,
@@ -239,8 +244,8 @@ export function getFieldTitleStyle(
 }
 
 type FieldTipIconInfo = {
-  position: 'title' | 'value';
-  type: 'prefix' | 'suffix';
+  position: "title" | "value";
+  type: "prefix" | "suffix";
 };
 
 function getFieldTipIcon(
@@ -262,7 +267,7 @@ function getFieldTipIcon(
 
 export function getFieldTitleAlign(field: FormFieldItem): string {
   if (!field.titleAlign) {
-    return /^h-/.test(field.fieldLayoutMode) ? 'right' : 'left';
+    return /^h-/.test(field.fieldLayoutMode) ? "right" : "left";
   }
   return field.titleAlign;
 }
@@ -299,33 +304,33 @@ export function getFieldIcon(
   reIcon.titleSuffixIcon = field.titleIcon;
   if (tipIconInfo && tipIconInfo.type) {
     // 标题区提示图标
-    if (hasTitle && tipIconInfo.position == 'title') {
+    if (hasTitle && tipIconInfo.position == "title") {
       // 提示在前缀
-      if ('prefix' == tipIconInfo.type) {
+      if ("prefix" == tipIconInfo.type) {
         reIcon.titlePrefixIcon = field.tipIcon;
         reIcon.titlePrefixTip = fieldTip;
         reIcon.titleSuffixIcon = field.titleIcon;
       }
       // 提示在后缀
-      else if ('suffix' == tipIconInfo.type) {
+      else if ("suffix" == tipIconInfo.type) {
         reIcon.titleSuffixIcon = field.tipIcon;
         reIcon.titleSuffixTip = fieldTip;
         reIcon.titlePrefixIcon = field.titleIcon;
       }
     }
     // 值区提示图标
-    else if (tipIconInfo.position == 'value') {
+    else if (tipIconInfo.position == "value") {
       // ... 好像没什么需要做的
       reIcon.titleSuffixIcon = field.titleIcon;
     }
     // 提示区图标
     else if (hasTip) {
       // 提示在前缀
-      if ('prefix' == tipIconInfo.type) {
+      if ("prefix" == tipIconInfo.type) {
         reIcon.tipPrefixIcon = field.tipIcon;
       }
       // 提示在后缀
-      else if ('suffix' == tipIconInfo.type) {
+      else if ("suffix" == tipIconInfo.type) {
         reIcon.tipSuffixIcon = field.tipIcon;
       }
     }
@@ -368,13 +373,13 @@ export type FieldTextInfo = {
 export function getFieldTextInfo(
   field: Pick<
     FormFieldItem,
-    | 'title'
-    | 'titleType'
-    | 'fieldTitleBy'
-    | 'tip'
-    | 'tipType'
-    | 'isRequired'
-    | 'data'
+    | "title"
+    | "titleType"
+    | "fieldTitleBy"
+    | "tip"
+    | "tipType"
+    | "isRequired"
+    | "data"
   >,
   vars?: Vars
 ): FieldTextInfo {
@@ -403,25 +408,23 @@ export function getFieldTextInfo(
     title = I18n.text(title);
   }
   if (isRequired && isRequired(field.data) && title && !fieldTitleBy) {
-    if ('text' == titleType) {
+    if ("text" == titleType) {
       title = _.escape(title);
     }
     title = '<b class="required-mark">*</b>' + title;
-    titleType = 'html';
+    titleType = "html";
   }
 
   // for tip
   let tip = Util.selectValue(ctx, tip_arms, { explain: true });
 
-  return { title: title ?? '', titleType, tip, tipType };
+  return { title: title ?? "", titleType, tip, tipType };
 }
 
-export function getBodyPartStyle(
-  props: FormItemGroup | GridFieldsProps
-): Vars {
+export function getBodyPartStyle(props: FormItemGroup | GridFieldsProps): Vars {
   let css = _.cloneDeep(props.bodyPartStyle) || {};
   if (props.bodyPartDense) {
-    css['grid-auto-flow'] = 'dense';
+    css["grid-auto-flow"] = "dense";
   }
   return css;
 }

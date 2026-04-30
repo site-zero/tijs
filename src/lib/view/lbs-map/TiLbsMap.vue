@@ -19,7 +19,7 @@
   const props = withDefaults(defineProps<LbsMapProps>(), {
     zoom: 10,
     maxZoom: 18,
-    valuePrecision: 6,
+    valuePrecision: 8,
     valueCoords: "WGS84",
   });
   //--------------------------------------------

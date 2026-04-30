@@ -123,6 +123,7 @@ export function useValidateResults(options: ValidateResultsOptions) {
   // 返回接口
   //-----------------------------------------------------
   return {
+    _results,
     getVarifyResult,
     validate,
     validateDelta,

@@ -18,7 +18,7 @@ import _ from "lodash";
 import { computed, ref } from "vue";
 import { InputComboEmitter, InputComboProps } from "./input-combo-types";
 
-const debug = true;
+const debug = false;
 
 export type InputComboApi = ReturnType<typeof useTiInputComboApi>;
 
@@ -191,7 +191,6 @@ export function useTiInputComboApi(
   }
   //-----------------------------------------------------
   function setCurrentItem(item?: Vars | null) {
-    console.log("setCurrentItem", item);
     _current_item.value = item ?? undefined;
   }
   //-----------------------------------------------------
