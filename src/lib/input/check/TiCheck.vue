@@ -16,10 +16,10 @@
     tipDockMode: "V",
   });
   const emit = defineEmits<BooleanEmitter>();
-  const Bool = computed(() => useBooleanInput(props, { emit }));
+  const Bool = useBooleanInput(props, { emit });
 
   const TopClass = computed(() => {
-    let yes = Bool.value.yes;
+    let yes = Bool.Yes.value;
     return CssUtils.mergeClassName(props.className, {
       "is-on": yes,
       "is-off": !yes,
@@ -29,7 +29,7 @@
   const TopStyle = computed(() => CssUtils.toStyle(props.style));
 
   const CheckIcon = computed(() => {
-    let II = Bool.value.yes ? 1 : 0;
+    let II = Bool.Yes.value ? 1 : 0;
     return props.icons[II];
   });
 </script>

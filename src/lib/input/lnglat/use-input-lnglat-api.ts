@@ -1,19 +1,29 @@
-import _ from "lodash";
-import { computed } from "vue";
-import { LbsMapProps, openAppModal } from "../../";
 import {
+  Be,
   isLngLatObj,
   isLngLatTuple,
-  LngLatObj,
+  LbsMapProps,
   LbsMapValue,
-} from "../../view/all-views";
-import { lnglatTupleToObj } from "../../view/lbs-map/gis";
+  LngLatObj,
+  lnglatTupleToObj,
+  openAppModal,
+} from "@site0/tijs";
+import _ from "lodash";
+import { computed } from "vue";
 import { InputLngLatEmitter, InputLngLatProps } from "./ti-input-lnglat-types";
+
+export type InputLngLatSetup = {
+  emit: InputLngLatEmitter;
+  getElement: () => HTMLElement | null;
+  getLngElement: () => HTMLElement | null;
+  getLatElement: () => HTMLElement | null;
+};
 
 export function useInputLatLngApi(
   props: InputLngLatProps,
-  emit: InputLngLatEmitter
+  setup: InputLngLatSetup
 ) {
+  let { emit, getElement, getLngElement, getLatElement } = setup;
   //-----------------------------------------------------
   // 数据处理
   //-----------------------------------------------------
@@ -103,6 +113,22 @@ export function useInputLatLngApi(
     emit("change", null);
   }
   //-----------------------------------------------------
+  function doCopyValue(mode: "lng" | "lat" | "all" = "all") {
+    let lal = getLatLngObj() ?? { lat: 0, lng: 0 };
+    let val = toLatLngValue(lal);
+    let str = JSON.stringify(val);
+    let ele = getElement();
+    if ("lng" == mode) {
+      str = String(lal.lng);
+      ele = getLngElement() ?? ele;
+    } else if ("lat" == mode) {
+      str = String(lal.lat);
+      ele = getLatElement() ?? ele;
+    }
+    Be.Clipboard.write(str);
+    Be.BlinkIt(ele);
+  }
+  //-----------------------------------------------------
   function onUpdate(key: keyof LngLatObj, val: any) {
     if (_.isNil(val)) {
       update({ [key]: 0 });
@@ -137,6 +163,7 @@ export function useInputLatLngApi(
   return {
     doEditPoint,
     doClearValue,
+    doCopyValue,
     onUpdate,
     notifyChange,
   };

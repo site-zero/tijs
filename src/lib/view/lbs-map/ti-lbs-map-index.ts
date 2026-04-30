@@ -114,5 +114,6 @@ const TiLbsMapInfo: TiComInfo = {
   ],
 };
 
+export * from "./gis";
 export * from "./ti-lbs-map-types";
 export { TiLbsMap, TiLbsMapInfo };

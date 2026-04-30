@@ -7,6 +7,7 @@ export type BooleanProps = {
   // [falseValue, trueValue]
   values?: [any, any];
   isTrue?: (val: any) => boolean;
+  text?: string[] | string;
 };
 
 export type BooleanEmitter = {
@@ -26,6 +27,24 @@ export function useBooleanInput(
   // function getTrueValue() {
   //   return _.nth(props.values, 1) ?? true;
   // }
+
+  const rawValue = computed(() => props.value);
+  const Yes = computed(() => isTrue(props.value));
+  const Text = computed(() => getBoolText());
+
+  function getBoolText() {
+    if (_.isString(props.text)) {
+      return props.text;
+    }
+    if (_.isArray(props.text) && props.text.length > 0) {
+      let ts = props.text;
+      if (ts.length > 1) {
+        return Yes.value ? ts[1] : ts[0];
+      }
+      return ts[0];
+    }
+    return "";
+  }
 
   function getBoolValues() {
     if (props.values) {
@@ -65,9 +84,8 @@ export function useBooleanInput(
 
   return {
     rawValue: computed(() => props.value),
-    yes: isTrue(props.value),
-    //getTrueValue,
-    isTrue,
+    Yes,
+    Text,
     emitToggle,
   };
 }

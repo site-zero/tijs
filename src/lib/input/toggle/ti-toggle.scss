@@ -2,8 +2,10 @@
 
 .ti-toggle {
   @include flex-align-nowrap;
+  gap: 0.3em;
   padding: 1px;
   user-select: none;
+  font-size: var(--ti-fontsz-m);
   //.............................
   --color-on: var(--ti-color-primary);
   --color-on-bg: var(--ti-color-body);
@@ -11,33 +13,45 @@
   --color-off: var(--ti-color-mask-thin);
   --color-off-bg: var(--ti-color-border-shallow);
   //.............................
+  --space: 0.3em;
+  --box-width: 2.8em;
+  --btn-size: 1em;
+  --border: 1px;
+  --on-left: calc(
+    var(--box-width) - var(--space) * 2 - var(--btn-size) - var(--border) * 2
+  );
+  //.............................
   > aside {
     position: relative;
-    width: SZ(32);
-    padding: SZ(3);
-    cursor: pointer;
-    border-radius: SZ(20);
+    width: var(--box-width);
+    padding: var(--space);
+    border-radius: 2em;
+    border-width: var(--border);
+    border-style: solid;
     transition: background-color 0.2s;
-    b {
+    cursor: pointer;
+    > b {
       display: block;
       border-radius: 50%;
-      width: SZ(12);
-      height: SZ(12);
+      width: var(--btn-size);
+      height: var(--btn-size);
       transition: margin-left 0.2s;
     }
   }
+  //-----------------------------------------
   > span {
-    margin-left: 0.8em;
+    font-size: max(10px, 0.9em);
+    line-height: 1em;
   }
   //-----------------------------------------
   &.is-off {
     color: var(--color-off);
     aside {
       background-color: var(--color-off-bg);
-      border: 1px solid var(--color-off);
+      border-color: var(--color-off);
       b {
         background-color: var(--color-off);
-        border: 1px solid var(--color-off);
+        border: var(--border) solid var(--color-off);
       }
     }
   }
@@ -46,11 +60,11 @@
     color: var(--color-on);
     aside {
       background-color: var(--color-on-bg);
-      border: 1px solid var(--color-on);
+      border: var(--border) solid var(--color-on);
       b {
         background-color: var(--color-on);
-        border: 1px solid var(--color-on);
-        margin-left: SZ(12);
+        border-color: var(--color-on);
+        margin-left: var(--on-left);
       }
     }
   }
