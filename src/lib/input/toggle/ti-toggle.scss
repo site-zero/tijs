@@ -2,49 +2,58 @@
 
 .ti-toggle {
   @include flex-align-nowrap;
-  gap: 0.3em;
-  padding: 1px;
-  user-select: none;
   font-size: var(--ti-fontsz-m);
   //.............................
   --color-on: var(--ti-color-primary);
   --color-on-bg: var(--ti-color-body);
   //.............................
-  --color-off: var(--ti-color-mask-thin);
+  --color-off: var(--ti-color-border-dark);
   --color-off-bg: var(--ti-color-border-shallow);
   //.............................
   --space: 0.3em;
   --box-width: 2.8em;
+  --box-height: auto;
   --btn-size: 1em;
   --border: 1px;
+  --icon-size: 0.7em;
+  --off-left: 0;
   --on-left: calc(
     var(--box-width) - var(--space) * 2 - var(--btn-size) - var(--border) * 2
   );
   //.............................
+  gap: 0.3em;
+  padding: 1px;
+  user-select: none;
+
+  //.............................
   > aside {
-    position: relative;
+    @include flex-align-nowrap($ai: center);
     width: var(--box-width);
+    height: var(--box-height);
     padding: var(--space);
     border-radius: 2em;
     border-width: var(--border);
     border-style: solid;
-    transition: background-color 0.2s;
     cursor: pointer;
+    transition: 0.3s;
     > b {
       @include flex-center;
+      position: relative;
       border-radius: 50%;
       width: var(--btn-size);
       height: var(--btn-size);
-      transition: margin-left 0.2s;
-      > .ti-icon {
-        font-size: 0.6em;
+      line-height: var(--btn-size);
+      transition: 0.3s;
+      left: var(--off-left);
+      > .toggle-icon {
+        font-size: var(--icon-size);
         opacity: 0.6;
       }
     }
   }
   //-----------------------------------------
   > span {
-    font-size: max(10px, 0.9em);
+    font-size: min(20px, max(10px, 0.9em));
     line-height: 1em;
   }
   //-----------------------------------------
@@ -70,7 +79,7 @@
         color: var(--color-on-bg);
         background-color: var(--color-on);
         border-color: var(--color-on);
-        margin-left: var(--on-left);
+        transform: translateX(var(--on-left));
       }
     }
   }

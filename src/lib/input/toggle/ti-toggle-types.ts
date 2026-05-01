@@ -13,5 +13,4 @@ export type ToggleProps = CommonProps &
     type?: LogicType;
     boxFontSize?: AspectSize;
     width?: string;
-    btnIcon?: IconInput;
   };

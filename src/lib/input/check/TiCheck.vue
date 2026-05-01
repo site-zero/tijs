@@ -39,7 +39,7 @@
     class="ti-check"
     :class="TopClass"
     :style="TopStyle"
-    @click.stop="Bool.emitToggle">
+    @click.stop="Bool.emitToggle()">
     <div
       class="check-con"
       :data-tip="props.tip"
