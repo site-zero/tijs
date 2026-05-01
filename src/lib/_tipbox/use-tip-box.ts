@@ -1,7 +1,6 @@
+import { Alg, Dom, Rect, TipsApi, Vars } from "@site0/tijs";
 import _ from "lodash";
 import { createApp } from "vue";
-import { Rect, Vars } from "../../_type";
-import { Dom } from "../../core";
 import { TipBoxProps, TipInstance } from "./lib-tip-types";
 import TipBoxApp from "./TipBoxApp.vue";
 import {
@@ -135,6 +134,7 @@ function __prepre_box_dom(
 }
 
 export function drawTipBox(
+  api: TipsApi,
   tip: TipBoxProps,
   target: HTMLElement
 ): TipInstance | undefined {
@@ -165,6 +165,8 @@ export function drawTipBox(
 
   // 返回必要信息给调用者
   return {
+    id: Alg.genSnowQ(10, "TIP-"),
+    _api: api,
     ..._dx,
     app,
     tip,
@@ -184,11 +186,12 @@ export function eraseTip(tipObj: TipInstance) {
   });
 
   // 最后移除 tip 的定义和 DOM
-  // _.delay(() => {
-  //   app.unmount();
-  //   Dom.remove($tipbox);
-  //   delete (tipObj.$target as any).__tip_obj;
-  // }, tr_du);
+  _.delay(() => {
+    app.unmount();
+    Dom.remove($tipbox);
+    delete (tipObj.$target as any).__tip_obj;
+    tipObj._api.removeInstance(tipObj);
+  }, tr_du);
 
   Dom.updateStyle($tipbox, { display: "none" });
   app.unmount();

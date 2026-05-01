@@ -3,7 +3,9 @@ import { Point2D } from "../../_type";
 import { Rects } from "../../core";
 import { TipInstance } from "./lib-tip-types";
 import { drawTipBox, eraseTip } from "./use-tip-box";
-import { useTipsApi } from "./use-tips";
+import { useTipsApi } from "./use-tips-api";
+
+const debug = false;
 
 export function useTipsWatcher() {
   const _api = useTipsApi();
@@ -29,15 +31,23 @@ export function useTipsWatcher() {
       // 看看是否要开启新的 tips
       let src = ev.target as HTMLElement;
       let target = _api.getTipTargetElement(src);
-      // 已经有了 Tip
-      if (!target || (target as any).__tip_obj) {
+      if (debug) console.log(_pointer, "target", target);
+      // 没有 target
+      if (!target) {
+        return;
+      }
+      if ((target as any).__tip_obj) {
+        if (debug)
+          console.warn("Already has __tip_obj", (target as any).__tip_obj);
         return;
       }
       let tip = _api.loadTipFromElement(target);
+      if (debug) console.log("_api.loadTipFromElement", tip);
       if (tip) {
         // 看看是否需要限制修饰键
         if (!_.isEmpty(tip.modifier)) {
           if (!_api.isMatchModifier(ev, tip.modifier)) {
+            if (debug) console.log("未匹配修饰键", tip.modifier);
             return;
           }
         }
@@ -48,19 +58,39 @@ export function useTipsWatcher() {
           // 按着 ctrl 键，你当然是想要立刻看到提示了
           delayInMs = tip.modifier ? 0 : 800;
         }
+        if (debug) console.log("delayInMs:", delayInMs);
         // 绘制 Tip
         _.delay(() => {
           // 再次确认，鼠标在目标区域里，那么就需要显示提示
-          if (!target || (target as any).__tip_obj) {
+          if (!target) {
+            if (debug) console.warn(`delay(${delayInMs}) !target`, target);
             return;
           }
+          if ((target as any).__tip_obj) {
+            if (debug)
+              console.warn(
+                `delay(${delayInMs}) Already has __tip_obj`,
+                (target as any).__tip_obj
+              );
+            return;
+          }
+
           let rect = Rects.createBy(target);
+          if (debug) console.warn(`delay(${delayInMs}) rect:`, rect);
+
           if (!rect.hasPoint(_pointer)) {
+            if (debug)
+              console.warn(
+                `delay(${delayInMs}) !rect.hasPoint(x=${_pointer.x},y=${_pointer.y})`,
+                rect.toString()
+              );
             return;
           }
 
           // 确认了，那么需要绘制 Tip
-          let tipObj = drawTipBox(tip, target);
+          let tipObj = drawTipBox(_api, tip, target);
+          if (debug) console.warn(`delay(${delayInMs}) drawTipBox:`, tipObj);
+
           if (tipObj) {
             _api.addInstance(tipObj);
             (target as any).__tip_obj = tipObj;
@@ -91,3 +121,7 @@ export function useTipsWatcher() {
 }
 
 export const TI_APP_TIPS = useTipsWatcher();
+
+export function getAppTipsApi() {
+  return TI_APP_TIPS.api;
+}

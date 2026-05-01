@@ -2,9 +2,9 @@ import {
   AspectSize,
   BooleanProps,
   CommonProps,
-  IconInput,
   LogicType,
   ReadonlyProps,
+  TipableProps,
 } from "@site0/tijs";
 
 export type ToggleProps = CommonProps &
@@ -12,5 +12,6 @@ export type ToggleProps = CommonProps &
   ReadonlyProps & {
     type?: LogicType;
     boxFontSize?: AspectSize;
+    tipable?: TipableProps;
     width?: string;
   };

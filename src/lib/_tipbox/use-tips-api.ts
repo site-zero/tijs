@@ -77,7 +77,7 @@ import { ModifierKey, TipBoxProps, TipInstance } from "./lib-tip-types";
 export type TipsApi = ReturnType<typeof useTipsApi>;
 
 export function useTipsApi() {
-  let _tip_seq_id = 0;
+  let _tip_seq_id = 1;
   /**
    * 注册是提示信息
    */
@@ -85,7 +85,7 @@ export function useTipsApi() {
   /**
    * 页面上显示的提示信息对象
    */
-  const _instances: TipInstance[] = [];
+  const _instances = new Map<string, TipInstance>();
 
   function getTip(id: number) {
     return _all_tips.get(id);
@@ -95,6 +95,10 @@ export function useTipsApi() {
     let id = _tip_seq_id++;
     _all_tips.set(id, tip);
     return id;
+  }
+
+  function replaceTip(id: number, tip: TipBoxProps) {
+    _all_tips.set(id, tip);
   }
 
   function removeTip(...tipIds: number[]) {
@@ -108,12 +112,17 @@ export function useTipsApi() {
   }
 
   function addInstance(tipObj: TipInstance) {
-    _instances.push(tipObj);
+    _instances.set(tipObj.id, tipObj);
+  }
+
+  function removeInstance(tipObjOrId: string | TipInstance) {
+    let tipId = _.isString(tipObjOrId) ? tipObjOrId : tipObjOrId.id;
+    _instances.delete(tipId);
   }
 
   function findTipsNeedToErase(p: Point2D) {
     let re: TipInstance[] = [];
-    for (let tipObj of _instances) {
+    for (let tipObj of _instances.values()) {
       if (!tipObj.box.hasPoint(p) && !tipObj.ref.hasPoint(p)) {
         re.push(tipObj);
       }
@@ -200,16 +209,21 @@ export function useTipsApi() {
   // -----------------------------------------------------
   // 返回特性
   // -----------------------------------------------------
-  return {
+  const tipsApi =  {
+    _all_tips,
+    _instances,
     // 对于 Tip 的管理
     getTip,
     addTip,
+    replaceTip,
     removeTip,
     clearTips,
     addInstance,
+    removeInstance,
     findTipsNeedToErase,
     isMatchModifier,
     getTipTargetElement,
     loadTipFromElement,
   };
+  return tipsApi;
 }

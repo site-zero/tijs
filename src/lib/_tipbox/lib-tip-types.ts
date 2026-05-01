@@ -8,6 +8,7 @@ import {
   TranSpeed,
   Vars,
 } from "../../_type";
+import { TipsApi } from "./use-tips-api";
 
 /**
  * 四种原始定位方式
@@ -132,6 +133,8 @@ export type TipBoxProps = TipAspect & {
 };
 
 export type TipInstance = {
+  id: string; // 实例的唯一 ID，通常为一个 snowQ(10)
+  _api: TipsApi;
   app: App<Element>;
   tip: TipBoxProps;
   box: Rect;

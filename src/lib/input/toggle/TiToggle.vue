@@ -2,14 +2,14 @@
   import {
     BooleanEmitter,
     CssUtils,
-    TiIcon,
     toAspectFontSize,
     toLogicColor,
     useBooleanInput,
+    useTipable,
     Vars,
   } from "@site0/tijs";
   import _ from "lodash";
-  import { computed } from "vue";
+  import { computed, onBeforeUnmount, watch } from "vue";
   import { ToggleProps } from "./ti-toggle-types";
   //-----------------------------------------------------
   const props = withDefaults(defineProps<ToggleProps>(), {
@@ -35,12 +35,29 @@
     return re;
   });
   //-----------------------------------------------------
+  const _tip = useTipable();
+  //-----------------------------------------------------
+  watch(
+    () => Bool.Tip.value,
+    (tip: string | undefined) => {
+      _tip.registerTip(tip, props.tipable);
+    },
+    { immediate: true }
+  );
+  //-----------------------------------------------------
+  onBeforeUnmount(() => {
+    _tip.deposeTip();
+  });
+  //-----------------------------------------------------
 </script>
 <template>
   <div class="ti-toggle" :class="TopClass" :style="TopStyle">
-    <aside @click.left="Bool.emitToggle()" :data-tip="Bool.Tip.value">
+    <aside @click.left="Bool.emitToggle()" v-bind="_tip.TipDataConfig.value">
       <b>
-        <div v-if="Bool.hasIcon.value" class="toggle-icon" v-html="Bool.IconHtml.value"></div>
+        <div
+          v-if="Bool.hasIcon.value"
+          class="toggle-icon"
+          v-html="Bool.IconHtml.value"></div>
       </b>
     </aside>
     <span v-if="Bool.hasText">{{ Bool.Text }}</span>

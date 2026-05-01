@@ -6,10 +6,11 @@ import { ToggleProps } from "./ti-toggle-types";
 
 const en_us = {
   "com-name": "Toggle",
-  "example-for-int": "数字值",
-  "example-with-icon-text": "带图标·文字",
-  "example-with-icon-tip": "带图标·提示",
-  "example-loading": "加载中",
+  "example-for-int": "Number Value",
+  "example-with-icon-text": "Icon & Text",
+  "example-with-icon-tip": "Icon & Tip",
+  "example-loading": "Loading...",
+  "example-loading-tip": "Toggle button with customizable icon and text",
 };
 const zh_cn = {
   "com-name": "拨动开关",

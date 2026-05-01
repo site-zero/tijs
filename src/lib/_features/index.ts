@@ -21,6 +21,7 @@ export * from "./use-prefix-suffix";
 export * from "./use-row-indent";
 export * from "./use-selectable";
 export * from "./use-std-list-item";
+export * from "./use-tipable";
 export * from "./use-tree-data";
 export * from "./use-value-input";
 export * from "./use-value-pipe";

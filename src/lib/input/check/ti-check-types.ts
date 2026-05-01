@@ -1,17 +1,10 @@
-import { BooleanProps, ReadonlyProps, TipDockMode } from "../../";
-import {
-  CommonProps,
-  IconInput,
-  LogicType,
-  TextContentType,
-} from "../../../_type";
+import { AspectSize, CommonProps, LogicType, TipableProps } from "@site0/tijs";
+import { BooleanProps, ReadonlyProps } from "../../";
 
 export type CheckProps = CommonProps &
   BooleanProps &
   ReadonlyProps & {
-    text?: string;
-    tipMaxWidth?: string;
-    tipContentType?: TextContentType;
-    tipDockMode?: TipDockMode;
-    tipType?: LogicType;
+    type?: LogicType;
+    boxFontSize?: AspectSize;
+    tipable?: TipableProps;
   };
