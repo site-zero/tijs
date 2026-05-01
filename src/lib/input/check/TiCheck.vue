@@ -4,10 +4,10 @@
   import { IconInput } from "../../../_type";
   import { CssUtils, I18n } from "../../../core";
   import { CheckProps } from "./ti-check-types";
-
+  //-----------------------------------------------------
   const props = withDefaults(defineProps<CheckProps>(), {
     value: false,
-    icons: () =>
+    icon: () =>
       ["zmdi-square-o", "zmdi-check-square"] as [IconInput, IconInput],
     text: "i18n:yes",
     //values: () => [false, true] as [any, any],
@@ -15,9 +15,11 @@
     tipContentType: "text",
     tipDockMode: "V",
   });
+  //-----------------------------------------------------
   const emit = defineEmits<BooleanEmitter>();
+  //-----------------------------------------------------
   const Bool = useBooleanInput(props, { emit });
-
+  //-----------------------------------------------------
   const TopClass = computed(() => {
     let yes = Bool.Yes.value;
     return CssUtils.mergeClassName(props.className, {
@@ -26,13 +28,9 @@
       "is-readonly": Bool.Readonly.value,
     });
   });
-
+  //-----------------------------------------------------
   const TopStyle = computed(() => CssUtils.toStyle(props.style));
-
-  const CheckIcon = computed(() => {
-    let II = Bool.Yes.value ? 1 : 0;
-    return props.icons[II];
-  });
+  //-----------------------------------------------------
 </script>
 <template>
   <div
@@ -42,12 +40,12 @@
     @click.stop="Bool.emitToggle()">
     <div
       class="check-con"
-      :data-tip="props.tip"
+      :data-tip="Bool.Tip.value"
       :data-tip-max-width="props.tipMaxWidth"
       :data-tip-content-type="props.tipContentType"
       :data-tip-dock-mode="props.tipDockMode"
       :data-tip-type="props.tipType">
-      <div class="part-icon"><TiIcon :value="CheckIcon" /></div>
+      <div class="part-icon"><TiIcon :value="Bool.Icon.value" /></div>
       <div class="part-text" v-if="props.text">
         {{ I18n.text(props.text) }}
       </div>

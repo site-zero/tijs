@@ -10,11 +10,6 @@ export type CheckProps = CommonProps &
   BooleanProps &
   ReadonlyProps & {
     text?: string;
-    // [falseIcon, trueIcon]
-    icons?: [IconInput, IconInput];
-
-    // Tip
-    tip?: string;
     tipMaxWidth?: string;
     tipContentType?: TextContentType;
     tipDockMode?: TipDockMode;
