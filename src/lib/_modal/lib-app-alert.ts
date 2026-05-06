@@ -64,14 +64,26 @@ export async function AlertError(
   cmdText: string | null,
   reason: any
 ) {
-  let reasonToStr = Str.anyToStr(reason);
   let html = [`<h3>${title}</h3>`];
   if (cmdText) {
     html.push("<pre>", cmdText, "</pre>");
   }
-  html.push('<pre style="white-space:pre-wrap; width:100%;">');
-  html.push(reasonToStr);
-  html.push("</pre>");
+  // 数组
+  if (_.isArray(reason)) {
+    html.push("<ol>");
+    for (let item of reason) {
+      let str = _.escape(Str.anyToStr(item));
+      html.push("<li>", str, "</li>");
+    }
+    html.push("</ol>");
+  }
+  // 普通的字符串
+  else {
+    let reasonStr = _.escape(Str.anyToStr(reason));
+    html.push('<pre style="white-space:pre-wrap; width:100%;">');
+    html.push(reasonStr);
+    html.push("</pre>");
+  }
   await Alert(html.join(""), {
     type: "warn",
     width: "80%",
