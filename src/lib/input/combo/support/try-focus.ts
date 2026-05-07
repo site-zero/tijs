@@ -8,6 +8,5 @@ export function try_focus(api: InputComboApi, _props: InputComboProps) {
   if (api.isReadonly.value) {
     return;
   }
-
   api.setFocused(true);
 }

@@ -155,5 +155,9 @@
   @include __bar_item_color_by_name(number);
   @include __bar_item_color_by_name(primary);
   @include __bar_item_color_by_name(secondary);
+  @include __bar_item_color_by_name(tip);
+  @include __bar_item_color_by_name(star);
+  @include __bar_item_color_by_name(fog);
+  @include __bar_item_color_by_name(nil);
   //-----------------------------------------------------
 }

@@ -649,7 +649,14 @@ export function colInputUpper(
   return colInput(
     name,
     titleAndTip,
-    _.assign({ valueCase: "upperAll" } as InputBoxProps, comConf),
+    _.assign(
+      {
+        valueCase: "upperAll",
+        autoFocus: true,
+        autoSelect: true,
+      } as InputBoxProps,
+      comConf
+    ),
     readonlyComConf
   );
 }
