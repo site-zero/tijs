@@ -11,7 +11,7 @@
   const props = withDefaults(defineProps<CheckListProps>(), {
     textAsHtml: true,
     borderStyle: "solid",
-    highlightChecked: false,
+    highlightChecked: true,
     canHover: true,
   });
   //-----------------------------------------------------
@@ -56,6 +56,7 @@
     v-bind="_list.ListConfig.value"
     :multi="true"
     :data="_list.optionsData.value"
+    :showIndexFrom="props.showIndexFrom"
     :max-checked="props.maxChecked"
     :min-checked="props.minChecked"
     :can-select="true"

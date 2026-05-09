@@ -10,7 +10,7 @@
   const props = withDefaults(defineProps<RadioListProps>(), {
     textAsHtml: true,
     borderStyle: "solid",
-    highlightChecked: false,
+    highlightChecked: true,
     canHover: true,
   });
   //-----------------------------------------------------
@@ -45,6 +45,7 @@
     :marker-icon="'auto'"
     :data="_list.optionsData.value"
     :marker-icons="['zmdi-circle-o', 'zmdi-dot-circle']"
+    :showIndexFrom="props.showIndexFrom"
     :max-checked="1"
     :can-select="true"
     :showChecker="true"

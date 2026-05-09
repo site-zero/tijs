@@ -40,6 +40,11 @@ export type ListAspect = {
   textFormat?: ListItemTextFormat;
 
   /**
+   * 如果指定了这个属性，那么会显示每行的索引数字。
+   */
+  showIndexFrom?: number;
+
+  /**
    * 每行的选中图标的样子。
    *
    * 如果未指定，默认的行为是：

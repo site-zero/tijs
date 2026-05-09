@@ -100,6 +100,10 @@
     );
   });
   //-----------------------------------------------------
+  const isShowRowNumber = computed(() => {
+    return _.isNumber(props.showIndexFrom);
+  });
+  //-----------------------------------------------------
   const TopStyle = computed(() => {
     return CssUtils.toStyle(
       CssUtils.mergeStyles([
@@ -249,12 +253,17 @@
           <TiIcon v-if="it.checked" :value="MarkerIcons[1]" />
           <TiIcon v-else :value="MarkerIcons[0]" />
         </div>
+        <!--==Row Index==-->
+        <div v-if="isShowRowNumber" class="list-part as-index">
+          {{ it.index + props.showIndexFrom! }}
+        </div>
         <!--=Icon=-->
         <div
           v-if="isAlwaysShowItemIcon || it.rowIcon"
           class="list-part as-icon">
           <TiIcon v-if="it.rowIcon" :value="it.rowIcon" />
         </div>
+
         <!--=Text: AS HTML=-->
         <div
           v-if="props.textAsHtml"
