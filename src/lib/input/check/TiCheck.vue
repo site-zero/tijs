@@ -86,6 +86,7 @@
       }
       > .part-text {
         margin-left: 0.5em;
+        line-height: 1em;
       }
       &:hover {
         color: var(--ti-color-link-hover);
