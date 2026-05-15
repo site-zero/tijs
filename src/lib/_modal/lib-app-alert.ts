@@ -90,6 +90,10 @@ export async function AlertError(
     height: "80%",
     minWidth: "480px",
     minHeight: "320px",
+    bodyClass: "cover-parent",
+    bodyStyle: {
+      overflow: "auto",
+    },
     contentType: "html",
   });
   throw reason;
