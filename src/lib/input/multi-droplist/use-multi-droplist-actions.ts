@@ -1,5 +1,5 @@
 import { ActionBarProps, MultiDroplistProps } from '../../';
-import { MultiDroplistApi } from './use-multi-droplist';
+import { MultiDroplistApi } from './use-multi-droplist-api';
 
 export function useMultiDroplistActions(
   _props: MultiDroplistProps,

@@ -55,10 +55,10 @@ export function useItemLookup(props: ItemLookupProps) {
   //--------------------------------------------------
   let lookups = _.concat([], props.lookup);
   for (let lookup of lookups) {
-    if(!lookup){
+    if (!lookup) {
       continue;
     }
-    if(_.isFunction(lookup)){
+    if (_.isFunction(lookup)) {
       matchers.push(lookup);
       continue;
     }
@@ -67,7 +67,7 @@ export function useItemLookup(props: ItemLookupProps) {
   }
   //--------------------------------------------------
   // 判断函数，任何一个条件满足就能匹配
-  function matchAll(it: Vars, hint: string): boolean {
+  function matchAny(it: Vars, hint: string): boolean {
     for (let match of matchers) {
       if (match(it, hint)) {
         return true;
@@ -80,7 +80,6 @@ export function useItemLookup(props: ItemLookupProps) {
   //--------------------------------------------------
   return {
     matchers,
-    matchAll,
+    matchAll: matchAny,
   };
 }
-

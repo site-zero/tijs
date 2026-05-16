@@ -22,5 +22,5 @@ export type BoxCompositionProps = {
 export type BoxCompositionSetup = {
   isReadonly: () => boolean;
   onChange: (value: string) => void;
-  funcKeys: Record<string, () => Promise<void>>;
+  funcKeys?: Record<string, () => Promise<void>>;
 };

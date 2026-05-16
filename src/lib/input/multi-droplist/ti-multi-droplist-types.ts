@@ -40,4 +40,15 @@ export type MultiDroplistProps = CommonProps &
      * 强制不换行
      */
     nowrap?: boolean;
+
+    //-----------------------------------------------------
+    // 行为模式
+    //-----------------------------------------------------
+    /**
+     * 是否显示选项过滤框
+     *
+     * - `number`  : 如果选项超过了指定数量，则显示
+     * - `boolean` : 直接指定是否显示
+     */
+    showOptionKeyword?: number | boolean;
   };

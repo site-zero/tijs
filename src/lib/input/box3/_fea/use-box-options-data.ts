@@ -112,7 +112,7 @@ export function useBoxOptionsData(
         re = await dict.getData(false, lastAbort?.signal);
       }
 
-      // 对值进行过滤
+      // 对值进行处理
       let _data: Vars[] = [];
       for (let it of re) {
         if (optionKeepRaw) {

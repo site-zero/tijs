@@ -64,6 +64,9 @@ export function useBoxComposition(
   }
 
   async function onKeyDown(event: KeyboardEvent) {
+    if (!funcKeys) {
+      return;
+    }
     //if (debug) console.log("onKeyDown", event.key);
     // 默认设置为 false，当有可打印字符的时候， onBeforeInput 会被调用
     _will_change_input.value = false;

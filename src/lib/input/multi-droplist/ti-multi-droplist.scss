@@ -42,11 +42,13 @@
     @include flex-align-v-nowrap;
     position: fixed;
     z-index: $z-mask + 2;
-    padding: SZ(2) 0;
+    padding: 1px;
     background-color: var(--ti-color-card);
     border: 1px solid var(--ti-color-primary);
     border-radius: var(--ti-measure-r-s);
-    box-shadow: -1px -1px var(--ti-color-light), 1px 1px var(--ti-color-dark),
+    box-shadow:
+      -1px -1px var(--ti-color-light),
+      1px 1px var(--ti-color-dark),
       4px 4px 12px var(--ti-color-mask-thin);
     //---------------------------------------------------
     > .part-options-con {
@@ -54,23 +56,43 @@
       overflow: auto;
     }
     > footer {
-      @include flex-align-nowrap;
+      @include flex-align-nowrap($ai: stretch);
+      gap: var(--ti-gap-s);
       border-top: 1px solid var(--ti-color-primary);
       padding: var(--ti-gap-s);
       font-size: var(--ti-fontsz-s);
       > a {
         @include flex-align-nowrap;
+        gap: var(--ti-gap-s);
         padding: 0 0.5em;
         border-radius: var(--ti-measure-r-s);
         > i {
           font-size: 16px;
         }
         > span {
-          margin: 0 0.5em;
+          white-space: nowrap;
         }
         &:hover {
           text-decoration: none;
           background-color: var(--ti-color-primary-r);
+        }
+      }
+      > div.keyword {
+        @include flex-align-nowrap($jc: stretch, $ai: stretch);
+        flex: 1 1 auto;
+        input {
+          flex: 1 1 auto;
+          width:10px;
+          border: 1px solid var(--ti-color-primary);
+          border-radius: var(--ti-measure-r-s);
+          padding: 0 0.5em;
+          outline: none;
+          height: 2.4em;
+          line-height: 2.4em;
+          &:focus {
+            background-color: var(--ti-color-highlight);
+            color: var(--ti-color-highlight-f);
+          }
         }
       }
     }

@@ -5,6 +5,7 @@
     TiList,
     TiTags,
     useBoxAspect,
+    useBoxComposition,
     useBoxDropList,
   } from "@site0/tijs";
   import _ from "lodash";
@@ -13,19 +14,34 @@
     MultiDroplistEmitter,
     MultiDroplistProps,
   } from "./ti-multi-droplist-types";
-  import { useMultiDroplist } from "./use-multi-droplist";
   import { useMultiDroplistActions } from "./use-multi-droplist-actions";
+  import { useMultiDroplist } from "./use-multi-droplist-api";
+  //-----------------------------------------------------
+  const $input = useTemplateRef<HTMLInputElement>("input");
   //-----------------------------------------------------
   const emit = defineEmits<MultiDroplistEmitter>();
   //-----------------------------------------------------
   const props = withDefaults(defineProps<MultiDroplistProps>(), {
     placeholder: "i18n:no-selected",
+    showOptionKeyword: 7,
   });
   //-----------------------------------------------------
   const $el = useTemplateRef<HTMLElement>("el");
   const $tipcon = useTemplateRef<HTMLElement>("tipcon");
   //-----------------------------------------------------
   const api = useMultiDroplist(props, emit);
+  //-----------------------------------------------------
+  const Compose = computed(() => {
+    return useBoxComposition(
+      { canInput: true },
+      {
+        isReadonly: () => api.isReadonly.value,
+        onChange: (val: string) => {
+          api.setKeyword(val);
+        },
+      }
+    );
+  });
   //-----------------------------------------------------
   const _menu = computed(() => useMultiDroplistActions(props, api));
   //-----------------------------------------------------
@@ -113,14 +129,23 @@
             :can-select="true"
             :showChecker="true"
             :checked-ids="api.TagValues.value"
-            :data="api.FilteredOptionsData.value"
+            :data="api.DisplayOptionsData.value"
             @select="api.onOptionSelect" />
         </div>
         <footer>
           <a @click.left="api.tryNotifyChange(null)">
             <i class="zmdi zmdi-delete"></i><span>{{ I18n.get("clear") }}</span>
           </a>
-          <hr />
+          <div class="keyword" ref="keyword">
+            <input
+              v-if="api.isShowOptionKeyword.value"
+              placeholder="Filter Keyword"
+              @keyup="Compose.onKeyUp"
+              @keydown="Compose.onKeyDown"
+              @beforeinput="Compose.onBeforeInput"
+              @compositionstart="Compose.onStart"
+              @compositionend="Compose.onEnd" />
+          </div>
           <a @click.left="api.cancelChange()">
             <span>{{ I18n.get("cancel") }}</span>
           </a>

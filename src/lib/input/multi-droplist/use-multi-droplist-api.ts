@@ -5,6 +5,7 @@ import {
   TagItem,
   useBoxOptionsData,
   useDict,
+  useItemLookup,
   useReadonly,
   Util,
   Vars,
@@ -28,6 +29,10 @@ export function useMultiDroplist(
   //-----------------------------------------------------
   const _items = ref<TagItem[]>();
   const _it_values = ref<TableRowID[]>();
+  /**
+   * 用户主动输入的关键字
+   */
+  const _keyword = ref<string>();
   //-----------------------------------------------------
   const _options_data = ref<Vars[]>();
   const _options_status = ref<BoxOptionsStatus>("hide");
@@ -35,6 +40,7 @@ export function useMultiDroplist(
   const _readonly = computed(() => useReadonly(props));
   //-----------------------------------------------------
   const _dict = computed(() => useDict(props));
+  const _item_lookup = computed(() => useItemLookup(props));
   //-----------------------------------------------------
   const _box_options = computed(() => {
     if (!_dict.value) return;
@@ -55,8 +61,33 @@ export function useMultiDroplist(
   const isOptionsDataShow = computed(() => !isOptionsDataHide.value);
   const hasOptionsData = computed(() => (_dict.value ? true : false));
   //-----------------------------------------------------
+  const isShowOptionKeyword = computed(() => {
+    if (_.isNil(props.showOptionKeyword)) {
+      return false;
+    }
+    if (_.isNumber(props.showOptionKeyword)) {
+      return FilteredOptionsData.value?.length || 0 >= props.showOptionKeyword;
+    }
+    return props.showOptionKeyword;
+  });
+  //-----------------------------------------------------
   const FilteredOptionsData = computed(() => {
-    return _box_options.value?.filterOptionsData(_options_data.value || []);
+    let list = _box_options.value?.filterOptionsData(_options_data.value || []);
+    return list || [];
+  });
+  //-----------------------------------------------------
+  const DisplayOptionsData = computed(() => {
+    if (!isShowOptionKeyword.value || !_keyword.value) {
+      return FilteredOptionsData.value;
+    }
+    // 过滤
+    let reList = [];
+    for (let it of FilteredOptionsData.value) {
+      if (_item_lookup.value.matchAll(it, _keyword.value)) {
+        reList.push(it);
+      }
+    }
+    return reList;
   });
   //-----------------------------------------------------
   const TagItems = computed(() => _items.value);
@@ -73,6 +104,10 @@ export function useMultiDroplist(
   });
   //-----------------------------------------------------
   // 操作函数
+  //-----------------------------------------------------
+  function setKeyword(keyword?: string | undefined | null) {
+    _keyword.value = keyword || undefined;
+  }
   //-----------------------------------------------------
   function setOptionsStatus(status: BoxOptionsStatus) {
     _options_status.value = status;
@@ -96,6 +131,7 @@ export function useMultiDroplist(
   function clearOptionsData() {
     _options_data.value = undefined;
     _it_values.value = undefined;
+    _keyword.value = undefined;
   }
   //-----------------------------------------------------
   function tryNotifyChange(
@@ -210,11 +246,14 @@ export function useMultiDroplist(
     isOptionsDataHide,
     isOptionsDataShow,
     hasOptionsData,
+    isShowOptionKeyword,
     FilteredOptionsData,
+    DisplayOptionsData,
     TagItems,
     TagValues,
 
     // 操作函数
+    setKeyword,
     setOptionsStatus,
     changeItems,
     removeItem,

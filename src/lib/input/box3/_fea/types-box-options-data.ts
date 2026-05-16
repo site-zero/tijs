@@ -50,4 +50,5 @@ export type BoxOptionsDataSetup = {
    * 对于搜索提示信息进行预处理
    */
   cookHint?: BoxHintCooking;
+
 };

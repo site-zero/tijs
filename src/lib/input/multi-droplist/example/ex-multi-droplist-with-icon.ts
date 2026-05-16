@@ -7,7 +7,6 @@ export default {
   comConf: {
     value: 'otter',
     placeholder: 'Choose one Animal',
-    readonly: true,
     options: [
       { value: 'hippo', text: 'Hippo', icon: 'fas-hippo' },
       { value: 'cow', text: 'Cow', icon: 'fas-cow' },
