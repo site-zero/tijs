@@ -1,27 +1,33 @@
-import { App } from 'vue';
-import { TiComInfo, TiComRace } from '../../../_type';
-import { COM_TYPES } from '../../lib-com-types';
-import TiMultiDroplist from './TiMultiDroplist.vue';
-import example from './example';
+import { App } from "vue";
+import { TiComInfo, TiComRace } from "../../../_type";
+import { COM_TYPES } from "../../lib-com-types";
+import TiMultiDroplist from "./TiMultiDroplist.vue";
+import example from "./example";
 
 const en_us = {
-  'com-name': 'Multi-Droplist',
+  "com-name": "Multi-Droplist",
+  "keyword-placeholder": "Keywords",
+  "example-with-icon": "With Icons",
+  "example-with-tip": "With Notes",
+  "example-multi-with-icon": "Multi&Icons",
+  "example-multi-with-tip": "Multi&Notes",
 };
 const zh_cn = {
-  'com-name': '多选下拉框',
-  'example-with-icon': '选项带图标',
-  'example-with-tip': '选项带备注',
-  'example-multi-with-icon': '多选带图标',
-  'example-multi-with-tip': '多选带备注',
+  "com-name": "多选下拉框",
+  "keyword-placeholder": "输入关键字过滤选项",
+  "example-with-icon": "选项带图标",
+  "example-with-tip": "选项带备注",
+  "example-multi-with-icon": "多选带图标",
+  "example-multi-with-tip": "多选带备注",
 };
 
 const COM_TYPE = COM_TYPES.MultiDroplist;
 
 const TiMultiDroplistInfo: TiComInfo = {
-  icon: 'fas-check-double',
+  icon: "fas-check-double",
   race: TiComRace.INPUT,
   name: COM_TYPE,
-  text: 'i18n:ti-multi-droplist-com-name',
+  text: "i18n:ti-multi-droplist-com-name",
   i18n: {
     en_us: en_us,
     en_uk: en_us,
@@ -30,15 +36,15 @@ const TiMultiDroplistInfo: TiComInfo = {
   },
   com: TiMultiDroplist,
   liveStyle: {
-    display: 'block',
-    width: '80%',
-    minWidth: '120px',
-    maxWidth: '300px',
+    display: "block",
+    width: "80%",
+    minWidth: "120px",
+    maxWidth: "300px",
   },
   install: (app: App) => {
     app.component(COM_TYPE, TiMultiDroplist);
   },
-  defaultProps: 'simple',
+  defaultProps: "simple",
   exampleProps: [
     example.simple,
     example.withIcon,
@@ -48,5 +54,5 @@ const TiMultiDroplistInfo: TiComInfo = {
   ],
 };
 
-export * from './ti-multi-droplist-types';
+export * from "./ti-multi-droplist-types";
 export { TiMultiDroplist, TiMultiDroplistInfo };

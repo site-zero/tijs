@@ -51,16 +51,23 @@
       1px 1px var(--ti-color-dark),
       4px 4px 12px var(--ti-color-mask-thin);
     //---------------------------------------------------
+    > header {
+      padding: var(--ti-gap-t);
+      border-bottom: 1px solid var(--ti-color-primary);
+    }
+    //---------------------------------------------------
     > .part-options-con {
       //box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
       overflow: auto;
     }
+    //---------------------------------------------------
     > footer {
-      @include flex-align-nowrap($ai: stretch);
+      @include flex-align-nowrap($jc: space-between, $ai: stretch);
       gap: var(--ti-gap-s);
       border-top: 1px solid var(--ti-color-primary);
       padding: var(--ti-gap-s);
       font-size: var(--ti-fontsz-s);
+      //-------------------------------------------------
       > a {
         @include flex-align-nowrap;
         gap: var(--ti-gap-s);
@@ -77,22 +84,23 @@
           background-color: var(--ti-color-primary-r);
         }
       }
-      > div.keyword {
-        @include flex-align-nowrap($jc: stretch, $ai: stretch);
+      //-------------------------------------------------
+    }
+    //---------------------------------------------------
+    div.keyword {
+      flex: 1 1 auto;
+      input {
         flex: 1 1 auto;
-        input {
-          flex: 1 1 auto;
-          width:10px;
-          border: 1px solid var(--ti-color-primary);
-          border-radius: var(--ti-measure-r-s);
-          padding: 0 0.5em;
-          outline: none;
-          height: 2.4em;
-          line-height: 2.4em;
-          &:focus {
-            background-color: var(--ti-color-highlight);
-            color: var(--ti-color-highlight-f);
-          }
+        width: 100%;
+        border: 0;
+        border-radius: var(--ti-measure-r-s);
+        padding: 0 0.5em;
+        outline: none;
+        height: 2.4em;
+        line-height: 2.4em;
+        &:focus {
+          background-color: var(--ti-color-highlight);
+          color: var(--ti-color-highlight-f);
         }
       }
     }

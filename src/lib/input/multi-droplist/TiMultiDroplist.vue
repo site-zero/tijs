@@ -17,13 +17,12 @@
   import { useMultiDroplistActions } from "./use-multi-droplist-actions";
   import { useMultiDroplist } from "./use-multi-droplist-api";
   //-----------------------------------------------------
-  const $input = useTemplateRef<HTMLInputElement>("input");
-  //-----------------------------------------------------
   const emit = defineEmits<MultiDroplistEmitter>();
   //-----------------------------------------------------
   const props = withDefaults(defineProps<MultiDroplistProps>(), {
     placeholder: "i18n:no-selected",
     showOptionKeyword: 7,
+    lookup: () => ["*~value", "*~text"],
   });
   //-----------------------------------------------------
   const $el = useTemplateRef<HTMLElement>("el");
@@ -122,6 +121,17 @@
       <div class="part-mask" @click.left.stop="onClickMask"></div>
       <!--选项层：展开的选项存放的地方-->
       <div class="part-options" :style="Aspect.BoxTipWrapperStyle.value">
+        <header v-if="api.isShowOptionKeyword.value">
+          <div class="keyword">
+            <input
+              :placeholder="I18n.text('i18n:ti-multi-droplist-keyword-placeholder')"
+              @keyup="Compose.onKeyUp"
+              @keydown="Compose.onKeyDown"
+              @beforeinput="Compose.onBeforeInput"
+              @compositionstart="Compose.onStart"
+              @compositionend="Compose.onEnd" />
+          </div>
+        </header>
         <div class="part-options-con" ref="tipcon">
           <TiList
             v-bind="BoxDropList.value"
@@ -136,16 +146,6 @@
           <a @click.left="api.tryNotifyChange(null)">
             <i class="zmdi zmdi-delete"></i><span>{{ I18n.get("clear") }}</span>
           </a>
-          <div class="keyword" ref="keyword">
-            <input
-              v-if="api.isShowOptionKeyword.value"
-              placeholder="Filter Keyword"
-              @keyup="Compose.onKeyUp"
-              @keydown="Compose.onKeyDown"
-              @beforeinput="Compose.onBeforeInput"
-              @compositionstart="Compose.onStart"
-              @compositionend="Compose.onEnd" />
-          </div>
           <a @click.left="api.cancelChange()">
             <span>{{ I18n.get("cancel") }}</span>
           </a>

@@ -239,6 +239,7 @@ export function useMultiDroplist(
   // 输出特性
   //-----------------------------------------------------
   return {
+    _keyword,
     // 计算属性
     isReadonly,
     isOptionsDataReady,

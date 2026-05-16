@@ -1,25 +1,22 @@
 import {
-  GetDataLogicTypeOptions,
-  RoadblockProps,
-  RowIndentation,
-  StdListItemProps,
-} from "../../";
-import {
   AnyOptionItem,
   AspectSize,
   CommonProps,
   CssBorderStyle,
   CssSheet,
+  GetDataLogicTypeOptions,
   IconInput,
+  RoadblockProps,
   RowIndentProps,
-  TableRowID,
-  ToggleRowStatusEmitter,
-  Vars,
-} from "../../../_type";
-import {
+  RowIndentation,
   SelectEmitInfo,
   SelectableProps,
-} from "../../../lib/_features/use-selectable";
+  StdListItemProps,
+  TableRowID,
+  TextFragment,
+  ToggleRowStatusEmitter,
+  Vars,
+} from "@site0/tijs";
 
 export type ListItemTextFormat =
   | string
@@ -142,6 +139,13 @@ export type ListProps = CommonProps &
      * 传入的数据对象
      */
     data?: Vars[];
+
+    /**
+     * 首尾扩展插槽
+     */
+    head?: TextFragment;
+    tail?: TextFragment;
+
     /**
      * 当列表内容为空的时候，显示的内容
      */

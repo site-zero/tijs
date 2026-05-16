@@ -143,6 +143,10 @@
     } // > .list-item
   }
   //--------------------------------
+  > .list-part {
+    flex: 0 0 auto;
+  }
+  //--------------------------------
   &.is-hoverable {
     > main > .list-item {
       &:hover {

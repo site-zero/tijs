@@ -1,13 +1,20 @@
 <script lang="ts" setup>
+  import {
+    Alg,
+    CssSheet,
+    CssUtils,
+    Dom,
+    ElementScrollIntoViewOptions,
+    SelectableState,
+    TableRowID,
+    TiIcon,
+    TiRoadblock,
+    TiTextSnippet,
+    useRowIndent,
+    Util,
+  } from "@site0/tijs";
   import _ from "lodash";
   import { computed, nextTick, reactive, useTemplateRef, watch } from "vue";
-  import { SelectableState, TiIcon, TiRoadblock, useRowIndent } from "../../";
-  import {
-    CssSheet,
-    ElementScrollIntoViewOptions,
-    TableRowID,
-  } from "../../../_type";
-  import { Alg, CssUtils, Dom, Util } from "../../../core";
   import {
     IndentlyItem,
     ListEmitter,
@@ -212,7 +219,19 @@
       style="display: content"
       v-if="StyleSheetHTML"
       v-html="StyleSheetHTML"></div>
-    <slot name="head"></slot>
+    <slot name="head">
+      <TiTextSnippet
+        v-if="props.head"
+        className="list-part as-head"
+        :class="props.head.className"
+        :style="props.head.style"
+        :prefixIcon="props.head.icon"
+        :text="props.head.text ?? ''"
+        :auto-i18n="true"
+        :textType="props.head.textType"
+        :comType="props.head.comType"
+        :comConf="props.head.comConf" />
+    </slot>
     <!--------------Empty Items------------------>
     <div class="empty-tip" v-if="NotItems">
       <TiRoadblock v-bind="roadblock" />
@@ -275,7 +294,18 @@
         </div>
       </div>
     </main>
-    <slot name="tail"></slot>
+    <slot name="tail">
+      <TiTextSnippet
+        v-if="props.tail"
+        className="list-part as-tail"
+        :class="props.tail.className"
+        :style="props.tail.style"
+        :prefixIcon="props.tail.icon"
+        :text="props.tail.text ?? ''"
+        :textType="props.tail.textType"
+        :comType="props.tail.comType"
+        :comConf="props.tail.comConf" />
+    </slot>
   </div>
 </template>
 <style lang="scss">

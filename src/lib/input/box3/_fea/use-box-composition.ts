@@ -64,20 +64,27 @@ export function useBoxComposition(
   }
 
   async function onKeyDown(event: KeyboardEvent) {
-    if (!funcKeys) {
-      return;
-    }
-    //if (debug) console.log("onKeyDown", event.key);
+    if (debug) console.log("onKeyDown", event.key);
     // 默认设置为 false，当有可打印字符的时候， onBeforeInput 会被调用
     _will_change_input.value = false;
     _last_down_key.value = event.key;
-    let hdl = funcKeys[event.key];
-    if (hdl) {
-      await hdl();
+    if (funcKeys) {
+      let hdl = funcKeys[event.key];
+      if (hdl) {
+        await hdl();
+      }
     }
   }
 
   function __update_value($input: HTMLInputElement) {
+    if (debug)
+      console.log(
+        `__update_value:`,
+        `canInput=${props.canInput}`,
+        `isReadonly=${isReadonly()}`,
+        `_compositing=${_compositing.value}`,
+        `_will_change_input=${_will_change_input.value}`
+      );
     if (!props.canInput) {
       return;
     }

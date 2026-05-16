@@ -480,7 +480,7 @@
     <slot name="tail">
       <TiTextSnippet
         v-if="props.tail"
-        className="tablepart as-tail"
+        className="table-part as-tail"
         :class="props.tail.className"
         :style="props.tail.style"
         :prefixIcon="props.tail.icon"
