@@ -4,11 +4,12 @@ import {
   FieldValueType,
   FormField,
   getFieldTypeByValue,
+  IconInput,
   InputBoxProps,
   InputDatetimeProps,
   InputMultiLinesProps,
   InputNumProps,
-  TiMatch,
+  TiEditPairsProps,
   ToggleProps,
   useObjFields,
   Vars,
@@ -70,12 +71,14 @@ const DEFAULT_FIELDS: Record<FieldValueType, FormField> = {
   },
 };
 
-type GenObjFormFieldSetup = {
+type GenObjFormFieldSetup = Pick<
+  TiEditPairsProps,
+  "titles" | "icons" | "tips" | "fields" | "defaultFields" | "keyFilter"
+> & {
+  /**
+   * 正在处理的对象路径, 根对象从 `[]` 开始
+   */
   path: string[];
-  titles?: Record<string, string>;
-  fields?: Record<string, FieldRefer>;
-  defaultFields?: Record<FieldValueType, FormField>;
-  keyFilter?: TiMatch;
 };
 
 export function gen_obj_form_fields(
@@ -86,6 +89,8 @@ export function gen_obj_form_fields(
   const {
     path = [],
     titles = {},
+    icons = {},
+    tips = {},
     fields = {},
     defaultFields = {},
     keyFilter,
@@ -115,6 +120,7 @@ export function gen_obj_form_fields(
     if (fields) {
       fld_ref = fields[kpath];
     }
+    // 除非有定制字段，否则就用默认字段
     let cus_fld: FormField = dft_fld;
     if (fld_ref) {
       cus_fld = _ofs.getFieldBy(fld_ref);
@@ -126,11 +132,25 @@ export function gen_obj_form_fields(
       title = titles[kpath] || title;
     }
 
+    // 获取图标
+    let icon: IconInput | undefined = undefined;
+    if (icons) {
+      icon = icons[kpath];
+    }
+
+    // 获取提示信息
+    let tip: string | undefined = undefined;
+    if (tips) {
+      tip = tips[kpath];
+    }
+
     // 计入结果
     re.push({
       ...cus_fld,
       name: key,
       title,
+      titleIcon: icon,
+      tip,
     });
   }
   return re;

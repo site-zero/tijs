@@ -4,6 +4,7 @@ import {
   FieldRefer,
   FieldValueType,
   FormProps,
+  IconInput,
   StrOptionItem,
   TabsAspect,
   Vars,
@@ -13,9 +14,6 @@ export type TiEditPairsEmitter = {
   (event: "change", payload: Vars): void;
 };
 
-export type EditPairsValueType = "obj" | "str";
-export type EditPairsValueMode = "flat" | "nested";
-export type EditPairsFormMode = "tabs" | "simple" | "group";
 /**
  * 定义组
  */
@@ -73,6 +71,8 @@ export type TiEditPairsProps = CommonProps &
     /**
      * 未归纳分组的字段，如果不想被丢弃，那么需要声明这个属性
      * 在 `formMode='simple'` 模式下，将只关注这个选项
+     *
+     *  通常，这个选项是 `{text: "Others", value: "others"}`
      */
     otherGroup?: EditPairsGroup;
 
@@ -87,7 +87,8 @@ export type TiEditPairsProps = CommonProps &
     defaultFormConf?: Omit<FormProps, "data" | "field">;
 
     /**
-     * 可以精细指明各个字段的控件类型
+     * 可以精细指明各个字段的控件类型，如果没有指定，则会默认
+     * 为每种字段按值的类型自动分配编辑控件
      */
     fields?: Record<string, FieldRefer>;
 
@@ -97,6 +98,20 @@ export type TiEditPairsProps = CommonProps &
      * 如果是嵌套对象，用 "a.b.c" 这样的键路径来表示
      */
     titles?: Record<string, string>;
+
+    /**
+     * 指明各个字段的图标【最高优先级】
+     * 如果指定它会覆盖 fields 选项的 icon 配置
+     * 如果是嵌套对象，用 "a.b.c" 这样的键路径来表示
+     */
+    icons?: Record<string, IconInput>;
+
+    /**
+     * 指明各个字段的提示信息【最高优先级】
+     * 如果指定它会覆盖 fields 选项的 tips 配置
+     * 如果是嵌套对象，用 "a.b.c" 这样的键路径来表示
+     */
+    tips?: Record<string, string>;
 
     /**
      * 默认的根据字段值，返回控件
@@ -119,6 +134,7 @@ export type TiEditPairsProps = CommonProps &
     /**
      * 指定名称可以编辑.
      * 你可以编辑为任何名称，前提是这个名称不能违背 keyFilter 选项
+     * 也就是说，你虽然可以创建这个键值对，但是 keyFilter 可以把它过滤掉
      */
     nameEditable?: boolean;
 
@@ -127,3 +143,16 @@ export type TiEditPairsProps = CommonProps &
      */
     newButton?: ButtonProps;
   };
+
+export type EditPairsValueType = "obj" | "str";
+export function isEditPairsValueType(input: any): input is EditPairsValueType {
+  return /^obj|str$/.test(input);
+}
+export type EditPairsValueMode = "flat" | "nested";
+export function isEditPairsValueMode(input: any): input is EditPairsValueMode {
+  return /^flat|nested$/.test(input);
+}
+export type EditPairsFormMode = "tabs" | "simple" | "group";
+export function isEditPairsFormMode(input: any): input is EditPairsFormMode {
+  return /^tabs|simple|group$/.test(input);
+}

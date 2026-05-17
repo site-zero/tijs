@@ -1,4 +1,4 @@
-import { TiComInfo, TiComRace,  } from "@site0/tijs";
+import { TiComInfo, TiComRace } from "@site0/tijs";
 import { App } from "vue";
 import TiEditPairs from "./TiEditPairs.vue";
 import { TiEditPairsProps } from "./edit-pairs-types";
@@ -13,6 +13,7 @@ const zh_cn = {
 };
 
 const TiEditPairsInfo: TiComInfo = {
+  tags: ["ing"],
   icon: "fas-address-book",
   race: TiComRace.EDIT,
   name: COM_TYPE,
