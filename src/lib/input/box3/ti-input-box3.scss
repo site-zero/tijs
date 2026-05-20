@@ -12,6 +12,11 @@
   --box-padding: var(--ti-box-pad-m);
   --box-radius: var(--ti-measure-r-s);
   font-size: var(--box-fontsz);
+  //-----------------------------------------------------
+  &.fixed-font {
+    @include font-fixed;
+  }
+  //-----------------------------------------------------
   &.flex-auto {
     flex: 1 1 auto;
   }
