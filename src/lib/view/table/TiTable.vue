@@ -319,6 +319,11 @@
         _mea.watchMain();
       }
       _mea.updateMeasure();
+      _table.value.updateSelection(
+        props.data ?? [],
+        props.currentId,
+        props.checkedIds
+      );
     },
     { deep: true }
   );
@@ -328,7 +333,6 @@
     () => {
       //console.log('updateSelection before:', props.currentId, props.checkedIds);
       _table.value.updateSelection(
-        selection.value,
         props.data ?? [],
         props.currentId,
         props.checkedIds

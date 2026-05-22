@@ -1,6 +1,11 @@
 import _ from "lodash";
 import { computed, ComputedRef, Ref } from "vue";
-import { SelectableApi, useDataLogicType, useSelectable } from "../../";
+import {
+  CheckedIds,
+  SelectableApi,
+  useDataLogicType,
+  useSelectable,
+} from "../../";
 import {
   Callback,
   Callback1,
@@ -243,6 +248,136 @@ export function useTable(
     }
   }
   //-----------------------------------------------------
+  function getTableHeadClass(
+    selection: TableSelection,
+    col: TableStrictColumn
+  ) {
+    return {
+      "is-actived-column": selection.uniqKey == col.uniqKey,
+      "has-tip": col.tip ? true : false,
+    };
+  }
+  //-----------------------------------------------------
+  function bindTableResizing(
+    $main: HTMLElement,
+    colResizing: ColResizingState,
+    _column_sizes: Ref<Record<string, number>>,
+    _display_column_keys: Ref<string[]>,
+    showRowMarker: boolean,
+    onDestroy: Callback1<Callback>,
+    Keep: ComputedRef<TableKeepFeature>
+  ) {
+    if (props.columnResizable) {
+      useTableResizing(
+        $main,
+        colResizing,
+        _column_sizes,
+        _display_column_keys,
+        showRowMarker,
+        onDestroy,
+        () => {
+          if (_.isBoolean(props.columnResizeInTime)) {
+            return props.columnResizeInTime;
+          }
+          let n = props.columnResizeInTime ?? 50;
+          return props.data.length <= n;
+        },
+        Keep
+      );
+    }
+  }
+  //-----------------------------------------------------
+  function getRowIds(data: Vars[]): TableRowID[] {
+    return selectable.getDataIds(data);
+  }
+  //-----------------------------------------------------
+  function getCheckStatus() {
+    return selectable.getCheckStatus(selection.value);
+  }
+  //-----------------------------------------------------
+  function checkAll() {
+    //console.log('selectAll', selection.ids);
+    let newSelection = _.cloneDeep(selection.value);
+    selectable.checkAll(newSelection);
+
+    trySelect(newSelection);
+  }
+  //-----------------------------------------------------
+  function selectNone() {
+    let newSelection = _.cloneDeep(selection.value);
+    selectable.selectNone(newSelection);
+
+    trySelect(newSelection);
+  }
+  //-----------------------------------------------------
+  function OnRowSelect(rowEvent: TableEventPayload) {
+    if (selection.value.currentId == rowEvent.row.id) {
+      return;
+    }
+    if (debug) console.log("OnRowSelect", rowEvent);
+    let newSelection = _.cloneDeep(selection.value);
+    newSelection.uniqKey = null; // 清除列选择状态
+
+    if (props.multi) {
+      let { event, row } = rowEvent;
+      let se = EventUtils.getKeyboardStatus(event);
+      selectable.select(newSelection, row.id, se);
+    } else {
+      selectable.selectId(newSelection, rowEvent.row.id);
+    }
+    trySelect(newSelection);
+  }
+  //-----------------------------------------------------
+  function OnRowCheck(rowEvent: TableEventPayload) {
+    if (debug) console.log("OnRowCheck", rowEvent);
+    let newSelection = _.cloneDeep(selection.value);
+    if (props.multi) {
+      selectable.toggleId(newSelection, rowEvent.row.id);
+    } else {
+      selectable.selectId(newSelection, rowEvent.row.id);
+    }
+    newSelection.uniqKey = null;
+
+    trySelect(newSelection);
+  }
+  //-----------------------------------------------------
+  function OnCellSelect(rowEvent: TableEventPayload) {
+    let { row, colUniqKey } = rowEvent;
+    // console.log(
+    //   'OnCellSelect',
+    //   rowEvent.rowIndex,
+    //   colIndex,
+    //   'cols：',
+    //   columns.length
+    // );
+    let newSelection = _.cloneDeep(selection.value);
+    //console.log('colIndex', colUniqKey);
+
+    if (debug) console.log("OnCellSelect", rowEvent);
+    selectable.selectId(newSelection, row.id);
+    newSelection.uniqKey = colUniqKey;
+
+    trySelect(newSelection);
+  }
+  //-----------------------------------------------------
+  function updateSelection(
+    data: Vars[],
+    currentId?: TableRowID | null | undefined,
+    checkedIds?: CheckedIds<TableRowID> | undefined
+  ) {
+    selectable.updateSelection(selection.value, data, currentId, checkedIds);
+  }
+  //-----------------------------------------------------
+  function OnRowOpen(rowEvent: TableEventPayload) {
+    if (debug) console.log("OnRowOpen", rowEvent);
+    emit("open", rowEvent.row);
+  }
+  //-----------------------------------------------------
+  function OnCellOpen(rowEvent: TableEventPayload) {
+    if (debug) console.log("OnCellOpen", rowEvent);
+    emit("cell-open", rowEvent);
+  }
+  //-----------------------------------------------------
   // 返回特性
   //-----------------------------------------------------
   return {
@@ -250,129 +385,21 @@ export function useTable(
     TableData,
     getRowDataByIndex,
     getRowDataById,
-
-    getTableHeadClass: (selection: TableSelection, col: TableStrictColumn) => {
-      return {
-        "is-actived-column": selection.uniqKey == col.uniqKey,
-        "has-tip": col.tip ? true : false,
-      };
-    },
-    bindTableResizing: (
-      $main: HTMLElement,
-      colResizing: ColResizingState,
-      _column_sizes: Ref<Record<string, number>>,
-      _display_column_keys: Ref<string[]>,
-      showRowMarker: boolean,
-      onDestroy: Callback1<Callback>,
-      Keep: ComputedRef<TableKeepFeature>
-    ) => {
-      if (props.columnResizable) {
-        useTableResizing(
-          $main,
-          colResizing,
-          _column_sizes,
-          _display_column_keys,
-          showRowMarker,
-          onDestroy,
-          () => {
-            if (_.isBoolean(props.columnResizeInTime)) {
-              return props.columnResizeInTime;
-            }
-            let n = props.columnResizeInTime ?? 50;
-            return props.data.length <= n;
-          },
-          Keep
-        );
-      }
-    },
-
-    getRowIds: selectable.getDataIds,
-
-    getCheckStatus() {
-      return selectable.getCheckStatus(selection.value);
-    },
-
+    getTableHeadClass,
+    bindTableResizing,
+    getRowIds,
+    getCheckStatus,
     getCurrentRow,
     getCheckedRows,
-
     buildRowEditablePredicate,
-
-    checkAll() {
-      //console.log('selectAll', selection.ids);
-      let newSelection = _.cloneDeep(selection.value);
-      selectable.checkAll(newSelection);
-
-      trySelect(newSelection);
-    },
-
-    selectNone() {
-      let newSelection = _.cloneDeep(selection.value);
-      selectable.selectNone(newSelection);
-
-      trySelect(newSelection);
-    },
-
-    OnRowSelect(rowEvent: TableEventPayload) {
-      if (selection.value.currentId == rowEvent.row.id) {
-        return;
-      }
-      if (debug) console.log("OnRowSelect", rowEvent);
-      let newSelection = _.cloneDeep(selection.value);
-      newSelection.uniqKey = null; // 清除列选择状态
-
-      if (props.multi) {
-        let { event, row } = rowEvent;
-        let se = EventUtils.getKeyboardStatus(event);
-        selectable.select(newSelection, row.id, se);
-      } else {
-        selectable.selectId(newSelection, rowEvent.row.id);
-      }
-      trySelect(newSelection);
-    },
-
-    OnRowCheck(rowEvent: TableEventPayload) {
-      if (debug) console.log("OnRowCheck", rowEvent);
-      let newSelection = _.cloneDeep(selection.value);
-      if (props.multi) {
-        selectable.toggleId(newSelection, rowEvent.row.id);
-      } else {
-        selectable.selectId(newSelection, rowEvent.row.id);
-      }
-      newSelection.uniqKey = null;
-
-      trySelect(newSelection);
-    },
-
-    OnCellSelect(rowEvent: TableEventPayload) {
-      let { row, colUniqKey } = rowEvent;
-      // console.log(
-      //   'OnCellSelect',
-      //   rowEvent.rowIndex,
-      //   colIndex,
-      //   'cols：',
-      //   columns.length
-      // );
-      let newSelection = _.cloneDeep(selection.value);
-      //console.log('colIndex', colUniqKey);
-
-      if (debug) console.log("OnCellSelect", rowEvent);
-      selectable.selectId(newSelection, row.id);
-      newSelection.uniqKey = colUniqKey;
-
-      trySelect(newSelection);
-    },
-
-    updateSelection: selectable.updateSelection,
-
-    OnRowOpen(rowEvent: TableEventPayload) {
-      if (debug) console.log("OnRowOpen", rowEvent);
-      emit("open", rowEvent.row);
-    },
-
-    OnCellOpen(rowEvent: TableEventPayload) {
-      if (debug) console.log("OnCellOpen", rowEvent);
-      emit("cell-open", rowEvent);
-    },
+    checkAll,
+    selectNone,
+    OnRowSelect,
+    OnRowCheck,
+    OnCellSelect,
+    updateSelection,
+    OnRowOpen,
+    OnCellOpen,
   };
 }
 
