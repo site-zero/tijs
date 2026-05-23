@@ -98,7 +98,7 @@ function defineObjFields(featureName: string) {
       re.name = undefined;
     }
     re.title = finfo.title ?? re.title;
-    re.tip = finfo.tip;
+    re.tip = finfo.tip ?? re.tip;
     re.colStart = finfo.colStart ?? re.colStart;
     re.colSpan = finfo.colSpan ?? re.colSpan;
     re.rowStart = finfo.rowStart ?? re.rowStart;
@@ -174,6 +174,7 @@ function defineObjFields(featureName: string) {
   //---------------------------------------------
   function addFieldIfNoExists(uniqKey: string, field: FormField) {
     if (_FIELDS.has(uniqKey)) {
+      //console.warn(`field exists: '${uniqKey}'`);
       return;
     }
     addField(uniqKey, field);
