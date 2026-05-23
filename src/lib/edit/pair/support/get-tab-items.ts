@@ -1,8 +1,8 @@
-import { StrOptionItem, TiEditPairsProps } from "@site0/tijs";
+import { StrOptionItem, EditPairsProps } from "@site0/tijs";
 import _ from "lodash";
 import { EditPairsApi } from "../use-edit-pairs-api";
 
-export function get_tab_items(props: TiEditPairsProps, api: EditPairsApi) {
+export function get_tab_items(props: EditPairsProps, api: EditPairsApi) {
   let re = [] as StrOptionItem[];
   // 指定的分组
   if (props.groups) {

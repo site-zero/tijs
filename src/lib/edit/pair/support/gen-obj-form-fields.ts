@@ -1,5 +1,6 @@
 import {
   CodeEditorProps,
+  EditPairsProps,
   FieldRefer,
   FieldValueType,
   FormField,
@@ -9,7 +10,6 @@ import {
   InputDatetimeProps,
   InputMultiLinesProps,
   InputNumProps,
-  TiEditPairsProps,
   ToggleProps,
   useObjFields,
   Vars,
@@ -59,7 +59,7 @@ const DEFAULT_FIELDS: Record<FieldValueType, FormField> = {
   },
   Object: {
     type: "Object",
-    comType: "TiCodeEdtior",
+    comType: "TiCodeEditor",
     comConf: {
       type: "json",
     } as CodeEditorProps,
@@ -72,7 +72,7 @@ const DEFAULT_FIELDS: Record<FieldValueType, FormField> = {
 };
 
 type GenObjFormFieldSetup = Pick<
-  TiEditPairsProps,
+  EditPairsProps,
   "titles" | "icons" | "tips" | "fields" | "defaultFields" | "keyFilter"
 > & {
   /**

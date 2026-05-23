@@ -1,5 +1,7 @@
-@use '@site0/tijs/sass/_all.scss' as *;
+@use "@site0/tijs/sass/_all.scss" as *;
 
 .ti-edit-pairs {
   background-color: red;
+  height: 100%;
+  padding: 2px;
 }

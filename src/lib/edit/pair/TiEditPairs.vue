@@ -1,22 +1,29 @@
 <script lang="ts" setup>
+  import { TiLayoutGrid } from "@site0/tijs";
   import { computed } from "vue";
-  import { TiEditPairsEmitter, TiEditPairsProps } from "./edit-pairs-types";
+  import { EditPairsEmitter, EditPairsProps } from "./edit-pairs-types";
+  import { useEditPairsLayout } from "./gui-edit-pairs-layout";
+  import { useEditPairsSchema } from "./gui-edit-pairs-schema";
   import { get_tab_items } from "./support/";
   import { useTiEditPairsApi } from "./use-edit-pairs-api";
   //-----------------------------------------------------
-  const emit = defineEmits<TiEditPairsEmitter>();
-  const props = withDefaults(defineProps<TiEditPairsProps>(), {
+  const emit = defineEmits<EditPairsEmitter>();
+  const props = withDefaults(defineProps<EditPairsProps>(), {
     valueType: "auto",
     valueMode: "flat",
     formMode: "simple",
   });
+  //-----------------------------------------------------
   const api = useTiEditPairsApi(props, emit);
   //-----------------------------------------------------
-  const TabItems = computed(() => get_tab_items(props, api));
+  const GUILayout = computed(() => useEditPairsLayout(props, api));
+  const GUISchema = computed(() => useEditPairsSchema(props, api));
   //-----------------------------------------------------
 </script>
 <template>
-  <div class="ti-edit-pairs">This is TiEditPair</div>
+  <div class="ti-edit-pairs">
+    <TiLayoutGrid v-bind="GUILayout" :schema="GUISchema" />
+  </div>
 </template>
 <style lang="sass" scoped>
   @use "./edit-pairs.scss";

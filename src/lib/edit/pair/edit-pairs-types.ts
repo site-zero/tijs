@@ -10,7 +10,7 @@ import {
   Vars,
 } from "@site0/tijs";
 
-export type TiEditPairsEmitter = {
+export type EditPairsEmitter = {
   (event: "change", payload: Vars): void;
 };
 
@@ -30,7 +30,7 @@ export type EditPairsGroup = StrOptionItem & {
   fields?: FieldRefer[];
 };
 
-export type TiEditPairsProps = CommonProps &
+export type EditPairsProps = CommonProps &
   TabsAspect & {
     readonly?: boolean;
     /**
