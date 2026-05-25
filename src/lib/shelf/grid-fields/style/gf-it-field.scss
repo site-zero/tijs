@@ -52,6 +52,7 @@
       flex-wrap: nowrap;
       align-items: stretch;
       align-content: center;
+      gap: 1px;
       transition:
         color 1s,
         background-color 1s;
@@ -63,20 +64,16 @@
       }
       > .ti-icon {
         flex: 0 0 auto;
-        opacity: 0.6;
-        transition: 300ms;
         height: auto;
         align-self: stretch;
         cursor: pointer;
-        &.at-prefix {
-          margin-right: 0.2em;
+        > .part-main i {
+          opacity: 0.6;
+          transition: 600ms;
         }
-        &.at-suffix {
-          margin-left: 0.2em;
-        }
-        &:hover {
+        &:hover > .part-main i {
           opacity: 1;
-          transform: scale(1.5) translateY(-2px);
+          transform: scale(1.5) rotate(360deg);
         }
       }
       > .as-snippet-text {
