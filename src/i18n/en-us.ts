@@ -436,8 +436,8 @@ export default {
     "Current page number is ${pageNumber}, please enter number between 1 to ${pageCount}:",
   "paging-change-pn-invalid":
     "Page number must be integer, and must between 1 to ${pageCount}",
-  "paging-first": "Head",
-  "paging-last": "Tail",
+  "paging-first": "First",
+  "paging-last": "Last",
   "paging-next": "Next",
   "paging-prev": "Prev",
   "paging-brief":

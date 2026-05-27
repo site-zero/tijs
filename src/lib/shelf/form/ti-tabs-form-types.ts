@@ -1,3 +1,3 @@
-import { GridFieldsProps, TabsAspect } from '../all-shelf';
+import { FormProps, TabsAspect } from "../all-shelf";
 
-export type TabsFormProps = GridFieldsProps & TabsAspect;
+export type TabsFormProps = FormProps & TabsAspect;

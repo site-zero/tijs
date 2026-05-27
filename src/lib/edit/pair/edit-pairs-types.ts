@@ -7,32 +7,11 @@ import {
   IconInput,
   StrOptionItem,
   TabsAspect,
-  TiMatch,
   Vars,
 } from "@site0/tijs";
 
 export type EditPairsEmitter = {
   (event: "change", payload: Vars): void;
-};
-
-/**
- * 定义组
- */
-export type EditPairsGroup = StrOptionItem & {
-  /**
-   * 指明如何什么样的字段输入本组.
-   * 这是一个Match表达式，它的输入就是一个 FormField 对象
-   */
-  testField: any;
-
-  /**
-   * 无论如何，本组都要显示这些字段。
-   * 这里就是一个字段名列表，譬如
-   * ["general.name","general.age"]
-   * 
-   * 同时，这也可以用来声明一个固定的字段顺序
-   */
-  fields?: EditPairsGroupItem[];
 };
 
 export type EditPairsProps = CommonProps &
@@ -49,9 +28,9 @@ export type EditPairsProps = CommonProps &
     /**
      * 控件会自动分析输入对象，这里指定递归分析几层
      * 如果为 `0`, 则会无穷递归下去，所有的键只要不是对象就是字段
-     * 如果为 `1`, 那么只有第一层（顶级）对象字段会认为是字段 
+     * 如果为 `1`, 那么只有第一层（顶级）对象字段会认为是字段
      * 如果为 `2`, 第一层对象通常是分类 key
-     * 
+     *
      * 譬如输入对象:
      * ```js
      * {
@@ -69,7 +48,7 @@ export type EditPairsProps = CommonProps &
      *   }
      * }
      * ```
-     * 
+     *
      * 如果 `0`，则会认为有下面的字段
      *  - 'general.name'
      *  - 'general.age'
@@ -77,18 +56,18 @@ export type EditPairsProps = CommonProps &
      *  - 'address.postcode'
      *  - 'address.phone.work'
      *  - 'address.phone.mobile'
-     * 
+     *
      * 如果为 `1`，则会认为有下面字段
      *  - 'general'
      *  - 'address'
-     * 
+     *
      * 如果为 `2`，则会认为有下面字段
      *  - 'general.name'
      *  - 'general.age'
      *  - 'address.city'
      *  - 'address.postcode'
      *  - 'address.phone'
-     * 
+     *
      * 默认的，这个属性值为 `0`
      */
     fieldDepth?: number;
@@ -96,11 +75,11 @@ export type EditPairsProps = CommonProps &
     /**
      * 可以精细指明各个字段的控件类型，如果没有指定，则会默认
      * 为每种字段按值的类型自动分配编辑控件
-     * 
+     *
      * 这个设置可以自动试退，即如果你声明了 "general"
      * 那么所有 "general.xxx" 字段都会默认采用这个设置
      * 除非，你给出更详细的字段名，字段名是分段(`.`分隔)试退
-     * 
+     *
      * 如果都没定义，则会根据值的类型，寻找字段的控件
      */
     fields?: Record<string, FieldRefer>;
@@ -119,22 +98,22 @@ export type EditPairsProps = CommonProps &
 
     /**
      * 字段分组方式, 没有就不分组，因此对于 Tabs 模式
-     * 一定是需要这个分组设置的
+     * 一定是需要这个分组设置的。
+     * 
+     * 通常，你需要一个 `{ text: "Other", value: "o", fields: ["*"] }`
+     * 来容纳所有未包括进任何组的字段
      */
     groups?: EditPairsGroup[];
-
-
-    /**
-     * 如果指定了 tabs, 可以为各个 tab 定制表单
-     */
-    formConfs?: Record<string, Omit<FormProps, "data" | "field">>;
 
     /**
      * 默认的表单配置
      */
-    defaultFormConf?: Omit<FormProps, "data" | "field">;
+    formConf?: Omit<FormProps, "data" | "fields">;
 
-
+    /**
+     * 如果是 Tabs Form，这里可以单独指定 Tabs 的配置项
+     */
+    tabsConf?: TabsAspect;
 
     /**
      * 指明各个字段的标题【最高优先级】
@@ -156,7 +135,6 @@ export type EditPairsProps = CommonProps &
      * 如果是嵌套对象，用 "a.b.c" 这样的键路径来表示
      */
     tips?: Record<string, string>;
-
 
     /**
      * 指定名称可以编辑.
@@ -182,7 +160,7 @@ export function isEditPairsValueMode(input: any): input is EditPairsValueMode {
 
 /**
  * 用什么方式呈现这个对象编辑界面
- * 
+ *
  * - `tabs`：用 `TiTabsForm` 来渲染表单
  * - `form`：用 `TiForm` 来渲染表单
  */
@@ -192,35 +170,23 @@ export function isEditPairsFormMode(input: any): input is EditPairsFormMode {
 }
 
 /**
- * 可以精确的指定一个字段，也可以动态匹配多个字段，如果什么都不指定，
- * 表示分隔标签
- * 
- * 快捷字符串表示法:
- * 
- * - `---` : 三个以上减号开头表示字段分隔标签
- * - `^` : 正则动态匹配
- * - `*` : 通配符动态匹配 
- * - `xxx` :  其他就是精确匹配
- * 
- * 同时，这也可以很方便的用来指明一个 `Others` 的分组
+ * 定义组
  */
-export type EditPairsGroupItem = {
+export type EditPairsGroup = StrOptionItem & {
   /**
-   * 指定一个明确的字段键
+   * 无论如何，本组都要显示这些字段。
+   * 这里就是一个字段名列表，譬如
+   * ["general.name","general.age"]
+   *
+   * 同时，这也可以用来声明一个固定的字段顺序
+   *
+   * 快捷字符串表示法:
+   *
+   * - `---` : 三个以上减号开头表示字段分隔标签
+   * - `^` : 正则动态匹配
+   * - `*` : 通配符动态匹配
+   * - `xxx` :  其他就是精确匹配
+   *
    */
-  name?: string;
-  /**
-   * 一个匹配表达式，输入是字段名，表示可以宽泛匹配的字段
-   * 在一些固定字段列表中，可以插入一组动态字段
-   */
-  match?: any
-}
-
-export type EditPairsGroupInput = string | RegExp | EditPairsGroupItem;
-
-export type EditPairsGroupItemRT = {
-  name?: string,
-  match?: TiMatch
-  title?: string;
-  type: "label" | 'field' | 'match'
-}
+  fields: any[];
+};

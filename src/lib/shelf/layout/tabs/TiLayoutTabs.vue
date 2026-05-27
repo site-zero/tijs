@@ -198,6 +198,7 @@
             <TiLayoutGrid
               v-else-if="'grid' == MainTab.type"
               v-bind="MainTab.propsForBlock?.comConf"
+              :grid-style="MainTab.mainStyle"
               className="cover-parent"
               :sub-layout="true"
               :schema="schema"
