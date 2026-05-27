@@ -15,12 +15,6 @@ export function useEditPairsForm(
 
   }
   //-----------------------------------------------------
-  // Group Form
-  //-----------------------------------------------------
-  if (api.FormMode.value == 'group') {
-
-  }
-  //-----------------------------------------------------
   // Simple Form
   //-----------------------------------------------------
   return _.assign({
@@ -34,7 +28,6 @@ export function useEditPairsForm(
       tips: props.tips,
       fields: props.fields,
       defaultFields: props.defaultFields,
-      keyFilter: props.keepTab,
       path: []
     })
   }, props.defaultFormConf)

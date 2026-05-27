@@ -16,7 +16,7 @@ import {
 } from "@site0/tijs";
 import _ from "lodash";
 
-const DEFAULT_FIELDS: Record<FieldValueType, FormField> = {
+const DEFAULT_FIELDS: Record<FieldValueType, FieldRefer> = {
   Boolean: {
     type: "Boolean",
     comType: "TiToggle",
@@ -73,7 +73,7 @@ const DEFAULT_FIELDS: Record<FieldValueType, FormField> = {
 
 type GenObjFormFieldSetup = Pick<
   EditPairsProps,
-  "titles" | "icons" | "tips" | "fields" | "defaultFields" | "keyFilter"
+  "titles" | "icons" | "tips" | "fields" | "defaultFields"
 > & {
   /**
    * 正在处理的对象路径, 根对象从 `[]` 开始
@@ -93,7 +93,6 @@ export function gen_obj_form_fields(
     tips = {},
     fields = {},
     defaultFields = {},
-    keyFilter,
   } = setup;
   const dftFldSet = { ...DEFAULT_FIELDS, ...defaultFields };
   let prefix = path.join(".");
@@ -103,10 +102,6 @@ export function gen_obj_form_fields(
   // 循环对象字段
   for (let key of _.keys(obj)) {
     let kpath = prefix ? `${prefix}.${key}` : key;
-    // 无视的字段
-    if (keyFilter && !keyFilter.test(kpath)) {
-      continue;
-    }
 
     // 获取字段的值
     let val = obj[key];
@@ -116,15 +111,13 @@ export function gen_obj_form_fields(
     let dft_fld = dftFldSet[vtp];
 
     // 定制字段
-    let fld_ref: FieldRefer | undefined = undefined;
+    let fld_ref: FieldRefer = dft_fld;
     if (fields) {
-      fld_ref = fields[kpath];
+      fld_ref = fields[kpath] || dft_fld;
     }
     // 除非有定制字段，否则就用默认字段
-    let cus_fld: FormField = dft_fld;
-    if (fld_ref) {
-      cus_fld = _ofs.getFieldBy(fld_ref);
-    }
+    let cus_fld = _ofs.getFieldBy(fld_ref);
+
 
     // 获取标题
     let title = key;

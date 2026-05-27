@@ -52,25 +52,25 @@ const TiEditPairsInfo: TiComInfo = {
       text: "i18n:ti-edit-pairs-example-groups",
       comConf: {
         valueMode: 'nested',
-        formMode: 'group',
+        formMode: 'form',
         value: {
           general: {
             name: "xiaobai",
-            title: null,
+            title: "XiaoBai",
             age: 12,
             website: "www.site0.xyz",
             actived: true
           },
           address: {
             city: 'Beijing',
-            street: null,
+            street: "My Home Is Here",
             postcode: '10086',
-            email: null,
-            mobile: null,
-            phone: null,
+            email: "zozoh@site0.xyz",
+            mobile: "13910110054",
+            phone: "88765543",
           },
           note: "xxx",
-          comment: null
+          comment: "hello world"
         },
       } as EditPairsProps,
     },

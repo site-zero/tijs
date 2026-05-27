@@ -38,17 +38,7 @@ export function useTiEditPairsApi(
     return vt;
   });
   //-----------------------------------------------------
-  const ValueMode = computed(() => props.valueMode || "flat");
   const FormMode = computed(() => props.formMode || "simple");
-  //-----------------------------------------------------
-  const OtherGroup = computed(() => {
-    return (
-      props.otherGroup || {
-        text: "Others",
-        value: "others",
-      }
-    );
-  });
   //-----------------------------------------------------
   // 帮助函数
   //-----------------------------------------------------
@@ -73,9 +63,7 @@ export function useTiEditPairsApi(
     // 计算属性
     ValueObj,
     ValueType,
-    ValueMode,
     FormMode,
-    OtherGroup,
 
     // 操作函数
     // 数据校验
