@@ -124,6 +124,10 @@ export function tiCheckComponent(key: string): TiCom {
   return info;
 }
 
+export function tiAllComponents() {
+  return ALL_TI_COMS;
+}
+
 export function tiFindComponents(filter?: ComInfoFilter): TiCom[] {
   let list = [] as TiCom[];
   for (let com of ALL_TI_COMS.values()) {
