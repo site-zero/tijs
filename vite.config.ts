@@ -38,19 +38,6 @@ export default defineConfig({
     sourcemap: true,
     rollupOptions: {
       external: ["vue"],
-      output: {
-        // 提供全局变量到外部依赖
-        globals: {
-          vue: "Vue",
-        },
-        // 配置样式输出
-        assetFileNames: (assetInfo) => {
-          if (assetInfo.name.endsWith(".scss")) {
-            return "style.scss";
-          }
-          return assetInfo.name;
-        },
-      },
     },
   },
 });

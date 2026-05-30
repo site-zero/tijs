@@ -1,29 +1,29 @@
-import JSON5 from 'json5';
-import _ from 'lodash';
-import { computed, ref } from 'vue';
-import { Vars, WindowTheme } from '../../../_type';
-import { Dom } from '../../../core';
-import { CodeEditorEmitter, CodeEditorProps } from './ti-code-editor-types';
+import JSON5 from "json5";
+import _ from "lodash";
+import { computed, ref } from "vue";
+import { Vars, WindowTheme } from "../../../_type";
+import { Dom } from "../../../core";
+import { CodeEditorEmitter, CodeEditorProps } from "./ti-code-editor-types";
 
 declare const ace: any;
 
 const MODE_MAPPING = {
-  'txt': 'text',
-  'md': 'markdown',
-  'js': 'javascript',
-  'htm': 'html',
-  'json': 'json',
-  'json5': 'json5',
-  'html': 'html',
-  'xml': 'xml',
-  'css': 'css',
-  'text/json': 'json',
-  'text/json5': 'json5',
-  'text/html': 'html',
-  'text/css': 'css',
-  'text/xml': 'xml',
-  'text/markdown': 'markdown',
-  'application/json': 'json',
+  "txt": "text",
+  "md": "markdown",
+  "js": "javascript",
+  "htm": "html",
+  "json": "json",
+  "json5": "json5",
+  "html": "html",
+  "xml": "xml",
+  "css": "css",
+  "text/json": "json",
+  "text/json5": "json5",
+  "text/html": "html",
+  "text/css": "css",
+  "text/xml": "xml",
+  "text/markdown": "markdown",
+  "application/json": "json",
 } as Vars;
 
 export function useCodeAce(props: CodeEditorProps, emit: CodeEditorEmitter) {
@@ -35,7 +35,7 @@ export function useCodeAce(props: CodeEditorProps, emit: CodeEditorEmitter) {
   });
   //-----------------------------------------------------
   const _std_theme = computed(() => {
-    if ('light' == props.theme || 'dark' == props.theme) {
+    if ("light" == props.theme || "dark" == props.theme) {
       return props.theme as WindowTheme;
     }
     return _sys_theme.value;
@@ -57,12 +57,12 @@ export function useCodeAce(props: CodeEditorProps, emit: CodeEditorEmitter) {
   const EditorTheme = computed(() => {
     let _editor_theme = _.assign(
       {
-        light: 'chrome',
-        dark: 'terminal',
+        light: "chrome",
+        dark: "terminal",
       },
       props.editorTheme
     );
-    if ('dark' == _std_theme.value) {
+    if ("dark" == _std_theme.value) {
       return _editor_theme.dark;
     }
     return _editor_theme.light;
@@ -72,36 +72,52 @@ export function useCodeAce(props: CodeEditorProps, emit: CodeEditorEmitter) {
   //-----------------------------------------------------
   const EditorMode = computed(() => {
     return (
-      MODE_MAPPING[props.mime ?? ''] ||
-      MODE_MAPPING[props.type ?? ''] ||
+      MODE_MAPPING[props.mime ?? ""] ||
+      MODE_MAPPING[props.type ?? ""] ||
       props.type ||
-      'text'
+      "text"
     );
   });
   //-----------------------------------------------------
-  const EditorInputValue = computed(() => {
+  const EditorInputValue = computed((): string => {
     let val = props.value;
 
     if (val && !_.isString(val)) {
-      val = JSON.stringify(val, null, '  ');
+      val = JSON.stringify(val, null, "  ");
     }
 
     if (props.format) {
-      if ('JSON' == props.format) {
+      if ("JSON" == props.format) {
         let obj = JSON5.parse(val);
-        val = JSON.stringify(obj, null, '  ');
-      } else if ('JSON5' == props.format) {
+        val = JSON.stringify(obj, null, "  ");
+      } else if ("JSON5" == props.format) {
         let obj = JSON5.parse(val);
-        val = JSON5.stringify(obj, null, '  ');
+        val = JSON5.stringify(obj, null, "  ");
       } else if (_.isFunction(props.format)) {
         val = props.format(val);
       }
     }
 
-    return val || '';
+    return val || "";
   });
   //-----------------------------------------------------
   const _editor = ref<any>();
+  //-----------------------------------------------------
+  function tryNotifyChange() {
+    let str = _editor.value.getValue() || "";
+    if (EditorInputValue.value != str) {
+      emit("change", str);
+    }
+  }
+  //-----------------------------------------------------
+  const debounceNotifyChange = _.debounce(
+    tryNotifyChange,
+    props.debounce ?? 1000,
+    {
+      leading: false,
+      trailing: true,
+    }
+  );
   //-----------------------------------------------------
   function setupEditor($main: HTMLElement) {
     // Create editor
@@ -117,11 +133,16 @@ export function useCodeAce(props: CodeEditorProps, emit: CodeEditorEmitter) {
     }
     // Events
     else {
-      _editor.value.session.on('change', (_delta: any) => {
-        //console.log('editor change::', _delta);
-        let str = _editor.value.getValue() || '';
+      // 如果1秒内无变化，就触发一次更新
+      _editor.value.session.on("change", (_delta: any) => {
+        //console.log("editor change::", _delta);
         //let str = _delta[0];
-        emit('change', str);
+        debounceNotifyChange();
+      });
+      // 编辑器失焦，一定尝试更新一下
+      _editor.value.on("blur", () => {
+        //console.log("editor blur::");
+        tryNotifyChange();
       });
     }
   }
@@ -140,13 +161,13 @@ export function useCodeAce(props: CodeEditorProps, emit: CodeEditorEmitter) {
   //-----------------------------------------------------
   function updateEditorValue() {
     // 防守
-    if(!_editor.value) return;
+    if (!_editor.value) return;
 
     // 获取当前光标位置
     let cursorPosition = _editor.value.getCursorPosition();
 
     // 准备比较内容
-    let current_val = _editor.value.getValue() || '';
+    let current_val = _editor.value.getValue() || "";
 
     // 设置新的内容
     if (current_val != EditorInputValue.value) {

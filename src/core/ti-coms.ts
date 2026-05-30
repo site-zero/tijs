@@ -52,17 +52,9 @@ export function installTiComponents(app: App) {
   }
 }
 
-export const updateInstalledComponentsLangs: {
-  (lang: I18nLang): void;
-  (lang: string): void;
-} = function (lang: string | I18nLang): void {
+export function updateInstalledComponentsLangs(lang: string): void {
   if (debug) console.log("updateInstalledComponentsLangs", lang);
-  let langKey: I18nLang;
-  if (_.isString(lang)) {
-    langKey = I18n.toLangKey(lang);
-  } else {
-    langKey = lang;
-  }
+  let langKey: I18nLang = I18n.toLangKey(lang);
 
   for (let com of ALL_TI_COMS.values()) {
     let messages = com.i18n[langKey];

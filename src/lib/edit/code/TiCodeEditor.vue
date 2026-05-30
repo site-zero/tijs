@@ -12,6 +12,7 @@
   const props = withDefaults(defineProps<CodeEditorProps>(), {
     theme: 'auto',
     editorStatus: 'ready',
+    debounce: 1000,
     editorStyle: () => ({
       fontFamily: "Consolas, 'Courier New', monospace",
       lineHeight: '1.5em',
