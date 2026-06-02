@@ -95,7 +95,11 @@
   });
   //-------------------------------------------------
   const buildFieldStatus = computed(() =>
-    useFieldStatus(Grid.value.fieldItems, props.fieldStatusIcons)
+    useFieldStatus(
+      Grid.value.fieldItems,
+      props.fieldSetName,
+      props.fieldStatusIcons
+    )
   );
   //-------------------------------------------------
   const _field_status = computed(() =>

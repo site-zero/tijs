@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { computed } from "vue";
-  import { getFieldValue } from "../../../_type";
+  import { getFieldValue, Vars } from "../../../_type";
   import { CssUtils } from "../../../core";
   import { useFieldCom } from "../../_features/field";
   import {
@@ -41,7 +41,8 @@
     //   console.log("CellValue, name=", props.name, ", val=", val);
     // }
     if (props.transformer) {
-      return props.transformer(val, props.data, props.name);
+      let ctx: Vars = CellDynamicContext.value;
+      return props.transformer(val, ctx, props.name);
     }
     return val;
   });
