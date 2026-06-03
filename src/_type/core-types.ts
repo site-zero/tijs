@@ -1683,3 +1683,10 @@ export function setTimeToDate(
   }
   return d;
 }
+
+export type OpenUrlOptions = {
+  target?: "_blank" | "_self";
+  method?: "GET" | "POST";
+  params?: Vars;
+  delay?: number;
+};
