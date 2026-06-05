@@ -147,7 +147,7 @@ export function useTiFilterBarApi(
   // 打开编辑器
   //-----------------------------------------------------
   async function openFilterEditor() {
-    console.log("openFilterEditor");
+    //console.log("openFilterEditor");
     const result = _.cloneDeep(props.value ?? {});
     let modal = _.assign(
       {

@@ -110,7 +110,6 @@ export function useInputRangeApi<T, C extends Vars, V extends Vars>(
       return;
     }
     let re = await open_range_editor(props, Info.value, setup);
-    console.log(re);
     // 用户取消
     if (!re) {
       return;

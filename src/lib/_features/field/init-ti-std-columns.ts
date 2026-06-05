@@ -285,7 +285,7 @@ export function init_ti_std_columns() {
   _ofs.addColumn("obj.id", { name: "id", title: "ID" });
   _ofs.addColumn("obj.pid", { name: "pid", title: "PID" });
   _ofs.addColumn("obj.nm-title-icon", {
-    title: "i18n:wn-obj-nm",
+    title: "i18n:wn-obj-nm-title",
     name: ["nm", "icon", "race", "mime", "tp", "title"],
     type: "Object",
     comType: "WnObjThumb",

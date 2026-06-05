@@ -41,7 +41,6 @@
   });
   //-----------------------------------------------------
   function onClickCalendar(val: any) {
-    console.log(val);
     api.onDateValueChange(val);
     _show_calendar.value = false;
   }

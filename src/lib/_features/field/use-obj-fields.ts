@@ -441,6 +441,20 @@ export function fldInputDateRange(
     name,
     title: title || undefined,
     tip,
+    transformer: (s: string) => {
+      let lower = _.toLower(s);
+      if (lower.startsWith("str")) {
+        return s.substring(3).trim();
+      }
+      return s;
+    },
+    serializer: (s: string) => {
+      let lower = _.toLower(s);
+      if (!lower.startsWith("str")) {
+        return "str" + s;
+      }
+      return s;
+    },
     comType: "TiInputDateRange",
     comConf: _.assign(
       {
