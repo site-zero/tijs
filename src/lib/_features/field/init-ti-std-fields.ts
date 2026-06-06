@@ -253,7 +253,7 @@ export function init_ti_std_fields() {
     activatedComConf: {
       autoSelect: true,
       autoFocus: true,
-      placeholder: "=data.nm",
+      placeholder: "=nm",
     } as InputBoxProps,
   });
 
