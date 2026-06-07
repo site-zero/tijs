@@ -1,0 +1,42 @@
+@use "@site0/tijs/sass/_all.scss" as *;
+
+.ti-toast {
+}
+
+//-------------------------------------------------------
+// 混合特性: 位置
+//-------------------------------------------------------
+@mixin tpos($pos, $jc: flex-start, $ai: flex-start) {
+  &.at-#{$pos} {
+    justify-content: $jc;
+    align-items: $ai;
+  }
+}
+
+//-------------------------------------------------------
+// 垫片
+//-------------------------------------------------------
+.ti-toast-gasket {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  //-----------------------------------------------------
+  .toast-con {
+    display: flex;
+    position: fixed;
+    inset: 0;
+    //---------------------------------------------------
+    @include tpos(left-top, flex-start, flex-start);
+    @include tpos(top, center, flex-start);
+    @include tpos(right-top, flex-end, flex-start);
+    @include tpos(left, flex-start, center);
+    @include tpos(center, center, center);
+    @include tpos(right, flex-end, center);
+    @include tpos(bottom-left, flex-start, flex-end);
+    @include tpos(bottom, center, flex-end);
+    @include tpos(bottom-right, flex-end, flex-end);
+    //---------------------------------------------------
+  }
+  //-----------------------------------------------------
+  //-----------------------------------------------------
+}

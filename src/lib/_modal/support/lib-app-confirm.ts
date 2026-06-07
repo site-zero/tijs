@@ -1,13 +1,13 @@
 import _ from "lodash";
-import { openAppModal } from "..";
+import { openAppModal } from "../..";
 import {
   AppModalProps,
   IconInput,
   LogicType,
   PopItemProps,
   Vars,
-} from "../../_type";
-import { __get_msg_box_html } from "./get-msg-box-html";
+} from "../../../_type";
+import { __get_msg_box_html } from "../get-msg-box-html";
 
 export type ConfirmOptions = PopItemProps & {
   icon?: IconInput;

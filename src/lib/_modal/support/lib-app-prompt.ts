@@ -5,9 +5,9 @@ import {
   LogicType,
   PopItemProps,
   Vars,
-} from '../../_type';
-import { HtmlSnippetListenner, openAppModal } from '../../lib';
-import { __get_msg_box_html } from './get-msg-box-html';
+} from '../../../_type';
+import { HtmlSnippetListenner, openAppModal } from '../..';
+import { __get_msg_box_html } from '../get-msg-box-html';
 
 export type PromptOptions = PopItemProps & {
   icon?: IconInput;

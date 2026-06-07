@@ -1,5 +1,6 @@
 import _ from "lodash";
 import { Alert, Confirm, Prompt, openAppModal } from "./_modal";
+import { Toast, openToast } from './_toast'
 import { TI_APP_TIPS } from "./_tipbox";
 
 // console.log('ti lib index');
@@ -15,11 +16,14 @@ _.assign(G.Ti, {
   Confirm,
   Prompt,
   openAppModal,
+  Toast,
+  openToast,
   TI_APP_TIPS,
 });
 
 export * from "./_features";
 export * from "./_modal";
+export * from './_toast';
 export * from "./_tipbox";
 export * from "./_vue";
 export * from "./action/all-actions";
