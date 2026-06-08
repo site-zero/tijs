@@ -1,6 +1,62 @@
 @use "@site0/tijs/sass/_all.scss" as *;
 
-.ti-toast {
+.ti-toast > .trans-box {
+  @include flex-align-nowrap;
+  padding: 1px;
+  min-width: 10em;
+  text-align: center;
+  color: var(--color);
+  background-color: var(--bg);
+  border-radius: var(--ti-measure-r-s);
+  border: 1px solid var(--border);
+  box-shadow: 0.1em 0.1em 0.3em var(--ti-color-mask-weak);
+  pointer-events: auto;
+  overflow: hidden;
+  //-----------------------------------------------------
+  &.is-dead {
+    pointer-events: none;
+    opacity: 0;
+  }
+  //-----------------------------------------------------
+  > a.box-icon {
+    @include flex-center;
+    color: inherit;
+    font-size: 12px;
+    width: 1.5em;
+    height: 1.5em;
+    cursor: pointer;
+    //---------------------------------------------------
+    > i {
+      transition: 0.6s;
+      opacity: 0.6;
+    }
+    //---------------------------------------------------
+    &:hover {
+      text-decoration: none;
+      //-------------------------------------------------
+      > i {
+        opacity: 1;
+      }
+      //-------------------------------------------------
+      &.as-pin > i {
+        transform: rotate(-45deg) scale(1.5);
+      }
+      //-------------------------------------------------
+      &.as-close > i {
+        transform: rotate(360deg) scale(1.5);
+      }
+      //-------------------------------------------------
+    }
+    //---------------------------------------------------
+  }
+  //-----------------------------------------------------
+  &.is-pined {
+    border-width: 3px;
+    > a.box-icon.as-pin {
+      transform: rotate(-45deg);
+    }
+  }
+  //-----------------------------------------------------
 }
 
 //-------------------------------------------------------
@@ -18,22 +74,27 @@
 //-------------------------------------------------------
 .ti-toast-gasket {
   position: fixed;
-  inset: 0;
-  pointer-events: none;
+  top: 0;
+  z-index: $z-top;
+
   //-----------------------------------------------------
   .toast-con {
-    display: flex;
+    @include flex-align-v-nowrap;
+    gap: 0.3em;
+    padding: 0.3em;
     position: fixed;
     inset: 0;
+    pointer-events: none;
+
     //---------------------------------------------------
     @include tpos(left-top, flex-start, flex-start);
-    @include tpos(top, center, flex-start);
-    @include tpos(right-top, flex-end, flex-start);
-    @include tpos(left, flex-start, center);
+    @include tpos(top, flex-start, center);
+    @include tpos(right-top, flex-start, flex-end);
+    @include tpos(left, center, flex-start);
     @include tpos(center, center, center);
-    @include tpos(right, flex-end, center);
-    @include tpos(bottom-left, flex-start, flex-end);
-    @include tpos(bottom, center, flex-end);
+    @include tpos(right, center, flex-end);
+    @include tpos(bottom-left, flex-end, flex-start);
+    @include tpos(bottom, flex-end, center);
     @include tpos(bottom-right, flex-end, flex-end);
     //---------------------------------------------------
   }

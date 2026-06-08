@@ -6,34 +6,33 @@ import { ToastProps } from "./ti-toast-types";
 import TiToast from "./TiToast.vue";
 
 export async function Toast(content: string, setup: ToastProps = {}) {
-    let props = _.assign({ content, }, setup)
-    return openToast(props)
+  let props = _.assign({ content }, setup);
+  return openToast(props);
 }
 
 export async function openToast(props: ToastProps) {
-    // 确保已经存在了对应的 DOM  结构
-    const pos = props.position || 'top'
-    let $con = prepare_toast_dom(pos);
+  // 确保已经存在了对应的 DOM  结构
+  const pos = props.position || "top";
+  let $toa = prepare_toast_dom(pos);
 
-
-    // 准备异步返回
-    return new Promise<void>((_resolve) => {
-
-        function releaseDom() {
-            app.unmount();
-            //Dom.remove($gasket);
-        }
-
-        const app = createApp(TiToast, {
-            ...props, releaseDom
-        })
-        app.mount($con)
-    })
+  // 准备异步返回
+  return new Promise<void>((_resolve) => {
+    // 创建 Vue 实例
+    const app = createApp(TiToast, {
+      ...props,
+      releaseDom: () => {
+        app.unmount();
+        $toa.remove();
+      },
+    });
+    // 挂载 Vue 实例
+    app.mount($toa);
+  });
 }
 
 /**
- * 需要确保网页的结构是 
- * 
+ * 需要确保网页的结构是
+ *
  * ```bash
  * <body>
  * |-- div.ti-toast-gasket
@@ -51,23 +50,29 @@ export async function openToast(props: ToastProps) {
  * ```
  */
 function prepare_toast_dom(pos: PopPosition) {
-    let $body = document.body as HTMLBodyElement;
-    let $gask = Dom.find(":scope > .ti-toast-gasket", $body)
-    if (!$gask) {
-        $gask = Dom.createElement({
-            $p: $body,
-            tagName: "div",
-            className: 'ti-toast-gasket',
-        })
-    }
-    let $con = Dom.find(`:scope > .toast-con.at-${pos}`)
-    if (!$con) {
-        $con = Dom.createElement({
-            $p: $gask,
-            tagName: 'div',
-            className: `toast-con at-${pos}`,
-        })
-    }
+  let $body = document.body as HTMLBodyElement;
+  let $gask = Dom.find(":scope > .ti-toast-gasket", $body);
+  if (!$gask) {
+    $gask = Dom.createElement({
+      $p: $body,
+      tagName: "div",
+      className: "ti-toast-gasket",
+    });
+  }
+  let $con = Dom.find(`:scope > .toast-con.at-${pos}`, $gask);
+  if (!$con) {
+    $con = Dom.createElement({
+      $p: $gask,
+      tagName: "div",
+      className: `toast-con at-${pos}`,
+    });
+  }
 
-    return $con
+  let $toa = Dom.createElement({
+    $p: $con,
+    tagName: "div",
+    className: `toast-item`,
+  });
+
+  return $toa;
 }
