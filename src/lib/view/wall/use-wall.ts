@@ -26,26 +26,26 @@ export function useWall(
     getItem: (id: TableRowID) => getWallItemById(id),
   });
   //-----------------------------------------------------
-  function getWallItemClass(item: WallItem) {
-    //let id = item.id;
-    let isCurrent = selectable.isDataActived(
-      selection,
-      item.index,
-      item.rawData
-    );
-    let isChecked = selectable.isDataChecked(
-      selection,
-      item.index,
-      item.rawData
-    );
-    return CssUtils.mergeClassName(item.className, {
-      "is-current": isCurrent,
-      "is-checked": isChecked,
-    });
-  }
+  // function getWallItemClass(item: WallItem) {
+  //   //let id = item.id;
+  //   let isCurrent = selectable.isDataActived(
+  //     selection,
+  //     item.index,
+  //     item.rawData
+  //   );
+  //   let isChecked = selectable.isDataChecked(
+  //     selection,
+  //     item.index,
+  //     item.rawData
+  //   );
+  //   return CssUtils.mergeClassName(item.className, {
+  //     "is-current": isCurrent,
+  //     "is-checked": isChecked,
+  //   });
+  // }
   //-----------------------------------------------------
   function OnItemSelect(item: WallItem, event: Event) {
-    console.log("itemSelect");
+    // console.log("itemSelect");
     // 防守
     if (!props.canSelect) {
       return;
@@ -174,10 +174,11 @@ export function useWall(
     for (let i = 0; i < N; i++) {
       let item = data[i];
 
-      let itVars = { ...vars, item };
+      let isCurrent = selectable.isDataActived(selection, i, item);
+      let isChecked = selectable.isDataChecked(selection, i, item);
 
       // 逻辑类型
-      let type = getItemLogicType?.(item, i);
+      let logicType = getItemLogicType?.(item, i);
 
       // 样式
       let style = CssUtils.mergeStyles([itemStyle, getItemStyle?.(item, i)]);
@@ -188,9 +189,10 @@ export function useWall(
 
       // 类
       let className = CssUtils.mergeClassName(
-        {},
         {
-          [`is-${type}`]: type ? true : false,
+          [`is-${logicType}`]: logicType ? true : false,
+          "is-current": isCurrent,
+          "is-checked": isChecked,
         },
         getItemClass?.(item, i)
       );
@@ -198,16 +200,22 @@ export function useWall(
       let conClass = CssUtils.mergeClassName(
         {},
         {
-          [`is-${type}`]: type ? true : false,
+          [`is-${logicType}`]: logicType ? true : false,
         },
         getItemConClass?.(item, i)
       );
 
+      let itVars = { ...vars, logicType, isCurrent, isChecked, index: i, item };
+
       // 墙贴项具体的渲染控件
       let com: Required<ComRef>;
+
+      // 完全自定义
       if (props.wallItem) {
         com = props.wallItem(itVars);
-      } else {
+      }
+      // 采用 Explain 模式
+      else {
         let comType = Util.explainObj(
           itVars,
           props.comType ?? "TiThumb"
@@ -222,7 +230,7 @@ export function useWall(
         index: i,
         id: rowId,
         rawData: item,
-        type,
+        type: logicType,
         style,
         className,
         conStyle,
@@ -257,7 +265,7 @@ export function useWall(
     getWallItemByIndex,
     getWallItemById,
     getItemId: selectable.getDataId,
-    getWallItemClass,
+    //getWallItemClass,
     OnItemSelect,
     OnItemCheck,
     OnItemCancel,

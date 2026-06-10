@@ -66,7 +66,8 @@ export type WallProps = CommonProps &
      *
      * 通过一个回调函数，可以为每个数据项指定不同的墙贴项
      *
-     * @param itemContext 墙贴项渲染上下文 `{ ...vars, item }`
+     * @param itemContext 墙贴项渲染上下文
+     * `{ ...vars,  logicType, isCurrent, isChecked, index, item }`
      * @returns 墙贴项的控件具体渲染方式
      */
     wallItem?: (itemContext: Vars) => Required<ComRef>;

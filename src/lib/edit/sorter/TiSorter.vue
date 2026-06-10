@@ -15,6 +15,8 @@
   //-----------------------------------------------------
   const TopClass = computed(() => CssUtils.mergeClassName(props.className));
   //-----------------------------------------------------
+  const TopStyle = computed(() => CssUtils.toStyle(props.style));
+  //-----------------------------------------------------
   function onRemoveItem(it: TagItem) {
     let sv = Sorter.value.removeValue(it as SorterItem);
     if (props.onChange) {
@@ -65,7 +67,7 @@
   //-----------------------------------------------------
 </script>
 <template>
-  <div class="ti-sorter" :class="TopClass">
+  <div class="ti-sorter" :class="TopClass" :style="TopStyle">
     <div class="part-items">
       <TiTags
         :title="props.title"

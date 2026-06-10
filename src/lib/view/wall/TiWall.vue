@@ -150,7 +150,7 @@
         <div
           v-for="wit in _wall.Items.value"
           class="wall-item"
-          :class="_wall.getWallItemClass(wit)"
+          :class="wit.className"
           :style="wit.style"
           :it-index="wit.index"
           :it-type="wit.type">
