@@ -12,6 +12,8 @@
     height: 3em;
     border: 1px solid var(--bar-c0);
     // 不能添加 overflow: hidden; 因为 drag enter 样式需要超出边界
+    // 把 drag enter 放到上一层，就可以加了，否则圆角边线会被破会
+    overflow: hidden;
     //-----------------------------------------------
     > .part-icon {
       @include flex-center;
@@ -108,9 +110,9 @@
   }
   //-----------------------------------------------
   &.drag-enter {
-    > .bar-con::after {
+    &::after {
       pointer-events: none;
-      // background-color: yellow;
+      background-color: var(--ti-color-highlight);
       // opacity: 0.4;
       content: '';
       display: block;

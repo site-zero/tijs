@@ -2,9 +2,9 @@
   import JSON5 from "json5";
   import _ from "lodash";
   import { computed, ref } from "vue";
+  import { usePlaceholder, useReadonly } from "../../";
   import { CssUtils, Str } from "../../../core";
   import { InputTextProps } from "./ti-input-text-types";
-  import { useReadonly } from "../../";
 
   const emit = defineEmits<{
     (eventName: "change", payload: any): void;
@@ -17,6 +17,7 @@
 
   const _readonly = computed(() => useReadonly(props));
   const isReadonly = computed(() => _readonly.value.isReadonly(props.value));
+  const Placeholder = computed(() => usePlaceholder(props));
 
   const TopClass = computed(() => {
     return CssUtils.mergeClassName(props.className, {
@@ -90,6 +91,7 @@
     :style="TopStyle"
     spellcheck="false"
     :readonly="isReadonly"
+    :placeholder="Placeholder"
     @change="onTextChange"
     @focus="_focused = true"
     @blur="_focused = false"
