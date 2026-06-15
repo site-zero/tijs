@@ -253,7 +253,7 @@ export function applyFieldChangeDiff(
   changes: FieldChange[] | Vars,
   data: Vars = {}
 ) {
-  if (_.isArray<FieldChange>(changes)) {
+  if (_.isArray(changes)) {
     return mergeFieldChanges(changes, data);
   }
   // 已经合并过了

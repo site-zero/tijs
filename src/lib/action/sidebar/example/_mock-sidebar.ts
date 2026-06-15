@@ -1,5 +1,5 @@
-import { Chance } from 'chance';
-import { SideBarItem } from '../../../../_type';
+import { SideBarItem } from "@site0/tijs";
+import { Chance } from "chance";
 
 // 创建一个 Chance 实例
 const chance = new Chance();
@@ -10,10 +10,8 @@ export function genItem(childCount = 0, depth = 0): SideBarItem {
 
   let re: SideBarItem = {
     id,
-    key: id,
     path: chance.string(),
     title: chance.word(),
-    depth,
   };
   if (childCount > 0) {
     re.items = [];

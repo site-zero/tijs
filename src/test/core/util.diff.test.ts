@@ -1,6 +1,9 @@
-import { DiffItem } from "index";
+import {
+  buildDifferentItem,
+  buildDifferentListItems,
+  DiffItem,
+} from "@site0/tijs";
 import { expect, test } from "vitest";
-import { buildDifferentItem, buildDifferentListItems } from "../../core";
 
 test("diff-obj-00", function () {
   let my = { a: 35, b: "hello", c: { color: "red" } };
