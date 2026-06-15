@@ -1,4 +1,4 @@
-import { ImageProps, ProgressBarProps, TextSnippetProps } from '../../';
+import { ImageProps, ProgressBarProps, TextSnippetProps } from "../../";
 import {
   AspectSize,
   CommonProps,
@@ -6,14 +6,14 @@ import {
   IconInput,
   LogicType,
   Vars,
-} from '../../../_type';
+} from "../../../_type";
 
 export type ThumbIndicatorPosition =
-  | 'left-top'
-  | 'right-top'
-  | 'bottom-left'
-  | 'bottom-right'
-  | 'center';
+  | "left-top"
+  | "right-top"
+  | "bottom-left"
+  | "bottom-right"
+  | "center";
 
 export type ThumbIndicator = {
   position: ThumbIndicatorPosition;
@@ -40,11 +40,16 @@ export type ThumbIndicator = {
  * +---------------+
  * ```
  */
-export type ThumbProps = CommonProps & {
-  preview?: ImageProps;
-  progress?: ProgressBarProps;
-  text?: string | TextSnippetProps;
-  more?: string | TextSnippetProps;
+export type ThumbProps = CommonProps &
+  ThumbAspect & {
+    preview?: ImageProps;
+    progress?: ProgressBarProps;
+    text?: string | TextSnippetProps;
+    more?: string | TextSnippetProps;
+  };
+
+export type ThumbAspect = {
+  // Indicator
   indicators?: ThumbIndicator[];
 
   // Aspect: measure
@@ -63,5 +68,5 @@ export type ThumbProps = CommonProps & {
   moreAlign?: CssAlignment;
 
   // Flex Layout
-  flexGrow?: 'text' | 'more' | 'none';
+  flexGrow?: "text" | "more" | "none";
 };
