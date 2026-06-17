@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import _ from "lodash";
   import { computed, useTemplateRef } from "vue";
-  import { ActionBarProps, InputBoxProps, TiActionBar, TiInput } from "../../";
+  import { ActionBarProps, InputBoxProps, TiActionBar, TiInput } from "@site0/tijs";
   import { I18n } from "../../../core";
   import { isLngLatObj, isLngLatTuple } from "../../view/all-views";
   import { lnglatTupleToObj } from "../../view/lbs-map/gis/use-lbs-support";

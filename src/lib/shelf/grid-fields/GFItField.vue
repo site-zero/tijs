@@ -2,7 +2,7 @@
   import JSON5 from "json5";
   import _ from "lodash";
   import { computed, inject } from "vue";
-  import { TiTextSnippet, useFieldCom, useReadonly } from "../../";
+  import { TiTextSnippet, useFieldCom, useReadonly } from "@site0/tijs";
   import { LogicType, Vars, getFieldValue } from "../../../_type";
   import { CssUtils } from "../../../core";
   import {

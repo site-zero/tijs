@@ -21,7 +21,7 @@
     newItem: " ",
     checkedItemType: "primary",
     emptyRoadblock: () => ({
-      size: "small",
+      size: "s",
     }),
   });
   const _api = useTiInputMultiLinesApi(props, emit);

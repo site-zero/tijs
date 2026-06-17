@@ -1,4 +1,4 @@
-import { FieldRefer, GridFieldsInput, useObjFields } from "../../";
+import { FieldRefer, GridFieldsInput, useObjFields } from "@site0/tijs";
 import { InputGroupProps } from "./ti-input-group-types";
 
 export function getGroupFields(props: InputGroupProps): GridFieldsInput[] {

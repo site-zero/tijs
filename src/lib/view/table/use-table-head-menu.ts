@@ -1,5 +1,5 @@
 import { ComputedRef, Ref } from "vue";
-import { ActionBarProps, TableStrictColumn } from "../../";
+import { ActionBarProps, TableStrictColumn } from "@site0/tijs";
 import { ActionBarItem, Vars } from "../../../_type";
 import { doCustomizeColumn } from "./use-customized-columns";
 import { TableFeature } from "./use-table";

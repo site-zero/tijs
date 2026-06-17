@@ -6,7 +6,7 @@
     InputTimeEmitter,
     InputTimeProps,
     TiInputNum,
-  } from "../../";
+  } from "@site0/tijs";
   import { useInputTimeApi } from "./use-input-time-api";
   //-----------------------------------------------------
   const emit = defineEmits<InputTimeEmitter>();

@@ -11,7 +11,7 @@
     TiFilter,
     TiSorter,
     useKeep,
-  } from "../../";
+  } from "@site0/tijs";
   import { ActionBarItem } from "../../../_type";
   import { CssUtils, Util } from "../../../core";
   import { useComboFilterKeep } from "./use-combo-filter-keep";

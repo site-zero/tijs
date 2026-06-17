@@ -8,7 +8,7 @@ import {
   LabelProps,
   BoxDropItemFormat,
   ToggleProps,
-} from "../../";
+} from "@site0/tijs";
 import {
   ColumnRefer,
   FieldName,

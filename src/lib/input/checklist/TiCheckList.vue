@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import _ from "lodash";
   import { watch } from "vue";
-  import { ListSelectEmitInfo, TiList } from "../../";
+  import { ListSelectEmitInfo, TiList } from "@site0/tijs";
   import { LogicType, Vars } from "../../../_type";
   import { CheckListEmitter, CheckListProps } from "./ti-check-list-types";
   import { useChecklist } from "./use-checklist";

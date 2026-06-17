@@ -2,7 +2,7 @@
   import "leaflet/dist/leaflet.css";
   import _ from "lodash";
   import { computed, onMounted, ref, useTemplateRef, watch } from "vue";
-  import { TiLoading } from "../../";
+  import { TiLoading } from "@site0/tijs";
   import { CssUtils, LbsMapDrawContext } from "../../../";
   import {
     LbsMapEmitter,

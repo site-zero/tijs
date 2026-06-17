@@ -5,7 +5,7 @@ import {
   InputNumProps,
   LabelProps,
   ToggleProps,
-} from "../../";
+} from "@site0/tijs";
 import { useObjColumns } from "./use-obj-columns";
 
 export function init_ti_std_columns() {

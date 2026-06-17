@@ -1,7 +1,7 @@
 import { PopupOptions } from "leaflet";
 import _ from "lodash";
 import { ComputedRef, Ref } from "vue";
-import { RoadblockProps } from "../../";
+import { RoadblockProps } from "@site0/tijs";
 import { CommonProps, IconInput, LogicType, Vars } from "../../../_type";
 import { KeepInfo } from "../../../lib/_features";
 

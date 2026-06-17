@@ -8,7 +8,7 @@
     useFieldChange,
     useGridLayout,
     useViewport,
-  } from "../../";
+  } from "@site0/tijs";
   import { FieldChange } from "../../../_type";
   import { CssUtils } from "../../../core";
   import GFItField from "./GFItField.vue";
@@ -65,7 +65,7 @@
         text: "i18n:empty-data",
         icon: "fas-clipboard-list",
         mode: "cover",
-        size: "normal",
+        size: "m",
         layout: "A",
         opacity: "shadowy",
       } as RoadblockProps,

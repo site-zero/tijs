@@ -2,7 +2,7 @@
   import JSON5 from "json5";
   import _ from "lodash";
   import { computed, ref } from "vue";
-  import { usePlaceholder, useReadonly } from "../../";
+  import { usePlaceholder, useReadonly } from "@site0/tijs";
   import { CssUtils, Str } from "../../../core";
   import { InputTextProps } from "./ti-input-text-types";
 

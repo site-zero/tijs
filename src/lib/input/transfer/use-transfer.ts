@@ -85,7 +85,7 @@ export function useTransfer(
       text,
       icon,
       mode: "cover",
-      size: "normal",
+      size: "m",
       layout: "A",
     } as RoadblockProps;
   }

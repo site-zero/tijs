@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import _ from "lodash";
   import { computed, inject } from "vue";
-  import { useFieldCom } from "../../";
+  import { useFieldCom } from "@site0/tijs";
   import { BUS_KEY } from "../../../_type";
   import { ABAR_STATE, ABarUsedItem } from "./ti-action-bar-types";
   //-------------------------------------------------------

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import _ from "lodash";
   import { computed, watch } from "vue";
-  import { ListSelectEmitInfo, TiList } from "../../";
+  import { ListSelectEmitInfo, TiList } from "@site0/tijs";
   import { RadioListEmitter, RadioListProps } from "./ti-radio-list-types";
   import { useRadioList } from "./use-radio-list";
   //-----------------------------------------------------

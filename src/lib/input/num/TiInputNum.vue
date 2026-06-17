@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import _ from "lodash";
   import { computed, ref, watch } from "vue";
-  import { TiInput } from "../../";
+  import { TiInput } from "@site0/tijs";
   import { Bank, Num, tiGetDefaultComPropValue } from "../../../core";
   import { COM_TYPES } from "../../lib-com-types";
   import { InputNumProps, InputNumValueType } from "./ti-input-num-types";

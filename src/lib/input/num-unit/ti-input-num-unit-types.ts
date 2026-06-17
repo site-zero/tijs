@@ -1,4 +1,4 @@
-import { InputBoxProps, InputNumProps } from "../../";
+import { InputBoxProps, InputNumProps } from "@site0/tijs";
 import { AspectSize, Vars } from "../../../_type";
 
 export type InputNumUnitEmitter = (event: "change", payload: Vars) => void;

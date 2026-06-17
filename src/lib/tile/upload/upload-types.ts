@@ -4,7 +4,7 @@ import {
   ImageProps,
   ProgressBarProps,
   TextSnippetProps,
-} from "../../";
+} from "@site0/tijs";
 import {
   ActionBarItem,
   ActionBarItemInfo,

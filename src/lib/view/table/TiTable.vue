@@ -76,7 +76,7 @@
       text: "i18n:empty-data",
       mode: "auto",
       layout: "A",
-      size: "normal",
+      size: "s",
       opacity: "shadowy",
       icon: "zmdi-apps",
     }),

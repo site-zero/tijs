@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from "lodash";
 import {
   IconTextEvents,
   IconTextFeature,
@@ -7,10 +7,10 @@ import {
   UseIconEvents,
   UseTextEvents,
   useIconText,
-} from '../../';
-import { IconInput } from '../../../_type';
-import { CssUtils, I18n } from '../../../core';
-import { RoadblockProps, RoadblockSize } from './ti-roadblock-types';
+} from "@site0/tijs";
+import { AspectSize, IconInput, toAspectFontSize } from "../../../_type";
+import { CssUtils, I18n } from "../../../core";
+import { RoadblockProps } from "./ti-roadblock-types";
 /*-------------------------------------------------------
 
                      Types
@@ -56,14 +56,17 @@ export type RoadblockOptions = IconTextOptions<UseIconEvents, UseTextEvents> & {
   defaultText: string;
 };
 
-function getIconClass(Roadblock: IconTextFeature, Size: RoadblockSize) {
+function getIconClass(Roadblock: IconTextFeature, Size: AspectSize) {
   let css = CssUtils.mergeClassName({}, Roadblock.iconClass);
-  let autoIconClass = {
-    small: 's16',
-    normal: 's32',
-    big: 's64',
-    large: 's128',
-  }[Size];
+  let autoIconClass = (
+    {
+      t: "s16",
+      s: "s32",
+      m: "s64",
+      b: "s128",
+      h: "s256",
+    } as Record<AspectSize, string>
+  )[Size];
   let keys = _.keys(css);
   for (let k of keys) {
     if (/^(s\d+)$/.test(k)) {
@@ -90,35 +93,35 @@ export function useRoadblock(
   let { defaultIcon, defaultText } = options;
 
   const Roadblock = useIconText(state, props, options);
-  const Size = props.size ?? ('B' == props.layout ? 'normal' : 'big');
+  const Size: AspectSize = props.size ?? ("B" == props.layout ? "m" : "b");
   let hasLinks = !_.isEmpty(props.links);
 
   return {
     Size,
     ..._.pick(
       Roadblock,
-      'showIcon',
-      'showText',
-      'OnClickIcon',
-      'OnClickText',
-      'setIconHover',
-      'setTextHover'
+      "showIcon",
+      "showText",
+      "OnClickIcon",
+      "OnClickText",
+      "setIconHover",
+      "setTextHover"
     ),
     //.......................................
     TopClass: Roadblock.getClassName(
       props.className,
-      `mode-${props.mode || 'fit'}`,
-      `layout-${props.layout || 'A'}`,
-      Size,
+      `mode-${props.mode || "fit"}`,
+      `layout-${props.layout || "A"}`,
       _.isString(props.opacity) ? props.opacity : null,
       {
-        'has-links': hasLinks,
+        "has-links": hasLinks,
       }
     ),
     //.......................................
     TopStyle: CssUtils.mergeStyles([
-      Roadblock.style,
+      { fontSize: toAspectFontSize(Size) },
       _.isNumber(props.opacity) ? { opacity: props.opacity } : {},
+      Roadblock.style,
     ]),
     //.......................................
     IconClass: getIconClass(Roadblock, Size),

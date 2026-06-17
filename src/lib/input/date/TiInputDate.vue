@@ -7,7 +7,7 @@
     TiCalendar,
     TiInput,
     useDocking,
-  } from "../../";
+  } from "@site0/tijs";
   import { COM_TYPES } from "../../lib-com-types";
   import { useInputDateTimeApi } from "../datetime/use-input-datetime-api";
   //-----------------------------------------------------

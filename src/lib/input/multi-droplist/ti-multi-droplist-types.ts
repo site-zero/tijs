@@ -6,7 +6,7 @@ import {
   TableRowID,
   Vars,
 } from "@site0/tijs";
-import { DictProps, PlaceholderProps, ReadonlyProps, TagsProps } from "../../";
+import { DictProps, PlaceholderProps, ReadonlyProps, TagsProps } from "@site0/tijs";
 
 export type MultiDroplistEmitter = {
   (event: "change", vals: null | TableRowID[]): void;

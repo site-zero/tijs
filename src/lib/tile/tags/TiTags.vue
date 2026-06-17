@@ -8,7 +8,7 @@
     useTemplateRef,
     watch,
   } from "vue";
-  import { TiActionBar, TiLabel, usePlaceholder } from "../../";
+  import { TiActionBar, TiLabel, usePlaceholder } from "@site0/tijs";
   import { CssUtils, I18n } from "../../../core";
   import { TagItem, TagsEmitter, TagsProps } from "./ti-tags-types";
   import { useTags } from "./use-tags";

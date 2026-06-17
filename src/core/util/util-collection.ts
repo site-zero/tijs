@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { Util } from "../";
-import { TableRowID, TextStrValue } from "../../_type";
+import { TableRowID, TextStrValue, Vars } from "../../_type";
 
 /***
  * 将一组值推到一个对象的某个指定键下,
@@ -175,8 +175,8 @@ export function getNextId<T>(
   let _ids = _.isNil(checkedIds)
     ? []
     : _.isArray(checkedIds)
-    ? checkedIds
-    : [checkedIds];
+      ? checkedIds
+      : [checkedIds];
 
   // 防空
   if (_.isEmpty(_ids) || _.isEmpty(list)) {
@@ -310,4 +310,31 @@ export function moveChecked<T>(
   fns[dir]();
 
   return _.without(re, undefined);
+}
+
+export type RemoveListResult = {
+  list: Vars[];
+  removed: Vars[];
+};
+
+export function removeListBy(
+  inputList: Vars[],
+  predicate: (item: Vars, index: number) => boolean
+): RemoveListResult {
+  let list = [] as Vars[];
+  let removed = [] as Vars[];
+  if (inputList) {
+    for (let i = 0; i < inputList.length; i++) {
+      let item = inputList[i];
+      // 需要删除的 ID
+      if (predicate(item, i)) {
+        removed.push(item);
+      }
+      // 需要保留的 ID
+      else {
+        list.push(item);
+      }
+    }
+  }
+  return { list, removed };
 }

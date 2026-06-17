@@ -8,7 +8,7 @@ import {
   LabelProps,
   ToggleProps,
   useObjFields,
-} from "../../";
+} from "@site0/tijs";
 
 export function init_ti_std_fields() {
   const _ofs = useObjFields();

@@ -1,21 +1,21 @@
-@use '@site0/tijs/sass/_all.scss' as *;
+@use "@site0/tijs/sass/_all.scss" as *;
 
 .ti-thumb {
   position: relative;
   line-height: 1.2em;
   @include flex-align-v-nowrap;
   @mixin thumb_text_size($prefix, $sz) {
-    &[#{$prefix}-size='#{$sz}'] > .part-#{$prefix} {
+    &[#{$prefix}-size="#{$sz}"] > .part-#{$prefix} {
       font-size: var(--ti-fontsz-#{$sz});
     }
   }
   @mixin thumb_text_align($prefix, $align) {
-    &[#{$prefix}-align='#{$align}'] > .part-#{$prefix} {
+    &[#{$prefix}-align="#{$align}"] > .part-#{$prefix} {
       text-align: $align;
     }
   }
   @mixin thumb_text_padding($prefix, $padding) {
-    &[#{$prefix}-padding='#{$padding}'] > .part-#{$prefix} {
+    &[#{$prefix}-padding="#{$padding}"] > .part-#{$prefix} {
       padding: var(--ti-gap-#{$padding});
     }
   }
@@ -50,7 +50,6 @@
 
   &.flex-grow-text > .part-text {
     flex: 1 1 auto;
-    line-height: 1.1em;
   }
 
   &.flex-grow-more > .part-more {
@@ -63,27 +62,27 @@
     font-size: 10px;
     @include flex-align;
 
-    &[at='left-top'] {
+    &[at="left-top"] {
       left: 0;
       top: 0;
     }
 
-    &[at='right-top'] {
+    &[at="right-top"] {
       right: 0;
       top: 0;
     }
 
-    &[at='bottom-left'] {
+    &[at="bottom-left"] {
       left: 0;
       bottom: 0;
     }
 
-    &[at='bottom-right'] {
+    &[at="bottom-right"] {
       right: 0;
       bottom: 0;
     }
 
-    &[at='center'] {
+    &[at="center"] {
       inset: 0;
       justify-content: center;
       align-items: center;
@@ -119,5 +118,20 @@
     padding: 0.5em;
     background-color: var(--ti-color-mask-thin);
     @include flex-center;
+  }
+
+  .part-text {
+    line-height: 1.3em;
+    .as-snippet-text {
+      word-break: break-all;
+      // display: -webkit-box;
+      // -webkit-box-orient: vertical;
+      // -webkit-line-clamp: 2; /* 控制显示行数，2=两行 */
+      // TODO 如何限制一个固定的显示行数呢？譬如3行
+    }
+  }
+
+  .part-more {
+    line-height: 1.3em;
   }
 }

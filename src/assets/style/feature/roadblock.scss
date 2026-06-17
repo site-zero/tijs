@@ -1,4 +1,4 @@
-@use '../_all.scss' as *;
+@use "../_all.scss" as *;
 
 .roadblock {
   padding: SZ(20);
@@ -105,6 +105,23 @@
     }
     > .part-text {
       flex: 1 1 auto;
+    }
+    &.has-links {
+      > .part-links {
+        width: 100%;
+        justify-content: flex-start;
+        padding-left: 3.2em;
+      }
+    }
+  }
+  ///---------------------------------------
+  &.layout-C {
+    @include flex-align($jc: center, $ai: center, $ac: center);
+    > .part-icon {
+      margin: 0 0.8em;
+    }
+    > .part-text {
+      flex: 0 0 auto;
     }
     &.has-links {
       > .part-links {

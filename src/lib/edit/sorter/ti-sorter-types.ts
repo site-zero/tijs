@@ -1,4 +1,4 @@
-import { OptionsInput } from "../../";
+import { OptionsInput } from "@site0/tijs";
 import { CommonProps, IconInput, LogicType } from "../../../_type";
 
 export type SorterExportApi = {

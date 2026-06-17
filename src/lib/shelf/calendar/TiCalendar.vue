@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { computed } from "vue";
-  import { TiInput, TiTextSnippet } from "../../";
+  import { TiInput, TiTextSnippet } from "@site0/tijs";
   import {
     isAspectSize,
     toAspectBoxPad,

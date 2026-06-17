@@ -1,13 +1,13 @@
 import { Dom } from "..";
 
-export type DoUploadFilesOptions = {
+export type ChooseFilesOptions = {
   multi?: boolean;
   // accept="image/*, text/*, .jpg, .jpeg, .pdf"
   accept?: string;
 };
 
-export async function doUploadFiles(
-  options: DoUploadFilesOptions = {}
+export async function chooseFiles(
+  options: ChooseFilesOptions = {}
 ): Promise<File[]> {
   return new Promise<File[]>((resolve, reject) => {
     try {

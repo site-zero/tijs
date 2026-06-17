@@ -1,5 +1,5 @@
 import { InjectionKey } from "vue";
-import { VisibilityFeature } from "../../";
+import { VisibilityFeature } from "@site0/tijs";
 import {
   ActionBarCallback,
   ActionBarItem,

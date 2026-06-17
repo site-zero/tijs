@@ -3,7 +3,7 @@ import {
   DisplayTextProps,
   PlaceholderProps,
   ValuePipeProps,
-} from "../../";
+} from "@site0/tijs";
 import {
   AspectSize,
   BoxColorMode,

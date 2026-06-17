@@ -7,7 +7,7 @@
     TiInput,
     TiInputNum,
     useViewport,
-  } from "../../";
+  } from "@site0/tijs";
   import { CssUtils } from "../../../core";
   import {
     InputNumUnitEmitter,

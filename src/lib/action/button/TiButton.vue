@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import _ from "lodash";
   import { computed } from "vue";
-  import { TiIcon } from "../../";
+  import { TiIcon } from "@site0/tijs";
   import { CssUtils, I18n } from "../../../";
   import { ButtonProps } from "./ti-button-types";
   const emit = defineEmits<{

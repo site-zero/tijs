@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { computed } from "vue";
-import { RoadblockProps } from "../../";
+import { RoadblockProps } from "@site0/tijs";
 import { AnyOptionItem, IconInput, TableRowID, Vars } from "../../../_type";
 import { EventUtils, I18n, Tmpl, Util } from "../../../core";
 import {

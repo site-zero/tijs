@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { computed } from "vue";
-  import { EmitAdaptorOptions, TiIcon, useEmitAdaptor } from "../../";
+  import { EmitAdaptorOptions, TiIcon, useEmitAdaptor } from "@site0/tijs";
   import { TextSnippetEmitter, TextSnippetProps } from "./text-snippet-types";
   import { useTextSnippet } from "./use-text-snippet";
   import { EmitAdaptorEvent } from "../../../_type";

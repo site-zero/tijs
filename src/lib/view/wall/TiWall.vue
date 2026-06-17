@@ -1,22 +1,27 @@
 <script lang="ts" setup>
+  import {
+    CssUtils,
+    Dom,
+    ElementScrollIntoViewOptions,
+    RoadblockProps,
+    SelectableState,
+    TableRowID,
+    TiRoadblock,
+    TiTextSnippet,
+    useGridLayout,
+    useViewport,
+    Util,
+  } from "@site0/tijs";
   import _ from "lodash";
   import {
     computed,
+    nextTick,
     onMounted,
     onUnmounted,
     reactive,
     useTemplateRef,
     watch,
   } from "vue";
-  import {
-    RoadblockProps,
-    SelectableState,
-    TiRoadblock,
-    useGridLayout,
-    useViewport,
-  } from "../../";
-  import { TableRowID, TiTextSnippet } from "../../../";
-  import { CssUtils } from "../../../core";
   import { WallEmitter, WallItem, WallProps } from "./ti-wall-types";
   import { useWall } from "./use-wall";
 
@@ -67,7 +72,7 @@
       {
         mode: "fit",
         layout: "B",
-        size: "normal",
+        size: "s",
         className: "is-track",
         text: "i18n:nil-content",
         icon: "zmdi-view-module",
@@ -86,29 +91,43 @@
     return handlers;
   }
   //-----------------------------------------------------
-  watch(
-    () => selection.checkedIds,
-    (newVal, oldVal) => {
-      console.log(
-        "checkedIds changed",
-        [...oldVal.keys()].join(",") || "<empty>",
-        "=>",
-        [...newVal.keys()].join(",") || "<empty>"
-      );
+  function scrollIntoViewByIndex(
+    index: number,
+    options?: ElementScrollIntoViewOptions
+  ) {
+    // 防空
+    if (!$el.value) {
+      return;
     }
-  );
+    // 找到对应的的元素
+    let $item = Dom.find(`.wall-item[it-index="${index}"]`, $el.value);
+    // console.log("scrollIntoViewByIndex", index, $item);
+    if ($item && $item.parentElement) {
+      let $viewport: HTMLElement | undefined = undefined;
+      if (props.scrollViewPort) {
+        $viewport = props.scrollViewPort();
+      }
+      if (!$viewport) {
+        $viewport = $item.parentElement;
+      }
+      Dom.scrollIntoView($viewport, $item, options);
+    }
+  }
+  //-----------------------------------------------------
+  function scrollCheckedIntoView(smooth = true) {
+    //console.log("scrollCheckedIntoView");
+    let checkedIds = Util.mapTruthyKeys(selection.checkedIds);
+    if (checkedIds.length > 0) {
+      let fstId = checkedIds[0];
+      let index = _wall.value.getWallItemIndex(fstId);
+      if (index >= 0) {
+        scrollIntoViewByIndex(index, { to: "center", smooth });
+      }
+    }
+  }
   //-----------------------------------------------------
   watch(
-    () => props.data,
-    () => {
-      //console.log("reset selection");
-      _wall.value.OnItemCancel();
-    },
-    { immediate: true }
-  );
-  //-----------------------------------------------------
-  watch(
-    () => [props.currentId, props.checkedIds],
+    () => [props.currentId, props.checkedIds, props.data],
     () => {
       //console.log("updateSelection");
       _wall.value.updateSelection(
@@ -117,9 +136,16 @@
         props.currentId,
         props.checkedIds
       );
+      nextTick(() => {
+        scrollCheckedIntoView(false);
+      });
     },
     { immediate: true }
   );
+  //-----------------------------------------------------
+  defineExpose({
+    scrollIntoViewByIndex,
+  });
   //-----------------------------------------------------
 </script>
 <template>

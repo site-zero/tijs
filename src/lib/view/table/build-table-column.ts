@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { TableProps, TableStrictColumn, useObjColumns } from "../../";
+import { TableProps, TableStrictColumn, useObjColumns } from "@site0/tijs";
 import { makeFieldUniqKey, parseFieldConverter } from "../../../_type";
 import { I18n, Match, Util } from "../../../core";
 

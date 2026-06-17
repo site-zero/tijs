@@ -4,7 +4,7 @@ import {
   InputTimeMode,
   PlaceholderProps,
   ReadonlyProps,
-} from "../../";
+} from "@site0/tijs";
 import {
   CommonProps,
   DateParseOptionsZone,

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import _ from "lodash";
   import { computed } from "vue";
-  import { FormProps, TiGridFields } from "../../";
+  import { FormProps, TiGridFields } from "@site0/tijs";
   import { Vars } from "../../../_type";
   import { GridFieldsInput } from "../../shelf/grid-fields/ti-grid-fields-types";
   import { getGroupFields } from "./ti-input-group-api";

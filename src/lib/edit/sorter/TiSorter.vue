@@ -1,6 +1,6 @@
 <script lang="ts" setup>
   import { computed, onMounted, watch } from "vue";
-  import { TagItem, TiTags } from "../../";
+  import { TagItem, TiTags } from "@site0/tijs";
   import { CssUtils } from "../../../core";
   import { SorterEmitter, SorterProps } from "./ti-sorter-types";
   import { SorterItem, useSorter } from "./use-sorter";

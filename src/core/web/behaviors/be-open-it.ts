@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { Dom } from "../../";
+import { Dom } from "@site0/tijs";
 import { OpenUrlOptions } from "../../../_type";
 
 export function OpenUrl(url: string, options: OpenUrlOptions = {}) {

@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { BlockProps, useFieldCom } from "../../";
+import { BlockProps, useFieldCom } from "@site0/tijs";
 import { CssGridLayout } from "../../../_type";
 import { CssUtils, I18n } from "../../../core";
 

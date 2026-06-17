@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { ActionBarProps, useVisibility } from "../../";
+import { ActionBarProps, useVisibility } from "@site0/tijs";
 import {
   ActionBarAction,
   ActionBarCallback,

@@ -5,7 +5,7 @@
     useGridLayoutStyle,
     useGridLayoutTrack,
     useViewport,
-  } from "../../";
+  } from "@site0/tijs";
   import { CssUtils, Tmpl } from "../../../core";
   import GFItField from "./GFItField.vue";
   import GFItLabel from "./GFItLabel.vue";

@@ -7,7 +7,7 @@
     TiActionBar,
     TiIcon,
     useEmitAdaptor,
-  } from "../../";
+  } from "@site0/tijs";
   import { EmitAdaptorEvent } from "../../../_type";
   import { COM_TYPES } from "../../lib-com-types";
   import { BlockEmitter, BlockEvent } from "./ti-block-types";

@@ -1,4 +1,4 @@
-import { RoadblockProps, SelectableProps, SelectEmitInfo } from "../../";
+import { RoadblockProps, SelectableProps, SelectEmitInfo } from "@site0/tijs";
 import {
   CommonProps,
   ComRef,
@@ -87,6 +87,21 @@ export type WallProps = CommonProps &
     getItemClass?: (item: Vars, index: number) => Vars;
     getItemConClass?: (item: Vars, index: number) => Vars;
     getItemLogicType?: (item: Vars, index: number) => LogicType | undefined;
+
+    /**
+     * 当选区变化，自动滚动
+     */
+    autoScrollIntoView?: boolean | undefined;
+
+    /**
+     * 有时候， 列表所在一个容器元素内，列表自动延长。
+     * 这时候需要传入容器元素。
+     *
+     * 譬如在 droplist options 比较长的时候，就需要这样做
+     *
+     * @returns 如果自动滚动当前项目，可以指定滚动视口
+     */
+    scrollViewPort?: () => HTMLElement | undefined;
   };
 
 export type WallItemEventHandlers = Record<

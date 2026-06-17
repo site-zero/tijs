@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { computed, reactive, useTemplateRef, watch } from "vue";
-  import { useDict, usePlaceholder, useValuePipe } from "../../";
+  import { useDict, usePlaceholder, useValuePipe } from "@site0/tijs";
   import { Be, I18n } from "../../../core";
   import { LabelEmitter, LabelProps, LabelState } from "./ti-label-types";
   import { useLabel } from "./use-label";

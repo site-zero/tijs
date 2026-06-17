@@ -8,7 +8,7 @@
     useTemplateRef,
     watch,
   } from "vue";
-  import { InputBoxApi, InputBoxProps, TiInput } from "../../";
+  import { InputBoxApi, InputBoxProps, TiInput } from "@site0/tijs";
   import { AnyOptionItem, ToStr } from "../../../_type";
   import { CssUtils, Util } from "../../../core";
   import { InputCodeProps } from "./ti-input-code-types";

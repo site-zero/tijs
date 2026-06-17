@@ -7,7 +7,7 @@ import {
   //SorterExportApi,
   SorterProps,
   SorterValue,
-} from "../../";
+} from "@site0/tijs";
 import { ActionBarItem, CommonProps } from "../../../_type";
 
 export type ComboFilterExportApi = FilterExportApi & SorterExportApi;

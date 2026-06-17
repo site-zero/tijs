@@ -45,7 +45,7 @@ export function useWall(
   // }
   //-----------------------------------------------------
   function OnItemSelect(item: WallItem, event: Event) {
-    // console.log("itemSelect");
+    console.log("itemSelect", item.index);
     // 防守
     if (!props.canSelect) {
       return;
@@ -257,6 +257,14 @@ export function useWall(
     return _.nth(Items.value, index);
   }
   //-----------------------------------------------------
+  function getWallItemIndex(id: TableRowID): number {
+    return _id_index.get(id) ?? -1;
+  }
+  //-----------------------------------------------------
+  function getWallItemId(it: Vars, index: number): TableRowID {
+    return selectable.getDataId(it, index);
+  }
+  //-----------------------------------------------------
   // 返回特性
   //-----------------------------------------------------
   return {
@@ -264,7 +272,8 @@ export function useWall(
     isEmpty,
     getWallItemByIndex,
     getWallItemById,
-    getItemId: selectable.getDataId,
+    getWallItemIndex,
+    getWallItemId,
     //getWallItemClass,
     OnItemSelect,
     OnItemCheck,

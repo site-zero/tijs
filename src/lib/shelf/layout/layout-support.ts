@@ -7,7 +7,7 @@ import {
   LayoutSchema,
   LayoutState,
   TabsLayoutProps,
-} from "../../";
+} from "@site0/tijs";
 import { CssUtils } from "../../../core";
 
 /**

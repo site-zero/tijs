@@ -5,7 +5,7 @@ import {
   SelectableApi,
   useDataLogicType,
   useSelectable,
-} from "../../";
+} from "@site0/tijs";
 import {
   Callback,
   Callback1,

@@ -1,7 +1,7 @@
 <script lang="ts" setup>
   import _ from "lodash";
   import { computed, onMounted, onUnmounted, reactive, ref, watch } from "vue";
-  import { TabDisplayItem, TiIcon, useKeep } from "../../";
+  import { TabDisplayItem, TiIcon, useKeep } from "@site0/tijs";
   import { CssUtils } from "../../../core";
   import { TabsEmitter, TabsProps } from "./ti-tabs-types";
   import { useTabsItemApi } from "./use-tabs-item";

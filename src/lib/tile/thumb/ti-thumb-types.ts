@@ -1,4 +1,4 @@
-import { ImageProps, ProgressBarProps, TextSnippetProps } from "../../";
+import { ImageProps, ProgressBarProps, TextSnippetProps } from "@site0/tijs";
 import {
   AspectSize,
   CommonProps,

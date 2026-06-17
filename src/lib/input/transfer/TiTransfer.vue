@@ -9,7 +9,7 @@
     TiList,
     useOptions,
     useStdListItem,
-  } from "../../";
+  } from "@site0/tijs";
   import { StdOptionItem, TableRowID } from "../../../_type";
   import { CssUtils, I18n, Util } from "../../../core";
   import { TransferProps, TransferState } from "./ti-transfer-types";

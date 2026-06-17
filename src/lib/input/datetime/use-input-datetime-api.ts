@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { computed } from "vue";
-import { Alert, InputBoxProps, InputNumProps, InputTimeProps } from "../../";
+import { Alert, InputBoxProps, InputNumProps, InputTimeProps } from "@site0/tijs";
 import { TiTime } from "../../../";
 import { DateTime, tiGetDefaultComPropValue } from "../../../core";
 import { InputDatetimeProps } from "../datetime/ti-input-datetime-types";

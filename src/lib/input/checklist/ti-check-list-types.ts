@@ -5,7 +5,7 @@ import {
   RoadblockProps,
   SelectableProps,
   StdListItemProps,
-} from "../../";
+} from "@site0/tijs";
 import { TableRowID } from "../../../_type";
 
 export type CheckListEmitter = {

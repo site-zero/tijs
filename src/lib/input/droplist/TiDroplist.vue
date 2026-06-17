@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { TiInput } from "../../";
+  import { TiInput } from "@site0/tijs";
   import { DroplistEmitter, DroplistProps } from "./ti-droplist-types";
   //-----------------------------------------------------
   defineOptions({

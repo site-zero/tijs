@@ -3,7 +3,7 @@ import {
   InputBoxProps,
   PlaceholderProps,
   ReadonlyProps,
-} from "../../";
+} from "@site0/tijs";
 import { CommonProps, HDirecton, Vars } from "../../../_type";
 
 export type InputNumValueType = "num" | "str" | "fixed";

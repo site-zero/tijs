@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { Ref } from "vue";
-import { ActionBarEvent, ActionBarProps, useDropping } from "../../";
+import { ActionBarEvent, ActionBarProps, useDropping } from "@site0/tijs";
 import { ActionBarItem, ActionBarItemInfo } from "../../../_type/core-types";
 import { Be } from "../../../core";
 import { AbstractUploaderProps, AbstracUploadEmitter } from "./upload-types";
@@ -97,7 +97,7 @@ export function onUploadActionFire(
   //console.log('onUploadActionFire', event);
   let fn = {
     "choose-file": async () => {
-      let files = await Be.doUploadFiles({
+      let files = await Be.chooseFiles({
         multi: props.multi,
         accept: props.accept,
       });
