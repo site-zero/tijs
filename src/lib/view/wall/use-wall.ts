@@ -45,7 +45,7 @@ export function useWall(
   // }
   //-----------------------------------------------------
   function OnItemSelect(item: WallItem, event: Event) {
-    console.log("itemSelect", item.index);
+    //console.log("itemSelect", item.index);
     // 防守
     if (!props.canSelect) {
       return;
