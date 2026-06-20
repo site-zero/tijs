@@ -266,6 +266,9 @@ export function setFieldValue(name: FieldName, value: any, data?: Vars): Vars {
   if (_.isArray(name)) {
     for (let k of name) {
       let v = _.get(value, k);
+      if (_.isUndefined(v)) {
+        continue;
+      }
       _.set(data, k, v);
     }
   }

@@ -1,16 +1,20 @@
 <script lang="ts" setup>
-  import { computed, onMounted, ref, watch } from "vue";
   import {
     BlockEvent,
+    CssUtils,
     TiBlock,
     TiRoadblock,
     TiTabs,
     getLayoutItem,
     useKeep,
-  } from "../../../";
-  import { CssUtils } from "../../../../core";
+  } from "@site0/tijs";
+  import { computed, onMounted, ref, watch } from "vue";
   import { TabDisplayItem } from "../layout-types";
-  import { TabChangeEvent, TabsLayoutProps } from "./ti-layout-tabs-types";
+  import {
+    TabChangeEvent,
+    TabsLayoutApi,
+    TabsLayoutProps,
+  } from "./ti-layout-tabs-types";
   import {
     autoSetCurrentTablKey,
     buildLayoutTabsConfig,
@@ -103,12 +107,17 @@
   }
   //-------------------------------------------------
   function OnTabChange(item: TabDisplayItem) {
-    // if ('Bunya-GUI-layout-EdiViewer-Tabs' == props.keepTab) {
-    //   console.log('OnTabChange', item);
-    // }
-    _current_tab_key.value = item.value;
-    Keep.value.save(item.value);
+    changeTab(item.value);
   }
+  //-------------------------------------------------
+  function changeTab(tabName: string) {
+    _current_tab_key.value = tabName;
+    Keep.value.save(tabName);
+  }
+  //-------------------------------------------------
+  defineExpose<TabsLayoutApi>({
+    changeTab,
+  });
   //-------------------------------------------------
   watch(
     () => [Keep.value, TabBlocks.value, props.defaultTab],

@@ -1,11 +1,11 @@
-import { Vars } from '../../../../_type';
+import { Vars } from "@site0/tijs";
 import {
   LayoutItem,
   LayoutPanelProps,
   LayoutProps,
   TabDisplayItem,
   TabsAspect,
-} from '../layout-types';
+} from "../layout-types";
 
 //
 // Tab Layout
@@ -22,4 +22,8 @@ export type LayoutTabItem = LayoutItem;
 export type TabChangeEvent = {
   to: TabDisplayItem;
   from?: TabDisplayItem;
+};
+
+export type TabsLayoutApi = {
+  changeTab(tabName: string): void;
 };
