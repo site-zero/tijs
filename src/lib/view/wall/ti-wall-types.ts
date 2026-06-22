@@ -1,4 +1,9 @@
-import { RoadblockProps, SelectableProps, SelectEmitInfo } from "@site0/tijs";
+import {
+  ElementScrollIntoViewOptions,
+  RoadblockProps,
+  SelectableProps,
+  SelectEmitInfo,
+} from "@site0/tijs";
 import {
   CommonProps,
   ComRef,
@@ -139,4 +144,12 @@ export type WallSelectEmitInfo = SelectEmitInfo<TableRowID>;
 export type WallEmitter = {
   (event: "select", payload: WallSelectEmitInfo): void;
   (event: "open", payload: WallItem): void;
+};
+
+export type TiWallApi = {
+  scrollIntoViewByIndex(
+    index: number,
+    options?: ElementScrollIntoViewOptions | undefined
+  ): void;
+  scrollCheckedIntoView(smooth?: boolean): void;
 };

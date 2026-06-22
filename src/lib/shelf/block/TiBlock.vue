@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-  import _ from "lodash";
-  import { computed, onUnmounted } from "vue";
   import {
     BlockProps,
     EmitAdaptorOptions,
@@ -8,6 +6,8 @@
     TiIcon,
     useEmitAdaptor,
   } from "@site0/tijs";
+  import _ from "lodash";
+  import { computed, onUnmounted, useTemplateRef } from "vue";
   import { EmitAdaptorEvent } from "../../../_type";
   import { COM_TYPES } from "../../lib-com-types";
   import { BlockEmitter, BlockEvent } from "./ti-block-types";
@@ -19,6 +19,7 @@
     nameWidth: 0,
   });
   let props = withDefaults(defineProps<BlockProps>(), {});
+  const $com = useTemplateRef("com");
   //
   //  Features
   //
@@ -44,6 +45,20 @@
   // Life Hooks
   //
   onUnmounted(() => {});
+
+  //
+  // Export API
+  //
+  defineExpose({
+    getCom<T>() {
+      if ($com.value) {
+        return $com.value as unknown as T;
+      }
+    },
+    isMyName(name: string) {
+      return props.name == name;
+    },
+  });
 </script>
 
 <template>
@@ -76,6 +91,7 @@
       <main :class="Block.MainClass" :style="Block.MainStyle">
         <slot>
           <component
+            ref="com"
             :is="Block.BlockComType"
             v-bind="Block.BlockComConf"
             @_sub_block="onBlock"

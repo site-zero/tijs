@@ -13,10 +13,11 @@ import {
   TranName,
   TranSpeed,
   Vars,
-} from '../../../_type';
-import { KeepInfo } from '../../_features';
-import { LayoutGridProps } from './grid/ti-layout-grid-types';
-import { TabsLayoutProps } from './tabs/ti-layout-tabs-types';
+} from "../../../_type";
+import { KeepInfo } from "../../_features";
+import { TiBlockApi } from "../block/ti-block-types";
+import { LayoutGridProps } from "./grid/ti-layout-grid-types";
+import { TabsLayoutProps } from "./tabs/ti-layout-tabs-types";
 
 export type BlockSchema = ComRef & EmitAdaptorProps;
 
@@ -27,7 +28,7 @@ export type LayoutState = {
 };
 
 export type LayoutProps = CommonProps &
-  Pick<LayoutBlock, 'name' | 'blocks' | 'itemStyle' | 'itemClass'> & {
+  Pick<LayoutBlock, "name" | "blocks" | "itemStyle" | "itemClass"> & {
     schema?: LayoutSchema;
     /**
      * 如果是组合的布局，这里就需要传递 true
@@ -68,8 +69,8 @@ export type LayoutPanelProps = {
 //
 // Tab Layout
 //
-export type TabsAt = 'top' | 'bottom';
-export type TabsAlign = 'left' | 'right' | 'center';
+export type TabsAt = "top" | "bottom";
+export type TabsAlign = "left" | "right" | "center";
 export type TabsAspect = {
   /**
    * @default `top`
@@ -109,7 +110,7 @@ export type TabDisplayItem = StrOptionItem & {
  * - `column` 调整列宽，因此是一个竖条
  * - `row` 调整行高，因此是一个横条
  */
-export type LayoutBarMode = 'column' | 'row';
+export type LayoutBarMode = "column" | "row";
 
 //
 // Layout Adjust Bar
@@ -153,10 +154,10 @@ export type LayoutBar = {
    *
    * 拖动将涉及上传的行/列的格子轨道改动
    */
-  position: 'prev' | 'next';
+  position: "prev" | "next";
 };
 
-export type LayoutItemType = 'block' | 'grid' | 'tabs';
+export type LayoutItemType = "block" | "grid" | "tabs";
 export type LayoutBlock = TabsAspect &
   BlockInfoProps & {
     /**
@@ -268,9 +269,14 @@ export type LayoutItem = LayoutBlock & {
  * - cover: 内容将严格按照块的区域（通常由grid布局来决定），如果超过，则会自动滚动
  * - auto: 内容将会把 块的内容撑开
  */
-export type BlockOverflowMode = 'cover' | 'fit' | 'auto';
+export type BlockOverflowMode = "cover" | "fit" | "auto";
 
 export type BlockProps = CommonProps &
   CssGridItem &
   BlockInfoProps &
   BlockSchema;
+
+export type TiLayoutApi = {
+  getBlock(name: string): TiBlockApi | undefined;
+  getBlockCom<T>(name: string): T | undefined;
+};

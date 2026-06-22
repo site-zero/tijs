@@ -8,6 +8,7 @@
     TableRowID,
     TiRoadblock,
     TiTextSnippet,
+    TiWallApi,
     useGridLayout,
     useViewport,
     Util,
@@ -107,6 +108,7 @@
       if (props.scrollViewPort) {
         $viewport = props.scrollViewPort();
       }
+      // 否则就采用 `.wall-con
       if (!$viewport) {
         $viewport = $item.parentElement;
       }
@@ -143,8 +145,9 @@
     { immediate: true }
   );
   //-----------------------------------------------------
-  defineExpose({
+  defineExpose<TiWallApi>({
     scrollIntoViewByIndex,
+    scrollCheckedIntoView,
   });
   //-----------------------------------------------------
 </script>

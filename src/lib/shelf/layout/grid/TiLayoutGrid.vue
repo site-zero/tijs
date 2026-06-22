@@ -7,6 +7,7 @@
     onUnmounted,
     reactive,
     ref,
+    useTemplateRef,
     watch,
   } from "vue";
   import {
@@ -15,6 +16,7 @@
     BlockEvent,
     TabChangeEvent,
     TiBlock,
+    TiBlockApi,
     useGridLayoutStyle,
     useGridLayoutTrack,
     useViewport,
@@ -28,7 +30,7 @@
   } from "../grid/use-grid-keep";
   import { useGridResizing } from "../grid/use-grid-resizing";
   import { getLayoutPanelItems } from "../layout-panel";
-  import { LayoutBar, LayoutPanelItem } from "../layout-types";
+  import { LayoutBar, LayoutPanelItem, TiLayoutApi } from "../layout-types";
   import {
     GridItemTabChangeEvent,
     LayoutGridItem,
@@ -43,6 +45,9 @@
   });
   //-------------------------------------------------
   import { TiLayoutTabs } from "../tabs/ti-layout-tabs-index";
+  //-------------------------------------------------
+  const $subBlocks = useTemplateRef<TiBlockApi[]>("subBlocks");
+  const $subLayoutGrids = useTemplateRef<TiLayoutApi[]>("subLayoutGrids");
   //-------------------------------------------------
   const props = withDefaults(defineProps<LayoutGridProps>(), {
     shown: () => ({}),
@@ -232,6 +237,35 @@
   // onUnmounted(() => {
   //   obResize.disconnect();
   // });
+  function getBlock(name: string): TiBlockApi | undefined {
+    if ($subBlocks.value && $subBlocks.value?.length > 0) {
+      for (let b of $subBlocks.value) {
+        if (b.isMyName(name)) {
+          return b;
+        }
+      }
+    }
+    if ($subLayoutGrids.value && $subLayoutGrids.value?.length > 0) {
+      for (let g of $subLayoutGrids.value) {
+        let b = g.getBlock(name);
+        if (b) {
+          return b;
+        }
+      }
+    }
+  }
+  //-------------------------------------------------
+  function getBlockCom<T>(name: string): T | undefined {
+    let block = getBlock(name);
+    if (block) {
+      return block.getCom<T>();
+    }
+  }
+  //-------------------------------------------------
+  defineExpose<TiLayoutApi>({
+    getBlock,
+    getBlockCom,
+  });
   //-------------------------------------------------
 </script>
 <template>
@@ -253,12 +287,14 @@
           <!-- 格子布局:带标题-->
           <TiBlock
             v-if="it.propsForBlock"
+            ref="subBlocks"
             v-bind="it.propsForBlock"
             @fire="emit('fire', $event)"
             @happen="OnBlockEventHappen" />
           <!-- 格子布局:仅内容-->
           <TiLayoutGrid
             v-else-if="it.propsForLayoutGrid"
+            ref="subLayoutGrids"
             v-bind="it.propsForLayoutGrid"
             :schema="schema"
             :sub-layout="true"
@@ -268,6 +304,7 @@
           <!-- 标签布局-->
           <TiLayoutTabs
             v-else-if="it.propsForLayoutTabs"
+            ref="subLayoutTabs"
             v-bind="it.propsForLayoutTabs"
             :schema="schema"
             :sub-layout="true"

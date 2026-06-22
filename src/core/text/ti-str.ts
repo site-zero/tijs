@@ -994,3 +994,23 @@ export function toPercent(
   }
   return str + "%";
 }
+
+/**
+ * 按UTF8字节长度截断字符串，最大字节32，适配varchar(32)
+ * @param {string} str 原始字符串
+ * @param {number} maxByte 最大字节数32
+ * @returns {string} 截断后的字符串
+ */
+export function substrbytes(str: string, maxByte: number = 0) {
+  let total = 0;
+  let result = "";
+  if (maxByte <= 0) return str;
+  for (const char of str) {
+    // 获取单个字符UTF8字节长度
+    const byteLen = new Blob([char]).size;
+    if (total + byteLen > maxByte) break;
+    total += byteLen;
+    result += char;
+  }
+  return result;
+}

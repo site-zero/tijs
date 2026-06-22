@@ -1,5 +1,5 @@
-import { GridLayoutProps, Vars } from '../../../../_type';
-import { KeepFeature, KeepInfo } from '../../../../lib/_features';
+import { GridLayoutProps, Vars } from "../../../../_type";
+import { KeepFeature, KeepInfo } from "../../../../lib/_features";
 import {
   BlockOverflowMode,
   LayoutBar,
@@ -7,8 +7,8 @@ import {
   LayoutPanelProps,
   LayoutProps,
   LayoutState,
-} from '../layout-types';
-import { TabChangeEvent } from '../tabs/ti-layout-tabs-types';
+} from "../layout-types";
+import { TabChangeEvent } from "../tabs/ti-layout-tabs-types";
 
 export type GridResizingState = {
   /**

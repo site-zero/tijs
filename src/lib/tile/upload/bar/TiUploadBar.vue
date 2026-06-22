@@ -81,7 +81,9 @@
   );
   //-----------------------------------------------------
   onMounted(() => {
-    dropping.value();
+    if (!props.readonly) {
+      dropping.value();
+    }
   });
   //-----------------------------------------------------
 </script>
@@ -92,7 +94,7 @@
       <div class="part-icon" :title="props.tip">
         <TiImage v-bind="_bar.Preview.value" />
         <div
-          v-if="_bar.isPrefixForClean.value && !props.nilValue"
+          v-if="_bar.isPrefixForClean.value"
           class="prefix-cleaner"
           @click.left="emit('clear')">
           <i class="zmdi zmdi-close"></i>
@@ -102,7 +104,7 @@
       <TiTextSnippet class="part-text" v-bind="_bar.Text.value" />
       <!--============= Actions =============-->
       <TiActionBar
-        v-if="_bar.ActionBar.value"
+        v-if="_bar.ActionBar.value && !props.readonly"
         item-size="t"
         bar-pad="s"
         :top-item-min-width="null"

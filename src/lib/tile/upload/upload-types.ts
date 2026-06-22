@@ -30,7 +30,7 @@ export type AbstractUploaderProps = CommonProps & {
   text?: string | TextSnippetProps;
   tip?: string;
   nilValue?: boolean; // 是否是空值
-
+  readonly?: boolean;
   //-----------------------------------------------------
   // Actions
   //-----------------------------------------------------

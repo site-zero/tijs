@@ -94,6 +94,9 @@ export function onUploadActionFire(
   event: ActionBarEvent,
   emit: AbstracUploadEmitter
 ) {
+  if (props.readonly) {
+    return;
+  }
   //console.log('onUploadActionFire', event);
   let fn = {
     "choose-file": async () => {
