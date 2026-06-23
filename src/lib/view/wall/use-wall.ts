@@ -1,14 +1,18 @@
-import _ from "lodash";
-import { computed } from "vue";
 import {
   ComRef,
+  CssUtils,
+  EventUtils,
   SelectableState,
   TableRowID,
+  tiGetComponent,
   TiRoadblock,
+  useFuse,
   useSelectable,
+  Util,
   Vars,
-} from "../../..";
-import { CssUtils, EventUtils, tiGetComponent, Util } from "../../../core";
+} from "@site0/tijs";
+import _ from "lodash";
+import { computed } from "vue";
 import { WallEmitter, WallItem, WallProps } from "./ti-wall-types";
 
 export type WallApi = ReturnType<typeof useWall>;
@@ -44,12 +48,29 @@ export function useWall(
   //   });
   // }
   //-----------------------------------------------------
-  function OnItemSelect(item: WallItem, event: Event) {
+  async function OnItemSelect(item: WallItem, event: Event) {
     //console.log("itemSelect", item.index);
     // 防守
     if (!props.canSelect) {
       return;
     }
+    // 防重
+    if (selection.currentId == item.id) {
+      return;
+    }
+    // 保险
+    // 尝试熔断保险丝
+    if (props.fuse) {
+      let key: string | undefined = _.isString(props.fuse)
+        ? props.fuse
+        : undefined;
+      let fuse = useFuse();
+      if (await fuse.fire(key)) {
+        return;
+      }
+    }
+
+    // 通知
     selectable.doAndEmit(
       selection,
       props.data,

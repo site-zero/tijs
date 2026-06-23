@@ -1,11 +1,11 @@
-import _ from "lodash";
-import { computed, ComputedRef, Ref } from "vue";
 import {
   CheckedIds,
   SelectableApi,
   useDataLogicType,
   useSelectable,
 } from "@site0/tijs";
+import _ from "lodash";
+import { computed, ComputedRef, Ref } from "vue";
 import {
   Callback,
   Callback1,
@@ -195,7 +195,7 @@ export function useTable(
     // 新选区
 
     // 准备构建事件数据
-    let info = selectable.getSelectionEmitInfo(
+    let payload = selectable.getSelectionEmitInfo(
       newSelection,
       props.data,
       oldSelection.checkedIds,
@@ -203,13 +203,13 @@ export function useTable(
     ) as TableSelectEmitInfo;
 
     // 没有列信息
-    info.colIndex = -1;
+    payload.colIndex = -1;
     // 获取列信息
     if (newSelection.uniqKey) {
       let col = _table_column_map.value.get(newSelection.uniqKey);
       if (col) {
-        info.colIndex = col?.index;
-        info.column = col;
+        payload.colIndex = col?.index;
+        payload.column = col;
       }
     }
 
@@ -221,7 +221,7 @@ export function useTable(
           oldSelection,
           props.data
         ) as TableSelectEmitInfo;
-        if (!props.canChangeSelection(info, old)) {
+        if (!props.canChangeSelection(payload, old)) {
           return;
         }
       }
@@ -235,7 +235,7 @@ export function useTable(
         fuse.fire(key).then((fired) => {
           if (!fired) {
             selection.value = newSelection;
-            emit("select", info);
+            emit("select", payload);
           }
         });
         return;
@@ -243,7 +243,7 @@ export function useTable(
       // 不用保险丝
       else {
         selection.value = newSelection;
-        emit("select", info);
+        emit("select", payload);
       }
     }
   }

@@ -5,10 +5,12 @@
     TiBlock,
     TiRoadblock,
     TiTabs,
+    TiTabsApi,
     getLayoutItem,
+    isAsyncFunc,
     useKeep,
   } from "@site0/tijs";
-  import { computed, onMounted, ref, watch } from "vue";
+  import { computed, onMounted, ref, useTemplateRef, watch } from "vue";
   import { TabDisplayItem } from "../layout-types";
   import {
     TabChangeEvent,
@@ -23,6 +25,8 @@
   //-------------------------------------------------
   import _ from "lodash";
   import { TiLayoutGrid } from "../grid/ti-layout-grid-index";
+  //-------------------------------------------------
+  const $tabs = useTemplateRef<TiTabsApi>("tabs");
   //-------------------------------------------------
   const emit = defineEmits<{
     (eventName: "tab-change", payload: TabChangeEvent): void;
@@ -106,13 +110,43 @@
     }
   }
   //-------------------------------------------------
-  function OnTabChange(item: TabDisplayItem) {
+  async function OnTabChange(item: TabDisplayItem) {
+    // 有守卫判断
+    if (props.beforeTabChange) {
+      let from = _current_tab_key.value;
+      let to = item.value;
+      let payload = makeTabChangeEvent(from, to);
+      let can_change = false;
+      // 异步判断
+      if (isAsyncFunc(props.beforeTabChange)) {
+        can_change = await props.beforeTabChange(payload);
+      }
+      // 同步判断
+      else {
+        can_change = props.beforeTabChange(payload) as boolean;
+      }
+      if (!can_change) {
+        return;
+      }
+    }
     changeTab(item.value);
   }
   //-------------------------------------------------
   function changeTab(tabName: string) {
     _current_tab_key.value = tabName;
     Keep.value.save(tabName);
+  }
+  //-------------------------------------------------
+  function makeTabChangeEvent(
+    from: string | undefined,
+    to: string
+  ): TabChangeEvent {
+    let fromItem = from ? $tabs.value?.getTabItemByValue(from) : undefined;
+    let toItem = $tabs.value?.getTabItemByValue(to);
+    return {
+      to: toItem!,
+      from: fromItem,
+    };
   }
   //-------------------------------------------------
   defineExpose<TabsLayoutApi>({
@@ -151,27 +185,32 @@
       //   console.log('MainTabChanged', MainTab.value);
       // }
       if (MainTab.value && _emitted_tab_key.value != MainTab.value.uniqKey) {
-        // if ('Bunya-GUI-layout-EdiViewer-Tabs' == props.keepTab) {
-        //   console.log('emit MainTabChange', MainTab.value);
-        // }
-        emit("tab-change", {
-          to: {
-            className: MainTab.value.blockClass,
-            current: true,
-            index: MainTab.value.index || 0,
-            icon: MainTab.value.icon,
-            text: MainTab.value.title,
-            value: MainTab.value.uniqKey,
-          },
-        });
+        let payload = makeTabChangeEvent(
+          _emitted_tab_key.value,
+          MainTab.value.uniqKey
+        );
+        emit("tab-change", payload);
+        // emit("tab-change", {
+        //   to: {
+        //     className: MainTab.value.blockClass,
+        //     current: true,
+        //     index: MainTab.value.index || 0,
+        //     icon: MainTab.value.icon,
+        //     text: MainTab.value.title,
+        //     value: MainTab.value.uniqKey,
+        //   },
+        // });
         _emitted_tab_key.value = MainTab.value.uniqKey;
       }
-    },
-    { immediate: true }
+    }
   );
   //-------------------------------------------------
   onMounted(() => {
     autoSetCurrentTablKey(_current_tab_key, TabBlocks, Keep, props.defaultTab);
+    if (_current_tab_key.value) {
+      let payload = makeTabChangeEvent(undefined, _current_tab_key.value);
+      emit("tab-change", payload);
+    }
   });
   //-------------------------------------------------
 </script>
@@ -184,6 +223,7 @@
     <!--======== Head Tabs =======-->
     <header>
       <TiTabs
+        ref="tabs"
         v-bind="TabsConfig"
         :value="_current_tab_key"
         @change="OnTabChange" />

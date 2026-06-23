@@ -15,6 +15,7 @@ export type TabsLayoutProps = LayoutProps &
   TabsAspect & {
     mainStyle?: Vars;
     mainClass?: any;
+    beforeTabChange?: (event: TabChangeEvent) => boolean | Promise<boolean>;
   };
 
 export type LayoutTabItem = LayoutItem;
