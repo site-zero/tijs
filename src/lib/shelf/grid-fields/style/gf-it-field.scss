@@ -2,11 +2,8 @@
 
 .ti-grid-fiels-item.part-field {
   @include colorized;
-  & {
-    display: grid;
-    row-gap: var(--ti-gap-t);
-    min-height: 2.3em;
-  }
+  display: grid;
+  row-gap: var(--ti-gap-t);
   //-------------------------------------------------------------
   &.is-disabled {
     filter: grayscale(100%) blur(0px);
