@@ -1,5 +1,5 @@
-import { CssBorderStyle, ThumbProps, Vars } from '../../../../';
-import { AbstractUploaderProps, AbstracUploadEmitter } from '../upload-types';
+import { CssBorderStyle, ThumbProps, Vars } from "@site0/tijs";
+import { AbstractUploaderProps, AbstracUploadEmitter } from "../_support";
 
 export type UploadTileEmitter = AbstracUploadEmitter;
 
@@ -26,7 +26,7 @@ export type UploadTileProps = AbstractUploaderProps & {
   /**
    * 边款样式，默认 solid
    */
-  borderStyle?:CssBorderStyle;
+  borderStyle?: CssBorderStyle;
   /**
    * 边款宽度
    */

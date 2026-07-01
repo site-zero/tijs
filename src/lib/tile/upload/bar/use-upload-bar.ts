@@ -1,9 +1,8 @@
-import _ from 'lodash';
-import { computed } from 'vue';
-import { I18n, Icons } from '../../../../core';
-import { ImageProps } from '../../all-tiles';
-import { getActionBarProps } from '../use-uploader';
-import { UploadBarProps } from './ti-upload-bar-types';
+import { I18n, Icons, ImageProps } from "@site0/tijs";
+import _ from "lodash";
+import { computed } from "vue";
+import { getActionBarProps } from "../_support";
+import { UploadBarProps } from "./ti-upload-bar-types";
 
 export function useUploadBar(props: UploadBarProps) {
   // 构建主要显示文本
@@ -13,7 +12,7 @@ export function useUploadBar(props: UploadBarProps) {
     } else if (props.text) {
       return props.text;
     }
-    return { text: I18n.text(props.placeholder ?? 'i18n:nil-obj') };
+    return { text: I18n.text(props.placeholder ?? "i18n:nil-obj") };
   });
 
   // 构建操作按钮
@@ -26,18 +25,18 @@ export function useUploadBar(props: UploadBarProps) {
     if (_.isNil(props.prefixForClean)) {
       return !props.clearButton;
     }
-    return 'yes' == props.prefixForClean;
+    return "yes" == props.prefixForClean;
   });
 
   // 构建预览
   const Preview = computed(() => {
-    let dftIcon = Icons.getIcon(props.type, 'far-file');
+    let dftIcon = Icons.getIcon(props.type, "far-file");
     // console.log('dftIcon', dftIcon);
     let preview = {
-      width: '100%',
-      height: '100%',
+      width: "100%",
+      height: "100%",
       dftSrc: Icons.parseIcon(dftIcon),
-      iconFontSize: 'var(--ti-fontsz-b)',
+      iconFontSize: "var(--ti-fontsz-b)",
       ...props.preview,
     } as ImageProps;
 

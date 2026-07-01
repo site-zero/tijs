@@ -65,5 +65,6 @@
     :currentId="null"
     :checkedIds="props.value"
     :autoPickCurrent="false"
+    :styleSheet="props.styleSheet"
     @select="onSelect" />
 </template>

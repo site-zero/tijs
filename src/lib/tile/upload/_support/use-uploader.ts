@@ -1,9 +1,17 @@
+import {
+  ActionBarEvent,
+  ActionBarItem,
+  ActionBarItemInfo,
+  ActionBarProps,
+  Be,
+  useDropping,
+} from "@site0/tijs";
 import _ from "lodash";
-import { Ref } from "vue";
-import { ActionBarEvent, ActionBarProps, useDropping } from "@site0/tijs";
-import { ActionBarItem, ActionBarItemInfo } from "../../../_type/core-types";
-import { Be } from "../../../core";
-import { AbstractUploaderProps, AbstracUploadEmitter } from "./upload-types";
+import {
+  AbstractUploaderProps,
+  AbstracUploadEmitter,
+  UploadDroppingSetup,
+} from "./upload-types";
 
 export type GetActionBarOptions = {
   /**
@@ -123,24 +131,38 @@ export function onUploadActionFire(
 }
 
 export function useUploadDropping(
-  _drag_enter: Ref<boolean>,
-  $target: Ref<HTMLElement | null>,
-  emit: AbstracUploadEmitter,
-  InProgress: Ref<boolean>
+  // _drag_enter: Ref<boolean>,
+  // $target: Ref<HTMLElement | null>,
+  // emit: AbstracUploadEmitter,
+  // InProgress: Ref<boolean>
+  setup: UploadDroppingSetup
 ) {
+  const { setDragEnter, getTarget, emit, isInProgress, canReplace, hasValue } =
+    setup;
   return useDropping({
-    target: () => (InProgress.value ? null : $target.value),
+    target: () => (isInProgress() ? null : getTarget()),
     enter: () => {
-      _drag_enter.value = true;
+      if (!canReplace() && hasValue()) {
+        setDragEnter(false);
+        return;
+      }
+      setDragEnter(true);
     },
     over: () => {
-      _drag_enter.value = true;
+      if (!canReplace() && hasValue()) {
+        setDragEnter(false);
+        return;
+      }
+      setDragEnter(true);
     },
     leave: () => {
       //console.log('leave', _drag_enter.value);
-      _drag_enter.value = false;
+      setDragEnter(false);
     },
     drop: (files) => {
+      if (!canReplace() && hasValue()) {
+        return;
+      }
       //console.log(files);
       let f = _.first(files);
       if (f) {

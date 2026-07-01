@@ -1,4 +1,4 @@
-@use '@site0/tijs/sass/_all.scss' as *;
+@use "@site0/tijs/sass/_all.scss" as *;
 
 .ti-upload-bar {
   position: relative;
@@ -23,7 +23,7 @@
       color: var(--bar-c1);
       width: 2em;
       position: relative;
-      .prefix-cleaner {
+      .prefix-icon {
         @include flex-center;
         position: absolute;
         inset: 0;
@@ -75,9 +75,9 @@
       background-color: var(--ti-color-mask-thin);
     }
     //-----------------------------------------------
-    @include aspect_pad('&.bar-pad', '> .part-text');
-    @include aspect_fontsize('&.text-size');
-    @include aspect_radius('&.bar-radius');
+    @include aspect_pad("&.bar-pad", "> .part-text");
+    @include aspect_fontsize("&.text-size");
+    @include aspect_radius("&.bar-radius");
     //-----------------------------------------------
     &.text-align-center {
       > .part-text {
@@ -114,7 +114,7 @@
       pointer-events: none;
       background-color: var(--ti-color-highlight);
       // opacity: 0.4;
-      content: '';
+      content: "";
       display: block;
       position: absolute;
       inset: -5px;

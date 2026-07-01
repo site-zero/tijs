@@ -1,33 +1,35 @@
-import { App } from 'vue';
-import { TiComInfo, TiComRace } from '../../../../_type';
-import { COM_TYPES } from '../../../lib-com-types';
-import TiUploadBar from './TiUploadBar.vue';
-import example from './example';
+import { App } from "vue";
+import { TiComInfo, TiComRace } from "../../../../_type";
+import { COM_TYPES } from "../../../lib-com-types";
+import TiUploadBar from "./TiUploadBar.vue";
+import example from "./example";
 
 const en_us = {
-  'com-name': 'Upload Bar',
-  'example-in-progress': 'In Progress',
-  'example-nil': 'Nil Value',
-  'upload': 'Upload',
-  'clean': 'Clean',
-  'stop': 'Stop',
+  "com-name": "Upload Bar",
+  "example-in-progress": "In Progress",
+  "example-nil": "Nil Value",
+  "upload": "Upload",
+  "clean": "Clean",
+  "stop": "Stop",
+  "choose": "Choose Uploaded Files",
 };
 const zh_cn = {
-  'com-name': '上传条',
-  'example-in-progress': '带进度条',
-  'example-nil': '空值',
-  'upload': '上传',
-  'clean': '清除',
-  'stop': '停止',
+  "com-name": "上传条",
+  "example-in-progress": "带进度条",
+  "example-nil": "空值",
+  "upload": "上传",
+  "clean": "清除",
+  "stop": "停止",
+  "choose": "选择已上传文件",
 };
 
 const COM_TYPE = COM_TYPES.UploadBar;
 
 const TiUploadBarInfo: TiComInfo = {
-  icon: 'fas-upload',
+  icon: "fas-upload",
   race: TiComRace.TILE,
   name: COM_TYPE,
-  text: 'i18n:ti-upload-bar-com-name',
+  text: "i18n:ti-upload-bar-com-name",
   i18n: {
     en_us: en_us,
     en_uk: en_us,
@@ -39,20 +41,20 @@ const TiUploadBarInfo: TiComInfo = {
     app.component(COM_TYPE, TiUploadBar);
   },
   liveStyle: {
-    width: '62%',
-    minWidth: '300px',
-    maxWidth: '500px',
-    padding: '20px',
+    width: "62%",
+    minWidth: "300px",
+    maxWidth: "500px",
+    padding: "20px",
   },
-  defaultProps: 'simple',
+  defaultProps: "simple",
   exampleProps: [example.simple, example.inProgress, example.nil],
   exampleModel: {
-    'upload': 'upload',
-    'clear': 'clear',
-    'fire': 'fire',
-    'stop-upload': 'stop-upload',
+    "upload": "upload",
+    "clear": "clear",
+    "fire": "fire",
+    "stop-upload": "stop-upload",
   },
 };
 
-export * from './ti-upload-bar-types';
+export * from "./ti-upload-bar-types";
 export { TiUploadBar, TiUploadBarInfo };

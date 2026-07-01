@@ -1,7 +1,7 @@
 <script lang="ts" setup>
+  import { ListSelectEmitInfo, TiList } from "@site0/tijs";
   import _ from "lodash";
   import { computed, watch } from "vue";
-  import { ListSelectEmitInfo, TiList } from "@site0/tijs";
   import { RadioListEmitter, RadioListProps } from "./ti-radio-list-types";
   import { useRadioList } from "./use-radio-list";
   //-----------------------------------------------------
@@ -52,5 +52,6 @@
     :currentId="null"
     :checkedIds="checkedIds"
     :autoPickCurrent="false"
+    :styleSheet="props.styleSheet"
     @select="onSelect" />
 </template>

@@ -1,10 +1,15 @@
 <script lang="ts" setup>
+  import {
+    ActionBarEvent,
+    CssUtils,
+    TiActionBar,
+    TiImage,
+    TiProgressBar,
+    TiTextSnippet,
+    Vars,
+  } from "@site0/tijs";
   import { computed, onMounted, ref, useTemplateRef } from "vue";
-  import { ActionBarEvent, TiActionBar } from "../../../";
-  import { Vars } from "../../../../_type";
-  import { CssUtils } from "../../../../core";
-  import { TiImage, TiProgressBar, TiTextSnippet } from "../../../../lib";
-  import { onUploadActionFire, useUploadDropping } from "../use-uploader";
+  import { onUploadActionFire, useUploadDropping } from "../_support";
   import { UploadBarEmitter, UploadBarProps } from "./ti-upload-bar-types";
   import { useUploadBar } from "./use-upload-bar";
   //-----------------------------------------------------
@@ -77,7 +82,15 @@
   const _drag_enter = ref(false);
   const $bar = useTemplateRef("bar");
   const dropping = computed(() =>
-    useUploadDropping(_drag_enter, $bar, emit, _bar.InProgress)
+    //useUploadDropping(_drag_enter, $bar, emit, _bar.InProgress)
+    useUploadDropping({
+      setDragEnter: (v) => (_drag_enter.value = v),
+      getTarget: () => $bar.value,
+      emit,
+      isInProgress: () => _bar.InProgress.value,
+      canReplace: () => props.canReplace,
+      hasValue: () => !props.nilValue,
+    })
   );
   //-----------------------------------------------------
   onMounted(() => {
@@ -94,10 +107,17 @@
       <div class="part-icon" :title="props.tip">
         <TiImage v-bind="_bar.Preview.value" />
         <div
-          v-if="_bar.isPrefixForClean.value"
-          class="prefix-cleaner"
+          v-if="!props.nilValue && _bar.isPrefixForClean.value"
+          class="prefix-icon as-cleaner"
           @click.left="emit('clear')">
           <i class="zmdi zmdi-close"></i>
+        </div>
+        <div
+          v-else-if="props.canEmptyChooseFile"
+          class="prefix-icon as-choose"
+          data-tip="i18n:ti-upload-bar-choose"
+          @click.left="emit('choose-file')">
+          <i class="zmdi zmdi-more"></i>
         </div>
       </div>
       <!--============= Text =============-->

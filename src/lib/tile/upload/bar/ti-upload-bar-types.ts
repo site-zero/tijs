@@ -1,5 +1,5 @@
-import { Vars } from '../../../../_type';
-import { AbstractUploaderProps, AbstracUploadEmitter } from '../upload-types';
+import { Vars } from "@site0/tijs";
+import { AbstractUploaderProps, AbstracUploadEmitter } from "../_support";
 
 export type UploadBarEmitter = AbstracUploadEmitter;
 
@@ -22,7 +22,7 @@ export type UploadBarProps = AbstractUploaderProps & {
    * 前缀清除的特性。又或者，用户不想提供删除的按钮也可以
    * 使用这个属性
    * */
-  prefixForClean?: 'no' | 'yes';
+  prefixForClean?: "no" | "yes";
 
   // 空值的占位显示文字
   placeholder?: string;

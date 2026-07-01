@@ -1,8 +1,7 @@
 <script lang="ts" setup>
+  import { ActionBarEvent, CssUtils, TiActionBar } from "@site0/tijs";
   import { computed, onMounted, ref, useTemplateRef } from "vue";
-  import { ActionBarEvent, TiActionBar, TiThumb } from "../../../";
-  import { CssUtils } from "../../../../core";
-  import { onUploadActionFire, useUploadDropping } from "../use-uploader";
+  import { onUploadActionFire, useUploadDropping } from "../_support";
   import { UploadTileEmitter, UploadTileProps } from "./ti-upload-tile-types";
   import { useUploadTile } from "./use-upload-tile";
   //-----------------------------------------------------
@@ -64,7 +63,14 @@
   const _drag_enter = ref(false);
   const $main = useTemplateRef<HTMLElement>("main");
   const dropping = computed(() =>
-    useUploadDropping(_drag_enter, $main, emit, _tile.InProgress)
+    useUploadDropping({
+      setDragEnter: (v) => (_drag_enter.value = v),
+      getTarget: () => $main.value,
+      emit,
+      isInProgress: () => _tile.InProgress.value,
+      canReplace: () => props.canReplace,
+      hasValue: () => !props.nilValue,
+    })
   );
   //-----------------------------------------------------
   onMounted(() => {
