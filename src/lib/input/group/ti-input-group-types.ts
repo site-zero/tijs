@@ -36,7 +36,7 @@ export type InputGroupProps = CommonProps &
      * 字段名称部分如何显示:
      *
      * 1. dft-placeholder: 字段名称作为默认 placeholder 「默认」
-     * 2. placeholder: 字段名称作为 placeholder
+     * 2. placeholder: 字段名称强制作为 placeholder，即使已经声明了 placeholder
      * 3. sep: 字段名称作为分隔符，默认为 `-` （第一个控件将不显示）
      * 4. title: 字段名称依然显示标题（第一个控件将不显示）
      */

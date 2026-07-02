@@ -9,10 +9,10 @@
     icon: "fas-thumbstack",
     content: "",
     contentType: "text",
-    tranSpeed: "normal",
+    tranSpeed: "slow",
     type: "warn",
     position: "top",
-    duration: 3,
+    duration: 5,
   });
   //-----------------------------------------------------
   const api = useToastApi(props);
@@ -21,6 +21,7 @@
     let pos = props.position || "center";
     return positionToTransName(pos);
   });
+
   //-----------------------------------------------------
   onMounted(() => {
     // 延缓设置以便有一个增长动画
@@ -33,11 +34,14 @@
 </script>
 <template>
   <Transition :name="TransName" appear>
-    <div class="ti-toast ti-trans" v-if="!api.isDead.value">
+    <div
+      class="ti-toast ti-trans"
+      :class="api.TopClass.value"
+      v-if="!api.isDead.value">
       <div
         class="trans-box"
-        :class="api.TopClass.value"
-        :style="api.TopStyle.value">
+        :class="api.TransBoxClass.value"
+        :style="api.TransBoxStyle.value">
         <a class="box-icon as-pin" @click.left="api.togglePined()">
           <i class="fa-solid fa-thumbtack"></i>
         </a>

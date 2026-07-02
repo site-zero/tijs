@@ -1,4 +1,13 @@
-@use '../_all.scss' as *;
+@use "../_all.scss" as *;
+
+/*------------------------------------*/
+//
+// Trans Box
+//
+/*------------------------------------*/
+.trans-box {
+  transition: transform 0.5s;
+}
 
 /*------------------------------------*/
 //
@@ -19,9 +28,6 @@
 .ti-slide-left-enter-active,
 .ti-slide-left-leave-active {
   transition: opacity 0.3s;
-  > .trans-box {
-    transition: transform 0.3s;
-  }
 }
 .ti-slide-left-enter-from,
 .ti-slide-left-leave-to {
@@ -43,9 +49,6 @@
 .ti-slide-right-enter-active,
 .ti-slide-right-leave-active {
   transition: opacity 0.3s;
-  > .trans-box {
-    transition: transform 0.3s;
-  }
 }
 .ti-slide-right-enter-from,
 .ti-slide-right-leave-to {
@@ -67,9 +70,9 @@
 .ti-slide-up-enter-active,
 .ti-slide-up-leave-active {
   transition: opacity 0.3s;
-  > .trans-box {
-    transition: transform 0.3s;
-  }
+  // > .trans-box {
+  //   transition: transform 0.3s;
+  // }
 }
 .ti-slide-up-enter-from,
 .ti-slide-up-leave-to {
@@ -80,10 +83,10 @@
 }
 .ti-slide-up-enter-to,
 .ti-slide-up-leave-from {
-  opacity: 1;
-  > .trans-box {
-    transform: translateY(0);
-  }
+  // opacity: 1;
+  // > .trans-box {
+  //   transform: translateY(0);
+  // }
 }
 /*------------------------------------*/
 // slide down
@@ -154,7 +157,6 @@
 // Speed
 //
 /*------------------------------------*/
-
 .ti-trans-speed-slow {
   transition-duration: 1s;
 }

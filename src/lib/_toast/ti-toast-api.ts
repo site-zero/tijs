@@ -14,7 +14,11 @@ export function useToastApi(props: ToastBoxProps) {
   //-----------------------------------------------------
   const isDead = computed(() => _isdead.value);
   //-----------------------------------------------------
-  const TopClass = computed(() =>
+  const TopClass = computed(() => {
+    return `speed-${props.tranSpeed || "normal"}`;
+  });
+  //-----------------------------------------------------
+  const TransBoxClass = computed(() =>
     CssUtils.mergeClassName(
       props.className,
       `origin-${props.position}`,
@@ -26,7 +30,7 @@ export function useToastApi(props: ToastBoxProps) {
     )
   );
   //-----------------------------------------------------
-  const TopStyle = computed(() => {
+  const TransBoxStyle = computed(() => {
     const logicType = props.type;
     let cl = toLogicColor(logicType);
     let bg = toLogicColor(logicType, "r");
@@ -90,7 +94,8 @@ export function useToastApi(props: ToastBoxProps) {
   return {
     isDead,
     TopClass,
-    TopStyle,
+    TransBoxClass,
+    TransBoxStyle,
     ToastCom,
     markReady,
     setPined,

@@ -23,17 +23,17 @@ export function getGroupFields(props: InputGroupProps): GridFieldsInput[] {
     // 后面的采用分隔符
     else if (!keepFieldTitle) {
       fld.title = fld_sep;
+    }
 
-      // 自动填充 placeholder
-      if (autoFieldPlaceholder) {
-        if (!fld.comConf) {
-          fld.comConf = {};
-        }
-        if (overridePlaceholder) {
-          fld.comConf.placeholder = fldTitle;
-        } else if (!fld.comConf.placeholder) {
-          fld.comConf.placeholder = fldTitle;
-        }
+    // 自动填充 placeholder
+    if (autoFieldPlaceholder) {
+      if (!fld.comConf) {
+        fld.comConf = {};
+      }
+      if (overridePlaceholder) {
+        fld.comConf.placeholder = fldTitle;
+      } else if (!fld.comConf.placeholder) {
+        fld.comConf.placeholder = fldTitle;
       }
     }
 

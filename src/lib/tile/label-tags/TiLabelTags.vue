@@ -1,22 +1,29 @@
 <script setup lang="ts">
-  import _ from 'lodash';
-  import { computed, onMounted, ref, watch } from 'vue';
-  import { TagItem, TiTags, useDict } from '../../';
-  import { isTableRowID, TableRowID } from '../../../_type/core-types';
-  import { anyToStr } from '../../../core/text/ti-str';
-  import { LabelTagsProps } from './ti-label-tags-types';
+  import {
+    isTableRowID,
+    Str,
+    TableRowID,
+    TagItem,
+    TiTags,
+    useDict,
+  } from "@site0/tijs";
+  import _ from "lodash";
+  import { computed, onMounted, ref, watch } from "vue";
+  import { LabelTagsEmitter, LabelTagsProps } from "./ti-label-tags-types";
+  //--------------------------------------------
+  const emit = defineEmits<LabelTagsEmitter>();
   //--------------------------------------------
   const props = withDefaults(defineProps<LabelTagsProps>(), {});
   //--------------------------------------------
   const TagsProps = computed(() => {
     return _.omit(props, [
-      'value',
-      'options',
-      'dictVars',
-      'getIcon',
-      'getText',
-      'getTip',
-      'getValue',
+      "value",
+      "options",
+      "dictVars",
+      "getIcon",
+      "getText",
+      "getTip",
+      "getValue",
     ]);
   });
   //--------------------------------------------
@@ -38,13 +45,13 @@
         if (isTableRowID(v)) {
           vals.push(v as TableRowID);
         } else {
-          vals.push(anyToStr(v));
+          vals.push(Str.anyToStr(v));
         }
       }
     }
     // 直接拆分数组
     else {
-      vals = props.value.split(',').map((v: string) => v.trim());
+      vals = props.value.split(",").map((v: string) => v.trim());
     }
 
     // 准备转换为标签对象
@@ -68,7 +75,7 @@
   //--------------------------------------------
   function val_to_item(val: any): TagItem {
     return {
-      text: _.startCase(anyToStr(val)),
+      text: _.startCase(Str.anyToStr(val)),
       value: val,
     };
   }
@@ -89,5 +96,7 @@
 <template>
   <TiTags
     v-bind="TagsProps"
-    :value="_tag_items" />
+    :value="_tag_items"
+    @click="emit('click')"
+    @click-tag="emit('click-tag', $event)" />
 </template>
