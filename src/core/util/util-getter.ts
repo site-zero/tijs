@@ -1,5 +1,12 @@
 import _ from "lodash";
-import { AnyGetter, AnyTester, Convertor, Vars } from "../../_type";
+import {
+  AnyGetter,
+  AnyTester,
+  Convertor,
+  ItemGetter,
+  ValGetter,
+  Vars,
+} from "../../_type";
 import { splitIgnoreBlank, splitQuote } from "../text/ti-str";
 
 export type ObjGetterOptions<T> = Partial<GetterOptions<T>>;
@@ -142,6 +149,99 @@ export function genGetterWithDft<T>(
   // 防空
   if (!input) {
     return options.getDefault;
+  }
+  // 用户直接指定了
+  if (_.isFunction(input)) {
+    return input;
+  }
+  // 生成 Getter 函数
+  return genObjGetter(input, options);
+}
+
+export type GenItemGetterOptions = {};
+
+export function gen_item_path_getter<T>(input: string): ItemGetter<T> {
+  let keyPath = splitQuote(input, {
+    seps: ".",
+    keepQuote: false,
+    ignoreBlank: true,
+  });
+  // 中间获取
+  let getters = [] as ValGetter<Vars, Vars>[];
+  let lastI = keyPath.length - 1;
+  for (let i = 0; i < lastI; i++) {
+    let key = keyPath[i];
+    // 数组形式 name[3]
+    let m = /^([^[\]]+)\[(\d+)\]$/.exec(key);
+    if (m) {
+      let k = m[1];
+      let I = parseInt(m[2]);
+      getters.push((obj) => obj[k] || {});
+      getters.push((obj) => (obj ? obj[I] : {}));
+    }
+    // 普通获取模式
+    else {
+      getters.push((obj) => obj[key] || {});
+    }
+  }
+  // 最终获取
+  // 这里不考虑数组模式
+  let lastKey = _.last(keyPath)!;
+  let lastget = (obj: Vars, index?: number) => {
+    return obj[lastKey] ?? `item-${index}`;
+  };
+
+  // 返回函数
+  return (obj, index) => {
+    let re = obj;
+    for (let getter of getters) {
+      re = getter(re);
+    }
+    return lastget(re, index);
+  };
+}
+
+export function genItemPathGetter<T>(
+  input: string,
+  options = {} as ObjGetterOptions<any>
+): ItemGetter<T> {
+  let { test = (v) => !_.isNil(v), enableKeyPath = true, getDefault } = options;
+
+  let keyFallback = splitIgnoreBlank(input, "|");
+  let keyGetters = [] as ItemGetter<T>[];
+  for (let key of keyFallback) {
+    let getter: ItemGetter<T>;
+    if (enableKeyPath) {
+      getter = gen_item_path_getter(key);
+      _.set(getter, "_gen_by", `genItemPathGetter(${key}) input='${input}'`);
+    } else {
+      getter = (obj) => obj[key];
+      _.set(getter, "_gen_by", `obj[${key}] input='${input}'`);
+    }
+    keyGetters.push(getter);
+  }
+
+  return (obj) => {
+    for (let i = 0; i < keyGetters.length; i++) {
+      let getter = keyGetters[i];
+      let v = getter(obj, i);
+      if (test(v)) {
+        return v;
+      }
+    }
+    if (getDefault) {
+      return getDefault();
+    }
+  };
+}
+
+export function genItemGetter<T>(
+  input?: string | ((it: Vars, index: number) => T),
+  options = {} as ObjGetterOptions<T>
+): (it: Vars, index: number) => T {
+  // 防空
+  if (!input) {
+    return () => "undefined" as T;
   }
   // 用户直接指定了
   if (_.isFunction(input)) {

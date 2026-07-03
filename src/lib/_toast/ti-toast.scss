@@ -1,8 +1,14 @@
 @use "@site0/tijs/sass/_all.scss" as *;
 
 .ti-toast > .trans-box {
+  --color: var(--ti-color-warn);
+  --bg: var(--ti-color-warn-r);
+  --border: var(--ti-color-warn-b);
+  --fontsz: var(--ti-fontsz-s);
+  --padding: 1px;
   @include flex-align-nowrap;
-  padding: 1px;
+  position: relative;
+  padding: var(--padding) 1.6em;
   min-width: 10em;
   text-align: center;
   color: var(--color);
@@ -12,6 +18,11 @@
   box-shadow: 0.1em 0.1em 0.3em var(--ti-color-mask-weak);
   pointer-events: auto;
   overflow: hidden;
+  font-size: var(--fontsz);
+  //-----------------------------------------------------
+  > * {
+    font-size: inherit;
+  }
   //-----------------------------------------------------
   &.is-dead {
     pointer-events: none;
@@ -21,14 +32,24 @@
   > a.box-icon {
     @include flex-center;
     color: inherit;
-    font-size: 12px;
+    font-size: 1em;
     width: 1.5em;
     height: 1.5em;
+    position: absolute;
+    top: 0;
     cursor: pointer;
     //---------------------------------------------------
     > i {
       transition: 0.6s;
       opacity: 0.6;
+    }
+    //---------------------------------------------------
+    &.as-pin {
+      left: 0;
+    }
+    //---------------------------------------------------
+    &.as-close {
+      right: 0;
     }
     //---------------------------------------------------
     &:hover {

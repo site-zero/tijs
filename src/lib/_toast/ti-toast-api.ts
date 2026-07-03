@@ -1,6 +1,6 @@
 import _ from "lodash";
 import { computed, ref } from "vue";
-import { toLogicColor, Vars } from "../../_type";
+import { toAspectBoxPad, toAspectFontSize, toLogicColor, Vars } from "../../_type";
 import { CssUtils } from "../../core";
 import { useFieldCom } from "../_features";
 import { ToastBoxProps } from "./ti-toast-types";
@@ -38,6 +38,12 @@ export function useToastApi(props: ToastBoxProps) {
     let css: Vars = props.reverseColor
       ? { "--color": bg, "--bg": cl, "--border": bb }
       : { "--color": cl, "--bg": bg, "--border": bb };
+    if (props.boxFontSize) {
+      css['--fontsz'] = toAspectFontSize(props.boxFontSize)
+    }
+    if (props.boxPadding) {
+      css['--padding'] = toAspectBoxPad(props.boxPadding);
+    }
     _.assign(css, props.style);
     return css;
   });

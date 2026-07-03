@@ -1,4 +1,5 @@
 import {
+  AspectSize,
   CommonProps,
   ComRef,
   IconInput,
@@ -23,6 +24,10 @@ export type ToastProps = CommonProps &
      */
     reverseColor?: boolean;
 
+    boxFontSize?: AspectSize;
+    boxPadding?: AspectSize;
+    boxRadius?: AspectSize;
+
     // 内容
     content?: string;
     contentType?: "text" | "html";
@@ -38,6 +43,6 @@ export type ToastProps = CommonProps &
     duration?: number;
   };
 
-  export type ToastBoxProps = ToastProps & {
-    releaseDom: () => void;
-  }
+export type ToastBoxProps = ToastProps & {
+  releaseDom: () => void;
+}

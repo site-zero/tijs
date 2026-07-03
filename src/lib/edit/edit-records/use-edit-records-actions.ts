@@ -1,19 +1,19 @@
 import { ActionBarProps } from "@site0/tijs";
-import { EditTableProps } from "./edit-table-types";
-import { EditTableApi } from "./use-edit-table-api";
+import { EditRecordsProps } from "./edit-records-types";
+import { EditRecordsApi } from "./use-edit-records-api";
 
-export function useTiEditTableActions(
-  _props: EditTableProps,
-  _api: EditTableApi
+export function useTiEditRecordsActions(
+  _props: EditRecordsProps,
+  api: EditRecordsApi
 ): ActionBarProps {
   return {
-    vars: _api.ActionBarVars.value,
+    vars: api.ActionBarVars.value,
     items: [
       {
         icon: "zmdi-flare",
         text: "NEW",
         action: async () => {
-          await _api.addNewItem();
+          await api.addNewItem();
         },
       },
       {},
@@ -26,9 +26,8 @@ export function useTiEditTableActions(
           text: "i18n:saving",
         },
         enabled: { changed: true },
-        action: async () => {
-          await _api.saveChange();
-          await _api.refresh();
+        action: () => {
+          api.tryNotifyChange();
         },
       },
       {},
@@ -37,7 +36,7 @@ export function useTiEditTableActions(
         text: "DROP CHANGES",
         enabled: { changed: true },
         action: () => {
-          _api.dropChange();
+          api.initData();
         },
       },
       {},
@@ -47,20 +46,7 @@ export function useTiEditTableActions(
         className: "is-error",
         enabled: { hasChecked: true },
         action: () => {
-          _api.removeChecked();
-        },
-      },
-      {},
-      {
-        icon: "zmdi-refresh",
-        text: "i18n:refresh",
-        altDisplay: {
-          test: { loading: true },
-          icon: "zmdi-refresh zmdi-hc-spin",
-          text: "i18n:loading",
-        },
-        action: async () => {
-          await _api.refresh();
+          api.removeChecked();
         },
       },
     ],

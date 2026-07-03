@@ -651,6 +651,8 @@ export type ValTester<V> = ValGetter<V, boolean>;
 
 export type AnyGetter = ValGetter<any, any>;
 export type AnyTester = ValGetter<any, boolean>;
+export type ItemGetter<T> = (it: Vars, index: number) => T | undefined;
+export type AnyItemGetter = ItemGetter<any>;
 
 export type AsyncWaiting<T, E> = {
   resolve: Callback1<T>;
@@ -1388,6 +1390,21 @@ export type PopPosition =
   | "right-top"
   | "bottom-left"
   | "bottom-right";
+
+export function isPopPosition(input: any): input is PopPosition {
+  if (!input) return false;
+  return /^(left|right|top|bottom|center|free|left-top|right-top|bottom-left|bottom-right)$/.test(
+    input
+  );
+}
+
+export function toPopPosition(input: any): PopPosition {
+  let str = _.kebabCase(input);
+  if (isPopPosition(str)) {
+    return str as PopPosition;
+  }
+  return "center";
+}
 
 /*---------------------------------------------------
 
