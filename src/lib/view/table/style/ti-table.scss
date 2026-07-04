@@ -1,4 +1,4 @@
-@use "../../../../assets/style/_all.scss" as *;
+@use "@site0/tijs/sass/_all.scss" as *;
 
 .ti-table {
   @include flex-align-v-nowrap;
@@ -10,15 +10,17 @@
     overflow: hidden;
     position: relative;
     > main {
-      position: absolute;
-      inset: 0;
-      overflow: auto;
       user-select: none;
       display: grid;
       grid-template-rows: auto;
       align-items: stretch;
       align-content: flex-start;
       background-color: var(--ti-color-border-thin);
+      &[scroll-mode="cover"] {
+        position: absolute;
+        inset: 0;
+        overflow: auto;
+      }
 
       > .virtual-row {
         background-color: var(--ti-color-card);

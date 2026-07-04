@@ -3,6 +3,8 @@
     TiActionBar,
     TiRoadblock,
     TiTextSnippet,
+    Vars,
+    toAspectFontSize,
     useFieldChange,
     useLargeScrolling,
   } from "@site0/tijs";
@@ -71,6 +73,7 @@
     changeMode: "diff",
     colDefaultWidth: 0,
     autoPickCurrent: true,
+    mainScrollMode: "cover",
     data: () => [],
     emptyRoadblock: () => ({
       text: "i18n:empty-data",
@@ -220,7 +223,15 @@
     }
     //console.log('re-computed MainStyle', cols.join(' '));
 
-    let re = _.assign({}, props.mainStyle, {
+    let re: Vars = {};
+
+    if (props.mainFontSize) {
+      _.assign(re, {
+        "font-size": toAspectFontSize(props.mainFontSize),
+      });
+    }
+
+    _.assign(re, props.mainStyle, {
       "grid-template-columns": cols.join(" "),
       "grid-auto-rows": `minmax(${props.rowMinHeight - props.rowGap}px, auto)`,
       "row-gap": `${props.rowGap}px`,
@@ -404,7 +415,11 @@
         :comConf="props.head.comConf" />
     </slot>
     <div class="table-part as-body">
-      <main ref="$main" :style="MainStyle" @click="onClickMain">
+      <main
+        ref="$main"
+        :style="MainStyle"
+        :scroll-mode="props.mainScrollMode || 'cover'"
+        @click="onClickMain">
         <!-- 表格头 -->
         <template v-if="showHeader">
           <!-- 表头: 标记块 -->

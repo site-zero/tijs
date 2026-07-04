@@ -1,28 +1,27 @@
 import {
+  AbstractField,
+  AspectSize,
+  Callback2,
+  ColumnRefer,
+  CommonProps,
+  FieldChange,
   FieldChangeProps,
+  FieldComProps,
+  FieldName,
   GetDataLogicTypeOptions,
   KeepInfo,
+  LogicType,
   RoadblockProps,
   SelectEmitInfo,
   SelectableApi,
   SelectableProps,
   SelectableState,
-} from "../..";
-import {
-  AbstractField,
-  Callback2,
-  ColumnRefer,
-  CommonProps,
-  FieldChange,
-  FieldComProps,
-  FieldName,
-  LogicType,
   TableColumnAspect,
   TableRowID,
   TextFragment,
   TiMatch,
   Vars,
-} from "../../../_type";
+} from "@site0/tijs";
 
 export const KK_DISPLAY_COL_KEYS = "$table$display_column_keys";
 export const HEAD_MARKER = "$table$HEAD_MARKER";
@@ -273,6 +272,22 @@ export type TableProps = CommonProps &
     
     ......................................*/
     mainStyle?: Vars;
+
+    /**
+     * 表格主体区域 (表头+单元格) 默认的字体大小。
+     * 默认，没有默认值，因此表格会继承父亲元素的字体大小
+     */
+    mainFontSize?: AspectSize;
+
+    /**
+     * 表格主体的布局策略:
+     *
+     * - `cover`: 完全覆盖表格主体区域，会自动显示滚动条。但是要求给表格指定宽高，否则会什么也不显示
+     * - `stretch`: 表格主体内容自然延伸，因此不会有滚动条
+     *
+     * 默认为 `cover`
+     */
+    mainScrollMode?: "cover" | "stretch";
 
     /**
      * 右侧指定一个空白，以便最后一列有可被拖动的空间

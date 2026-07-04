@@ -13,6 +13,8 @@ export function useTiEditRecordsTableConfig(
       colInput("text", "Text"),
       colInput("tip", "Tip"),
     ],
+    mainFontSize: "s",
+    mainScrollMode: "stretch",
     ...props.table,
     data: api.ListData.value,
     currentId: api.CurrentId.value,

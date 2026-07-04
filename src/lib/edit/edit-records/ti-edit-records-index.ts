@@ -12,7 +12,7 @@ const zh_cn = {
 };
 
 const TiEditRecordsInfo: TiComInfo = {
-  icon: "fas-sheet",
+  icon: "fas-table-list",
   race: TiComRace.VIEW,
   name: COM_TYPE,
   text: "i18n:ti-edit-records-com-name",
@@ -31,7 +31,12 @@ const TiEditRecordsInfo: TiComInfo = {
     {
       name: "simple",
       text: "i18n:simple",
-      comConf: {} as EditRecordsProps,
+      comConf: {
+        table: {
+          className: "fit-parent",
+          mainScrollMode: "cover",
+        },
+      } as EditRecordsProps,
     },
   ],
 };

@@ -8,6 +8,8 @@ export function useTiEditRecordsActions(
 ): ActionBarProps {
   return {
     vars: api.ActionBarVars.value,
+    itemSize: "s",
+    barPad: "t",
     items: [
       {
         icon: "zmdi-flare",
