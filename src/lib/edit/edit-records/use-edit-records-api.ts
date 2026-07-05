@@ -12,9 +12,12 @@ import { EditRecordsEmitter, EditRecordsProps } from "./edit-records-types";
 
 export type EditRecordsApi = ReturnType<typeof useEditRecordsApi>;
 
-export function useEditRecordsApi(props: EditRecordsProps, emit: EditRecordsEmitter) {
+export function useEditRecordsApi(
+  props: EditRecordsProps,
+  emit: EditRecordsEmitter
+) {
   const _get_item_id = computed(() =>
-    Util.genItemGetter<TableRowID>(props.table?.getId || "id|value", {})
+    Util.genItemGetter<TableRowID>(props.getId || "id|value", {})
   );
   //-----------------------------------------------------
   // 数据模型
@@ -31,15 +34,25 @@ export function useEditRecordsApi(props: EditRecordsProps, emit: EditRecordsEmit
   const CurrentItem = computed(() => getItemById(_current_id.value));
   const CheckedItems = computed(() => getCheckedItems());
   //-----------------------------------------------------
+  const isChanged = computed(() => {
+    return !_.isEqual(props.value, _list_data.value);
+  });
+  //-----------------------------------------------------
   const hasCurrent = computed(() =>
     _.isNil(_current_id.value) ? false : true
   );
   const hasChecked = computed(() => !_.isEmpty(_checked_ids.value));
   //-----------------------------------------------------
+  const canAddNewItem = computed(() => {
+    return props.newItem ? true : false;
+  });
+  //-----------------------------------------------------
   const ActionBarVars = computed((): Vars => {
     return {
+      changed: isChanged.value,
       hasCurrent: hasCurrent.value,
       hasChecked: hasChecked.value,
+      canAddNewItem: canAddNewItem.value,
     };
   });
   //-----------------------------------------------------
@@ -54,7 +67,11 @@ export function useEditRecordsApi(props: EditRecordsProps, emit: EditRecordsEmit
   //-----------------------------------------------------
   // 查询函数
   //-----------------------------------------------------
-  function getItemIndex(id: TableRowID | undefined | null) {
+  function getItemId(it: Vars, index: number) {
+    return _get_item_id.value(it, index);
+  }
+  //-----------------------------------------------------
+  function getItemIndexById(id: TableRowID | undefined | null) {
     if (_.isNil(id)) return -1;
     return _.findIndex(_list_data.value, (it, index) => {
       let itId = _get_item_id.value(it, index);
@@ -63,7 +80,7 @@ export function useEditRecordsApi(props: EditRecordsProps, emit: EditRecordsEmit
   }
   //-----------------------------------------------------
   function getItemById(id: TableRowID | undefined | null) {
-    let index = getItemIndex(id);
+    let index = getItemIndexById(id);
     if (index < 0) return undefined;
     return _.nth(_list_data.value, index);
   }
@@ -115,7 +132,7 @@ export function useEditRecordsApi(props: EditRecordsProps, emit: EditRecordsEmit
   //-----------------------------------------------------
   function updateItemById(delta: Vars, id: TableRowID | undefined | null) {
     if (_.isNil(id)) return;
-    let index = getItemIndex(id);
+    let index = getItemIndexById(id);
     if (index < 0) return;
     return updateItemByIndex(delta, index);
   }
@@ -126,8 +143,40 @@ export function useEditRecordsApi(props: EditRecordsProps, emit: EditRecordsEmit
   //-----------------------------------------------------
   // 数据改动
   //-----------------------------------------------------
-  async function addNewItem() {
-    throw "No implements";
+  function appendItem(item: Vars | Vars[]) {
+    // 防空
+    if (!item) {
+      return;
+    }
+    let new_items = _.concat(item);
+    _list_data.value.push(...new_items);
+  }
+  //-----------------------------------------------------
+  function prependItem(item: Vars | Vars[]) {
+    // 防空
+    if (!item) {
+      return;
+    }
+    let new_items = _.concat(item);
+    _list_data.value.unshift(...new_items);
+  }
+  //-----------------------------------------------------
+  function insertItem(item: Vars | Vars[]) {
+    // 防空
+    if (!item) {
+      return;
+    }
+
+    let index = getItemIndexById(CurrentId.value);
+    // 有当前项目，就在之后插入
+    if (index > 0) {
+      let new_items = _.concat(item);
+      _list_data.value.splice(index, 0, new_items);
+    }
+    // 否则插入到末尾
+    else {
+      appendItem(item);
+    }
   }
   //-----------------------------------------------------
   function removeChecked() {
@@ -176,17 +225,24 @@ export function useEditRecordsApi(props: EditRecordsProps, emit: EditRecordsEmit
   }
   //-----------------------------------------------------
   function tryNotifyChange() {
-    if (!_.isEqual(props.value, _list_data.value)) {
+    if (isChanged.value) {
       emit("change", _list_data.value);
     }
   }
   //-----------------------------------------------------
-  function debounceTryNotifyChange() {
+  const _deb_try_notify_change = computed(() => {
     let delayInMs = props.emitDelay ?? 500;
-    _.debounce(tryNotifyChange, delayInMs, {
-      trailing: true,
-      leading: true,
-    });
+    if (delayInMs > 0) {
+      return _.debounce(tryNotifyChange, delayInMs, {
+        leading: false,
+        trailing: true,
+      });
+    }
+    return tryNotifyChange;
+  });
+  //-----------------------------------------------------
+  function debounceTryNotifyChange() {
+    _deb_try_notify_change.value();
   }
   //-----------------------------------------------------
   // 返回接口
@@ -198,9 +254,13 @@ export function useEditRecordsApi(props: EditRecordsProps, emit: EditRecordsEmit
     CheckedIds,
     CurrentItem,
     CheckedItems,
+    isChanged,
+    canAddNewItem,
     ActionBarVars,
     getKeepInfo,
-    getItemIndex,
+    // 查询函数
+    getItemId,
+    getItemIndexById,
     getItemById,
     getItemsById,
     getCheckedItems,
@@ -213,7 +273,9 @@ export function useEditRecordsApi(props: EditRecordsProps, emit: EditRecordsEmit
     updateCurrentItem,
     moveCheckedTo,
     // 数据改动
-    addNewItem,
+    appendItem,
+    prependItem,
+    insertItem,
     removeChecked,
     // 数据交互
     initData,

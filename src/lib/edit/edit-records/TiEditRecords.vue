@@ -23,7 +23,7 @@
   //-----------------------------------------------------
 </script>
 <template>
-  <TiTable v-bind="TableConfig">
+  <TiTable v-bind="TableConfig" @select="api.onSelect">
     <template #head>
       <TiActionBar v-bind="ActionConfig" />
     </template>

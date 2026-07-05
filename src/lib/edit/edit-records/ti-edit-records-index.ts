@@ -1,4 +1,4 @@
-import { TiComInfo, TiComRace, EditRecordsProps } from "@site0/tijs";
+import { EditRecordsProps, TiComInfo, TiComRace } from "@site0/tijs";
 import { App } from "vue";
 import TiEditRecords from "./TiEditRecords.vue";
 
@@ -13,7 +13,7 @@ const zh_cn = {
 
 const TiEditRecordsInfo: TiComInfo = {
   icon: "fas-table-list",
-  race: TiComRace.VIEW,
+  race: TiComRace.EDIT,
   name: COM_TYPE,
   text: "i18n:ti-edit-records-com-name",
   i18n: {
@@ -35,6 +35,10 @@ const TiEditRecordsInfo: TiComInfo = {
         table: {
           className: "fit-parent",
           mainScrollMode: "cover",
+        },
+        newItem: {
+          value: "->item-${N}",
+          text: "->New Item ${N}",
         },
       } as EditRecordsProps,
     },

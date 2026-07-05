@@ -16,6 +16,7 @@ export function useTiEditRecordsTableConfig(
     mainFontSize: "s",
     mainScrollMode: "stretch",
     ...props.table,
+    getId: api.getItemId,
     data: api.ListData.value,
     currentId: api.CurrentId.value,
     checkedIds: api.CheckedIds.value,
