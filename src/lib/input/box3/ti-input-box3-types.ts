@@ -12,7 +12,6 @@ import {
   BoxAspectProps,
   BoxCompositionProps,
   BoxHintCookingProps,
-  BoxIconEmit,
   BoxOptionsDataProps,
   BoxPrefixSuffixProps,
 } from "./_fea";
@@ -24,7 +23,12 @@ export type InputBoxEmitter = {
   (event: "focus"): void;
   // (event: "click:prefix-icon"): void;
   // (event: "click:suffix-icon"): void;
-  (event: BoxIconEmit): void;
+  // TODO 如果我像下面这么声明事件
+  // (event: BoxIconEmit): void;
+  // Vue 会报错: [Vue warn]: Component emitted event "click:suffix-icon"
+  // but it is neither declared in the emits option nor as an "onClick:suffixIcon" prop.
+  // 因此，我只好不用 BoxIconEmit，直接写这两个的值了
+  (event: "click:prefix-icon" | "click:suffix-icon"): void;
   (event: "click", payload: any): void;
 };
 
