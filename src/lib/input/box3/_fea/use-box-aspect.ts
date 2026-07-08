@@ -7,12 +7,12 @@ import {
   Vars,
 } from "@site0/tijs";
 import _ from "lodash";
-import { computed, ComputedRef } from "vue";
+import { computed } from "vue";
 import { BoxAspectProps } from "./types-box-aspect";
 
 export type FeaBoxAspectSetup = {
   isFocused: () => boolean;
-  isTipBoxReady: ComputedRef<boolean>;
+  isTipBoxReady: () => boolean;
   isReadonly: () => boolean;
   getElement: () => HTMLElement | null;
   getDockingElement: () => HTMLElement | null;
@@ -42,7 +42,7 @@ export function useBoxAspect(
   //--------------------------------------------------
   const TopStyle = computed(() => {
     const re = makeBoxAspectStyle(props, getBoxAlign);
-    if (isTipBoxReady.value && autoFloatWhenTipReady()) {
+    if (isTipBoxReady() && autoFloatWhenTipReady()) {
       let $el = getElement();
       let _box_rect = Rects.createBy($el!);
       _.assign(re, {
@@ -55,7 +55,7 @@ export function useBoxAspect(
   const PartMainClass = computed(() => {
     return {
       "is-focused": isFocused(),
-      "show-tips": isTipBoxReady.value,
+      "show-tips": isTipBoxReady(),
       "is-readonly": isReadonly(),
     };
   });
@@ -63,7 +63,7 @@ export function useBoxAspect(
   const PartMainStyle = computed(() => {
     let re: Vars = {};
     _.assign(re, props.partMainStyle);
-    if (isTipBoxReady.value && autoFloatWhenTipReady()) {
+    if (isTipBoxReady() && autoFloatWhenTipReady()) {
       let $el = getElement();
       let _box_rect = Rects.createBy($el!);
       _.assign(re, {
@@ -95,7 +95,7 @@ export function useBoxAspect(
     if (!$el) {
       return {};
     }
-    if (!isTipBoxReady.value) {
+    if (!isTipBoxReady()) {
       return;
     }
     let _box_rect = Rects.createBy($el);

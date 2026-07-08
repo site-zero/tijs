@@ -49,7 +49,7 @@
       getElement: () => $el.value,
       getDockingElement: () => $tipcon.value,
       isFocused: () => false,
-      isTipBoxReady: api.isOptionsDataReady,
+      isTipBoxReady: () => api.isOptionsDataReady.value,
       isReadonly: () => api.isReadonly.value,
       autoFloatWhenTipReady: () => false,
     })
@@ -107,7 +107,7 @@
       <TiTags
         :style="props.tagsStyle"
         :placeholder="props.placeholder"
-        default-tag-type="primary"
+        :default-tag-type="props.type"
         :editable="api.isReadonly.value ? false : true"
         :actions="TagActions"
         :nowrap="props.nowrap"
@@ -124,7 +124,9 @@
         <header v-if="api.isShowOptionKeyword.value">
           <div class="keyword">
             <input
-              :placeholder="I18n.text('i18n:ti-multi-droplist-keyword-placeholder')"
+              :placeholder="
+                I18n.text('i18n:ti-multi-droplist-keyword-placeholder')
+              "
               @keyup="Compose.onKeyUp"
               @keydown="Compose.onKeyDown"
               @beforeinput="Compose.onBeforeInput"

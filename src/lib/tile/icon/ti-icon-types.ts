@@ -1,5 +1,16 @@
-import { CommonProps, IconInput, LogicType, Vars } from '../../../_type';
-import { TiColor, TiDict } from '../../../core';
+import {
+  CommonProps,
+  IconInput,
+  IconObj,
+  LogicType,
+  TiColor,
+  TiDict,
+  Vars,
+} from "@site0/tijs";
+
+export type IconEmitter = {
+  (event: "click", payload: IconObj): void;
+};
 
 export interface IconProps extends CommonProps {
   //
@@ -10,12 +21,13 @@ export interface IconProps extends CommonProps {
   dict?: TiDict;
   defaultValue?: IconInput;
   tip?: string;
-  //
-  // Behavior
-  //
-  notifyName?: string;
-  notifyConf?: any;
-  stopPropagation?: boolean;
+  // //
+  // // Behavior
+  // //
+  // notifyName?: string;
+  // notifyConf?: any;
+  // stopPropagation?: boolean;
+  onClick?: (icon: IconObj) => void;
   //
   // Aspect
   //
@@ -27,7 +39,7 @@ export interface IconProps extends CommonProps {
   color?: string | TiColor;
   logicType?: LogicType; // for font icon
   // image only
-  objectFit?: 'contain' | 'cover' | 'fill' | 'scale-down';
+  objectFit?: "contain" | "cover" | "fill" | "scale-down";
   // Free Style
   style?: Vars;
   imgStyle?: Vars;

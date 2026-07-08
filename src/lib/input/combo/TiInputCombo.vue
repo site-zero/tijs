@@ -47,7 +47,7 @@
       getElement: () => $el.value,
       getDockingElement: () => $tipcon.value,
       isFocused: () => api.isFocused.value,
-      isTipBoxReady: api.isOptionsDataReady,
+      isTipBoxReady: () => api.isOptionsDataReady.value,
       isReadonly: () => api.isReadonly.value,
       autoFloatWhenTipReady: () => true,
     })

@@ -43,7 +43,7 @@
       getElement: () => $el.value,
       getDockingElement: () => $tipcon.value,
       isFocused: () => false,
-      isTipBoxReady: computed(() => false),
+      isTipBoxReady: () => false,
       isReadonly: () => false,
       autoFloatWhenTipReady: () => false,
       getBoxAlign: (align?: CssAlignment) => {

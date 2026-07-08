@@ -1,34 +1,27 @@
 <script setup lang="ts">
-  import _ from 'lodash';
-  import { computed } from 'vue';
-  import { LogicType } from '../../../_type/core-types';
-  import { CssUtils, Icons } from '../../../core';
-  import { IconProps } from './ti-icon-types';
-  import { getIconStyle } from './use-icon';
-  defineOptions({
-    name: 'TiIcon',
-    inheritAttrs: true,
-  });
-  /*-------------------------------------------------------
+  import _ from "lodash";
+  import { computed } from "vue";
+  import { LogicType } from "../../../_type/core-types";
+  import { CssUtils, Icons } from "../../../core";
+  import { IconEmitter, IconProps } from "./ti-icon-types";
+  import { getIconStyle } from "./use-icon";
+  //-----------------------------------------------------
 
-                      Props
-
--------------------------------------------------------*/
+  const emit = defineEmits<IconEmitter>();
+  //-----------------------------------------------------
   const props = defineProps<IconProps>();
-  /*-------------------------------------------------------
-
-                      Computed
-
--------------------------------------------------------*/
+  //-----------------------------------------------------
   const Icon = computed(() => {
     return Icons.toIconObj(props.value ?? props.defaultValue);
   });
+  //-----------------------------------------------------
   const TopClass = computed(() => {
     return CssUtils.mergeClassName(
       props.className,
       `is-type-${Icon.value.type}`
     );
   });
+  //-----------------------------------------------------
   const TopStyle = computed(() => {
     let logicType: LogicType | undefined = props.logicType;
     if (props.value) {
@@ -50,7 +43,17 @@
     }
     return re;
   });
+  //-----------------------------------------------------
   const IconStyle = computed(() => getIconStyle(props, Icon));
+  //-----------------------------------------------------
+  function onClickTop() {
+    if (props.onClick) {
+      props.onClick(Icon.value);
+    } else {
+      emit("click", Icon.value);
+    }
+  }
+  //-----------------------------------------------------
 </script>
 
 <template>
@@ -60,7 +63,8 @@
     :style="TopStyle"
     :data-tip="props.tip"
     :data-tip-type="props.logicType"
-    data-tip-font-size="m">
+    data-tip-font-size="m"
+    @click="onClickTop">
     <!-- Emoji Icon-->
     <div
       class="part-main as-emoji"
@@ -76,13 +80,9 @@
       <i :class="Icon.className"></i>
     </div>
     <!-- Image Icon-->
-    <img
-      v-else
-      :src="Icon.src"
-      class="part-main as-image"
-      :style="IconStyle" />
+    <img v-else :src="Icon.src" class="part-main as-image" :style="IconStyle" />
   </div>
 </template>
 <style lang="scss">
-  @use './ti-icon.scss';
+  @use "./ti-icon.scss";
 </style>
