@@ -9,11 +9,11 @@
   } from "@site0/tijs";
   import _ from "lodash";
   import { computed, ref } from "vue";
-  import { TiBatchFormEmitter, TiBatchFormProps } from "./ti-batch-form-types";
+  import { BatchFormEmitter, BatchFormProps } from "./ti-batch-form-types";
   import { useTiBatchFormApi } from "./use-ti-batch-form-api";
   //-----------------------------------------------------
-  const emit = defineEmits<TiBatchFormEmitter>();
-  const props = withDefaults(defineProps<TiBatchFormProps>(), {});
+  const emit = defineEmits<BatchFormEmitter>();
+  const props = withDefaults(defineProps<BatchFormProps>(), {});
   const _api = useTiBatchFormApi(props, emit);
   //-----------------------------------------------------
   const _checked_name = ref<Record<string, boolean>>({});
@@ -22,7 +22,13 @@
   const FormConfig = computed(() => {
     const re: FormProps = { ..._.omit(props, "defaultFieldTitleBy") };
     const is_disable = (ctx: any) => {
+      // 如果是 Field Group 自然就是没有 $field 的
+      if (!ctx.$field) {
+        return false;
+      }
+      // 普通字段，需要验证一下
       let fnames = _.concat([], ctx.$field.name);
+      console.log("is_disable", fnames, _checked_name.value);
       for (let fnm of fnames) {
         if (!_checked_name.value[fnm]) {
           return true;

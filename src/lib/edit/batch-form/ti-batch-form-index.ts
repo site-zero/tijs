@@ -1,4 +1,4 @@
-import { TiBatchFormProps, TiComInfo, TiComRace } from "@site0/tijs";
+import { BatchFormProps, TiComInfo, TiComRace } from "@site0/tijs";
 import { App } from "vue";
 import TiBatchForm from "./TiBatchForm.vue";
 
@@ -49,7 +49,7 @@ const TiBatchFormInfo: TiComInfo = {
           "#INPUT-INT=age/Age",
           "#TOGGLE=is_admin/Is Admin",
         ],
-      } as TiBatchFormProps,
+      } as BatchFormProps,
     },
   ],
 };

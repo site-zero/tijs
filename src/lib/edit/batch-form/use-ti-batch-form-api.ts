@@ -1,12 +1,12 @@
 import { TableSelectEmitInfo, Vars } from "@site0/tijs";
 import { computed } from "vue";
-import { TiBatchFormProps, TiBatchFormEmitter } from "./ti-batch-form-types";
+import { BatchFormProps, BatchFormEmitter } from "./ti-batch-form-types";
 
 export type TiBatchFormApi = ReturnType<typeof useTiBatchFormApi>;
 
 export function useTiBatchFormApi(
-  _props: TiBatchFormProps,
-  _emit: TiBatchFormEmitter
+  _props: BatchFormProps,
+  _emit: BatchFormEmitter
 ) {
   //-----------------------------------------------------
   // 数据模型
