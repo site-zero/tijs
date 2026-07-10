@@ -1,5 +1,4 @@
 import _ from "lodash";
-import { Ref } from "vue";
 import { DefaultIdGetter, getDiffItemType, Match } from "..";
 import { ConflictItem, DiffItem, TableRowID, TiMatch, Vars } from "../../_type";
 
@@ -34,9 +33,9 @@ export function get_conflict_delta(data: Vars, conflict: ConflictItem): Vars {
 }
 
 export function apply_conflict(
-  local: Ref<Vars | undefined>,
-  server?: Vars,
-  localDiff?: DiffItem
+  server: Vars,
+  localDiff: DiffItem,
+  setLocalMeta: (newMeta: Vars) => void
 ) {
   // if (local.value && server && conflict) {
   //   // 没有冲突，就把本地修改直接融合到服务器上
@@ -49,34 +48,63 @@ export function apply_conflict(
   //     _.assign(local.value, delta);
   //   }
   // }
-  if (local.value) {
-    local.value = _.assign(_.cloneDeep(server), localDiff?.delta);
-  }
+  let newMeta = _.assign(_.cloneDeep(server), localDiff?.delta);
+  setLocalMeta(newMeta);
 }
 
 export function apply_conflict_list(
-  local: Ref<Vars[] | undefined>,
-  server?: Vars[],
-  localDiff?: DiffItem[]
+  server: Vars[],
+  localDiff: DiffItem[],
+  setLocalList: (newList: Vars[]) => void,
+  keepOrderBy: TableRowID[]
 ) {
   if (!server || _.isEmpty(server)) {
     return;
   }
   // 编制冲突索引
-  let deltaMap = new Map<string, Vars>();
-  _.forEach(localDiff, (diffItem) => {
-    if (diffItem.id && !_.isEmpty(diffItem.delta))
-      deltaMap.set(diffItem.id as string, diffItem.delta!);
-  });
+  let itemMap = new Map<TableRowID, Vars>();
+  let deltaMap = new Map<TableRowID, Vars>();
+  for (let diffItem of localDiff) {
+    if (diffItem.id && !_.isEmpty(diffItem.delta)) {
+      deltaMap.set(diffItem.id, diffItem.delta!);
+    }
+    // 新插入的数据，这里也记录一下
+    if (diffItem.existsInMine && !diffItem.existsInTarget) {
+      itemMap.set(diffItem.id, diffItem.delta);
+    }
+  }
 
   // 已 Server 为基础循环处理冲突项目
   let list = _.cloneDeep(server);
   for (let li of list) {
     let delta = deltaMap.get(li.id);
     _.assign(li, delta);
+    itemMap.set(li.id, li);
   }
-  // 更新本地列表
-  local.value = list;
+
+  // 根据本地数据，尽量保持原来的顺序
+  let orderedList: Vars[] = [];
+  for (let id of keepOrderBy) {
+    let item = itemMap.get(id);
+    if (!item) {
+      // 这个分支应该不大可能，但是这里记录一下
+      console.warn(
+        `item not found for id=${id}`,
+        _.cloneDeep({
+          server,
+          localDiff,
+          keepOrderBy,
+          deltaMap,
+          itemMap,
+        })
+      );
+    } else {
+      orderedList.push(item);
+    }
+  }
+
+  // 更新的本地列表
+  setLocalList(orderedList);
 }
 
 /**

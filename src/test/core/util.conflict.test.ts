@@ -1,6 +1,7 @@
 import { expect, test } from "vitest";
-import { ConflictItem } from "../../_type";
+import { ConflictItem, Vars } from "../../_type";
 import {
+  apply_conflict_list,
   buildConflict,
   buildConflictList,
   buildDifferentItem,
@@ -165,4 +166,34 @@ test("conflict-list-02", function () {
     taDelta: { age: 39, info: { x: false, y: "1.5" } },
     fields: {},
   } as ConflictItem);
+});
+
+test("conflict-list-03", function () {
+  let local = [
+    { id: "B", name: "banana", age: 5 },
+    { id: "A", name: "apple", age: 19 },
+  ];
+  let remote = [{ id: "A", name: "apple", age: 19 }];
+  let server = [{ id: "A", name: "apple", age: 19 }];
+
+  let myDiff = buildDifferentListItems(local, remote);
+  let taDiff = buildDifferentListItems(server, remote);
+
+  let conflicts = buildConflictList(myDiff, taDiff, {});
+  expect(conflicts.length).eq(0);
+
+  // 应用冲突
+  let localDiff = myDiff;
+  let new_local = [] as Vars[];
+  apply_conflict_list(
+    server,
+    localDiff,
+    (list) => {
+      new_local = list;
+    },
+    ["B", "A"]
+  );
+  expect(new_local.length).eq(2);
+  expect(new_local[0]).toEqual({ id: "B", name: "banana", age: 5 });
+  expect(new_local[1]).toEqual({ id: "A", name: "apple", age: 19 });
 });
