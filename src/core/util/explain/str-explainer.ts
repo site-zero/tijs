@@ -188,7 +188,7 @@ export class StringExplainer implements Explainer {
         // whole context  "=.."
         else if (".." == m_val) {
           func = (context) => {
-            return _.cloneDeep(context);
+            return Util.jsonClone(context);
           };
         }
         // Others, must starts with "=" auto covert to JS value

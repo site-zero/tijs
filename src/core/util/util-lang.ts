@@ -1,4 +1,5 @@
 import _ from "lodash";
+import { isProxy, isRef, toRaw } from "vue";
 import { anyToStr } from "../text/ti-str";
 import { genObjGetter } from "./util-getter";
 
@@ -21,39 +22,49 @@ export function V<T>(getter?: (() => T) | null | undefined): T | undefined {
  * 对于原始类型（`string`, `number`, `boolean`, `null`, `undefined`），此函数会直接返回原始值。
  *
  * @template T - 要克隆的对象的类型。
- * @param obj - 要克隆的对象。
+ * @param src - 要克隆的对象。
  * @returns 返回输入对象的深拷贝副本。
  */
-export function jsonClone<T>(obj: T): T {
-  return _.cloneDeep(obj);
-  // if (_.isNil(obj) || _.isString(obj) || _.isNumber(obj) || _.isBoolean(obj)) {
-  //   return obj;
-  // }
-  // let json: string;
-  // // 数组
-  // if (_.isArray(obj)) {
-  //   let re = [];
-  //   for (let it of obj) {
-  //     let it2 = jsonClone(it);
-  //     re.push(it2);
-  //   }
-  //   return re as T;
-  // }
-  // // 对象
-  // let rec = obj as Record<string, any>;
-  // let re: any = {};
-  // for (let key of _.keys(rec)) {
-  //   let val = rec[key as string];
-  //   try {
-  //     let v2 = jsonClone(val);
-  //     re[key] = v2;
-  //   } catch (err) {
-  //     console.error(`jsonClone Fail in key[${key}] val=`, val, obj);
-  //     throw err;
-  //   }
-  // }
-  // return re;
+export function jsonClone<T>(src: T): T {
+  let raw = src;
+  if (isRef(raw)) {
+    raw = raw.value as any;
+  }
+
+  if (isProxy(raw)) {
+    raw = toRaw(raw);
+  }
+
+  return _.cloneDeep(raw);
 }
+// if (_.isNil(obj) || _.isString(obj) || _.isNumber(obj) || _.isBoolean(obj)) {
+//   return obj;
+// }
+// let json: string;
+// // 数组
+// if (_.isArray(obj)) {
+//   let re = [];
+//   for (let it of obj) {
+//     let it2 = jsonClone(it);
+//     re.push(it2);
+//   }
+//   return re as T;
+// }
+// // 对象
+// let rec = obj as Record<string, any>;
+// let re: any = {};
+// for (let key of _.keys(rec)) {
+//   let val = rec[key as string];
+//   try {
+//     let v2 = jsonClone(val);
+//     re[key] = v2;
+//   } catch (err) {
+//     console.error(`jsonClone Fail in key[${key}] val=`, val, obj);
+//     throw err;
+//   }
+// }
+// return re;
+//}
 
 /**
  * 有时候，函数的返回值被要求是 `Promise`，

@@ -327,9 +327,14 @@ export function toJsValue(v: any = "", options = {} as ToJsValueOptions): any {
   //...............................................
   // try JSON
   if (autoJson) {
-    try {
-      return JSON5.parse(v);
-    } catch (err) {}
+    // 临时加个防守，有时候会有动态字典，譬如 xxx(=petId) 这样的
+    // 会被解析，在 ti-dict.ts 的 explainDictName 里面就会用到
+    // 这里就不进入 JSON5 的解析了
+    if (v && !/^=/.test(v)) {
+      try {
+        return JSON5.parse(v);
+      } catch (err) {}
+    }
   }
   //...............................................
   // try Date

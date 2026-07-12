@@ -1,5 +1,5 @@
 import _ from "lodash";
-import { DefaultIdGetter, getDiffItemType, Match } from "..";
+import { DefaultIdGetter, getDiffItemType, jsonClone, Match } from "..";
 import { ConflictItem, DiffItem, TableRowID, TiMatch, Vars } from "../../_type";
 
 export function has_conflict(cf?: ConflictItem): boolean {
@@ -40,7 +40,7 @@ export function apply_conflict(
   // if (local.value && server && conflict) {
   //   // 没有冲突，就把本地修改直接融合到服务器上
   //   if (!conflict.fields || _.isEmpty(conflict.fields)) {
-  //     local.value = _.assign({}, _.cloneDeep(server), localDiff);
+  //     local.value = _.assign({}, jsonClone(server), localDiff);
   //   }
   //   // 更新本地修改没有冲突的部分
   //   else {
@@ -48,7 +48,7 @@ export function apply_conflict(
   //     _.assign(local.value, delta);
   //   }
   // }
-  let newMeta = _.assign(_.cloneDeep(server), localDiff?.delta);
+  let newMeta = _.assign(jsonClone(server), localDiff?.delta);
   setLocalMeta(newMeta);
 }
 
@@ -75,7 +75,7 @@ export function apply_conflict_list(
   }
 
   // 已 Server 为基础循环处理冲突项目
-  let list = _.cloneDeep(server);
+  let list = jsonClone(server);
   for (let li of list) {
     let delta = deltaMap.get(li.id);
     _.assign(li, delta);
@@ -90,7 +90,7 @@ export function apply_conflict_list(
       // 这个分支应该不大可能，但是这里记录一下
       console.warn(
         `item not found for id=${id}`,
-        _.cloneDeep({
+        jsonClone({
           server,
           localDiff,
           keepOrderBy,

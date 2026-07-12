@@ -275,12 +275,12 @@ export function moveChecked<T>(
       if (I_start < 0) {
         I_start = i;
       }
-      checks.push(_.cloneDeep(li));
+      checks.push(Util.jsonClone(li));
       re.push(undefined);
     }
     // 记录
     else {
-      re.push(_.cloneDeep(li));
+      re.push(Util.jsonClone(li));
     }
   }
 
