@@ -1,6 +1,6 @@
 @use "@site0/tijs/sass/_all.scss" as *;
 
-.ti-grid-fiels-item.part-field {
+.ti-grid-fields-item.part-field {
   @include colorized;
   display: grid;
   row-gap: var(--ti-gap-t);

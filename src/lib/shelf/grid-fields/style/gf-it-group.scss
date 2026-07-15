@@ -1,6 +1,6 @@
 @use "@site0/tijs/sass/_all.scss" as *;
 
-.ti-grid-fiels-item.part-group {
+.ti-grid-fields-item.part-group {
   > .as-group-title {
     @include flex-align-nowrap;
     > .ti-icon + .as-snippet-text {
@@ -89,10 +89,10 @@
     &.body-gap-#{$sz} > .as-group-body {
       gap: var(--ti-gap-#{$sz});
       padding: var(--ti-gap-#{$sz});
-      > .ti-grid-fiels-item.part-field {
+      > .ti-grid-fields-item.part-field {
         column-gap: var(--ti-gap-#{$sz});
       }
-      > .ti-grid-fiels-item.part-group {
+      > .ti-grid-fields-item.part-group {
         gap: var(--ti-gap-#{$sz});
         padding: var(--ti-gap-#{$sz});
       }

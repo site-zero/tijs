@@ -202,7 +202,7 @@
 </script>
 <template>
   <div
-    class="ti-grid-fiels-item part-field"
+    class="ti-grid-fields-item part-field"
     :class="TopClass"
     :style="TopStyle"
     @mousedown="emit('field-actived', props.uniqKey)">

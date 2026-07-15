@@ -45,7 +45,7 @@
 </script>
 <template>
   <div
-    class="ti-grid-fiels-item part-label"
+    class="ti-grid-fields-item part-label"
     :class="TopClass"
     :style="TopStyle">
     <!--===: 标题 :===-->

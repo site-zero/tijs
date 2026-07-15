@@ -7,6 +7,7 @@
     TiTextSnippet,
   } from "@site0/tijs";
   import { computed, provide } from "vue";
+  import TiActionBar from "../../action/actionbar/TiActionBar.vue";
   import GFItField from "../../shelf/grid-fields/GFItField.vue";
   import { FilterBarEmitter, FilterBarProps } from "./ti-filter-bar-types";
   import { useTiFilterBarApi } from "./use-ti-filter-bar-api";
@@ -22,13 +23,19 @@
   const _field_status = computed(() => new Map<string, FieldStatusInfo>());
   provide(FIELD_STATUS_KEY, _field_status);
   //-----------------------------------------------------
+  const TopClass = computed(() => {
+    return CssUtils.mergeClassName({}, props.className, {
+      "major-only": props.majorOnly,
+    });
+  });
+  //-----------------------------------------------------
   const TopStyle = computed(() => {
     return CssUtils.toStyle(props.style);
   });
   //-----------------------------------------------------
 </script>
 <template>
-  <div class="ti-filter-bar" :style="TopStyle">
+  <div class="ti-filter-bar" :class="TopClass" :style="TopStyle">
     <!-------头槽--------->
     <slot name="head">
       <TiTextSnippet
@@ -47,17 +54,22 @@
       </template>
     </div>
     <!-------主体--------->
-    <TiTags
-      class="part-body"
-      :editable="true"
-      :actions="api.ActionBarConfig.value"
-      :nowrap="true"
-      v-bind="props.tags"
-      :placeholder="props.placeholder"
-      :value="api.FilterTagValue.value"
-      @change="api.onTagsChange"
-      @click="api.openFilterEditor()"
-      @fire="api.onActionFire" />
+    <template v-if="!props.majorOnly">
+      <TiTags
+        class="part-body"
+        :editable="true"
+        :actions="api.ActionBarConfig.value"
+        :nowrap="true"
+        v-bind="props.tags"
+        :placeholder="props.placeholder"
+        :value="api.FilterTagValue.value"
+        @change="api.onTagsChange"
+        @click="api.openFilterEditor()"
+        @fire="api.onActionFire" />
+    </template>
+    <template v-else>
+      <TiActionBar v-bind="api.ActionBarConfig.value" />
+    </template>
     <!-- <div class="part-menu">
       <TiActionBar v-bind="api.ActionBarConfig.value" />
     </div> -->

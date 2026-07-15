@@ -89,7 +89,7 @@
 </script>
 <template>
   <div
-    class="ti-grid-fiels-item part-group"
+    class="ti-grid-fields-item part-group"
     :class="TopClass"
     :style="TopStyle">
     <!--===============: 组头 :===================-->

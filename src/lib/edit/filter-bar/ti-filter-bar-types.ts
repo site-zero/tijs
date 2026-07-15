@@ -50,6 +50,10 @@ export type FilterBarProps = CommonProps &
      */
     major?: FormMajorProps;
     majorTitleAsPlaceholder?: boolean;
+    /**
+     * 开启这个选项，将不显示主体的 TiTags 多余条件框
+     */
+    majorOnly?: boolean;
     //-----------------------------------------------------
     // 扩展表单
     //-----------------------------------------------------

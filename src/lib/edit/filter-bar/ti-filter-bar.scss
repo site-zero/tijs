@@ -18,10 +18,21 @@
     @include flex-align-nowrap;
     gap: 2px;
     padding: var(--ti-gap-s);
+    > .ti-grid-fields-item  {
+      &:last-child {
+        flex: 1 1 auto;
+      }
+    }
   }
   //-----------------------------------------------------
   > .part-body {
     flex: 1 1 auto;
+  }
+  //-----------------------------------------------------
+  &.major-only {
+    > .part-major {
+      flex: 1 1 auto;
+    }
   }
   //-----------------------------------------------------
 }
