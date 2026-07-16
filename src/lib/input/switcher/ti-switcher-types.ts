@@ -1,15 +1,15 @@
-import { OptionsProps, SelectableProps } from '../../';
+import { OptionsProps, SelectableProps } from "../../";
 import {
   AspectSize,
   CommonProps,
   LogicType,
   TableRowID,
   Vars,
-} from '../../../_type';
+} from "../../../_type";
 
 export type SwitcherProps = CommonProps &
-  Pick<SelectableProps<TableRowID>, 'minChecked' | 'maxChecked'> &
-  Omit<OptionsProps, 'mustInOptions'> & {
+  Pick<SelectableProps<TableRowID>, "minChecked" | "maxChecked"> &
+  Omit<OptionsProps, "mustInOptions"> & {
     multi?: boolean;
 
     readonly?: boolean;
@@ -17,7 +17,7 @@ export type SwitcherProps = CommonProps &
     /**
      * 值，如果多选就是数组，如果单选就是单个值
      */
-    value?: TableRowID | TableRowID[];
+    value?: any | any[];
 
     defaultItemType?: LogicType;
 
@@ -37,10 +37,10 @@ export type SwitcherProps = CommonProps &
     /**
      * 选项间距
      */
-    itemGap?: AspectSize | 'none';
+    itemGap?: AspectSize | "none";
 
     /**
      * 选项圆角
      */
-    itemRadius?: AspectSize | 'none';
+    itemRadius?: AspectSize | "none";
   };
