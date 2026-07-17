@@ -1,12 +1,12 @@
 <script setup lang="ts">
-  import { computed, reactive, useTemplateRef, watch } from "vue";
   import { useDict, usePlaceholder, useValuePipe } from "@site0/tijs";
-  import { Be, I18n } from "../../../core";
+  import { computed, reactive, useTemplateRef, watch } from "vue";
+  import { I18n } from "../../../core";
   import { LabelEmitter, LabelProps, LabelState } from "./ti-label-types";
+  import { useClickCopy } from "./use-click-copy";
   import { useLabel } from "./use-label";
   import { useLabelAspect } from "./use-label-aspect";
   import { useLabelIcon } from "./use-label-icon";
-  import { useClickCopy } from "./use-click-copy";
   //-----------------------------------------------------
   defineOptions({ inheritAttrs: true });
   //-----------------------------------------------------
@@ -18,6 +18,7 @@
     boxRadius: "s",
     boxFontSize: "s",
     boxPadding: "s",
+    colorMode: "text",
     clickForCopy: () => ["ctrl", "ctrl+shift"],
   });
   //-----------------------------------------------------

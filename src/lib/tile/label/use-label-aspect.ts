@@ -68,6 +68,14 @@ export function useLabelAspect(
           "--box-color-hover-icon-bg": `var(--ti-color-${props.type}-r)`,
         });
       }
+      // 无背景颜色
+      if ("no-bg" == props.colorMode) {
+        _.assign(re, {
+          "--box-color-text": `var(--ti-color-${props.type})`,
+          "--box-color-hover-icon": `var(--ti-color-${props.type}-r)`,
+          "--box-color-hover-icon-bg": `var(--ti-color-${props.type})`,
+        });
+      }
       // 默认主颜色在文字上
       else {
         _.assign(re, {

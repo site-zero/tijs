@@ -358,6 +358,7 @@ export function colLabelI(
         align: "right",
         type: _LBL_TYPE,
         boxRadius: "none",
+        colorMode: "text",
       } as LabelProps,
       comConf
     ),
@@ -382,6 +383,7 @@ export function colLabelF2(
         hideBorder: true,
         type: _LBL_TYPE,
         boxRadius: "none",
+        colorMode: "text",
       } as LabelProps,
       comConf
     ),
@@ -406,6 +408,7 @@ export function colLabelF3(
         hideBorder: true,
         type: _LBL_TYPE,
         boxRadius: "none",
+        colorMode: "text",
       } as LabelProps,
       comConf
     ),
@@ -430,6 +433,7 @@ export function colLabelF4(
         hideBorder: true,
         type: _LBL_TYPE,
         boxRadius: "none",
+        colorMode: "text",
       } as LabelProps,
       comConf
     ),
@@ -454,6 +458,7 @@ export function colLabelF5(
         hideBorder: true,
         type: _LBL_TYPE,
         boxRadius: "none",
+        colorMode: "text",
       } as LabelProps,
       comConf
     ),
@@ -478,6 +483,7 @@ export function colLabelF6(
         hideBorder: true,
         type: _LBL_TYPE,
         boxRadius: "none",
+        colorMode: "text",
       } as LabelProps,
       comConf
     ),

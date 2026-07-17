@@ -7,14 +7,18 @@ import {
   LogicType,
 } from '../../../_type';
 
+export type ButtonEmitter = {
+  (event: 'click', payload: any): void;
+}
+
 export type ButtonProps = CommonProps & {
   icon?: IconInput;
   text?: string;
   autoI18n?: boolean;
 
-  // 行为,默认 "click"
-  action?: null | string | ((payload?: any) => void);
-  payload?: any;
+  // 默认的 Button Click 时的 payload
+  value?: any;
+  stopPropagation?: boolean;
 
   // 外观
   boxFontSize?: AspectSize;

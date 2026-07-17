@@ -509,7 +509,7 @@ export function toLogicColor(
  *
  * 默认的，我们使用 'text
  */
-export type BoxColorMode = "box" | "text";
+export type BoxColorMode = "box" | "text" | "no-bg";
 
 export type ObjDataStatus = "loading" | "saving" | "ready" | "empty";
 /*---------------------------------------------------

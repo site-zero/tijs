@@ -22,7 +22,7 @@
   --ti-gap-b: 12px; // big
   --ti-gap-h: 16px; // hug
 
-  --ti-box-pad-t: 0.1em; // tiny
+  --ti-box-pad-t: 2px; // tiny
   --ti-box-pad-s: 0.3em; // small
   --ti-box-pad-m: 0.5em; // middle
   --ti-box-pad-b: 1em; // big
@@ -49,6 +49,7 @@
   --ti-fontsz-h: 20px; // hug
 
   --ti-font-fixed: Monaco, Consolas, Courier New;
-  --ti-font-nice: Microsoft YaHei, PingHei, Helvetica Neue, Helvetica, Arial,
-    Verdana, sans-serif;
+  --ti-font-nice:
+    Microsoft YaHei, PingHei, Helvetica Neue, Helvetica, Arial, Verdana,
+    sans-serif;
 }

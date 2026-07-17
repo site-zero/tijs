@@ -1,9 +1,12 @@
 <script setup lang="ts">
+  import { TiIcon } from "@site0/tijs";
   import _ from "lodash";
   import { computed } from "vue";
-  import { TiIcon } from "@site0/tijs";
   import { CssUtils, I18n } from "../../../";
   import { ButtonProps } from "./ti-button-types";
+  defineOptions({
+    inheritAttrs: false,
+  });
   const emit = defineEmits<{
     (event: string, payload: any): void;
   }>();
@@ -91,13 +94,12 @@
     return props.text;
   });
 
-  const onClick = () => {
-    if (_.isString(props.action)) {
-      emit(props.action, props.payload);
-    } else if (_.isFunction(props.action)) {
-      props.action(props.payload);
+  function onClick(e: Event) {
+    if (props.stopPropagation) {
+      e.stopPropagation();
     }
-  };
+    emit("click", props.value);
+  }
 </script>
 
 <template>
@@ -106,7 +108,7 @@
     class="ti-button"
     :class="TopClass"
     :style="TopStyle"
-    @click="onClick">
+    @click.left="onClick">
     <div class="part-icon" v-if="props.icon">
       <TiIcon :value="props.icon" />
     </div>
