@@ -963,7 +963,7 @@ export type ComRef = {
   /**
    * 字段控件配置
    */
-  comConf?: Vars;
+  comConf?: Vars | Convertor<Vars, Vars>;
 };
 
 /**

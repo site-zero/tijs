@@ -1,4 +1,5 @@
 import { FieldRefer, GridFieldsInput, useObjFields } from "@site0/tijs";
+import _ from "lodash";
 import { InputGroupProps } from "./ti-input-group-types";
 
 export function getGroupFields(props: InputGroupProps): GridFieldsInput[] {
@@ -30,10 +31,13 @@ export function getGroupFields(props: InputGroupProps): GridFieldsInput[] {
       if (!fld.comConf) {
         fld.comConf = {};
       }
-      if (overridePlaceholder) {
-        fld.comConf.placeholder = fldTitle;
-      } else if (!fld.comConf.placeholder) {
-        fld.comConf.placeholder = fldTitle;
+      // 这里自动为其设置 placeholder
+      else if (!_.isFunction(fld.comConf)) {
+        if (overridePlaceholder) {
+          fld.comConf.placeholder = fldTitle;
+        } else if (!fld.comConf.placeholder) {
+          fld.comConf.placeholder = fldTitle;
+        }
       }
     }
 

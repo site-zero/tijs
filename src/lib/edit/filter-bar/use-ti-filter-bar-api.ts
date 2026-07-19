@@ -100,9 +100,10 @@ export function useTiFilterBarApi(
     if (props.onChange) {
       props.onChange(v2);
     }
-
-    // 用户确认
-    emit("change", v2);
+    // 否则就 emit 事件
+    else {
+      emit("change", v2);
+    }
   }
   //-----------------------------------------------------
   // 响应事件

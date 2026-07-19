@@ -50,61 +50,75 @@ export function useFieldCom(
     return tiCheckComponent(props.comType || defaultComType);
   }
   function getComConf(context: Vars, val?: any): Vars {
-    let comConf = _.cloneDeep(props.comConf ?? defaultComConf);
+    let _com_conf: Vars;
+    if (_.isFunction(props.comConf)) {
+      _com_conf = props.comConf(context);
+    } else {
+      _com_conf = Util.jsonClone(props.comConf ?? defaultComConf);
+    }
+
     if (props.dynamic) {
-      comConf = Util.explainObj(context, comConf, props.explainOptions);
+      _com_conf = Util.explainObj(context, _com_conf, props.explainOptions);
     }
     // 自动为控件添加值属性
     let valueKey = Util.fallback(props.autoValue, "value");
-    if (valueKey && _.isUndefined(comConf[valueKey])) {
-      comConf[valueKey] = val;
+    if (valueKey && _.isUndefined(_com_conf[valueKey])) {
+      _com_conf[valueKey] = val;
     }
-    return comConf;
+    return _com_conf;
   }
 
   function getReadonlyComType() {
     return tiCheckComponent(props.readonlyComType || defaultComType);
   }
   function getReadonlyComConf(context: Vars, val?: any): Vars {
-    let comConf = _.cloneDeep(
-      props.readonlyComConf ?? props.comConf ?? defaultComConf
-    );
+    let _com_conf: Vars;
+    if (_.isFunction(props.readonlyComConf)) {
+      _com_conf = props.readonlyComConf(context);
+    } else {
+      _com_conf = Util.jsonClone(props.readonlyComConf ?? defaultComConf);
+    }
+
     if (props.dynamic) {
-      comConf = Util.explainObj(context, comConf);
+      _com_conf = Util.explainObj(context, _com_conf);
     }
 
     // TODO 自动分析 comConf ，构建一个自己对应的  comConf
 
     // 自动为控件添加值属性
     let valueKey = Util.fallback(props.autoValue, "value");
-    if (valueKey && _.isUndefined(comConf[valueKey])) {
-      comConf[valueKey] = val;
+    if (valueKey && _.isUndefined(_com_conf[valueKey])) {
+      _com_conf[valueKey] = val;
     }
 
     // 尽量确保只读
-    comConf.readonly = true;
+    _com_conf.readonly = true;
 
     // 搞定
-    return comConf;
+    return _com_conf;
   }
 
   function getActivatedComType() {
     return tiCheckComponent(props.activatedComType || "TiInput");
   }
   function getActivatedComConf(context: Vars, val?: any): Vars {
-    let comConf = _.cloneDeep(
-      props.activatedComConf ?? props.comConf ?? defaultComConf
-    );
+    let _com_conf: Vars;
+    if (_.isFunction(props.activatedComConf)) {
+      _com_conf = props.activatedComConf(context);
+    } else {
+      _com_conf = Util.jsonClone(props.activatedComConf ?? defaultComConf);
+    }
+
     if (props.dynamic) {
-      comConf = Util.explainObj(context, comConf);
+      _com_conf = Util.explainObj(context, _com_conf);
     }
 
     // 自动为控件添加值属性
-    if (!_.isNull(props.autoValue) && _.isUndefined(comConf.value)) {
+    if (!_.isNull(props.autoValue) && _.isUndefined(_com_conf.value)) {
       let valueKey = props.autoValue ?? "value";
-      comConf[valueKey] = val;
+      _com_conf[valueKey] = val;
     }
-    return comConf;
+    return _com_conf;
   }
 
   function autoGetComType(status: FieldMode = {}) {

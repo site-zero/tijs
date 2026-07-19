@@ -19,6 +19,8 @@ export type ButtonProps = CommonProps & {
   // 默认的 Button Click 时的 payload
   value?: any;
   stopPropagation?: boolean;
+  // 声明了这个回调，将不会触发 emit，
+  action?: (payload: any) => void;
 
   // 外观
   boxFontSize?: AspectSize;

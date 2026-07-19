@@ -591,7 +591,7 @@ export type FieldComProps = ComRef & {
    * 只读模式时的控件属性，默认的，会自动分析 `comType/comConf`
    * 提取必要的属性
    */
-  readonlyComConf?: Vars;
+  readonlyComConf?: Vars | Convertor<Vars, Vars>;
 
   /**
    * 激活式时的显示控件。如果未指定，则采用 `TiInput`
@@ -602,7 +602,7 @@ export type FieldComProps = ComRef & {
   /**
    * 激活模式时的控件属性，如果未指定，则默认采用 `comConf`
    */
-  activatedComConf?: Vars;
+  activatedComConf?: Vars | Convertor<Vars, Vars>;
 
   /**
    * 捕获字段控件修改事件的名称，默认的，如果你声明了 `activatedComType`

@@ -21,7 +21,6 @@
     align: "center",
     type: "primary",
     colorMode: "box",
-    action: "click",
   });
 
   const TopClass = computed(() => CssUtils.mergeClassName(props.className));
@@ -98,7 +97,11 @@
     if (props.stopPropagation) {
       e.stopPropagation();
     }
-    emit("click", props.value);
+    if (props.action) {
+      props.action(props.value);
+    } else {
+      emit("click", props.value);
+    }
   }
 </script>
 

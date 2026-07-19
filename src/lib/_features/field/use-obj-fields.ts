@@ -78,10 +78,15 @@ function defineObjFields(featureName: string) {
     let re = _.cloneDeep(_fld);
     _.assign(re, _.omit(field, "comConf"));
     re.comConf = re.comConf ?? {};
-    _.assign(re.comConf, field?.comConf);
+    if (!_.isFunction(re.comConf)) {
+      _.assign(re.comConf, field?.comConf);
+      if (finfo.readonly) {
+        re.comConf.readonly = true;
+      }
+    }
+
     if (finfo.readonly) {
       re.readonly = true;
-      re.comConf.readonly = true;
       re.activatedComType = undefined;
       re.activatedComConf = undefined;
     }

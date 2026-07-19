@@ -9,7 +9,6 @@ export default {
       comType: "TiButton",
       comConf: {
         text:"Click Me ^_^",
-        action: "click-button",
       } as ButtonProps,
       events: {
         "click-button": true,

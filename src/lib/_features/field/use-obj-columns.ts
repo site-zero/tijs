@@ -1,14 +1,14 @@
-import _ from "lodash";
 import {
+  BoxDropItemFormat,
   CheckProps,
   DroplistProps,
   InputBoxProps,
   InputDatetimeProps,
   InputNumProps,
   LabelProps,
-  BoxDropItemFormat,
   ToggleProps,
 } from "@site0/tijs";
+import _ from "lodash";
 import {
   ColumnRefer,
   FieldName,
@@ -107,7 +107,7 @@ function defineObjColumns(featureName: string) {
       re.readonly = true;
     }
 
-    if (true === re.disabled) {
+    if (true === re.disabled && !_.isFunction(re.comConf)) {
       if (!re.comType || "TiLabel" === re.comType) {
         re.comConf.type = "fog";
       } else {
