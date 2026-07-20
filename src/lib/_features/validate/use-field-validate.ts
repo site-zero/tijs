@@ -1,12 +1,13 @@
-import _ from 'lodash';
-import { Vars } from '../../../_type';
+import _ from "lodash";
+import { Vars } from "../../../_type";
 import {
   AbstractField,
   AyncFieldValidator,
   FieldValidation,
+  FieldValidator,
   ValidateResult,
-} from '../../../_type/lib-type-fields';
-import { Dicts, Match } from '../../../core';
+} from "../../../_type/lib-type-fields";
+import { Dicts, isAsyncFunc, Match } from "../../../core";
 
 const BUILT_IN_VALIDATIONS = new Map<string, FieldValidation>();
 
@@ -34,14 +35,14 @@ export function removeGlobalValidation(name: string) {
  */
 export function buildFieldValidator(
   validation?: FieldValidation | undefined
-): AyncFieldValidator | undefined {
+): AyncFieldValidator | FieldValidator | undefined {
   if (!validation) {
     return;
   }
   // 判断是否采用内置的验证规则
   if (_.isString(validation)) {
     // 如果采用 `#xxx` 的形式，则生成一个内置的字典验证
-    if (validation.startsWith('#')) {
+    if (validation.startsWith("#")) {
       let dictName = validation.slice(1);
       let $dict = Dicts.checkDict(dictName);
       return async (
@@ -51,16 +52,16 @@ export function buildFieldValidator(
       ): Promise<ValidateResult | undefined> => {
         let it = await $dict.getItem(value);
         if (it) {
-          return { type: 'OK' };
+          return { type: "OK" };
         }
         return {
-          type: 'VALUE_INVALID',
+          type: "VALUE_INVALID",
           message: `Value ${value} out of defination`,
         };
       };
     }
     // 如果采用 `@xxx` 的形式，则从内置验证规则中获取 `xxx` 对应的验证规则
-    if (validation.startsWith('@')) {
+    if (validation.startsWith("@")) {
       let name = validation.slice(1);
       let vali = getGlobalValidation(name);
       if (vali) {
@@ -74,9 +75,9 @@ export function buildFieldValidator(
     let am = Match.parse(validation);
     return async (value: any) => {
       if (am.test(value)) {
-        return { type: 'OK' };
+        return { type: "OK" };
       }
-      return { type: 'VALUE_INVALID' };
+      return { type: "VALUE_INVALID" };
     };
   }
 
@@ -95,9 +96,9 @@ export function buildFieldValidator(
         ok = !ok;
       }
       if (ok) {
-        return { type: 'OK' };
+        return { type: "OK" };
       }
-      return { type: 'VALUE_INVALID', message };
+      return { type: "VALUE_INVALID", message };
     };
   }
 }
@@ -121,7 +122,7 @@ export function buildFieldValidatorGroup(
     return;
   }
 
-  let vali_list: AyncFieldValidator[] = [];
+  let vali_list: (AyncFieldValidator | FieldValidator)[] = [];
   let inputs = _.concat([], validations);
   for (let input of inputs) {
     let vali = buildFieldValidator(input);
@@ -137,11 +138,16 @@ export function buildFieldValidatorGroup(
     data: Vars
   ): Promise<ValidateResult | undefined> => {
     for (let vali of vali_list) {
-      let re = await vali(value, field, data);
-      if (re && re.type != 'OK') {
+      let re: ValidateResult | undefined = undefined;
+      if (isAsyncFunc(vali)) {
+        re = await vali(value, field, data);
+      } else {
+        re = vali(value, field, data) as ValidateResult | undefined;
+      }
+      if (re && re.type != "OK") {
         return re;
       }
     }
-    return { type: 'OK' };
+    return { type: "OK" };
   };
 }

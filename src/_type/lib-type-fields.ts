@@ -186,6 +186,12 @@ export type AyncFieldValidator = (
   data: Vars
 ) => Promise<ValidateResult | undefined>;
 
+export type FieldValidator = (
+  value: any,
+  field: AbstractField,
+  data: Vars
+) => ValidateResult | undefined;
+
 export type FieldValidateMatcher = {
   not?: boolean;
   test: any;
@@ -199,6 +205,7 @@ export type FieldValidation =
   | RegExp
   | string
   | FieldValidateMatcher
+  | FieldValidator
   | AyncFieldValidator;
 
 /**

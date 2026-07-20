@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { ref } from "vue";
 import { FieldStatus, Vars } from "../../../_type";
-import { FieldValidateResult } from "./data-validate-types";
+import { FieldValidateResult, has_valicate_error } from "./data-validate-types";
 import { DataValidation, ValidateOptions } from "./use-data-validate";
 
 export type ValidateResultsOptions = {
@@ -24,6 +24,22 @@ export function useValidateResults(options: ValidateResultsOptions) {
       return {};
     }
     return _results.value[id] || {};
+  }
+  //-----------------------------------------------------
+  function hasVarifyError(id?: string | null | undefined) {
+    if (id) {
+      let result = getVarifyResult(id);
+      if (result) {
+        return has_valicate_error(result);
+      }
+      return false;
+    }
+    for (let result of _.values(_results.value)) {
+      if (has_valicate_error(result)) {
+        return true;
+      }
+    }
+    return false;
   }
   //-----------------------------------------------------
   // 数据校验
@@ -125,6 +141,7 @@ export function useValidateResults(options: ValidateResultsOptions) {
   return {
     _results,
     getVarifyResult,
+    hasVarifyError,
     validate,
     validateDelta,
     setVarifyResult,

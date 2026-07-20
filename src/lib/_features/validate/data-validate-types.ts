@@ -1,3 +1,4 @@
+import _ from "lodash";
 import { TextArm, VisibilityFeature } from "../..";
 import {
   AbstractField,
@@ -49,3 +50,12 @@ export type DataValidatableField = AbstractField &
   };
 
 export type FieldValidateResult = Record<string, FieldStatus>;
+
+export function has_valicate_error(result: FieldValidateResult = {}) {
+  for (let re of _.values(result)) {
+    if (re.type != "ok") {
+      return true;
+    }
+  }
+  return false;
+}

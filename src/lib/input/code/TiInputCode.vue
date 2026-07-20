@@ -1,4 +1,5 @@
 <script lang="ts" setup>
+  import { InputBoxApi, InputBoxProps, TiInput, Vars } from "@site0/tijs";
   import _ from "lodash";
   import {
     computed,
@@ -8,7 +9,6 @@
     useTemplateRef,
     watch,
   } from "vue";
-  import { InputBoxApi, InputBoxProps, TiInput } from "@site0/tijs";
   import { AnyOptionItem, ToStr } from "../../../_type";
   import { CssUtils, Util } from "../../../core";
   import { InputCodeProps } from "./ti-input-code-types";
@@ -35,6 +35,7 @@
   //-------------------------------------------------
   const _box = useTemplateRef<InputBoxApi>("box");
   //-----------------------------------------------------
+  const _rawItem = ref<Vars | null>(null);
   const _item = ref<AnyOptionItem | null>(null);
   //-----------------------------------------------------
   const InputConfig = computed(() => {
@@ -58,13 +59,26 @@
         flex: "0 0 auto",
       };
     }
+    if (CustomizedStyle.value?.boxAspect) {
+      _.assign(re, CustomizedStyle.value.boxAspect);
+    }
     return re;
+  });
+  //-----------------------------------------------------
+  const CustomizedStyle = computed(() => {
+    if (props.customizeStyle) {
+      return props.customizeStyle(_rawItem.value);
+    }
+    return {};
   });
   //-----------------------------------------------------
   const CodeTextStyle = computed(() => {
     let re = _.cloneDeep(props.textBoxStyle ?? {});
     if (props.gap) {
       re.marginLeft = `var(--ti-gap-${props.gap})`;
+    }
+    if (CustomizedStyle.value?.codeTextStyle) {
+      re = _.assign(re, CustomizedStyle.value.codeTextStyle);
     }
     return re;
   });
@@ -118,6 +132,7 @@
       //....................................
       let it = await boxApi.reloadItem(props.value);
       if (it) {
+        _rawItem.value = it as Vars;
         _item.value = boxApi.toOptionItem(it) ?? null;
       }
     }

@@ -1,5 +1,10 @@
-import { InputBoxProps } from '../../';
-import { AnyOptionItem, AspectSize, Vars } from '../../../_type';
+import { InputBoxProps } from "../../";
+import { AnyOptionItem, AspectSize, Vars } from "../../../_type";
+
+export type InputCodeCustomizedStyle = {
+  boxAspect?: InputBoxProps;
+  codeTextStyle?: Vars;
+};
 
 export type InputCodeProps = InputBoxProps & {
   codeWidth?: string | number;
@@ -13,4 +18,8 @@ export type InputCodeProps = InputBoxProps & {
   hideDescription?: boolean;
 
   showDebugInfo?: boolean;
+
+  customizeStyle?: (
+    rawItem: Vars | null
+  ) => InputCodeCustomizedStyle | undefined | void;
 };
