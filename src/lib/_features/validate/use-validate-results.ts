@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { ref } from "vue";
 import { FieldStatus, Vars } from "../../../_type";
-import { FieldValidateResult, has_valicate_error } from "./data-validate-types";
+import { FieldValidateResult, has_validate_error } from "./data-validate-types";
 import { DataValidation, ValidateOptions } from "./use-data-validate";
 
 export type ValidateResultsOptions = {
@@ -30,12 +30,12 @@ export function useValidateResults(options: ValidateResultsOptions) {
     if (id) {
       let result = getVarifyResult(id);
       if (result) {
-        return has_valicate_error(result);
+        return has_validate_error(result);
       }
       return false;
     }
     for (let result of _.values(_results.value)) {
-      if (has_valicate_error(result)) {
+      if (has_validate_error(result)) {
         return true;
       }
     }

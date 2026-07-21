@@ -51,7 +51,7 @@ export type DataValidatableField = AbstractField &
 
 export type FieldValidateResult = Record<string, FieldStatus>;
 
-export function has_valicate_error(result: FieldValidateResult = {}) {
+export function has_validate_error(result: FieldValidateResult = {}) {
   for (let re of _.values(result)) {
     if (re.type != "ok") {
       return true;

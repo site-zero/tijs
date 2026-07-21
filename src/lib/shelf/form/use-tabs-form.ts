@@ -1,9 +1,9 @@
-import _ from 'lodash';
-import { StrOptionItem, makeFieldUniqKey } from '../../../_type';
-import { Util } from '../../../core';
-import { useObjFields } from '../../_features';
-import { GridFieldsProps } from '../all-shelf';
-import { TabsFormProps } from './ti-tabs-form-types';
+import _ from "lodash";
+import { StrOptionItem, makeFieldUniqKey } from "../../../_type";
+import { Util } from "../../../core";
+import { useObjFields } from "../../_features";
+import { GridFieldsProps } from "../all-shelf";
+import { TabsFormProps } from "./ti-tabs-form-types";
 
 export type TabItem = StrOptionItem;
 
