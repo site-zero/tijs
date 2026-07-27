@@ -242,15 +242,25 @@
         _result.value
       );
     }
-    _isdead.value = true;
+
     if (withResult) {
-      props.returnValue(_result.value);
+      // 这里需要延迟一下，因为要等待 TiForm 这样的控件的更新
+      // TODO: 需要思考一下，可以等待，但是动画可以马上绘制
+      //console.log("!!!_do_close_modal: withResult, delay 500ms to return value");
+      _.delay(() => {
+        _isdead.value = true;
+        props.returnValue(_result.value);
+        _.delay(() => {
+          props.releaseDom();
+        }, 500);
+      }, 0);
     } else {
+      _isdead.value = true;
       props.returnValue(undefined);
+      _.delay(() => {
+        props.releaseDom();
+      }, 500);
     }
-    _.delay(() => {
-      props.releaseDom();
-    }, 500);
   }
 
   function onActionFire(event: ActionBarEvent) {

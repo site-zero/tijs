@@ -107,6 +107,9 @@
       //re.suffixIcon = 'zmdi-caret-down';
       re.canInput = false;
     }
+    if(_.isUndefined(re.readonly) && props.readonly){
+      re.readonly = true;
+    }
     return re;
   });
   //-----------------------------------------------------

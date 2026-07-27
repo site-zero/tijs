@@ -129,6 +129,8 @@ export function buildOneGridField(
 
     fld.name = field.name;
     fld.type = field.type ?? dft.defaultFieldType ?? "String";
+    fld.moreVerifyFields = field.moreVerifyFields;
+
     fld.typeTransformOptions =
       fld.typeTransformOptions ?? dft.defaultFieldTypeTransformOptions;
     fld.typeSerializeOptions =

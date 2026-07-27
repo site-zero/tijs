@@ -178,6 +178,11 @@ export type GridFieldsInput = CommonProps &
     // 默认为 'zmdi-help-outline'
     tipIcon?: IconInput;
 
+    /**
+     * 指明一组键，当这些字段出现错误的时候，也会显示错误
+     */
+    moreVerifyFields?: string[];
+
     // 仅仅当 `race=field` 时有效
     fieldTitleBy?: FieldComProps;
     fieldTitleAlign?: CssTextAlign;
@@ -393,6 +398,7 @@ export type FormFieldItem = AbstractFormItem &
     race: "field";
 
     checkEquals: boolean;
+    moreVerifyFields?: string[];
     maxFieldNameWidth?: number | string;
     fieldLayoutMode: FormFieldLayoutMode;
 

@@ -23,6 +23,7 @@ export function try_blur(api: InputBoxApi) {
   if (api.debug) console.log("try_blur");
   api.setFocused(false);
   if (api.hasOptionsData.value && api.isOptionsDataShow.value) {
+    if (api.debug) console.log("try_blur: with options data, delay 500");
     api.DeferList.addDefer(() => {
       do_box_blur(api);
     });
@@ -30,6 +31,7 @@ export function try_blur(api: InputBoxApi) {
   }
   // 放心处理失焦
   else {
+    if (api.debug) console.log("try_blur: no options data, do blur");
     do_box_blur(api);
   }
 }

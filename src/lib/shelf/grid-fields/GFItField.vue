@@ -1,8 +1,8 @@
 <script lang="ts" setup>
+  import { TiTextSnippet, useFieldCom, useReadonly } from "@site0/tijs";
   import JSON5 from "json5";
   import _ from "lodash";
   import { computed, inject } from "vue";
-  import { TiTextSnippet, useFieldCom, useReadonly } from "@site0/tijs";
   import { LogicType, Vars, getFieldValue } from "../../../_type";
   import { CssUtils } from "../../../core";
   import {
@@ -59,7 +59,23 @@
   );
   //-------------------------------------------------
   const AllFieldStatus = inject(FIELD_STATUS_KEY);
-  const FieldStatus = computed(() => AllFieldStatus?.value.get(props.uniqKey));
+  const FieldStatus = computed(() => {
+    let st = AllFieldStatus?.value.get(props.uniqKey);
+    if (!st && props.moreVerifyFields && props.moreVerifyFields.length > 0) {
+      let more_uk = props.moreVerifyFields.join("-");
+      let st2 = AllFieldStatus?.value.get(more_uk);
+      if (st2) {
+        return st2;
+      }
+      for (let mvf of props.moreVerifyFields) {
+        let st2 = AllFieldStatus?.value.get(mvf);
+        if (st2) {
+          return st2;
+        }
+      }
+    }
+    return st;
+  });
   const FieldTitleStyle = computed(() =>
     getFieldTitleStyle(props, FieldStatus.value)
   );

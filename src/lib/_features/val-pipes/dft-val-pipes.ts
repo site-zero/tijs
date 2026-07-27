@@ -9,6 +9,10 @@ export function getDefaultValPipes(): Record<string, ValueProcesser> {
       return _.trim(v);
     },
     //----------------------------------------------
+    $I3: (v: any) => {
+      return Bank.toBankText(v, { decimalPlaces: 0 });
+    },
+    //----------------------------------------------
     $F1: (v: any) => {
       return Bank.toBankText(v, { decimalPlaces: 1 });
     },
@@ -123,8 +127,6 @@ export function getDefaultValPipes(): Record<string, ValueProcesser> {
       let info = Alg.parseObjMode(parseInt(v));
       return info.mod;
     },
-    //----------------------------------------------
-    //----------------------------------------------
     //----------------------------------------------
   };
 }

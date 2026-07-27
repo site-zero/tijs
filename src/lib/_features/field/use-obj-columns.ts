@@ -706,6 +706,8 @@ export function colInputI(
     readonlyComType: "TiLabel",
     readonlyComConf: {
       align: "right",
+      valuePiping: "$I3",
+      hideBorder: true,
       boxRadius: "none",
     } as LabelProps,
     activatedComType: "TiInputNum",

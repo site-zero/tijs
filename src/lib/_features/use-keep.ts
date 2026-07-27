@@ -33,14 +33,17 @@ export type KeepProps = {
                   Methods
 
 -------------------------------------------------------*/
-function parseInfo(info: KeepInfo): KeepProps {
+function parseInfo(
+  info: KeepInfo,
+  dftKeepMode: KeepMode = "session"
+): KeepProps {
   if (_.isString(info)) {
     let m = /^((session|local):\s*)?(.+)/.exec(info);
     let keepAt = info;
-    let keepMode = "session" as KeepMode;
+    let keepMode = dftKeepMode || "session";
     if (m) {
       keepAt = _.trim(m[3]);
-      keepMode = (m[2] || "session") as KeepMode;
+      keepMode = (m[2] || dftKeepMode) as KeepMode;
     }
     return { keepAt, keepMode };
   }
@@ -136,7 +139,7 @@ export function makeKeepProps(
 ): KeepProps {
   let re = { keepMode: dftKeepMode } as KeepProps;
   if (_.isString(info)) {
-    re.keepAt = info;
+    re = parseInfo(info, dftKeepMode);
   } else {
     _.assign(re, info);
   }

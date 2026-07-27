@@ -70,6 +70,11 @@ export function useFieldStatus(
           icon: statusIcons[type],
         });
       }
+      unify_fld_status.set(k, {
+        type,
+        text,
+        icon: statusIcons[type],
+      });
     });
     return unify_fld_status;
   }

@@ -1,6 +1,8 @@
 import { BoxCompositionApi } from "../_fea";
 import { InputBoxApi } from "../ti-input-box3-types";
 
+const debug = false;
+
 export async function on_input_change(
   api: InputBoxApi,
   compose: BoxCompositionApi
@@ -22,7 +24,7 @@ export async function on_input_change(
   const input = $input?.value;
   val = api.applyPipe(input);
 
-  if (api.debug) console.log(`on_input_change(input:[${input}], val:[${val}])`);
+  if (debug) console.log(`on_input_change(input:[${input}], val:[${val}])`);
 
   if (api.hasOptionsData.value && api.isOptionsDataShow.value) {
     api.DeferList.addDefer(async () => {
@@ -36,10 +38,10 @@ export async function on_input_change(
 }
 
 export async function do_apply_input_change(api: InputBoxApi, val: any) {
-  if (api.debug) console.log(`do_apply_input_change(val:${val}) Begin`);
+  if (debug) console.log(`do_apply_input_change(val:${val}) Begin`);
   // 提交
   await api.tryNotifyChange(val);
   // 清理一下
   api.clearLastHints();
-  if (api.debug) console.log(`do_apply_input_change(val:${val}) End`);
+  if (debug) console.log(`do_apply_input_change(val:${val}) End`);
 }
