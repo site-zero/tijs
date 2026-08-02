@@ -27,13 +27,13 @@ export function V<T>(getter?: (() => T) | null | undefined): T | undefined {
  */
 export function jsonClone<T>(src: T): T {
   let raw = src;
-  if (isRef(raw)) {
-    raw = raw.value as any;
-  }
+  // if (isRef(raw)) {
+  //   raw = raw.value as any;
+  // }
 
-  if (isProxy(raw)) {
-    raw = toRaw(raw);
-  }
+  // if (isProxy(raw)) {
+  //   raw = toRaw(raw);
+  // }
 
   return _.cloneDeep(raw);
 }

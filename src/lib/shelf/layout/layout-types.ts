@@ -17,7 +17,7 @@ import {
 import { KeepInfo } from "../../_features";
 import { TiBlockApi } from "../block/ti-block-types";
 import { LayoutGridProps } from "./grid/ti-layout-grid-types";
-import { TabsLayoutProps } from "./tabs/ti-layout-tabs-types";
+import { TabChangeEvent, TabsLayoutProps } from "./tabs/ti-layout-tabs-types";
 
 export type BlockSchema = ComRef & EmitAdaptorProps;
 
@@ -202,6 +202,8 @@ export type LayoutBlock = TabsAspect &
      * 仅当 type=tabs 指定 TiLayoutTabs 本身的 className
      */
     tabsClass?: any;
+
+    beforeTabChange?: (event: TabChangeEvent) => boolean | Promise<boolean>;
 
     /**
      * 拖动控制条，这个只对 Grid 布局有效

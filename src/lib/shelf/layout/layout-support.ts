@@ -151,6 +151,7 @@ export function setLayoutItemConfig(it: LayoutItem, schema: LayoutSchema) {
       "blocks",
       "tabsAt",
       "tabsAlign",
+      "beforeTabChange",
       "wrapTabs",
       "tabMaxWidth",
       "tabItemSpace",
