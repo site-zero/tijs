@@ -138,10 +138,20 @@
     let modListeners = makeAppModelEventListeners({
       COM_TYPE: "TiAppModal",
       bindingEvent: model?.event,
-      setResult: (result: any) => {
+      convertResult: async (result: any) => {
+        let re = result;
+        if (props.convertor) {
+          re = props.convertor(result);
+        }
+        if (props.asyncConvertor) {
+          re = await props.asyncConvertor(result);
+        }
+        return re;
+      },
+      setResult: async (result: any) => {
         _result.value = result;
       },
-      assignResult: (meta: any) => {
+      assignResult: async (meta: any) => {
         _.assign(_result.value, meta);
       },
     });

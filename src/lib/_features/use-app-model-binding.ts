@@ -53,8 +53,9 @@ export function makeAppModelDataProps(
 
 export type MakeAppModelEventListenerOption = {
   COM_TYPE: string;
-  setResult: (result: any) => void;
-  assignResult: (meta: any) => void;
+  convertResult?: (result: any) => Promise<any>;
+  setResult: (result: any) => Promise<void>;
+  assignResult: (meta: any) => Promise<void>;
   bindingEvent?: AppModelBindingEvent;
 };
 
@@ -69,7 +70,8 @@ export type MakeAppModelEventListenerOption = {
 export function makeAppModelEventListeners(
   options: MakeAppModelEventListenerOption
 ): Record<string, AppModelActionHandler> {
-  let { COM_TYPE, setResult, assignResult, bindingEvent } = options;
+  let { COM_TYPE, convertResult, setResult, assignResult, bindingEvent } =
+    options;
   //console.log(COM_TYPE, bindingEvent, result);
   if (debug) console.log("listenResult:", COM_TYPE, bindingEvent, setResult);
   let listeners = {} as Record<string, AppModelActionHandler>;
@@ -89,15 +91,17 @@ export function makeAppModelEventListeners(
       listeners[eventName] = async (_api, payload: any) => {
         if (debug)
           console.log(`🎃<${COM_TYPE}>`, eventName, `(${path}) = `, payload);
-        let eventData = _.get(payload, path);
-        setResult(eventData);
+        let re = convertResult ? await convertResult(payload) : payload;
+        let eventData = _.get(re, path);
+        await setResult(eventData);
       };
     }
-    // 简单的鹅黄色定
+    // 简单
     else {
       listeners[bindingEvent] = async (_api, payload: any) => {
         if (debug) console.log(`🎃<${COM_TYPE}>`, bindingEvent, "=", payload);
-        setResult(payload);
+        let re = convertResult ? await convertResult(payload) : payload;
+        await setResult(re);
       };
     }
   }
@@ -123,8 +127,9 @@ export function makeAppModelEventListeners(
               "=",
               payload
             );
-          let meta = _.pick(payload, ...asKeys);
-          assignResult(meta);
+          let re = convertResult ? await convertResult(payload) : payload;
+          let meta = _.pick(re, ...asKeys);
+          await assignResult(meta);
         };
       }
       // 5. `{change:{a:"x",b:"y"}}`
@@ -142,12 +147,13 @@ export function makeAppModelEventListeners(
               "=",
               payload
             );
+          let re = convertResult ? await convertResult(payload) : payload;
           for (let fromKey of _.keys(asMapping)) {
             let toKey = asMapping[fromKey];
-            let val = _.get(payload, fromKey);
+            let val = _.get(re, fromKey);
             _.set(meta, toKey, val);
           }
-          assignResult(meta);
+          await assignResult(meta);
         };
       }
     }

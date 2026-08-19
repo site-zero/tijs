@@ -8,11 +8,10 @@ import {
   DateTimeQuickParseMode,
   DateTimeQuickParseOptions,
   DateTimeQuickParserSet,
-  setTimeToDate,
   TimeInput,
   TimeUpdateUnit,
 } from "../../_type";
-import { TiTime } from "./time-info";
+import { setTimeToDate, TiTime } from "./time-info";
 
 ///////////////////////////////////////////
 // const P_DATE = new RegExp(

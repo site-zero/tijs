@@ -70,6 +70,7 @@ export * from "./icon/ti-input-icon-index";
 export * from "./lnglat/ti-input-lnglat-index";
 export * from "./multi-droplist/ti-multi-droplist-index";
 export * from "./multi-lines/ti-input-multi-lines-index";
+export * from "./num-range/ti-input-num-range-index";
 export * from "./num-unit/ti-input-num-unit-index";
 export * from "./num/ti-input-num-index";
 export * from "./picker/ti-input-picker-index";

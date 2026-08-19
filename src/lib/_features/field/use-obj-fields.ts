@@ -13,6 +13,7 @@ import {
   InputDateRangeProps,
   InputDatetimeProps,
   InputNumProps,
+  InputNumRangeProps,
   InputNumUnitProps,
   InputTextProps,
   LabelProps,
@@ -487,6 +488,27 @@ export function fldInputDateRangeUTC(
       comConf
     )
   );
+}
+
+export function fldInputNumRange(
+  name: FieldName,
+  titleAndTip: string | string[],
+  comConf?: InputNumRangeProps
+): FormField {
+  let [title, tip] = _.concat(titleAndTip);
+  return {
+    name,
+    title: title || undefined,
+    tip,
+    comType: "TiInputNumRange",
+    comConf: _.assign(
+      {
+        placeholder: "i18n:no-set",
+        prefixIconFor: "clear",
+      } as InputNumRangeProps,
+      comConf
+    ),
+  };
 }
 
 /*-------------------------------------------------------

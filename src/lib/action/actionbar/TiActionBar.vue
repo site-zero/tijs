@@ -132,7 +132,12 @@
   });
 </script>
 <template>
-  <div class="ti-actionbar" :class="TopClass" :style="TopStyle" ref="$root">
+  <div
+    class="ti-actionbar"
+    :class="TopClass"
+    :style="TopStyle"
+    ref="$root"
+    @click.left.stop>
     <!--===: Bar Head :===-->
     <slot name="head">
       <TiTextSnippet
@@ -148,7 +153,10 @@
         :comConf="props.head.comConf" />
     </slot>
     <!--===: Bar Mask :===-->
-    <div class="bar-mask" v-if="HasOpenedGroup" @click.left.stop="OnClickMask"></div>
+    <div
+      class="bar-mask"
+      v-if="HasOpenedGroup"
+      @click.left.stop="OnClickMask"></div>
     <!--===: Show Bar Items :===-->
     <div class="bar-item-wrapper" :item-align="props.itemAlign">
       <template v-for="it in UsedBarItems" :key="it.uniqKey">

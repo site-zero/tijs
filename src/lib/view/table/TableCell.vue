@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { computed } from "vue";
+  import { computed, isProxy, isReactive, watchEffect } from "vue";
   import { getFieldValue, Vars } from "../../../_type";
   import { CssUtils } from "../../../core";
   import { useFieldCom } from "../../_features/field";
@@ -36,28 +36,29 @@
   });
   //-------------------------------------------------------
   const CellValue = computed(() => {
-    let val = getFieldValue(props.name, props.data);
-    // if ("load_etd" == props.name && val && val.startsWith('2025-09-09')) {
-    //   console.log("CellValue, name=", props.name, ", val=", val);
-    // }
+    let ctx = CellDynamicContext.value;
+    let val = ctx.$field?.value;
+    //console.log("CellValue, name=", props.name, ", val=", val);
     if (props.transformer) {
-      let ctx: Vars = CellDynamicContext.value;
       return props.transformer(val, ctx, props.name);
     }
     return val;
   });
   //-------------------------------------------------
-  const CellDynamicContext = computed(() => {
+  function getCellDynamicContext() {
+    let val = getFieldValue(props.name, props.data);
     return {
       ...props.data,
       $vars: props.vars,
       $field: {
         uniqKey: props.uniqKey,
         name: props.name,
-        value: CellValue.value,
+        value: val,
       },
     };
-  });
+  }
+  //-------------------------------------------------
+  const CellDynamicContext = computed(() => getCellDynamicContext());
   //-------------------------------------------------
   const FieldReadonly = computed(() => {
     if (props.readonly) {

@@ -1,4 +1,4 @@
-@use '@site0/tijs/sass/_all.scss' as *;
+@use "@site0/tijs/sass/_all.scss" as *;
 
 @mixin __table_color($prefix, $name) {
   #{$prefix}.is-#{$name} {
@@ -27,6 +27,9 @@
   @include __table_color($prefix, number);
   @include __table_color($prefix, primary);
   @include __table_color($prefix, secondary);
+  @include __table_color($prefix, star);
+  @include __table_color($prefix, fog);
+  @include __table_color($prefix, nil);
 }
 
 // 表格头

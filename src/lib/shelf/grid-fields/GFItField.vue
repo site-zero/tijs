@@ -89,17 +89,30 @@
     }
   });
   //-------------------------------------------------
-  const FieldDynamicContext = computed(() => {
+  const FieldValue = computed(() => {
+    //let val = getFieldValue(props.name, props.data) ?? props.defaultAs;
+    let ctx = FieldDynamicContext.value;
+    let val = ctx.$field?.value;
+    if (props.transformer) {
+      return props.transformer(val, ctx, props.name);
+    }
+    return val;
+  });
+  //-------------------------------------------------
+  function getFieldDynamicContext() {
+    let val = getFieldValue(props.name, props.data);
     return {
       ...props.data,
       $vars: props.vars,
       $field: {
         uniqKey: props.uniqKey,
         name: props.name,
-        value: FieldValue.value,
+        value: val,
       },
     };
-  });
+  }
+  //-------------------------------------------------
+  const FieldDynamicContext = computed(() => getFieldDynamicContext());
   //-------------------------------------------------
   const _readonly = computed(() => useReadonly(props));
   const FieldReadonly = computed(() => {
@@ -146,14 +159,6 @@
     </tr>`);
     html.push("</table>");
     return html.join("");
-  });
-  //-------------------------------------------------
-  const FieldValue = computed(() => {
-    let val = getFieldValue(props.name, props.data) ?? props.defaultAs;
-    if (props.transformer) {
-      return props.transformer(val, props.data, props.name);
-    }
-    return val;
   });
   //-------------------------------------------------
   const FieldTitleVars = computed((): Vars => {
