@@ -23,6 +23,7 @@ export type InputDatetimeProps = CommonProps &
     "prefixIcon" | "prefixHoverIcon" | "suffixIcon" | "suffixHoverIcon"
   > & {
     value?: number | Date | string;
+
     /**
      * - string 用字符串格式
      * - timestamp 直接存储时间戳
@@ -53,10 +54,16 @@ export type InputDatetimeProps = CommonProps &
     quickInputMode?: DateTimeQuickParseMode;
 
     /**
-     * 本控件的所在时区，
-     * 如果未指定则采用默认时区
+     * 本控件的所在时区（即，显示的时区）
+     * 如果未指定则采用系统上下文里默认时区
      */
     timezone?: DateParseOptionsZone;
+
+    /**
+     * 特别指定输入值（当字符串时）的时区
+     * 如果没有指定这个属性，则采用 timezone 属性的值
+     */
+    valueTimezone?: DateParseOptionsZone;
 
     /**
      * 时间输入框的模式

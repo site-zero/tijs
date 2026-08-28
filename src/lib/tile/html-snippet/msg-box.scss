@@ -71,15 +71,29 @@
       color: var(--ti-color-box-f);
 
       > .part-input {
-        padding: 1em 0;
-        input {
+        @include flex-align-nowrap($ai: stretch);
+        border: 1px solid var(--ti-color-border-dark);
+        border-radius: var(--ti-measure-r-s);
+        padding: 0;
+        font-size: var(--ti-fontsz-m);
+        overflow: hidden;
+        > input {
           @include font-fixed;
-          border-radius: var(--ti-measure-r-s);
+          flex: 1 1 auto;
           outline: none;
-          border: 1px solid var(--ti-color-border-dark);
+          font-size: inherit;
           padding: 0.8em 1em;
-          font-size: 1.3em;
-          width: 100%;
+          border: 0;
+        }
+        > a {
+          @include flex-center;
+          flex: 0 0 auto;
+          width: 2em;
+          color: var(--ti-color-primary);
+          &:hover {
+            background-color: var(--ti-color-primary);
+            color: var(--ti-color-primary-r);
+          }
         }
       } // > .part-input
     } // > main

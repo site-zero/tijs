@@ -160,6 +160,7 @@ export function parse(
   }
 
   // 合并输出
+  let tz_suffix = toTimezoneSuffix(info.zone);
   let dateStr = [
     _.padStart(info.yy, 4, "0"),
     "-",
@@ -168,7 +169,7 @@ export function parse(
     _.padStart(info.dd, 2, "0"),
     " ",
     info.time.toString(),
-    toTimezoneSuffix(info.zone),
+    tz_suffix,
   ].join("");
 
   return new Date(dateStr);
@@ -354,8 +355,12 @@ function toTimezoneSuffix(timezone?: DateParseOptionsZone) {
   if ("Z" === timezone) {
     return "Z";
   }
+  // 自动
+  if ("auto" === timezone) {
+    timezone = getDefaultTimezoneOffset();
+  }
   // 直接时区偏移量
-  else if (_.isNumber(timezone)) {
+  if (_.isNumber(timezone)) {
     if (timezone >= 0) {
       return `+${timezone}`;
     }
@@ -557,17 +562,22 @@ export function getDefaultTimezoneOffset(dftAsLocal = true) {
 
 export function getDefaultTimezoneProp(
   COM_TYPE: string,
-  timezone?: DateParseOptionsZone
+  timezone?: DateParseOptionsZone,
+  propKey = "timezone",
+  dftValue?: DateParseOptionsZone
 ): DateParseOptionsZone {
   if (!_.isNil(timezone)) {
     return timezone;
   }
-  let dft = tiGetDefaultComPropValue(COM_TYPE, "timezone", "auto");
+  let dft = tiGetDefaultComPropValue(COM_TYPE, propKey, "auto");
   if ("Z" == dft) {
     return "Z";
   }
   if (/^[+-][0-9]{1,2}$/.test(dft)) {
     return parseInt(dft);
+  }
+  if (!_.isNil(dftValue)) {
+    return dftValue;
   }
   return getDefaultTimezoneOffset() ?? "Z";
 }
@@ -601,7 +611,7 @@ export function format(
   // 未指定 timezone 那么尝试从全局环境变量里获取
   // 这个通常由开发者在连接远程服务器获得正确的时区后
   // 通过类似 setEnv(ENV_KEYS.TIMEZONE,'GMT+8'); 来设置
-  if (_.isNil(timezone)) {
+  if (_.isNil(timezone) || "auto" == timezone) {
     timezone = getDefaultTimezoneOffset(false);
   }
   let date: Date;

@@ -1,6 +1,11 @@
 import _ from "lodash";
 import { computed } from "vue";
-import { Alert, InputBoxProps, InputNumProps, InputTimeProps } from "@site0/tijs";
+import {
+  Alert,
+  InputBoxProps,
+  InputNumProps,
+  InputTimeProps,
+} from "@site0/tijs";
 import { TiTime } from "../../../";
 import { DateTime, tiGetDefaultComPropValue } from "../../../core";
 import { InputDatetimeProps } from "../datetime/ti-input-datetime-types";
@@ -33,6 +38,15 @@ export function useInputDateTimeApi(
     return DateTime.getDefaultTimezoneProp(COM_TYPE, props.timezone);
   });
 
+  const ValueTimeZone = computed(() => {
+    return DateTime.getDefaultTimezoneProp(
+      COM_TYPE,
+      props.valueTimezone,
+      "valueTimezone",
+      TimeZone.value
+    );
+  });
+
   const TimeMode = computed(
     () =>
       props.timeMode ?? tiGetDefaultComPropValue(COM_TYPE, "timeMode", "sec")
@@ -44,7 +58,7 @@ export function useInputDateTimeApi(
 
   const DateValue = computed(() => {
     return DateTime.parse(props.value, {
-      timezone: TimeZone.value,
+      timezone: ValueTimeZone.value,
     });
   });
 
