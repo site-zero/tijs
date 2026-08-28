@@ -1,46 +1,64 @@
 <script lang="ts" setup>
+  import { TiActionBar, usePlaceholder, useReadonly } from "@site0/tijs";
   import JSON5 from "json5";
   import _ from "lodash";
   import { computed, ref } from "vue";
-  import { usePlaceholder, useReadonly } from "@site0/tijs";
   import { CssUtils, Str } from "../../../core";
+  import { gen_text_action_bar_config } from "./support";
   import { InputTextProps } from "./ti-input-text-types";
-
+  //-----------------------------------------------------
   const emit = defineEmits<{
     (eventName: "change", payload: any): void;
   }>();
+  //-----------------------------------------------------
   const _focused = ref(false);
-
-  const props = defineProps<InputTextProps>();
-
+  //-----------------------------------------------------
+  const props = withDefaults(defineProps<InputTextProps>(), {
+    actionBarPosition: "top",
+  });
+  //-----------------------------------------------------
   const hasValue = computed(() => !_.isNil(props.value));
-
+  //-----------------------------------------------------
   const _readonly = computed(() => useReadonly(props));
   const isReadonly = computed(() => _readonly.value.isReadonly(props.value));
   const Placeholder = computed(() => usePlaceholder(props));
-
+  //-----------------------------------------------------
   const TopClass = computed(() => {
-    return CssUtils.mergeClassName(props.className, {
-      "has-value": hasValue.value,
-      "nil-value": !hasValue.value,
-      "is-focused": _focused.value,
-      "no-focused": !_focused.value,
-      "show-border": !props.hideBorder,
-      "hide-border": props.hideBorder,
-    });
+    return CssUtils.mergeClassName(
+      props.className,
+      {
+        "has-value": hasValue.value,
+        "nil-value": !hasValue.value,
+        "is-focused": _focused.value,
+        "no-focused": !_focused.value,
+        "show-border": !props.hideBorder,
+        "hide-border": props.hideBorder,
+      },
+      {
+        [`bar-at-${props.actionBarPosition}`]: props.actionBar ? true : false,
+      }
+    );
   });
-
+  //-----------------------------------------------------
   const TopStyle = computed(() => {
+    return CssUtils.mergeStyles([{}, props.style]);
+  });
+  //-----------------------------------------------------
+  const InputStyle = computed(() => {
     return CssUtils.mergeStyles([
       {},
-      props.style,
+      props.inputStyle,
       {
         width: CssUtils.toSize(props.width),
         height: CssUtils.toSize(props.height),
       },
     ]);
   });
-
+  //-----------------------------------------------------
+  const ActionBarConfig = computed(() => {
+    return gen_text_action_bar_config(props);
+  });
+  //-----------------------------------------------------
   const TextValue = computed(() => {
     let input = props.value;
 
@@ -67,7 +85,7 @@
 
     return input + "";
   });
-
+  //-----------------------------------------------------
   function onTextChange(evt: Event) {
     let $t = evt.target as HTMLTextAreaElement;
     let v = $t.value;
@@ -83,46 +101,25 @@
       emit("change", v);
     }
   }
+  //-----------------------------------------------------
 </script>
 <template>
-  <textarea
-    class="ti-input-text"
-    :class="TopClass"
-    :style="TopStyle"
-    spellcheck="false"
-    :readonly="isReadonly"
-    :placeholder="Placeholder"
-    @change="onTextChange"
-    @focus="_focused = true"
-    @blur="_focused = false"
-    :value="TextValue"></textarea>
+  <div class="ti-input-text" :class="TopClass" :style="TopStyle">
+    <textarea
+      class="ti-input-text"
+      :style="InputStyle"
+      spellcheck="false"
+      :readonly="isReadonly"
+      :placeholder="Placeholder"
+      @change="onTextChange"
+      @focus="_focused = true"
+      @blur="_focused = false"
+      :value="TextValue"></textarea>
+    <div class="part-actions">
+      <TiActionBar v-bind="ActionBarConfig" />
+    </div>
+  </div>
 </template>
 <style lang="scss" scoped>
-  @use "../../../assets/style/_all.scss" as *;
-
-  textarea {
-    padding: 0.5em;
-    display: block;
-    width: 100%;
-    height: 5.7em;
-    line-height: 1.5em;
-    outline: none;
-    resize: none;
-    font-family: inherit;
-    &.show-border {
-      border-radius: var(--ti-measure-r-s);
-      border: 1px solid var(--ti-color-border-dark);
-      &.is-focused {
-        border-color: var(--ti-color-primary);
-      }
-    }
-    &[readonly] {
-      border-color: var(--ti-color-border-dark);
-      background-color: var(--ti-color-disable-r);
-      color: var(--ti-color-disable);
-      &.is-focused {
-        border-color: var(--ti-color-border-dark);
-      }
-    }
-  }
+  @use "./ti-input-text.scss";
 </style>
