@@ -1,36 +1,36 @@
 <script lang="ts" setup>
-  import { TiActionBar, usePlaceholder, useReadonly } from "@site0/tijs";
-  import JSON5 from "json5";
-  import _ from "lodash";
-  import { computed, ref } from "vue";
-  import { CssUtils, Str } from "../../../core";
+  import { TiActionBar } from "@site0/tijs";
+  import { computed, useTemplateRef } from "vue";
+  import { CssUtils } from "../../../core";
   import { gen_text_action_bar_config } from "./support";
-  import { InputTextProps } from "./ti-input-text-types";
+  import { useInputTextApi } from "./ti-input-text-api";
+  import { InputTextEmitter, InputTextProps } from "./ti-input-text-types";
   //-----------------------------------------------------
-  const emit = defineEmits<{
-    (eventName: "change", payload: any): void;
-  }>();
+  const $el = useTemplateRef<HTMLDivElement>("el");
+  const $text = useTemplateRef<HTMLTextAreaElement>("text");
   //-----------------------------------------------------
-  const _focused = ref(false);
+  const emit = defineEmits<InputTextEmitter>();
   //-----------------------------------------------------
   const props = withDefaults(defineProps<InputTextProps>(), {
     actionBarPosition: "top",
   });
   //-----------------------------------------------------
-  const hasValue = computed(() => !_.isNil(props.value));
+  const api = useInputTextApi(props, {
+    getElement: () => $el.value,
+    getTextElement: () => $text.value,
+    emit,
+  });
   //-----------------------------------------------------
-  const _readonly = computed(() => useReadonly(props));
-  const isReadonly = computed(() => _readonly.value.isReadonly(props.value));
-  const Placeholder = computed(() => usePlaceholder(props));
+  const TextValue = computed(() => api.getTextValue());
   //-----------------------------------------------------
   const TopClass = computed(() => {
     return CssUtils.mergeClassName(
       props.className,
       {
-        "has-value": hasValue.value,
-        "nil-value": !hasValue.value,
-        "is-focused": _focused.value,
-        "no-focused": !_focused.value,
+        "has-value": api.hasValue.value,
+        "nil-value": !api.hasValue.value,
+        "is-focused": api.isFocused.value,
+        "no-focused": !api.isFocused.value,
         "show-border": !props.hideBorder,
         "hide-border": props.hideBorder,
       },
@@ -56,66 +56,24 @@
   });
   //-----------------------------------------------------
   const ActionBarConfig = computed(() => {
-    return gen_text_action_bar_config(props);
+    return gen_text_action_bar_config(props, api);
   });
-  //-----------------------------------------------------
-  const TextValue = computed(() => {
-    let input = props.value;
-
-    if (_.isNil(input)) {
-      return "";
-    }
-
-    if (_.isString(input)) {
-      return input;
-    }
-
-    if (_.isArray(input)) {
-      let ss = _.map(input, (it) => Str.anyToStr(it));
-      return ss.join("\n");
-    }
-
-    if (_.isError(input)) {
-      return [input.name, input.message].join(": ");
-    }
-
-    if (_.isObject(input)) {
-      return JSON5.stringify(input, null, "    ");
-    }
-
-    return input + "";
-  });
-  //-----------------------------------------------------
-  function onTextChange(evt: Event) {
-    let $t = evt.target as HTMLTextAreaElement;
-    let v = $t.value;
-    if (props.trimed) {
-      v = _.trim(v);
-    }
-    if ("list" == props.valueType) {
-      let ss = Str.splitIgnoreBlank(v, /\r?\n/g);
-      emit("change", ss);
-    }
-    // 简单文本值
-    else {
-      emit("change", v);
-    }
-  }
   //-----------------------------------------------------
 </script>
 <template>
-  <div class="ti-input-text" :class="TopClass" :style="TopStyle">
+  <div class="ti-input-text" :class="TopClass" :style="TopStyle" ref="el">
     <textarea
+      ref="text"
       class="ti-input-text"
       :style="InputStyle"
       spellcheck="false"
-      :readonly="isReadonly"
-      :placeholder="Placeholder"
-      @change="onTextChange"
-      @focus="_focused = true"
-      @blur="_focused = false"
-      :value="TextValue"></textarea>
-    <div class="part-actions">
+      :readonly="api.isReadonly.value"
+      :placeholder="api.Placeholder.value"
+      :value="TextValue"
+      @change="api.onTextChange"
+      @focus="api.setFocus(true)"
+      @blur="api.setFocus(false)"></textarea>
+    <div class="part-actions" v-if="ActionBarConfig">
       <TiActionBar v-bind="ActionBarConfig" />
     </div>
   </div>

@@ -1,5 +1,15 @@
-import { ActionBarProps, PlaceholderProps, ReadonlyProps } from "../../";
-import { CommonProps, Vars } from "../../../_type";
+import {
+  ActionBarProps,
+  CommonProps,
+  PlaceholderProps,
+  ReadonlyProps,
+  Vars,
+} from "@site0/tijs";
+import { useInputTextApi } from "./ti-input-text-api";
+
+export type InputTextEmitter = {
+  (eventName: "change", payload: any): void;
+};
 
 export type InputTextActionPosition = "top" | "bottom" | "left" | "right";
 
@@ -20,3 +30,5 @@ export type InputTextProps = CommonProps &
      */
     actionBarPosition?: InputTextActionPosition;
   };
+
+export type InputTextApi = ReturnType<typeof useInputTextApi>;

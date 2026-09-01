@@ -1,7 +1,7 @@
 <script lang="ts" setup>
+  import { ListSelectEmitInfo, TiList } from "@site0/tijs";
   import _ from "lodash";
   import { watch } from "vue";
-  import { ListSelectEmitInfo, TiList } from "@site0/tijs";
   import { LogicType, Vars } from "../../../_type";
   import { CheckListEmitter, CheckListProps } from "./ti-check-list-types";
   import { useChecklist } from "./use-checklist";
@@ -55,6 +55,8 @@
   <TiList
     v-bind="_list.ListConfig.value"
     :multi="true"
+    :head="props.head"
+    :tail="props.tail"
     :data="_list.optionsData.value"
     :showIndexFrom="props.showIndexFrom"
     :max-checked="props.maxChecked"

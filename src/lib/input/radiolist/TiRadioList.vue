@@ -43,6 +43,8 @@
     v-bind="_list.ListConfig.value"
     :multi="true"
     :marker-icon="'auto'"
+    :head="props.head"
+    :tail="props.tail"
     :data="_list.optionsData.value"
     :marker-icons="['zmdi-circle-o', 'zmdi-dot-circle']"
     :showIndexFrom="props.showIndexFrom"

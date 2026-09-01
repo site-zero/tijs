@@ -152,7 +152,7 @@ export function useTiFilterBarApi(
     const result = _.cloneDeep(props.value ?? {});
     let modal = _.assign(
       {
-        title: "i18n:edit",
+        title: "i18n:search",
         icon: "zmdi-graphic-eq",
         type: "primary",
         position: "left",
