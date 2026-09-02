@@ -286,10 +286,42 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBoxSetup) {
   async function reloadItem(val: any) {
     if (_box_options.value) {
       let box = _box_options.value;
-      if (props.optionKeepRaw) {
-        return await box.loadRawItemByValue(_options_data.value, val);
+      // 获取固定项
+      let fixedList: Vars[] = [];
+      if (_.isArray(props.fixedOptions)) {
+        fixedList = props.fixedOptions;
+      } else if (_.isFunction(props.fixedOptions)) {
+        fixedList = await props.fixedOptions();
       }
-      return await box.loadStdItemByValue(_options_data.value, val);
+
+      // 准备返回值
+      let re: Vars | AnyOptionItem | undefined = undefined;
+
+      // 尽量保持原始值
+      if (props.optionKeepRaw) {
+        // 固定项
+        if (fixedList.length > 0) {
+          re = await box.loadRawItemByValue(fixedList, val);
+        }
+        // 直接查询
+        if (!re) {
+          re = await box.loadRawItemByValue(_options_data.value, val);
+        }
+      }
+      // 获取标准值
+      else {
+        // 固定项
+        if (fixedList.length > 0) {
+          re = await box.loadStdItemByValue(fixedList, val);
+        }
+        // 直接查询
+        if (!re) {
+          re = await box.loadStdItemByValue(_options_data.value, val);
+        }
+      }
+
+      // 搞定
+      return re;
     }
   }
   //-----------------------------------------------------

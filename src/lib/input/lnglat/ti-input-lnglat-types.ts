@@ -1,4 +1,4 @@
-import { CommonProps } from "../../../_type";
+import { ActionBarItemRefer, CommonProps } from "../../../_type";
 import {
   LbsMapProps,
   LbsMapValue,
@@ -51,4 +51,21 @@ export type InputLngLatProps = CommonProps & {
   mapOptions?: LbsMapProps;
 
   boxAspect?: BoxAspectProps;
+
+  /**
+   * 定制操作按钮, 内置了下面的快捷选项
+   * - `COPY`: 复制
+   * - `EDIT`: 编辑
+   * - `CLEAR`: 清空
+   * 如果没有定义，相当于下面的默认设置
+   *
+   * ```json
+   * {
+   *    icon: "fas-ellipsis-vertical",
+   *    className: "is-primary",
+   *    items: ["COPY", {}, "EDIT", "CLEAR"],
+   * },
+   * ```
+   */
+  actions?: ActionBarItemRefer[];
 };

@@ -1,4 +1,8 @@
-import { AnyOptionItem, Convertor, IconInput } from "@site0/tijs";
+import {
+  AnyOptionItem,
+  Convertor,
+  IconInput
+} from "@site0/tijs";
 import { BoxIconFor } from "./types-box-icon";
 
 export type BoxPrefixSuffixProps<A> = {

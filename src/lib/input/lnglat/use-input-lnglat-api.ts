@@ -52,9 +52,9 @@ export function useInputLatLngApi(
   }
   //-----------------------------------------------------
   function toLatLngValue(lal: LngLatObj): LbsMapValue {
-    let { lat, lng } = lal;
+    let { lat, lng, alt } = lal;
     if ("tuple" == ValueType.value) {
-      return [lat, lng];
+      return [lat, lng, alt];
     }
     return { lat, lng };
   }

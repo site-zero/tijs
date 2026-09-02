@@ -1,7 +1,12 @@
 <script lang="ts" setup>
+  import {
+    ActionBarProps,
+    InputBoxProps,
+    TiActionBar,
+    TiInput,
+  } from "@site0/tijs";
   import _ from "lodash";
   import { computed, useTemplateRef } from "vue";
-  import { ActionBarProps, InputBoxProps, TiActionBar, TiInput } from "@site0/tijs";
   import { I18n } from "../../../core";
   import { isLngLatObj, isLngLatTuple } from "../../view/all-views";
   import { lnglatTupleToObj } from "../../view/lbs-map/gis/use-lbs-support";
@@ -50,44 +55,39 @@
       },
       topItemAspectMode: "button",
       topItemMinWidth: "auto",
-      items: [
-        {
+      barItemSet: {
+        EDIT: {
           icon: "fas-map-location-dot",
-          className: "is-primary",
+          text: "i18n:edit",
           tip: "i18n:ti-input-lng-lat-edit",
+          disabled: props.readonly,
           action: () => {
             _api.doEditPoint();
           },
-          items: [
-            {
-              icon: "far-copy",
-              text: "i18n:copy",
-              tip: "i18n:ti-input-lng-lat-copy",
-              action: () => {
-                _api.doCopyValue();
-              },
-            },
-            {},
-            {
-              icon: "fas-map-location-dot",
-              text: "i18n:edit",
-              tip: "i18n:ti-input-lng-lat-edit",
-              disabled: props.readonly,
-              action: () => {
-                _api.doEditPoint();
-              },
-            },
-            {},
-            {
-              icon: "fas-trash-alt",
-              text: "i18n:clear",
-              disabled: props.readonly,
-              tip: "i18n:ti-input-lng-lat-clear",
-              action: () => {
-                _api.doClearValue();
-              },
-            },
-          ],
+        },
+        COPY: {
+          icon: "far-copy",
+          text: "i18n:copy",
+          tip: "i18n:ti-input-lng-lat-copy",
+          action: () => {
+            _api.doCopyValue();
+          },
+        },
+        CLEAR: {
+          icon: "fas-trash-alt",
+          text: "i18n:clear",
+          tip: "i18n:ti-input-lng-lat-clear",
+          disabled: props.readonly,
+          action: () => {
+            _api.doClearValue();
+          },
+        },
+      },
+      items: props.actions ?? [
+        {
+          icon: "fas-ellipsis-vertical",
+          className: "is-primary-r",
+          items: ["COPY", {}, "EDIT", "CLEAR"],
         },
       ],
     } as ActionBarProps;
