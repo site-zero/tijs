@@ -5,6 +5,7 @@ import {
   IconObj,
   isIconObj,
   MessageMap,
+  toLogicColor,
   Vars,
 } from "../../_type";
 import { CssUtils } from "../web/";
@@ -239,7 +240,28 @@ export function parseIcon(val: IconInput, dft?: string | IconObj): IconObj {
 
 export function fontIconHtml(val: IconInput, dft?: string | IconObj) {
   let icon = _.isString(val) ? parseIcon(val, dft) : val;
-  return `<i class="${icon.className}"></i>`;
+
+  let iconStyle = _.assign({}, icon.style);
+  if (icon.logicType) {
+    iconStyle.color = toLogicColor(icon.logicType);
+  }
+
+  let styleAttr = "";
+  if (!_.isEmpty(iconStyle)) {
+    let styleStr = CssUtils.renderCssRule(iconStyle);
+    styleAttr = ` style="${styleStr}"`;
+  }
+
+  let tipAttr = "";
+  if (icon.tip) {
+    tipAttr = ` data-tip="${_.escape(icon.tip)}"`;
+  }
+
+  if ("emoji" == icon.type && icon.value) {
+    return `<span${styleAttr}${tipAttr}>${icon.value}</span>`;
+  }
+
+  return `<i class="${icon.className}"${styleAttr}${tipAttr}></i>`;
 }
 
 /**
@@ -251,11 +273,26 @@ export function fontIconHtml(val: IconInput, dft?: string | IconObj) {
  */
 export function fontIconHtmlWithStyle(val: IconInput, style?: Vars) {
   let icon = _.isString(val) ? parseIcon(val) : val;
-  if (style) {
-    let css = CssUtils.toStyle(style);
-    let stystr = CssUtils.renderCssRule(css);
-    return `<i class="${icon.className}" style="${stystr}"></i>`;
+  let iconStyle = _.assign({}, icon.style);
+  if (icon.logicType) {
+    iconStyle.color = toLogicColor(icon.logicType);
+  }
+  _.assign(iconStyle, style);
+
+  let styleAttr = "";
+  if (!_.isEmpty(iconStyle)) {
+    let styleStr = CssUtils.renderCssRule(iconStyle);
+    styleAttr = ` style="${styleStr}"`;
   }
 
-  return `<i class="${icon.className}"></i>`;
+  let tipAttr = "";
+  if (icon.tip) {
+    tipAttr = ` data-tip="${_.escape(icon.tip)}"`;
+  }
+
+  if ("emoji" == icon.type && icon.value) {
+    return `<span${styleAttr}${tipAttr}>${icon.value}</span>`;
+  }
+
+  return `<i class="${icon.className}"${styleAttr}${tipAttr}></i>`;
 }

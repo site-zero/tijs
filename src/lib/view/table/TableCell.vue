@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-  import { computed, isProxy, isReactive, watchEffect } from "vue";
-  import { getFieldValue, Vars } from "../../../_type";
+  import _ from "lodash";
+  import { computed } from "vue";
+  import { getFieldValue } from "../../../_type";
   import { CssUtils } from "../../../core";
-  import { useFieldCom } from "../../_features/field";
+  import { FieldComFeature, useFieldCom } from "../../_features/field";
   import {
     TableCellEmitter,
     TableCellEventPayload,
@@ -84,27 +85,38 @@
     return props.editable;
   });
   //-------------------------------------------------------
-  const Cell = computed(() => useFieldCom(props));
+  const Cell = computed((): FieldComFeature => useFieldCom(props));
   const CellCom = computed(() => {
-    let readonly = FieldReadonly.value;
-    let actived = FieldActived.value;
-    let re = Cell.value.autoGetCom(
-      { actived, readonly },
-      CellDynamicContext.value,
-      CellValue.value
-    );
+    const readonly = FieldReadonly.value;
+    const actived = FieldActived.value;
+    const ctx = CellDynamicContext.value;
+    const _cell = Cell.value;
+    const _cell_val = CellValue.value;
+    let re = _cell.autoGetCom({ actived, readonly }, ctx, _cell_val);
     // 如果是标签控件，可以悄悄做更都操作
-    const isComLabel = "TiLabel" === re.comType.name;
     // 暗戳戳的标记一下控件的 disabled 状态，因为有些控件可以针对这个状态做特殊显示
     if (re.comConf && FieldDisabled.value) {
-      if (isComLabel && !re.comConf.type) {
+      if ("TiLabel" === re.comType.name && !re.comConf.type) {
         re.comConf.type = "fog";
       } else {
         re.comConf.disable = true;
       }
     }
+    // 如果是 Input 控件，那么设置一下默认属性
+    if (re.comConf && /^(TiInput)/.test(re.comType.name)) {
+      _.defaults(re.comConf, {
+        boxRadius: "none",
+        hideBorder: true,
+        autoSelect: true,
+        autoFocus: true,
+      });
+    }
     // 有主题的 row 可以让 Label 继承自己的颜色
-    if (props.rowType && isComLabel && !re.comConf.boxInherit) {
+    if (
+      props.rowType &&
+      "TiLabel" === re.comType.name &&
+      !re.comConf.boxInherit
+    ) {
       re.comConf.boxInherit = ["text"];
     }
     return re;

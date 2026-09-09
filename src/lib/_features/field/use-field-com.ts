@@ -155,10 +155,11 @@ export function useFieldCom(
 
   function autoGetCom(status: FieldMode, context: Vars, val?: any): FieldCom {
     let comType = autoGetComType(status);
+    let comConf = autoGetComConf(status, context, val);
     return {
       rawCom: comType.com,
       comType,
-      comConf: autoGetComConf(status, context, val),
+      comConf,
     };
   }
 

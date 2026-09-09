@@ -160,6 +160,7 @@ export type IconType = "font" | "image" | "emoji";
 export type IconObj = {
   type: IconType;
   src?: string; // for image icon
+  tip?: string;
   logicType?: LogicType; // for font icon
   className?: string; // for font icon
   value?: string; // for emojie

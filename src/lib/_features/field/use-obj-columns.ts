@@ -57,48 +57,20 @@ function defineObjColumns(featureName: string) {
     let re = _.cloneDeep(_column);
     _.assign(
       re,
-      _.omit(column, "comConf", "activatedComConf", "readonlyComConf"),
+      // 不能在这里就理解 comConf，应该在 TableCell 组件里，因为可以获得全部上下文
+      //_.omit(column, "comConf", "activatedComConf", "readonlyComConf"),
+      column,
       _.omitBy(col_info, (v, k) => {
         return /^_/.test(k) || _.isNil(v);
       })
     );
 
-    // 活动字段
-    if (re.activatedComConf) {
-      re.activatedComConf = _.assign(
-        {
-          boxRadius: "none",
-          hideBorder: true,
-          autoSelect: true,
-          autoFocus: true,
-        },
-        re.activatedComConf,
-        column?.activatedComConf
-      );
-    }
-
-    // 只读字段
-    if (re.readonlyComConf) {
-      re.readonlyComConf = _.assign(
-        { boxRadius: "none", hideBorder: true },
-        re.readonlyComConf,
-        column?.readonlyComConf
-      );
-    }
-
     // 默认字段
     if (!re.comType && !re.comConf && re.readonlyComConf) {
       re.comType = re.readonlyComType || undefined;
-      re.comConf = _.cloneDeep(re.readonlyComConf);
+      re.comConf = re.readonlyComConf;
     }
-    // 如果定义了只读字段，但是没有定义默认字段，默认采用只读字段作为默认字段
-    else {
-      re.comConf = _.assign(
-        { boxRadius: "none", hideBorder: true },
-        re.comConf,
-        column?.comConf
-      );
-    }
+    
 
     // 如果不是可编辑的，那么就需要去掉活动控件定义
     if (true === re.readonly || (_.isNil(re.readonly) && !editable)) {
@@ -107,23 +79,6 @@ function defineObjColumns(featureName: string) {
       re.readonly = true;
     }
 
-    if (true === re.disabled && !_.isFunction(re.comConf)) {
-      if (!re.comType || "TiLabel" === re.comType) {
-        re.comConf.type = "fog";
-      } else {
-        re.comConf.disable = true;
-      }
-    }
-
-    // 候选字段
-    // if (col_info.candidate) {
-    //   re.candidate = true;
-    // }
-
-    // 指定列宽
-    // if (_.isNumber(col_info.width)) {
-    //   re.width = col_info.width;
-    // }
     // 没有宽度的话，给个默认宽度
     if (_.isNil(re.width)) {
       re.width = 100;
@@ -131,8 +86,6 @@ function defineObjColumns(featureName: string) {
 
     // 字段的名称和标题
     re.name = col_info.name ?? re.name ?? col_info._key;
-    // re.title = col_info.title ?? re.title;
-    // re.tip = col_info.tip ?? re.tip;
 
     return re;
   }
@@ -198,7 +151,7 @@ function defineObjColumns(featureName: string) {
     // 如果定义了只读字段，但是没有定义默认字段，默认采用只读字段作为默认字段
     if (!column.comType && !column.comConf && column.readonlyComConf) {
       column.comType = column.readonlyComType || undefined;
-      column.comConf = _.cloneDeep(column.readonlyComConf);
+      column.comConf = column.readonlyComConf;
     }
     // 表格内，如果是标签，那么默认是没有圆角的
     if (column.comType == "TiLabel" || !column.comType) {
