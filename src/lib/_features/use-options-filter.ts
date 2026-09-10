@@ -1,15 +1,19 @@
 import {
   BoxOptionFilterMaker,
+  getBoxOptionItemHint,
   I18n,
   IconInput,
+  ItemLookupProps,
   Match,
+  setBoxOptionItemHint,
+  useItemLookup,
   Util,
   Vars,
 } from "@site0/tijs";
 import _ from "lodash";
 import { computed } from "vue";
 
-export type OptionsFilterProps = {
+export type OptionsFilterProps = ItemLookupProps & {
   /**
    * 提供固定的选项列表，这些选项会默认的被加入选项列表的前部
    */
@@ -19,11 +23,15 @@ export type OptionsFilterProps = {
    * 一个过滤器 AutoMatch，用来预先过滤字典项
    * 第二个参数是解析上下文，来自 box 的 vars 字段
    * 如果控件在表单里，自然采用表单字段的动态上下文
+   *
+   * 如果指定 `lookup` 那么需要控件的 lookup 属性来支撑
+   *
    */
   optionFilter?:
     | Record<string, any>
     | Record<string, any>[]
-    | BoxOptionFilterMaker;
+    | BoxOptionFilterMaker
+    | "lookup";
 
   /**
    * 生成 optionFilter 的上下文，
@@ -58,7 +66,15 @@ export type OptionsFilterProps = {
   clearOptionItemStyle?: Vars;
 };
 
-export function useOptionsFilter(props: OptionsFilterProps) {
+export type OptionsFilterSetup = {
+  getHint?: () => string;
+};
+
+export function useOptionsFilter(
+  props: OptionsFilterProps,
+  setup: OptionsFilterSetup
+) {
+  const { getHint } = setup;
   //------------------------------------------------
   // 计算属性
   //------------------------------------------------
@@ -70,7 +86,22 @@ export function useOptionsFilter(props: OptionsFilterProps) {
         let maker = props.optionFilter as BoxOptionFilterMaker;
         return maker(flt_vars);
       }
-      // 否则，就是对象
+      // 指定是 lookup，那么就得有 lookup 属性
+      // 否则就是默认 true
+      if ("lookup" == props.optionFilter) {
+        if (props.lookup) {
+          const itLookup = useItemLookup(props);
+          return (item: Vars) => {
+            let hint = getBoxOptionItemHint(item);
+            let re = itLookup.matchAny(item, hint);
+            return re;
+          };
+        }
+        // 未指定 lookup 属性，直接返回 true
+        return () => true;
+      }
+
+      // 剩下的情况就是把 optionFilter 当做 Matche 对象好了
       let m_input = props.optionFilter;
       if (!_.isEmpty(flt_vars)) {
         m_input = Util.explainObj(flt_vars, props.optionFilter);
@@ -115,10 +146,14 @@ export function useOptionsFilter(props: OptionsFilterProps) {
     // 添加固定项目
     re.push(...getFixedOptions());
     // 添加动态项目
+    let is_match_option_filter = _options_filter.value;
+    let hint = getHint ? getHint() : "";
     for (let it of list) {
-      if (_options_filter.value(it)) {
+      let itVars = setBoxOptionItemHint(it, hint);
+      // 建立动态项目
+      if (is_match_option_filter(itVars)) {
         // 我只是想要一个副本，或许能规避一些潜在的副作用
-        re.push(_.cloneDeep(it));
+        re.push({ ...it });
       }
     }
     return re;

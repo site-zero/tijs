@@ -51,7 +51,12 @@ export function useTiInputComboApi(
   const _pipe = computed(() => useValuePipe(props));
   //-----------------------------------------------------
   const _box_options = computed(() => useOptionItem<any>(props));
-  const _box_filter = computed(() => useOptionsFilter(props));
+  const _box_filter = computed(() =>
+    useOptionsFilter(props, {
+      // 这个可能没啥用
+      getHint: () => _last_hint.LastHint.value || "",
+    })
+  );
   //-----------------------------------------------------
   const _box_val = computed(() => {
     return useBoxValue(props, {

@@ -83,7 +83,7 @@ export function useMultiDroplist(
     // 过滤
     let reList = [];
     for (let it of FilteredOptionsData.value) {
-      if (_item_lookup.value.matchAll(it, _keyword.value)) {
+      if (_item_lookup.value.matchAny(it, _keyword.value)) {
         reList.push(it);
       }
     }

@@ -66,6 +66,7 @@ export function useTiInputBox3Api(props: InputBoxProps, setup: InputBoxSetup) {
     return useBoxOptionsData(props, {
       dict: _dict.value,
       cookHint: _cook_hint.value,
+      getHint: () => _last_hint.LastHint.value || "",
     });
   });
   //-----------------------------------------------------

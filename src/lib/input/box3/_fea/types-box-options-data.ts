@@ -1,10 +1,25 @@
-import { OptionsFilterProps, TiDict, Vars } from "@site0/tijs";
+import {
+  OptionsFilterProps,
+  OptionsFilterSetup,
+  TiDict,
+  Vars,
+} from "@site0/tijs";
 import { ItemLookupProps } from "./types-item-lookup";
 import { BoxHintCooking } from "./use-box-hint-cooking";
 
 //--------------------------------------------------
-export type BoxOptionFilter = (item: Record<string, any>) => boolean;
+// item 是当前选项，可能是 stdItem 也可能是 rawItem 全看是不是 useRawValue
+// 里面有个特殊的值 `__val_hint` 是输入框的的值
+export type BoxOptionFilter = (item: Vars) => boolean;
 export type BoxOptionFilterMaker = (vars: Vars) => BoxOptionFilter;
+//--------------------------------------------------
+export function getBoxOptionItemHint(item: Vars): string {
+  return item.__val_hint ?? "";
+}
+//--------------------------------------------------
+export function setBoxOptionItemHint(item: Vars, hint: string): Vars {
+  return { ...item, __val_hint: hint };
+}
 //--------------------------------------------------
 export type BoxOptionsDataProps = ItemLookupProps &
   OptionsFilterProps & {
@@ -35,7 +50,7 @@ export type BoxOptionsDataProps = ItemLookupProps &
   };
 
 //--------------------------------------------------
-export type BoxOptionsDataSetup = {
+export type BoxOptionsDataSetup = OptionsFilterSetup & {
   /**
    * 准备好的字典实例
    */
@@ -50,5 +65,4 @@ export type BoxOptionsDataSetup = {
    * 对于搜索提示信息进行预处理
    */
   cookHint?: BoxHintCooking;
-
 };

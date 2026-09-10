@@ -80,6 +80,6 @@ export function useItemLookup(props: ItemLookupProps) {
   //--------------------------------------------------
   return {
     matchers,
-    matchAll: matchAny,
+    matchAny,
   };
 }

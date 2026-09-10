@@ -23,7 +23,7 @@ export function useBoxOptionsData(
   //------------------------------------------------
   // 动态过滤器
   //------------------------------------------------
-  const _oflt = useOptionsFilter(props);
+  const _oflt = useOptionsFilter(props, setup);
   const _item = useOptionItem<any>(props);
   //------------------------------------------------
   // 计算属性
