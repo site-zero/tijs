@@ -6,6 +6,7 @@ import {
   DisplayTextProps,
   PlaceholderProps,
   ReadonlyProps,
+  ShowBoxSizeProps,
   ValuePipeProps,
 } from "@site0/tijs";
 import {
@@ -69,6 +70,7 @@ export type InputBoxProps = CommonProps &
   BoxAspectProps &
   BoxOptionsDataProps &
   BoxDropListProps &
+  ShowBoxSizeProps &
   BoxHintCookingProps &
   ValuePipeProps &
   BoxPrefixSuffixProps<any> &

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-  import { TiList, useBoxDropList } from "@site0/tijs";
+  import { TiList, useBoxDropList, useShowBoxSize } from "@site0/tijs";
   import _ from "lodash";
   import { computed, onMounted, useTemplateRef, watch } from "vue";
   import { useBoxAspect } from "./_fea";
@@ -22,6 +22,7 @@
   const $el = useTemplateRef<HTMLElement>("el");
   const $input = useTemplateRef<HTMLInputElement>("input");
   const $tipcon = useTemplateRef<HTMLElement>("tipcon");
+  const $main = useTemplateRef<HTMLElement>("main");
   //-----------------------------------------------------
   const emit = defineEmits<InputBoxEmitter>();
   //-----------------------------------------------------
@@ -49,6 +50,19 @@
   });
   //-----------------------------------------------------
   const Compose = computed(() => create_box_composition(props, api));
+  //-----------------------------------------------------
+  const ShowBoxSize = useShowBoxSize(props, {
+    getBoxElement: () => $main.value,
+    isFocused: () => api.isFocused.value,
+    getBoxSize: () => BoxValSize.value,
+  });
+  //-----------------------------------------------------
+  const BoxValSize = computed(() => {
+    if (api.LastHint.value) {
+      return api.LastHint.value.length;
+    }
+    return api.DisplayText.value.length;
+  });
   //-----------------------------------------------------
   const PrefixSuffix = computed(() =>
     create_prefix_suffix(props, api, emit, () => $el.value)
@@ -101,6 +115,7 @@
   );
   //-----------------------------------------------------
   onMounted(async () => {
+    ShowBoxSize.updateBoxSize();
     await try_update_by_props(api);
     if (props.autoFocus) {
       api.setFocused(true);
@@ -177,7 +192,7 @@
       <!----------|> MAIN PART: HEAD |---------->
       <slot name="head"></slot>
       <!----------|> MAIN PART: BODY |---------->
-      <div class="main-body" :style="Aspect.MainBodyStyle.value">
+      <div class="main-body" :style="Aspect.MainBodyStyle.value" ref="main">
         <!--|> MAIN PART: BODY > prefix icon |-->
         <div
           v-if="Prefix.hasIcon.value"
@@ -209,6 +224,14 @@
           :class="Suffix.IconPartClass.value"
           v-html="Suffix.IconPartHtml.value"
           @click.left.stop="Suffix.onClick"></div>
+        <!--|> MAIN PART: BODY > size part |-->
+        <div
+          v-if="ShowBoxSize.isShowSize.value"
+          class="size-part"
+          :class="ShowBoxSize.TipClass.value"
+          :style="ShowBoxSize.TipStyle.value">
+          {{ ShowBoxSize.TipText.value }}
+        </div>
       </div>
       <!----------|> MAIN PART: TAIL |---------->
       <slot name="tail"> </slot>

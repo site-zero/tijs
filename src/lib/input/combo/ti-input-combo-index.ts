@@ -24,9 +24,17 @@ const TiInputComboInfo: TiComInfo = {
     zh_hk: zh_cn,
   },
   com: TiInputCombo,
+  liveStyle: {
+    width: "80%",
+    minWidth: "120px",
+    maxWidth: "500px",
+    margin: "40px auto",
+    overflow: "visible",
+  },
   install: (app: App) => {
     app.component(COM_TYPE, TiInputComboInfo);
   },
+
   defaultProps: "simple",
   exampleProps: [
     {
@@ -36,6 +44,10 @@ const TiInputComboInfo: TiComInfo = {
         value: "Some Text",
         valueCase: "upperAll",
         autoSelect: true,
+        showSizeWhen: "auto",
+        showSizeAt: "top-right",
+        forceShowSizeWhen: "fullsize",
+        maxSize: 10,
       } as InputComboProps,
     },
   ],

@@ -21,6 +21,15 @@ export function useBoxComposition(
   const _will_change_input = ref(false);
   const _last_down_key = ref<string>("");
 
+  //-----------------------------------------------------
+  // 计算属性
+  //-----------------------------------------------------
+  const isCompositing = computed(() => _compositing.value);
+  const willChangeInput = computed(() => _will_change_input.value);
+  const LastDownKey = computed(() => _last_down_key.value);
+  //-----------------------------------------------------
+  // 操作函数
+  //-----------------------------------------------------
   function onStart() {
     _compositing.value = true;
   }
@@ -95,6 +104,7 @@ export function useBoxComposition(
     if (_compositing.value) {
       return;
     }
+    // 记录每一次输入的值
     if (!_will_change_input.value) {
       return;
     }
@@ -105,10 +115,15 @@ export function useBoxComposition(
     onChange(value);
   }
 
+  //-----------------------------------------------------
+  // 返回接口
+  //-----------------------------------------------------
   return {
-    isCompositing: computed(() => _compositing.value),
-    willChangeInput: computed(() => _will_change_input.value),
-    LastDownKey: computed(() => _last_down_key.value),
+    // 计算属性
+    isCompositing,
+    willChangeInput,
+    LastDownKey,
+    // 操作函数
     onStart,
     onEnd,
     onBeforeInput,

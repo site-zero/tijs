@@ -1,6 +1,6 @@
+import { CheckedIds, Dom, RoadblockProps } from "@site0/tijs";
 import _ from "lodash";
 import { computed } from "vue";
-import { RoadblockProps } from "@site0/tijs";
 import { AnyOptionItem, IconInput, TableRowID, Vars } from "../../../_type";
 import { EventUtils, I18n, Tmpl, Util } from "../../../core";
 import {
@@ -25,6 +25,7 @@ export function useList(
   selection: SelectableState<TableRowID>,
   emit: ListEmitter
 ) {
+  if (debug) console.log("useList initialized");
   // 启用特性: 选择行，对于列表 getId 与 getValue 通常用户只会指定一个
   let _get_id: undefined | string | ((it: Vars, index: number) => TableRowID) =
     undefined;
@@ -38,30 +39,32 @@ export function useList(
     _get_id = props.getValue;
   }
   //-----------------------------------------------------
-  const selectable = useSelectable<TableRowID>(
-    { ...props, getId: _get_id },
-    {
-      getItem: (id: TableRowID) => {
-        let it = getItemById(id);
-        if (!it) {
-          return;
-        }
-        return {
-          id: it.value,
-          rawData: it.rawData,
-          index: it.index,
-        };
-      },
-    }
+  const selectable = computed(() =>
+    useSelectable<TableRowID>(
+      { ...props, getId: _get_id },
+      {
+        getItem: (id: TableRowID) => {
+          let it = getItemById(id);
+          if (!it) {
+            return;
+          }
+          return {
+            id: it.value,
+            rawData: it.rawData,
+            index: it.index,
+          };
+        },
+      }
+    )
   );
   //-----------------------------------------------------
-  const getRowType = useDataLogicType(props.getRowType);
+  const getRowType = computed(() => useDataLogicType(props.getRowType));
   //-----------------------------------------------------
   // 标准列表
   let { toStdItem } = useStdListItem({
     ...props,
     getValue: (it: Vars, index: number) => {
-      return selectable.getDataId(it, index);
+      return selectable.value.getDataId(it, index);
     },
   });
   //-----------------------------------------------------
@@ -142,13 +145,13 @@ export function useList(
     }
     for (let index = 0; index < props.data.length; index++) {
       let li = props.data[index];
-      let is_current = selectable.isDataActived(selection, index, li);
-      let is_checked = selectable.isDataChecked(selection, index, li);
+      let is_current = selectable.value.isDataActived(selection, index, li);
+      let is_checked = selectable.value.isDataChecked(selection, index, li);
       let className: Vars = {
         "is-current": is_current,
         "is-checked": is_checked,
       };
-      let type = getRowType ? getRowType(li) : undefined;
+      let type = getRowType.value ? getRowType.value(li) : undefined;
       if (type) {
         className[`is-${type}`] = true;
       }
@@ -172,8 +175,8 @@ export function useList(
 
       // 准备判断是否可以选择
       let sIt = { id: value, rawData: li, index };
-      let canCheck = selectable.canCheckItem(sIt);
-      let canSelect = selectable.canSelectItem(sIt);
+      let canCheck = selectable.value.canCheckItem(sIt);
+      let canSelect = selectable.value.canSelectItem(sIt);
 
       // 准备列表项
       let it: ListItem = {
@@ -235,11 +238,19 @@ export function useList(
     return false;
   }
   //-----------------------------------------------------
-  function OnItemCancel() {
+  function OnItemCancel(event: MouseEvent) {
+    if (debug) console.log("OnItemCancel", event);
+    // 在 List Item 里点击，那就不要管了
+    if (event.target) {
+      let $item = Dom.closest(event.target as HTMLElement, ".list-item");
+      if ($item) {
+        return;
+      }
+    }
     let oldCurrentId = _.cloneDeep(selection.currentId);
     let oldCheckedIds = _.cloneDeep(selection.checkedIds);
-    selectable.selectNone(selection);
-    let info = selectable.getSelectionEmitInfo(
+    selectable.value.selectNone(selection);
+    let info = selectable.value.getSelectionEmitInfo(
       selection,
       props.data || [],
       oldCheckedIds,
@@ -253,7 +264,7 @@ export function useList(
     let { item, event } = itemEvent;
     if (
       !props.multi &&
-      !selectable.canSelectItem({
+      !selectable.value.canSelectItem({
         id: item.value,
         rawData: item.rawData,
         index: item.index,
@@ -265,12 +276,12 @@ export function useList(
     let oldCheckedIds = _.cloneDeep(selection.checkedIds);
     let se = EventUtils.getKeyboardStatus(event);
     if (props.multi) {
-      selectable.select(selection, itemEvent.item.value, se);
+      selectable.value.select(selection, itemEvent.item.value, se);
     } else {
-      selectable.selectId(selection, itemEvent.item.value);
+      selectable.value.selectId(selection, itemEvent.item.value);
     }
 
-    let info = selectable.getSelectionEmitInfo(
+    let info = selectable.value.getSelectionEmitInfo(
       selection,
       props.data || [],
       oldCheckedIds,
@@ -283,7 +294,7 @@ export function useList(
     if (debug) console.log("OnItemCheck", itemEvent);
     let { item } = itemEvent;
     if (
-      !selectable.canCheckItem({
+      !selectable.value.canCheckItem({
         id: item.value,
         rawData: item.rawData,
         index: item.index,
@@ -294,12 +305,12 @@ export function useList(
     let oldCurrentId = _.cloneDeep(selection.currentId);
     let oldCheckedIds = _.cloneDeep(selection.checkedIds);
     if (props.multi) {
-      selectable.toggleId(selection, itemEvent.item.value);
+      selectable.value.toggleId(selection, itemEvent.item.value);
     } else {
-      selectable.selectId(selection, itemEvent.item.value);
+      selectable.value.selectId(selection, itemEvent.item.value);
     }
 
-    let info = selectable.getSelectionEmitInfo(
+    let info = selectable.value.getSelectionEmitInfo(
       selection,
       props.data || [],
       oldCheckedIds,
@@ -321,7 +332,13 @@ export function useList(
     itemsHasTip,
     getMarkerIcons,
 
-    updateSelection: selectable.updateSelection,
+    updateSelection: (
+      data: Vars[],
+      currentId?: TableRowID | null,
+      checkedIds?: CheckedIds<TableRowID>
+    ) => {
+      selectable.value.updateSelection(selection, data, currentId, checkedIds);
+    },
 
     OnItemCancel,
     OnItemSelect,

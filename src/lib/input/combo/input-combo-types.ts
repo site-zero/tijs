@@ -10,6 +10,7 @@ import {
   OptionItemProps,
   PlaceholderProps,
   ReadonlyProps,
+  ShowBoxSizeProps,
   ValuePipeProps,
   Vars,
 } from "@site0/tijs";
@@ -29,6 +30,7 @@ export type InputComboProps = CommonProps &
   ReadonlyProps &
   OptionItemProps<any> &
   BoxDropListProps &
+  ShowBoxSizeProps &
   BoxAspectProps &
   ValuePipeProps &
   BoxPrefixSuffixProps<any> &

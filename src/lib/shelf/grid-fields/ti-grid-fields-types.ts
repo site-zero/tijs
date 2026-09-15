@@ -113,6 +113,18 @@ export type GridFieldsProps = Omit<
      * 每种状态的图标
      */
     fieldStatusIcons?: FieldStatusIcons;
+
+    /**
+     * 有些时候，如果一个字段被激活，就会导致这个字段重新被渲染
+     * 如果这个字段恰好是radio list, 你点击它的一个项目的时候
+     * 由于它重新被渲染了，那么DOM事件就不会被捕获。
+     * 
+     * 这里有一个全局的表单开关在很多表单情况下，
+     * 实际上我们并不关心ActivedField。
+     * 
+     * 当然，如果以后我们想做更细腻的控制，可以在每个字段上面加上这个开关
+     */
+    ignoreActivedField?: boolean;
   };
 
 /**

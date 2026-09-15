@@ -120,7 +120,7 @@ export function useTiInputComboApi(
   //-----------------------------------------------------
   const DisplayText = computed(() => {
     let re = getBoxDisplayText({
-      lastHint: LastHint.value,
+      lastHint: _last_hint.LastHint.value,
       toOptionItem,
       boxItem: _current_item.value,
       isOptionsDataShow: isOptionsDataShow.value,

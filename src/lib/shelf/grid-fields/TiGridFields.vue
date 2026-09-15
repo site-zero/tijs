@@ -157,6 +157,7 @@
     // _.delay(() => {
     //   _actived_uniqKey.value = uniqKey;
     // }, 10);
+    if (props.ignoreActivedField) return;
     _actived_uniqKey.value = uniqKey;
   }
   //-------------------------------------------------

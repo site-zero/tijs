@@ -23,6 +23,8 @@
   } from "./ti-list-types";
   import { useList } from "./use-list";
   //-----------------------------------------------------
+  const debug = false;
+  //-----------------------------------------------------
   const props = withDefaults(defineProps<ListProps>(), {
     data: () => [],
     forceShowRowIconPart: "auto",
@@ -46,16 +48,16 @@
   } as SelectableState<TableRowID>);
   //-----------------------------------------------------
   const $main = useTemplateRef<HTMLElement>("main");
-  const _list = computed(() => useList(props, selection, emit));
+  const _list = useList(props, selection, emit);
   //-----------------------------------------------------
-  const roadblock = computed(() => _list.value.getRoadblock());
-  const NotItems = computed(() => _.isEmpty(_list.value.Items.value));
+  const roadblock = computed(() => _list.getRoadblock());
+  const NotItems = computed(() => _.isEmpty(_list.Items.value));
   //-----------------------------------------------------
   const _indent = computed(() => useRowIndent(props));
   //-----------------------------------------------------
   const IndentlyItems = computed(() => {
     let re: IndentlyItem[] = [];
-    for (let it of _list.value.Items.value) {
+    for (let it of _list.Items.value) {
       let item = {
         ...it,
         ..._indent.value.getRowIndentation(it.value, it, it.icon),
@@ -87,7 +89,7 @@
     }
     // 纯列表的话，只要有一个项目有图标就强制显示图标部分
     // 这样列表看起来会比较整齐
-    return _list.value.itemsHasIcon(IndentlyItems.value);
+    return _list.itemsHasIcon(IndentlyItems.value);
   });
   //-----------------------------------------------------
   const TopClass = computed(() => {
@@ -141,11 +143,11 @@
     }
   });
   //-----------------------------------------------------
-  const MarkerIcons = computed(() => _list.value.getMarkerIcons());
+  const MarkerIcons = computed(() => _list.getMarkerIcons());
   //-----------------------------------------------------
   function onListItemClick(item: ListItem, event: MouseEvent) {
-    //console.log('onListItemClick', item);
-    _list.value.OnItemSelect({ event, item });
+    if (debug) console.log("onListItemClick", item);
+    _list.OnItemSelect({ event, item });
   }
   //-----------------------------------------------------
   function scrollIntoViewByIndex(
@@ -179,7 +181,7 @@
     let checkedIds = Util.mapTruthyKeys(selection.checkedIds);
     if (checkedIds.length > 0) {
       let fstId = checkedIds[0];
-      let index = _list.value.getItemIndex(fstId);
+      let index = _list.getItemIndex(fstId);
       if (index >= 0) {
         scrollIntoViewByIndex(index, { to: "center", smooth });
       }
@@ -188,10 +190,17 @@
   //-----------------------------------------------------
   watch(
     () => [props.currentId, props.checkedIds, props.data],
-    () => {
-      //console.log("selection changed");
-      _list.value.updateSelection(
-        selection,
+    (newVal, oldVal) => {
+      if (_.isEqual(newVal, oldVal)) {
+        return;
+      }
+      if (debug) {
+        console.log("selection changed", {
+          newVal,
+          oldVal,
+        });
+      }
+      _list.updateSelection(
         props.data ?? [],
         props.currentId,
         props.checkedIds
@@ -214,7 +223,7 @@
     :class="TopClass"
     :style="TopStyle"
     :data-ti-scope="TagScope"
-    @click="_list.OnItemCancel">
+    @click.left="_list.OnItemCancel">
     <div
       style="display: content"
       v-if="StyleSheetHTML"
@@ -243,8 +252,8 @@
         class="list-item"
         :class="it.className"
         :style="it.style"
-        @click.stop="onListItemClick(it, $event)"
-        @dblclick="emit('open', it)">
+        @click.left="onListItemClick(it, $event)"
+        @dblclick.left="emit('open', it)">
         <!--***********************************-->
         <!--=Indent placeholder=-->
         <div class="list-part as-indents" v-if="it.indent > 0">

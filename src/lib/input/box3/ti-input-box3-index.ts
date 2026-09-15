@@ -43,6 +43,7 @@ const TiInputBox3Info: TiComInfo = {
     minWidth: "120px",
     maxWidth: "500px",
     margin: "40px auto",
+    overflow: "visible",
   },
   install: (app: App) => {
     app.component(COM_TYPE, TiInputBox3Info);
@@ -56,6 +57,10 @@ const TiInputBox3Info: TiComInfo = {
         value: "Some Text",
         valueCase: "upperAll",
         autoSelect: true,
+        showSizeWhen: "auto",
+        showSizeAt: "top-right",
+        forceShowSizeWhen: "fullsize",
+        maxSize: 10,
       } as InputBoxProps,
     },
     {
