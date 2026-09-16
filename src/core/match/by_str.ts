@@ -1,13 +1,14 @@
-import _ from 'lodash';
-import { TiMatch } from '../../_type';
-import { gen_by_blank } from './by_blank';
-import { gen_by_empty } from './by_empty';
-import { gen_by_not } from './by_not';
-import { gen_by_num_range } from './by_num_range';
-import { gen_by_regex } from './by_regex';
-import { gen_by_stict_eq } from './by_strict_eq';
-import { gen_by_wildcard } from './by_wildcard';
-import { MakeTiMatch } from './ti-match';
+import _ from "lodash";
+import { TiMatch } from "../../_type";
+import { gen_by_blank } from "./by_blank";
+import { gen_by_empty } from "./by_empty";
+import { gen_by_not } from "./by_not";
+import { gen_by_num_range } from "./by_num_range";
+import { gen_by_regex } from "./by_regex";
+import { gen_by_str_range } from "./by_str_range";
+import { gen_by_stict_eq } from "./by_strict_eq";
+import { gen_by_wildcard } from "./by_wildcard";
+import { MakeTiMatch } from "./ti-match";
 
 export const gen_by_str: MakeTiMatch<string> = function (src: string): TiMatch {
   // 预先处理
@@ -17,7 +18,7 @@ export const gen_by_str: MakeTiMatch<string> = function (src: string): TiMatch {
 
   // 提出一个 NOT
   let s = src.trim();
-  let not = s.startsWith('!');
+  let not = s.startsWith("!");
   if (not) {
     s = s.substring(1);
   }
@@ -31,7 +32,7 @@ export const gen_by_str: MakeTiMatch<string> = function (src: string): TiMatch {
   };
 
   // [BLANK]
-  if ('[BLANK]' == s) {
+  if ("[BLANK]" == s) {
     return _W(gen_by_blank(s));
   }
 
@@ -41,8 +42,17 @@ export const gen_by_str: MakeTiMatch<string> = function (src: string): TiMatch {
     return _W(gen_by_regex(reg));
   }
 
+  // Str Range
+  if (/^str([(\[])([^\]]+)([)\]])$/i.exec(s)) {
+    let str = s.substring(3).trim();
+    return _W(gen_by_str_range(str));
+  }
+
   // Range
   if (/^([(\[])([^\]]+)([)\]])$/.exec(s)) {
+    if (/[^0-9, ]/.test(s)) {
+      return _W(gen_by_str_range(s));
+    }
     return _W(gen_by_num_range(s));
   }
 

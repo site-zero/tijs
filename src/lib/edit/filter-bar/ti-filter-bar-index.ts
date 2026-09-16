@@ -1,19 +1,18 @@
-import { FormProps, TiComInfo, TiComRace } from "@site0/tijs";
+import { TiComInfo, TiComRace } from "@site0/tijs";
 import { App } from "vue";
 import { COM_TYPES } from "../../lib-com-types";
 import TiFilterBar from "./TiFilterBar.vue";
-import { FilterBarProps } from "./ti-filter-bar-types";
 import example from "./example";
 
 const COM_TYPE = COM_TYPES.FilterBar;
 
 const en_us = {
   "com-name": "Filter Bar",
-  "example-xxx": "XXX",
+  "example-explain": "Explain",
 };
 const zh_cn = {
   "com-name": "过滤条",
-  "example-xxx": "XXX",
+  "example-explain": "自解释字段",
 };
 
 const TiFilterBarInfo: TiComInfo = {
@@ -35,7 +34,7 @@ const TiFilterBarInfo: TiComInfo = {
     maxWidth: "800px",
   },
   defaultProps: "simple",
-  exampleProps: [example.simple],
+  exampleProps: [example.simple, example.explain],
 };
 
 export * from "./ti-filter-bar-types";

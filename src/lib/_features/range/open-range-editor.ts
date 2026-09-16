@@ -22,7 +22,7 @@ export async function open_range_editor<T, C extends Vars, V extends Vars>(
   props: RangeApiProps<T, C, V>,
   info: RangeInfo<T>,
   setup: InputRangeApiSetup<T>
-): Promise<RangeInfo<T>> {
+): Promise<RangeInfo<T> | undefined> {
   const { valueToRange, msgPrefix } = setup;
   const valueComType = props.valueComType || setup.valueComType();
   const editFieldType = setup.editFieldType || "String";
@@ -72,22 +72,23 @@ export async function open_range_editor<T, C extends Vars, V extends Vars>(
     titleType: "html",
     layoutHint: 2,
     changeMode: "all",
-    maxFieldNameWidth: 50,
+    maxFieldNameWidth: 80,
     fields: [
       {
         title: _T("min"),
         fields: [
-          {
-            name: "hasMinValue",
-            type: "Boolean",
-            comType: "TiToggle",
-          },
+          // {
+          //   name: "hasMinValue",
+          //   type: "Boolean",
+          //   comType: "TiToggle",
+          // },
           {
             title: _T("min-val"),
             name: "minValue",
             type: editFieldType,
-            enabled: { hasMinValue: true },
-            readonly: { hasMinValue: false },
+            //enabled: { hasMinValue: true },
+            enabled: true,
+            //readonly: { hasMinValue: false },
             comType: valueComType,
             comConf: val_input_config(),
           },
@@ -96,8 +97,9 @@ export async function open_range_editor<T, C extends Vars, V extends Vars>(
             titleType: "html",
             name: "minValueIncluded",
             type: "Boolean",
-            enabled: { hasMinValue: true },
-            readonly: { hasMinValue: false },
+            //enabled: { hasMinValue: true },
+            enabled: true,
+            //readonly: { hasMinValue: false },
             comType: "TiCheck",
             comConf: checkbox_config({
               text: _T("min-included"),
@@ -108,17 +110,18 @@ export async function open_range_editor<T, C extends Vars, V extends Vars>(
       {
         title: _T("max"),
         fields: [
-          {
-            name: "hasMaxValue",
-            type: "Boolean",
-            comType: "TiToggle",
-          },
+          // {
+          //   name: "hasMaxValue",
+          //   type: "Boolean",
+          //   comType: "TiToggle",
+          // },
           {
             title: _T("max-val"),
             name: "maxValue",
             type: editFieldType,
-            enabled: { hasMaxValue: true },
-            readonly: { hasMaxValue: false },
+            //enabled: { hasMinValue: true },
+            enabled: true,
+            //readonly: { hasMaxValue: false },
             comType: valueComType,
             comConf: val_input_config(),
           },
@@ -127,8 +130,9 @@ export async function open_range_editor<T, C extends Vars, V extends Vars>(
             titleType: "html",
             name: "maxValueIncluded",
             type: "Boolean",
-            enabled: { hasMaxValue: true },
-            readonly: { hasMaxValue: false },
+            //enabled: { hasMaxValue: true },
+            enabled: true,
+            //readonly: { hasMaxValue: false },
             comType: "TiCheck",
             comConf: checkbox_config({
               text: _T("max-included"),
@@ -138,27 +142,33 @@ export async function open_range_editor<T, C extends Vars, V extends Vars>(
       },
     ],
     linkFields: {
-      hasMinValue: async (v, data): Promise<LinkFieldChange[] | undefined> => {
-        if (!v) {
-          return [{ name: "minValue", value: null }];
+      minValue: async (v): Promise<LinkFieldChange[] | undefined> => {
+        if (_.isNil(v)) {
+          return [
+            { name: "minValue", value: null },
+            { name: "hasMinValue", value: false },
+          ];
         }
         // 默认弄个值
-        else if (_.isNil(data.minValue)) {
+        else {
           return [
-            { name: "minValue", value: data.maxValue ?? defaultValue },
-            { name: "minValueIncluded", value: true },
+            { name: "minValue", value: v },
+            { name: "hasMinValue", value: true },
           ];
         }
       },
-      hasMaxValue: async (v, data): Promise<LinkFieldChange[] | undefined> => {
-        if (!v) {
-          return [{ name: "maxValue", value: null }];
+      maxValue: async (v): Promise<LinkFieldChange[] | undefined> => {
+        if (_.isNil(v)) {
+          return [
+            { name: "maxValue", value: null },
+            { name: "hasMaxValue", value: false },
+          ];
         }
         // 默认弄个值
-        else if (_.isNil(data.maxValue)) {
+        else {
           return [
-            { name: "maxValue", value: data.minValue ?? defaultValue },
-            { name: "maxValueIncluded", value: true },
+            { name: "maxValue", value: v },
+            { name: "hasMaxValue", value: true },
           ];
         }
       },
@@ -171,7 +181,7 @@ export async function open_range_editor<T, C extends Vars, V extends Vars>(
   }
 
   // 打开对话框
-  let re = await openAppModal(
+  let re: RangeInfo<T> = await openAppModal(
     _.assign(
       {
         icon: "zmdi-collection-item-2",
@@ -187,6 +197,15 @@ export async function open_range_editor<T, C extends Vars, V extends Vars>(
       _.omit(cusDialog, "comConf")
     )
   );
+
+  // 用户取消
+  if (!re) {
+    return;
+  }
+
+  // 根据值来确定一下
+  re.hasMinValue = !_.isNil(re.minValue);
+  re.hasMaxValue = !_.isNil(re.maxValue);
 
   return re;
 }

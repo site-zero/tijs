@@ -1,5 +1,5 @@
-import _ from 'lodash';
-import { Dicts, I18n, Match } from '../../core';
+import _ from "lodash";
+import { Dicts, I18n, Match } from "../../core";
 
 const _BUILTIN_TRANS = new Map<string, ValTrans>();
 
@@ -33,7 +33,7 @@ function getTranslator(
     }
     // 默认直接显示值
     return async (val: any): Promise<string> => {
-      return `${val ?? I18n.get('nil')}`;
+      return `${val ?? I18n.get("nil")}`;
     };
   }
   // 自定义
@@ -43,12 +43,19 @@ function getTranslator(
   // 采用字典
   let m = /^(#)(.+)$/.exec(trans);
   if (m) {
-    let type = m[0];
-    let name = m[1];
-    if ('#' == type) {
+    let type = m[1];
+    let name = m[2];
+    if ("#" == type) {
       let dict = Dicts.checkDict(name);
       return async (val: any): Promise<string> => {
-        let text = await dict.getItemText(val);
+        // 多个值翻译
+        if (_.isArray(val)) {
+          let vs = val.sort();
+          let texts = await Promise.all(vs.map((v) => dict.getText(v)));
+          return texts.join(" or ");
+        }
+        // 单个值
+        let text = await dict.getText(val);
         return text;
       };
     }

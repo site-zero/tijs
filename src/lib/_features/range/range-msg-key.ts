@@ -1,4 +1,5 @@
 import { RangeInfo, RangeInfoMsgKey } from "@site0/tijs";
+import _ from "lodash";
 
 export function get_range_info_msg_key<T>(info: RangeInfo<T>): RangeInfoMsgKey {
   let {
@@ -9,6 +10,10 @@ export function get_range_info_msg_key<T>(info: RangeInfo<T>): RangeInfoMsgKey {
     minValueIncluded,
     maxValue,
   } = info;
+
+  hasMinValue = !_.isNil(minValue);
+  hasMaxValue = !_.isNil(maxValue);
+
   if (hasMaxValue && hasMinValue) {
     // {$eq, $ne}
     if (minValue === maxValue) {
@@ -28,7 +33,7 @@ export function get_range_info_msg_key<T>(info: RangeInfo<T>): RangeInfoMsgKey {
     if (maxValueIncluded) {
       return "gtlte";
     }
-    return "gtelte";
+    return "gtlt";
   }
   if (hasMinValue) {
     if (minValueIncluded) {

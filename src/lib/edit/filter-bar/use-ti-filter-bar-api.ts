@@ -25,9 +25,9 @@ export function useTiFilterBarApi(
   //-----------------------------------------------------
   // 常驻字段
   //-----------------------------------------------------
-  const major = useFormMajor(props.major ?? {});
-  const MajorFields = computed(() => major.getFields());
-  const hasMajorFields = computed(() => major.hasMajorFields());
+  const major = computed(() => useFormMajor(props.major ?? {}));
+  const MajorFields = computed(() => major.value.getFields());
+  const hasMajorFields = computed(() => major.value.hasMajorFields());
   //-----------------------------------------------------
   const MajorFieldNames = computed(() => {
     let map = new Map<string, boolean>();
