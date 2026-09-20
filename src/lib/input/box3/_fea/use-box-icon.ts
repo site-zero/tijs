@@ -18,8 +18,8 @@ export function useBoxIcon<A>(props: BoxIconProps<A>, setup: BoxIconSetup<A>) {
   //--------------------------------------------------
   const _icon = computed(() => {
     if (_.isNull(icon)) return;
-    if (icon) return icon;
-    if (_.isFunction(iconFor)) return "zmdi-settings";
+    if (icon) return autoIcon || icon;
+    if (_.isFunction(iconFor)) return autoIcon || "zmdi-settings";
     if (iconFor) {
       return {
         "clear": autoIcon || "zmdi-minus",
