@@ -1019,3 +1019,38 @@ export function substrbytes(str: string, maxByte: number = 0) {
   }
   return result;
 }
+
+/**
+ * 最宽泛的判断一个输入的字符是否可打印。
+ * 支持中文等更多的 UTF-8 数字和字符图标 emoji 等
+ *
+ * @param c 输入的字符
+ * @returns 如果字符是可打印的，返回 true，否则返回 false
+ */
+export function isPrintableCompat(c: string) {
+  if (c.length !== 1) return false;
+  const code = c.charCodeAt(0);
+  // 控制字符区间：0–31，127
+  if ((code >= 0 && code <= 31) || code === 127) return false;
+  return true;
+}
+
+/**
+ * 最严格的判断一个输入的字符是否是可打印的 ASCII 字符。
+ * @param c 输入的字符
+ * @returns 如果字符是可打印的 ASCII 字符，返回 true，否则返回 false
+ */
+export function isPrintableAscii(c: string) {
+  return /^[\x20-\x7E]*$/.test(c);
+}
+
+/**
+ * 最严格的判断一个输入的字符是否是可打印的 ASCII 字符。
+ * 同时，它还包括ASCII后半部分的扩展字符
+ *
+ * @param c 输入的字符
+ * @returns 如果字符是可打印的 ASCII 字符，返回 true，否则返回 false
+ */
+export function isPrintableAsciiExt(c: string) {
+  return /^[\x20-\x7E\x80-\xFF]*$/.test(c);
+}
