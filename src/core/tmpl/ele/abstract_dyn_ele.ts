@@ -1,7 +1,7 @@
-import _ from 'lodash';
-import { AnyGetter, Vars } from '../../../_type';
-import { genObjGetter } from '../../util/util-getter';
-import { DynElInfo, TmplEle } from '../ti-tmpl';
+import _ from "lodash";
+import { AnyGetter, Vars } from "../../../_type";
+import { genObjGetter } from "../../util/util-getter";
+import { DynElInfo, TmplEle } from "../ti-tmpl";
 
 export abstract class DynEle implements TmplEle {
   protected _key: string;
@@ -17,7 +17,8 @@ export abstract class DynEle implements TmplEle {
     this._get_value = genObjGetter(this._key);
     if (/^[=@]/.test(input.dft)) {
       let dft_key = input.dft.substring(1).trim();
-      this._get_dft = (obj) => obj[dft_key];
+      //this._get_dft = (obj) => obj[dft_key];
+      this._get_dft = genObjGetter(dft_key);
     }
     // 静态默认值
     else {

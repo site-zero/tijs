@@ -1,7 +1,6 @@
 import _ from "lodash";
 import { assert, expect, test } from "vitest";
-import { getTimeZoneOffset } from "../../_type/core-types";
-import { DateTime, installTiCoreI18n } from "../../core";
+import { DateTime, getTimeZoneOffset, installTiCoreI18n } from "../../core";
 
 installTiCoreI18n("en-us");
 

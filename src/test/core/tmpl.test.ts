@@ -2,6 +2,13 @@ import { expect, test } from "vitest";
 import { Vars } from "../../_type";
 import { DateTime, Tmpl } from "../../core/";
 
+test("dynamic_dft", () => {
+  let tmpl = Tmpl.parse("${pos.x?=pos.y}");
+  expect(tmpl.render({ pos: { x: 100 } })).eq("100");
+  expect(tmpl.render({ pos: {} })).eq("");
+  expect(tmpl.render({ pos: { y: 50 } })).eq("50");
+});
+
 test("float_str", () => {
   let tmpl = Tmpl.parse("${w<:@fs=7.2>}");
   expect(tmpl.render({ w: "12345678.45" })).eq("1234567");
@@ -271,8 +278,11 @@ test("float", () => {
 test("date", () => {
   let d = new Date();
   let ms = d.getTime();
-  let sd_utc = DateTime.format(d, { fmt: "yyyy-MM-dd HH:mm:ss", timezone: "Z" });
-  let sd = DateTime.format(d, { fmt: "yyyy-MM-dd HH:mm:ss"});
+  let sd_utc = DateTime.format(d, {
+    fmt: "yyyy-MM-dd HH:mm:ss",
+    timezone: "Z",
+  });
+  let sd = DateTime.format(d, { fmt: "yyyy-MM-dd HH:mm:ss" });
   expect(Tmpl.exec("${d<date>}", { d: ms })).eq(sd);
   expect(Tmpl.exec("${d<date:yyyy-MM-dd>}", { d: sd_utc })).eq(
     DateTime.format(d, { fmt: "yyyy-MM-dd" })

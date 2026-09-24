@@ -43,14 +43,15 @@ export const gen_by_str: MakeTiMatch<string> = function (src: string): TiMatch {
   }
 
   // Str Range
-  if (/^str([(\[])([^\]]+)([)\]])$/i.exec(s)) {
+  if (/^str([(\[])([^\]]+)([)\]])$/i.test(s)) {
     let str = s.substring(3).trim();
     return _W(gen_by_str_range(str));
   }
 
   // Range
-  if (/^([(\[])([^\]]+)([)\]])$/.exec(s)) {
-    if (/[^0-9, ]/.test(s)) {
+  let m = /^([(\[])([^\]]+)([)\]])$/.exec(s);
+  if (m) {
+    if (/[^0-9., ]/.test(m[2])) {
       return _W(gen_by_str_range(s));
     }
     return _W(gen_by_num_range(s));
