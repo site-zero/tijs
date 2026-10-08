@@ -296,6 +296,8 @@ export function getExchangeRateOfDate(
   if (!date) {
     return rateSet.last;
   }
+  // 确保 date 的格式是 YYYYMMDD
+  date = toExchangeRateDateStr(date);
   // 指定日期比最后日期还晚，也用最新汇率
   if (rateSet.lastDate && rateSet.last && date >= rateSet.lastDate) {
     return rateSet.last;
