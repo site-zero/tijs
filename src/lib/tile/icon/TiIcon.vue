@@ -18,7 +18,10 @@
   const TopClass = computed(() => {
     return CssUtils.mergeClassName(
       props.className,
-      `is-type-${Icon.value.type}`
+      `is-type-${Icon.value.type}`,
+      {
+        "can-hover": props.canHover,
+      }
     );
   });
   //-----------------------------------------------------
@@ -47,11 +50,8 @@
   const IconStyle = computed(() => getIconStyle(props, Icon));
   //-----------------------------------------------------
   function onClickTop() {
-    if (props.onClick) {
-      props.onClick(Icon.value);
-    } else {
-      emit("click", Icon.value);
-    }
+    let payload = props.vars || Icon.value;
+    emit("click", payload);
   }
   //-----------------------------------------------------
 </script>

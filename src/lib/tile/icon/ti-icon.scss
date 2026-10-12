@@ -5,6 +5,10 @@
   width: SZ(16);
   height: SZ(16);
 
+  &.can-hover {
+    cursor: pointer;
+  }
+
   &.as-font {
     font-size: SZ(16);
   }
