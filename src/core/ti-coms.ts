@@ -27,14 +27,28 @@ const debug = false;
  */
 const ALL_TI_COMS = new Map<string, TiCom>();
 
+// const sum = {
+//   ti: 0,  // 74
+//   wn: 0,  // 25
+//   other: 0,  // 182
+// }
+
 function _put_com_set(coms: TiComSet) {
   _.forEach(coms, (info, key) => {
     //console.log(Str.toComType(key))
     let comType = _.kebabCase(key);
     let com = new TiComImpl(info);
-    //console.log(key, info)
+    //console.log(key, info);
+    // if(/^Ti/.test(key)){
+    //   sum.ti++;
+    // }else if(/^Wn/.test(key)){
+    //   sum.wn++;
+    // }else{
+    //   sum.other++;
+    // }
     ALL_TI_COMS.set(comType, com);
   });
+  //console.log(sum);
 }
 
 _put_com_set(_com_set_action);
@@ -72,7 +86,7 @@ export function updateInstalledComponentsLangs(lang: string): void {
 
     I18n.putAll(_msgs);
   }
-};
+}
 
 export function installTiCoreI18n(lang: string, updateComponents = false) {
   let cn = zh_cn as MessageMap;

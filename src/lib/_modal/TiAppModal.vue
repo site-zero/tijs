@@ -1,6 +1,13 @@
 <script setup lang="ts">
   import _ from "lodash";
-  import { computed, onUnmounted, provide, ref } from "vue";
+  import {
+    computed,
+    defineProps,
+    onUnmounted,
+    provide,
+    ref,
+    withDefaults,
+  } from "vue";
   import {
     ActionBarItem,
     AppModalInitProps,
@@ -257,13 +264,29 @@
       // 这里需要延迟一下，因为要等待 TiForm 这样的控件的更新
       // TODO: 需要思考一下，可以等待，但是动画可以马上绘制
       //console.log("!!!_do_close_modal: withResult, delay 500ms to return value");
-      _.delay(() => {
-        _isdead.value = true;
-        props.returnValue(_result.value);
+      const __do_close = () => {
         _.delay(() => {
-          props.releaseDom();
-        }, 500);
-      }, 0);
+          _isdead.value = true;
+          props.returnValue(_result.value);
+          _.delay(() => {
+            props.releaseDom();
+          }, 500);
+        }, 0);
+      };
+
+      // 条件关闭
+      if (props.beforeClose) {
+        props.beforeClose(ModalApi.value).then((canClose) => {
+          if (!canClose) {
+            return;
+          }
+          __do_close();
+        });
+      }
+      // 无条件关闭
+      else {
+        __do_close();
+      }
     } else {
       _isdead.value = true;
       props.returnValue(undefined);

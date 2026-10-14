@@ -1327,6 +1327,13 @@ export type AppModalProps = CommonProps &
     watchDeep?: boolean;
     handleBlocks?: Record<string, AppModelActionHandler>;
     /**
+     * 如果用户带上结果关闭对话框，会触发此回调来检查关闭条件
+     * 
+     * @param api 对话框上下文接口
+     * @returns `true` 可以正常关闭模式框 `false` 阻止模式框关闭
+     */
+    beforeClose?:(api: AppModelApi)=> Promise<boolean>;
+    /**
      * 本回调在对话框资源准备完毕后调用，用来获取更多的延迟动态效果
      * 例如：动态设置焦点，动态设置滚动条位置，动态更新数据等
      * 本回调会传递一个 api 对象，用来操作模式框
