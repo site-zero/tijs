@@ -128,7 +128,6 @@
     if (props.type) {
       conf.className.push(`is-${props.type}`);
     }
-    conf.actionBar = props.actionBar;
     conf.actions = [
       {
         icon: "zmdi-close",
@@ -380,6 +379,7 @@
         <footer v-if="hasModalLeftActions || hasModalRightActions">
           <div class="at-left" v-if="hasModalLeftActions && props.actions">
             <TiActionBar
+              v-bind="props.actionBar"
               :items="props.actions"
               top-item-aspect-mode="button"
               @fire="onActionFire" />
