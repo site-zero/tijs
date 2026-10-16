@@ -42,7 +42,7 @@ function defineObjColumns(featureName: string) {
     editable: boolean = true,
     column: Partial<TableInputColumn> = {}
   ): TableInputColumn {
-    // if ("imd.en.refund_rsn_code" == uniqKey) {
+    // if ("payl.doc_amount::70" == uniqKey) {
     //   console.log(uniqKey, editable, column);
     // }
     let col_info = parseNameColumn(uniqKey);
@@ -57,12 +57,12 @@ function defineObjColumns(featureName: string) {
     let re = _.cloneDeep(_column);
     _.assign(
       re,
-      // 不能在这里就理解 comConf，应该在 TableCell 组件里，因为可以获得全部上下文
-      //_.omit(column, "comConf", "activatedComConf", "readonlyComConf"),
-      column,
       _.omitBy(col_info, (v, k) => {
         return /^_/.test(k) || _.isNil(v);
-      })
+      }),
+      // 不能在这里就理解 comConf，应该在 TableCell 组件里，因为可以获得全部上下文
+      //_.omit(column, "comConf", "activatedComConf", "readonlyComConf"),
+      column
     );
 
     // 默认字段
@@ -70,7 +70,6 @@ function defineObjColumns(featureName: string) {
       re.comType = re.readonlyComType || undefined;
       re.comConf = re.readonlyComConf;
     }
-    
 
     // 如果不是可编辑的，那么就需要去掉活动控件定义
     if (true === re.readonly || (_.isNil(re.readonly) && !editable)) {
