@@ -15,6 +15,7 @@
     suffixIconFor: "load-options",
     autoPrefixIcon: true,
     autoSelect: false,
+    useTextWhenFocus: true,
     lookup: () => ["=text", "=value"],
   });
   //-----------------------------------------------------
