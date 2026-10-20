@@ -17,6 +17,7 @@ import { TiInputMultiLinesInfo } from "./multi-lines/ti-input-multi-lines-index"
 import { TiInputNumRangeInfo } from "./num-range/ti-input-num-range-index";
 import { TiInputNumUnitInfo } from "./num-unit/ti-input-num-unit-index";
 import { TiInputNumInfo } from "./num/ti-input-num-index";
+import { TiInputPasswordInfo } from "./passwd/ti-input-password-index";
 import { TiInputPickerInfo } from "./picker/ti-input-picker-index";
 import { TiRadioListInfo } from "./radiolist/ti-radio-list-index";
 import { TiScoreInfo } from "./score/ti-score-index";
@@ -41,6 +42,7 @@ export default {
   TiInputIcon: TiInputIconInfo,
   TiInputLngLat: TiInputLngLatInfo,
   TiInputNum: TiInputNumInfo,
+  TiInputPassword: TiInputPasswordInfo,
   TiInputNumRange: TiInputNumRangeInfo,
   TiInputNumUnit: TiInputNumUnitInfo,
   TiInputPicker: TiInputPickerInfo,
@@ -73,6 +75,7 @@ export * from "./multi-lines/ti-input-multi-lines-index";
 export * from "./num-range/ti-input-num-range-index";
 export * from "./num-unit/ti-input-num-unit-index";
 export * from "./num/ti-input-num-index";
+export * from "./passwd/ti-input-password-index";
 export * from "./picker/ti-input-picker-index";
 export * from "./radiolist/ti-radio-list-index";
 export * from "./score/ti-score-index";

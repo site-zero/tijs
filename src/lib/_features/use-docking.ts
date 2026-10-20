@@ -30,8 +30,6 @@ export type DockingOptions = DockingProps & {
    * 指定停靠间距(px)，默认为 4
    */
   space?: number;
-
-  whenHide?: () => void;
 };
 
 /**

@@ -50,6 +50,7 @@ export const COM_TYPES = {
   InputLngLat: "TiInputLngLat",
   InputNum: "TiInputNum",
   InputNumUnit: "TiInputNumUnit",
+  InputPassword: "TiInputPassword",
   InputPicker: "TiInputPicker",
   InputText: "TiInputText",
   Score: "TiScore",
