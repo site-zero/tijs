@@ -1,6 +1,4 @@
 <script lang="ts" setup>
-  import _ from "lodash";
-  import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
   import {
     RoadblockProps,
     TiRoadblock,
@@ -9,6 +7,8 @@
     useGridLayout,
     useViewport,
   } from "@site0/tijs";
+  import _ from "lodash";
+  import { computed, onMounted, onUnmounted, provide, ref, watch } from "vue";
   import { FieldChange } from "../../../_type";
   import { CssUtils } from "../../../core";
   import GFItField from "./GFItField.vue";
@@ -17,8 +17,6 @@
   import {
     FIELD_STATUS_KEY,
     FormFieldItem,
-    FormItemGroup,
-    FormLabelItem,
     GridFieldsDomReadyInfo,
     GridFieldsEmitter,
     GridFieldsProps,
@@ -244,7 +242,7 @@
             <!------[:Field:]---------->
             <GFItField
               v-if="'field' == fld.race"
-              v-bind="fld as FormFieldItem"
+              v-bind="fld"
               :max-track-count="GridLayoutStyle.trackCount"
               :is-actived="fld.uniqKey == _actived_uniqKey"
               @name-change="emit('name-change', $event)"
@@ -254,7 +252,7 @@
             <!------[:Group:]---------->
             <GFItGroup
               v-else-if="'group' == fld.race"
-              v-bind="fld as FormItemGroup"
+              v-bind="fld"
               :max-track-count="GridLayoutStyle.trackCount"
               :actived-uniq-key="_actived_uniqKey"
               @name-change="emit('name-change', $event)"
@@ -263,7 +261,7 @@
             <!------[:Label:]---------->
             <GFItLabel
               v-else-if="'label' == fld.race"
-              v-bind="fld as FormLabelItem"
+              v-bind="fld"
               :max-track-count="GridLayoutStyle.trackCount" />
             <!------[!Invalid!]---------->
             <blockquote
