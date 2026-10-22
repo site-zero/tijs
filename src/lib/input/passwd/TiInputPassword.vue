@@ -78,6 +78,22 @@
 <template>
   <div class="ti-input-password" :class="TopClass" :style="TopStyle" ref="el">
     <form class="part-box">
+      <!-- 离屏隐藏username，专门安抚chrome自动填充检查，用户看不见 -->
+      <input
+        type="text"
+        autocomplete="username"
+        tabindex="-1"
+        style="
+          position: fixed;
+          width: 1px;
+          height: 1px;
+          padding: 0;
+          margin: -1px;
+          overflow: hidden;
+          clip: rect(0, 0, 0, 0);
+          white-space: nowrap;
+          border-width: 0;
+        " />
       <input
         ref="input"
         class="part-input"
