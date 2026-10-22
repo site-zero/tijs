@@ -63,5 +63,6 @@ const TiInputPasswordInfo: TiComInfo = {
   ],
 };
 
+export * from "./support";
 export * from "./ti-input-password-types";
 export { TiInputPassword, TiInputPasswordInfo };

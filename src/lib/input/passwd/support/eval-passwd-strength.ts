@@ -19,15 +19,25 @@ export type PasswdLevel = 1 | 2 | 3 | 4 | 5;
  * 3. 长度与类型的组合奖励
  *
  * @param input 待评估的密码字符串
+ * @param weakSize 密码被认为是弱密码的长度阈值，默认 `8`
  * @returns 密码强度等级 `1-5`，如果传入空值则返回 `0`
  */
-export function evalPasswdStrength(input?: string | null): number {
+export function evalPasswdStrength(
+  input?: string | null,
+  weakSize = 8
+): number {
   if (_.isNil(input) || !input) {
     return 0;
   }
 
   const len = input.length;
   let score = 0;
+  //-----------------------------------------------------
+  // 阈值长度
+  //-----------------------------------------------------
+  if (weakSize > 0) {
+    if (len < weakSize) return 1;
+  }
 
   //-----------------------------------------------------
   // 1. 长度评分 (0 - 3)

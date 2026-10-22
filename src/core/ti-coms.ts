@@ -28,9 +28,9 @@ const debug = false;
 const ALL_TI_COMS = new Map<string, TiCom>();
 
 // const sum = {
-//   ti: 0,  // 74
-//   wn: 0,  // 25
-//   other: 0,  // 182
+//   ti: 0,  // 75
+//   wn: 0,  // 26
+//   other: 0,  // 186
 // }
 
 function _put_com_set(coms: TiComSet) {
@@ -38,7 +38,7 @@ function _put_com_set(coms: TiComSet) {
     //console.log(Str.toComType(key))
     let comType = _.kebabCase(key);
     let com = new TiComImpl(info);
-    //console.log(key, info);
+    // console.log(key, info);
     // if(/^Ti/.test(key)){
     //   sum.ti++;
     // }else if(/^Wn/.test(key)){
@@ -48,7 +48,7 @@ function _put_com_set(coms: TiComSet) {
     // }
     ALL_TI_COMS.set(comType, com);
   });
-  //console.log(sum);
+  // console.log(sum);
 }
 
 _put_com_set(_com_set_action);

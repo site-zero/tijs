@@ -18,6 +18,7 @@
     showIndicator: true,
     allowToggleVisible: true,
     autoSelect: true,
+    weakSize: 8,
   });
   //-----------------------------------------------------
   const api = useTiInputPasswordApi(props, {
@@ -76,7 +77,7 @@
 </script>
 <template>
   <div class="ti-input-password" :class="TopClass" :style="TopStyle" ref="el">
-    <div class="part-box">
+    <form class="part-box">
       <input
         ref="input"
         class="part-input"
@@ -102,7 +103,7 @@
             api.isRevealed.value ? 'zmdi zmdi-eye-off' : 'zmdi zmdi-eye'
           "></i>
       </button>
-    </div>
+    </form>
     <div
       v-if="props.showIndicator"
       class="part-indicator"

@@ -43,7 +43,7 @@ export function useTiInputPasswordApi(
    * - `5` : 密码很强
    */
   const PasswdLevel = computed((): number => {
-    return evalPasswdStrength(props.value);
+    return evalPasswdStrength(props.value, props.weakSize);
   });
   //-----------------------------------------------------
   const isRevealed = computed(() => _revealed.value);

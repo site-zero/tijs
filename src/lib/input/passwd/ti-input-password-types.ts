@@ -42,5 +42,11 @@ export type InputPasswordProps = CommonProps &
     /**
      * 聚焦后是否自动选择内容
      */
-    autoSelect?:boolean;
+    autoSelect?: boolean;
+
+    /**
+     * 密码强度的弱等级阈值，小于这个长度的都被认为是 `level 1`
+     * 默认 `8`
+     */
+    weakSize?: number;
   };
