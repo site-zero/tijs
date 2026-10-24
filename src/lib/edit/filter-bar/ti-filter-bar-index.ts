@@ -38,4 +38,5 @@ const TiFilterBarInfo: TiComInfo = {
 };
 
 export * from "./ti-filter-bar-types";
+export * from "./use-form-major";
 export { TiFilterBar, TiFilterBarInfo };

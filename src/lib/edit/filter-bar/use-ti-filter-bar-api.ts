@@ -64,7 +64,8 @@ export function useTiFilterBarApi(
   const ActionBarConfig = computed((): ActionBarProps | undefined => {
     let re = _.cloneDeep(props.actions) ?? {};
     _.defaults(re, {
-      itemAlign: "right",
+      itemAlign: "left",
+      style: { padding: 0 },
       barItemSet: dft_flt_bar_action_items(),
     } as Partial<ActionBarProps>);
     // 用户确定不要显示动作条

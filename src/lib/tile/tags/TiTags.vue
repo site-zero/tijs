@@ -49,7 +49,7 @@
   const hasTagItems = computed(() => tagItems.value.length > 0);
   //-----------------------------------------------------
   const TopClass = computed(() =>
-    CssUtils.mergeClassName({
+    CssUtils.mergeClassName(props.className, {
       "is-readonly": !props.editable,
       "is-editable": props.editable,
       "is-empty": !hasTagItems.value,

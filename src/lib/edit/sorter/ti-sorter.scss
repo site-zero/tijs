@@ -2,7 +2,7 @@
 
 .ti-sorter {
   @include flex-align-nowrap($ai: center);
-  padding: var(--ti-gap-s);
+  padding: 0 var(--ti-gap-s);
   > .part-items {
     @include flex-align($ai: center, $ac: center);
     > .ti-label {

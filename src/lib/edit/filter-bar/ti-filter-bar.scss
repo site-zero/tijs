@@ -5,34 +5,50 @@
   gap: var(--ti-gap-s);
   padding: var(--ti-gap-s) var(--ti-gap-m);
   //-----------------------------------------------------
-  > .part-head {
+  &.major-only > .part-major {
+    flex: 1 1 auto;
+  }
+  //-----------------------------------------------------
+  .part-head {
     @include flex-align-nowrap;
     gap: var(--ti-gap-s);
   }
   //-----------------------------------------------------
-  > .part-tail {
+  .part-tail {
     @include flex-align-nowrap;
   }
   //-----------------------------------------------------
-  > .part-major {
+  .part-major {
     @include flex-align-nowrap;
     gap: 2px;
     padding: var(--ti-gap-s);
-    > .ti-grid-fields-item  {
+    > .ti-grid-fields-item {
       &:last-child {
         flex: 1 1 auto;
       }
     }
   }
   //-----------------------------------------------------
-  > .part-body {
+  .part-tags {
     flex: 1 1 auto;
   }
   //-----------------------------------------------------
-  &.major-only {
-    > .part-major {
-      flex: 1 1 auto;
-    }
+  .part-menu {
+    flex: 0 0 auto;
   }
   //-----------------------------------------------------
+  // 指定布局: menu-at-top
+  //-----------------------------------------------------
+  &[display-mode="menu-at-top"] {
+    @include flex-align-v-nowrap;
+    gap: 0;
+    //---------------------------------------------------
+    > .flt-bar-row {
+      @include flex-align-nowrap;
+    }
+    .part-menu {
+      flex: 1 1 auto;
+    }
+    //---------------------------------------------------
+  }
 }

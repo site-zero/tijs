@@ -15,6 +15,7 @@
   const emit = defineEmits<FilterBarEmitter>();
   const props = withDefaults(defineProps<FilterBarProps>(), {
     majorTitleAsPlaceholder: true,
+    displayMode: "bar",
   });
   const api = useTiFilterBarApi(props, emit);
   //-----------------------------------------------------
@@ -22,6 +23,20 @@
   // 说不定以后也用得到
   const _field_status = computed(() => new Map<string, FieldStatusInfo>());
   provide(FIELD_STATUS_KEY, _field_status);
+  //-----------------------------------------------------
+  const TagsConfig = computed(() => {
+    return {
+      className: "part-tags",
+      editable: true,
+      nowrap: true,
+      ...props.tags,
+      placeholder: props.placeholder,
+      value: api.FilterTagValue.value,
+      onChange: api.onTagsChange,
+      onClick: api.openFilterEditor,
+      onFire: api.onActionFire,
+    };
+  });
   //-----------------------------------------------------
   const TopClass = computed(() => {
     return CssUtils.mergeClassName({}, props.className, {
@@ -35,53 +50,92 @@
   //-----------------------------------------------------
 </script>
 <template>
-  <div class="ti-filter-bar" :class="TopClass" :style="TopStyle">
-    <!-------头槽--------->
-    <slot name="head">
-      <TiTextSnippet
-        v-if="props.head"
-        className="part-head"
-        v-bind="props.head" />
-    </slot>
-    <!-------常驻字段------>
-    <div v-if="api.hasMajorFields.value" class="part-major">
-      <template v-for="fld in api.MajorFields.value">
-        <GFItField
-          v-bind="fld"
-          :data="props.value ?? {}"
-          :titleAsPlaceholder="props.majorTitleAsPlaceholder"
-          @value-change="api.onMajorFieldChange" />
-      </template>
-    </div>
-    <!-------主体--------->
-    <template v-if="!props.majorOnly">
-      <TiTags
-        class="part-body"
-        :editable="true"
-        :actions="api.ActionBarConfig.value"
-        :nowrap="true"
-        v-bind="props.tags"
-        :placeholder="props.placeholder"
-        :value="api.FilterTagValue.value"
-        @change="api.onTagsChange"
-        @click="api.openFilterEditor()"
-        @fire="api.onActionFire" />
+  <div
+    class="ti-filter-bar"
+    :class="TopClass"
+    :style="TopStyle"
+    :display-mode="props.displayMode">
+    <!--
+    布局: menu-at-top
+    -->
+    <template v-if="'menu-at-top' == props.displayMode">
+      <div class="flt-bar-row at-1">
+        <!-------头槽--------->
+        <slot name="head">
+          <TiTextSnippet
+            v-if="props.head"
+            className="part-head"
+            v-bind="props.head" />
+        </slot>
+        <div class="part-menu">
+          <TiActionBar v-bind="api.ActionBarConfig.value" />
+        </div>
+        <!-------尾槽--------->
+        <slot name="tail">
+          <TiTextSnippet
+            v-if="props.tail"
+            className="part-tail"
+            v-bind="props.tail" />
+        </slot>
+      </div>
+      <div class="flt-bar-row at-2">
+        <!-------常驻字段------>
+        <div v-if="api.hasMajorFields.value" class="part-major">
+          <template v-for="fld in api.MajorFields.value">
+            <GFItField
+              v-bind="fld"
+              :data="props.value ?? {}"
+              :titleAsPlaceholder="props.majorTitleAsPlaceholder"
+              @value-change="api.onMajorFieldChange" />
+          </template>
+        </div>
+        <!-------主体--------->
+        <template v-if="!props.majorOnly">
+          <TiTags v-bind="TagsConfig" />
+        </template>
+      </div>
     </template>
+    <!--
+    默认布局:bar
+    -->
     <template v-else>
-      <TiActionBar v-bind="api.ActionBarConfig.value" />
-    </template>
-    <!-- <div class="part-menu">
+      <!-------头槽--------->
+      <slot name="head">
+        <TiTextSnippet
+          v-if="props.head"
+          className="part-head"
+          v-bind="props.head" />
+      </slot>
+      <!-------常驻字段------>
+      <div v-if="api.hasMajorFields.value" class="part-major">
+        <template v-for="fld in api.MajorFields.value">
+          <GFItField
+            v-bind="fld"
+            :data="props.value ?? {}"
+            :titleAsPlaceholder="props.majorTitleAsPlaceholder"
+            @value-change="api.onMajorFieldChange" />
+        </template>
+      </div>
+      <!-------主体--------->
+      <template v-if="!props.majorOnly">
+        <TiTags v-bind="TagsConfig" />
+      </template>
+      <div class="part-menu">
+        <TiActionBar v-bind="api.ActionBarConfig.value" />
+      </div>
+      <!-- <div class="part-menu">
       <TiActionBar v-bind="api.ActionBarConfig.value" />
     </div> -->
-    <!-------尾槽--------->
-    <slot name="tail">
-      <TiTextSnippet
-        v-if="props.tail"
-        className="part-tail"
-        v-bind="props.tail" />
-    </slot>
+      <!-------尾槽--------->
+      <slot name="tail">
+        <TiTextSnippet
+          v-if="props.tail"
+          className="part-tail"
+          v-bind="props.tail" />
+      </slot>
+    </template>
   </div>
 </template>
-<style lang="scss">
+<style lang="scss" scoped>
   @use "./ti-filter-bar.scss";
 </style>
