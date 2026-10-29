@@ -11,7 +11,7 @@ status: draft
 `Tmpl` 是 `src/core/tmpl/ti-tmpl.ts` 导出的轻量模板引擎命名空间，负责把一段带占位符的模板字符串
 **解析成一棵段树**，再按上下文变量渲染成字符串。它是 `Str.renderTmpl` 的底层实现：
 
-```
+```text
 Str.renderTmpl(tmpl, vars)  ──委托──▶  Tmpl.exec(tmpl, vars)
 ```
 

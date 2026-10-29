@@ -31,11 +31,14 @@ status: draft
 - **实现新组件前**：读概念篇的共享 Props、事件绑定、字典模型，再对照
   [`101.dev/`](101.dev/README.md) 的开发规范与组件范本。
 
-## 当前进度
+## 篇目覆盖
 
-- 入门篇：`00.start-here/` 2 篇已完成。
-- 概念机制篇：`10.concepts/` 7 篇（README + 六篇机制）已完成。
-- 工具篇：`20.core-utils/` 16 个命名空间已完成。
-- 组件篇：`30.components/` 72 篇已完成；`TiFilter`、`TiComboFilter`、`TiFilterBar` 弃用不收录。
-- Feature 篇：`40.features/` 48 篇已完成，按 value / options / shared / interaction / field / range / validate 分组。
-- 开发规范篇：`101.dev/` 6 篇已完成。
+- 入门篇：`00.start-here/` 2 篇已建齐。
+- 概念机制篇：`10.concepts/` 7 篇（README + 六篇机制）已建齐。
+- 工具篇：`20.core-utils/` 16 个命名空间已建齐。
+- 组件篇：`30.components/` 72 篇已建齐；`TiFilter`、`TiComboFilter`、`TiFilterBar` 弃用不收录。
+- Feature 篇：`40.features/` 48 篇已建齐（含 hook 与模块概述），按 value / options / shared / interaction / field / range / validate 分组。
+- 开发规范篇：`101.dev/` 6 篇已建齐。
+
+> 「已建齐」表示篇目覆盖完整，不等同于逐篇源码复核完成；各篇 front-matter 的
+> `status: draft | done | deprecated` 才表示具体核对状态。

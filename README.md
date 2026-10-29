@@ -121,7 +121,7 @@ tijs/
 |   |-- i18n/                 # 核心语言包：zh-cn / en-us
 |   `-- test/                 # Vitest 单元测试，目前覆盖 core 工具层
 |
-|-- doc/                      # 项目文档体系：reference 参考手册已完成，其余分区见下一节
+|-- doc/                      # 项目文档体系：参考手册篇目已建齐，其余分区见下一节
 |-- fragment/                 # 可复用代码片段（组件用法、core 调用范例）
 |-- prompt/                   # 缓存提示词
 |-- index.d.ts                # 包类型入口：export * from "./src"
@@ -136,15 +136,16 @@ tijs/
 
 ## 文档与 AI 协作
 
-- **参考手册**：[`doc/reference/`](./doc/reference/README.md)，按入门、概念、core 工具、组件、特性钩子、开发规范分模块组织，附全量索引 [`INDEX.md`](./doc/reference/INDEX.md) 与源码映射 [`SOURCEMAP.md`](./doc/reference/SOURCEMAP.md)。
+- **文档入口**：[`doc/README.md`](./doc/README.md)，说明内容分区与文档站导航；站点生成配置见 [`doc/www-gen-site.json5`](./doc/www-gen-site.json5)。
+- **参考手册**：[`doc/reference/`](./doc/reference/README.md)，按入门、概念、core 工具、组件、特性钩子、开发规范分模块组织，附全量索引 [`INDEX.md`](./doc/reference/INDEX.md) 与源码映射 [`SOURCEMAP.md`](./doc/reference/SOURCEMAP.md)。篇目已建齐，front-matter 中的 `status` 表示逐篇核对状态。
 - **写作规范**：[`doc/skill/write-tijs-doc.skill.md`](./doc/skill/write-tijs-doc.skill.md)，约束参考手册的结构、参数分组与索引格式。
 - **AI 入口**：[`AGENT.md`](./AGENT.md)，给 Agent 的最少 token 阅读路线、源码地图与契约速览。
-- **技能文档**：`doc/skill/`，后续沉淀"如何新增组件 / 写测试 / 排错"等可复用套路。
+- **技能文档**：`doc/skill/`，后续沉淀“如何新增组件 / 写测试 / 排错”等可复用套路，不发布到文档站。
 - **工作笔记**：`doc/note/`，通读源码后的非正式记录，可能过时，不对外发布。
 
 ## 注意事项
 
-- 文档与源码不一致时，**以源码为准**；修改 `src/` 中已 documented 的行为需同步更新对应文档。
+- 文档与源码不一致时，**以源码为准**；修改 `src/` 中已有文档记录的行为需同步更新对应文档。
 - 以下组件在 `src/lib/lib-com-types.ts` 中已标注待删除，新代码不要使用：
   `TiFilter`、`TiComboFilter`、`TiFilterBar`。
 - `.gitignore` 忽略的目录与产物（`dist/`、`node_modules/`、日志等）一律不用阅读。

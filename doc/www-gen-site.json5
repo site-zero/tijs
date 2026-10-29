@@ -1,0 +1,35 @@
+{
+  // TiJS 文档站点配置（www-gen-site）
+  // 用法：www-gen-site "D:\workspace\git\github\site-zero\tijs\doc"
+  site: {
+    title: "TiJS 文档",
+    description: "TiJS 项目文档：快速上手、核心概念、工具 API、Vue 组件、特性钩子与开发规范",
+    keywords: ["TiJS", "Vue 3", "TypeScript", "组件库", "文档"],
+    lang: "zh-CN",
+    baseUrl: "/",
+    favicon: "favicon.svg",
+  },
+
+  templates: {
+    // dir: null,        // 模板主目录，null = 工具内置 templates/
+    theme: "nice",       // 主题 = 模板主目录下的子目录名
+  },
+
+  build: {
+    outputDir: "../dist/tijs-www",    // → <tijs>/dist/tijs-www
+    // cacheDir: null,                // 默认 <outputDir>/.www-gen-site-cache
+    urlStyle: "flat",                 // 文档页输出为 xxx.html
+    autoIndex: true,                  // 无 README 的目录自动生成索引页（列子页面）
+    stripOrderPrefix: false,          // 保留 00. 01- 这类前缀在 URL 中
+    excludeGlobs: [
+      "_old/**",                      // 归档目录不参与站点生成
+      "note/**",                      // 非正式笔记不参与站点生成
+      "skill/**",                     // Agent 写作流程不参与站点生成
+    ],
+  },
+
+  markdown: {
+    gfm: true,
+    highlight: true,
+  },
+}

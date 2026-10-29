@@ -21,31 +21,35 @@
 
 ## 最少 token 阅读顺序
 
-1. [`doc/reference/INDEX.md`](doc/reference/INDEX.md) —— 全量文档索引，按主题或关键词
+1. [`doc/README.md`](doc/README.md) —— 文档站首页，先弄清正式手册与内部写作流程的边界。
+2. [`doc/reference/INDEX.md`](doc/reference/INDEX.md) —— 全量文档索引，按主题或关键词
    检索，直达对应篇目。
-2. [`doc/reference/10.concepts/README.md`](doc/reference/10.concepts/README.md) 及其六篇
+3. [`doc/reference/10.concepts/README.md`](doc/reference/10.concepts/README.md) 及其六篇
    机制 —— 全库共同地基，先读这一部分再看组件或工具。
-3. [`doc/reference/SOURCEMAP.md`](doc/reference/SOURCEMAP.md) —— 拿到源码文件 / 类名时，
+4. [`doc/reference/SOURCEMAP.md`](doc/reference/SOURCEMAP.md) —— 拿到源码文件 / 类名时，
    反查对应文档；反之从文档回到源码入口。
-4. 动手改代码前，先看 [`doc/reference/101.dev/`](doc/reference/101.dev/README.md) 对应
+5. 动手改代码前，先看 [`doc/reference/101.dev/`](doc/reference/101.dev/README.md) 对应
    篇目；**写文档前必读** [`doc/skill/write-tijs-doc.skill.md`](doc/skill/write-tijs-doc.skill.md)。
-5. 查具体内容：组件 → `doc/reference/30.components/<类>/`；hook → `doc/reference/40.features/`；
+6. 查具体内容：组件 → `doc/reference/30.components/<类>/`；hook → `doc/reference/40.features/`；
    工具 API → `doc/reference/20.core-utils/`。
 
 ## 文档体系（doc/ 与根目录）
 
 ```text
 doc/
-├── reference/   # 正式参考手册（已完成）：入门 / 概念 / core 工具 / 组件 / feature hook / 开发规范
-├── skill/       # 技能套路；当前仅有 write-tijs-doc.skill.md（写作规范），其余套路规划中
-└── note/        # 工作过程笔记（尚未建立，非正式、可能过时）
-fragment/        # 根目录，可复用代码片段（待补）
-prompt/          # 根目录，提示词缓存
+├── README.md             # 文档站首页与内容分区说明
+├── www-gen-site.json5    # 静态文档站生成配置
+├── reference/            # 正式参考手册（篇目已建齐，持续核对）
+├── skill/                # Agent 技能套路，不发布到文档站
+└── note/                 # 工作过程笔记（尚未建立，非正式、可能过时，不发布）
+fragment/                 # 根目录，可复用代码片段（待补）
+prompt/                   # 根目录，提示词缓存
 ```
 
 - 根 [`README.md`](./README.md) 面向人类使用者；本篇 `AGENT.md` 面向 Agent。
-- 文档与源码冲突时，**以源码为准**；修改了已 documented 的行为，必须同步更新对应文档。
-- 新增篇目后要同步三处：`INDEX.md`、`SOURCEMAP.md`、所属分区 README；格式要求见写作规范。
+- 文档与源码冲突时，**以源码为准**；修改已有文档记录的行为，必须同步更新对应文档。
+- 新增、删除篇目或改变标题、归属、源码入口时，按需同步 `INDEX.md`、`SOURCEMAP.md`、
+  所属分区 README；格式要求见写作规范。
 
 ## 源码布局
 
