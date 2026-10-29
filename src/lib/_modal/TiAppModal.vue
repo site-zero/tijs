@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import _ from "lodash";
-  import { computed, onUnmounted, provide, ref, withDefaults } from "vue";
+  import { computed, onUnmounted, provide, ref } from "vue";
   import {
     ActionBarItem,
     AppModalInitProps,
