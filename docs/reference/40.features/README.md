@@ -8,7 +8,7 @@ status: draft
 
 `src/lib/_features/` 下可复用的 composable 特性，**每个 hook 单独一篇**，按主题分子目录。
 共享 Props 与 hook 的对应关系见 [`../10.concepts/02-common-props.md`](../10.concepts/02-common-props.md)；
-Hook 写作模板见 `doc/skill/write-tijs-doc.skill.md` 第 4.4 节。
+Hook 写作模板见 `docs/skill/write-tijs-doc.skill.md` 第 4.4 节。
 
 ## value · 值输入与处理
 

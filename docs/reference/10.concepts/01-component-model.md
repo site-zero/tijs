@@ -145,6 +145,6 @@ installTiComponents(app);
 
 ## 延伸阅读
 
-- 组件目录内各文件分别提供什么素材：写作规范 `doc/skill/write-tijs-doc.skill.md` 第 5 节。
+- 组件目录内各文件分别提供什么素材：写作规范 `docs/skill/write-tijs-doc.skill.md` 第 5 节。
 - 事件如何回写到演示配置：[事件绑定](03-event-binding.md)。
 - 组件局部语言包如何并入全局词典：[国际化 i18n](04-i18n.md)。

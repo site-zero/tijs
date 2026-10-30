@@ -18,7 +18,7 @@ tijs/
 ├── package.json            # scripts / main / module / exports / files
 ├── vite.config.ts          # 库模式构建 + vitest 配置
 ├── tsconfig.json
-├── doc/                    # 文档体系（reference / skill / note）
+├── docs/                    # 文档体系（reference / skill / note）
 └── src/
     ├── index.ts            # 源码总出口：re-export _type / core / lib，附带 en_us / zh_cn
     ├── style.scss
@@ -53,7 +53,7 @@ tijs/
   每类一份 `all-*.ts` 注册表，见下表。
 - **`src/i18n/`**：核心包语言包；组件局部文案在各自组件目录内维护（见下）。
 - **`src/test/`**：Vitest 工程，详见 [测试约定](03-testing.md)。
-- **`doc/`**：文档体系；`doc/reference/` 是本手册，`doc/skill/` 是写作与开发技能文档。
+- **`docs/`**：文档体系；`docs/reference/` 是本手册，`docs/skill/` 是写作与开发技能文档。
 
 ## 六个类注册表
 

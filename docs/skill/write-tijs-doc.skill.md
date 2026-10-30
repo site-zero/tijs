@@ -1,8 +1,8 @@
 # 编写 TiJS 文档（write-tijs-doc）
 
-> 任务：在 `doc/reference/` 下新增或修订 TiJS 文档；以及判断一篇内容该写到哪里。
+> 任务：在 `docs/reference/` 下新增或修订 TiJS 文档；以及判断一篇内容该写到哪里。
 > 先按「第 0 步」判断类型与归属，再选对应模板写作；写完按第 8 节做同步检查。
-> 本规范只约束 `doc/` 体系；组件源码旁的 `types/api/example` 不在此列。
+> 本规范只约束 `docs/` 体系；组件源码旁的 `types/api/example` 不在此列。
 
 ---
 
@@ -12,13 +12,13 @@
 
 | 你要讲的内容 | 落到哪里 |
 | --- | --- |
-| 某个机制为什么存在、怎么运转（组件模型、i18n、样式、字典模型…） | `doc/reference/10.concepts/` |
-| 某个 core 命名空间提供哪些 API、怎么调用 | `doc/reference/20.core-utils/` |
-| 某个组件怎么用：Props、Events、示例 | `doc/reference/30.components/<类>/<组件>.md` |
-| 某个 composable hook 的机制与用法 | `doc/reference/40.features/` |
-| 本仓库的固定工程流程（新增组件、写测试、发布） | `doc/reference/101.dev/` |
-| 面向 Agent 的可复用执行套路（素材抽取、批量核对、写作流程） | `doc/skill/` |
-| 通读源码过程中的阶段性认识、踩坑、待办 | `doc/note/`（不发布站点，可能过时） |
+| 某个机制为什么存在、怎么运转（组件模型、i18n、样式、字典模型…） | `docs/reference/10.concepts/` |
+| 某个 core 命名空间提供哪些 API、怎么调用 | `docs/reference/20.core-utils/` |
+| 某个组件怎么用：Props、Events、示例 | `docs/reference/30.components/<类>/<组件>.md` |
+| 某个 composable hook 的机制与用法 | `docs/reference/40.features/` |
+| 本仓库的固定工程流程（新增组件、写测试、发布） | `docs/reference/101.dev/` |
+| 面向 Agent 的可复用执行套路（素材抽取、批量核对、写作流程） | `docs/skill/` |
+| 通读源码过程中的阶段性认识、踩坑、待办 | `docs/note/`（不发布站点，可能过时） |
 
 **边界**：`00.start-here/` 与 `101.dev/` 可以写必要的操作步骤；概念、工具、组件与
 hook 篇以机制和用法为主。技能文档面向 Agent 记录执行套路，不重复展开机制原理，
@@ -28,7 +28,7 @@ hook 篇以机制和用法为主。技能文档面向 Agent 记录执行套路�
 
 ## 1. 目录归属速查
 
-`doc/reference/` 的分区与收录范围（骨架见根 `README.md`）：
+`docs/reference/` 的分区与收录范围（骨架见根 `README.md`）：
 
 - `00.start-here/` —— 新读者入门：是什么、安装引导、跑通第一个组件。
 - `10.concepts/` —— 全库共同地基：`TiComInfo`/`TiComRace` 组件模型、共享 Props、事件绑定、
@@ -39,7 +39,7 @@ hook 篇以机制和用法为主。技能文档面向 Agent 记录执行套路�
 - `40.features/` —— `src/lib/_features/` 每个 hook 一篇，按主题分子目录归档。
 - `101.dev/` —— 源码布局、新增组件流程、测试、构建发布、代码规范。
 
-新增主题时优先挂进已有分区；确需新分区，先在 `doc/reference/README.md` 讨论确认，不要私自新建顶层目录。
+新增主题时优先挂进已有分区；确需新分区，先在 `docs/reference/README.md` 讨论确认，不要私自新建顶层目录。
 
 ---
 
@@ -61,7 +61,7 @@ hook 篇以机制和用法为主。技能文档面向 Agent 记录执行套路�
 
 ## 3. front-matter 规范
 
-`doc/reference/` 下每一篇都必须带 YAML front-matter，只保留检索需要的三个字段；
+`docs/reference/` 下每一篇都必须带 YAML front-matter，只保留检索需要的三个字段；
 源码路径、模块归属、相关文档一律写进正文末尾的「延伸阅读」，不进 front-matter。
 
 缺 front-matter 的篇目视为未完成。
@@ -346,12 +346,12 @@ status: draft
 新增、删除篇目，或修订导致标题、归属、源码入口变化时，按需处理第 1～3 项；
 只修改正文措辞或示例且索引信息不变时，不必机械修改索引：
 
-1. `doc/reference/INDEX.md`：在对应分区增删或更新一行
+1. `docs/reference/INDEX.md`：在对应分区增删或更新一行
    `- [标题](相对路径.md)：一句话说明这篇写什么。`
    链接文字用可读标题，不写裸路径；抽象名称（如「组件模型」「字典模型」）后面必须补一句
    短句，让不熟悉主题的读者知道本篇覆盖什么；检索词留在正文 front-matter 的 `keywords`，
    不堆在索引行里。
-2. `doc/reference/SOURCEMAP.md`：按本篇「延伸阅读 · 源码入口」增删或更新
+2. `docs/reference/SOURCEMAP.md`：按本篇「延伸阅读 · 源码入口」增删或更新
    「源码路径 ↔ 文档」。
 3. 所属分区的 `README.md` 索引：新增、删除或改名时同步计数、列表与相对链接。
 4. 自检死链：本篇链接到的文档存在，正文中没有残留旧文档链接。
@@ -364,7 +364,7 @@ status: draft
 ## 9. 禁止事项
 
 - 不臆造 Props、事件、默认值与示例；源码里读不到的，标「待补充」而不是编造。
-- 不照搬 `doc/_old/`、历史草稿或网络旧文档（本仓库目前没有旧草稿，未来归档后同样禁止照抄）。
+- 不照搬 `docs/_old/`、历史草稿或网络旧文档（本仓库目前没有旧草稿，未来归档后同样禁止照抄）。
 - 不在概念篇罗列 API 清单；不在组件篇复制共享 Props 清单；不在工具篇讲组件用法。
 - 不为 `deprecated` 组件写新增使用教程，只标注状态与替代项。
 - 清单数字不手抄；组件数、hook 数、导出函数数都以当前源码扫描结果为准。
@@ -373,7 +373,7 @@ status: draft
 
 ## 10. 范本清单（已建成样例，批量写作时对齐口径）
 
-- 概念篇范本：`doc/reference/10.concepts/01-component-model.md`
-- 工具篇范本：`doc/reference/20.core-utils/10-str.md`
-- 组件篇范本：`doc/reference/30.components/action/ti-button.md`
-- Hook 篇范本：`doc/reference/40.features/value/use-value-input.md`
+- 概念篇范本：`docs/reference/10.concepts/01-component-model.md`
+- 工具篇范本：`docs/reference/20.core-utils/10-str.md`
+- 组件篇范本：`docs/reference/30.components/action/ti-button.md`
+- Hook 篇范本：`docs/reference/40.features/value/use-value-input.md`

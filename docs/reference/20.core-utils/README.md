@@ -43,4 +43,4 @@ status: draft
 ## 延伸阅读
 
 - 源码出口：`src/core/ti-exports.ts`
-- 写作模板：`doc/skill/write-tijs-doc.skill.md` 第 4.2 节
+- 写作模板：`docs/skill/write-tijs-doc.skill.md` 第 4.2 节

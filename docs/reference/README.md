@@ -7,7 +7,7 @@ status: draft
 # TiJS 参考手册
 
 > 面向二次开发者与 AI Agent 的 TiJS 机制、工具、组件与 feature 手册。
-> 写作规范见 `doc/skill/write-tijs-doc.skill.md`；总索引见 [`INDEX.md`](INDEX.md)，
+> 写作规范见 `docs/skill/write-tijs-doc.skill.md`；总索引见 [`INDEX.md`](INDEX.md)，
 > 源码 ↔ 文档对照见 [`SOURCEMAP.md`](SOURCEMAP.md)。
 
 ## 分区导航

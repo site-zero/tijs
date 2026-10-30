@@ -70,7 +70,7 @@ app.mount("#app");
 ```
 
 组件在模板中的直接用法、各组件 Props/事件说明，见
-[参考手册 · 组件篇](./doc/reference/30.components/README.md)；
+[参考手册 · 组件篇](./docs/reference/30.components/README.md)；
 可交互演示：本地运行 [ti-demo](https://github.com/site-zero/ti-demo) 工程，按路由
 `/:comType?/:example?` 浏览每个组件的内置示例。
 
@@ -121,7 +121,7 @@ tijs/
 |   |-- i18n/                 # 核心语言包：zh-cn / en-us
 |   `-- test/                 # Vitest 单元测试，目前覆盖 core 工具层
 |
-|-- doc/                      # 项目文档体系：参考手册篇目已建齐，其余分区见下一节
+|-- docs/                      # 项目文档体系：参考手册篇目已建齐，其余分区见下一节
 |-- fragment/                 # 可复用代码片段（组件用法、core 调用范例）
 |-- prompt/                   # 缓存提示词
 |-- index.d.ts                # 包类型入口：export * from "./src"
@@ -136,12 +136,12 @@ tijs/
 
 ## 文档与 AI 协作
 
-- **文档入口**：[`doc/README.md`](./doc/README.md)，说明内容分区与文档站导航；站点生成配置见 [`doc/www-gen-site.json5`](./doc/www-gen-site.json5)。
-- **参考手册**：[`doc/reference/`](./doc/reference/README.md)，按入门、概念、core 工具、组件、特性钩子、开发规范分模块组织，附全量索引 [`INDEX.md`](./doc/reference/INDEX.md) 与源码映射 [`SOURCEMAP.md`](./doc/reference/SOURCEMAP.md)。篇目已建齐，front-matter 中的 `status` 表示逐篇核对状态。
-- **写作规范**：[`doc/skill/write-tijs-doc.skill.md`](./doc/skill/write-tijs-doc.skill.md)，约束参考手册的结构、参数分组与索引格式。
-- **AI 入口**：[`AGENT.md`](./AGENT.md)，给 Agent 的最少 token 阅读路线、源码地图与契约速览。
-- **技能文档**：`doc/skill/`，后续沉淀“如何新增组件 / 写测试 / 排错”等可复用套路，不发布到文档站。
-- **工作笔记**：`doc/note/`，通读源码后的非正式记录，可能过时，不对外发布。
+- **文档入口**：[`docs/README.md`](./docs/README.md)，说明内容分区与文档站导航；站点生成配置见 [`docs/www-gen-site.json5`](./docs/www-gen-site.json5)。
+- **参考手册**：[`docs/reference/`](./docs/reference/README.md)，按入门、概念、core 工具、组件、特性钩子、开发规范分模块组织，附全量索引 [`INDEX.md`](./docs/reference/INDEX.md) 与源码映射 [`SOURCEMAP.md`](./docs/reference/SOURCEMAP.md)。篇目已建齐，front-matter 中的 `status` 表示逐篇核对状态。
+- **写作规范**：[`docs/skill/write-tijs-doc.skill.md`](./docs/skill/write-tijs-doc.skill.md)，约束参考手册的结构、参数分组与索引格式。
+- **AI 入口**：[`AGENTS.md`](./AGENTS.md)，给 Agent 的最少 token 阅读路线、源码地图与契约速览。
+- **技能文档**：`docs/skill/`，后续沉淀“如何新增组件 / 写测试 / 排错”等可复用套路，不发布到文档站。
+- **工作笔记**：`docs/note/`，通读源码后的非正式记录，可能过时，不对外发布。
 
 ## 注意事项
 

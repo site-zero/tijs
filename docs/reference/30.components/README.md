@@ -175,4 +175,4 @@ status: draft
 ## 延伸阅读
 
 - 组件注册表机制：[`../10.concepts/01-component-model.md`](../10.concepts/01-component-model.md)
-- 组件素材抽取约定：`doc/skill/write-tijs-doc.skill.md` 第 5 节
+- 组件素材抽取约定：`docs/skill/write-tijs-doc.skill.md` 第 5 节

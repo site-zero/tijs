@@ -164,4 +164,4 @@ status: draft
 
 - 事件适配器 `events` 属性：[事件绑定](03-event-binding.md)。
 - 文本 `i18n:` 前缀如何解析：[国际化 i18n](04-i18n.md)。
-- 共享 Props 在组件目录中的抽取位置：`doc/skill/write-tijs-doc.skill.md` 第 5 节。
+- 共享 Props 在组件目录中的抽取位置：`docs/skill/write-tijs-doc.skill.md` 第 5 节。

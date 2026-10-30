@@ -1,4 +1,4 @@
-# AGENT.md — 快速了解 TiJS 项目
+# AGENTS.md — 快速了解 TiJS 项目
 
 > 给 AI Agent 的入口文件。读完本篇，再按顺序点开 2~3 个链接即可建立对全项目的认知，
 > 不要盲目翻源码。人类读者请先看根目录 [`README.md`](./README.md)。
@@ -21,22 +21,23 @@
 
 ## 最少 token 阅读顺序
 
-1. [`doc/README.md`](doc/README.md) —— 文档站首页，先弄清正式手册与内部写作流程的边界。
-2. [`doc/reference/INDEX.md`](doc/reference/INDEX.md) —— 全量文档索引，按主题或关键词
+1. [`docs/README.md`](docs/README.md) —— 文档站首页，先弄清正式手册与内部写作流程的边界。
+2. [`docs/reference/INDEX.md`](docs/reference/INDEX.md) —— 全量文档索引，按主题或关键词
    检索，直达对应篇目。
-3. [`doc/reference/10.concepts/README.md`](doc/reference/10.concepts/README.md) 及其六篇
+3. [`docs/reference/10.concepts/README.md`](docs/reference/10.concepts/README.md) 及其六篇
    机制 —— 全库共同地基，先读这一部分再看组件或工具。
-4. [`doc/reference/SOURCEMAP.md`](doc/reference/SOURCEMAP.md) —— 拿到源码文件 / 类名时，
+4. [`docs/reference/SOURCEMAP.md`](docs/reference/SOURCEMAP.md) —— 拿到源码文件 / 类名时，
    反查对应文档；反之从文档回到源码入口。
-5. 动手改代码前，先看 [`doc/reference/101.dev/`](doc/reference/101.dev/README.md) 对应
-   篇目；**写文档前必读** [`doc/skill/write-tijs-doc.skill.md`](doc/skill/write-tijs-doc.skill.md)。
-6. 查具体内容：组件 → `doc/reference/30.components/<类>/`；hook → `doc/reference/40.features/`；
-   工具 API → `doc/reference/20.core-utils/`。
+5. 动手改代码前，先看 [`docs/reference/101.dev/`](docs/reference/101.dev/README.md) 对应
+   篇目；**写组件前必读** [`docs/skill/write-tijs-com.skill.md`](docs/skill/write-tijs-com.skill.md)，
+   **写文档前必读** [`docs/skill/write-tijs-doc.skill.md`](docs/skill/write-tijs-doc.skill.md)。
+6. 查具体内容：组件 → `docs/reference/30.components/<类>/`；hook → `docs/reference/40.features/`；
+   工具 API → `docs/reference/20.core-utils/`。
 
-## 文档体系（doc/ 与根目录）
+## 文档体系（docs/ 与根目录）
 
 ```text
-doc/
+docs/
 ├── README.md             # 文档站首页与内容分区说明
 ├── www-gen-site.json5    # 静态文档站生成配置
 ├── reference/            # 正式参考手册（篇目已建齐，持续核对）
@@ -46,7 +47,7 @@ fragment/                 # 根目录，可复用代码片段（待补）
 prompt/                   # 根目录，提示词缓存
 ```
 
-- 根 [`README.md`](./README.md) 面向人类使用者；本篇 `AGENT.md` 面向 Agent。
+- 根 [`README.md`](./README.md) 面向人类使用者；本篇 `AGENTS.md` 面向 Agent。
 - 文档与源码冲突时，**以源码为准**；修改已有文档记录的行为，必须同步更新对应文档。
 - 新增、删除篇目或改变标题、归属、源码入口时，按需同步 `INDEX.md`、`SOURCEMAP.md`、
   所属分区 README；格式要求见写作规范。
@@ -121,7 +122,7 @@ prompt/                   # 根目录，提示词缓存
   `TiFalls`、`TiWeeks`、`TiTimeSlots`；文档已据实标注为占位。
 - `dist/`、`node_modules/`、日志等被 `.gitignore` 忽略的产物一律不用阅读。
 - 已记录但**尚未修复**的源码疑点（默认值错配、重复判断、失效导出路径等），见
-  [`doc/reference/101.dev/04-build-and-release.md`](doc/reference/101.dev/04-build-and-release.md)
+  [`docs/reference/101.dev/04-build-and-release.md`](docs/reference/101.dev/04-build-and-release.md)
   与对应组件篇注意事项；不要在文档里把未接线属性写成已生效功能。
 
 ## 动手时的纪律
@@ -129,13 +130,16 @@ prompt/                   # 根目录，提示词缓存
 - Props、事件、默认值、示例必须回读 `ti-xxx-types.ts`、`TiXxx.vue` 的 `withDefaults`、
   `ti-xxx-index.ts` 核对；源码里读不到就标注待补充，**禁止臆造**。
 - 新增或修改组件后，同步组件篇、`INDEX.md`、`SOURCEMAP.md`、分区 README；流程见
-  [新增一个组件](doc/reference/101.dev/02-add-component.md) 与
-  [文档与弃用规则](doc/reference/101.dev/05-doc-and-deprecation.md)。
+  [新增一个组件](docs/reference/101.dev/02-add-component.md) 与
+  [文档与弃用规则](docs/reference/101.dev/05-doc-and-deprecation.md)。
 - 组件篇固定结构、参数六分组、代码块语言（Vue 标签用 ` ```xml `、JSON 用 ` ```json `、
   TS 用 ` ```ts `、SCSS 用 ` ```scss `）一律以
-  [写作规范](doc/skill/write-tijs-doc.skill.md) 为准。
+  [写作规范](docs/skill/write-tijs-doc.skill.md) 为准。
 - 共享 Props 不在组件篇重复罗列，统一链接到
-  [共享 Props](doc/reference/10.concepts/02-common-props.md)。
+  [共享 Props](docs/reference/10.concepts/02-common-props.md)。
+- 非琐碎的源代码改动（不只改几个字），把 `package.json` 的 `version` 末位加 1，
+  到 99 后向中间位进位；细则见
+  [控件写作规范](docs/skill/write-tijs-com.skill.md) 的「版本号维护」。
 
 ## 关键 API 入口
 
