@@ -1,18 +1,23 @@
-import _ from 'lodash';
-import { computed, ref } from 'vue';
 import {
+  CssUtils,
+  EventUtils,
+  I18n,
   KeyboardStatus,
   LogicType,
   OptionItem,
+  SelectableState,
   TableRowID,
+  useOptions,
+  useSelectable,
+  Util,
   Vars,
-} from '../../../_type';
-import { CssUtils, EventUtils, Util } from '../../../core';
-import { SelectableState, useOptions, useSelectable } from '../../../lib';
-import { SwitcherProps } from './ti-switcher-types';
+} from "@site0/tijs";
+import _ from "lodash";
+import { computed, ref } from "vue";
+import { SwitcherProps } from "./ti-switcher-types";
 
 export type SwitcherEmitter = {
-  (event: 'change', payload: null | TableRowID | TableRowID[]): void;
+  (event: "change", payload: null | TableRowID | TableRowID[]): void;
 };
 
 export type OptionDisplayItem = OptionItem<TableRowID> & {
@@ -48,6 +53,14 @@ export function useSwitcher(
     let dftStyle = CssUtils.toCssStyle(props.itemStyle);
     for (let i = 0; i < items.length; i++) {
       let it = items[i];
+      if (props.autoI18n) {
+        if (it.text) {
+          it.text = I18n.text(it.text);
+        }
+        if (it.tip) {
+          it.tip = I18n.text(it.tip);
+        }
+      }
       it.checked = isChecked(it);
       _id_index.set(it.value, i);
       //.......................................
@@ -59,7 +72,7 @@ export function useSwitcher(
         it.className = CssUtils.mergeClassName(
           {},
           it.className,
-          `item-r-${props.itemRadius ?? 's'}`,
+          `item-r-${props.itemRadius ?? "s"}`,
           `is-${it.type}`
         );
       }
@@ -69,7 +82,7 @@ export function useSwitcher(
       }
       if (it.checked) {
         it.className = CssUtils.mergeClassName({}, it.className, {
-          'is-checked': it.checked,
+          "is-checked": it.checked,
         });
       }
     }
@@ -115,7 +128,7 @@ export function useSwitcher(
   const selectable = computed(() =>
     useSelectable<TableRowID>(
       {
-        getId: 'value',
+        getId: "value",
         multi: props.multi,
         checkedIds: SwitcherCheckedIds.value,
         canSelect: props.readonly ? false : true,
@@ -153,7 +166,7 @@ export function useSwitcher(
           index: i,
         } as OptionDisplayItem;
         //.......................................
-        _.assign(it, _.pick(item, 'style', 'className', 'type'));
+        _.assign(it, _.pick(item, "style", "className", "type"));
         //.......................................
         list.push(it);
         ids.push(it.value);
@@ -192,7 +205,7 @@ export function useSwitcher(
       // 通知改动
       let vals = Util.mapTruthyKeys(selection.checkedIds);
       if (!_.isEqual(vals, props.value)) {
-        emit('change', vals);
+        emit("change", vals);
       }
     }
     // 单选
@@ -208,7 +221,7 @@ export function useSwitcher(
       // 通知改动
       let val = selection.currentId;
       if (!_.isEqual(val, props.value)) {
-        emit('change', val ?? null);
+        emit("change", val ?? null);
       }
     }
   }

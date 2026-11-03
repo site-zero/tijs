@@ -14,6 +14,8 @@ export type SwitcherProps = CommonProps &
 
     readonly?: boolean;
 
+    autoI18n?: boolean;
+
     /**
      * 值，如果多选就是数组，如果单选就是单个值
      */

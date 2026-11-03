@@ -74,7 +74,7 @@
       :class="it.className"
       :style="it.style"
       :data-type="it.type"
-      :title="it.tip"
+      :data-tip="it.tip"
       @click.left="_swt.onSelect(it.value, $event)">
       <div class="it-icon" v-if="it.icon">
         <TiIcon :value="it.icon" />
