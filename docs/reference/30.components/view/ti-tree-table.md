@@ -1,7 +1,7 @@
 ---
 title: TiTreeTable 树状表格
 keywords: [树状表格, tree-table, TiTreeTable, 树形表格, 层级表格, 展开, 视图]
-status: draft
+status: done
 ---
 
 # TiTreeTable 树状表格
@@ -73,7 +73,7 @@ status: draft
 
 ### 外观
 
-- **`size`、`mainFontSize`、`rowGap`、`colGap`、`rowMinHeight`、`indentSize`、
+- **`mainFontSize`、`rowGap`、`colGap`、`rowMinHeight`、`indentSize`、
   `emptyRoadblock` 等**：与 `TiTable` 相同，见 [TiTable](ti-table.md)。
 
 ### 回调

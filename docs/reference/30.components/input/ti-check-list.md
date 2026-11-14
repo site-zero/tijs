@@ -1,7 +1,7 @@
 ---
 title: TiCheckList 多选列表
 keywords: [多选列表, 勾选列表, check list, TiCheckList, 多选, 选项组, 复选列表]
-status: draft
+status: done
 ---
 
 # TiCheckList 多选列表

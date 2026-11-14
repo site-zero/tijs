@@ -1,7 +1,7 @@
 ---
 title: TiInputCombo 复合输入框
 keywords: [复合输入, 自动补全, combo, TiInputCombo, 下拉建议, 模糊匹配, INPUT]
-status: draft
+status: done
 ---
 
 # TiInputCombo 复合输入框

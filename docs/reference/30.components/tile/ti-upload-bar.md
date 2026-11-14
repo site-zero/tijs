@@ -1,7 +1,7 @@
 ---
 title: TiUploadBar 上传条
 keywords: [上传, upload, upload-bar, TiUploadBar, 文件上传, 进度, 拖拽, TILE]
-status: draft
+status: done
 ---
 
 # TiUploadBar 上传条

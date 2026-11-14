@@ -1,7 +1,7 @@
 ---
 title: TiEditPairs 名值对编辑
 keywords: [名值对编辑, EditPairs, TiEditPairs, 对象表单, JSON 编辑, 分组表单, tabs 表单, EDIT]
-status: draft
+status: done
 ---
 
 # TiEditPairs 名值对编辑

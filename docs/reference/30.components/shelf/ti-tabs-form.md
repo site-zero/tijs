@@ -1,7 +1,7 @@
 ---
 title: TiTabsForm 标签表单
 keywords: [标签表单, tabs form, TiTabsForm, 分页签表单, 多页录入, SHELF]
-status: draft
+status: done
 ---
 
 # TiTabsForm 标签表单

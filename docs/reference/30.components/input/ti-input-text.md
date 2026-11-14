@@ -1,7 +1,7 @@
 ---
 title: TiInputText 文本框
 keywords: [文本框, textarea, TiInputText, 多行文本, 列表值, 文本输入]
-status: draft
+status: done
 ---
 
 # TiInputText 文本框

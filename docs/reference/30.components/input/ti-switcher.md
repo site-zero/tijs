@@ -1,7 +1,7 @@
 ---
 title: TiSwitcher 开关组
 keywords: [开关组, 分段选择, switcher, TiSwitcher, 按钮组, 标签组, 单选多选按钮]
-status: draft
+status: done
 ---
 
 # TiSwitcher 开关组
@@ -61,6 +61,7 @@ status: draft
 - **`multi`（`boolean`）**：是否允许多选。
 - **`readonly`（`boolean`）**：是否只读。
 - **`minChecked` / `maxChecked`（`number`）**：多选时最少 / 最多可选数量。
+- **`autoI18n`（`boolean`）**：选项文本自动进行 i18n 多国语言转换。
 
 ### 外观
 

@@ -1,7 +1,7 @@
 ---
 title: TiTextSnippet 文字片段
 keywords: [文字, 文本, snippet, text, TiTextSnippet, 前缀图标, 动态文本, TILE]
-status: draft
+status: done
 ---
 
 # TiTextSnippet 文字片段

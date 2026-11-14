@@ -1,7 +1,7 @@
 ---
 title: TiInputNum 数字输入框
 keywords: [数字输入, number, TiInputNum, 金额格式化, 千分位, 数字分段, 精度]
-status: draft
+status: done
 ---
 
 # TiInputNum 数字输入框

@@ -1,7 +1,7 @@
 ---
 title: TiBatchForm 批量表单
 keywords: [批量表单, batch form, TiBatchForm, 批量修改, 字段勾选, 部分更新, EDIT]
-status: draft
+status: done
 ---
 
 # TiBatchForm 批量表单

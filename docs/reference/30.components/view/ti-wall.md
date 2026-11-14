@@ -1,7 +1,7 @@
 ---
 title: TiWall 墙贴
 keywords: [墙贴, wall, TiWall, 网格, 卡片墙, 缩略图墙, 视图]
-status: draft
+status: done
 ---
 
 # TiWall 墙贴
@@ -73,6 +73,8 @@ status: draft
 - **`autoScrollIntoView`（`boolean`，无默认值）**：选区变化是否自动滚动到当前卡片。
 - **`scrollViewPort`（`() => HTMLElement`，无默认值）**：自动滚动时指定的视口容器。
 - **`mode`（`"list" | "wall"`，默认 `"wall"`）**：显示模式，墙式网格或纵向列表。
+- **`emptyRoadblock`（`RoadblockProps`，无默认值）**：空数据时的占位标牌配置；缺省渲染
+  内置 `TiRoadblock`（`i18n:nil-content`）。
 
 ### 外观
 

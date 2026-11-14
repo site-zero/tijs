@@ -1,7 +1,7 @@
 ---
 title: TiMultiDroplist 多选下拉框
 keywords: [多选, 下拉框, multi-droplist, TiMultiDroplist, 标签多选, 选项过滤, INPUT]
-status: draft
+status: done
 ---
 
 # TiMultiDroplist 多选下拉框

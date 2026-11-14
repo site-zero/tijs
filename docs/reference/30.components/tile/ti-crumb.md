@@ -1,7 +1,7 @@
 ---
 title: TiCrumb 面包屑导航条
 keywords: [面包屑, crumb, breadcrumb, TiCrumb, 导航, 路径导航, TILE]
-status: draft
+status: done
 ---
 
 # TiCrumb 面包屑导航条

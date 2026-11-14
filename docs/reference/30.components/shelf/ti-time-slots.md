@@ -1,7 +1,7 @@
 ---
 title: TiTimeSlots 日时间槽
 keywords: [日时间槽, time slots, TiTimeSlots, 时间格, 排班, SHELF, scaffold]
-status: draft
+status: done
 ---
 
 # TiTimeSlots 日时间槽

@@ -1,7 +1,7 @@
 ---
 title: TiLabelTags 选项标签
 keywords: [标签组, label-tags, tags, TiLabelTags, 多值展示, 字典翻译, 标签云, TILE]
-status: draft
+status: done
 ---
 
 # TiLabelTags 选项标签

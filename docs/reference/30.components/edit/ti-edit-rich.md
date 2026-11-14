@@ -1,7 +1,7 @@
 ---
 title: TiEditRich 富文本编辑
 keywords: [富文本, rich editor, TiEditRich, TiEditRichProse, prosemirror, 文档编辑, WYSIWYG, EDIT]
-status: draft
+status: done
 ---
 
 # TiEditRich 富文本编辑

@@ -1,7 +1,7 @@
 ---
 title: TiCalendar 日历
 keywords: [日历, calendar, TiCalendar, 日期选择, 月视图, 日期格, SHELF]
-status: draft
+status: done
 ---
 
 # TiCalendar 日历
@@ -58,6 +58,7 @@ status: draft
 - **`valueFormat`（`string`，默认 `"yyyy-MM-dd"`）**：`valueType` 为 `str` 时的输出格式。
 - **`timezone`（`DateParseOptionsZone`，无默认值）**：解析字符串值时的时区，缺省取环境时区。
 - **`today`（`any`，无默认值）**：指定「今日」日期，缺省用系统当天。
+- **`todayIndex`（无默认值）**：今日区块在区块列表中的位置。
 - **`comType` / `comConf`**：每个日期格渲染的自定义控件；`comConf` 经模板解释，上下文中
   含当天 `year / month / date / dayInWeek / isToday / isCurrent / isInMonth`。
 

@@ -1,7 +1,7 @@
 ---
 title: TiSorter 排序器
 keywords: [排序, sorter, TiSorter, 排序条件, 排序字段, ASC, DESC, 标签, EDIT]
-status: draft
+status: done
 ---
 
 # TiSorter 排序器

@@ -1,7 +1,7 @@
 ---
 title: TiLayoutTabs 标签布局
 keywords: [标签布局, layout tabs, TiLayoutTabs, 页签容器, 多视图切换, SHELF]
-status: draft
+status: done
 ---
 
 # TiLayoutTabs 标签布局

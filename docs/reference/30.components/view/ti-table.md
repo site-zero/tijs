@@ -1,7 +1,7 @@
 ---
 title: TiTable 表格
 keywords: [表格, table, TiTable, 数据表, 列定义, 可编辑表格, 虚拟滚动, 视图]
-status: draft
+status: done
 ---
 
 # TiTable 表格

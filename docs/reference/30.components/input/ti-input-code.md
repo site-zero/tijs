@@ -1,7 +1,7 @@
 ---
 title: TiInputCode 编号输入
 keywords: [编号, code, TiInputCode, 记录主键, 编码输入, 描述区, 字典编号]
-status: draft
+status: done
 ---
 
 # TiInputCode 编号输入

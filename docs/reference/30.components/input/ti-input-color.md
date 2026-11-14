@@ -1,7 +1,7 @@
 ---
 title: TiInputColor 颜色框
 keywords: [颜色, 颜色选择, color, TiInputColor, 取色器, scaffold, INPUT]
-status: draft
+status: done
 ---
 
 # TiInputColor 颜色框

@@ -1,7 +1,7 @@
 ---
 title: TiCodeEditor 代码编辑
 keywords: [代码编辑, code editor, TiCodeEditor, ace, 代码高亮, JSON 编辑, markdown 编辑, EDIT]
-status: draft
+status: done
 ---
 
 # TiCodeEditor 代码编辑

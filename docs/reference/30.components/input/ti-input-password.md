@@ -1,7 +1,7 @@
 ---
 title: TiInputPassword 密码输入框
 keywords: [密码, password, TiInputPassword, 密码强度, 遮蔽输入, 显示隐藏密码]
-status: draft
+status: done
 ---
 
 # TiInputPassword 密码输入框

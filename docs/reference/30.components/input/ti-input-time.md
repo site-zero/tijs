@@ -1,7 +1,7 @@
 ---
 title: TiInputTime 时间框
 keywords: [时间, 时间框, time, TiInputTime, 时分秒, 一天内时间, INPUT]
-status: draft
+status: done
 ---
 
 # TiInputTime 时间框

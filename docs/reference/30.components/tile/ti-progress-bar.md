@@ -1,7 +1,7 @@
 ---
 title: TiProgressBar 进度条
 keywords: [进度条, progress, progress-bar, TiProgressBar, 百分比, 水平, 垂直, TILE]
-status: draft
+status: done
 ---
 
 # TiProgressBar 进度条

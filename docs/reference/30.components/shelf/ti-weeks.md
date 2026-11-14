@@ -1,7 +1,7 @@
 ---
 title: TiWeeks 周视图
 keywords: [周视图, weeks, TiWeeks, 周排程, 日历周, SHELF, scaffold]
-status: draft
+status: done
 ---
 
 # TiWeeks 周视图

@@ -1,7 +1,7 @@
 ---
 title: TiDropTag 下拉标签
 keywords: [下拉标签, 标签, drop tag, dropdown, TiDropTag, 选择器, 芯片, chip]
-status: draft
+status: done
 ---
 
 # TiDropTag 下拉标签

@@ -1,7 +1,7 @@
 ---
 title: TiDroplist 下拉列表
 keywords: [下拉列表, 下拉选择, dropdown, droplist, TiDroplist, 单选下拉, 候选取值]
-status: draft
+status: done
 ---
 
 # TiDroplist 下拉列表

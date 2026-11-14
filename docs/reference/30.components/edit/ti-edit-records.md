@@ -1,7 +1,7 @@
 ---
 title: TiEditRecords 记录对象编辑
 keywords: [记录编辑, EditRecords, TiEditRecords, 表格编辑, 行编辑, 增删行, 批量记录, EDIT]
-status: draft
+status: done
 ---
 
 # TiEditRecords 记录对象编辑

@@ -1,7 +1,7 @@
 ---
 title: TiSidebar 侧边导航
 keywords: [侧边栏, 导航, 菜单, sidebar, nav, menu, TiSidebar, 树形菜单, 目录]
-status: draft
+status: done
 ---
 
 # TiSidebar 侧边导航

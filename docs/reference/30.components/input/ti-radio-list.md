@@ -1,7 +1,7 @@
 ---
 title: TiRadioList 单选列表
 keywords: [单选列表, 单选框, radio, TiRadioList, 单选, 选项组, 纵向单选]
-status: draft
+status: done
 ---
 
 # TiRadioList 单选列表

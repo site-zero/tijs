@@ -1,7 +1,7 @@
 ---
 title: TiScore 评分条
 keywords: [评分, 星级, score, TiScore, 星级评分, 半星, INPUT]
-status: draft
+status: done
 ---
 
 # TiScore 评分条

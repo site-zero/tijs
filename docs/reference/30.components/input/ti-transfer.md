@@ -1,7 +1,7 @@
 ---
 title: TiTransfer 穿梭框
 keywords: [穿梭框, transfer, TiTransfer, 双栏选择, 候选列表, 已选列表, INPUT]
-status: draft
+status: done
 ---
 
 # TiTransfer 穿梭框

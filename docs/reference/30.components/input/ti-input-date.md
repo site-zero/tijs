@@ -1,7 +1,7 @@
 ---
 title: TiInputDate 日期选择
 keywords: [日期, 日历, date, TiInputDate, 日期选择, 日历浮层, INPUT]
-status: draft
+status: done
 ---
 
 # TiInputDate 日期选择

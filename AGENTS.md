@@ -42,8 +42,8 @@ docs/
 ├── www-gen-site.json5    # 静态文档站生成配置
 ├── reference/            # 正式参考手册（篇目已建齐，持续核对）
 ├── skill/                # Agent 技能套路，不发布到文档站
-└── note/                 # 工作过程笔记（尚未建立，非正式、可能过时，不发布）
-fragment/                 # 根目录，可复用代码片段（待补）
+└── note/                 # 工作过程笔记（非正式、可能过时，不发布；约定见 note/README.md）
+fragment/                 # 根目录，可复用代码片段（约定与清单见 fragment/README.md）
 prompt/                   # 根目录，提示词缓存
 ```
 

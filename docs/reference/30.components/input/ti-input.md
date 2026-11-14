@@ -1,7 +1,7 @@
 ---
 title: TiInput 输入框
 keywords: [输入框, input, TiInput, box3, 文本输入, 自动补全, 提示列表, 字典, 可输入下拉]
-status: draft
+status: done
 ---
 
 # TiInput 输入框
@@ -81,7 +81,7 @@ status: draft
 - **`keepEmptyValue`（`boolean`）**：保留空字符串而非规整为 `null`，用于区分空串与未设置。
 - **`tipShowTime`（`"focus" | "auto" | (input: string) => boolean`）**：提示列表显示时机——聚焦即显示、
   需要时才显示，或自定义判定函数。
-- **`tipShowDelay`（`number`，默认 `500`）**：输入反弹跳多少毫秒后才查询提示；同时影响值管道的
+- **`tipShowDelay`（`number`，默认 `0`，即不延迟）**：输入反弹跳多少毫秒后才查询提示；同时影响值管道的
   反弹跳阈值。
 - **`autoSelect`（`boolean`）**：聚焦输入框时是否自动全选内容。
 - **`autoFocus`（`boolean`）**：控件创建时是否自动聚焦。

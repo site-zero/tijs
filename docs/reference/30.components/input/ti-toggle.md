@@ -1,7 +1,7 @@
 ---
 title: TiToggle 拨动开关
 keywords: [拨动开关, 开关, toggle, TiToggle, switch, 滑动开关, 布尔开关]
-status: draft
+status: done
 ---
 
 # TiToggle 拨动开关

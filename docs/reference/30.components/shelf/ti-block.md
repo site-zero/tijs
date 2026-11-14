@@ -1,7 +1,7 @@
 ---
 title: TiBlock 布局块
 keywords: [布局块, block, TiBlock, 面板容器, 标题栏, 动作栏, SHELF]
-status: draft
+status: done
 ---
 
 # TiBlock 布局块

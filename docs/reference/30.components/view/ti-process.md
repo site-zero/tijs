@@ -1,7 +1,7 @@
 ---
 title: TiProcess 处理过程
 keywords: [处理过程, process, TiProcess, 进度, progress, 进度条, 日志, 可中止, 视图]
-status: draft
+status: done
 ---
 
 # TiProcess 处理过程

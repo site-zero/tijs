@@ -1,7 +1,7 @@
 ---
 title: TiLbsMap 地图
 keywords: [地图, lbs, TiLbsMap, 经纬度, leaflet, 定位, 标记点, 视图]
-status: draft
+status: done
 ---
 
 # TiLbsMap 地图
@@ -71,7 +71,7 @@ status: draft
 - **`editPoint`（`"none" | "drag" | "pin"`，默认 `"none"`）**：单点编辑模式，仅
   `obj` / `tuple` 生效。
 - **`minZoom` / `maxZoom`（`number`，默认 `1` / `18`）**：缩放范围。
-- **`zoom`（`number`，默认 `14`）**：初始缩放级别。
+- **`zoom`（`number`，默认 `10`）**：初始缩放级别。
 - **`keepZoomBy`（`KeepInfo`，无默认值）**：本地记忆最后缩放级别。
 - **`autoFitBounds`（`boolean`，无默认值）**：多点时自动缩放到合适视野。
 - **`fitBoundsBy` / `fitBoundsOptions`（`Vars` / `L.FitBoundsOptions`，无默认值）**：自动
@@ -79,7 +79,7 @@ status: draft
 - **`cooling`（`number`，默认 `500`）**：编辑防抖冷却时间（毫秒）。
 - **`flyToOptions` / `moveToOptions`（`L.ZoomPanOptions | boolean`，无默认值）**：值变化
   导致地图移动时的飞行动画 / 移动动画配置。
-- **`valuePrecision`（`number`，默认 `6`）**：编辑点的坐标精度。
+- **`valuePrecision`（`number`，默认 `8`）**：编辑点的坐标精度。
 - **`displayPrecision`（`number`，无默认值）**：信息栏坐标显示精度。
 
 ### 外观
@@ -94,7 +94,7 @@ status: draft
 - **`imageIconBase`（`string`，默认 `"/resources/icons/"`）**：自定义图标的基础路径前缀。
 - **各类绘制 options**：`markerOptions`、`polylineOptions`、`polygonOptions`、
   `rectangleOptions`、`circleOptions`，以及 `markerIcon`、`markerIconOptions`、
-  `markerPopup` 等标记样式，直接透传给 Leaflet。
+  `markerPopup`、`markerPopupOptions` 等标记样式与弹窗设置，直接透传给 Leaflet。
 
 ### 回调
 

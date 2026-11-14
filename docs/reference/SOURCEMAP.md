@@ -1,7 +1,7 @@
 ---
 title: 源码文档对照
 keywords: [SOURCEMAP, 源码对照, 路径映射]
-status: draft
+status: done
 ---
 
 # 源码 ↔ 文档对照

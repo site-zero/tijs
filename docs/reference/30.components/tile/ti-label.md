@@ -1,7 +1,7 @@
 ---
 title: TiLabel 标签
 keywords: [标签, label, TiLabel, 展示, 前缀图标, 后缀图标, 复制, 超链接, 字典翻译]
-status: draft
+status: done
 ---
 
 # TiLabel 标签

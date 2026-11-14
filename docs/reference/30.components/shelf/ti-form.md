@@ -1,7 +1,7 @@
 ---
 title: TiForm 表单
 keywords: [表单, form, TiForm, 字段录入, 记录编辑, SHELF]
-status: draft
+status: done
 ---
 
 # TiForm 表单

@@ -1,7 +1,7 @@
 ---
 title: TiList 列表
 keywords: [列表, list, TiList, 选项列表, 单选, 多选, 树形列表, 视图]
-status: draft
+status: done
 ---
 
 # TiList 列表

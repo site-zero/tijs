@@ -1,7 +1,7 @@
 ---
 title: TiInputLngLat 经纬度
 keywords: [经纬度, 坐标, lnglat, TiInputLngLat, 地图选点, 地图编辑器, INPUT]
-status: draft
+status: done
 ---
 
 # TiInputLngLat 经纬度

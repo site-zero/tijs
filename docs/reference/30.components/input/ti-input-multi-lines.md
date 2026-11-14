@@ -1,7 +1,7 @@
 ---
 title: TiInputMultiLines 多行标签输入
 keywords: [多行输入, 标签输入, 多选标签, multi-lines, TiInputMultiLines, 数组录入, chips]
-status: draft
+status: done
 ---
 
 # TiInputMultiLines 多行标签输入

@@ -1,7 +1,7 @@
 ---
 title: TiHtmlSnippet HTML片段
 keywords: [html, snippet, HTML片段, v-html, TiHtmlSnippet, 富文本, 事件委托, TILE]
-status: draft
+status: done
 ---
 
 # TiHtmlSnippet HTML片段

@@ -1,7 +1,7 @@
 ---
 title: TiHtmlPage HTML页面
 keywords: [html, htmlpage, TiHtmlPage, 页面, 模板渲染, 动态组件, 视图]
-status: draft
+status: done
 ---
 
 # TiHtmlPage HTML页面

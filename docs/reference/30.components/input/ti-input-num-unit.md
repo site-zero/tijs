@@ -1,7 +1,7 @@
 ---
 title: TiInputNumUnit 带单位数字
 keywords: [数字单位, 金额, 重量, 体积, TiInputNumUnit, 单位选择, 货币单位]
-status: draft
+status: done
 ---
 
 # TiInputNumUnit 带单位数字

@@ -1,7 +1,7 @@
 ---
 title: TiInputGroup 输入控件组
 keywords: [输入组, 字段组, input-group, TiInputGroup, 多字段录入, 组合输入, INPUT]
-status: draft
+status: done
 ---
 
 # TiInputGroup 输入控件组

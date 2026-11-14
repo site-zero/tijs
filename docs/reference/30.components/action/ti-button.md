@@ -1,7 +1,7 @@
 ---
 title: TiButton 按钮
 keywords: [按钮, button, TiButton, click, action, 命令按钮, 动作控件]
-status: draft
+status: done
 ---
 
 # TiButton 按钮

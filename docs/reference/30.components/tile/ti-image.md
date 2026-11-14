@@ -1,7 +1,7 @@
 ---
 title: TiImage 图像
 keywords: [图像, 图片, image, img, TiImage, svg, 拖拽文件, object-fit, TILE]
-status: draft
+status: done
 ---
 
 # TiImage 图像

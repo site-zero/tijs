@@ -1,7 +1,7 @@
 ---
 title: TiIcon 图标
 keywords: [图标, icon, TiIcon, font-icon, svg, emoji, 图片图标, TILE]
-status: draft
+status: done
 ---
 
 # TiIcon 图标

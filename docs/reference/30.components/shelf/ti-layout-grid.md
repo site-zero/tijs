@@ -1,7 +1,7 @@
 ---
 title: TiLayoutGrid 栅格布局
 keywords: [栅格布局, layout grid, TiLayoutGrid, 区块布局, 可拖拽, schema, SHELF]
-status: draft
+status: done
 ---
 
 # TiLayoutGrid 栅格布局

@@ -1,7 +1,7 @@
 ---
 title: TiInputIcon 选择图标
 keywords: [图标, 选择图标, icon, TiInputIcon, 图标挑选, scaffold, INPUT]
-status: draft
+status: done
 ---
 
 # TiInputIcon 选择图标

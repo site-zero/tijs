@@ -1,7 +1,7 @@
 ---
 title: 组件手册
 keywords: [组件, components, 组件分类, action, edit, input, shelf, tile, view, 控件索引]
-status: draft
+status: done
 ---
 
 # 组件手册

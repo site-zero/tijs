@@ -1,7 +1,7 @@
 ---
 title: TiLoading 加载标牌
 keywords: [加载, loading, TiLoading, 等待, spinner, 加载中, 视图]
-status: draft
+status: done
 ---
 
 # TiLoading 加载标牌

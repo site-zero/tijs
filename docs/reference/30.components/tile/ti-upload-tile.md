@@ -1,7 +1,7 @@
 ---
 title: TiUploadTile 上传贴片
 keywords: [上传, upload, upload-tile, TiUploadTile, 文件卡片, 缩略图上传, 拖拽, TILE]
-status: draft
+status: done
 ---
 
 # TiUploadTile 上传贴片

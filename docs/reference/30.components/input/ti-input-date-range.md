@@ -1,7 +1,7 @@
 ---
 title: TiInputDateRange 日期范围
 keywords: [日期范围, 区间, date-range, TiInputDateRange, 起止日期, 比较条件, INPUT]
-status: draft
+status: done
 ---
 
 # TiInputDateRange 日期范围

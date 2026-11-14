@@ -1,7 +1,7 @@
 ---
 title: TiInputDatetime 日期时间框
 keywords: [日期时间, datetime, TiInputDatetime, 日期时间选择, 日历加时间, INPUT]
-status: draft
+status: done
 ---
 
 # TiInputDatetime 日期时间框

@@ -1,7 +1,7 @@
 ---
 title: TiTabs 标签组
 keywords: [标签页, 页签, tabs, tab, TiTabs, 切换, 选项卡, tab bar]
-status: draft
+status: done
 ---
 
 # TiTabs 标签组

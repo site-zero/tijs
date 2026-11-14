@@ -1,7 +1,7 @@
 ---
 title: TiRoadblock 路障牌
 keywords: [路障, roadblock, TiRoadblock, 占位, 空态, 提示牌, 遮盖, 加载, 视图]
-status: draft
+status: done
 ---
 
 # TiRoadblock 路障牌

@@ -1,7 +1,7 @@
 ---
 title: TiHtmlFrame HTML框架
 keywords: [html, iframe, frame, TiHtmlFrame, HTML渲染, 富文本, 内嵌网页, TILE]
-status: draft
+status: done
 ---
 
 # TiHtmlFrame HTML框架

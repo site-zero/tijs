@@ -1,7 +1,7 @@
 ---
 title: TiInputNumRange 数字区间
 keywords: [数字区间, 范围, range, TiInputNumRange, 大小区间, 比较对象, 区间选择]
-status: draft
+status: done
 ---
 
 # TiInputNumRange 数字区间

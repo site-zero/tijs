@@ -1,7 +1,7 @@
 ---
 title: TiInputPicker 挑选输入框
 keywords: [挑选, 弹窗选择, picker, TiInputPicker, 模态选择, scaffold, INPUT]
-status: draft
+status: done
 ---
 
 # TiInputPicker 挑选输入框

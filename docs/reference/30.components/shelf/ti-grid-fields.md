@@ -1,7 +1,7 @@
 ---
 title: TiGridFields 栅格字段组
 keywords: [栅格字段组, grid fields, TiGridFields, 表单, 字段布局, 嵌套字段, SHELF]
-status: draft
+status: done
 ---
 
 # TiGridFields 栅格字段组

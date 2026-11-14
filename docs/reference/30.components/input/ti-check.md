@@ -1,7 +1,7 @@
 ---
 title: TiCheck 勾选框
 keywords: [勾选框, 复选框, checkbox, TiCheck, 布尔开关, 勾选, 自定义真假值]
-status: draft
+status: done
 ---
 
 # TiCheck 勾选框

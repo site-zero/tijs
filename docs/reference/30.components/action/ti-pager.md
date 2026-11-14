@@ -1,7 +1,7 @@
 ---
 title: TiPager 翻页器
 keywords: [翻页, 分页, pager, pagination, TiPager, 页码, 跳转, 指示器]
-status: draft
+status: done
 ---
 
 # TiPager 翻页器

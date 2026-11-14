@@ -1,7 +1,7 @@
 ---
 title: TiThumb 缩略图
 keywords: [缩略图, thumb, thumbnail, TiThumb, 图片预览, 指示标记, 进度条, TILE]
-status: draft
+status: done
 ---
 
 # TiThumb 缩略图

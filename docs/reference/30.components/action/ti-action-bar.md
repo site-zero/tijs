@@ -1,7 +1,7 @@
 ---
 title: TiActionBar 动作条
 keywords: [动作条, 工具栏, 菜单, action bar, toolbar, TiActionBar, 命令组, 下拉菜单]
-status: draft
+status: done
 ---
 
 # TiActionBar 动作条
