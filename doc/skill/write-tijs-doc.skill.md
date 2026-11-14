@@ -208,7 +208,7 @@ status: draft
 - **`event-name`**：载荷形态 + 触发时机。
 
 > 继承的共享 Props（`CommonProps`、`ReadonlyProps`、`PlaceholderProps` 等）不在本篇
-> 罗列，只用一句话指向 [共享 Props](../../10.concepts/02-common-props.md)。
+> 罗列，只用一句话指向 [共享 Props](../reference/10.concepts/02-common-props.md)。
 
 ## 更多例子
 逐个对应 `ti-xxx-index.ts` 中的 `exampleProps`（`example/ex-*.ts`），示例名与注册表
