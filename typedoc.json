@@ -9,7 +9,7 @@
     "./src/core/util/*.ts",
     "./src/core/web/*.ts"
   ],
-  "out": "docs",
+  "out": "dist/typedoc",
   "plugin": ["suika-docs-theme"],
   "theme": "suika-theme"
 }
