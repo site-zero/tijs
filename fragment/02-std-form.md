@@ -45,5 +45,5 @@
 - `changeMode: "diff"` 时 `change` 事件只带改动差异；要整条记录用 `"all"`。
 - 字段不写 `comType` 时走默认控件；只读 / 激活态控件由字段机制自动切换。
 - 字段联动、校验、虚拟字段等进阶能力见
-  `docs/reference/30.components/shelf/ti-form.md` 与
-  `docs/reference/30.components/shelf/ti-grid-fields.md`。
+  `doc/reference/30.components/shelf/ti-form.md` 与
+  `doc/reference/30.components/shelf/ti-grid-fields.md`。

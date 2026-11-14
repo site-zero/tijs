@@ -49,7 +49,7 @@
 ## 要点与坑
 
 - `options` 三种形态：静态数组、`"#字典名"` 引用已注册字典、异步加载函数；
-  机制见 `docs/reference/10.concepts/06-dict-model.md`。
+  机制见 `doc/reference/10.concepts/06-dict-model.md`。
 - 多选场景改用 `TiMultiDroplist`；需要可手打过滤时用 `TiInputCombo`。
 - 选项带图标 / 备注用 `icon` / `tip` 字段，见
-  `docs/reference/30.components/input/ti-droplist.md`。
+  `doc/reference/30.components/input/ti-droplist.md`。

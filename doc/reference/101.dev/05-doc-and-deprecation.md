@@ -7,7 +7,7 @@ status: draft
 # 文档与弃用规则
 
 文档不是写完一次就结束的快照：组件改了 Props、加了示例、删了文件，文档就要跟着改。
-本仓库的写作规范（`docs/skill/write-tijs-doc.skill.md`）对同步与弃用有硬性约定，
+本仓库的写作规范（`doc/skill/write-tijs-doc.skill.md`）对同步与弃用有硬性约定，
 提交代码时一并遵守。
 
 ## 文档与源码冲突时，以源码为准
@@ -20,10 +20,10 @@ Props 名、事件名、默认值、示例配置一律从 `src/` 抽取。文档
 新增、删除篇目，或修订导致标题、分区归属、源码入口变化时，按需同步以下三处；
 只调整正文措辞或示例且索引信息不变时，不必机械修改索引：
 
-1. **`docs/reference/INDEX.md`** —— 在对应分区增删或更新一行
+1. **`doc/reference/INDEX.md`** —— 在对应分区增删或更新一行
    `` - `相对路径.md` — 标题 — 模块：源码模块 — 关键词：关键词 ``（Agent 检索口径，
    关键词照抄本篇 front-matter）；一句话说明写在分区 `README.md` 的篇目列表里。
-2. **`docs/reference/SOURCEMAP.md`** —— 按本篇「延伸阅读 · 源码入口」增删或更新
+2. **`doc/reference/SOURCEMAP.md`** —— 按本篇「延伸阅读 · 源码入口」增删或更新
    「源码路径 ↔ 文档」映射，反向定位某个源码文件该看哪篇文档。
 3. **所属分区的 `README.md` 索引** —— 新增、删除或改名时，同步计数与篇目列表
    （例如 `30.components/README.md` 按六类维护控件索引）。
@@ -66,5 +66,5 @@ FilterBar: "TiFilterBar",
 
 ## 延伸阅读
 
-- **源码入口**：`src/lib/lib-com-types.ts`（弃用标注段）、`docs/skill/write-tijs-doc.skill.md`（第 5、8、9 节）
+- **源码入口**：`src/lib/lib-com-types.ts`（弃用标注段）、`doc/skill/write-tijs-doc.skill.md`（第 5、8、9 节）
 - **相关文档**：[组件手册](../30.components/README.md)（弃用组件索引写法）、[新增一个组件](02-add-component.md)（新组件的文档补登位置）

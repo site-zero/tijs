@@ -48,5 +48,5 @@
 - `keepColumns.keepAt` 把用户调过的列宽 / 显隐持久化到本地存储。
 - 行状态色用 `getRowType`（Match 条件数组），单元格编辑用列的
   `activatedComType` / `activatedComConf`，见
-  `docs/reference/30.components/view/ti-table.md`。
+  `doc/reference/30.components/view/ti-table.md`。
 - 大数据（上千行）直接开虚拟滚动，无需额外配置。

@@ -37,5 +37,5 @@ updateInstalledComponentsLangs('zh-cn'); // 5. 注册完成后统一切语言
 - 自定义组件用 `tiPutComponents({ 名称: 组件信息 })` 追加，**必须在第 4 步之前**调用。
 - `updateInstalledComponentsLangs(...)` **必须在第 4 步之后**，否则组件语言包不生效。
 - `vue` 是外部依赖，不会被打进产物；业务工程自己装。
-- 机制详解见 `docs/reference/10.concepts/01-component-model.md` 与
-  `docs/reference/00.start-here/01-getting-started.md`。
+- 机制详解见 `doc/reference/10.concepts/01-component-model.md` 与
+  `doc/reference/00.start-here/01-getting-started.md`。

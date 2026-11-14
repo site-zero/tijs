@@ -42,9 +42,7 @@
   "scripts": {
     "build": "vue-tsc && vite build && tsc --emitDeclarationOnly",
     "preview": "vite preview",
-    "test": "vitest --silent=false",
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "test": "vitest --silent=false"
   },
   "dependencies": {
     "@types/crypto-js": "^4.1.2",
