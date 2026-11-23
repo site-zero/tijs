@@ -2,6 +2,8 @@
 
 控件库 + 工具核心（`Ti*` 组件、注册表、两段式 GUI、schema 渲染）。人类读者先看 `README.md`。
 
+> 维护：本文件由智能体自己维护；改之前先读 [如何编写AGENTS.md](../dev-tools/doc/write-AGENTS.md)。
+
 ## 先读
 
 1. `doc/README.md` — 文档站首页；
